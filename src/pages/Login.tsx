@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, Props }  from "react";
+import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +13,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import { useAuth } from "../context/auth";
+import axios from 'axios';
 
 function Copyright() {
   return (
@@ -48,8 +50,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Login() {
+function Login(props: any) {
+
   const classes = useStyles();
+
+  console.log('inside login function, props: ')
+  console.log(props)
+
+  const referer = props.location.state ? props.location.state.referer : '/';
+
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const { setAuthTokens } = useAuth();
+
+  function postLogin() {
+    axios.post("https://www.somePlace.com/auth/login", {
+      userName,
+      password
+    }).then(result => {
+      if (result.status === 200) {
+        setAuthTokens(result.data);
+        setLoggedIn(true);
+      } else {
+        setIsError(true);
+      }
+    }).catch(e => {
+      setIsError(true);
+    });
+  }
+  
+  if (isLoggedIn) {
+    return <Redirect to={referer} />;
+  }
+
+  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -71,6 +107,10 @@ function Login() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            value={userName}
+            onChange={e => {
+              setUserName(e.target.value);
+            }}
             autoFocus
           />
           <TextField
@@ -82,6 +122,10 @@ function Login() {
             label="Password"
             type="password"
             id="password"
+            value={password}
+            onChange={e => {
+              setPassword(e.target.value);
+            }}
             autoComplete="current-password"
           />
           <FormControlLabel
@@ -94,6 +138,7 @@ function Login() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={postLogin}
           >
             Sign In
           </Button>
@@ -104,7 +149,7 @@ function Login() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

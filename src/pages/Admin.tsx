@@ -1,7 +1,18 @@
 import React from "react";
+import Button from "@material-ui/core/Button"
+import { useAuth } from "../context/auth";
 
 function Admin(props: any) {
-  return <div>Admin Page</div>;
+  const { setAuthTokens } = useAuth();
+
+  function logOut() {
+    setAuthTokens();
+  }
+
+  
+  return (
+    <Button onClick={logOut}>Log out</Button>
+  )
 }
 
 export default Admin;
