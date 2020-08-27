@@ -13,14 +13,14 @@ function App() {
     <AuthContext.Provider value={false}>
       <Router>
         <div>
-          <ul>
+          {/*<ul>
             <li>
               <Link to="/">Home Page</Link>
             </li>
             <li>
               <Link to="/admin">Admin Page</Link>
             </li>
-          </ul>
+          </ul>*/}
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
