@@ -5,6 +5,8 @@ import Home from './pages/Home'
 import Admin from './pages/Admin';
 import { AuthContext } from "./context/auth";
 import PrivateRoute from './pages/PrivateRoute.js';
+import Login from "./pages/Login";
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             </li>
           </ul>
           <Route exact path="/" component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
           <PrivateRoute path="/admin" component={Admin} />
         </div>
       </Router>
