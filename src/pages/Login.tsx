@@ -16,6 +16,7 @@ import Container from '@material-ui/core/Container';
 import { useAuth } from "../context/auth";
 import axios from 'axios';
 
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -54,38 +55,43 @@ function Login(props: any) {
 
   const classes = useStyles();
 
-  console.log('inside login function, props: ')
-  console.log(props)
+  console.log('inside login function, props')
 
   const referer = props.location.state ? props.location.state.referer : '/';
-
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("eve.holt@reqres.in");
+  const [password, setPassword] = useState("cityslicka");
   const { setAuthTokens } = useAuth();
 
-  function postLogin() {
-    axios.post("https://www.somePlace.com/auth/login", {
-      userName,
+  async function postLogin() {
+    let url = 'https://reqres.in/api/login' //mock api site for front end devs. See https://reqres.in/
+    var result = null;
+  try {
+
+    result = await axios.post(url, {
+      email: userName,
       password
-    }).then(result => {
-      if (result.status === 200) {
-        setAuthTokens(result.data);
-        setLoggedIn(true);
-      } else {
-        setIsError(true);
-      }
-    }).catch(e => {
-      setIsError(true);
-    });
+    })
+
+    if (result.status === 200) {
+      console.log('result status is 200')
+      console.log(result.data)
+      setAuthTokens(result.data.token);
+      setLoggedIn(true)
+    }
+
+  } catch (err) {
+    console.log('result status is not 200')
+    alert(err.response.data.error)
   }
-  
+
+}
+   
   if (isLoggedIn) {
+    //history.push(referer);
     return <Redirect to={referer} />;
   }
 
-  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -133,7 +139,7 @@ function Login(props: any) {
             label="Remember me"
           />
           <Button
-            type="submit"
+            type="button"
             fullWidth
             variant="contained"
             color="primary"
