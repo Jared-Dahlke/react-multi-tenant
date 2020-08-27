@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, Props }  from "react";
+import { Redirect } from "react-router-dom";
 // import { Link } from 'react-router-dom';
-
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +14,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from 'axios';
+import { useAuth } from "../context/auth";
 
 function Copyright() {
   return (
@@ -49,8 +51,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Signup() {
+function Signup(props: any) {
   const classes = useStyles();
+  const [email, setEmail] = useState("eve.holt@reqres.in");
+  const [password, setPassword] = useState("pistol");
+  const { setAuthTokens } = useAuth();
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const referer = props.location.state ? props.location.state.referer : '/';
+
+  async function register () {
+    let url = 'https://reqres.in/api/register' //mock api site for front end devs. See https://reqres.in/
+    var result = null;
+    try {
+
+      result = await axios.post(url, {
+        email,
+        password
+      })
+
+      if (result.status === 200) {
+        console.log('result status is 200')
+        console.log(result.data)
+        setAuthTokens(result.data.token);
+        setLoggedIn(true)
+      }
+
+    } catch (err) {
+      console.log('result status is not 200')
+      alert(err.response.data.error)
+    }
+  }
+
+  if (isLoggedIn) {
+    //history.push(referer);
+    return <Redirect to={referer} />;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -96,6 +131,10 @@ function Signup() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
+                onChange={e => {
+                  setEmail(e.target.value);
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -108,6 +147,10 @@ function Signup() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={e => {
+                  setPassword(e.target.value);
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -118,17 +161,18 @@ function Signup() {
             </Grid>
           </Grid>
           <Button
-            type="submit"
+            type="button"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={register}
           >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

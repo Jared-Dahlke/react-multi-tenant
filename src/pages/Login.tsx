@@ -66,24 +66,24 @@ function Login(props: any) {
   async function postLogin() {
     let url = 'https://reqres.in/api/login' //mock api site for front end devs. See https://reqres.in/
     var result = null;
-  try {
+    try {
 
-    result = await axios.post(url, {
-      email: userName,
-      password
-    })
+      result = await axios.post(url, {
+        email: userName,
+        password
+      })
 
-    if (result.status === 200) {
-      console.log('result status is 200')
-      console.log(result.data)
-      setAuthTokens(result.data.token);
-      setLoggedIn(true)
+      if (result.status === 200) {
+        console.log('result status is 200')
+        console.log(result.data)
+        setAuthTokens(result.data.token);
+        setLoggedIn(true)
+      }
+
+    } catch (err) {
+      console.log('result status is not 200')
+      alert(err.response.data.error)
     }
-
-  } catch (err) {
-    console.log('result status is not 200')
-    alert(err.response.data.error)
-  }
 
 }
    
@@ -134,10 +134,13 @@ function Login(props: any) {
             }}
             autoComplete="current-password"
           />
-          <FormControlLabel
+          {/**
+           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+           */}
+          
           <Button
             type="button"
             fullWidth
@@ -156,7 +159,7 @@ function Login(props: any) {
             </Grid>
             <Grid item>
               <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"Don't have an account?"}
               </Link>
             </Grid>
           </Grid>
