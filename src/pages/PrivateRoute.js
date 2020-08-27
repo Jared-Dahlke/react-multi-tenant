@@ -16,7 +16,7 @@ function PrivateRoute({ component: Component, ...rest }) {
 
         :
 
-        (<Redirect to='/'/>)
+        (<Redirect to='/login'/>)
 
       }
     />
