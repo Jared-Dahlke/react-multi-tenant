@@ -7,6 +7,12 @@ import PrivateRoute from './pages/PrivateRoute.js';
 import Login from "./pages/Login";
 import Signup from './pages/Signup';
 
+
+//begin dashboard
+import Admin from "../src/layouts/Admin.js";
+import { createBrowserHistory } from "history";
+const hist = createBrowserHistory();
+
 function App(props: any) {
   const existingTokens  = localStorage.getItem("tokens");
   const [authTokens, setAuthTokens] = useState(existingTokens);
@@ -25,10 +31,10 @@ function App(props: any) {
       <Router>
         <div>
          
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Admin} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
-          <PrivateRoute path="/home" component={Home} />
+          <PrivateRoute path="/admin" component={Admin} />
         </div>
       </Router>
     </AuthContext.Provider>
