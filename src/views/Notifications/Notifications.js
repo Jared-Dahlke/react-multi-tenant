@@ -132,12 +132,12 @@ export default function Notifications() {
           >
             Material UI
           </a>{" "}
-          and styled by{" "}
+          
           <a
             target="_blank"
-            href="https://www.creative-tim.com/?ref=mdr-notifications-page"
+            href="https://www.sightly.com/"
           >
-            Creative Tim
+            
           </a>
           . Please checkout the{" "}
           <a href="#pablo" target="_blank">

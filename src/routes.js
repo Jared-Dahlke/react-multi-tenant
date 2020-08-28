@@ -1,6 +1,8 @@
 
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
+import People from "@material-ui/icons/People"
+import AccountTree from "@material-ui/icons/AccountTree"
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
@@ -17,17 +19,17 @@ import NotificationsPage from "./views/Notifications/Notifications.js";
 // core components/views for RTL layout
 
 const dashboardRoutes = [
-  {
+  /*{
     path: "/dashboard",
     name: "Dashboard",
     rtlName: "لوحة القيادة",
     icon: Dashboard,
     component: DashboardPage,
     layout: "/admin"
-  },
+  },*/
   {
     path: "/user",
-    name: "User Profile",
+    name: "My Profile",
     rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
     component: UserProfile,
@@ -37,7 +39,7 @@ const dashboardRoutes = [
     path: "/table",
     name: "Accounts",
     rtlName: "قائمة الجدول",
-    icon: "content_paste",
+    icon: AccountTree,
     component: TableList,
     layout: "/admin"
   },
@@ -45,7 +47,7 @@ const dashboardRoutes = [
     path: "/typography",
     name: "Users",
     rtlName: "طباعة",
-    icon: Person,
+    icon: People,
     component: Typography,
     layout: "/admin"
   },

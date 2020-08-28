@@ -21,10 +21,16 @@ import Button from "../CustomButtons/Button.js"  //"../../components/CustomButto
 
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js" //"assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
+import { useAuth } from "../../../src/context/auth.js";
+import { useHistory } from "react-router-dom";
+
+
 const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
   const classes = useStyles();
+  const { setAuthTokens } = useAuth();
+const history = useHistory();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleClickNotification = event => {
@@ -45,7 +51,10 @@ export default function AdminNavbarLinks() {
     }
   };
   const handleCloseProfile = () => {
-    setOpenProfile(null);
+    //setOpenProfile(null);  
+    
+    setAuthTokens();
+    history.push("/login");
   };
   return (
     <div>
