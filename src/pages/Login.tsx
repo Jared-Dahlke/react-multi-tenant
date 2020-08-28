@@ -17,6 +17,7 @@ import { useAuth } from "../context/auth";
 import axios from 'axios';
 
 
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -74,14 +75,11 @@ function Login(props: any) {
       })
 
       if (result.status === 200) {
-        console.log('result status is 200')
-        console.log(result.data)
         setAuthTokens(result.data.token);
         setLoggedIn(true)
       }
 
     } catch (err) {
-      console.log('result status is not 200')
       alert(err.response.data.error)
     }
 
@@ -110,7 +108,7 @@ function Login(props: any) {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             value={userName}

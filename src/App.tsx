@@ -8,27 +8,16 @@ import Login from "./pages/Login";
 import Signup from './pages/Signup';
 
 function App(props: any) {
-console.log('in app.tsx')
- 
-  console.log(localStorage.getItem("tokens"))
- 
-   const existingTokens  = localStorage.getItem("tokens");
-  
-  console.log('got tokens:')
-  console.log(existingTokens)
+  const existingTokens  = localStorage.getItem("tokens");
   const [authTokens, setAuthTokens] = useState(existingTokens);
-
   const setTokens = (data: any) => {
-    console.log('setting tokens:')
-    console.log(data)
     if (data) {
       localStorage.setItem("tokens", data);
       setAuthTokens(data);
     } else {
       localStorage.removeItem("tokens");
       setAuthTokens("");
-    }
-    
+    }  
   }
 
   return (
