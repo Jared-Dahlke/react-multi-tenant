@@ -58,7 +58,7 @@ function Login(props: any) {
 
   console.log('inside login function, props')
 
-  const referer = props.location.state ? props.location.state.referer : '/admin/user';
+  const referer = props.location.state ? props.location.state.referer : '/admin/profile';
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState("eve.holt@reqres.in");
   const [password, setPassword] = useState("cityslicka");

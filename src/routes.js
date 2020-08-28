@@ -28,7 +28,7 @@ const dashboardRoutes = [
     layout: "/admin"
   },*/
   {
-    path: "/user",
+    path: "/profile",
     name: "My Profile",
     rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
@@ -36,7 +36,7 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/table",
+    path: "/accounts",
     name: "Accounts",
     rtlName: "قائمة الجدول",
     icon: AccountTree,
@@ -44,7 +44,7 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/typography",
+    path: "/users",
     name: "Users",
     rtlName: "طباعة",
     icon: People,

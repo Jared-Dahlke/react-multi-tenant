@@ -75,7 +75,8 @@ const history = useHistory();
         </Button>
       </div>
 
-      {/*<Button
+      {/*
+       <Button
         color={window.innerWidth > 959 ? "transparent" : "white"}
         justIcon={window.innerWidth > 959}
         simple={!(window.innerWidth > 959)}
@@ -87,6 +88,9 @@ const history = useHistory();
           <p className={classes.linkText}>Dashboard</p>
         </Hidden>
       </Button> 
+       */}
+
+     
 
       <div className={classes.manager}>
 
@@ -235,7 +239,7 @@ const history = useHistory();
       </div>
       
       
-      */}
+      
       
       
       
