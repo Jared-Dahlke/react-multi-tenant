@@ -30,7 +30,7 @@ const useStyles = makeStyles(styles);
 export default function AdminNavbarLinks() {
   const classes = useStyles();
   const { setAuthTokens } = useAuth();
-const history = useHistory();
+  const history = useHistory();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleClickNotification = event => {
@@ -51,10 +51,10 @@ const history = useHistory();
     }
   };
   const handleCloseProfile = () => {
-    //setOpenProfile(null);  
-    
+    setOpenProfile(null);
+  };
+  const handleLogOut = () => {   
     setAuthTokens();
-    history.push("/login");
   };
   return (
     <div>
@@ -225,7 +225,7 @@ const history = useHistory();
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={handleLogOut}
                       className={classes.dropdownItem}
                     >
                       Logout

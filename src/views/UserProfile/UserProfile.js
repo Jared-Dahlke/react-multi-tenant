@@ -12,6 +12,7 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardAvatar from "../../components/Card/CardAvatar.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
+import {useAuth} from '../../../src/context/auth.js'
 
 import avatar from "../../assets/img/faces/marc.jpg";
 
@@ -36,6 +37,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
+
 export default function UserProfile() {
   const classes = useStyles();
   return (
@@ -45,7 +47,7 @@ export default function UserProfile() {
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
+  <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
