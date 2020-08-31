@@ -1,4 +1,5 @@
-import React, {useContext} from "react";
+import React from "react";
+import {connect} from 'react-redux'
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,21 +18,30 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "../CustomInput/CustomInput.js";
-import Button from "../CustomButtons/Button.js"  //"../../components/CustomButtons/Button.js";
+import Button from "../CustomButtons/Button.js"
 
-import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js" //"assets/jss/material-dashboard-react/components/headerLinksStyle.js";
-
+import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 import { useHistory } from "react-router-dom";
-
-
- //import { useAuth } from "../../context/auth.js";
-
+import {setAuthToken} from '../../redux/actions/index.js'
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+
+
+const mapStateToProps = (state) => {
+  return { 
+    authToken: state.authToken
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setAuthToken: (authToken) => dispatch(setAuthToken(authToken))
+  }
+}
+
+function AdminNavbarLinks(props) {
   const classes = useStyles();
-//  const { setAuthTokens } = useAuth();
   const history = useHistory();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
@@ -55,8 +65,9 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
-  const handleLogOut = () => {   
-    //setAuthTokens();
+  const handleLogOut = (props) => {
+    localStorage.removeItem('token')
+    props.setAuthToken();
   };
   return (
     <div>
@@ -227,7 +238,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleLogOut}
+                      onClick={()=>{handleLogOut(props)}}
                       className={classes.dropdownItem}
                     >
                       Logout
@@ -248,3 +259,7 @@ export default function AdminNavbarLinks() {
     </div>
   );
 }
+
+const MyAdminNavbarLinks = connect(mapStateToProps, mapDispatchToProps)(AdminNavbarLinks)
+
+export default MyAdminNavbarLinks;

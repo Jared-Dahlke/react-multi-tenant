@@ -1,4 +1,5 @@
-import React, { useState, Props, useContext }  from "react";
+import React, { useState }  from "react";
+import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 // import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
@@ -15,7 +16,22 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
-// import { useAuth } from "../context/auth";
+import {addArticle, setAuthToken} from '../redux/actions/index.js'
+
+
+const mapStateToProps = (state : any) => {
+  return { 
+    articles: state.articles,
+    authToken: state.authToken
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    addArticle: (article: any) => dispatch(addArticle(article)),
+    setAuthToken: (authToken: any) => dispatch(setAuthToken(authToken))
+  }
+}
 
 function Copyright() {
   return (
@@ -71,8 +87,8 @@ function Signup(props: any) {
 
       if (result.status === 200) {
         console.log('result status is 200')
-        console.log(result.data)
-       // setAuthTokens(result.data.token);
+        props.setAuthToken(result.data.token);
+        localStorage.setItem("token", result.data.token);
         setLoggedIn(true)
       }
 
@@ -188,4 +204,7 @@ function Signup(props: any) {
   );
 }
 
-export default Signup;
+
+const MySignup = connect(mapStateToProps, mapDispatchToProps)(Signup)
+
+export default MySignup;

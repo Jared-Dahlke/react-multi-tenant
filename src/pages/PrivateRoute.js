@@ -1,9 +1,7 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-//import { AuthContext, useAuth } from '../context/auth';
-//import {useAuth} from '../context/auth.js';
 import {connect} from 'react-redux'
-import {setAuthToken} from '../actions/index.js'
+import {setAuthToken} from '../redux/actions/index.js'
 
 const mapStateToProps = (state) => {
   return { authToken: state.authToken };

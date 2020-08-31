@@ -1,4 +1,4 @@
-import React, { useState, Props, useContext }  from "react";
+import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
-import {addArticle, setAuthToken} from '../actions/index.js'
+import {addArticle, setAuthToken} from '../redux/actions/index.js'
 
 
 const mapStateToProps = (state : any) => {

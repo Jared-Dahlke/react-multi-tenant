@@ -1,28 +1,19 @@
-import React, { useState } from 'react';
-import {connect} from 'react-redux'
+import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import PrivateRoute from './pages/PrivateRoute.js';
 import Login from "./pages/Login";
 import Signup from './pages/Signup';
 import {Provider} from 'react-redux'
-import store from './store/index.js'
-import {addArticle, setAuthToken} from './actions/index.js'
-
-//begin dashboard
+import store from './redux/store/index.js'
 import Admin from "../src/layouts/Admin.js";
-import { createBrowserHistory } from "history";
-const hist = createBrowserHistory();
 
-
-
-function App(props: any) {
+function App() {
 
   return (
     <Provider store={store}>
       <Router>
-        <div>
-         
+        <div>     
           <Route exact path="/" component={Login} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
@@ -32,7 +23,5 @@ function App(props: any) {
     </Provider>
   );
 }
-
-
 
 export default App;

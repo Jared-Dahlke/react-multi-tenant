@@ -17,7 +17,7 @@ function rootReducer(state = initialState, action) {
       authToken: action.payload
     })
   }
-  
+
   return state
 }
 
