@@ -1,14 +1,14 @@
 import React from "react";
 import Button from "@material-ui/core/Button"
-import { useAuth } from "../context/auth";
+// import { useAuth } from "../context/auth";
 import { useHistory } from "react-router-dom";
 
 function Home(props: any) {
-  const { setAuthTokens } = useAuth();
+  //const { setAuthTokens } = useAuth();
   const history = useHistory();
 
   function logOut() {
-    setAuthTokens();
+    //setAuthTokens();
     history.push("/login");
   }
 

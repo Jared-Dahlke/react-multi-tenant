@@ -1,27 +1,47 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import {useAuth} from '../context/auth.js';
+//import { AuthContext, useAuth } from '../context/auth';
+//import {useAuth} from '../context/auth.js';
+import {connect} from 'react-redux'
+import {setAuthToken} from '../actions/index.js'
+
+const mapStateToProps = (state) => {
+  return { authToken: state.authToken };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setAuthToken: (token) => dispatch(setAuthToken(token))
+  }
+}
+
+
 
 function isValidToken (token) {
-  if (token) return true
+  console.log('checking if isValidToken')
+  console.log(token)
+  if (token) return true //TODO: send to api to check validity
   return false
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
+console.log('in private route')
 
-  const { authTokens } = useAuth();
-  console.log('in private route')
-  console.log(authTokens)
+ var authToken = rest.authToken
+ console.log('authToken from state:' + authToken)
+ if (!authToken) {
+  console.log('no authToken from state so getting it from storage')
+  authToken = localStorage.getItem("token");
+ }
 
-
-
-  //const validToken = authTokens && authTokens.length > 1 ? true : false
+ console.log('final token')
+ console.log(authToken)
   
   return(
     <Route 
       {...rest} 
       render= { props => 
-        isValidToken(authTokens)  ?
+        isValidToken(authToken)  ?
       
         (
           <Component {...props} />
@@ -40,4 +60,6 @@ function PrivateRoute({ component: Component, ...rest }) {
   );
 }
 
-export default PrivateRoute;
+const MyPrivateRoute = connect(mapStateToProps, mapDispatchToProps)(PrivateRoute)
+
+export default MyPrivateRoute;

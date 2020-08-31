@@ -1,4 +1,4 @@
-import React, { useState, Props }  from "react";
+import React, { useState, Props, useContext }  from "react";
 import { Redirect } from "react-router-dom";
 // import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
-import { useAuth } from "../context/auth";
+// import { useAuth } from "../context/auth";
 
 function Copyright() {
   return (
@@ -55,7 +55,7 @@ function Signup(props: any) {
   const classes = useStyles();
   const [email, setEmail] = useState("eve.holt@reqres.in");
   const [password, setPassword] = useState("pistol");
-  const { setAuthTokens } = useAuth();
+  //const { setAuthTokens } = useAuth();
   const [isLoggedIn, setLoggedIn] = useState(false);
   const referer = props.location.state ? props.location.state.referer : '/';
 
@@ -72,7 +72,7 @@ function Signup(props: any) {
       if (result.status === 200) {
         console.log('result status is 200')
         console.log(result.data)
-        setAuthTokens(result.data.token);
+       // setAuthTokens(result.data.token);
         setLoggedIn(true)
       }
 

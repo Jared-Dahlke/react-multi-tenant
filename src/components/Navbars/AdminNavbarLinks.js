@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,15 +21,17 @@ import Button from "../CustomButtons/Button.js"  //"../../components/CustomButto
 
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js" //"assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
-import { useAuth } from "../../../src/context/auth.js";
 import { useHistory } from "react-router-dom";
+
+
+ //import { useAuth } from "../../context/auth.js";
 
 
 const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
   const classes = useStyles();
-  const { setAuthTokens } = useAuth();
+//  const { setAuthTokens } = useAuth();
   const history = useHistory();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
@@ -54,7 +56,7 @@ export default function AdminNavbarLinks() {
     setOpenProfile(null);
   };
   const handleLogOut = () => {   
-    setAuthTokens();
+    //setAuthTokens();
   };
   return (
     <div>

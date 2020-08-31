@@ -1,33 +1,25 @@
 import React, { useState } from 'react';
+import {connect} from 'react-redux'
 import './App.css';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import { AuthContext } from "./context/auth.js";
 import PrivateRoute from './pages/PrivateRoute.js';
 import Login from "./pages/Login";
 import Signup from './pages/Signup';
-
+import {Provider} from 'react-redux'
+import store from './store/index.js'
+import {addArticle, setAuthToken} from './actions/index.js'
 
 //begin dashboard
 import Admin from "../src/layouts/Admin.js";
 import { createBrowserHistory } from "history";
 const hist = createBrowserHistory();
 
+
+
 function App(props: any) {
-  const existingTokens  = localStorage.getItem("tokens");
-  const [authTokens, setAuthTokens] = useState(existingTokens);
-  const setTokens = (data: any) => {
-    if (data) {
-      localStorage.setItem("tokens", data);
-      setAuthTokens(data);
-    } else {
-      localStorage.removeItem("tokens");
-      setAuthTokens("");
-    }  
-  }
 
   return (
-    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+    <Provider store={store}>
       <Router>
         <div>
          
@@ -37,8 +29,10 @@ function App(props: any) {
           <PrivateRoute path="/admin" component={Admin} />
         </div>
       </Router>
-    </AuthContext.Provider>
+    </Provider>
   );
 }
+
+
 
 export default App;

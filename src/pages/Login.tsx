@@ -1,4 +1,5 @@
-import React, { useState, Props }  from "react";
+import React, { useState, Props, useContext }  from "react";
+import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -13,10 +14,23 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useAuth } from "../context/auth";
 import axios from 'axios';
+import {addArticle, setAuthToken} from '../actions/index.js'
 
 
+const mapStateToProps = (state : any) => {
+  return { 
+    articles: state.articles,
+    authToken: state.authToken
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    addArticle: (article: any) => dispatch(addArticle(article)),
+    setAuthToken: (authToken: any) => dispatch(setAuthToken(authToken))
+  }
+}
 
 function Copyright() {
   return (
@@ -54,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props: any) {
 
+  console.log('props from login')
+  console.log(props)
+  
+
   const classes = useStyles();
 
   console.log('inside login function, props')
@@ -62,9 +80,14 @@ function Login(props: any) {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState("eve.holt@reqres.in");
   const [password, setPassword] = useState("cityslicka");
-  const { setAuthTokens } = useAuth();
+
+  // console.log(AuthContext)
 
   async function postLogin() {
+    // props.addArticle('test')
+    console.log('after adding')
+    console.log(props)
+
     let url = 'https://reqres.in/api/login' //mock api site for front end devs. See https://reqres.in/
     var result = null;
     try {
@@ -75,11 +98,13 @@ function Login(props: any) {
       })
 
       if (result.status === 200) {
-        setAuthTokens(result.data.token);
+        props.setAuthToken(result.data.token);
+        localStorage.setItem("token", result.data.token);
         setLoggedIn(true)
       }
 
     } catch (err) {
+      console.log(err)
       alert(err.response.data.error)
     }
 
@@ -170,4 +195,6 @@ function Login(props: any) {
   );
 }
 
-export default Login;
+const MyLogin = connect(mapStateToProps, mapDispatchToProps)(Login)
+
+export default MyLogin;
