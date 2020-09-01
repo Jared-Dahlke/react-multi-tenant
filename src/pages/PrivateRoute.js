@@ -19,7 +19,6 @@ function isValidToken (token) {
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
-  console.log('in private route')
   var authToken = rest.authToken
   if (!authToken) {
     authToken = localStorage.getItem("token");

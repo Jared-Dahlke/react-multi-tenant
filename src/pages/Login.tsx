@@ -16,9 +16,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import {addArticle, setAuthToken} from '../redux/actions/index.js'
-import config from '../config.jsx'
+import config from '../config.js'
 
-const apiBase = config.apiGateway.URL;
+const apiBase = config.apiGateway.MOCKURL;
 
 const mapStateToProps = (state : any) => {
   return { 

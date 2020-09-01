@@ -17,11 +17,56 @@ import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js
 import bgImage from "../assets/img/sightly_image.jpg";
 import logo from "../assets/img/sightly_icon.png";
 
+import Person from "@material-ui/icons/Person";
+import People from "@material-ui/icons/People"
+import AccountTree from "@material-ui/icons/AccountTree"
+//import LibraryBooks from "@material-ui/icons/LibraryBooks";
+//import BubbleChart from "@material-ui/icons/BubbleChart";
+//import LocationOn from "@material-ui/icons/LocationOn";
+import Notifications from "@material-ui/icons/Notifications";
+//import Unarchive from "@material-ui/icons/Unarchive";
+//import Language from "@material-ui/icons/Language";
+// core components/views for Admin layout
+//import DashboardPage from "./views/Dashboard/Dashboard.js";
+import UserProfile from "../views/UserProfile/UserProfile.js";
+import TableList from "../views/TableList/TableList.js";
+import Users from "../views/Users/Users";
+
+//import Icons from "./views/Icons/Icons.js";
+import NotificationsPage from "../views/Notifications/Notifications.js";
+import CreateUser from "../views/Users/CreateUser.js";
+
+
 let ps;
 
 const switchRoutes = (
   <Switch>
-    {routes.map((prop, key) => {
+    <Route
+      path='/admin/profile'
+      component={UserProfile}
+    />
+    <Route
+      path='/admin/accounts'
+      component={TableList}
+    />
+    <Route
+      path='/admin/users'
+      render={({ match: { url } }) => (
+        <>
+          <Route path={`${url}/`} component={Users} exact />
+          <Route path={`${url}/create`} component={CreateUser} />
+         
+        </>
+      )}
+    />
+
+  
+
+    <Route
+      path='/admin/notifications'
+      component={UserProfile}
+    />
+    {/*routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
           <Route
@@ -32,7 +77,7 @@ const switchRoutes = (
         );
       }
       return null;
-    })}
+    })*/}
     <Redirect from="/admin" to="/admin/dashboard" />
   </Switch>
 );
@@ -40,28 +85,12 @@ const switchRoutes = (
 const useStyles = makeStyles(styles);
 
 export default function Admin({ ...rest }) {
-  // styles
   const classes = useStyles();
-  // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
-  // states and functions
   const [image] = React.useState(bgImage);
   const [color] = React.useState("blue");
-  //const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  //const handleImageClick = image => {
-  //  setImage(image);
-  //};
-  //const handleColorClick = color => {
-  //  setColor(color);
-  //};
-  //const handleFixedClick = () => {
-  //  if (fixedClasses === "dropdown") {
-  //    setFixedClasses("dropdown show");
-  //  } else {
-  //    setFixedClasses("dropdown");
-  //  }
-  //};
+ 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

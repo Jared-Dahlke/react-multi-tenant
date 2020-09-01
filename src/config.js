@@ -4,7 +4,8 @@ const development = {
   //},
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
-    URL: "https://reqres.in/api" //mock api
+    MOCKURL: "https://reqres.in/api", //mock api
+    URL: "http://localhost:4000"
   }
   //cognito: {
   //  REGION: "YOUR_DEV_COGNITO_REGION",
@@ -20,7 +21,8 @@ const staging = {
   //},
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
-    URL: "https://reqres.in/api" //mock api
+    MOCKURL: "https://reqres.in/api", //mock api
+    URL: "http://localhost:4000"
   }
   //cognito: {
   //  REGION: "YOUR_DEV_COGNITO_REGION",
@@ -36,7 +38,8 @@ const production = {
   //},
   apiGateway: {
     REGION: "YOUR_PROD_API_GATEWAY_REGION",
-    URL: "https://reqres.in/api"
+    URL: "https://reqres.in/api",
+    MOCKURL:"neverused"
   }
   //cognito: {
   //  REGION: "YOUR_PROD_COGNITO_REGION",
@@ -46,16 +49,18 @@ const production = {
   //}
 };
 
+
+var config = production
 //let config;
 switch(process.env.REACT_APP_STAGE) {
-  case 'production':
-    var config = production
-    break;
   case 'staging':
-    var config = staging
+    config = staging
     break;
   case 'development':
-    var config = development
+    config = development
+    break;
+  default: 
+    config = production
 }
 
 export default {
