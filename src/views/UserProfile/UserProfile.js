@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from 'react-redux'
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -37,9 +38,18 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
+const mapStateToProps = (state) => {
+  return { 
+    authToken: state.authToken
+  };
+};
 
-export default function UserProfile() {
+
+
+function UserProfile(props) {
+
   const classes = useStyles();
+
   return (
     <div>
       <GridContainer>
@@ -47,7 +57,7 @@ export default function UserProfile() {
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-  <p className={classes.cardCategoryWhite}>Complete your profile</p>
+              <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
@@ -72,6 +82,12 @@ export default function UserProfile() {
                     }}
                   />
                 </GridItem>
+
+                <GridItem xs={12} sm={12} md={3}>
+                  token: {props.authToken}
+                </GridItem>
+
+
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Email address"
@@ -178,3 +194,7 @@ export default function UserProfile() {
     </div>
   );
 }
+
+const MyUserProfile = connect(mapStateToProps)(UserProfile)
+
+export default MyUserProfile;

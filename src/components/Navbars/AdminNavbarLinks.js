@@ -14,14 +14,14 @@ import Divider from "@material-ui/core/Divider";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
-import Dashboard from "@material-ui/icons/Dashboard";
+// import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "../CustomInput/CustomInput.js";
 import Button from "../CustomButtons/Button.js"
 
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 import {setAuthToken} from '../../redux/actions/index.js'
 
 const useStyles = makeStyles(styles);
@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch) => {
 
 function AdminNavbarLinks(props) {
   const classes = useStyles();
-  const history = useHistory();
+  //const history = useHistory();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleClickNotification = event => {

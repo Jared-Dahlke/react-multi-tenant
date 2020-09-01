@@ -13,27 +13,20 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-
-
 function isValidToken (token) {
-  console.log('checking if isValidToken')
-  console.log(token)
-  if (token) return true //TODO: send to api to check validity
+  if (token) return true //TODO: send token to api to check validity
   return false
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
-console.log('in private route')
-
- var authToken = rest.authToken
- console.log('authToken from state:' + authToken)
- if (!authToken) {
-  console.log('no authToken from state so getting it from storage')
-  authToken = localStorage.getItem("token");
- }
-
- console.log('final token')
- console.log(authToken)
+  console.log('in private route')
+  var authToken = rest.authToken
+  if (!authToken) {
+    authToken = localStorage.getItem("token");
+    if (authToken) {
+      rest.setAuthToken(authToken)
+    }
+  }
   
   return(
     <Route 

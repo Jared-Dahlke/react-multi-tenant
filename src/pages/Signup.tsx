@@ -6,8 +6,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+//import FormControlLabel from '@material-ui/core/FormControlLabel';
+//import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -16,19 +16,19 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
-import {addArticle, setAuthToken} from '../redux/actions/index.js'
+import {setAuthToken} from '../redux/actions/index.js'
+import config from '../config.jsx'
 
+const apiBase = config.apiGateway.URL;
 
 const mapStateToProps = (state : any) => {
   return { 
-    articles: state.articles,
     authToken: state.authToken
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addArticle: (article: any) => dispatch(addArticle(article)),
     setAuthToken: (authToken: any) => dispatch(setAuthToken(authToken))
   }
 }
@@ -71,12 +71,11 @@ function Signup(props: any) {
   const classes = useStyles();
   const [email, setEmail] = useState("eve.holt@reqres.in");
   const [password, setPassword] = useState("pistol");
-  //const { setAuthTokens } = useAuth();
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const referer = props.location.state ? props.location.state.referer : '/';
+  //const referer = props.location.state ? props.location.state.referer : '/';
 
   async function register () {
-    let url = 'https://reqres.in/api/register' //mock api site for front end devs. See https://reqres.in/
+    let url = apiBase + '/register'
     var result = null;
     try {
 
@@ -86,21 +85,19 @@ function Signup(props: any) {
       })
 
       if (result.status === 200) {
-        console.log('result status is 200')
         props.setAuthToken(result.data.token);
         localStorage.setItem("token", result.data.token);
         setLoggedIn(true)
       }
 
     } catch (err) {
-      console.log('result status is not 200')
       alert(err.response.data.error)
     }
   }
 
   if (isLoggedIn) {
     //history.push(referer);
-    return <Redirect to={referer} />;
+    return <Redirect to='./admin/profile' />;
   }
 
   return (

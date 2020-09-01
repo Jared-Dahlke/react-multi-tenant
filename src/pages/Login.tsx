@@ -5,8 +5,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+//import FormControlLabel from '@material-ui/core/FormControlLabel';
+//import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -16,7 +16,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import {addArticle, setAuthToken} from '../redux/actions/index.js'
+import config from '../config.jsx'
 
+const apiBase = config.apiGateway.URL;
 
 const mapStateToProps = (state : any) => {
   return { 
@@ -87,8 +89,9 @@ function Login(props: any) {
     // props.addArticle('test')
     console.log('after adding')
     console.log(props)
+    console.log('config:' + JSON.stringify(config.apiGateway))
 
-    let url = 'https://reqres.in/api/login' //mock api site for front end devs. See https://reqres.in/
+    let url =  apiBase + '/login'
     var result = null;
     try {
 
