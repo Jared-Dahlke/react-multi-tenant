@@ -21,7 +21,7 @@ const staging = {
   //},
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
-    MOCKURL: "https://reqres.in/api", //mock api
+    MOCKURL: "https://reqres.in/api/staging", //mock api
     URL: "http://localhost:4000"
   }
   //cognito: {
