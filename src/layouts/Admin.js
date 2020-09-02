@@ -54,8 +54,7 @@ const switchRoutes = (
       render={({ match: { url } }) => (
         <>
           <Route path={`${url}/`} component={Users} exact />
-          <Route path={`${url}/create`} component={CreateUser} />
-         
+          <Route path={`${url}/create`} component={CreateUser} />     
         </>
       )}
     />
