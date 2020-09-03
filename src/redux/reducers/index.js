@@ -1,8 +1,9 @@
-import { ADD_ARTICLE, SET_AUTH_TOKEN } from "../constants/action-types";
+import { ADD_ARTICLE, SET_AUTH_TOKEN, SET_ALL_ROLES } from "../constants/action-types";
 
 const initialState = {
   articles: [],
-  authToken: null
+  authToken: null,
+  allRoles: []
 }
 
 function rootReducer(state = initialState, action) {
@@ -15,6 +16,12 @@ function rootReducer(state = initialState, action) {
   if(action.type === SET_AUTH_TOKEN) {
     return Object.assign({}, state, {
       authToken: action.payload
+    })
+  }
+
+  if(action.type === SET_ALL_ROLES) {
+    return Object.assign({}, state, {
+      allRoles: action.payload
     })
   }
 

@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 // core components
-import {Checkbox, FormControlLabel} from "@material-ui/core"
+import {Checkbox, TextField, MenuItem, Select, FormControl, Paper, Chip, MenuList} from "@material-ui/core"
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
@@ -38,15 +38,59 @@ const styles = {
   alignRight: {
     float: "right",
     
-  }
+  },
+  root: {
+    display: 'flex',
+    justifyContent: 'left',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    padding: .5,
+    margin: .5,
+  },
+  chip: {
+    margin: .5,
+  },
 };
 
 const useStyles = makeStyles(styles);
 
-const InviteUserForm = (props) => {
+export default function CreateUser  (props) {
+  
   const classes = useStyles();
   const taskClasses = useTaskStyles();
+
+
+  const [age, setAge] = React.useState('');
+
+
+  const [chipData, setChipData] = React.useState([{key: 1, label: 'first'}]);
+
+
+  const handleDelete = (chipToDelete) => () => {
+    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+  };
+
+  const handleRoleSelect = (event) => {
+    console.log('handle role sel')
+    console.log(event)
+    let current = [...chipData]
+
+  let blah = {}
+   blah.key = 5
+   blah.label = 'test'
+
+
+    current[1] = blah
+    setChipData(current)
+   
+  };
+
+
   return (
+    <Card>
+
+      
+      <CardBody>
    
     <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
@@ -100,6 +144,48 @@ const InviteUserForm = (props) => {
                 </GridItem>
 
                 
+                <GridItem xs={12} sm={12} md={12}>
+
+                
+                <Paper component="ul" className={classes.root}>
+                  {chipData.map((data) => {
+                    let icon;
+
+                    if (data.label === 'React') {
+                     // icon = <TagFacesIcon />;
+                    }
+
+                    return (
+                      <li key={data.key}>
+                        <Chip
+                          icon={icon}
+                          label={data.label}
+                          onDelete={handleDelete(data)}
+                          className={classes.chip}
+                        />
+                      </li>
+                    );
+                  })
+                }
+                </Paper>
+
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={age}
+                    onChange={handleRoleSelect}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+                          
+
+                </GridItem>
+                
 
               </GridContainer>
             
@@ -113,27 +199,10 @@ const InviteUserForm = (props) => {
         </GridItem>
         
       </GridContainer>
-  )
-}
-
-
-
-export default function CreateUser() {
-   const classes = useStyles();
-  return (
-    <Card>
-
-      
-
-      
-      <CardBody>
-
-
-      <InviteUserForm/>
-
 
         
       </CardBody>
     </Card>
-  );
+  )
 }
+
