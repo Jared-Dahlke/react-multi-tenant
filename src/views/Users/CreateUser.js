@@ -17,6 +17,23 @@ import taskstyles from "../../assets/jss/material-dashboard-react/components/tas
 import {connect} from 'react-redux'
 import {itemsFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
+import classNames from "classnames";
+
+import inputstyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
+import CustomSelect from "../../components/CustomSelect/CustomSelect.js";
+
+const useInputStyles = makeStyles(inputstyles);
+
+/*  {!props.isLoading ? props.items.data.map(item=>{
+                        return (
+                          <MenuItem value={20}>Twenty</MenuItem>
+                        )
+                        
+                      })
+                    : null
+                    
+                    }
+                  */ 
 
 
 const apiBase = config.apiGateway.URL;
@@ -62,7 +79,7 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return {
-      items: state.items,
+      items: state.items.data,
       hasErrored: state.itemsHasErrored,
       isLoading: state.itemsIsLoading
   };
@@ -75,6 +92,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 function CreateUser  (props) {
+  console.log('props from createUser')
+  console.log(props)
 
   const {fetchData} = props
   
@@ -88,8 +107,8 @@ function CreateUser  (props) {
   const classes = useStyles();
   const taskClasses = useTaskStyles();
 
-
-  const [age] = React.useState('');
+  
+  const [selectedRole, setSelectedRole] = React.useState('');
 
 
   const [chipData, setChipData] = React.useState([{key: 1, label: 'first'}]);
@@ -102,6 +121,7 @@ function CreateUser  (props) {
   const handleRoleSelect = (event) => {
     console.log('handle role sel')
     console.log(event)
+    setSelectedRole(event.target.value)
     let current = [...chipData]
 
     let blah = {}
@@ -113,6 +133,8 @@ function CreateUser  (props) {
     setChipData(current)
    
   };
+
+  
 
 
   return (
@@ -172,8 +194,7 @@ function CreateUser  (props) {
               Internal User
                  
                 </GridItem>
-
-                
+               
                 <GridItem xs={12} sm={12} md={12}>
 
                 
@@ -198,23 +219,22 @@ function CreateUser  (props) {
                   })
                 }
                 </Paper>
+                </GridItem>
 
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={age}
-                    onChange={handleRoleSelect}
-                  >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-                          
+                <GridItem xs={12} sm={12} md={12}>
+                  <CustomSelect
+                    items={props.items}
+                    labelText='Role'
+                    handleItemSelect={handleRoleSelect}
+                    value={selectedRole}
+                  />
 
                 </GridItem>
+
+               
+                          
+
+               
                 
 
               </GridContainer>
