@@ -5,8 +5,10 @@ import PrivateRoute from './pages/PrivateRoute.js';
 import Login from "./pages/Login";
 import Signup from './pages/Signup';
 import {Provider} from 'react-redux'
-import store from './redux/store/index.js'
+import configureStore from './redux/store/index.js'
 import Admin from "../src/layouts/Admin.js";
+
+const store = configureStore();
 
 function App() {
 

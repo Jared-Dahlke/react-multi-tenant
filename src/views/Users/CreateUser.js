@@ -14,6 +14,12 @@ import CardFooter from "../../components/Card/CardFooter.js";
 import Check from "@material-ui/icons/Check";
 // core components
 import taskstyles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
+import {connect} from 'react-redux'
+import {itemsFetchData} from '../../redux/actions/roles'
+import config from '../../config.js'
+
+
+const apiBase = config.apiGateway.MOCKURL;
 
 const useTaskStyles = makeStyles(taskstyles);
 
@@ -54,7 +60,26 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function CreateUser  (props) {
+const mapStateToProps = (state) => {
+  return {
+      items: state.items,
+      hasErrored: state.itemsHasErrored,
+      isLoading: state.itemsIsLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      fetchData: (url) => dispatch(itemsFetchData(url))
+  };
+};
+
+function CreateUser  (props) {
+
+  React.useEffect(() => {
+    let url =  apiBase + '/login'
+    props.fetchData(url)
+  }, []); // <-- Have to pass in [] here!
   
   const classes = useStyles();
   const taskClasses = useTaskStyles();
@@ -95,6 +120,12 @@ export default function CreateUser  (props) {
     <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
+            <div>
+              test
+              hasErrored: {props.hasErrored ? 'errored':'success'}
+              isLoading: {props.isLoading ? 'loading' : 'not loading'}
+              items: {JSON.stringify(props.items.data)}
+            </div>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Invite a new user</h4>
               <p className={classes.cardCategoryWhite}></p>
@@ -206,3 +237,4 @@ export default function CreateUser  (props) {
   )
 }
 
+export default connect(mapStateToProps, mapDispatchToProps)(CreateUser);

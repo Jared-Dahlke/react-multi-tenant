@@ -1,9 +1,10 @@
 import { ADD_ARTICLE, SET_AUTH_TOKEN, SET_ALL_ROLES } from "../constants/action-types";
+import {combineReducers} from 'redux'
+import {items, itemsHasErrored, itemsIsLoading} from './roles'
+import {authToken} from './auth'
 
-const initialState = {
-  articles: [],
-  authToken: null,
-  allRoles: []
+/* const initialState = {
+  articles: []
 }
 
 function rootReducer(state = initialState, action) {
@@ -26,6 +27,11 @@ function rootReducer(state = initialState, action) {
   }
 
   return state
-}
+} */
 
-export default rootReducer;
+export default combineReducers({
+  authToken,
+  items,
+  itemsHasErrored,
+  itemsIsLoading
+})

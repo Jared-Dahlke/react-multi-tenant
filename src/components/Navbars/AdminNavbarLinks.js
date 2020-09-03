@@ -67,7 +67,7 @@ function AdminNavbarLinks(props) {
   };
   const handleLogOut = (props) => {
     localStorage.removeItem('token')
-    props.setAuthToken();
+    props.setAuthToken(null);
   };
   return (
     <div>

@@ -28,6 +28,8 @@ const mapStateToProps = (state : any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => {
+  console.log('map dispatch to props')
+  console.log(setAuthToken)
   return {
     addArticle: (article: any) => dispatch(addArticle(article)),
     setAuthToken: (authToken: any) => dispatch(setAuthToken(authToken))
