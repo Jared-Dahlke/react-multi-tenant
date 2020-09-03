@@ -22,7 +22,7 @@ import Button from "../CustomButtons/Button.js"
 
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 //import { useHistory } from "react-router-dom";
-import {setAuthToken} from '../../redux/actions/index.js'
+import {setAuthToken} from '../../redux/actions/auth.js'
 
 const useStyles = makeStyles(styles);
 

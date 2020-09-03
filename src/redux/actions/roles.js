@@ -1,20 +1,21 @@
 import axios from 'axios';
+import {ITEMS_HAS_ERRORED, ITEMS_IS_LOADING, ITEMS_FETCH_DATA_SUCCESS} from '../action-types/roles'
 
 export function itemsHasErrored(bool) {
   return {
-      type: 'ITEMS_HAS_ERRORED',
+      type: ITEMS_HAS_ERRORED,
       hasErrored: bool
   };
 }
 export function itemsIsLoading(bool) {
   return {
-      type: 'ITEMS_IS_LOADING',
+      type: ITEMS_IS_LOADING,
       isLoading: bool
   };
 }
 export function itemsFetchDataSuccess(items) {
   return {
-      type: 'ITEMS_FETCH_DATA_SUCCESS',
+      type: ITEMS_FETCH_DATA_SUCCESS,
       items
   };
 }
@@ -31,15 +32,11 @@ export function itemsFetchData(url) {
 
         dispatch(itemsIsLoading(false));
 
-        console.log('fetch role status:' + result.status)
         if (result.status === 200) {
-
-          console.log('fetch roles success:' + JSON.stringify(result))
           dispatch(itemsFetchDataSuccess(result))
         }
       }
       catch(error) {
-        console.log('fetch errored: '+ error)
         dispatch(itemsHasErrored(true))
       }
 

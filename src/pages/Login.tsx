@@ -15,23 +15,19 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
-import {addArticle, setAuthToken} from '../redux/actions/index.js'
+import {setAuthToken} from '../redux/actions/auth.js'
 import config from '../config.js'
 
 const apiBase = config.apiGateway.MOCKURL;
 
 const mapStateToProps = (state : any) => {
   return { 
-    articles: state.articles,
     authToken: state.authToken
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  console.log('map dispatch to props')
-  console.log(setAuthToken)
   return {
-    addArticle: (article: any) => dispatch(addArticle(article)),
     setAuthToken: (authToken: any) => dispatch(setAuthToken(authToken))
   }
 }
@@ -72,26 +68,17 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props: any) {
 
-  console.log('props from login')
-  console.log(props)
-  
-
   const classes = useStyles();
 
-  console.log('inside login function, props')
 
   const referer = props.location.state ? props.location.state.referer : '/admin/profile';
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState("eve.holt@reqres.in");
   const [password, setPassword] = useState("cityslicka");
 
-  // console.log(AuthContext)
 
   async function postLogin() {
-    // props.addArticle('test')
-    console.log('after adding')
-    console.log(props)
-    console.log('config:' + JSON.stringify(config.apiGateway))
+
 
     let url =  apiBase + '/login'
     var result = null;

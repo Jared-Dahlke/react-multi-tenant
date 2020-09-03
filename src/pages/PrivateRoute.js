@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import {connect} from 'react-redux'
-import {setAuthToken} from '../redux/actions/index.js'
+import {setAuthToken} from '../redux/actions/auth.js'
 
 const mapStateToProps = (state) => {
   return { authToken: state.authToken };

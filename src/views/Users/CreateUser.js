@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 // core components
-import {Checkbox, TextField, MenuItem, Select, FormControl, Paper, Chip, MenuList} from "@material-ui/core"
+import {Checkbox, Select, FormControl, Paper, Chip, MenuItem} from "@material-ui/core"
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
@@ -76,16 +76,20 @@ const mapDispatchToProps = (dispatch) => {
 
 function CreateUser  (props) {
 
-  React.useEffect(() => {
-    let url =  apiBase + '/login'
-    props.fetchData(url)
-  }, []); // <-- Have to pass in [] here!
+  const {fetchData} = props
   
+  React.useEffect(() => {
+      console.log('inside use Effect')
+      let url =  apiBase + '/users?page=2'
+      fetchData(url)
+  }, [fetchData]);
+  
+
   const classes = useStyles();
   const taskClasses = useTaskStyles();
 
 
-  const [age, setAge] = React.useState('');
+  const [age] = React.useState('');
 
 
   const [chipData, setChipData] = React.useState([{key: 1, label: 'first'}]);
