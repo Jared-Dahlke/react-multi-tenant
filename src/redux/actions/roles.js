@@ -1,5 +1,6 @@
-import axios from 'axios';
+//import axios from 'axios';
 import {ITEMS_HAS_ERRORED, ITEMS_IS_LOADING, ITEMS_FETCH_DATA_SUCCESS} from '../action-types/roles'
+import axios from '../../axiosConfig'
 
 export function itemsHasErrored(bool) {
   return {

@@ -18,7 +18,7 @@ import axios from 'axios';
 import {setAuthToken} from '../redux/actions/auth.js'
 import config from '../config.js'
 
-const apiBase = config.apiGateway.MOCKURL;
+const apiBase = config.apiGateway.URL;
 
 const mapStateToProps = (state : any) => {
   return { 
@@ -73,25 +73,27 @@ function Login(props: any) {
 
   const referer = props.location.state ? props.location.state.referer : '/admin/profile';
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("eve.holt@reqres.in");
-  const [password, setPassword] = useState("cityslicka");
+  const [userName, setUserName] = useState("jared@sightly.com");
+  const [password, setPassword] = useState("a");
+  //
 
 
   async function postLogin() {
 
 
-    let url =  apiBase + '/login'
+    let url =  apiBase + '/authenticate'
     var result = null;
     try {
-
+//const response = await axios.post(`${state.apiGenesisBase}/api/v1/authenticate`, { username, password })
       result = await axios.post(url, {
-        email: userName,
+        username: userName,
         password
       })
 
       if (result.status === 200) {
-        props.setAuthToken(result.data.token);
-        localStorage.setItem("token", result.data.token);
+        let token = result.data.jwt
+        props.setAuthToken(token);
+        localStorage.setItem("token", token);
         setLoggedIn(true)
       }
 

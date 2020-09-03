@@ -19,7 +19,7 @@ import {itemsFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
 
 
-const apiBase = config.apiGateway.MOCKURL;
+const apiBase = config.apiGateway.URL;
 
 const useTaskStyles = makeStyles(taskstyles);
 
@@ -80,7 +80,7 @@ function CreateUser  (props) {
   
   React.useEffect(() => {
       console.log('inside use Effect')
-      let url =  apiBase + '/users?page=2'
+      let url =  apiBase + '/role'
       fetchData(url)
   }, [fetchData]);
   
@@ -104,9 +104,9 @@ function CreateUser  (props) {
     console.log(event)
     let current = [...chipData]
 
-  let blah = {}
-   blah.key = 5
-   blah.label = 'test'
+    let blah = {}
+    blah.key = 5
+    blah.label = 'test'
 
 
     current[1] = blah
@@ -124,12 +124,7 @@ function CreateUser  (props) {
     <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-            <div>
-              test
-              hasErrored: {props.hasErrored ? 'errored':'success'}
-              isLoading: {props.isLoading ? 'loading' : 'not loading'}
-              items: {JSON.stringify(props.items.data)}
-            </div>
+           
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Invite a new user</h4>
               <p className={classes.cardCategoryWhite}></p>
