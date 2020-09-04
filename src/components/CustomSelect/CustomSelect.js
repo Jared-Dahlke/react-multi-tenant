@@ -1,17 +1,20 @@
 import React from "react";
 import classNames from "classnames";
 // @material-ui/core components
+import Input from "@material-ui/core/Input"
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select"
-import styles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
+import styles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js"
+import dropdownStyles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 
 const useStyles = makeStyles(styles);
-
+const useDropdownStyles = makeStyles(dropdownStyles)
 export default function CustomSelect(props) {
   const classes = useStyles();
+  const dropDownClasses = useDropdownStyles()
   const {
     formControlProps,
     labelText,
@@ -22,16 +25,18 @@ export default function CustomSelect(props) {
     success,
     items,
     value,
+    multiple,
     handleItemSelect
   } = props;
 
   const marginTop = classNames({
-    [classes.marginTop]: null === undefined
+    [classes.marginTop]: null === undefined,
+  
   });
 
   const underlineClasses = classNames({
-    [classes.underlineError]: false,
-    [classes.underlineSuccess]: true && !false,
+  //  [classes.underlineError]: false,
+  //  [classes.underlineSuccess]: true && !false,
     [classes.underline]: true
   });
 
@@ -39,10 +44,11 @@ export default function CustomSelect(props) {
     [" " + classes.labelRootError]: false,
     [" " + classes.labelRootSuccess]: true && !false
   });
+ 
 
   
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl className={classes.formControl} {...formControlProps}>
       <InputLabel
         className={classes.labelRoot + labelClasses} 
       >
@@ -52,17 +58,31 @@ export default function CustomSelect(props) {
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
+        input={<Input
+          classes={{
+            underline: underlineClasses
+          }}
+          />}
         value={value}
         onChange={handleItemSelect}
+        multiple={true}
         classes={{
           root: marginTop,
-          disabled: classes.disabled,    
+          disabled: classes.disabled
         }}
       >
+
         
-        {items && items.map(item=>{
+        {props.items && props.items.map(item=>{
           return (
-          <MenuItem key={item.roleId} value={item.roleId}>{item.roleName}</MenuItem>
+          <MenuItem 
+          key={item.roleId} 
+          value={item.roleId}
+          className={dropDownClasses.dropdownItem}
+          >
+            {item.roleName}
+          </MenuItem>
+
           )})
         }
         

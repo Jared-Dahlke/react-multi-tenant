@@ -108,7 +108,7 @@ function CreateUser  (props) {
   const taskClasses = useTaskStyles();
 
   
-  const [selectedRole, setSelectedRole] = React.useState('');
+  const [selectedRoles, setSelectedRoles] = React.useState([]);
 
 
   const [chipData, setChipData] = React.useState([{key: 1, label: 'first'}]);
@@ -118,20 +118,12 @@ function CreateUser  (props) {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
 
+  
+
   const handleRoleSelect = (event) => {
-    console.log('handle role sel')
-    console.log(event)
-    setSelectedRole(event.target.value)
-    let current = [...chipData]
+    
+    setSelectedRoles(event.target.value);
 
-    let blah = {}
-    blah.key = 5
-    blah.label = 'test'
-
-
-    current[1] = blah
-    setChipData(current)
-   
   };
 
   
@@ -195,38 +187,18 @@ function CreateUser  (props) {
                  
                 </GridItem>
                
-                <GridItem xs={12} sm={12} md={12}>
-
-                
-                <Paper component="ul" className={classes.root}>
-                  {chipData.map((data) => {
-                    let icon;
-
-                    if (data.label === 'React') {
-                     // icon = <TagFacesIcon />;
-                    }
-
-                    return (
-                      <li key={data.key}>
-                        <Chip
-                          icon={icon}
-                          label={data.label}
-                          onDelete={handleDelete(data)}
-                          className={classes.chip}
-                        />
-                      </li>
-                    );
-                  })
-                }
-                </Paper>
-                </GridItem>
+               
 
                 <GridItem xs={12} sm={12} md={12}>
                   <CustomSelect
                     items={props.items}
                     labelText='Role'
                     handleItemSelect={handleRoleSelect}
-                    value={selectedRole}
+                    value={selectedRoles}
+                    multiple={true}
+                    formControlProps={{
+                      fullWidth: true
+                    }}
                   />
 
                 </GridItem>
