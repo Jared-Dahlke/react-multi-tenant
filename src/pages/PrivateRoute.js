@@ -33,17 +33,17 @@ function PrivateRoute({ component: Component, ...rest }) {
       render= { props => 
         isValidToken(authToken)  ?
       
-        (
-          <Component {...props} />
-        )
+          (
+            <Component {...props} />
+          )
 
-        :
-      
-
-        (         
+          :
         
-          <Redirect to={{ pathname: '/login', state: {referer: props.location}}}/>      
-        )
+
+          (         
+          
+            <Redirect to={{ pathname: '/login', state: {referer: props.location}}}/>      
+          )
 
       }
     />

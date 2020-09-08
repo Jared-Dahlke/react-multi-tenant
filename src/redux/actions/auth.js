@@ -17,23 +17,23 @@ export function login(credentials) {
   let url =  apiBase + '/authenticate'
   return async (dispatch) => {
       
-      try {
-          const result = await axios.post(url, {
-            username: credentials.username,
-            password: credentials.password
-          })  
+    try {
+      const result = await axios.post(url, {
+        username: credentials.username,
+        password: credentials.password
+      })  
 
-        if (result.status === 200) {
-          let token = result.data.jwt
-          dispatch(setAuthToken(token))
-          localStorage.setItem("token", token);
-          dispatch(setLoggedIn(true))        
-        }
+      if (result.status === 200) {
+        let token = result.data.jwt
+        dispatch(setAuthToken(token))
+        localStorage.setItem("token", token);
+        dispatch(setLoggedIn(true))        
+      }
 
-      }
-      catch(error) {
-        let errorType = error.response.status
-        handleError(errorType)
-      }
+    }
+    catch(error) {
+      let errorType = error.response.status
+      handleError(errorType)
+    }
   };
 }

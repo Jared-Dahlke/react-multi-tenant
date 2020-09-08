@@ -39,7 +39,11 @@
     "start-production": "REACT_APP_STAGE=production react-scripts start"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "indent": ["error", 2],
+      "semi":["error", "never"]
+    }
   },
   "browserslist": {
     "production": [

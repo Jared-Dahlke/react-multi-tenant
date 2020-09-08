@@ -40,7 +40,7 @@ export default function Header(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-           <AdminNavbarLinks />
+          <AdminNavbarLinks />
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton

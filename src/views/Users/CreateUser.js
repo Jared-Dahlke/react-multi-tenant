@@ -55,15 +55,15 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return {
-      roles: state.roles.data,
-      hasErrored: state.rolesHasErrored,
-      isLoading: state.rolesIsLoading
+    roles: state.roles.data,
+    hasErrored: state.rolesHasErrored,
+    isLoading: state.rolesIsLoading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      fetchData: (url) => dispatch(rolesFetchData(url))
+    fetchData: (url) => dispatch(rolesFetchData(url))
   };
 };
 
@@ -72,81 +72,76 @@ function CreateUser  (props) {
   const {fetchData} = props
   
   React.useEffect(() => {
-      let url =  apiBase + '/role'
-      fetchData(url)
+    let url =  apiBase + '/role'
+    fetchData(url)
   }, [fetchData]);
   
 
   const classes = useStyles();
-
-
-  
   const [selectedRoles, setSelectedRoles] = React.useState([]);
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
 
   const handleRoleSelect = (event) => {
-    
     setSelectedRoles(event.target.value);
-
   };
 
 
   return (
-<Card>
+    <Card>
 
+          
+      <CardBody>
       
-  <CardBody>
-   
-    <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
-          <Card>
-           
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Invite a new user</h4>
-              <p className={classes.cardCategoryWhite}></p>
-            </CardHeader>
-            <CardBody>
-              <GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={8}>
+            <Card>
+            
+              <CardHeader color="primary">
+                <h4 className={classes.cardTitleWhite}>Invite a new user</h4>
+                <p className={classes.cardCategoryWhite}></p>
+              </CardHeader>
+              <CardBody>
+                <GridContainer>
+                  
+                  <GridItem xs={12} sm={12} md={5}>
+                    <CustomInput
+                      labelText="Company"
+                      id="company-disabled"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: false
+                      }}
+                    />
+                  </GridItem>
                 
-                <GridItem xs={12} sm={12} md={5}>
-                  <CustomInput
-                    labelText="Company"
-                    id="company-disabled"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: false
-                    }}
-                  />
-                </GridItem>
-               
 
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Email address"
-                    id="email-address"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <CustomInput
+                      labelText="Email address"
+                      id="email-address"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
 
-                <GridItem xs={12} sm={12} md={12}>
-                  <CustomSelect
-                    roles={props.roles}
-                    labelText='Role'
-                    handleItemSelect={handleRoleSelect}
-                    value={selectedRoles}
-                    multiple={true}
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <CustomSelect
+                      roles={props.roles}
+                      labelText='Role'
+                      handleItemSelect={handleRoleSelect}
+                      value={selectedRoles}
+                      multiple={true}
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
 
 
-                <GridItem xs={12} sm={12} md={12}>
+                  <GridItem xs={12} sm={12} md={12}>
                     <CustomCheckbox
                       checked={internalUserChecked}
                       //tabIndex={-1}
@@ -156,24 +151,22 @@ function CreateUser  (props) {
                       }}
                       labelText="Internal User"                 
                     />             
-                </GridItem>
-               
-               
-              </GridContainer>
+                  </GridItem>
+                
+                
+                </GridContainer>         
+                
+              </CardBody>
+              <CardFooter>
+                <Button color="primary">Invite User</Button>
+              </CardFooter>
+            </Card>
+          </GridItem>
+          
+        </GridContainer>
             
-              
-              
-            </CardBody>
-            <CardFooter>
-              <Button color="primary">Invite User</Button>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        
-      </GridContainer>
-        
-    </CardBody>
-  </Card>
+      </CardBody>
+    </Card>
   )
 }
 

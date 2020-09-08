@@ -34,17 +34,17 @@ export default function RegularButton(props) {
 
   return (
     
-<FormControl
-{...formControlProps}
-className={formControlProps.className + " " + classes.formControl}
->
-<FormControlLabel
+    <FormControl
+      {...formControlProps}
+      className={formControlProps.className + " " + classes.formControl}
+    >
+      <FormControlLabel
         control={
           <Checkbox
-          checked={checked}
-          onClick={changed}
-          checkedIcon={<Check className={taskClasses.checkedIcon} />}
-          icon={<Check className={taskClasses.uncheckedIcon} />}
+            checked={checked}
+            onClick={changed}
+            checkedIcon={<Check className={taskClasses.checkedIcon} />}
+            icon={<Check className={taskClasses.uncheckedIcon} />}
             name="checkedB"        
             classes={{
               checked: taskClasses.checked,
@@ -53,11 +53,10 @@ className={formControlProps.className + " " + classes.formControl}
           />
         }
         label={labelText}
-        classes={{label: inputClasses.labelRoot}}
-        
+        classes={{label: inputClasses.labelRoot}}      
       />
 
-</FormControl>
+    </FormControl>
    
 
 

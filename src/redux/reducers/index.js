@@ -1,7 +1,7 @@
 
 import {combineReducers} from 'redux'
 import {roles, rolesHasErrored, rolesIsLoading} from './roles'
-import {authToken, isLoggedIn, setLoggedIn} from './auth'
+import {authToken, isLoggedIn} from './auth'
 
 
 export default combineReducers({

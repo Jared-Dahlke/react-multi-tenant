@@ -56,7 +56,7 @@ export default function CustomSelect(props) {
           classes={{
             underline: underlineClasses
           }}
-          />}
+        />}
         value={value}
         onChange={handleItemSelect}
         multiple={multiple}
@@ -69,13 +69,13 @@ export default function CustomSelect(props) {
         
         {props.roles && props.roles.map(role=>{
           return (
-          <MenuItem 
-          key={role.roleId} 
-          value={role.roleId}
-          className={dropDownClasses.dropdownItem}
-          >
-            {role.roleName}
-          </MenuItem>
+            <MenuItem 
+              key={role.roleId} 
+              value={role.roleId}
+              className={dropDownClasses.dropdownItem}
+            >
+              {role.roleName}
+            </MenuItem>
 
           )})
         }

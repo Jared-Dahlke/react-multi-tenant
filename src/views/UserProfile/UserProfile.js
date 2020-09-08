@@ -82,11 +82,6 @@ function UserProfile(props) {
                   />
                 </GridItem>
 
-                <GridItem xs={12} sm={12} md={3}>
-                  token: {props.authToken}
-                </GridItem>
-
-
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Email address"

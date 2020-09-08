@@ -53,20 +53,20 @@ const production = {
 var config = production
 //let config;
 switch(process.env.REACT_APP_STAGE) {
-  case 'staging':
-    config = staging
-    break;
-  case 'development':
-    config = development
-    break;
-  default: 
-    config = production
+case 'staging':
+  config = staging
+  break;
+case 'development':
+  config = development
+  break;
+default: 
+  config = production
 }
 
 
 
 export default {
   // Add common config values here
- // MAX_ATTACHMENT_SIZE: 5000000,
+  // MAX_ATTACHMENT_SIZE: 5000000,
   ...config
 };
