@@ -5,30 +5,24 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-//import FormControlLabel from '@material-ui/core/FormControlLabel';
-//import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-//import LockOutlinedIcon from '@material-ui/core.....';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import axios from 'axios';
-import {setAuthToken} from '../redux/actions/auth.js'
-import config from '../config.js'
-
-const apiBase = config.apiGateway.URL;
+import {login} from '../redux/actions/auth.js'
 
 const mapStateToProps = (state : any) => {
   return { 
-    authToken: state.authToken
+    authToken: state.authToken,
+    isLoggedIn: state.isLoggedIn
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setAuthToken: (authToken: any) => dispatch(setAuthToken(authToken))
+    login: (credentials: any) => dispatch(login(credentials))
   }
 }
 
@@ -69,45 +63,22 @@ const useStyles = makeStyles((theme) => ({
 function Login(props: any) {
 
   const classes = useStyles();
-
-
   const referer = props.location.state ? props.location.state.referer : '/admin/profile';
-  const [isLoggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState("jared@sightly.com");
   const [password, setPassword] = useState("a");
-  //
-
 
   async function postLogin() {
-
-
-    let url =  apiBase + '/authenticate'
-    var result = null;
-    try {
-      result = await axios.post(url, {
-        username: userName,
-        password
-      })
-
-      if (result.status === 200) {
-        let token = result.data.jwt
-        props.setAuthToken(token);
-        localStorage.setItem("token", token);
-        setLoggedIn(true)
-      }
-
-    } catch (err) {
-      console.log(err)
-      alert(err.response.data.error)
+    let credentials = {
+      username: userName,
+      password: password
     }
-
-}
+    props.login(credentials)
+  }
    
-  if (isLoggedIn) {
+  if (props.isLoggedIn) {   
     //history.push(referer);
     return <Redirect to={referer} />;
   }
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -150,12 +121,6 @@ function Login(props: any) {
             }}
             autoComplete="current-password"
           />
-          {/**
-           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-           */}
           
           <Button
             type="button"

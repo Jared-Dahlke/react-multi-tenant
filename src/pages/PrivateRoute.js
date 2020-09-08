@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function isValidToken (token) {
-  if (token) return true //TODO: send token to api to check validity
+  if (token) return true
   return false
 }
 
