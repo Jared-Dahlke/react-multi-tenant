@@ -84,7 +84,6 @@ function Login(props: any) {
     let url =  apiBase + '/authenticate'
     var result = null;
     try {
-//const response = await axios.post(`${state.apiGenesisBase}/api/v1/authenticate`, { username, password })
       result = await axios.post(url, {
         username: userName,
         password

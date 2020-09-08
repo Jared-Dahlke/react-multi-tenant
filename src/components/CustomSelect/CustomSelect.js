@@ -18,12 +18,6 @@ export default function CustomSelect(props) {
   const {
     formControlProps,
     labelText,
-    id,
-    labelProps,
-    inputProps,
-    error,
-    success,
-    items,
     value,
     multiple,
     handleItemSelect
@@ -65,7 +59,7 @@ export default function CustomSelect(props) {
           />}
         value={value}
         onChange={handleItemSelect}
-        multiple={true}
+        multiple={multiple}
         classes={{
           root: marginTop,
           disabled: classes.disabled
@@ -73,14 +67,14 @@ export default function CustomSelect(props) {
       >
 
         
-        {props.items && props.items.map(item=>{
+        {props.roles && props.roles.map(role=>{
           return (
           <MenuItem 
-          key={item.roleId} 
-          value={item.roleId}
+          key={role.roleId} 
+          value={role.roleId}
           className={dropDownClasses.dropdownItem}
           >
-            {item.roleName}
+            {role.roleName}
           </MenuItem>
 
           )})

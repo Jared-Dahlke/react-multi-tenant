@@ -1,45 +1,45 @@
 //import axios from 'axios';
-import {ITEMS_HAS_ERRORED, ITEMS_IS_LOADING, ITEMS_FETCH_DATA_SUCCESS} from '../action-types/roles'
+import {ROLES_HAS_ERRORED, ROLES_IS_LOADING, ROLES_FETCH_DATA_SUCCESS} from '../action-types/roles'
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 
-export function itemsHasErrored(bool) {
+export function rolesHasErrored(bool) {
   return {
-      type: ITEMS_HAS_ERRORED,
+      type: ROLES_HAS_ERRORED,
       hasErrored: bool
   };
 }
-export function itemsIsLoading(bool) {
+export function rolesIsLoading(bool) {
   return {
-      type: ITEMS_IS_LOADING,
+      type: ROLES_IS_LOADING,
       isLoading: bool
   };
 }
-export function itemsFetchDataSuccess(items) {
+export function rolesFetchDataSuccess(roles) {
   return {
-      type: ITEMS_FETCH_DATA_SUCCESS,
-      items
+      type: ROLES_FETCH_DATA_SUCCESS,
+      roles
   };
 }
 
-export function itemsFetchData(url) {
+export function rolesFetchData(url) {
   return async (dispatch) => {
 
-      dispatch(itemsIsLoading(true));
+      dispatch(rolesIsLoading(true));
       
       try {
 
         const result = await axios.get(url)       
-        dispatch(itemsIsLoading(false));
+        dispatch(rolesIsLoading(false));
         if (result.status === 200) {
-          dispatch(itemsFetchDataSuccess(result))
+          dispatch(rolesFetchDataSuccess(result))
         }
 
       }
       catch(error) {
         let errorType = error.response.status
         handleError(errorType)
-        dispatch(itemsHasErrored(true))
+        dispatch(rolesHasErrored(true))
       }
   };
 }

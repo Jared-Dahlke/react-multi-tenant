@@ -1,9 +1,7 @@
 import React from "react";
 // nodejs library that concatenates classes
 import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Typography from "@material-ui/core/Typography"
-import InputLabel from "@material-ui/core/InputLabel"
-import classNames from "classnames";
+import FormControl from "@material-ui/core/FormControl"
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 import Check from "@material-ui/icons/Check";
@@ -28,51 +26,25 @@ export default function RegularButton(props) {
   
   const classes = useStyles();
   const {
-    color,
-    round,
-    children,
-    disabled,
-    simple,
-    size,
-    block,
-    link,
-    justIcon,
-    className,
-    muiClasses,
     formControlProps,
     labelText,
     checked,
-    handleChange,
-    ...rest
+    changed
   } = props;
-
-  const labelClasses = classNames({
-    [" " + classes.labelRootError]: false,
-    [" " + classes.labelRootSuccess]: true && !false
-  });
 
   return (
     
-   /**<Checkbox
-    // checked={checked.indexOf(value) !== -1}
-     //tabIndex={-1}
-     //onClick={() => handleToggle(value)}
-     checkedIcon={<Check className={taskClasses.checkedIcon} />}
-     icon={<Check className={taskClasses.uncheckedIcon} />}
-     classes={{
-       checked: taskClasses.checked,
-       root: taskClasses.root
-     }}
-     label
-   />
- */
-   <FormControlLabel
+<FormControl
+{...formControlProps}
+className={formControlProps.className + " " + classes.formControl}
+>
+<FormControlLabel
         control={
           <Checkbox
+          checked={checked}
+          onClick={changed}
           checkedIcon={<Check className={taskClasses.checkedIcon} />}
           icon={<Check className={taskClasses.uncheckedIcon} />}
-            checked={checked}
-            onChange={handleChange}
             name="checkedB"        
             classes={{
               checked: taskClasses.checked,
@@ -84,6 +56,9 @@ export default function RegularButton(props) {
         classes={{label: inputClasses.labelRoot}}
         
       />
+
+</FormControl>
+   
 
 
   );

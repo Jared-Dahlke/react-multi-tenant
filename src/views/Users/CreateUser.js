@@ -1,8 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-// core components
-import {Checkbox, Select, FormControl, Paper, Chip, MenuItem} from "@material-ui/core"
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
@@ -11,20 +8,14 @@ import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-import Check from "@material-ui/icons/Check";
-// core components
-
 import {connect} from 'react-redux'
-import {itemsFetchData} from '../../redux/actions/roles'
+import {rolesFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js";
 
 
 const apiBase = config.apiGateway.URL;
-
-
-
 
 const styles = {
   cardCategoryWhite: {
@@ -64,15 +55,15 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return {
-      items: state.items.data,
-      hasErrored: state.itemsHasErrored,
-      isLoading: state.itemsIsLoading
+      roles: state.roles.data,
+      hasErrored: state.rolesHasErrored,
+      isLoading: state.rolesIsLoading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      fetchData: (url) => dispatch(itemsFetchData(url))
+      fetchData: (url) => dispatch(rolesFetchData(url))
   };
 };
 
@@ -81,7 +72,6 @@ function CreateUser  (props) {
   const {fetchData} = props
   
   React.useEffect(() => {
-      console.log('inside use Effect')
       let url =  apiBase + '/role'
       fetchData(url)
   }, [fetchData]);
@@ -92,16 +82,7 @@ function CreateUser  (props) {
 
   
   const [selectedRoles, setSelectedRoles] = React.useState([]);
-
-
-  const [chipData, setChipData] = React.useState([{key: 1, label: 'first'}]);
-
-
-  const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-  };
-
-  
+  const [internalUserChecked, setInternalUserChecked] = React.useState(false)
 
   const handleRoleSelect = (event) => {
     
@@ -109,14 +90,12 @@ function CreateUser  (props) {
 
   };
 
-  
-
 
   return (
-    <Card>
+<Card>
 
       
-      <CardBody>
+  <CardBody>
    
     <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
@@ -128,6 +107,7 @@ function CreateUser  (props) {
             </CardHeader>
             <CardBody>
               <GridContainer>
+                
                 <GridItem xs={12} sm={12} md={5}>
                   <CustomInput
                     labelText="Company"
@@ -153,25 +133,8 @@ function CreateUser  (props) {
                 </GridItem>
 
                 <GridItem xs={12} sm={12} md={12}>
-
-                <CustomCheckbox
-               // checked={checked.indexOf(value) !== -1}
-                //tabIndex={-1}
-                //onClick={() => handleToggle(value)}
-                formControlProps={{
-                  fullWidth: true
-                }}
-                labelText="Internal User"
-                
-              />
-                 
-                </GridItem>
-               
-               
-
-                <GridItem xs={12} sm={12} md={12}>
                   <CustomSelect
-                    items={props.items}
+                    roles={props.roles}
                     labelText='Role'
                     handleItemSelect={handleRoleSelect}
                     value={selectedRoles}
@@ -180,15 +143,22 @@ function CreateUser  (props) {
                       fullWidth: true
                     }}
                   />
-
                 </GridItem>
 
-               
-                          
 
+                <GridItem xs={12} sm={12} md={12}>
+                    <CustomCheckbox
+                      checked={internalUserChecked}
+                      //tabIndex={-1}
+                      changed={()=>setInternalUserChecked(!internalUserChecked)}
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      labelText="Internal User"                 
+                    />             
+                </GridItem>
                
-                
-
+               
               </GridContainer>
             
               
@@ -201,10 +171,9 @@ function CreateUser  (props) {
         </GridItem>
         
       </GridContainer>
-
         
-      </CardBody>
-    </Card>
+    </CardBody>
+  </Card>
   )
 }
 
