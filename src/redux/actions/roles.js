@@ -37,8 +37,6 @@ export function itemsFetchData(url) {
 
       }
       catch(error) {
-        console.log('error from role fetch')
-        console.log(error)
         let errorType = error.response.status
         handleError(errorType)
         dispatch(itemsHasErrored(true))
