@@ -39,7 +39,7 @@ const production = {
   apiGateway: {
     REGION: "YOUR_PROD_API_GATEWAY_REGION",
     URL: "https://reqres.in/api",
-    MOCKURL:"neverused"
+    MOCKURL:"never used"
   }
   //cognito: {
   //  REGION: "YOUR_PROD_COGNITO_REGION",

@@ -13,32 +13,17 @@ import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import Check from "@material-ui/icons/Check";
 // core components
-import taskstyles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
+
 import {connect} from 'react-redux'
 import {itemsFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
-import classNames from "classnames";
-
-import inputstyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
+import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js";
-
-const useInputStyles = makeStyles(inputstyles);
-
-/*  {!props.isLoading ? props.items.data.map(item=>{
-                        return (
-                          <MenuItem value={20}>Twenty</MenuItem>
-                        )
-                        
-                      })
-                    : null
-                    
-                    }
-                  */ 
 
 
 const apiBase = config.apiGateway.URL;
 
-const useTaskStyles = makeStyles(taskstyles);
+
 
 
 const styles = {
@@ -92,8 +77,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 function CreateUser  (props) {
-  console.log('props from createUser')
-  console.log(props)
 
   const {fetchData} = props
   
@@ -105,7 +88,7 @@ function CreateUser  (props) {
   
 
   const classes = useStyles();
-  const taskClasses = useTaskStyles();
+
 
   
   const [selectedRoles, setSelectedRoles] = React.useState([]);
@@ -171,19 +154,16 @@ function CreateUser  (props) {
 
                 <GridItem xs={12} sm={12} md={12}>
 
-                <Checkbox
+                <CustomCheckbox
                // checked={checked.indexOf(value) !== -1}
                 //tabIndex={-1}
                 //onClick={() => handleToggle(value)}
-                checkedIcon={<Check className={taskClasses.checkedIcon} />}
-                icon={<Check className={taskClasses.uncheckedIcon} />}
-                classes={{
-                  checked: taskClasses.checked,
-                  root: taskClasses.root
+                formControlProps={{
+                  fullWidth: true
                 }}
+                labelText="Internal User"
+                
               />
-
-              Internal User
                  
                 </GridItem>
                

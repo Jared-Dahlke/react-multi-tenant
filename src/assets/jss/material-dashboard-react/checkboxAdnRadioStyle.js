@@ -18,15 +18,15 @@ const checkboxAdnRadioStyle = {
     color: primaryColor[0] + "!important"
   },
   checkedIcon: {
-    width: "20px",
-    height: "20px",
+    width: "15px",
+    height: "15px",
     border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
     borderRadius: "3px"
   },
   uncheckedIcon: {
     width: "0px",
     height: "0px",
-    padding: "10px",
+    padding: "7.5px",
     border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
     borderRadius: "3px"
   },
