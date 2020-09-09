@@ -24,10 +24,8 @@ export function login(credentials) {
       })  
 
       if (result.status === 200) {
-        console.log('auth call status 200')
         let token = result.data.jwt
         dispatch(setAuthToken(token))
-        console.log('set auth token')
         localStorage.setItem("token", token);
         dispatch(setLoggedIn(true))        
       }

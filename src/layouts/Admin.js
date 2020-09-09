@@ -40,6 +40,7 @@ import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
 
 let ps;
 
+
 const switchRoutes = (
   <Switch>
     <Route
@@ -64,13 +65,7 @@ const switchRoutes = (
       path='/admin/RolesPermissions'
       component={RolesPermissions}
     />
-
-    {/*<Route
-      path='/admin/notifications'
-      component={UserProfile}
-    /> */}
     
-  
     <Redirect from="/admin" to="/admin/profile" />
   </Switch>
 );

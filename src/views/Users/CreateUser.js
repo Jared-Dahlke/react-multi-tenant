@@ -14,7 +14,6 @@ import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js";
 
-
 const apiBase = config.apiGateway.URL;
 
 const styles = {
@@ -69,14 +68,14 @@ const mapDispatchToProps = (dispatch) => {
 
 function CreateUser  (props) {
 
+
   const {fetchData} = props
   
   React.useEffect(() => {
-    console.log('calling /role')
     let url =  apiBase + '/role'
     fetchData(url)
   }, [fetchData]);
-  
+
 
   const classes = useStyles();
   const [selectedRoles, setSelectedRoles] = React.useState([]);

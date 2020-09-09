@@ -28,8 +28,6 @@ export function rolesFetchData(url) {
     dispatch(rolesIsLoading(true));
     
     try {
-      console.log('axios object from rolesfetchData')
-      console.log(axios)
 
       const result = await axios.get(url)       
       dispatch(rolesIsLoading(false));
