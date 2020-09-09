@@ -28,6 +28,8 @@ export function rolesFetchData(url) {
     dispatch(rolesIsLoading(true));
     
     try {
+      console.log('axios object from rolesfetchData')
+      console.log(axios)
 
       const result = await axios.get(url)       
       dispatch(rolesIsLoading(false));
@@ -36,7 +38,8 @@ export function rolesFetchData(url) {
       }
 
     }
-    catch(error) {
+    catch(error) {    
+      alert(error)
       let errorType = error.response.status
       handleError(errorType)
       dispatch(rolesHasErrored(true))

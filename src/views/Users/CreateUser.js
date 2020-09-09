@@ -72,6 +72,7 @@ function CreateUser  (props) {
   const {fetchData} = props
   
   React.useEffect(() => {
+    console.log('calling /role')
     let url =  apiBase + '/role'
     fetchData(url)
   }, [fetchData]);

@@ -8,8 +8,8 @@ export default function handleError(responseCode) {
   switch (responseCode) {
   case 401:
     console.log('inside 401 switch')
-    localStorage.removeItem('token')
-    store.dispatch(SET_AUTH_TOKEN, null)
+    //localStorage.removeItem('token')
+    //store.dispatch(SET_AUTH_TOKEN, null)
     break;
 
   default:

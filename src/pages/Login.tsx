@@ -76,7 +76,8 @@ function Login(props: any) {
     props.login(credentials)
   }
    
-  if (props.isLoggedIn) {   
+  if (props.isLoggedIn) {
+    console.log('now logged in')
     //history.push(referer);
     return <Redirect to={referer} />;
   }

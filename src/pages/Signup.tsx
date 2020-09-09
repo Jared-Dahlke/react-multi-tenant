@@ -46,7 +46,6 @@ function Copyright() {
   );
 }
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -97,7 +96,7 @@ function Signup(props: any) {
 
   if (isLoggedIn) {
     //history.push(referer);
-    return <Redirect to='./admin/profile' />;
+    return <Redirect to='/admin/profile' />;
   }
 
   return (

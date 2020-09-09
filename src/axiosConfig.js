@@ -1,5 +1,15 @@
 
 import axios from 'axios';
-const token = localStorage.getItem('token')
-axios.defaults.headers.common = {'Authorization': `${token}`}
-export default axios;
+
+axios.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers.common = {'Authorization': `${token}`}
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+)
+
+export default axios
