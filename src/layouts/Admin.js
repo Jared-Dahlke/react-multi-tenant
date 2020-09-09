@@ -35,6 +35,7 @@ import Users from "../views/Users/Users";
 //import Icons from "./views/Icons/Icons.js";
 //import NotificationsPage from "../views/Notifications/Notifications.js";
 import CreateUser from "../views/Users/CreateUser.js";
+import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
 
 
 let ps;
@@ -54,16 +55,21 @@ const switchRoutes = (
       render={({ match: { url } }) => (
         <>
           <Route path={`${url}/`} component={Users} exact />
-          <Route path={`${url}/create`} component={CreateUser} />     
+          <Route path={`${url}/create`} component={CreateUser} />      
         </>
       )}
     />
 
-
     <Route
+      path='/admin/RolesPermissions'
+      component={RolesPermissions}
+    />
+
+    {/*<Route
       path='/admin/notifications'
       component={UserProfile}
-    />
+    /> */}
+    
   
     <Redirect from="/admin" to="/admin/profile" />
   </Switch>

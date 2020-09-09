@@ -86,7 +86,7 @@ function AdminNavbarLinks(props) {
       <div className={classes.manager}>
 
        
-        <Button
+        {/*<Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
           simple={!(window.innerWidth > 959)}
@@ -102,7 +102,7 @@ function AdminNavbarLinks(props) {
               Notification
             </p>
           </Hidden>
-        </Button>
+        </Button>*/}
         <Poppers
           open={Boolean(openNotification)}
           anchorEl={openNotification}

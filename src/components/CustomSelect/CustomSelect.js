@@ -39,7 +39,6 @@ export default function CustomSelect(props) {
     [" " + classes.labelRootSuccess]: true && !false
   });
  
-
   
   return (
     <FormControl className={classes.formControl} {...formControlProps}>

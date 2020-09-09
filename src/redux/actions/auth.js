@@ -32,6 +32,7 @@ export function login(credentials) {
 
     }
     catch(error) {
+      alert(error)
       let errorType = error.response.status
       handleError(errorType)
     }

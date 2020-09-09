@@ -13,7 +13,7 @@ const development = {
   //  APP_CLIENT_ID: "YOUR_DEV_COGNITO_APP_CLIENT_ID",
   //  IDENTITY_POOL_ID: "YOUR_DEV_IDENTITY_POOL_ID"
   //}
-};
+}
 
 const staging = {
   //s3: {
@@ -22,7 +22,7 @@ const staging = {
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
     MOCKURL: "https://reqres.in/api/staging", //mock api
-    URL: "http://localhost:4000"
+    URL: "http://52.250.22.66:4000"
   }
   //cognito: {
   //  REGION: "YOUR_DEV_COGNITO_REGION",
@@ -30,7 +30,7 @@ const staging = {
   //  APP_CLIENT_ID: "YOUR_DEV_COGNITO_APP_CLIENT_ID",
   //  IDENTITY_POOL_ID: "YOUR_DEV_IDENTITY_POOL_ID"
   //}
-};
+}
 
 const production = {
   //s3: {
@@ -55,10 +55,10 @@ var config = production
 switch(process.env.REACT_APP_STAGE) {
 case 'staging':
   config = staging
-  break;
+  break
 case 'development':
   config = development
-  break;
+  break
 default: 
   config = production
 }
@@ -69,4 +69,4 @@ export default {
   // Add common config values here
   // MAX_ATTACHMENT_SIZE: 5000000,
   ...config
-};
+}
