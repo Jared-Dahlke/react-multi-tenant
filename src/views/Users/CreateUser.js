@@ -1,3 +1,4 @@
+/* eslint-disable semi, indent, no-mixed-operators, no-underscore-dangle */
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import GridItem from "../../components/Grid/GridItem.js"
@@ -13,6 +14,9 @@ import {rolesFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
+
+import Demo from './MyTree'
+
 
 const apiBase = config.apiGateway.URL
 
@@ -52,6 +56,7 @@ const styles = {
 
 const useStyles = makeStyles(styles)
 
+
 const mapStateToProps = (state) => {
   return {
     roles: state.roles.data,
@@ -66,6 +71,11 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+const myData = [{"title":"0-0-label","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
+
+  //
+
+
 function CreateUser  (props) {
 
 
@@ -75,6 +85,7 @@ function CreateUser  (props) {
     let url =  apiBase + '/role'
     fetchData(url)
   }, [fetchData])
+
 
 
   const classes = useStyles()
@@ -89,7 +100,6 @@ function CreateUser  (props) {
   return (
     <Card>
 
-          
       <CardBody>
       
         <GridContainer>
@@ -100,6 +110,7 @@ function CreateUser  (props) {
                 <h4 className={classes.cardTitleWhite}>Invite a new user</h4>
                 <p className={classes.cardCategoryWhite}></p>
               </CardHeader>
+              
               <CardBody>
                 <GridContainer>
                   
@@ -150,6 +161,12 @@ function CreateUser  (props) {
                     />
                   </GridItem>
 
+                  <GridItem xs={12} sm={12} md={8}>
+                    <Demo/>
+                  </GridItem>
+                  
+                
+
 
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomCheckbox
@@ -176,6 +193,10 @@ function CreateUser  (props) {
         </GridContainer>
             
       </CardBody>
+
+    
+      
+               
     </Card>
   )
 }
