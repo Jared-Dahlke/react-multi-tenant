@@ -36,7 +36,8 @@ export function rolesFetchData(url) {
       }
 
     }
-    catch(error) {
+    catch(error) {    
+      alert(error)
       let errorType = error.response.status
       handleError(errorType)
       dispatch(rolesHasErrored(true))

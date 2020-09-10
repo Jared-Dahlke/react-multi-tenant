@@ -11,7 +11,6 @@ import Hidden from "@material-ui/core/Hidden";
 import Poppers from "@material-ui/core/Popper";
 import Divider from "@material-ui/core/Divider";
 import Person from "@material-ui/icons/Person";
-import Notifications from "@material-ui/icons/Notifications";
 import Search from "@material-ui/icons/Search";
 import CustomInput from "../CustomInput/CustomInput.js";
 import Button from "../CustomButtons/Button.js"
@@ -38,13 +37,13 @@ function AdminNavbarLinks(props) {
   const classes = useStyles();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
-  const handleClickNotification = event => {
+  /* const handleClickNotification = event => {
     if (openNotification && openNotification.contains(event.target)) {
       setOpenNotification(null);
     } else {
       setOpenNotification(event.currentTarget);
     }
-  };
+  }; */
   const handleCloseNotification = () => {
     setOpenNotification(null);
   };
