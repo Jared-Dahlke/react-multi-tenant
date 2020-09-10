@@ -1,20 +1,20 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import GridItem from "../../components/Grid/GridItem.js";
-import GridContainer from "../../components/Grid/GridContainer.js";
-import CustomInput from "../../components/CustomInput/CustomInput.js";
-import Button from "../../components/CustomButtons/Button.js";
-import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardBody from "../../components/Card/CardBody.js";
-import CardFooter from "../../components/Card/CardFooter.js";
+import React from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import GridItem from "../../components/Grid/GridItem.js"
+import GridContainer from "../../components/Grid/GridContainer.js"
+import CustomInput from "../../components/CustomInput/CustomInput.js"
+import Button from "../../components/CustomButtons/Button.js"
+import Card from "../../components/Card/Card.js"
+import CardHeader from "../../components/Card/CardHeader.js"
+import CardBody from "../../components/Card/CardBody.js"
+import CardFooter from "../../components/Card/CardFooter.js"
 import {connect} from 'react-redux'
 import {rolesFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
-import CustomSelect from "../../components/CustomSelect/CustomSelect.js";
+import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
 
-const apiBase = config.apiGateway.URL;
+const apiBase = config.apiGateway.URL
 
 const styles = {
   cardCategoryWhite: {
@@ -48,23 +48,23 @@ const styles = {
   chip: {
     margin: .5,
   },
-};
+}
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
   return {
     roles: state.roles.data,
     hasErrored: state.rolesHasErrored,
     isLoading: state.rolesIsLoading
-  };
-};
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: (url) => dispatch(rolesFetchData(url))
-  };
-};
+  }
+}
 
 function CreateUser  (props) {
 
@@ -74,16 +74,16 @@ function CreateUser  (props) {
   React.useEffect(() => {
     let url =  apiBase + '/role'
     fetchData(url)
-  }, [fetchData]);
+  }, [fetchData])
 
 
-  const classes = useStyles();
-  const [selectedRoles, setSelectedRoles] = React.useState([]);
+  const classes = useStyles()
+  const [selectedRoles, setSelectedRoles] = React.useState([])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
 
   const handleRoleSelect = (event) => {
-    setSelectedRoles(event.target.value);
-  };
+    setSelectedRoles(event.target.value)
+  }
 
 
   return (
@@ -117,10 +117,20 @@ function CreateUser  (props) {
                   </GridItem>
                 
 
-                  <GridItem xs={12} sm={12} md={4}>
+                  <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
                       labelText="Email address"
                       id="email-address"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                    />
+                  </GridItem>
+
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Full Name"
+                      id="full-name"
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -170,4 +180,4 @@ function CreateUser  (props) {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateUser);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateUser)
