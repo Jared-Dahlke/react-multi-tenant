@@ -1,17 +1,16 @@
-
+//The below 2 warnings exist when using the rc-tree component. They both appear to be related to AntDesign which is used in this component. 
+//Warning: `children` of Tree is deprecated. Please use `treeData` instead.
+//Warning: Second param return from event is node data instead of TreeNode instance. Please read value directly instead of reading from `props`.
 import './index.less'
 import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
 import GridList from '@material-ui/core/GridList'
-import { gData, getRadioSelectKeys } from './dataUtils'
 import "rc-tree/assets/index.css"
-import Edit from "@material-ui/icons/Edit"
-import {defaultFont, grayColor} from "../../assets/jss/material-dashboard-react"
-import CustomInput from "../../components/CustomInput/CustomInput.js"
-import Card from "../../components/Card/Card.js"
-import CardBody from "../../components/Card/CardBody.js"
-import CardHeader from "../../components/Card/CardHeader.js"
-import { makeStyles } from "@material-ui/core/styles"
+import {defaultFont} from "../../assets/jss/material-dashboard-react"
+import CustomInput from "../CustomInput/CustomInput.js"
+import Card from "../Card/Card.js"
+import CardBody from "../Card/CardBody.js"
+import CardHeader from "../Card/CardHeader.js"
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
@@ -49,6 +48,10 @@ const styles = {
 }
 
 
+const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
+
+
+
 
 class Demo extends React.Component {
   static defaultProps = {
@@ -58,12 +61,8 @@ class Demo extends React.Component {
   
 
   state = {
-    // expandedKeys: getFilterExpandedKeys(gData, ['0-0-0-key']),
     expandedKeys: [],
     autoExpandParent: true,
-    // checkedKeys: ['0-0-0-0-key', '0-0-1-0-key', '0-1-0-0-key'],
-    checkedKeys: ['0-0-0-key'],
-    checkStrictlyKeys: { checked: ['0-0-1-key'], halfChecked: [] },
     selectedKeys: [],
     treeData: [],
     inputValue: ''
@@ -132,7 +131,7 @@ class Demo extends React.Component {
         }
         if (item.children) {
           return (
-            <TreeNode style={{fontFamily: defaultFont.fontFamily, fontWeight: defaultFont.fontWeight, lineHeight: defaultFont.lineHeight}} key={item.key} title={item.title} disableCheckbox={item.key === '0-0-0-key'}>
+            <TreeNode style={{fontFamily: defaultFont.fontFamily, fontWeight: defaultFont.fontWeight, lineHeight: defaultFont.lineHeight}} key={item.key} title={item.title} disableCheckbox={item.key === 'mydisabledkey'}>
               {loop(item.children)}
             </TreeNode>
           )
@@ -187,7 +186,7 @@ class Demo extends React.Component {
               filterTreeNode={this.filterTreeNode}
               style={{}}
             >
-              {loop(gData)}
+              {loop(myData)}
             </Tree>
 
 

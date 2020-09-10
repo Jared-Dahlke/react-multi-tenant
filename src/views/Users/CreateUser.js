@@ -15,7 +15,7 @@ import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
 
-import Demo from './MyTree'
+import CustomTree from '../../components/Tree/CustomTree'
 
 
 const apiBase = config.apiGateway.URL
@@ -70,10 +70,6 @@ const mapDispatchToProps = (dispatch) => {
     fetchData: (url) => dispatch(rolesFetchData(url))
   }
 }
-
-const myData = [{"title":"0-0-label","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
-
-  //
 
 
 function CreateUser  (props) {
@@ -162,7 +158,7 @@ function CreateUser  (props) {
                   </GridItem>
 
                   <GridItem xs={12} sm={12} md={8}>
-                    <Demo/>
+                    <CustomTree/>
                   </GridItem>
                   
                 
