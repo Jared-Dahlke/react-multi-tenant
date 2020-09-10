@@ -7,9 +7,9 @@ export default function handleError(responseCode) {
   case 401:
     localStorage.removeItem('token')
     store.dispatch(SET_AUTH_TOKEN, null)
-    break;
+    break
 
   default:
-    break;
+    break
   }
 }

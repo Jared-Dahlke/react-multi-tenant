@@ -1,3 +1,4 @@
+/* eslint-disable semi, indent, no-mixed-operators, no-underscore-dangle */
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import GridItem from "../../components/Grid/GridItem.js"
@@ -13,6 +14,9 @@ import {rolesFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
+
+import CustomTree from '../../components/Tree/CustomTree'
+
 
 const apiBase = config.apiGateway.URL
 
@@ -52,6 +56,7 @@ const styles = {
 
 const useStyles = makeStyles(styles)
 
+
 const mapStateToProps = (state) => {
   return {
     roles: state.roles.data,
@@ -66,6 +71,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+
 function CreateUser  (props) {
 
 
@@ -75,6 +81,7 @@ function CreateUser  (props) {
     let url =  apiBase + '/role'
     fetchData(url)
   }, [fetchData])
+
 
 
   const classes = useStyles()
@@ -89,7 +96,6 @@ function CreateUser  (props) {
   return (
     <Card>
 
-          
       <CardBody>
       
         <GridContainer>
@@ -100,6 +106,7 @@ function CreateUser  (props) {
                 <h4 className={classes.cardTitleWhite}>Invite a new user</h4>
                 <p className={classes.cardCategoryWhite}></p>
               </CardHeader>
+              
               <CardBody>
                 <GridContainer>
                   
@@ -150,6 +157,12 @@ function CreateUser  (props) {
                     />
                   </GridItem>
 
+                  <GridItem xs={12} sm={12} md={8}>
+                    <CustomTree/>
+                  </GridItem>
+                  
+                
+
 
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomCheckbox
@@ -176,6 +189,10 @@ function CreateUser  (props) {
         </GridContainer>
             
       </CardBody>
+
+    
+      
+               
     </Card>
   )
 }
