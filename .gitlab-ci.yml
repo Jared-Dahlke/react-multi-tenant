@@ -12,5 +12,8 @@ docker-build:
     - docker build -f dockerfile.staging -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging .
     - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
 
+  only:
+    - sprint-baguio
+    
   except:
     - master
