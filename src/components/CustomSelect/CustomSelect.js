@@ -11,7 +11,6 @@ import styles from "../../assets/jss/material-dashboard-react/components/customI
 import dropdownStyles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
-import { FormHelperText } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 const useDropdownStyles = makeStyles(dropdownStyles)
