@@ -1,0 +1,16 @@
+docker-build:
+  # Official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+
+  before_script:
+    - docker login -u $recru02 -p dE_wc1eopRsixMPnrumx registry.gitlab.com
+    
+  script:
+    - docker build -f dockerfile.staging -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging .
+    - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
+
+  except:
+    - master
