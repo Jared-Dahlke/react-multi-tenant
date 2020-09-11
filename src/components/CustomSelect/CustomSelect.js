@@ -9,6 +9,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select"
 import styles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js"
 import dropdownStyles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
+import Clear from "@material-ui/icons/Clear";
+import Check from "@material-ui/icons/Check";
+import { FormHelperText } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 const useDropdownStyles = makeStyles(dropdownStyles)
@@ -20,7 +23,9 @@ export default function CustomSelect(props) {
     labelText,
     value,
     multiple,
-    handleItemSelect
+    handleItemSelect,
+    error,
+    success
   } = props;
 
   const marginTop = classNames({
@@ -28,20 +33,22 @@ export default function CustomSelect(props) {
   
   });
 
-  const underlineClasses = classNames({
-  //  [classes.underlineError]: false,
-  //  [classes.underlineSuccess]: true && !false,
-    [classes.underline]: true
-  });
-
   const labelClasses = classNames({
-    [" " + classes.labelRootError]: false,
-    [" " + classes.labelRootSuccess]: true && !false
+    [" " + classes.labelRootError]: error,
+    [" " + classes.labelRootSuccess]: success && !error
+  });
+  const underlineClasses = classNames({
+    [classes.underlineError]: error,
+    [classes.underlineSuccess]: success && !error,
+    [classes.underline]: true
   });
  
   
   return (
-    <FormControl className={classes.formControl} {...formControlProps}>
+    <FormControl
+      {...formControlProps}
+      className={formControlProps.className + " " + classes.formControl}
+    >
       <InputLabel
         className={classes.labelRoot + labelClasses} 
       >
@@ -81,6 +88,22 @@ export default function CustomSelect(props) {
         
         
       </Select>
+
+      {error ? (
+        
+        <div onClick={() => props.handleClear()}>
+          <Clear className={classes.feedback + " " + classes.labelRootError + " " + classes.clickable}/>
+        </div>
+        /*<Clear className={classes.feedback + " " + classes.labelRootError} />*/
+        
+      ) : success ? (
+        <div style={{position: "absolute", right: -40}}>
+          <Check className={classes.feedback + " " + classes.labelRootSuccess} />
+        </div>
+       
+        
+      ) : null}
+
       
     </FormControl>
   );

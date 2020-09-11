@@ -48,8 +48,6 @@ const styles = {
 }
 
 
-const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
-
 
 
 
@@ -150,29 +148,39 @@ class Demo extends React.Component {
     
     return (
 
-      <Card>
+      <Card style={{paddingTop: '27px'}}>
 
         <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Account Access</h4>
+          <h4 className={classes.cardTitleWhite}>{this.props.title}</h4>
           <p className={classes.cardCategoryWhite}></p>
         </CardHeader>
 
         <CardBody>
 
-          <CustomInput
-            labelText="Search"
-            id="treeSearch"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              disabled: false,
-              value: this.state.inputValue,
-              onChange: this.onChange
-            }}       
-          />
+          {this.props.search ?
+          
+            <CustomInput
+              labelText="Search"
+              id="treeSearch"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                disabled: false,
+                value: this.state.inputValue,
+                onChange: this.onChange
+              }}       
+            />
 
-          <GridList cellHeight={150}  cols={1}>
+            :
+          
+            null
+          
+          }
+
+         
+
+          <GridList cellHeight={this.props.treeContainerHeight}  cols={1}>
     
             <Tree
               checkable
@@ -186,7 +194,7 @@ class Demo extends React.Component {
               filterTreeNode={this.filterTreeNode}
               style={{}}
             >
-              {loop(myData)}
+              {loop(this.props.data)}
             </Tree>
 
 
