@@ -17,6 +17,7 @@
     "axios": "0.20.0",
     "chartist": "0.11.4",
     "classnames": "2.2.6",
+    "email-validator": "2.0.4",
     "perfect-scrollbar": "1.5.0",
     "prop-types": "15.7.2",
     "rc-tree": "3.9.5",

@@ -14,8 +14,13 @@ import {rolesFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
+import {isValidEmail, isValidFullName} from "../../utils"
+
 
 import CustomTree from '../../components/Tree/CustomTree'
+
+
+const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
 
 
 const apiBase = config.apiGateway.URL
@@ -87,11 +92,32 @@ function CreateUser  (props) {
   const classes = useStyles()
   const [selectedRoles, setSelectedRoles] = React.useState([])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
+  const [email, setEmail] = React.useState('')
+  const [fullName, setFullName] = React.useState('')
+  const [company, setCompany] = React.useState('')
 
   const handleRoleSelect = (event) => {
     setSelectedRoles(event.target.value)
   }
 
+ 
+
+  function handleEmailChange (event) {
+    setEmail(event.target.value)
+  }
+
+  function handleFullNameChange (event) {
+    setFullName(event.target.value)
+  }
+
+  function handleCompanyChange (event) {
+    setCompany(event.target.value)
+  }
+
+  const formIsValid = () => {
+    if ((company.length >= 2) && (isValidEmail(email)) && (isValidFullName(fullName)) && (selectedRoles.length > 0)) return true
+    return false
+  }
 
   return (
     <Card>
@@ -118,8 +144,12 @@ function CreateUser  (props) {
                         fullWidth: true
                       }}
                       inputProps={{
-                        disabled: false
+                        disabled: false,
+                        value: company,
+                        onChange: handleCompanyChange
                       }}
+                      error={company.length > 0 && company.length < 2}
+                      success={company.length >= 2}
                     />
                   </GridItem>
                 
@@ -131,8 +161,18 @@ function CreateUser  (props) {
                       formControlProps={{
                         fullWidth: true
                       }}
+                      inputProps={{
+                        type: 'email',
+                        value: email,
+                        onChange: handleEmailChange
+                      }}
+                      handleClear={()=>setEmail('')}
+                      error={email.length > 0 && !isValidEmail(email)}
+                      success={isValidEmail(email)}
                     />
                   </GridItem>
+
+              
 
                   <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
@@ -141,25 +181,48 @@ function CreateUser  (props) {
                       formControlProps={{
                         fullWidth: true
                       }}
+                      inputProps={{
+                        value: fullName,
+                        onChange: handleFullNameChange
+                      }}
+                      error={fullName.length > 0 && !isValidFullName(fullName)}
+                      success={isValidFullName(fullName)}
                     />
                   </GridItem>
 
-                  <GridItem xs={12} sm={12} md={12}>
+                  <GridItem xs={10} sm={10} md={10}>
                     <CustomSelect
                       roles={props.roles}
                       labelText='Role'
                       handleItemSelect={handleRoleSelect}
                       value={selectedRoles}
                       multiple={true}
+                      success={selectedRoles.length > 0}
                       formControlProps={{
                         fullWidth: true
                       }}
+                     
                     />
                   </GridItem>
 
+                 {
+                   selectedRoles.includes(11) ?
+
                   <GridItem xs={12} sm={12} md={8}>
-                    <CustomTree/>
+                    <CustomTree
+                      data={myData}
+                      title='Account Access'
+                      search={true}
+                      treeContainerHeight={150}
+                    />
                   </GridItem>
+
+                   :
+
+                   null
+                 }
+
+                  
                   
                 
 
@@ -181,7 +244,7 @@ function CreateUser  (props) {
                 
               </CardBody>
               <CardFooter>
-                <Button color="primary">Invite User</Button>
+                <Button disabled={!formIsValid()} color="primary">Invite User</Button>
               </CardFooter>
             </Card>
           </GridItem>
