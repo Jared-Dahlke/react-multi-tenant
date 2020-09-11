@@ -1,4 +1,8 @@
-docker-build:
+stages:
+  - build
+
+
+build-staging:
   # Official docker image.
   image: docker:latest
   stage: build
@@ -13,7 +17,24 @@ docker-build:
     - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
 
   only:
-    - sprint-baguio
+    - staging
+
+
+build-master:
+  # Official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+
+  before_script:
+    - docker login -u recru02 -p dE_wc1eopRsixMPnrumx registry.gitlab.com
     
-  except:
+  script:
+    - docker build -f dockerfile.production -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-production .
+    - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-production
+
+  only:
     - master
+
+
