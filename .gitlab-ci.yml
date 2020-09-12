@@ -17,7 +17,7 @@ build-staging:
     - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
 
   only:
-    - staging
+    - /^sprint-.*$/
 
 
 build-master:
