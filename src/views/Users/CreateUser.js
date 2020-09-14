@@ -14,11 +14,11 @@ import {rolesFetchData} from '../../redux/actions/roles'
 import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
-import {isValidEmail, isValidFullName} from "../../utils"
-
+import {isValidEmail} from "../../utils"
+import Snackbar from "../../components/Snackbar/Snackbar"
+import AddAlert from '@material-ui/icons/AddAlert'
 
 import CustomTree from '../../components/Tree/CustomTree'
-
 
 const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
 
@@ -87,8 +87,6 @@ function CreateUser  (props) {
     fetchData(url)
   }, [fetchData])
 
-
-
   const classes = useStyles()
   const [selectedRoles, setSelectedRoles] = React.useState([])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
@@ -96,6 +94,7 @@ function CreateUser  (props) {
   const [firstName, setFirstName] = React.useState('')
   const [lastName, setLastName] = React.useState('')
   const [company, setCompany] = React.useState('')
+  const [inviteButtonDisabled, setInviteButtonDisabled] = React.useState(false)
 
   const handleRoleSelect = (event) => {
     setSelectedRoles(event.target.value)
@@ -124,8 +123,24 @@ function CreateUser  (props) {
     return false
   }
 
+
+  const [showAlertMessage, setShowAlertMessage] = React.useState(false);
+
+  const handleInviteUserClick = () => {
+    setInviteButtonDisabled(true)
+    setShowAlertMessage(true)
+    setTimeout(function() {
+      setShowAlertMessage(false)
+      setInviteButtonDisabled(false)
+    }, 4000)
+  }
+
+
+
   return (
     <Card>
+
+     
 
       <CardBody>
       
@@ -265,12 +280,24 @@ function CreateUser  (props) {
                 
               </CardBody>
               <CardFooter>
-                <Button disabled={!formIsValid()} color="primary">Invite User</Button>
+                <Button disabled={!formIsValid() || inviteButtonDisabled} onClick={handleInviteUserClick} color="primary">Invite User</Button>
               </CardFooter>
             </Card>
           </GridItem>
           
         </GridContainer>
+
+        <Snackbar
+          place="bc"
+          color="success"
+          icon={AddAlert}
+          message="User created and Signup invitation is sent"
+          open={showAlertMessage}
+          closeNotification={() => setShowAlertMessage(false)}
+          close
+        />
+
+       
             
       </CardBody>
 
