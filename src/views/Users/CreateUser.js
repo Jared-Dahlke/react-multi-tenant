@@ -93,7 +93,8 @@ function CreateUser  (props) {
   const [selectedRoles, setSelectedRoles] = React.useState([])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
   const [email, setEmail] = React.useState('')
-  const [fullName, setFullName] = React.useState('')
+  const [firstName, setFirstName] = React.useState('')
+  const [lastName, setLastName] = React.useState('')
   const [company, setCompany] = React.useState('')
 
   const handleRoleSelect = (event) => {
@@ -106,8 +107,12 @@ function CreateUser  (props) {
     setEmail(event.target.value)
   }
 
-  function handleFullNameChange (event) {
-    setFullName(event.target.value)
+  function handleFirstNameChange (event) {
+    setFirstName(event.target.value)
+  }
+
+  function handleLastNameChange (event) {
+    setLastName(event.target.value)
   }
 
   function handleCompanyChange (event) {
@@ -115,7 +120,7 @@ function CreateUser  (props) {
   }
 
   const formIsValid = () => {
-    if ((company.length >= 2) && (isValidEmail(email)) && (isValidFullName(fullName)) && (selectedRoles.length > 0)) return true
+    if ((company.length >= 2) && (isValidEmail(email)) && (firstName.length > 1 && lastName.length > 1) && (selectedRoles.length > 0)) return true
     return false
   }
 
@@ -174,19 +179,35 @@ function CreateUser  (props) {
 
               
 
-                  <GridItem xs={12} sm={12} md={6}>
+                  <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
-                      labelText="Full Name"
-                      id="full-name"
+                      labelText="First Name"
+                      id="first-name"
                       formControlProps={{
-                        fullWidth: true
+                        fullWidth: false
                       }}
                       inputProps={{
-                        value: fullName,
-                        onChange: handleFullNameChange
+                        value: firstName,
+                        onChange: handleFirstNameChange
                       }}
-                      error={fullName.length > 0 && !isValidFullName(fullName)}
-                      success={isValidFullName(fullName)}
+                      error={firstName.length > 0 && firstName.length < 2}
+                      success={firstName.length > 1}
+                    />
+                  </GridItem>
+
+                  <GridItem xs={12} sm={12} md={8}>
+                    <CustomInput
+                      labelText="Last Name"
+                      id="last-name"
+                      formControlProps={{
+                        fullWidth: false
+                      }}
+                      inputProps={{
+                        value: lastName,
+                        onChange: handleLastNameChange
+                      }}
+                      error={lastName.length > 0 && lastName.length < 2}
+                      success={lastName.length > 1}
                     />
                   </GridItem>
 

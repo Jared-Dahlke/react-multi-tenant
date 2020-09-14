@@ -18,6 +18,7 @@ import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import {setAuthToken} from '../redux/actions/auth.js'
 import config from '../config.js'
+const queryString = require('query-string');
 
 const apiBase = config.apiGateway.MOCKURL;
 
@@ -68,10 +69,14 @@ const useStyles = makeStyles((theme) => ({
 
 function Signup(props: any) {
   const classes = useStyles();
-  const [email, setEmail] = useState("eve.holt@reqres.in");
-  const [password, setPassword] = useState("pistol");
+
+  const parsed = queryString.parse(props.location.search)
+  const [fromInvite] = useState(!!parsed.fromInvite)
+  const [email, setEmail] = useState(parsed.email);
+  const [firstName, setFirstName] = useState(parsed.firstName)
+  const [lastName, setLastName] = useState(parsed.lastName)
+  const [password, setPassword] = useState("");
   const [isLoggedIn, setLoggedIn] = useState(false);
-  //const referer = props.location.state ? props.location.state.referer : '/';
 
   async function register () {
     let url = apiBase + '/register'
@@ -115,22 +120,32 @@ function Signup(props: any) {
               <TextField
                 autoComplete="fname"
                 name="firstName"
+                value={firstName}
+                onChange={e => {
+                  setFirstName(e.target.value);
+                }}
                 variant="outlined"
                 required
                 fullWidth
                 id="firstName"
                 label="First Name"
                 autoFocus
+                disabled={fromInvite}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
+                value={lastName}
+                onChange={e => {
+                  setLastName(e.target.value);
+                }}
                 fullWidth
                 id="lastName"
                 label="Last Name"
                 name="lastName"
+                disabled={fromInvite}
                 autoComplete="lname"
               />
             </Grid>
@@ -140,6 +155,7 @@ function Signup(props: any) {
                 required
                 fullWidth
                 id="email"
+                disabled={fromInvite}
                 label="Email Address"
                 name="email"
                 autoComplete="email"
@@ -158,6 +174,7 @@ function Signup(props: any) {
                 label="Password"
                 type="password"
                 id="password"
+                autoFocus={fromInvite}
                 autoComplete="current-password"
                 value={password}
                 onChange={e => {
@@ -165,13 +182,7 @@ function Signup(props: any) {
                 }}
               />
             </Grid>
-            {/*<Grid item xs={12}>
-
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid> */}
+           
             
           </Grid>
           <Button
@@ -182,7 +193,13 @@ function Signup(props: any) {
             className={classes.submit}
             onClick={register}
           >
-            Sign Up
+            {
+              fromInvite ?
+                'Complete Sign Up'
+                :
+                'Sign Up'
+            }
+           
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
