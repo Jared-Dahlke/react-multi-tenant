@@ -38,3 +38,29 @@ export function login(credentials) {
     }
   };
 }
+
+export function resetPassword(email) {
+  let url =  apiBase + '/resetPassword'
+  return async (dispatch) => {
+      
+    try {
+      const result = await axios.post(url, {
+        email: email
+      })  
+
+      if (result.status === 200) {
+        console.log('reset password email sent');
+        // let token = result.data.jwt
+        // dispatch(setAuthToken(token))
+        // localStorage.setItem("token", token);
+        // dispatch(setLoggedIn(true))        
+      }
+
+    }
+    catch(error) {
+      alert(error)
+      let errorType = error.response.status
+      handleError(errorType)
+    }
+  };
+}

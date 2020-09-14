@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import PrivateRoute from './pages/PrivateRoute.js';
 import Login from "./pages/Login";
 import Signup from './pages/Signup';
+import ResetPassword from './pages/ResetPassword';
 import {Provider} from 'react-redux'
 import configureStore from './redux/store/index.js'
 import Admin from "../src/layouts/Admin.js";
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
+          <Route path="/resetPassword" component={ResetPassword} />
           <PrivateRoute path="/admin" component={Admin} />
         </div>
       </Router>
