@@ -100,8 +100,6 @@ function CreateUser  (props) {
     setSelectedRoles(event.target.value)
   }
 
- 
-
   function handleEmailChange (event) {
     setEmail(event.target.value)
   }
@@ -136,11 +134,8 @@ function CreateUser  (props) {
   }
 
 
-
   return (
     <Card>
-
-     
 
       <CardBody>
       
