@@ -5,6 +5,7 @@ import PrivateRoute from './pages/PrivateRoute.js';
 import Login from "./pages/Login";
 import Signup from './pages/Signup';
 import ResetPassword from './pages/ResetPassword';
+import ChangePassword from './pages/ChangePassword';
 import {Provider} from 'react-redux'
 import configureStore from './redux/store/index.js'
 import Admin from "../src/layouts/Admin.js";
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/resetPassword" component={ResetPassword} />
+          <Route path="/changePassword" component={ChangePassword} />
           <PrivateRoute path="/admin" component={Admin} />
         </div>
       </Router>

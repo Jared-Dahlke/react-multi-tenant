@@ -11,7 +11,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {resetPassword} from '../redux/actions/auth.js'
+import {changePassword} from '../redux/actions/auth.js'
 
 const mapStateToProps = (state : any) => {
   return { 
@@ -21,7 +21,7 @@ const mapStateToProps = (state : any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    resetPassword: (email: string) => dispatch(resetPassword(email))
+    changePassword: (email: string) => dispatch(changePassword(email))
   }
 }
 
@@ -59,15 +59,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PasswordReset(props: any) {
+function PasswordChange(props: any) {
   const classes = useStyles();
-  const [email, setEmail] = useState("rahul@sightly.com");
-  // const [password, setPassword] = useState("pistol");
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setPasswordConfirmation] = useState("");
   const [isLoggedIn] = useState(false);
   //const referer = props.location.state ? props.location.state.referer : '/';
 
-  async function postResetPassword() {
-    props.resetPassword(email)
+  async function postChangePassword() {
+    props.changePassword(password)
   }
 
   if (props.isLoggedIn) {
@@ -83,7 +83,7 @@ function PasswordReset(props: any) {
 
         </Avatar>
         <Typography component="h1" variant="h5">
-          Forgot your Password
+          Change your Password
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -92,17 +92,32 @@ function PasswordReset(props: any) {
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={email}
+                id="password"
+                label="Password"
+                name="password"
+                autoComplete="password"
+                value={password}
                 onChange={e => {
-                  setEmail(e.target.value);
+                  setPassword(e.target.value);
                 }}
               />
             </Grid>
             
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="password_confirmation"
+                label="Password Confirmation"
+                name="password_confirmation"
+                autoComplete="password_confirmation"
+                value={password_confirmation}
+                onChange={e => {
+                  setPasswordConfirmation(e.target.value);
+                }}
+              />
+            </Grid>
           </Grid>
           <Button
             type="button"
@@ -110,9 +125,9 @@ function PasswordReset(props: any) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={postResetPassword}
+            onClick={postChangePassword}
           >
-            Reset
+            Change Password
           </Button>
         </form>
       </div>
@@ -124,6 +139,6 @@ function PasswordReset(props: any) {
 }
 
 
-const ResetPassword = connect(mapStateToProps, mapDispatchToProps)(PasswordReset)
+const ChangePassword = connect(mapStateToProps, mapDispatchToProps)(PasswordChange)
 
-export default ResetPassword;
+export default ChangePassword;

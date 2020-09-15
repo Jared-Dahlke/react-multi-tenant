@@ -64,3 +64,29 @@ export function resetPassword(email) {
     }
   };
 }
+
+export function changePassword(password) {
+  let url =  apiBase + '/user'
+  return async (dispatch) => {
+      
+    try {
+      const result = await axios.put(url, {
+        password: password
+      })  
+
+      if (result.status === 200) {
+        console.log('password reset');
+        // let token = result.data.jwt
+        // dispatch(setAuthToken(token))
+        // localStorage.setItem("token", token);
+        // dispatch(setLoggedIn(true))        
+      }
+
+    }
+    catch(error) {
+      alert(error)
+      let errorType = error.response.status
+      handleError(errorType)
+    }
+  };
+}
