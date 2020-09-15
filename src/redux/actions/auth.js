@@ -49,11 +49,7 @@ export function resetPassword(email) {
       })  
 
       if (result.status === 200) {
-        console.log('reset password email sent');
-        // let token = result.data.jwt
-        // dispatch(setAuthToken(token))
-        // localStorage.setItem("token", token);
-        // dispatch(setLoggedIn(true))        
+        alert('reset password email sent');    
       }
 
     }
@@ -65,21 +61,18 @@ export function resetPassword(email) {
   };
 }
 
-export function changePassword(password) {
-  let url =  apiBase + '/user'
+export function changePassword(password, userId, token) {
+  console.log(password, userId, token);
+  let url =  `${apiBase}/updatePassword/${userId}/${token}`
   return async (dispatch) => {
       
     try {
-      const result = await axios.put(url, {
+      const result = await axios.post(url, {
         password: password
       })  
 
       if (result.status === 200) {
-        console.log('password reset');
-        // let token = result.data.jwt
-        // dispatch(setAuthToken(token))
-        // localStorage.setItem("token", token);
-        // dispatch(setLoggedIn(true))        
+        alert('Password has been reset. Please proceed to login with your new password.');      
       }
 
     }

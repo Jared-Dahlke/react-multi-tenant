@@ -1,4 +1,5 @@
 import React, { useState }  from "react";
+// import PropTypes from "prop-types"
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
@@ -21,7 +22,7 @@ const mapStateToProps = (state : any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    changePassword: (email: string) => dispatch(changePassword(email))
+    changePassword: (password: string, userId: string, token: string) => dispatch(changePassword(password, userId, token))
   }
 }
 
@@ -60,18 +61,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PasswordChange(props: any) {
+  const { userId, token } = props;
   const classes = useStyles();
   const [password, setPassword] = useState("");
   const [password_confirmation, setPasswordConfirmation] = useState("");
-  const [isLoggedIn] = useState(false);
-  //const referer = props.location.state ? props.location.state.referer : '/';
 
   async function postChangePassword() {
-    props.changePassword(password)
+    // console.log(password, password_confirmation)
+    if (password === password_confirmation){
+      props.changePassword(password, userId, token)
+    } else {
+      alert('Passwords do not match.')
+    }
   }
 
   if (props.isLoggedIn) {
-    //history.push(referer);
     return <Redirect to='./admin/profile' />;
   }
 
@@ -94,6 +98,7 @@ function PasswordChange(props: any) {
                 fullWidth
                 id="password"
                 label="Password"
+                type="password"
                 name="password"
                 autoComplete="password"
                 value={password}
@@ -110,6 +115,7 @@ function PasswordChange(props: any) {
                 fullWidth
                 id="password_confirmation"
                 label="Password Confirmation"
+                type="password"
                 name="password_confirmation"
                 autoComplete="password_confirmation"
                 value={password_confirmation}
@@ -129,6 +135,18 @@ function PasswordChange(props: any) {
           >
             Change Password
           </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="/login" variant="body2">
+                Login
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="/signup" variant="body2">
+                {"Don't have an account?"}
+              </Link>
+            </Grid>
+          </Grid>
         </form>
       </div>
       <Box mt={5}>
@@ -140,5 +158,10 @@ function PasswordChange(props: any) {
 
 
 const ChangePassword = connect(mapStateToProps, mapDispatchToProps)(PasswordChange)
+
+// ChangePassword.propTypes = {
+//   token: PropTypes.string.isRequired,
+//   userId: PropTypes.string.isRequired
+// }
 
 export default ChangePassword;

@@ -62,16 +62,12 @@ const useStyles = makeStyles((theme) => ({
 function PasswordReset(props: any) {
   const classes = useStyles();
   const [email, setEmail] = useState("rahul@sightly.com");
-  // const [password, setPassword] = useState("pistol");
-  const [isLoggedIn] = useState(false);
-  //const referer = props.location.state ? props.location.state.referer : '/';
 
   async function postResetPassword() {
     props.resetPassword(email)
   }
 
   if (props.isLoggedIn) {
-    //history.push(referer);
     return <Redirect to='./admin/profile' />;
   }
 

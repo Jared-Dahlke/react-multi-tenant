@@ -22,7 +22,12 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/resetPassword" component={ResetPassword} />
-          <Route path="/changePassword" component={ChangePassword} />
+          <Route
+            path="/changePassword/:userId/:token"
+            render={({ match }) => (
+              <ChangePassword userId={match.params.userId} token={match.params.token} />
+            )}
+          />
           <PrivateRoute path="/admin" component={Admin} />
         </div>
       </Router>
