@@ -16,6 +16,8 @@ import {usersFetchData} from '../../redux/actions/users.js'
 import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
+import { useHistory } from "react-router-dom";
+
 
 const useTableStyles = makeStyles(tableStyles);
 
@@ -30,12 +32,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsersData: () => dispatch(usersFetchData())
+    fetchUsersData: () => dispatch(usersFetchData()),
+    //setCurrentlyEditingUserGlobally: (user) => dispatch(setCurrentlyEditingUser(user))
   }
 }
 
 function Users(props) {
 
+  let history = useHistory();
   const classes = useStyles();
   const tableClasses = useTableStyles();
 
@@ -51,6 +55,13 @@ function Users(props) {
   });
 
   const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
+
+  const handleEditUserClick= () => {
+    
+    history.push('/admin/users/edit')
+    // set global currentEditingUserState then navigate to the edit user url
+    // href={'/admin/users/edit?' + encodeParams(user)}
+  }
 
 
   return (                                   
@@ -99,7 +110,7 @@ function Users(props) {
                     <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
                     <TableCell className={tableCellClasses}>{user.company}</TableCell>
                     <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.userType}</TableCell>
+                    <TableCell className={tableCellClasses}>{user.internal}</TableCell>
                     
                     <TableCell className={classes.tableActions}>
                       <Tooltip
@@ -111,6 +122,7 @@ function Users(props) {
                         <IconButton
                           aria-label="Edit"
                           className={classes.tableActionButton}
+                          onClick={handleEditUserClick}
                         >
                           <Edit
                             className={

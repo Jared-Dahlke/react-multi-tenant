@@ -3,6 +3,7 @@ import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, } from '../action-types/use
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 import config from '../../config.js'
+import {User} from '../../models/user'
 const apiBase = config.apiGateway.URL
 
 export function usersHasErrored(bool) {
@@ -29,7 +30,12 @@ export function usersFetchData() {
       const result = await axios.get(url)       
      
       if (result.status === 200) {
-        dispatch(usersFetchDataSuccess(result))
+        let users = {data: []}
+        for (const user of result.data) {
+          let newUser = new User(user.userId, user.firstName, user.lastName, user.company, user.email, user.userType)
+          users.data.push(newUser)
+        }
+        dispatch(usersFetchDataSuccess(users))
       }
 
     }

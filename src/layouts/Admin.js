@@ -17,6 +17,7 @@ import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
 import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
+import EditUser from '../views/Users/EditUser'
 
 let ps;
 
@@ -36,6 +37,7 @@ const switchRoutes = (
         <>
           <Route path={`${url}/`} component={Users} exact />
           <Route path={`${url}/create`} component={CreateUser} />      
+          <Route path={`${url}/edit`} component={EditUser} />   
         </>
       )}
     />
