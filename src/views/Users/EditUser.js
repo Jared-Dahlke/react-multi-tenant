@@ -13,7 +13,7 @@ import CustomSelect from '../../components/CustomSelect/CustomSelect'
 import CustomTree from '../../components/Tree/CustomTree'
 import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
 import Snackbar from '../../components/Snackbar/Snackbar'
-import { userUnderEdit } from "../../redux/reducers/users.js";
+import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
 
 const queryString = require('query-string');
@@ -41,8 +41,7 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    roles: state.roles.data,
-    userUnderEdit: state.userUnderEdit
+    roles: state.roles.data
   };
 };
 
@@ -54,7 +53,7 @@ function EditUser(props) {
   const [user, setUser] = React.useState(userFromParams)
   const classes = useStyles();
   const [selectedRoles, setSelectedRoles] = React.useState([])
-  //let user = props.userUnderEdit
+  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
   const handleFirstNameChange = (text) => {
     let currentUser = {...user}
@@ -81,10 +80,25 @@ function EditUser(props) {
   }
 
   const handleInternalUserChecked = () => {
-    console.log('handle interna user checked')
     let currentUser = {...user}
     currentUser.internal = !currentUser.internal
     setUser(currentUser)
+  }
+
+  const formIsValid = () => {
+    if ((v.isCompanySuccess(user.company)) && (v.isEmailSuccess(user.email)) && (v.isFirstNameSuccess(user.firstName)) && (v.isLastNameSuccess(user.lastName)) && (v.isRoleSuccess(user.roles)) ) return true
+    return false
+  }
+
+  const [showAlertMessage, setShowAlertMessage] = React.useState(false);
+
+  const handleSaveClick = () => {
+    setSaveButtonDisabled(true)
+    setShowAlertMessage(true)
+    setTimeout(function() {
+      setShowAlertMessage(false)
+      setSaveButtonDisabled(false)
+    }, 4000)
   }
   
   return (
@@ -226,7 +240,7 @@ function EditUser(props) {
                 
               </CardBody>
               <CardFooter>
-                <Button  color="primary">Save</Button>
+                <Button disabled={!formIsValid() || saveButtonDisabled} onClick={handleSaveClick} color="primary">Save</Button>
               </CardFooter>
             </Card>
           </GridItem>
@@ -240,6 +254,16 @@ function EditUser(props) {
           message="User created and Signup invitation is sent"
           //open={showAlertMessage}
           //closeNotification={() => setShowAlertMessage(false)}
+          close
+        />
+
+        <Snackbar
+          place="bc"
+          color="success"
+          icon={AddAlert}
+          message="User info is saved"
+          open={showAlertMessage}
+          closeNotification={() => setShowAlertMessage(false)}
           close
         />
 

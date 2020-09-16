@@ -2,7 +2,7 @@
 import {combineReducers} from 'redux'
 import {roles, rolesHasErrored, rolesIsLoading, rolesPermissions, rolesPermissionsHasErrored} from './roles'
 import {authToken, isLoggedIn} from './auth'
-import {users, usersHasErrored, userUnderEdit} from './users'
+import {users, usersHasErrored} from './users'
 
 
 export default combineReducers({
@@ -14,6 +14,5 @@ export default combineReducers({
   rolesIsLoading,
   isLoggedIn,
   users,
-  usersHasErrored,
-  userUnderEdit
+  usersHasErrored
 })

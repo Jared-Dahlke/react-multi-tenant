@@ -1,4 +1,4 @@
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, SET_USER_UNDER_EDIT} from '../action-types/users'
+import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS} from '../action-types/users'
 
 export function usersHasErrored(state = false, action) {
   switch (action.type) {
@@ -9,14 +9,6 @@ export function usersHasErrored(state = false, action) {
   }
 }
 
-export function userUnderEdit(state = null, action) {
-  switch (action.type) {
-  case SET_USER_UNDER_EDIT:
-    return action.userUnderEdit;
-  default:
-    return state;
-  }
-}
 
 export function users(state = [], action) {
   switch (action.type) {
