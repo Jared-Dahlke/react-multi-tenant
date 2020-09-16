@@ -1,11 +1,11 @@
 
 export class User {
-  constructor (userId, firstName, lastName, company, email, internal) {
-    if (arguments.length !== 6) {
+  constructor (userId, firstName, lastName, company, email, internal, roles) {
+    if (arguments.length !== 7) {
       throw new Error('invalid User argument count')
     }
    
-    if (!firstName || !lastName || !company || !email || !internal) {
+    if (!firstName || !lastName || !company || !email || !internal || !roles) {
       throw new Error('invalid User arguments: missing required argument')
     }
 
@@ -15,7 +15,6 @@ export class User {
     this.company = company
     this.email = email
     this.internal = internal
+    this.roles = roles
   }
 }
-
-

@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import {usersFetchData} from '../../redux/actions/users.js'
+import {usersFetchData, userUnderEdit} from '../../redux/actions/users.js'
 import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
@@ -33,9 +33,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsersData: () => dispatch(usersFetchData()),
-    //setCurrentlyEditingUserGlobally: (user) => dispatch(setCurrentlyEditingUser(user))
+    //setUserUnderEdit: (user) => dispatch(userUnderEdit(user))
   }
 }
+
+
 
 function Users(props) {
 
@@ -56,11 +58,12 @@ function Users(props) {
 
   const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
 
-  const handleEditUserClick= () => {
-    
-    history.push('/admin/users/edit')
-    // set global currentEditingUserState then navigate to the edit user url
-    // href={'/admin/users/edit?' + encodeParams(user)}
+  const handleEditUserClick = (user) => {
+    //props.setUserUnderEdit(user)
+    console.log('user from users page:')
+    console.log(user)
+    let url = '/admin/users/edit?user=' + encodeURIComponent(JSON.stringify(user))
+    history.push(url)
   }
 
 
@@ -115,14 +118,14 @@ function Users(props) {
                     <TableCell className={classes.tableActions}>
                       <Tooltip
                         id="tooltip-top"
-                        title="Edit Task"
+                        title="Edit User"
                         placement="top"
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <IconButton
                           aria-label="Edit"
                           className={classes.tableActionButton}
-                          onClick={handleEditUserClick}
+                          onClick={()=>handleEditUserClick(user)}
                         >
                           <Edit
                             className={

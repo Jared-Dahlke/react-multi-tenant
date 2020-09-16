@@ -17,6 +17,7 @@ import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
 import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
+import {rolesFetchData} from '../redux/actions/roles.js'
 import EditUser from '../views/Users/EditUser'
 
 let ps;
@@ -55,7 +56,8 @@ const useStyles = makeStyles(styles);
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsersData: () => dispatch(usersFetchData())
+    fetchUsersData: () => dispatch(usersFetchData()),
+    fetchRoles: () => dispatch(rolesFetchData())
   }
 }
 
@@ -97,14 +99,12 @@ function Admin({ ...rest }) {
     };
   }, [mainPanel]);
 
-  const {fetchUsersData} = rest
-
+  //preload critical data into the application
+  const {fetchUsersData, fetchRoles} = rest
   React.useEffect(() => {
     fetchUsersData()
-  }, [fetchUsersData])
-
-
-
+    fetchRoles()
+  }, [fetchUsersData, fetchRoles])
 
   return (
     <div className={classes.wrapper}>

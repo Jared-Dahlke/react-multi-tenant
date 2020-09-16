@@ -1,24 +1,19 @@
 import React from "react";
 import {connect} from 'react-redux'
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-// core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
-import CardAvatar from "../../components/Card/CardAvatar.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-import avatar from "../../assets/img/faces/marc.jpg";
 import CustomSelect from '../../components/CustomSelect/CustomSelect'
 import CustomTree from '../../components/Tree/CustomTree'
 import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
 import Snackbar from '../../components/Snackbar/Snackbar'
-
+import { userUnderEdit } from "../../redux/reducers/users.js";
 
 const queryString = require('query-string');
 
@@ -45,16 +40,44 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    authToken: state.authToken
+    roles: state.roles.data,
+    userUnderEdit: state.userUnderEdit
   };
 };
 
 
-
 function EditUser(props) {
 
+  const params = queryString.parse(props.location.search)
+  const userFromParams = JSON.parse(params.user)
+  const [user, setUser] = React.useState(userFromParams)
   const classes = useStyles();
   const [selectedRoles, setSelectedRoles] = React.useState([])
+  //let user = props.userUnderEdit
+
+  const handleFirstNameChange = (event) => {
+    let currentUser = {...user}
+    currentUser.firstName = event.target.value
+    setUser(currentUser)
+  }
+
+  const handleLastNameChange = (event) => {
+    let currentUser = {...user}
+    currentUser.lastName = event.target.value
+    setUser(currentUser)
+  }
+
+  const handleEmailChange = (event) => {
+    let currentUser = {...user}
+    currentUser.email = event.target.value
+    setUser(currentUser)
+  }
+
+  const handleRoleChange = (event) => {
+    let currentUser = {...user}
+    currentUser.roles = event.target.value
+    setUser(currentUser)
+  }
   
   return (
     <Card>
@@ -82,8 +105,7 @@ function EditUser(props) {
                       }}
                       inputProps={{
                         disabled: true,
-                        //value: user.company,
-                        
+                        value: user.company,                      
                       }}
                       
                     />
@@ -99,8 +121,8 @@ function EditUser(props) {
                       }}
                       inputProps={{
                         type: 'email',
-                        //value: email,
-                        
+                        value: user.email,
+                        onChange: handleEmailChange
                       }}
                       //handleClear={()=>setEmail('')}
                       //error={email.length > 0 && !isValidEmail(email)}
@@ -118,8 +140,8 @@ function EditUser(props) {
                         fullWidth: false
                       }}
                       inputProps={{
-                        //value: firstName,
-                        //onChange: handleFirstNameChange
+                        value: user.firstName,
+                        onChange: handleFirstNameChange
                       }}
                       //error={firstName.length > 0 && firstName.length < 2}
                       //success={firstName.length > 1}
@@ -134,8 +156,8 @@ function EditUser(props) {
                         fullWidth: false
                       }}
                       inputProps={{
-                        //value: lastName,
-                        //onChange: handleLastNameChange
+                        value: user.lastName,
+                        onChange: handleLastNameChange
                       }}
                       //error={lastName.length > 0 && lastName.length < 2}
                       //success={lastName.length > 1}
@@ -144,12 +166,12 @@ function EditUser(props) {
 
                   <GridItem xs={10} sm={10} md={10}>
                     <CustomSelect
-                      //roles={props.roles}
+                      roles={props.roles}
                       labelText='Role'
-                      //handleItemSelect={handleRoleSelect}
-                      //value={selectedRoles}
+                      handleItemSelect={handleRoleChange}
+                      value={user.roles}
                       multiple={true}
-                      //success={selectedRoles.length > 0}
+                      success={user.roles.length > 0}
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -224,4 +246,4 @@ function EditUser(props) {
   );
 }
 
-export default connect(null, mapStateToProps)(EditUser)
+export default connect(mapStateToProps, null)(EditUser)

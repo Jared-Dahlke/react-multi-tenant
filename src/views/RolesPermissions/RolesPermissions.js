@@ -5,10 +5,7 @@ import Card from "../../components/Card/Card.js";
 import CardBody from "../../components/Card/CardBody.js";
 import Table from "../../components/Table/Table.js";
 import {rolesPermissionsFetchData} from '../../redux/actions/roles.js'
-import config from '../../config.js'
 import {connect} from 'react-redux'
-
-const apiBase = config.apiGateway.URL
 
 
 const mapStateToProps = (state) => {
@@ -20,19 +17,18 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(rolesPermissionsFetchData(url))
+    fetchRolesPermissions: () => dispatch(rolesPermissionsFetchData())
   }
 }
 
 
 function RolesPermissions(props) {
 
-  const {fetchData} = props
+  const {fetchRolesPermissions} = props
 
   React.useEffect(() => {
-    let url =  apiBase + '/permission'
-    fetchData(url)
-  }, [fetchData])
+    fetchRolesPermissions()
+  }, [fetchRolesPermissions])
 
 
   return (                                   
