@@ -14,6 +14,7 @@ import CustomTree from '../../components/Tree/CustomTree'
 import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import { userUnderEdit } from "../../redux/reducers/users.js";
+import * as v from '../../validations'
 
 const queryString = require('query-string');
 
@@ -55,27 +56,34 @@ function EditUser(props) {
   const [selectedRoles, setSelectedRoles] = React.useState([])
   //let user = props.userUnderEdit
 
-  const handleFirstNameChange = (event) => {
+  const handleFirstNameChange = (text) => {
     let currentUser = {...user}
-    currentUser.firstName = event.target.value
+    currentUser.firstName = text
     setUser(currentUser)
   }
 
-  const handleLastNameChange = (event) => {
+  const handleLastNameChange = (text) => {
     let currentUser = {...user}
-    currentUser.lastName = event.target.value
+    currentUser.lastName = text
     setUser(currentUser)
   }
 
-  const handleEmailChange = (event) => {
+  const handleEmailChange = (text) => {
     let currentUser = {...user}
-    currentUser.email = event.target.value
+    currentUser.email = text
     setUser(currentUser)
   }
 
   const handleRoleChange = (event) => {
     let currentUser = {...user}
     currentUser.roles = event.target.value
+    setUser(currentUser)
+  }
+
+  const handleInternalUserChecked = () => {
+    console.log('handle interna user checked')
+    let currentUser = {...user}
+    currentUser.internal = !currentUser.internal
     setUser(currentUser)
   }
   
@@ -122,15 +130,13 @@ function EditUser(props) {
                       inputProps={{
                         type: 'email',
                         value: user.email,
-                        onChange: handleEmailChange
+                        onChange: (event)=>handleEmailChange(event.target.value)
                       }}
-                      //handleClear={()=>setEmail('')}
-                      //error={email.length > 0 && !isValidEmail(email)}
-                      //success={isValidEmail(email)}
+                      handleClear={()=>handleEmailChange('')}
+                      error={v.isEmailError(user.email)}
+                      success={v.isEmailSuccess(user.email)}
                     />
                   </GridItem>
-
-              
 
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
@@ -141,10 +147,11 @@ function EditUser(props) {
                       }}
                       inputProps={{
                         value: user.firstName,
-                        onChange: handleFirstNameChange
+                        onChange: (event)=>handleFirstNameChange(event.target.value)
                       }}
-                      //error={firstName.length > 0 && firstName.length < 2}
-                      //success={firstName.length > 1}
+                      handleClear={()=>handleFirstNameChange('')}
+                      error={v.isFirstNameError(user.firstName)}
+                      success={v.isFirstNameSuccess(user.firstName)}
                     />
                   </GridItem>
 
@@ -157,10 +164,11 @@ function EditUser(props) {
                       }}
                       inputProps={{
                         value: user.lastName,
-                        onChange: handleLastNameChange
+                        onChange: (event)=>handleLastNameChange(event.target.value)
                       }}
-                      //error={lastName.length > 0 && lastName.length < 2}
-                      //success={lastName.length > 1}
+                      handleClear={()=>handleLastNameChange('')}
+                      error={v.isLastNameError(user.lastName)}
+                      success={v.isLastNameSuccess(user.lastName)}
                     />
                   </GridItem>
 
@@ -171,7 +179,7 @@ function EditUser(props) {
                       handleItemSelect={handleRoleChange}
                       value={user.roles}
                       multiple={true}
-                      success={user.roles.length > 0}
+                      success={v.isRoleSuccess(user.roles)}
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -203,9 +211,9 @@ function EditUser(props) {
 
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomCheckbox
-                      //checked={internalUserChecked}
+                      checked={user.internal}
                       //tabIndex={-1}
-                      //changed={()=>setInternalUserChecked(!internalUserChecked)}
+                      changed={handleInternalUserChecked}
                       formControlProps={{
                         fullWidth: true
                       }}

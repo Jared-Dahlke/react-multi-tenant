@@ -113,7 +113,7 @@ function Users(props) {
                     <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
                     <TableCell className={tableCellClasses}>{user.company}</TableCell>
                     <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.internal}</TableCell>
+                    <TableCell className={tableCellClasses}>{user.internal? 'true' : 'false'}</TableCell>
                     
                     <TableCell className={classes.tableActions}>
                       <Tooltip

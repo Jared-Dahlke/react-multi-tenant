@@ -9,12 +9,17 @@ export class User {
       throw new Error('invalid User arguments: missing required argument')
     }
 
+    let isInternal = true
+    if (internal !== 'Internal') {
+      isInternal = false
+    }
+
     this.userId = userId
     this.firstName = firstName
     this.lastName = lastName
     this.company = company
     this.email = email
-    this.internal = internal
+    this.internal = isInternal
     this.roles = roles
   }
 }
