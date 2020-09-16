@@ -40,7 +40,7 @@ export function login(credentials) {
 }
 
 export function resetPassword(email) {
-  let url =  apiBase + '/resetPassword'
+  let url =  apiBase + '/reset-password'
   return async (dispatch) => {
       
     try {
@@ -63,7 +63,7 @@ export function resetPassword(email) {
 
 export function changePassword(password, userId, token) {
   console.log(password, userId, token);
-  let url =  `${apiBase}/updatePassword/${userId}/${token}`
+  let url =  `${apiBase}/update-password/${userId}/${token}`
   return async (dispatch) => {
       
     try {
