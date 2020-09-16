@@ -52,7 +52,7 @@ function EditUser(props) {
   const userFromParams = JSON.parse(params.user)
   const [user, setUser] = React.useState(userFromParams)
   const classes = useStyles();
-  const [selectedRoles, setSelectedRoles] = React.useState([])
+  const [selectedRoles] = React.useState([])
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
   const handleFirstNameChange = (text) => {
