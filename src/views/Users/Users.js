@@ -32,10 +32,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsersData: () => dispatch(usersFetchData()),
-    //setCurrentlyEditingUserGlobally: (user) => dispatch(setCurrentlyEditingUser(user))
+    fetchUsersData: () => dispatch(usersFetchData())
   }
 }
+
+
 
 function Users(props) {
 
@@ -56,11 +57,9 @@ function Users(props) {
 
   const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
 
-  const handleEditUserClick= () => {
-    
-    history.push('/admin/users/edit')
-    // set global currentEditingUserState then navigate to the edit user url
-    // href={'/admin/users/edit?' + encodeParams(user)}
+  const handleEditUserClick = (user) => {
+    let url = '/admin/users/edit?user=' + encodeURIComponent(JSON.stringify(user))
+    history.push(url)
   }
 
 
@@ -110,19 +109,19 @@ function Users(props) {
                     <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
                     <TableCell className={tableCellClasses}>{user.company}</TableCell>
                     <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.internal}</TableCell>
+                    <TableCell className={tableCellClasses}>{user.internal? 'true' : 'false'}</TableCell>
                     
                     <TableCell className={classes.tableActions}>
                       <Tooltip
                         id="tooltip-top"
-                        title="Edit Task"
+                        title="Edit User"
                         placement="top"
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <IconButton
                           aria-label="Edit"
                           className={classes.tableActionButton}
-                          onClick={handleEditUserClick}
+                          onClick={()=>handleEditUserClick(user)}
                         >
                           <Edit
                             className={

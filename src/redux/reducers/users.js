@@ -9,6 +9,7 @@ export function usersHasErrored(state = false, action) {
   }
 }
 
+
 export function users(state = [], action) {
   switch (action.type) {
   case USERS_FETCH_DATA_SUCCESS:
