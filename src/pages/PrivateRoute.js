@@ -4,7 +4,10 @@ import {connect} from 'react-redux'
 import {setAuthToken} from '../redux/actions/auth.js'
 
 const mapStateToProps = (state) => {
-  return { authToken: state.authToken };
+  return { 
+    authToken: state.authToken,
+    users: state.users 
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -17,6 +20,7 @@ function isValidToken (token) {
   if (token) return true
   return false
 }
+
 
 function PrivateRoute({ component: Component, ...rest }) {
   var authToken = rest.authToken
