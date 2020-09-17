@@ -165,7 +165,7 @@ return (
                 <GridItem xs={12} sm={12} md={12}>
                   <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
                   <CustomInput
-                    labelText="This is some test text to test the text, I'm in that two seat Lambo."
+                    labelText="cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
                     id="about-me"
                     formControlProps={{
                       fullWidth: true

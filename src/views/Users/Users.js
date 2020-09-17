@@ -16,6 +16,8 @@ import {usersFetchData} from '../../redux/actions/users.js'
 import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
+import { useHistory } from "react-router-dom";
+
 
 const useTableStyles = makeStyles(tableStyles);
 
@@ -34,8 +36,11 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+
+
 function Users(props) {
 
+  let history = useHistory();
   const classes = useStyles();
   const tableClasses = useTableStyles();
 
@@ -51,6 +56,11 @@ function Users(props) {
   });
 
   const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
+
+  const handleEditUserClick = (user) => {
+    let url = '/admin/users/edit?user=' + encodeURIComponent(JSON.stringify(user))
+    history.push(url)
+  }
 
 
   return (                                   
@@ -99,18 +109,19 @@ function Users(props) {
                     <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
                     <TableCell className={tableCellClasses}>{user.company}</TableCell>
                     <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.userType}</TableCell>
+                    <TableCell className={tableCellClasses}>{user.internal? 'true' : 'false'}</TableCell>
                     
                     <TableCell className={classes.tableActions}>
                       <Tooltip
                         id="tooltip-top"
-                        title="Edit Task"
+                        title="Edit User"
                         placement="top"
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <IconButton
                           aria-label="Edit"
                           className={classes.tableActionButton}
+                          onClick={()=>handleEditUserClick(user)}
                         >
                           <Edit
                             className={
