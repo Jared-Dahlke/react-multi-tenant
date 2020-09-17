@@ -1,5 +1,5 @@
 
-import {SET_AUTH_TOKEN, SET_LOGGED_IN} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT} from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
 import handleError from '../../errorHandling'
@@ -7,6 +7,10 @@ const apiBase = config.apiGateway.URL;
 
 export function setAuthToken (payload) {
   return {type: SET_AUTH_TOKEN, payload}
+}
+
+export function setShowAlert (payload) {
+  return {type: SET_SHOW_ALERT, payload}
 }
 
 export function setLoggedIn (payload) {
@@ -40,7 +44,7 @@ export function login(credentials) {
 }
 
 export function resetPassword(email) {
-  let url =  apiBase + '/reset-password'
+  let url = apiBase + '/reset-password'
   return async (dispatch) => {
       
     try {
@@ -49,7 +53,7 @@ export function resetPassword(email) {
       })  
 
       if (result.status === 200) {
-        alert('reset password email sent');    
+        dispatch(setShowAlert(true))
       }
 
     }
@@ -62,8 +66,7 @@ export function resetPassword(email) {
 }
 
 export function changePassword(password, userId, token) {
-  console.log(password, userId, token);
-  let url =  `${apiBase}/update-password/${userId}/${token}`
+  let url = `${apiBase}/update-password/${userId}/${token}`
   return async (dispatch) => {
       
     try {
@@ -72,7 +75,7 @@ export function changePassword(password, userId, token) {
       })  
 
       if (result.status === 200) {
-        alert('Password has been reset. Please proceed to login with your new password.');      
+        dispatch(setShowAlert(true))
       }
 
     }

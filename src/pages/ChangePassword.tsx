@@ -12,17 +12,21 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {changePassword} from '../redux/actions/auth.js'
+import {setShowAlert, changePassword} from '../redux/actions/auth.js';
+import Snackbar from "../components/Snackbar/Snackbar";
+import AddAlert from '@material-ui/icons/AddAlert'
 
 const mapStateToProps = (state : any) => {
   return { 
-    authToken: state.authToken
+    isLoggedIn: state.isLoggedIn,
+    showAlert: state.showAlert
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    changePassword: (password: string, userId: string, token: string) => dispatch(changePassword(password, userId, token))
+    changePassword: (password: string, userId: string, token: string) => dispatch(changePassword(password, userId, token)),
+    setShowAlert: (showAlert: boolean) => dispatch(setShowAlert(showAlert))
   }
 }
 
@@ -73,6 +77,10 @@ function PasswordChange(props: any) {
     } else {
       alert('Passwords do not match.')
     }
+
+    setTimeout(function() {
+      props.setShowAlert(false)
+    }, 4000)
   }
 
   if (props.isLoggedIn) {
@@ -149,6 +157,15 @@ function PasswordChange(props: any) {
           </Grid>
         </form>
       </div>
+      <Snackbar
+          place="bc"
+          color="success"
+          icon={AddAlert}
+          message="Password has been reset. Please proceed to login with your new password."
+          open={props.showAlert}
+          closeNotification={() => props.setShowAlert(false)}
+          close
+        />
       <Box mt={5}>
         <Copyright />
       </Box>

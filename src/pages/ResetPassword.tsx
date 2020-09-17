@@ -11,17 +11,21 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {resetPassword} from '../redux/actions/auth.js'
+import {setShowAlert, resetPassword} from '../redux/actions/auth.js';
+import Snackbar from "../components/Snackbar/Snackbar";
+import AddAlert from '@material-ui/icons/AddAlert'
 
 const mapStateToProps = (state : any) => {
   return { 
-    authToken: state.authToken
+    isLoggedIn: state.isLoggedIn,
+    showAlert: state.showAlert
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    resetPassword: (email: string) => dispatch(resetPassword(email))
+    resetPassword: (email: string) => dispatch(resetPassword(email)),
+    setShowAlert: (showAlert: boolean) => dispatch(setShowAlert(showAlert))
   }
 }
 
@@ -65,6 +69,10 @@ function PasswordReset(props: any) {
 
   async function postResetPassword() {
     props.resetPassword(email)
+
+    setTimeout(function() {
+      props.setShowAlert(false)
+    }, 4000)
   }
 
   if (props.isLoggedIn) {
@@ -112,6 +120,15 @@ function PasswordReset(props: any) {
           </Button>
         </form>
       </div>
+      <Snackbar
+          place="bc"
+          color="success"
+          icon={AddAlert}
+          message="Reset password email sent. Check Your email."
+          open={props.showAlert}
+          closeNotification={() => props.setShowAlert(false)}
+          close
+        />
       <Box mt={5}>
         <Copyright />
       </Box>
