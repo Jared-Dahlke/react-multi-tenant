@@ -13,7 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {setShowAlert, resetPassword} from '../redux/actions/auth.js';
 import Snackbar from "../components/Snackbar/Snackbar";
-import AddAlert from '@material-ui/icons/AddAlert'
+import AddAlert from '@material-ui/icons/AddAlert';
+import {isEmailError, isEmailSuccess} from "../validations";
 
 const mapStateToProps = (state : any) => {
   return { 
@@ -104,6 +105,7 @@ function PasswordReset(props: any) {
                 onChange={e => {
                   setEmail(e.target.value);
                 }}
+                error={isEmailError(email)}
               />
             </Grid>
             
@@ -114,6 +116,7 @@ function PasswordReset(props: any) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={isEmailError(email)}
             onClick={postResetPassword}
           >
             Reset

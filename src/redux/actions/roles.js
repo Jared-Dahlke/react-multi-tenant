@@ -38,11 +38,7 @@ export function rolesPermissionsFetchDataSuccess(rolesPermissions) {
   };
 }
 
-<<<<<<< HEAD
-export function rolesFetchData(url) {
-=======
 export function rolesFetchData() {
->>>>>>> origin/sprint-baguio
   return async (dispatch) => {
 
     dispatch(rolesIsLoading(true));
@@ -66,18 +62,11 @@ export function rolesFetchData() {
 }
 
 
-<<<<<<< HEAD
-export function rolesPermissionsFetchData(url) {
-  return async (dispatch) => {
-
-    try {
-=======
 export function rolesPermissionsFetchData() {
   return async (dispatch) => {
 
     try {
       let url =  apiBase + '/permission'
->>>>>>> origin/sprint-baguio
       const result = await axios.get(url)       
       if (result.status === 200) {
         dispatch(rolesPermissionsFetchDataSuccess(result))

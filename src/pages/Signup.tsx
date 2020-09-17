@@ -18,8 +18,6 @@ import PasswordRequirements from '../components/CustomPasswordRequirements/Custo
 import config from '../config.js'
 const queryString = require('query-string');
 
-const queryString = require('query-string');
-
 const apiBase = config.apiGateway.MOCKURL;
 
 const mapStateToProps = (state : any) => {
