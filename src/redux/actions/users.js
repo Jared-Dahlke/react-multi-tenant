@@ -1,8 +1,11 @@
 //import axios from 'axios';
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, } from '../action-types/users'
+import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS } from '../action-types/users'
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 import config from '../../config.js'
+
+
+
 const apiBase = config.apiGateway.URL
 
 export function usersHasErrored(bool) {
@@ -19,7 +22,6 @@ export function usersFetchDataSuccess(users) {
   };
 }
 
-
 export function usersFetchData() {
 
   let url =  apiBase + '/user'
@@ -27,7 +29,6 @@ export function usersFetchData() {
     try {
 
       const result = await axios.get(url)       
-     
       if (result.status === 200) {
         dispatch(usersFetchDataSuccess(result))
       }

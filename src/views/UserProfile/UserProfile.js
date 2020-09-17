@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {connect} from 'react-redux'
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +15,9 @@ import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 
 import avatar from "../../assets/img/faces/marc.jpg";
+
+// Redux
+import {getUserProfileById} from '../../redux/actions/auth'
 
 const styles = {
   cardCategoryWhite: {
@@ -39,24 +42,41 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    authToken: state.authToken
+    authToken: state.authToken,
+    userProfile: state.authReducer.user,
+    loading: state.authReducer.loading,
+    userId: state.userId,
   };
 };
 
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserProfileById: (userId) => dispatch(getUserProfileById(userId))
+  }
+}
 
 
 function UserProfile(props) {
 
   const classes = useStyles();
+  const user = props.userProfile
+  useEffect(() => { 
+    const userId = props.userId
+    if(userId){
+      props.getUserProfileById(userId)
+    }
+  }, [props])  
 
-  return (
+return (
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
+              <p className={classes.cardCategoryWhite}>Complete your profile
+</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
@@ -172,11 +192,15 @@ function UserProfile(props) {
             </CardAvatar>
             <CardBody profile>
               <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
+              <h4 className={classes.cardTitle}>j</h4>
               <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
+              User card will be here
+            {/* {user.firstName}
+            {user.lastName}
+            {user.userId} */}
+
+{/* {loading? 'loading...': user.userId} */}
+
               </p>
               <Button color="primary" round>
                 Follow
@@ -189,6 +213,6 @@ function UserProfile(props) {
   );
 }
 
-const MyUserProfile = connect(mapStateToProps)(UserProfile)
+const MyUserProfile = connect(mapStateToProps,mapDispatchToProps)(UserProfile)
 
 export default MyUserProfile;
