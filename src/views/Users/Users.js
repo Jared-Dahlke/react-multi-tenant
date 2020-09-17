@@ -58,7 +58,7 @@ function Users(props) {
   const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
 
   const handleEditUserClick = (user) => {
-    let url = '/admin/users/edit?user=' + encodeURIComponent(JSON.stringify(user))
+    let url = '/admin/users/edit/' + encodeURIComponent(JSON.stringify(user))
     history.push(url)
   }
 

@@ -47,7 +47,7 @@
     "extends": "react-app",
     "rules": {
       "indent": [
-        "warning",
+        "warn",
         2
       ]
     }
