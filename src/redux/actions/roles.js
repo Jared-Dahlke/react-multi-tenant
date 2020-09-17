@@ -2,6 +2,8 @@
 import {ROLES_HAS_ERRORED, ROLES_PERMISSIONS_HAS_ERRORED, ROLES_IS_LOADING, ROLES_FETCH_DATA_SUCCESS, ROLES_PERMISSIONS_FETCH_DATA_SUCCESS} from '../action-types/roles'
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
+import config from '../../config'
+const apiBase = config.apiGateway.URL;
 
 export function rolesHasErrored(bool) {
   return {
@@ -36,13 +38,17 @@ export function rolesPermissionsFetchDataSuccess(rolesPermissions) {
   };
 }
 
+<<<<<<< HEAD
 export function rolesFetchData(url) {
+=======
+export function rolesFetchData() {
+>>>>>>> origin/sprint-baguio
   return async (dispatch) => {
 
     dispatch(rolesIsLoading(true));
     
     try {
-
+      let url =  apiBase + '/role'
       const result = await axios.get(url)       
       dispatch(rolesIsLoading(false));
       if (result.status === 200) {
@@ -60,10 +66,18 @@ export function rolesFetchData(url) {
 }
 
 
+<<<<<<< HEAD
 export function rolesPermissionsFetchData(url) {
   return async (dispatch) => {
 
     try {
+=======
+export function rolesPermissionsFetchData() {
+  return async (dispatch) => {
+
+    try {
+      let url =  apiBase + '/permission'
+>>>>>>> origin/sprint-baguio
       const result = await axios.get(url)       
       if (result.status === 200) {
         dispatch(rolesPermissionsFetchDataSuccess(result))

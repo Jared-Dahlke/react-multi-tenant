@@ -11,19 +11,17 @@ import CardBody from "../../components/Card/CardBody.js"
 import CardFooter from "../../components/Card/CardFooter.js"
 import {connect} from 'react-redux'
 import {rolesFetchData} from '../../redux/actions/roles'
-import config from '../../config.js'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
-import {isValidEmail} from "../../utils"
+//import {isValidEmail} from "../../validations"
 import Snackbar from "../../components/Snackbar/Snackbar"
 import AddAlert from '@material-ui/icons/AddAlert'
+import * as v from '../../validations'
 
 import CustomTree from '../../components/Tree/CustomTree'
 
 const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
 
-
-const apiBase = config.apiGateway.URL
 
 const styles = {
   cardCategoryWhite: {
@@ -72,20 +70,19 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(rolesFetchData(url))
+    fetchRoles: () => dispatch(rolesFetchData())
   }
 }
 
 
 function CreateUser  (props) {
+ 
 
-
-  const {fetchData} = props
+  //const {fetchRoles} = props
   
-  React.useEffect(() => {
-    let url =  apiBase + '/role'
-    fetchData(url)
-  }, [fetchData])
+  //React.useEffect(() => {
+  //  fetchRoles()
+  //}, [fetchRoles])
 
   const classes = useStyles()
   const [selectedRoles, setSelectedRoles] = React.useState([])
@@ -117,7 +114,7 @@ function CreateUser  (props) {
   }
 
   const formIsValid = () => {
-    if ((company.length >= 2) && (isValidEmail(email)) && (firstName.length > 1 && lastName.length > 1) && (selectedRoles.length > 0)) return true
+    if ((v.isCompanySuccess(company)) && (v.isEmailSuccess(email)) && (v.isFirstNameSuccess(firstName)) && (v.isLastNameSuccess(lastName)) && (v.isRoleSuccess(selectedRoles)) ) return true
     return false
   }
 
@@ -163,8 +160,9 @@ function CreateUser  (props) {
                         value: company,
                         onChange: handleCompanyChange
                       }}
-                      error={company.length > 0 && company.length < 2}
-                      success={company.length >= 2}
+                      handleClear={()=>setCompany('')}
+                      error={v.isCompanyError(company)}
+                      success={v.isCompanySuccess(company)}
                     />
                   </GridItem>
                 
@@ -182,8 +180,8 @@ function CreateUser  (props) {
                         onChange: handleEmailChange
                       }}
                       handleClear={()=>setEmail('')}
-                      error={email.length > 0 && !isValidEmail(email)}
-                      success={isValidEmail(email)}
+                      error={v.isEmailError(email)}
+                      success={v.isEmailSuccess(email)}
                     />
                   </GridItem>
 
@@ -200,8 +198,9 @@ function CreateUser  (props) {
                         value: firstName,
                         onChange: handleFirstNameChange
                       }}
-                      error={firstName.length > 0 && firstName.length < 2}
-                      success={firstName.length > 1}
+                      handleClear={()=>setFirstName('')}
+                      error={v.isFirstNameError(firstName)}
+                      success={v.isFirstNameSuccess(firstName)}
                     />
                   </GridItem>
 
@@ -216,8 +215,9 @@ function CreateUser  (props) {
                         value: lastName,
                         onChange: handleLastNameChange
                       }}
-                      error={lastName.length > 0 && lastName.length < 2}
-                      success={lastName.length > 1}
+                      handleClear={()=>setLastName('')}
+                      error={v.isLastNameError(lastName)}
+                      success={v.isLastNameSuccess(lastName)}
                     />
                   </GridItem>
 
@@ -228,7 +228,7 @@ function CreateUser  (props) {
                       handleItemSelect={handleRoleSelect}
                       value={selectedRoles}
                       multiple={true}
-                      success={selectedRoles.length > 0}
+                      success={v.isRoleSuccess(selectedRoles)}
                       formControlProps={{
                         fullWidth: true
                       }}
