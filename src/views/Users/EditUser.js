@@ -16,8 +16,6 @@ import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
 
-const queryString = require('query-string');
-
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -48,9 +46,8 @@ const mapStateToProps = (state) => {
 
 function EditUser(props) {
 
-  const params = queryString.parse(props.location.search)
-  const userFromParams = JSON.parse(params.user)
-  const [user, setUser] = React.useState(userFromParams)
+  let parsedParams = JSON.parse(decodeURIComponent(props.match.params.user)) 
+  const [user, setUser] = React.useState(parsedParams)
   const classes = useStyles();
   const [selectedRoles] = React.useState([])
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
@@ -201,27 +198,24 @@ function EditUser(props) {
                     />
                   </GridItem>
 
-                 {
-                   selectedRoles.includes(11) ?
+                  {
+                    selectedRoles.includes(11) ?
 
-                  <GridItem xs={12} sm={12} md={8}>
-                    <CustomTree
-                      //data={myData}
-                      title='Account Access'
-                      search={true}
-                      treeContainerHeight={150}
-                    />
-                  </GridItem>
+                      <GridItem xs={12} sm={12} md={8}>
+                        <CustomTree
+                          //data={myData}
+                          title='Account Access'
+                          search={true}
+                          treeContainerHeight={150}
+                        />
+                      </GridItem>
 
-                   :
+                      :
 
-                   null
-                 }
+                      null
+                  }
 
                   
-                  
-                
-
 
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomCheckbox
