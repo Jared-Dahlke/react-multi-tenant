@@ -42,6 +42,7 @@ export function authReducer (state = initialState, action){
     case USER_LOADED:
        return {
         ...state,
+        isAuthenticated: true,
         loading: false,
         user: payload,
       };

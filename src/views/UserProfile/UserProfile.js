@@ -52,7 +52,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserProfileById: (userId) => dispatch(getUserProfileById(userId))
+    getUserProfileById: (userId) => dispatch(getUserProfileById(userId)),
+    
   }
 }
 
@@ -60,13 +61,18 @@ const mapDispatchToProps = (dispatch) => {
 function UserProfile(props) {
 
   const classes = useStyles();
-  const user = props.userProfile
+
+
   useEffect(() => { 
     const userId = props.userId
     if(userId){
       props.getUserProfileById(userId)
     }
-  }, [props])  
+  }, [getUserProfileById])  
+
+
+  const user = props.userProfile
+  const {loading} = props
 
 return (
     <div>
@@ -195,8 +201,8 @@ return (
               <h4 className={classes.cardTitle}>j</h4>
               <p className={classes.description}>
               User card will be here
-            {/* {user.firstName}
-            {user.lastName}
+            {loading? '': user.firstName}
+            {/* {user.lastName}
             {user.userId} */}
 
 {/* {loading? 'loading...': user.userId} */}

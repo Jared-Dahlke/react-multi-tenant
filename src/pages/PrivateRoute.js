@@ -15,9 +15,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setAuthToken: (token) => dispatch(setAuthToken(token)),
-    setUserId: (userId) => dispatch(setUserId(userId)),
-    getUserProfileById: (userId) => dispatch(getUserProfileById(userId))
-
   }
 }
 
@@ -32,15 +29,6 @@ function PrivateRoute({ component: Component, ...rest }) {
     authToken = localStorage.getItem("token");
     if (authToken) {
       rest.setAuthToken(authToken)
-    }
-  }
-
-  var userId = rest.userId
-  if(!userId){
-    let userId = localStorage.getItem("userId")
-    if (userId) {
-      rest.setUserId(userId)
-      rest.getUserProfileById(userId)
     }
   }
 

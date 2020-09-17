@@ -19,6 +19,7 @@ import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
 import {rolesFetchData} from '../redux/actions/roles.js'
 import EditUser from '../views/Users/EditUser'
+import { getUserProfileById, setUserId} from "../redux/actions/auth.js";
 
 let ps;
 
@@ -57,7 +58,9 @@ const useStyles = makeStyles(styles);
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsersData: () => dispatch(usersFetchData()),
-    fetchRoles: () => dispatch(rolesFetchData())
+    fetchRoles: () => dispatch(rolesFetchData()),
+    getUserProfileById: (userId) => dispatch(getUserProfileById(userId)),
+    setUserId: (userId) => dispatch(setUserId(userId)),
   }
 }
 
@@ -99,11 +102,21 @@ function Admin({ ...rest }) {
     };
   }, [mainPanel]);
 
+
+  var userId = rest.userId
+  if(!userId){
+    let userId = localStorage.getItem("userId")
+    if (userId) {
+      rest.setUserId(userId)
+      
+    }
+  }
   //preload critical data into the application
-  const {fetchUsersData, fetchRoles} = rest
+  const {fetchUsersData, fetchRoles,getUserProfileById} = rest
   React.useEffect(() => {
     fetchUsersData()
     fetchRoles()
+    getUserProfileById(userId)
   }, [fetchUsersData, fetchRoles])
 
   return (
