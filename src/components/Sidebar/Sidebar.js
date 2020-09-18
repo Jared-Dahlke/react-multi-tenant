@@ -11,6 +11,12 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import StarBorder from '@material-ui/icons/StarBorder';
+
 // core components
 import AdminNavbarLinks from "../../components/Navbars/AdminNavbarLinks.js";
 
@@ -24,6 +30,14 @@ export default function Sidebar(props) {
   function activeRoute(routeName) {
     return window.location.href.indexOf(routeName) > -1 ? true : false;
   }
+
+  const [openCollapse, setOpenCollapse] = React.useState(false);    
+
+  function handleOpenSettings(){
+     setOpenCollapse(!openCollapse);
+  }
+
+
   const { color, logo, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
@@ -49,8 +63,10 @@ export default function Sidebar(props) {
             className={activePro + classes.item}
             activeClassName="active"
             key={key}
+            
           >
-            <ListItem button className={classes.itemLink + listItemClasses}>
+
+            <ListItem onClick={handleOpenSettings} button className={classes.itemLink + listItemClasses}>
               {typeof prop.icon === "string" ? (
                 <Icon
                   className={classNames(classes.itemIcon, whiteFontClasses, {
@@ -73,7 +89,20 @@ export default function Sidebar(props) {
                 })}
                 disableTypography={true}
               />
+              {openCollapse ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
+
+            <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <StarBorder />
+                </ListItemIcon>
+                <ListItemText inset primary="Starred" />
+              </ListItem>
+            </List>
+          </Collapse>
+
           </NavLink>
         );
       })}
