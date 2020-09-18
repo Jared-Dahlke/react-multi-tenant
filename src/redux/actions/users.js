@@ -54,13 +54,16 @@ export function usersFetchData() {
 }
 
 
-export function deleteUser(userId){
-  
+export const deleteUser = (userId) => {
   let url =  apiBase + `/user/${userId}`
-  axios.delete(url).then((res) => 
-  {      
-      console.log('finished')
-  })
-                
+  return (dispatch) => {
+      axios.delete(url)
+      .then(response => {
+          console.log(response)
+      })
+      .catch(error => {
+          //TODO: handle the error when implemented
+      })
+  }
 }
      

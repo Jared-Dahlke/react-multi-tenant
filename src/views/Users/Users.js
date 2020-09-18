@@ -67,7 +67,6 @@ function Users(props) {
   }
 
   const handleDeleteUserClick = (user) => {
-    console.log(user)
     handleOpenDeleteUserAlert(user)
     setUserToDelete(user)
   }
@@ -83,16 +82,13 @@ function Users(props) {
 
   const handleDeleteUser = () => {
     setDeleteUserAlertIsOpen(false)
-    // delete user here
-    deleteUser(userToDelete.userId)
+    props.deleteUser(userToDelete.userId)
     setUserToDelete({})
   }
 
   return (                                   
  
     <GridContainer spacing={2}>
-
-      {props.hasErrored ? 'true' : 'false'}
 
       <CustomAlert
         open={deleteUserAlertIsOpen}
