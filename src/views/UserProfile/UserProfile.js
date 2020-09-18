@@ -65,11 +65,11 @@ const defaultState = {
 function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
   const [userForm, setUserForm] = useState(defaultState)
   const [edit, setEdit] = useState(false)
+  const [editPassword, setEditPassword] = useState(false)
 
   const classes = useStyles();
 
   useEffect(() => {
-    console.log(userProfile)
     if(!userProfile) fetchUserProfile();
     if(!loading && userProfile) {
       const userData = {...defaultState}
@@ -79,6 +79,7 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
         } 
       }
       setUserForm(userData)
+
     }
   }, [fetchUserProfile,userProfile,loading])
 
@@ -92,11 +93,17 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
   }
   const disableEdit = () => {
     setEdit(false)
+    setUserForm(userProfile)
   }
   const onSubmit = (e) => {
     e.preventDefault();
     disableEdit()
   };
+
+  const showPasswordCard = () => 
+  {
+    setEditPassword((prevState)=> !prevState)
+  }
 
   const formIsValid = () => {
      if ((v.isCompanySuccess(company)) && (v.isEmailSuccess(email)) && (v.isFirstNameSuccess(firstName)) && (v.isLastNameSuccess(lastName)) ) return true
@@ -218,16 +225,77 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
               </GridContainer>
             </CardBody>
             <CardFooter>
-               {edit &&<Button color="primary" onClick={disableEdit}>Stop Editing</Button>}
+               {edit &&<Button color="primary" onClick={disableEdit}>Cancel</Button>}
               <Button 
                 color="primary" 
                 onClick={edit?onSubmit: enableEdit}
                 disabled={!formIsValid()}
               >
-                {edit?'Update Profile':'Edit Profile'}
+                {edit?'Save':'Edit Profile'}
               </Button>
             </CardFooter>
           </Card>
+        </GridItem>
+
+
+        <GridItem xs={12} sm={12} md={6}>
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={5}>
+              <Button onClick={showPasswordCard}>Change Password</Button>  
+            </GridItem>
+
+          </GridContainer>
+        <GridItem>
+          <Card>
+          
+            {editPassword && <CardBody>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={8}><CustomInput
+                    labelText="Current Password"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      type: "password",
+
+                    }}
+                    success={edit && v.isCompanySuccess(company)}
+                    error={edit && v.isCompanyError(company)}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={8}><CustomInput
+                    labelText="New Password"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      type: "password",
+                      
+                    }}
+                    success={edit && v.isCompanySuccess(company)}
+                    error={edit && v.isCompanyError(company)}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={8}><CustomInput
+                    labelText="Confirm Password"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      type: "password",
+        
+                    }}
+                    success={edit && v.isCompanySuccess(company)}
+                    error={edit && v.isCompanyError(company)}
+                  />
+
+                </GridItem>
+              </GridContainer>
+            </CardBody>}
+          </Card>
+        </GridItem>
         </GridItem>
       </GridContainer>
     </div>
