@@ -38,7 +38,7 @@ const switchRoutes = (
         <>
           <Route path={`${url}/`} component={Users} exact />
           <Route path={`${url}/create`} component={CreateUser} />      
-          <Route path={`${url}/edit`} component={EditUser} />   
+          <Route path={`${url}/edit/:user`} component={EditUser} />   
         </>
       )}
     />

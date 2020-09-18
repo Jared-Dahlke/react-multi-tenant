@@ -1,5 +1,5 @@
 
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER} from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
 import handleError from '../../errorHandling'
@@ -11,6 +11,10 @@ export function setAuthToken (payload) {
 
 export function setShowAlert (payload) {
   return {type: SET_SHOW_ALERT, payload}
+}
+
+export function setUser (payload) {
+  return {type: SET_USER, payload}
 }
 
 export function setLoggedIn (payload) {
@@ -29,8 +33,11 @@ export function login(credentials) {
 
       if (result.status === 200) {
         let token = result.data.jwt
+        let user = result.data.user
         dispatch(setAuthToken(token))
+        dispatch(setUser(user))
         localStorage.setItem("token", token);
+        localStorage.setItem('userId', user.userId)
         dispatch(setLoggedIn(true))        
       }
 
@@ -43,41 +50,32 @@ export function login(credentials) {
   };
 }
 
-export function resetPassword(email) {
-  let url = apiBase + '/reset-password'
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+};
+
+export function userProfileFetchData() {
+  let userId = localStorage.getItem('userId')
+  
+  if(!userId) {
+    let parsedToken = parseJwt(localStorage.getItem('token'))
+    userId = parsedToken.userId
+  }
+
+  let url =  apiBase + `/user/${userId}`
   return async (dispatch) => {
-      
     try {
-      const result = await axios.post(url, {
-        email: email
-      })  
-
+      const result = await axios.get(url) 
       if (result.status === 200) {
-        dispatch(setShowAlert(true))
+        let user = result.data
+        dispatch(setUser(user))
       }
-
-    }
-    catch(error) {
-      alert(error)
-      let errorType = error.response.status
-      handleError(errorType)
-    }
-  };
-}
-
-export function changePassword(password, userId, token) {
-  let url = `${apiBase}/update-password/${userId}/${token}`
-  return async (dispatch) => {
-      
-    try {
-      const result = await axios.post(url, {
-        password: password
-      })  
-
-      if (result.status === 200) {
-        dispatch(setShowAlert(true))
-      }
-
     }
     catch(error) {
       alert(error)
