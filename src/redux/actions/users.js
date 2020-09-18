@@ -17,7 +17,6 @@ export function usersHasErrored(bool) {
   };
 }
 
-
 export function usersFetchDataSuccess(users) {
   return {
     type: USERS_FETCH_DATA_SUCCESS,
@@ -27,8 +26,6 @@ export function usersFetchDataSuccess(users) {
 
 
 export function usersFetchData() {
-
-  
 
   let url =  apiBase + '/user'
   return async (dispatch) => {

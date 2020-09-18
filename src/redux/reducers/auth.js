@@ -1,4 +1,4 @@
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_USER} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER} from '../action-types/auth'
 import {User} from '../../models/user'
 
 export function authToken(state = null, action) {
@@ -24,6 +24,15 @@ export function user(state = newUser, action) {
 export function isLoggedIn(state = false, action) {
   switch (action.type) {
   case SET_LOGGED_IN:
+    return action.payload;
+  default:
+    return state;
+  }
+}
+
+export function showAlert(state = false, action) {
+  switch (action.type) {
+  case SET_SHOW_ALERT:
     return action.payload;
   default:
     return state;

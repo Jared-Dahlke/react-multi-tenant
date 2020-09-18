@@ -16,7 +16,6 @@ import {setAuthToken} from '../redux/actions/auth.js'
 import PasswordRequirements from '../components/CustomPasswordRequirements/CustomPasswordRequirements'
 
 import config from '../config.js'
-
 const queryString = require('query-string');
 
 const apiBase = config.apiGateway.MOCKURL;

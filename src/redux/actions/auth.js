@@ -1,5 +1,5 @@
 
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_USER} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER} from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
 import handleError from '../../errorHandling'
@@ -7,6 +7,10 @@ const apiBase = config.apiGateway.URL;
 
 export function setAuthToken (payload) {
   return {type: SET_AUTH_TOKEN, payload}
+}
+
+export function setShowAlert (payload) {
+  return {type: SET_SHOW_ALERT, payload}
 }
 
 export function setUser (payload) {
@@ -72,6 +76,50 @@ export function userProfileFetchData() {
         let user = result.data
         dispatch(setUser(user))
       }
+    }
+    catch(error) {
+      alert(error)
+      let errorType = error.response.status
+      handleError(errorType)
+    }
+  };
+}
+
+export function resetPassword(email) {
+  let url = apiBase + '/reset-password'
+  return async (dispatch) => {
+
+    try {
+      const result = await axios.post(url, {
+        email: email
+      })
+
+      if (result.status === 200) {
+        dispatch(setShowAlert(true))
+      }
+
+    }
+    catch(error) {
+      alert(error)
+      let errorType = error.response.status
+      handleError(errorType)
+    }
+  };
+}
+
+export function changePassword(password, userId, token) {
+  let url = `${apiBase}/update-password/${userId}/${token}`
+  return async (dispatch) => {
+ 
+    try {
+      const result = await axios.post(url, {
+        password: password
+      })
+
+      if (result.status === 200) {
+        dispatch(setShowAlert(true))
+      }
+
     }
     catch(error) {
       alert(error)
