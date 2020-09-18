@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 function Login(props: any) {
 
   const classes = useStyles();
-  const referer = props.location.state ? props.location.state.referer : '/admin/profile';
+  const referer = props.location.state ? props.location.state.referer : '/admin/settings/profile';
   const [userName, setUserName] = useState("jared@sightly.com");
   const [password, setPassword] = useState("a");
 

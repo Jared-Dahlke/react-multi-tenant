@@ -12,11 +12,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import StarBorder from '@material-ui/icons/StarBorder';
 import AdminNavbarLinks from "../../components/Navbars/AdminNavbarLinks.js";
 import styles from "../../assets/jss/material-dashboard-react/components/sidebarStyle.js";
 import Settings from '@material-ui/icons/Settings'
+import PieChart from '@material-ui/icons/PieChart'
 import SettingsRoutes from '../../routes'
 
 const useStyles = makeStyles(styles);
@@ -25,7 +24,8 @@ export default function Sidebar(props) {
   const classes = useStyles();
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
-    return window.location.href.indexOf(routeName) > -1 ? true : false;
+    let current = window.location.href
+    return current.includes(routeName)
   }
 
   const [openCollapse, setOpenCollapse] = React.useState(true);    
@@ -37,15 +37,44 @@ export default function Sidebar(props) {
 
   const { color, logo, image, logoText, routes } = props;
 
+  
+
   const listItemClasses = classNames({
-    [" " + classes[color]]: openCollapse
+    [" " + classes[color]]: activeRoute('/admin/settings')
+  });
+
+  const listItemClassesDiscovery = classNames({
+    [" " + classes[color]]: activeRoute('/admin/discovery')
   });
 
   const whiteFontClasses = classNames({
-    [" " + classes.whiteFont]: activeRoute('/admin/profile')
+    [" " + classes.whiteFont]: true
   });
 
   var links = (
+    <div>
+
+    <List className={classes.list}>
+      <NavLink
+        to={'/admin/discovery/home'}
+        className={classes.item}
+        activeClassName="active"
+        key={'1'}          
+      >     
+        <ListItem  button className={classes.itemLink + listItemClassesDiscovery}>         
+        
+          <PieChart
+            className={classNames(classes.itemIcon, whiteFontClasses)}
+          />
+          <ListItemText
+            primary={'Discovery'}
+            className={classNames(classes.itemText, whiteFontClasses)}
+            disableTypography={true}
+          />          
+        </ListItem>
+      </NavLink>
+    </List>
+
     <List className={classes.list}>
     
 
@@ -69,6 +98,10 @@ export default function Sidebar(props) {
 
                 {SettingsRoutes.map((setting, key)=>{
 
+                  const whiteFontClassesNest = classNames({
+                    [" " + classes.whiteFont]: true
+                  });
+
                   const subListItemClasses = classNames({
                     [" " + classes[color]]: activeRoute(setting.layout + setting.path)
                   });
@@ -82,13 +115,23 @@ export default function Sidebar(props) {
                       key={key}          
                     >
 
-                      <ListItem button inset className={classes.itemLink, subListItemClasses}>
+                      <ListItem button inset="true" className={classes.nestedItemLink + subListItemClasses}>
                         
-                          <setting.icon className={classNames(classes.nested, classes.itemIcon, whiteFontClasses)}/>
-                        
+                          <setting.icon 
+                            style={{color: 'white',width: "24px",
+                            height: "30px",
+                            fontSize: "24px",
+                            lineHeight: "30px",
+                            float: "left",
+                            marginRight: "15px",
+                            paddingLeft:'15px',
+                            textAlign: "center",
+                            verticalAlign: "middle"}}
+                          />
+                
                         <ListItemText  
                           primary={setting.name} 
-                          className={classNames(classes.itemText, whiteFontClasses)}
+                          className={classNames(classes.itemText, whiteFontClassesNest)}
                           disableTypography={true}
                         />
                       </ListItem>
@@ -96,11 +139,6 @@ export default function Sidebar(props) {
                     </NavLink>
 
                   )
-
-                  
-
-
-
 
                 })}
 
@@ -111,6 +149,11 @@ export default function Sidebar(props) {
     
      
     </List>
+
+
+
+
+</div>
   );
 
   var brand = (

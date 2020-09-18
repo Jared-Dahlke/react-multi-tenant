@@ -10,28 +10,28 @@ import RolesPermissions from "./views/RolesPermissions/RolesPermissions";
 
 const settingsRoutes = [
   {
-    path: "/profile",
+    path: "/settings/profile",
     name: "My Profile",
     icon: Person,
     component: UserProfile,
     layout: "/admin"
   },
   {
-    path: "/accounts",
+    path: "/settings/accounts",
     name: "Accounts",
     icon: AccountTree,
     component: TableList,
     layout: "/admin"
   },
   {
-    path: "/users",
+    path: "/settings/users",
     name: "Users",
     icon: People,
     component: Users,
     layout: "/admin"
   },
   {
-    path: "/rolesPermissions",
+    path: "/settings/rolesPermissions",
     name: "Roles",
     icon: LockOpenIcon,
     component: RolesPermissions,

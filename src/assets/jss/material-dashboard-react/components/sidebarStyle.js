@@ -134,6 +134,7 @@ const sidebarStyle = theme => ({
   },
   nested: {
     paddingLeft: theme.spacing(4),
+    color: 'white !important'
   },
   itemLink: {
     width: "auto",
@@ -141,7 +142,21 @@ const sidebarStyle = theme => ({
     margin: "10px 15px 0",
     borderRadius: "3px",
     position: "relative",
-   // display: "block",
+    // display: "block",
+    padding: "10px 15px",
+    backgroundColor: "transparent",
+    ...defaultFont
+  },
+  nestedItemLink: {
+    width: "auto",
+    transition: "all 300ms linear",
+    marginTop: "10px",
+    marginLeft: '30px',
+    marginRight: '15px',
+    marginBottom: 0,
+    borderRadius: "3px",
+    position: "relative",
+    // display: "block",
     padding: "10px 15px",
     backgroundColor: "transparent",
     ...defaultFont
