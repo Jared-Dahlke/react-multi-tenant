@@ -84,7 +84,7 @@ function PasswordChange(props: any) {
   }
 
   if (props.isLoggedIn) {
-    return <Redirect to='./admin/profile' />;
+    return <Redirect to='./admin/settings/profile' />;
   }
 
   return (
@@ -158,14 +158,14 @@ function PasswordChange(props: any) {
         </form>
       </div>
       <Snackbar
-          place="bc"
-          color="success"
-          icon={AddAlert}
-          message="Password has been reset. Please proceed to login with your new password."
-          open={props.showAlert}
-          closeNotification={() => props.setShowAlert(false)}
-          close
-        />
+        place="bc"
+        color="success"
+        icon={AddAlert}
+        message="Password has been reset. Please proceed to login with your new password."
+        open={props.showAlert}
+        closeNotification={() => props.setShowAlert(false)}
+        close
+      />
       <Box mt={5}>
         <Copyright />
       </Box>

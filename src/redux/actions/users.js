@@ -1,6 +1,7 @@
 //import axios from 'axios';
 import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS} from '../action-types/users'
 import axios from '../../axiosConfig'
+import rawAxios from 'axios'
 import handleError from '../../errorHandling';
 import config from '../../config.js'
 import {User} from '../../models/user'
@@ -52,3 +53,14 @@ export function usersFetchData() {
   };
 }
 
+
+export function deleteUser(userId){
+  
+  let url =  apiBase + `/user/${userId}`
+  axios.delete(url).then((res) => 
+  {      
+      console.log('finished')
+  })
+                
+}
+     
