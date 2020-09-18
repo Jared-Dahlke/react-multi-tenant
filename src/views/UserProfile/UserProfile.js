@@ -1,5 +1,4 @@
-import React, {useEffect} from "react";
-import {connect} from 'react-redux'
+import React, {useEffect, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import GridItem from "../../components/Grid/GridItem.js";
@@ -10,10 +9,11 @@ import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-import {userProfileFetchData} from '../../redux/actions/auth.js'
 
 // Redux
-import {getUserProfileById} from '../../redux/actions/auth'
+import {userProfileFetchData} from '../../redux/actions/auth.js'
+import {connect} from 'react-redux'
+
 
 const styles = {
   cardCategoryWhite: {
@@ -49,19 +49,54 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+const defaultState = {
+  userId:'',
+  firstName:'',
+  lastName:'',
+  email:'',
+  company: '',
+  phoneNumber:'',
+  userName: ''
+}
 
-function UserProfile(props) {
+function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
+  const [userForm, setUserForm] = useState(defaultState)
+  const [edit, setEdit] = useState(false)
 
   const classes = useStyles();
 
+  useEffect(() => {
+    console.log(userProfile)
+    if(!userProfile) fetchUserProfile();
+    if(!loading && userProfile) {
+      const userData = {...defaultState}
+      for (const key in userProfile) {
+        if (key in userData){
+          userData[key] = userProfile[key];
+        } 
+      }
+      setUserForm(userData)
+    }
+  }, [fetchUserProfile,userProfile,loading])
 
-  const {fetchUserProfile} = props
 
-  React.useEffect(() => {
-    fetchUserProfile()
-  }, [fetchUserProfile])
+  const onChange = (e) =>{
+      console.log(e.target)
+    setUserForm({ ...userForm, [e.target.name]: e.target.value });
+  } 
+  
+  const enableEdit = () => {
+    setEdit(true)
+  }
+  const disableEdit = () => {
+    setEdit(false)
+  }
+  const onSubmit = (e) => {
+    e.preventDefault();
+    disableEdit()
+  };
 
- 
+  const {firstName,lastName,email,company} = userForm
   return (
     <div>
       <GridContainer>
@@ -82,26 +117,36 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                     inputProps={{
-                      disabled: true
+                      disabled: true,
+                      value: company
                     }}
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
+                {/* <GridItem xs={12} sm={12} md={3}>
                   <CustomInput
-                    labelText="Username"
+                    // labelText="Username"
                     id="username"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      value: userName
                     }}
                   />
-                </GridItem>
+                </GridItem> */}
 
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Email address"
-                    id="email-address"
+                    // id="email-address"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      disabled: edit? false:true,
+                      value: email,
+                      name: "email",
+                      onChange: onChange
                     }}
                   />
                 </GridItem>
@@ -115,7 +160,10 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                     inputProps={{
-                      value: props.user.firstName
+                      disabled: edit? false:true,
+                      value: firstName,
+                      name: "firstName",
+                      onChange: onChange
                     }}
                   />
                 </GridItem>
@@ -124,42 +172,21 @@ function UserProfile(props) {
                     labelText="Last Name"
                     id="last-name"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      disabled: edit? false:true,
+                      value: lastName,
+                      name: 'lastName',
+                      onChange: onChange
                     }}
                   />
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="City"
-                    id="city"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Country"
-                    id="country"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Postal Code"
-                    id="postal-code"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
+                {/* <GridItem xs={12} sm={12} md={12}>
                   <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
                   <CustomInput
                     labelText="cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
@@ -172,34 +199,15 @@ function UserProfile(props) {
                       rows: 5
                     }}
                   />
-                </GridItem>
+                </GridItem> */}
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+               {edit &&<Button color="primary" onClick={disableEdit}>Stop Editing</Button>}
+              <Button color="primary" onClick={edit?onSubmit: enableEdit}>{edit?'Update Profile':'Edit Profile'}</Button>
             </CardFooter>
           </Card>
         </GridItem>
-      {/* <GridItem xs={12} sm={12} md={4}>   
-          <Card profile>
-            <CardAvatar profile>
-              <Avatar style={{width:70, height: 70}}>J</Avatar>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-                  <h4 className={classes.cardTitle}>{props.user && props.user.firstName || '....'}</h4>
-              <p className={classes.description}>
-              User card will be here
-            {loading? '': user.firstName}
-        
-
-              </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
-            </CardBody>
-          </Card>
-        </GridItem> */}
       </GridContainer>
     </div>
   );
