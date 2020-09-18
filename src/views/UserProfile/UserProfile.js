@@ -1,20 +1,16 @@
 import React, {useEffect} from "react";
 import {connect} from 'react-redux'
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
-// core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
-import CardAvatar from "../../components/Card/CardAvatar.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-
-import avatar from "../../assets/img/faces/marc.jpg";
+import {userProfileFetchData} from '../../redux/actions/auth.js'
 
 // Redux
 import {getUserProfileById} from '../../redux/actions/auth'
@@ -42,12 +38,16 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    authToken: state.authToken,
-    userProfile: state.authReducer.user,
-    loading: state.authReducer.loading,
-    userId: state.userId,
+    user: state.user,
+    token: state.authToken
   };
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserProfile: () => dispatch(userProfileFetchData())
+  }
+}
 
 
 const mapDispatchToProps = (dispatch) => {
@@ -63,18 +63,14 @@ function UserProfile(props) {
   const classes = useStyles();
 
 
-  useEffect(() => { 
-    const userId = props.userId
-    if(userId){
-      props.getUserProfileById(userId)
-    }
-  }, [getUserProfileById])  
+  const {fetchUserProfile} = props
 
+  React.useEffect(() => {
+    fetchUserProfile()
+  }, [fetchUserProfile])
 
-  const user = props.userProfile
-  const {loading} = props
-
-return (
+ 
+  return (
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
@@ -82,7 +78,7 @@ return (
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
               <p className={classes.cardCategoryWhite}>Complete your profile
-</p>
+              </p>
             </CardHeader>
             <CardBody>
               <GridContainer>
@@ -125,6 +121,9 @@ return (
                     id="first-name"
                     formControlProps={{
                       fullWidth: true
+                    }}
+                    inputProps={{
+                      value: props.user.firstName
                     }}
                   />
                 </GridItem>
@@ -189,16 +188,16 @@ return (
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+<p>
+        {/** <GridItem xs={12} sm={12} md={4}>
+         
           <Card profile>
             <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
+              <Avatar style={{width:70, height: 70}}>J</Avatar>
             </CardAvatar>
             <CardBody profile>
               <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>j</h4>
+                  <h4 className={classes.cardTitle}>{props.user && props.user.firstName || '....'}</h4>
               <p className={classes.description}>
               User card will be here
             {loading? '': user.firstName}
@@ -213,12 +212,14 @@ return (
               </Button>
             </CardBody>
           </Card>
-        </GridItem>
+        
+        
+          
+        </GridItem>*/}
+        
       </GridContainer>
     </div>
   );
 }
 
-const MyUserProfile = connect(mapStateToProps,mapDispatchToProps)(UserProfile)
-
-export default MyUserProfile;
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile)
