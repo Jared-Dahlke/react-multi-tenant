@@ -10,6 +10,9 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 
+// Validation 
+import * as v from '../../validations'
+
 // Redux
 import {userProfileFetchData} from '../../redux/actions/auth.js'
 import {connect} from 'react-redux'
@@ -81,7 +84,6 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
 
 
   const onChange = (e) =>{
-      console.log(e.target)
     setUserForm({ ...userForm, [e.target.name]: e.target.value });
   } 
   
@@ -96,6 +98,11 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
     disableEdit()
   };
 
+  const formIsValid = () => {
+     if ((v.isCompanySuccess(company)) && (v.isEmailSuccess(email)) && (v.isFirstNameSuccess(firstName)) && (v.isLastNameSuccess(lastName)) ) return true
+    return false
+  }
+
   const {firstName,lastName,email,company} = userForm
   return (
     <div>
@@ -103,8 +110,8 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
         <GridItem xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile
+              <h4 className={classes.cardTitleWhite}>{edit?'Edit Profile':'My Profile'}</h4>
+              <p className={classes.cardCategoryWhite}>{edit?'Complete your profile': 'Your profile information'}
               </p>
             </CardHeader>
             <CardBody>
@@ -120,6 +127,8 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                       disabled: true,
                       value: company
                     }}
+                    success={edit && v.isCompanySuccess(company)}
+                    error={edit && v.isCompanyError(company)}
                   />
                 </GridItem>
                 {/* <GridItem xs={12} sm={12} md={3}>
@@ -148,6 +157,8 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                       name: "email",
                       onChange: onChange
                     }}
+                    success={edit && v.isEmailSuccess(email)}
+                    error={edit && v.isEmailError(email)}
                   />
                 </GridItem>
               </GridContainer>
@@ -165,6 +176,8 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                       name: "firstName",
                       onChange: onChange
                     }}
+                    success={edit && v.isFirstNameSuccess(firstName)}
+                    error={edit && v.isFirstNameError(firstName)}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
@@ -180,6 +193,8 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                       name: 'lastName',
                       onChange: onChange
                     }}
+                    success={edit && v.isLastNameSuccess(lastName)}
+                    error={edit && v.isLastNameError(lastName)}
                   />
                 </GridItem>
               </GridContainer>
@@ -204,7 +219,13 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
             </CardBody>
             <CardFooter>
                {edit &&<Button color="primary" onClick={disableEdit}>Stop Editing</Button>}
-              <Button color="primary" onClick={edit?onSubmit: enableEdit}>{edit?'Update Profile':'Edit Profile'}</Button>
+              <Button 
+                color="primary" 
+                onClick={edit?onSubmit: enableEdit}
+                disabled={!formIsValid()}
+              >
+                {edit?'Update Profile':'Edit Profile'}
+              </Button>
             </CardFooter>
           </Card>
         </GridItem>
