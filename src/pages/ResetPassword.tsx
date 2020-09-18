@@ -14,7 +14,7 @@ import Container from '@material-ui/core/Container';
 import {setShowAlert, resetPassword} from '../redux/actions/auth.js';
 import Snackbar from "../components/Snackbar/Snackbar";
 import AddAlert from '@material-ui/icons/AddAlert';
-import {isEmailError, isEmailSuccess} from "../validations";
+import {isEmailError} from "../validations";
 
 const mapStateToProps = (state : any) => {
   return { 
@@ -124,14 +124,14 @@ function PasswordReset(props: any) {
         </form>
       </div>
       <Snackbar
-          place="bc"
-          color="success"
-          icon={AddAlert}
-          message="Reset password email sent. Check Your email."
-          open={props.showAlert}
-          closeNotification={() => props.setShowAlert(false)}
-          close
-        />
+        place="bc"
+        color="success"
+        icon={AddAlert}
+        message="Reset password email sent. Check Your email."
+        open={props.showAlert}
+        closeNotification={() => props.setShowAlert(false)}
+        close
+      />
       <Box mt={5}>
         <Copyright />
       </Box>

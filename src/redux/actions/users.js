@@ -27,8 +27,6 @@ export function usersFetchDataSuccess(users) {
 
 export function usersFetchData() {
 
-  
-
   let url =  apiBase + '/user'
   return async (dispatch) => {
     try {

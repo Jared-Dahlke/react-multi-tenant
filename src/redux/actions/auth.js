@@ -54,7 +54,7 @@ function parseJwt (token) {
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
   }).join(''));
 
   return JSON.parse(jsonPayload);
@@ -76,6 +76,50 @@ export function userProfileFetchData() {
         let user = result.data
         dispatch(setUser(user))
       }
+    }
+    catch(error) {
+      alert(error)
+      let errorType = error.response.status
+      handleError(errorType)
+    }
+  };
+}
+
+export function resetPassword(email) {
+  let url = apiBase + '/reset-password'
+  return async (dispatch) => {
+
+    try {
+      const result = await axios.post(url, {
+        email: email
+      })
+
+      if (result.status === 200) {
+        dispatch(setShowAlert(true))
+      }
+
+    }
+    catch(error) {
+      alert(error)
+      let errorType = error.response.status
+      handleError(errorType)
+    }
+  };
+}
+
+export function changePassword(password, userId, token) {
+  let url = `${apiBase}/update-password/${userId}/${token}`
+  return async (dispatch) => {
+ 
+    try {
+      const result = await axios.post(url, {
+        password: password
+      })
+
+      if (result.status === 200) {
+        dispatch(setShowAlert(true))
+      }
+
     }
     catch(error) {
       alert(error)
