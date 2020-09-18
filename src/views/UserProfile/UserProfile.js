@@ -1,20 +1,16 @@
 import React from "react";
 import {connect} from 'react-redux'
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
-// core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
-import CardAvatar from "../../components/Card/CardAvatar.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-
-import avatar from "../../assets/img/faces/marc.jpg";
+import {userProfileFetchData} from '../../redux/actions/auth.js'
 
 const styles = {
   cardCategoryWhite: {
@@ -39,9 +35,16 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    authToken: state.authToken
+    user: state.user,
+    token: state.authToken
   };
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserProfile: () => dispatch(userProfileFetchData())
+  }
+}
 
 
 
@@ -49,6 +52,14 @@ function UserProfile(props) {
 
   const classes = useStyles();
 
+
+  const {fetchUserProfile} = props
+
+  React.useEffect(() => {
+    fetchUserProfile()
+  }, [fetchUserProfile])
+
+ 
   return (
     <div>
       <GridContainer>
@@ -99,6 +110,9 @@ function UserProfile(props) {
                     id="first-name"
                     formControlProps={{
                       fullWidth: true
+                    }}
+                    inputProps={{
+                      value: props.user.firstName
                     }}
                   />
                 </GridItem>
@@ -163,16 +177,15 @@ function UserProfile(props) {
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+        {/** <GridItem xs={12} sm={12} md={4}>
+         
           <Card profile>
             <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
+              <Avatar style={{width:70, height: 70}}>J</Avatar>
             </CardAvatar>
             <CardBody profile>
               <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Rick James</h4>
+                  <h4 className={classes.cardTitle}>{props.user && props.user.firstName || '....'}</h4>
               <p className={classes.description}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut...
               </p>
@@ -181,12 +194,14 @@ function UserProfile(props) {
               </Button>
             </CardBody>
           </Card>
-        </GridItem>
+        
+        
+          
+        </GridItem>*/}
+        
       </GridContainer>
     </div>
   );
 }
 
-const MyUserProfile = connect(mapStateToProps)(UserProfile)
-
-export default MyUserProfile;
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile)

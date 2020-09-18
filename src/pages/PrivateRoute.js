@@ -5,8 +5,7 @@ import {setAuthToken} from '../redux/actions/auth.js'
 
 const mapStateToProps = (state) => {
   return { 
-    authToken: state.authToken,
-    users: state.users 
+    authToken: state.authToken
   };
 };
 
