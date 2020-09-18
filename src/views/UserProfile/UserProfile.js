@@ -136,6 +136,7 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                     }}
                     success={edit && v.isCompanySuccess(company)}
                     error={edit && v.isCompanyError(company)}
+                    handleClear={() => setUserForm({ ...userForm, company:'' })}
                   />
                 </GridItem>
                 {/* <GridItem xs={12} sm={12} md={3}>
@@ -166,6 +167,8 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                     }}
                     success={edit && v.isEmailSuccess(email)}
                     error={edit && v.isEmailError(email)}
+                    handleClear={() => setUserForm({ ...userForm, email:'' })}
+
                   />
                 </GridItem>
               </GridContainer>
@@ -185,6 +188,7 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                     }}
                     success={edit && v.isFirstNameSuccess(firstName)}
                     error={edit && v.isFirstNameError(firstName)}
+                    handleClear={() => setUserForm({ ...userForm, firstName:'' })}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
@@ -202,6 +206,7 @@ function UserProfile({fetchUserProfile, user:{userProfile,loading}}) {
                     }}
                     success={edit && v.isLastNameSuccess(lastName)}
                     error={edit && v.isLastNameError(lastName)}
+                    handleClear={() => setUserForm({ ...userForm, lastName:'' })}
                   />
                 </GridItem>
               </GridContainer>
