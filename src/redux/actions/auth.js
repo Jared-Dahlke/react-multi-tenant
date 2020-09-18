@@ -1,5 +1,5 @@
 
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_USER} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_USER, SET_USER_ID} from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
 import handleError from '../../errorHandling'
@@ -19,12 +19,12 @@ export function setUser (payload) {
 export function setLoggedIn (payload) {
   return {type: SET_LOGGED_IN, payload}
 }
-export function loadUserProfile(payload){
-  return {
-    type: USER_LOADED,
-    payload
-  }
-}
+// export function loadUserProfile(payload){
+//   return {
+//     type: USER_LOADED,
+//     payload
+//   }
+// }
 
 
 export function setUserId(payload){
@@ -41,7 +41,7 @@ export function getUserProfileById(userId) {
       const result = await axios.get(url) 
       if (result.status === 200) {
         let user = result.data
-        dispatch(loadUserProfile(user))
+        dispatch(setUser(user))
       }
     }
     catch(error) {
@@ -66,6 +66,7 @@ export function login(credentials) {
         let user = result.data.user
         dispatch(setAuthToken(token))
         dispatch(setUser(user))
+        dispatch(setUserId(user.userId))
         localStorage.setItem("token", token);
         localStorage.setItem('userId', user.userId)
         dispatch(setLoggedIn(true))        

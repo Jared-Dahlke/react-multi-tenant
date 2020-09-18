@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
 import {rolesFetchData} from '../redux/actions/roles.js'
 import EditUser from '../views/Users/EditUser'
-import { getUserProfileById, setUserId} from "../redux/actions/auth.js";
+import { setUserId} from "../redux/actions/auth.js";
 
 let ps;
 
@@ -59,8 +59,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsersData: () => dispatch(usersFetchData()),
     fetchRoles: () => dispatch(rolesFetchData()),
-    getUserProfileById: (userId) => dispatch(getUserProfileById(userId)),
-    setUserId: (userId) => dispatch(setUserId(userId)),
+    setUserId: (userId) => dispatch(setUserId(userId))
   }
 }
 
@@ -112,11 +111,10 @@ function Admin({ ...rest }) {
     }
   }
   //preload critical data into the application
-  const {fetchUsersData, fetchRoles,getUserProfileById} = rest
+  const {fetchUsersData, fetchRoles} = rest
   React.useEffect(() => {
     fetchUsersData()
     fetchRoles()
-    getUserProfileById(userId)
   }, [fetchUsersData, fetchRoles])
 
   return (

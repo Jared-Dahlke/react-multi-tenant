@@ -50,14 +50,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getUserProfileById: (userId) => dispatch(getUserProfileById(userId)),
-    
-  }
-}
-
-
 function UserProfile(props) {
 
   const classes = useStyles();
@@ -188,9 +180,7 @@ function UserProfile(props) {
             </CardFooter>
           </Card>
         </GridItem>
-<p>
-        {/** <GridItem xs={12} sm={12} md={4}>
-         
+      {/* <GridItem xs={12} sm={12} md={4}>   
           <Card profile>
             <CardAvatar profile>
               <Avatar style={{width:70, height: 70}}>J</Avatar>
@@ -201,10 +191,7 @@ function UserProfile(props) {
               <p className={classes.description}>
               User card will be here
             {loading? '': user.firstName}
-            {/* {user.lastName}
-            {user.userId} */}
-
-{/* {loading? 'loading...': user.userId} */}
+        
 
               </p>
               <Button color="primary" round>
@@ -212,11 +199,7 @@ function UserProfile(props) {
               </Button>
             </CardBody>
           </Card>
-        
-        
-          
-        </GridItem>*/}
-        
+        </GridItem> */}
       </GridContainer>
     </div>
   );
