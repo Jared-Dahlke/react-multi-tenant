@@ -12,12 +12,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import {usersFetchData} from '../../redux/actions/users.js'
+import {usersFetchData, deleteUser} from '../../redux/actions/users.js'
 import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import { useHistory } from "react-router-dom";
 import { Facebook } from 'react-content-loader'
+import CustomAlert from '../../components/CustomAlert.js'
 
 
 const MyFacebookLoader = () => <Facebook />
@@ -34,16 +35,18 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsersData: () => dispatch(usersFetchData())
+    fetchUsersData: () => dispatch(usersFetchData()),
+    deleteUser: (userId) => dispatch(deleteUser(userId))
   }
 }
-
 
 function Users(props) {
 
   let history = useHistory();
   const classes = useStyles();
   const tableClasses = useTableStyles();
+  const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)
+  const [userToDelete, setUserToDelete] = React.useState({})
 
   const {fetchUsersData} = props
 
@@ -59,20 +62,53 @@ function Users(props) {
   const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
 
   const handleEditUserClick = (user) => {
-    let url = '/admin/users/edit/' + encodeURIComponent(JSON.stringify(user))
+    let url = '/admin/settings/users/edit/' + encodeURIComponent(JSON.stringify(user))
     history.push(url)
   }
 
+  const handleDeleteUserClick = (user) => {
+    console.log(user)
+    handleOpenDeleteUserAlert(user)
+    setUserToDelete(user)
+  }
+
+  const handleCloseDeleteUserAlert =() =>{
+    setDeleteUserAlertIsOpen(false)
+    setUserToDelete({})
+  }
+
+  const handleOpenDeleteUserAlert = () => {
+    setDeleteUserAlertIsOpen(true)
+  }
+
+  const handleDeleteUser = () => {
+    setDeleteUserAlertIsOpen(false)
+    // delete user here
+    deleteUser(userToDelete.userId)
+    setUserToDelete({})
+  }
 
   return (                                   
  
     <GridContainer spacing={2}>
+
+      {props.hasErrored ? 'true' : 'false'}
+
+      <CustomAlert
+        open={deleteUserAlertIsOpen}
+        handleClose={handleCloseDeleteUserAlert}
+        contentText={'Are you sure you want to delete this user?'}
+        cancelText={'Cancel'}
+        proceedText={'Yes'}
+        titleText={'Delete User'}
+        handleConfirm={()=>{handleDeleteUser()}}
+      />
       
             
       <Grid container justify="flex-end">
 
         <GridItem >
-          <Button href="/admin/users/create" color="primary">Create New User</Button>
+          <Button href="/admin/settings/users/create" color="primary">Create New User</Button>
         </GridItem>
         
         
@@ -144,6 +180,7 @@ function Users(props) {
                           <IconButton
                             aria-label="Close"
                             className={classes.tableActionButton}
+                            onClick={()=>{handleDeleteUserClick(user)}}
                           >
                             <Close
                               className={
