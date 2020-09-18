@@ -19,21 +19,22 @@ import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
 import {rolesFetchData} from '../redux/actions/roles.js'
 import EditUser from '../views/Users/EditUser'
+import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 
 let ps;
 
 const switchRoutes = (
   <Switch>
     <Route
-      path='/admin/profile'
+      path='/admin/settings/profile'
       component={UserProfile}
     />
     <Route
-      path='/admin/accounts'
+      path='/admin/settings/accounts'
       component={TableList}
     />
     <Route
-      path='/admin/users'
+      path='/admin/settings/users'
       render={({ match: { url } }) => (
         <>
           <Route path={`${url}/`} component={Users} exact />
@@ -44,11 +45,16 @@ const switchRoutes = (
     />
 
     <Route
-      path='/admin/RolesPermissions'
+      path='/admin/settings/RolesPermissions'
       component={RolesPermissions}
     />
+
+    <Route
+      path='/admin/discovery/home'
+      component={DiscoveryHome}
+    />
     
-    <Redirect from="/admin" to="/admin/profile" />
+    <Redirect from="/admin" to="/admin/settings/profile" />
   </Switch>
 );
 
