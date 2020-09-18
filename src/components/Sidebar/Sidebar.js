@@ -3,18 +3,20 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Icon from "@material-ui/core/Icon";
-// core components
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 import AdminNavbarLinks from "../../components/Navbars/AdminNavbarLinks.js";
-
 import styles from "../../assets/jss/material-dashboard-react/components/sidebarStyle.js";
+import Settings from '@material-ui/icons/Settings'
+import PieChart from '@material-ui/icons/PieChart'
+import SettingsRoutes from '../../routes'
 
 const useStyles = makeStyles(styles);
 
@@ -22,63 +24,138 @@ export default function Sidebar(props) {
   const classes = useStyles();
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
-    return window.location.href.indexOf(routeName) > -1 ? true : false;
+    let current = window.location.href
+    return current.includes(routeName)
   }
+
+  const [openCollapse, setOpenCollapse] = React.useState(true);    
+
+  function handleOpenSettings(){
+     setOpenCollapse(!openCollapse);
+  }
+
+
   const { color, logo, image, logoText, routes } = props;
+
+  
+
+  const listItemClasses = classNames({
+    [" " + classes[color]]: activeRoute('/admin/settings')
+  });
+
+  const listItemClassesDiscovery = classNames({
+    [" " + classes[color]]: activeRoute('/admin/discovery')
+  });
+
+  const whiteFontClasses = classNames({
+    [" " + classes.whiteFont]: true
+  });
+
   var links = (
+    <div>
+
     <List className={classes.list}>
-      {routes.map((prop, key) => {
-        var activePro = " ";
-        var listItemClasses;
-        if (prop.path === "/upgrade-to-pro") {
-          activePro = classes.activePro + " ";
-          listItemClasses = classNames({
-            [" " + classes[color]]: true
-          });
-        } else {
-          listItemClasses = classNames({
-            [" " + classes[color]]: activeRoute(prop.layout + prop.path)
-          });
-        }
-        const whiteFontClasses = classNames({
-          [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path)
-        });
-        return (
-          <NavLink
-            to={prop.layout + prop.path}
-            className={activePro + classes.item}
-            activeClassName="active"
-            key={key}
-          >
-            <ListItem button className={classes.itemLink + listItemClasses}>
-              {typeof prop.icon === "string" ? (
-                <Icon
-                  className={classNames(classes.itemIcon, whiteFontClasses, {
-                    [classes.itemIconRTL]: props.rtlActive
-                  })}
-                >
-                  {prop.icon}
-                </Icon>
-              ) : (
-                <prop.icon
-                  className={classNames(classes.itemIcon, whiteFontClasses, {
-                    [classes.itemIconRTL]: props.rtlActive
-                  })}
+      <NavLink
+        to={'/admin/discovery/home'}
+        className={classes.item}
+        activeClassName="active"
+        key={'1'}          
+      >     
+        <ListItem  button className={classes.itemLink + listItemClassesDiscovery}>         
+        
+          <PieChart
+            className={classNames(classes.itemIcon, whiteFontClasses)}
+          />
+          <ListItemText
+            primary={'Discovery'}
+            className={classNames(classes.itemText, whiteFontClasses)}
+            disableTypography={true}
+          />          
+        </ListItem>
+      </NavLink>
+    </List>
+
+    <List className={classes.list}>
+    
+
+            <ListItem onClick={handleOpenSettings} button className={classes.itemLink + listItemClasses}>
+              
+             
+                <Settings
+                  className={classNames(classes.itemIcon, whiteFontClasses)}
                 />
-              )}
+           
               <ListItemText
-                primary={props.rtlActive ? prop.rtlName : prop.name}
-                className={classNames(classes.itemText, whiteFontClasses, {
-                  [classes.itemTextRTL]: props.rtlActive
-                })}
+                primary={'Settings'}
+                className={classNames(classes.itemText, whiteFontClasses)}
                 disableTypography={true}
               />
+              {openCollapse ? <ExpandLess className={classNames(classes.itemIcon, whiteFontClasses)}/> : <ExpandMore className={classNames(classes.itemIcon, whiteFontClasses)}/>}
             </ListItem>
-          </NavLink>
-        );
-      })}
+
+            <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+              <List  disablePadding >
+
+                {SettingsRoutes.map((setting, key)=>{
+
+                  const whiteFontClassesNest = classNames({
+                    [" " + classes.whiteFont]: true
+                  });
+
+                  const subListItemClasses = classNames({
+                    [" " + classes[color]]: activeRoute(setting.layout + setting.path)
+                  });
+
+                  return (
+
+                    <NavLink
+                      to={setting.layout + setting.path}
+                      className={classes.item}
+                      activeClassName="active"
+                      key={key}          
+                    >
+
+                      <ListItem button inset="true" className={classes.nestedItemLink + subListItemClasses}>
+                        
+                          <setting.icon 
+                            style={{color: 'white',width: "24px",
+                            height: "30px",
+                            fontSize: "24px",
+                            lineHeight: "30px",
+                            float: "left",
+                            marginRight: "15px",
+                            paddingLeft:'15px',
+                            textAlign: "center",
+                            verticalAlign: "middle"}}
+                          />
+                
+                        <ListItemText  
+                          primary={setting.name} 
+                          className={classNames(classes.itemText, whiteFontClassesNest)}
+                          disableTypography={true}
+                        />
+                      </ListItem>
+
+                    </NavLink>
+
+                  )
+
+                })}
+
+                
+              </List>
+            </Collapse>
+
+    
+     
     </List>
+
+
+
+
+</div>
   );
+
   var brand = (
     <div className={classes.logo}>
       <a
