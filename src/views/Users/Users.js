@@ -17,8 +17,10 @@ import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import { useHistory } from "react-router-dom";
+import { Facebook } from 'react-content-loader'
 
 
+const MyFacebookLoader = () => <Facebook />
 const useTableStyles = makeStyles(tableStyles);
 
 const useStyles = makeStyles(styles);
@@ -35,7 +37,6 @@ const mapDispatchToProps = (dispatch) => {
     fetchUsersData: () => dispatch(usersFetchData())
   }
 }
-
 
 
 function Users(props) {
@@ -58,7 +59,7 @@ function Users(props) {
   const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
 
   const handleEditUserClick = (user) => {
-    let url = '/admin/users/edit?user=' + encodeURIComponent(JSON.stringify(user))
+    let url = '/admin/users/edit/' + encodeURIComponent(JSON.stringify(user))
     history.push(url)
   }
 
@@ -82,77 +83,87 @@ function Users(props) {
         <Card>
           
           <CardBody>
-            <Table className={classes.table}>
 
-         
-              <TableHead className={tableClasses["primaryTableHeader"]}>
-                <TableRow className={tableClasses.tableHeadRow}>
-                  {userHeaders.map((prop, key) => {
-                    return (
-                      <TableCell
-                        className={tableClasses.tableCell + " " + tableClasses.tableHeadCell}
-                        key={key}
-                      >
-                        {prop}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
+            {props.users ?
             
 
-              <TableBody>
-                {props.users && props.users.map(user => (
-                  <TableRow key={user.userId} className={classes.tableRow}>
-                   
-                    <TableCell className={tableCellClasses}>{user.firstName}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.company}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                    <TableCell className={tableCellClasses}>{user.internal? 'true' : 'false'}</TableCell>
-                    
-                    <TableCell className={classes.tableActions}>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Edit User"
-                        placement="top"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <IconButton
-                          aria-label="Edit"
-                          className={classes.tableActionButton}
-                          onClick={()=>handleEditUserClick(user)}
-                        >
-                          <Edit
-                            className={
-                              classes.tableActionButtonIcon + " " + classes.edit
-                            }
-                          />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip
-                        id="tooltip-top-start"
-                        title="Remove"
-                        placement="top"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <IconButton
-                          aria-label="Close"
-                          className={classes.tableActionButton}
-                        >
-                          <Close
-                            className={
-                              classes.tableActionButtonIcon + " " + classes.close
-                            }
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
+              <Table className={classes.table}>
 
+          
+                <TableHead className={tableClasses["primaryTableHeader"]}>
+                  <TableRow className={tableClasses.tableHeadRow}>
+                    {userHeaders.map((prop, key) => {
+                      return (
+                        <TableCell
+                          className={tableClasses.tableCell + " " + tableClasses.tableHeadCell}
+                          key={key}
+                        >
+                          {prop}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+              
+
+                <TableBody>
+                  {props.users && props.users.map(user => (
+                    <TableRow key={user.userId} className={classes.tableRow}>
+                    
+                      <TableCell className={tableCellClasses}>{user.firstName}</TableCell>
+                      <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
+                      <TableCell className={tableCellClasses}>{user.company}</TableCell>
+                      <TableCell className={tableCellClasses}>{user.email}</TableCell>
+                      <TableCell className={tableCellClasses}>{user.internal? 'true' : 'false'}</TableCell>
+                      
+                      <TableCell className={classes.tableActions}>
+                        <Tooltip
+                          id="tooltip-top"
+                          title="Edit User"
+                          placement="top"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
+                          <IconButton
+                            aria-label="Edit"
+                            className={classes.tableActionButton}
+                            onClick={()=>handleEditUserClick(user)}
+                          >
+                            <Edit
+                              className={
+                                classes.tableActionButtonIcon + " " + classes.edit
+                              }
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip
+                          id="tooltip-top-start"
+                          title="Remove"
+                          placement="top"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
+                          <IconButton
+                            aria-label="Close"
+                            className={classes.tableActionButton}
+                          >
+                            <Close
+                              className={
+                                classes.tableActionButtonIcon + " " + classes.close
+                              }
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              :
+
+              <MyFacebookLoader/>
+
+            }
           </CardBody>
         </Card>
       </GridItem>
