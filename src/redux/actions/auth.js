@@ -69,6 +69,7 @@ export function userProfileFetchData() {
   }
 
   let url =  apiBase + `/user/${userId}`
+  
   return async (dispatch) => {
     try {
       const result = await axios.get(url) 
