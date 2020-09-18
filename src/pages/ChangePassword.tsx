@@ -84,7 +84,7 @@ function PasswordChange(props: any) {
   }
 
   if (props.isLoggedIn) {
-    return <Redirect to='./admin/profile' />;
+    return <Redirect to='./admin/settings/profile' />;
   }
 
   return (
