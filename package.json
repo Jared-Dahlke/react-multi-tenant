@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "4.11.0",
     "@material-ui/icons": "4.9.1",
+    "@material-ui/lab": "4.0.0-alpha.56",
     "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "9.5.0",
     "@testing-library/user-event": "7.2.1",
@@ -16,9 +17,13 @@
     "@types/react-router-dom": "5.1.5",
     "axios": "0.20.0",
     "chartist": "0.11.4",
+    "check-password-strength": "1.0.13",
     "classnames": "2.2.6",
+    "email-validator": "2.0.4",
     "perfect-scrollbar": "1.5.0",
     "prop-types": "15.7.2",
+    "query-string": "6.13.2",
+    "rc-tree": "3.9.5",
     "react": "16.13.1",
     "react-chartist": "0.14.3",
     "react-dom": "16.13.1",
@@ -41,7 +46,10 @@
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
-      "indent": ["error", 2]
+      "indent": [
+        "warning",
+        2
+      ]
     }
   },
   "browserslist": {

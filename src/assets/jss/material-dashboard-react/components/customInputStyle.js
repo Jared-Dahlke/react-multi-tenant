@@ -45,6 +45,9 @@ const customInputStyle = {
   labelRootSuccess: {
     color: successColor[0]
   },
+  marginLeft: {
+    paddingLeft: '10px'
+  },
   feedback: {
     position: "absolute",
     top: "18px",
@@ -54,7 +57,10 @@ const customInputStyle = {
     width: "24px",
     height: "24px",
     textAlign: "center",
-    pointerEvents: "none"
+    //pointerEvents: "none"
+  },
+  clickable: {
+    cursor: 'pointer'
   },
   marginTop: {
     marginTop: "16px"

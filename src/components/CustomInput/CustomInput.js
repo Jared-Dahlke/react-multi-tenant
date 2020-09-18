@@ -43,6 +43,8 @@ export default function CustomInput(props) {
       {...formControlProps}
       className={formControlProps.className + " " + classes.formControl}
     >
+
+      
       {labelText !== undefined ? (
         <InputLabel
           className={classes.labelRoot + labelClasses}
@@ -62,7 +64,12 @@ export default function CustomInput(props) {
         {...inputProps}
       />
       {error ? (
-        <Clear className={classes.feedback + " " + classes.labelRootError} />
+        
+        <div  onClick={() => props.handleClear()}>
+          <Clear className={classes.feedback + " " + classes.labelRootError + " " + classes.clickable}/>
+        </div>
+        /*<Clear className={classes.feedback + " " + classes.labelRootError} />*/
+        
       ) : success ? (
         <Check className={classes.feedback + " " + classes.labelRootSuccess} />
       ) : null}
@@ -77,5 +84,6 @@ CustomInput.propTypes = {
   inputProps: PropTypes.object,
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
-  success: PropTypes.bool
+  success: PropTypes.bool,
+  handleClear: PropTypes.func
 };
