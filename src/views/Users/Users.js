@@ -19,6 +19,10 @@ import tableStyles from "../../assets/jss/material-dashboard-react/components/ta
 import { useHistory } from "react-router-dom";
 import { Facebook } from 'react-content-loader'
 import CustomAlert from '../../components/CustomAlert.js'
+import Snackbar from '../../components/Snackbar/Snackbar'
+import Success from "@material-ui/icons/Check";
+import SnackbarContent from '../../components/Snackbar/SnackbarContent.js'
+
 
 
 const MyFacebookLoader = () => <Facebook />
@@ -29,7 +33,8 @@ const useStyles = makeStyles(styles);
 const mapStateToProps = (state) => {
   return {
     users: state.users.data,
-    hasErrored: state.usersHasErrored
+    hasErrored: state.usersHasErrored,
+    userDeleted: state.userDeleted
   }
 }
 
@@ -99,12 +104,21 @@ function Users(props) {
         titleText={'Delete User'}
         handleConfirm={()=>{handleDeleteUser()}}
       />
+
+      <Snackbar
+        place="bc"
+        color="success"
+        icon={Success}
+        message={"User succesfully deleted"}
+        open={props.userDeleted}
+      />
       
             
       <Grid container justify="flex-end">
 
         <GridItem >
           <Button href="/admin/settings/users/create" color="primary">Create New User</Button>
+          <Button onClick={firethis}>error button</Button>
         </GridItem>
         
         
@@ -115,6 +129,9 @@ function Users(props) {
         <Card>
           
           <CardBody>
+
+            
+         
 
             {props.users ?
             
@@ -199,8 +216,15 @@ function Users(props) {
             }
           </CardBody>
         </Card>
+
+        
+
+         
       </GridItem>
 
+   
+
+     
     </GridContainer>
     
 

@@ -1,7 +1,6 @@
 //import axios from 'axios';
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS} from '../action-types/users'
+import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED} from '../action-types/users'
 import axios from '../../axiosConfig'
-import rawAxios from 'axios'
 import handleError from '../../errorHandling';
 import config from '../../config.js'
 import {User} from '../../models/user'
@@ -15,6 +14,13 @@ export function usersHasErrored(bool) {
   return {
     type: USERS_HAS_ERRORED,
     hasErrored: bool
+  };
+}
+
+export function userDeleted(bool) {
+  return {
+    type: USER_DELETED,
+    userDeleted: bool
   };
 }
 
@@ -59,7 +65,10 @@ export const deleteUser = (userId) => {
   return (dispatch) => {
       axios.delete(url)
       .then(response => {
-          console.log(response)
+          dispatch(userDeleted(true))
+          setTimeout(() => {
+            dispatch(userDeleted(false))
+          }, 2000);
       })
       .catch(error => {
           //TODO: handle the error when implemented
