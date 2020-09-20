@@ -1,5 +1,5 @@
 //import axios from 'axios';
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED} from '../action-types/users'
+import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER} from '../action-types/users'
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 import config from '../../config.js'
@@ -9,6 +9,7 @@ const apiBase = config.apiGateway.URL
 const mockRoles = [
   11,12
 ]
+
 
 export function usersHasErrored(bool) {
   return {
@@ -20,6 +21,12 @@ export function usersHasErrored(bool) {
 export function userDeleted(bool) {
   return {
     type: USER_DELETED,
+    userDeleted: bool
+  };
+}
+export function userDeletedError(bool) {
+  return {
+    type: USER_DELETED_ERROR,
     userDeleted: bool
   };
 }
@@ -51,18 +58,26 @@ export function usersFetchData() {
 
     }
     catch(error) {    
-      alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
       dispatch(usersHasErrored(true))
     }
   };
 }
 
+export function usersRemoveUser(userId) {
+  return {
+      type: USERS_REMOVE_USER,
+      userId
+  };
+}
+
 
 export const deleteUser = (userId) => {
+  
   let url =  apiBase + `/user/${userId}`
   return (dispatch) => {
+      dispatch(usersRemoveUser(userId))
       axios.delete(url)
       .then(response => {
           dispatch(userDeleted(true))
@@ -71,7 +86,10 @@ export const deleteUser = (userId) => {
           }, 2000);
       })
       .catch(error => {
-          //TODO: handle the error when implemented
+          dispatch(userDeletedError(true))
+          setTimeout(() => {
+            dispatch(userDeletedError(false))
+          }, 2000);
       })
   }
 }

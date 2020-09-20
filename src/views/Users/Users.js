@@ -21,8 +21,7 @@ import { Facebook } from 'react-content-loader'
 import CustomAlert from '../../components/CustomAlert.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import Success from "@material-ui/icons/Check";
-import SnackbarContent from '../../components/Snackbar/SnackbarContent.js'
-
+import Error from '@material-ui/icons/Error'
 
 
 const MyFacebookLoader = () => <Facebook />
@@ -34,7 +33,8 @@ const mapStateToProps = (state) => {
   return {
     users: state.users.data,
     hasErrored: state.usersHasErrored,
-    userDeleted: state.userDeleted
+    userDeleted: state.userDeleted,
+    userDeletedError: state.userDeletedError
   }
 }
 
@@ -112,13 +112,20 @@ function Users(props) {
         message={"User succesfully deleted"}
         open={props.userDeleted}
       />
+
+      <Snackbar
+        place="bc"
+        color="danger"
+        icon={Error}
+        message={"There was an error deleting this user. Please try again later."}
+        open={props.userDeletedError}
+      />
       
             
       <Grid container justify="flex-end">
 
         <GridItem >
           <Button href="/admin/settings/users/create" color="primary">Create New User</Button>
-          <Button onClick={firethis}>error button</Button>
         </GridItem>
         
         

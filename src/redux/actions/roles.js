@@ -53,9 +53,9 @@ export function rolesFetchData() {
 
     }
     catch(error) {    
-      alert(error)
+      //alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
       dispatch(rolesHasErrored(true))
     }
   };
@@ -74,9 +74,9 @@ export function rolesPermissionsFetchData() {
 
     }
     catch(error) {    
-      alert(error)
+      //alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
       dispatch(rolesPermissionsHasErrored(true))
     }
   };
