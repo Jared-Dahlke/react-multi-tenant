@@ -31,6 +31,11 @@ export function login(credentials) {
         password: credentials.password
       })  
 
+      if (!result.data.jwt) {
+        alert('We were unable to authenticate this user. Please try again later.')
+        return
+      }
+
       if (result.status === 200) {
         let token = result.data.jwt
         let user = result.data.user
@@ -45,7 +50,7 @@ export function login(credentials) {
     catch(error) {
       alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
     }
   };
 }
@@ -81,7 +86,7 @@ export function userProfileFetchData() {
     catch(error) {
       alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
     }
   };
 }
@@ -103,7 +108,7 @@ export function resetPassword(email) {
     catch(error) {
       alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
     }
   };
 }
@@ -125,7 +130,7 @@ export function changePassword(password, userId, token) {
     catch(error) {
       alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
     }
   };
 }

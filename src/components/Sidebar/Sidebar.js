@@ -9,6 +9,7 @@ import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
@@ -94,7 +95,7 @@ export default function Sidebar(props) {
             </ListItem>
 
             <Collapse in={openCollapse} timeout="auto" unmountOnExit>
-              <List  disablePadding >
+              <List>
 
                 {SettingsRoutes.map((setting, key)=>{
 
@@ -117,6 +118,8 @@ export default function Sidebar(props) {
 
                       <ListItem button inset="true" className={classes.nestedItemLink + subListItemClasses}>
                         
+                        
+
                           <setting.icon 
                             style={{color: 'white',width: "24px",
                             height: "30px",
@@ -124,10 +127,15 @@ export default function Sidebar(props) {
                             lineHeight: "30px",
                             float: "left",
                             marginRight: "15px",
-                            paddingLeft:'15px',
+                            marginLeft:'15px',
                             textAlign: "center",
-                            verticalAlign: "middle"}}
+                            verticalAlign: "middle",
+                            }}
                           />
+
+                          
+                          
+                          
                 
                         <ListItemText  
                           primary={setting.name} 

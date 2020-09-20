@@ -19,6 +19,9 @@ import tableStyles from "../../assets/jss/material-dashboard-react/components/ta
 import { useHistory } from "react-router-dom";
 import { Facebook } from 'react-content-loader'
 import CustomAlert from '../../components/CustomAlert.js'
+import Snackbar from '../../components/Snackbar/Snackbar'
+import Success from "@material-ui/icons/Check";
+import Error from '@material-ui/icons/Error'
 
 
 const MyFacebookLoader = () => <Facebook />
@@ -29,7 +32,9 @@ const useStyles = makeStyles(styles);
 const mapStateToProps = (state) => {
   return {
     users: state.users.data,
-    hasErrored: state.usersHasErrored
+    hasErrored: state.usersHasErrored,
+    userDeleted: state.userDeleted,
+    userDeletedError: state.userDeletedError
   }
 }
 
@@ -99,6 +104,22 @@ function Users(props) {
         titleText={'Delete User'}
         handleConfirm={()=>{handleDeleteUser()}}
       />
+
+      <Snackbar
+        place="bc"
+        color="success"
+        icon={Success}
+        message={"User succesfully deleted"}
+        open={props.userDeleted}
+      />
+
+      <Snackbar
+        place="bc"
+        color="danger"
+        icon={Error}
+        message={"There was an error deleting this user. Please try again later."}
+        open={props.userDeletedError}
+      />
       
             
       <Grid container justify="flex-end">
@@ -115,6 +136,9 @@ function Users(props) {
         <Card>
           
           <CardBody>
+
+            
+         
 
             {props.users ?
             
@@ -199,8 +223,15 @@ function Users(props) {
             }
           </CardBody>
         </Card>
+
+        
+
+         
       </GridItem>
 
+   
+
+     
     </GridContainer>
     
 
