@@ -6,11 +6,6 @@ import config from '../../config.js'
 import {User} from '../../models/user'
 const apiBase = config.apiGateway.URL
 
-const mockRoles = [
-  11,12
-]
-
-
 export function usersHasErrored(bool) {
   return {
     type: USERS_HAS_ERRORED,
@@ -45,12 +40,30 @@ export function usersFetchData() {
   return async (dispatch) => {
     try {
 
-      const result = await axios.get(url)       
+      let params = {
+        account: true,
+        role: true,
+        permission: true
+      }
+     
+
+      const result = await axios.get(url, {
+        params
+      })       
      
       if (result.status === 200) {
         let users = {data: []}
         for (const user of result.data) {
-          let newUser = new User(user.userId, user.firstName, user.lastName, user.company, user.email, user.userType, mockRoles)
+          let roles = []
+          for (const role of user.roles) {
+            if (role.roleId) roles.push(role.roleId)          
+          }
+          let accounts = []
+          for (const account of user.accounts) {
+            if (account.accountId) accounts.push(account.accountId)          
+          }
+
+          let newUser = new User(user.userId, user.firstName, user.lastName, user.company, user.email, user.userType, roles, accounts)
           users.data.push(newUser)
         }
         dispatch(usersFetchDataSuccess(users))
@@ -67,15 +80,15 @@ export function usersFetchData() {
 
 export function usersRemoveUser(userId) {
   return {
-      type: USERS_REMOVE_USER,
-      userId
+    type: USERS_REMOVE_USER,
+    userId
   };
 }
 
 export function usersAddUser(user) {
   return {
-      type: USERS_ADD_USER,
-      user
+    type: USERS_ADD_USER,
+    user
   };
 }
 
@@ -84,19 +97,19 @@ export const deleteUser = (userId) => {
   
   let url =  apiBase + `/user/${userId}`
   return (dispatch) => {
-      dispatch(usersRemoveUser(userId))
-      axios.delete(url)
+    dispatch(usersRemoveUser(userId))
+    axios.delete(url)
       .then(response => {
-          dispatch(userDeleted(true))
-          setTimeout(() => {
-            dispatch(userDeleted(false))
-          }, 2000);
+        dispatch(userDeleted(true))
+        setTimeout(() => {
+          dispatch(userDeleted(false))
+        }, 2000);
       })
       .catch(error => {
-          dispatch(userDeletedError(true))
-          setTimeout(() => {
-            dispatch(userDeletedError(false))
-          }, 2000);
+        dispatch(userDeletedError(true))
+        setTimeout(() => {
+          dispatch(userDeletedError(false))
+        }, 2000);
       })
   }
 }
@@ -105,20 +118,20 @@ export const inviteUser = (user) => {
   
   //let url =  apiBase + `/user/${userId}`
   return (dispatch) => {
-      dispatch(usersAddUser(user))
-      //axios.delete(url)
-      //.then(response => {
-      //    dispatch(userDeleted(true))
-      //    setTimeout(() => {
-      //      dispatch(userDeleted(false))
-      //    }, 2000);
-      //})
-      //.catch(error => {
-      //    dispatch(userDeletedError(true))
-      //    setTimeout(() => {
-      //      dispatch(userDeletedError(false))
-      //    }, 2000);
-      //})
+    dispatch(usersAddUser(user))
+    //axios.delete(url)
+    //.then(response => {
+    //    dispatch(userDeleted(true))
+    //    setTimeout(() => {
+    //      dispatch(userDeleted(false))
+    //    }, 2000);
+    //})
+    //.catch(error => {
+    //    dispatch(userDeletedError(true))
+    //    setTimeout(() => {
+    //      dispatch(userDeletedError(false))
+    //    }, 2000);
+    //})
   }
 }
      

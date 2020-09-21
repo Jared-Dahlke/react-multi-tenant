@@ -119,8 +119,8 @@ function CreateUser  (props) {
 
   const handleInviteUserClick = () => {
     setInviteButtonDisabled(true)
-
-    let newUser = new User(null, firstName, lastName, company, email, internalUserChecked, selectedRoles)
+    let mockAccounts = []
+    let newUser = new User(null, firstName, lastName, company, email, internalUserChecked, selectedRoles, mockAccounts)
     props.addNewUser(newUser)
     setShowAlertMessage(true)
     setTimeout(function() {

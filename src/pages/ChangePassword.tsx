@@ -71,7 +71,6 @@ function PasswordChange(props: any) {
   const [password_confirmation, setPasswordConfirmation] = useState("");
 
   async function postChangePassword() {
-    // console.log(password, password_confirmation)
     if (password === password_confirmation){
       props.changePassword(password, userId, token)
     } else {

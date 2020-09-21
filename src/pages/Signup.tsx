@@ -193,30 +193,30 @@ function Signup(props: any) {
 
             
         </Grid>
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={register}
-          >
-            {
-              fromInvite ?
-                'Complete Sign Up'
-                :
-                'Sign Up'
-            }
-           
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/login" variant="body2">
-                Already have an account?
-              </Link>
-            </Grid>
+        <Button
+          type="button"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={register}
+        >
+          {
+            fromInvite ?
+              'Complete Sign Up'
+              :
+              'Sign Up'
+          }
+          
+        </Button>
+        <Grid container justify="flex-end">
+          <Grid item>
+            <Link href="/login" variant="body2">
+              Already have an account?
+            </Link>
           </Grid>
-       
+        </Grid>
+      
       </div>
       <Box mt={5}>
         <Copyright />

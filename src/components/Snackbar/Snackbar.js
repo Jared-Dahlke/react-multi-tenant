@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles);
 
 export default function Snackbar(props) {
   const classes = useStyles();
-  const { message, color, close, icon, place, open, rtlActive, autoHideDuration } = props;
+  const { message, color, close, icon, place, open, rtlActive } = props;
   var action = [];
   const messageClasses = classNames({
     [classes.iconMessage]: icon !== undefined
