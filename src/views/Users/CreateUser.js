@@ -11,14 +11,15 @@ import CardBody from "../../components/Card/CardBody.js"
 import CardFooter from "../../components/Card/CardFooter.js"
 import {connect} from 'react-redux'
 import {rolesFetchData} from '../../redux/actions/roles'
+import {inviteUser} from '../../redux/actions/users'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
-//import {isValidEmail} from "../../validations"
 import Snackbar from "../../components/Snackbar/Snackbar"
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
 
 import CustomTree from '../../components/Tree/CustomTree'
+import { User } from "../../models/user.js"
 
 const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
 
@@ -70,19 +71,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchRoles: () => dispatch(rolesFetchData())
+    fetchRoles: () => dispatch(rolesFetchData()),
+    addNewUser: (user) => dispatch(inviteUser(user))
   }
 }
 
 
 function CreateUser  (props) {
  
-
-  //const {fetchRoles} = props
-  
-  //React.useEffect(() => {
-  //  fetchRoles()
-  //}, [fetchRoles])
 
   const classes = useStyles()
   const [selectedRoles, setSelectedRoles] = React.useState([])
@@ -123,6 +119,9 @@ function CreateUser  (props) {
 
   const handleInviteUserClick = () => {
     setInviteButtonDisabled(true)
+
+    let newUser = new User(null, firstName, lastName, company, email, internalUserChecked, selectedRoles)
+    props.addNewUser(newUser)
     setShowAlertMessage(true)
     setTimeout(function() {
       setShowAlertMessage(false)

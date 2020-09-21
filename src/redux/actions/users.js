@@ -1,5 +1,5 @@
 //import axios from 'axios';
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER} from '../action-types/users'
+import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER, USERS_ADD_USER} from '../action-types/users'
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 import config from '../../config.js'
@@ -72,6 +72,13 @@ export function usersRemoveUser(userId) {
   };
 }
 
+export function usersAddUser(user) {
+  return {
+      type: USERS_ADD_USER,
+      user
+  };
+}
+
 
 export const deleteUser = (userId) => {
   
@@ -91,6 +98,27 @@ export const deleteUser = (userId) => {
             dispatch(userDeletedError(false))
           }, 2000);
       })
+  }
+}
+
+export const inviteUser = (user) => {
+  
+  //let url =  apiBase + `/user/${userId}`
+  return (dispatch) => {
+      dispatch(usersAddUser(user))
+      //axios.delete(url)
+      //.then(response => {
+      //    dispatch(userDeleted(true))
+      //    setTimeout(() => {
+      //      dispatch(userDeleted(false))
+      //    }, 2000);
+      //})
+      //.catch(error => {
+      //    dispatch(userDeletedError(true))
+      //    setTimeout(() => {
+      //      dispatch(userDeletedError(false))
+      //    }, 2000);
+      //})
   }
 }
      

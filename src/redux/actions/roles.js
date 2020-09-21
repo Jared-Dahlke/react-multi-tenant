@@ -66,7 +66,7 @@ export function rolesPermissionsFetchData() {
   return async (dispatch) => {
 
     try {
-      let url =  apiBase + '/permission'
+      let url =  apiBase + '/role/permissions'
       const result = await axios.get(url)       
       if (result.status === 200) {
         dispatch(rolesPermissionsFetchDataSuccess(result))
