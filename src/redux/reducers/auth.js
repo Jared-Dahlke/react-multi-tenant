@@ -10,7 +10,7 @@ export function authToken(state = null, action) {
   }
 }
 
-let newUser = new User(' ', ' ', ' ', ' ', ' ', ' ', ' ')
+let newUser = new User(' ', ' ', ' ', ' ', ' ', ' ', [], [])
 
 export function user(state = newUser, action) {
   switch (action.type) {
