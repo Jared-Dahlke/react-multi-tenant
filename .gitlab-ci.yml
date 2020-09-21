@@ -70,6 +70,5 @@ deploy-to-staging:
     - ssh admin-1@52.250.22.66 "sudo docker pull registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging:latest"
     - ssh admin-1@52.250.22.66 "sudo docker run --name front-end -it -d -p 3000:3000 registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging"
 
-  #only:
-    #- /^sprint-.*$/
-    
+  only:
+    - /^sprint-.*$/
