@@ -4,3 +4,4 @@ export const DELETE_USER = 'DELETE_USER';
 export const USER_DELETED = 'USER_DELETED';
 export const USER_DELETED_ERROR = 'USER_DELETED_ERROR';
 export const USERS_REMOVE_USER = 'USERS_REMOVE_USER';
+export const USERS_ADD_USER = 'USERS_ADD_USER';
