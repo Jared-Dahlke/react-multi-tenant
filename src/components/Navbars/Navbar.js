@@ -22,6 +22,10 @@ export default function Header(props) {
       if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
         name = prop.name;
       }
+      let url = window.location.href
+      if(url.includes('/brandProfiles/create')) {
+        name = 'Create a Brand Profile'
+      }
       return null;
     });
     return name;

@@ -4,6 +4,7 @@ import GridItem from "../../components/Grid/GridItem.js";
 import GridList from '@material-ui/core/GridList'
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
+import CardFooter from '../../components/Card/CardFooter'
 //import Card from '@material-ui/core/Card'
 import CardBody from "../../components/Card/CardBody.js";
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,10 +25,14 @@ const useStyles = makeStyles((theme) => ({
    
   },
   card: {
-    height: '100%'
+    //height: '100%'
   },
   stepper: {
     
+  },
+  fixBottom: {
+    position: 'fixed',
+    bottom: 0
   },
   backButton: {
     marginRight: theme.spacing(2),
@@ -93,17 +98,33 @@ export default function CreateBrandProfiles (props) {
    
     <div>
 
-
+      <Stepper classes={{ root: classes.stepper}}  activeStep={activeStep} alternativeLabel>
+        {steps.map((label, index) => (
+          <Step key={label}>
+            
+            <StepLabel 
+              StepIconProps={{ 
+                classes: { 
+                  root: classes.step,
+                  completed: classes.completed,
+                  active: classes.active
+                } 
+              }}
+            >
+              {label}
+            </StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      
     
       <Card classes={{root: classes.card}}>
         <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Create your brand profile</h4>           
+          <h4 className={classes.cardTitleWhite}>{steps[activeStep]}</h4>           
         </CardHeader>
         <CardBody>
-          
-        
-            
-          {/*activeStep === 0 ?
+
+        {activeStep === 0 ?
             <BasicInfo/> 
             : activeStep === 1 ?
               <div>step 2</div> 
@@ -111,30 +132,14 @@ export default function CreateBrandProfiles (props) {
                 <div> step 3</div> 
                 : 
                 <div></div>
-          */ }
-            
-        
+           }
+          
+          
+          
+        </CardBody>          
+     <CardFooter>
 
-          <Card className={classes.root}>
-            <Stepper classes={{ root: classes.stepper}}  activeStep={activeStep} alternativeLabel>
-              {steps.map((label, index) => (
-                <Step key={label}>
-                  
-                  <StepLabel 
-                    StepIconProps={{ 
-                      classes: { 
-                        root: classes.step,
-                        completed: classes.completed,
-                        active: classes.active
-                      } 
-                    }}
-                  >
-                    {label}
-                  </StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-            <div>
+     <div style={{position: 'fixed', bottom: 30, right: 70}}>
               {activeStep === steps.length ? (
                 <div>
                   <Typography className={classes.instructions}></Typography>
@@ -142,7 +147,7 @@ export default function CreateBrandProfiles (props) {
                 </div>
               ) : (
                 <div>
-                  <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+                  
                   <div>
                     <Button
                       disabled={activeStep === 0}
@@ -158,10 +163,13 @@ export default function CreateBrandProfiles (props) {
                 </div>
               )}
             </div>
-          </Card>
-          
-        </CardBody>          
-      </Card>
+     
+
+     </CardFooter>
+
+           
+
+         </Card>
     </div>
 
   )
