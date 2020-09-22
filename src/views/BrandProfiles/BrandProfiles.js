@@ -31,10 +31,7 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users.data,
-    hasErrored: state.usersHasErrored,
-    userDeleted: state.userDeleted,
-    userDeletedError: state.userDeletedError
+    brandProfiles: state.brandProfiles
   }
 }
 
@@ -47,17 +44,18 @@ const mapDispatchToProps = (dispatch) => {
 
 function BrandProfiles(props) {
 
+  console.log(props)
   //let history = useHistory();
   const classes = useStyles();
   const tableClasses = useTableStyles();
   //const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)
   //const [userToDelete, setUserToDelete] = React.useState({})
 
-  //const {fetchUsersData} = props
+  const {fetchBrandProfiles} = props
 
-  //React.useEffect(() => { 
-  //fetchUsersData()
-  //}, [fetchUsersData])
+  React.useEffect(() => { 
+    fetchBrandProfiles()
+  }, [fetchBrandProfiles])
 
 
   const tableCellClasses = classnames(classes.tableCell, {
@@ -125,7 +123,7 @@ function BrandProfiles(props) {
       <Grid container justify="flex-end">
 
         <GridItem >
-          <Button href="/admin/settings/users/create" color="primary">Create New Profile</Button>
+          <Button href="/admin/settings/brandProfiles/create" color="primary">Create New Profile</Button>
         </GridItem>
         
         
@@ -164,10 +162,10 @@ function BrandProfiles(props) {
 
                 <TableBody>
                   {props.brandProfiles && props.brandProfiles.map(profile => (
-                    <TableRow key={profile.profileId} className={classes.tableRow}>
+                    <TableRow key={profile.brandProfileId} className={classes.tableRow}>
                     
-                      <TableCell className={tableCellClasses}>{profile.profileName}</TableCell>
-                      <TableCell className={tableCellClasses}>{profile.websiteUrl}</TableCell>
+                      <TableCell className={tableCellClasses}>{profile.brandProfileName}</TableCell>
+                      <TableCell className={tableCellClasses}>{profile.website}</TableCell>
                      
                       <TableCell className={classes.tableActions}>
                         <Tooltip

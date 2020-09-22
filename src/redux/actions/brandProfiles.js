@@ -1,15 +1,18 @@
 //import axios from 'axios';
 import {BRAND_PROFILES_FETCH_DATA_SUCCESS} from '../action-types/brandProfiles'
-import axios from '../../axiosConfig'
+//import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
-import config from '../../config.js'
-import {BrandProfile} from '../../models/brandProfile'
-const apiBase = config.apiGateway.URL
+//import config from '../../config.js'
+//import {BrandProfile} from '../../models/brandProfile'
+//const apiBase = config.apiGateway.URL
 
 
-///let mockBrandProfiles = [
-//  {}
-//]
+let mockBrandProfiles = [
+  {brandProfileId: 1, brandProfileName: 'Trendy', website:'www.bruen.com', twitter: 'twitter.com/water', industryVertical: 'Food', industrySubVertical: 'Liquid'},
+  {brandProfileId: 2, brandProfileName: 'Conservative', website:'www.pkm.com', twitter: 'twitter.com/you', industryVertical: 'Food', industrySubVertical: 'Liquid'},
+  {brandProfileId: 3, brandProfileName: 'Progressive', website:'www.M4A1.com', twitter: 'twitter.com/knowthe', industryVertical: 'Food', industrySubVertical: 'Liquid'},
+  {brandProfileId: 4, brandProfileName: 'Emo', website:'www.Origin.com', twitter: 'twitter.com/thing', industryVertical: 'Food', industrySubVertical: 'Liquid'},
+]
 
 export function brandProfilesFetchDataSuccess(brandProfiles) {
   return {
@@ -18,24 +21,24 @@ export function brandProfilesFetchDataSuccess(brandProfiles) {
   };
 }
 
-
 export function fetchBrandProfiles() {
 
-  let url =  apiBase + '/brandProfiles'
+  //let url =  apiBase + '/brandProfiles'
   return async (dispatch) => {
     try {
 
-      const result = await axios.get(url)       
+      //const result = await axios.get(url)       
      
-      if (result.status === 200) {
-        let brandProfiles = []
-        for (const brandProfile of result.data) {
+      //if (result.status === 200) {
+      //  let brandProfiles = []
+      //  for (const brandProfile of result.data) {
           
-          let newBrandProfile = new BrandProfile(brandProfile.brandProfileId, brandProfile.brandProfileName, brandProfile.website, brandProfile.twitterName, brandProfile.industryVertical, brandProfile.industrySubVertical)
-          brandProfiles.data.push(newBrandProfile)
-        }
-        dispatch(brandProfilesFetchDataSuccess(brandProfiles))
-      }
+      //    let newBrandProfile = new BrandProfile(brandProfile.brandProfileId, brandProfile.brandProfileName, brandProfile.website, brandProfile.twitterName, brandProfile.industryVertical, brandProfile.industrySubVertical)
+      //    brandProfiles.data.push(newBrandProfile)
+      //  }
+      console.log('inside getcfh brand profile')
+      dispatch(brandProfilesFetchDataSuccess(mockBrandProfiles))
+      //}
 
     }
     catch(error) {    

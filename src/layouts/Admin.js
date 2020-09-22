@@ -21,6 +21,7 @@ import {rolesFetchData} from '../redux/actions/roles.js'
 import EditUser from '../views/Users/EditUser'
 import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
+import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 
 let ps;
 
@@ -52,7 +53,12 @@ const switchRoutes = (
 
     <Route
       path='/admin/settings/brandProfiles'
-      component={BrandProfiles}
+      render={({ match: { url } }) => (
+        <>
+          <Route path={`${url}/`} component={BrandProfiles} exact />
+          <Route path={`${url}/create`} component={CreateBrandProfile} />      
+        </>
+      )}
     />
 
     <Route
