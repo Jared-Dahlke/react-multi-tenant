@@ -58,89 +58,89 @@ function RolesPermissions(props) {
           
           <CardBody>
             
-          {props.rolesPermissions ?
-            
+            {props.rolesPermissions ?
+              
 
-            <Table className={classes.table}>
+              <Table className={classes.table}>
 
-        
-              <TableHead className={tableClasses["primaryTableHeader"]}>
-                <TableRow className={tableClasses.tableHeadRow}>
-                  {headers.map((prop, key) => {
-                    return (
-                      <TableCell
-                        className={tableClasses.tableCell + " " + tableClasses.tableHeadCell}
-                        key={key}
-                      >
-                        {prop}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-            
-
-              <TableBody>
-                {props.rolesPermissions && props.rolesPermissions.map(role => (
-                  <TableRow key={role.roleId} className={classes.tableRow}>
-                  
-                    <TableCell className={tableCellClasses}>{role.roleName}</TableCell>
-                    <TableCell className={tableCellClasses}>{role.roleDescription}</TableCell>
-                    <TableCell className={tableCellClasses}>{role.moduleName}</TableCell>
-                    <TableCell className={tableCellClasses}>{role.permissionName}</TableCell>
-                    <TableCell className={tableCellClasses}>{role.permissionDescription}</TableCell>
-                   
-                    
-                    {/*<TableCell className={classes.tableActions}>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Edit User"
-                        placement="top"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <IconButton
-                          aria-label="Edit"
-                          className={classes.tableActionButton}
-                          onClick={()=>handleEditUserClick(user)}
+          
+                <TableHead className={tableClasses["primaryTableHeader"]}>
+                  <TableRow className={tableClasses.tableHeadRow}>
+                    {headers.map((prop, key) => {
+                      return (
+                        <TableCell
+                          className={tableClasses.tableCell + " " + tableClasses.tableHeadCell}
+                          key={key}
                         >
-                          <Edit
-                            className={
-                              classes.tableActionButtonIcon + " " + classes.edit
-                            }
-                          />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip
-                        id="tooltip-top-start"
-                        title="Remove"
-                        placement="top"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <IconButton
-                          aria-label="Close"
-                          className={classes.tableActionButton}
-                          onClick={()=>{handleDeleteUserClick(user)}}
-                        >
-                          <Close
-                            className={
-                              classes.tableActionButtonIcon + " " + classes.close
-                            }
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>*/}
-                    
-
+                          {prop}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+              
 
-            :
+                <TableBody>
+                  {props.rolesPermissions && props.rolesPermissions.map(role => (
+                    <TableRow key={role.roleId} className={classes.tableRow}>
+                    
+                      <TableCell className={tableCellClasses}>{role.roleName}</TableCell>
+                      <TableCell className={tableCellClasses}>{role.roleDescription}</TableCell>
+                      <TableCell className={tableCellClasses}>{role.moduleName}</TableCell>
+                      <TableCell className={tableCellClasses}>{role.permissionName}</TableCell>
+                      <TableCell className={tableCellClasses}>{role.permissionDescription}</TableCell>
+                    
+                      
+                      {/*<TableCell className={classes.tableActions}>
+                        <Tooltip
+                          id="tooltip-top"
+                          title="Edit User"
+                          placement="top"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
+                          <IconButton
+                            aria-label="Edit"
+                            className={classes.tableActionButton}
+                            onClick={()=>handleEditUserClick(user)}
+                          >
+                            <Edit
+                              className={
+                                classes.tableActionButtonIcon + " " + classes.edit
+                              }
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip
+                          id="tooltip-top-start"
+                          title="Remove"
+                          placement="top"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
+                          <IconButton
+                            aria-label="Close"
+                            className={classes.tableActionButton}
+                            onClick={()=>{handleDeleteUserClick(user)}}
+                          >
+                            <Close
+                              className={
+                                classes.tableActionButtonIcon + " " + classes.close
+                              }
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>*/}
+                      
 
-            <MyFacebookLoader/>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
 
-          }
+              :
+
+              <MyFacebookLoader/>
+
+            }
 
           </CardBody>
         </Card>
