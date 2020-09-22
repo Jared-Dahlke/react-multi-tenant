@@ -1,5 +1,6 @@
 import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER, USERS_ADD_USER} from '../action-types/users'
 
+
 export function usersHasErrored(state = false, action) {
   switch (action.type) {
   case USERS_HAS_ERRORED:
@@ -47,3 +48,4 @@ export function users(state = [], action) {
     return state;
   }
 }
+

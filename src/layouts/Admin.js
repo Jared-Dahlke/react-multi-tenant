@@ -15,9 +15,14 @@ import TableList from "../views/TableList/TableList.js";
 import Users from "../views/Users/Users";
 import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
+
+
+// Redux
 import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
 import {rolesFetchData} from '../redux/actions/roles.js'
+import { setUserId} from "../redux/actions/auth.js";
+import {userProfileFetchData} from '../redux/actions/auth.js'
 import EditUser from '../views/Users/EditUser'
 import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
@@ -75,7 +80,9 @@ const useStyles = makeStyles(styles);
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsersData: () => dispatch(usersFetchData()),
-    fetchRoles: () => dispatch(rolesFetchData())
+    fetchRoles: () => dispatch(rolesFetchData()),
+    setUserId: (userId) => dispatch(setUserId(userId)),
+    userProfileFetchData: () => dispatch(userProfileFetchData())
   }
 }
 
@@ -117,12 +124,22 @@ function Admin({ ...rest }) {
     };
   }, [mainPanel]);
 
+
+  var userId = rest.userId
+  if(!userId){
+    let userId = localStorage.getItem("userId")
+    if (userId) {
+      rest.setUserId(userId)
+      
+    }
+  }
   //preload critical data into the application
-  const {fetchUsersData, fetchRoles} = rest
+  const {fetchUsersData, fetchRoles, userProfileFetchData} = rest
   React.useEffect(() => {
     fetchUsersData()
     fetchRoles()
-  }, [fetchUsersData, fetchRoles])
+    userProfileFetchData()
+  }, [fetchUsersData, fetchRoles,userProfileFetchData])
 
   return (
     <div className={classes.wrapper}>
