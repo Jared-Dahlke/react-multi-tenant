@@ -38,13 +38,13 @@
     "typescript": "3.7.5"
   },
   "scripts": {
-    "build-staging": "REACT_APP_STAGE=staging react-scripts build",
-    "build-production": "REACT_APP_STAGE=production react-scripts build",
+    "build-staging": "cross-env REACT_APP_STAGE=staging react-scripts build",
+    "build-production": "cross-env REACT_APP_STAGE=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-development": "REACT_APP_STAGE=development react-scripts start",
-    "start-staging": "REACT_APP_STAGE=staging react-scripts start",
-    "start-production": "REACT_APP_STAGE=production react-scripts start"
+    "start-development": "cross-env REACT_APP_STAGE=development react-scripts start",
+    "start-staging": "cross-env REACT_APP_STAGE=staging react-scripts start",
+    "start-production": "cross-env REACT_APP_STAGE=production react-scripts start"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -66,5 +66,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2"
   }
 }
