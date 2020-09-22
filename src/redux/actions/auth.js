@@ -3,6 +3,7 @@ import {
   SET_LOGGED_IN,
   SET_USER,
   SET_USER_ID,
+  SET_SHOW_ALERT,
 } from "../action-types/auth";
 import axios from "../../axiosConfig";
 import config from "../../config";
@@ -11,15 +12,19 @@ import handleError from "../../errorHandling";
 const apiBase = config.apiGateway.URL;
 
 export function setAuthToken(payload) {
-  return {type: SET_AUTH_TOKEN, payload};
+  return { type: SET_AUTH_TOKEN, payload };
+}
+
+export function setShowAlert(payload) {
+  return { type: SET_SHOW_ALERT, payload };
 }
 
 export function setUser(payload) {
-  return {type: SET_USER, payload};
+  return { type: SET_USER, payload };
 }
 
 export function setLoggedIn(payload) {
-  return {type: SET_LOGGED_IN, payload};
+  return { type: SET_LOGGED_IN, payload };
 }
 // export function loadUserProfile(payload){
 //   return {
@@ -61,6 +66,13 @@ export function login(credentials) {
         password: credentials.password,
       });
 
+      if (!result.data.jwt) {
+        alert(
+          "We were unable to authenticate this user. Please try again later."
+        );
+        return;
+      }
+
       if (result.status === 200) {
         let token = result.data.jwt;
         let user = result.data.user;
@@ -74,7 +86,7 @@ export function login(credentials) {
     } catch (error) {
       alert(error);
       let errorType = error.response.status;
-      handleError(errorType);
+      handleError(dispatch, errorType);
     }
   };
 }
@@ -113,7 +125,45 @@ export function userProfileFetchData() {
     } catch (error) {
       alert(error);
       let errorType = error.response.status;
-      handleError(errorType);
+      handleError(dispatch, errorType);
+    }
+  };
+}
+
+export function resetPassword(email) {
+  let url = apiBase + "/reset-password";
+  return async (dispatch) => {
+    try {
+      const result = await axios.post(url, {
+        email: email,
+      });
+
+      if (result.status === 200) {
+        dispatch(setShowAlert(true));
+      }
+    } catch (error) {
+      alert(error);
+      let errorType = error.response.status;
+      handleError(dispatch, errorType);
+    }
+  };
+}
+
+export function changePassword(password, userId, token) {
+  let url = `${apiBase}/update-password/${userId}/${token}`;
+  return async (dispatch) => {
+    try {
+      const result = await axios.post(url, {
+        password: password,
+      });
+
+      if (result.status === 200) {
+        dispatch(setShowAlert(true));
+      }
+    } catch (error) {
+      alert(error);
+      let errorType = error.response.status;
+      handleError(dispatch, errorType);
     }
   };
 }

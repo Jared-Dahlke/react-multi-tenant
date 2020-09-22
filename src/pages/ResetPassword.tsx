@@ -11,18 +11,22 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {login} from '../redux/actions/auth.js'
+import {setShowAlert, resetPassword} from '../redux/actions/auth.js';
+import Snackbar from "../components/Snackbar/Snackbar";
+import AddAlert from '@material-ui/icons/AddAlert';
+import {isEmailError} from "../validations";
 
 const mapStateToProps = (state : any) => {
   return { 
-    authToken: state.authToken,
-    isLoggedIn: state.isLoggedIn
+    isLoggedIn: state.isLoggedIn,
+    showAlert: state.showAlert
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    login: (credentials: any) => dispatch(login(credentials))
+    resetPassword: (email: string) => dispatch(resetPassword(email)),
+    setShowAlert: (showAlert: boolean) => dispatch(setShowAlert(showAlert))
   }
 }
 
@@ -39,6 +43,7 @@ function Copyright() {
   );
 }
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -52,31 +57,27 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
 
-
-function Login(props: any) {
-
+function PasswordReset(props: any) {
   const classes = useStyles();
-  const referer = props.location.state ? props.location.state.referer : '/admin/settings/profile';
-  const [userName, setUserName] = useState("jared@sightly.com");
-  const [password, setPassword] = useState("a");
+  const [email, setEmail] = useState("rahul@sightly.com");
 
-  async function postLogin() {
-    let credentials = {
-      username: userName,
-      password: password
-    }
-    props.login(credentials)
+  async function postResetPassword() {
+    props.resetPassword(email)
+
+    setTimeout(function() {
+      props.setShowAlert(false)
+    }, 4000)
   }
-   
+
   if (props.isLoggedIn) {
-    return <Redirect to={referer} />;
+    return <Redirect to='./admin/settings/profile' />;
   }
 
   return (
@@ -84,74 +85,61 @@ function Login(props: any) {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          {/*<LockOutlinedIcon />*/} 
+
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Forgot your Password
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            value={userName}
-            onChange={e => {
-              setUserName(e.target.value);
-            }}
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={e => {
-              setPassword(e.target.value);
-            }}
-            autoComplete="current-password"
-          />
-          
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={e => {
+                  setEmail(e.target.value);
+                }}
+                error={isEmailError(email)}
+              />
+            </Grid>
+            
+          </Grid>
           <Button
             type="button"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={postLogin}
+            disabled={isEmailError(email)}
+            onClick={postResetPassword}
           >
-            Sign In
+            Reset
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/resetPassword" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account?"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
-      <Box mt={8}>
+      <Snackbar
+        place="bc"
+        color="success"
+        icon={AddAlert}
+        message="Reset password email sent. Check Your email."
+        open={props.showAlert}
+        closeNotification={() => props.setShowAlert(false)}
+        close
+      />
+      <Box mt={5}>
         <Copyright />
       </Box>
     </Container>
   );
 }
 
-const MyLogin = connect(mapStateToProps, mapDispatchToProps)(Login)
 
-export default MyLogin;
+const ResetPassword = connect(mapStateToProps, mapDispatchToProps)(PasswordReset)
+
+export default ResetPassword;

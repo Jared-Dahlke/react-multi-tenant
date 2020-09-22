@@ -16,7 +16,6 @@ import {setAuthToken} from '../redux/actions/auth.js'
 import PasswordRequirements from '../components/CustomPasswordRequirements/CustomPasswordRequirements'
 
 import config from '../config.js'
-
 const queryString = require('query-string');
 
 const apiBase = config.apiGateway.MOCKURL;
@@ -118,106 +117,106 @@ function Signup(props: any) {
           Sign up
         </Typography>
        
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                value={firstName}
-                onChange={e => {
-                  setFirstName(e.target.value);
-                }}
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                disabled={fromInvite}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                value={lastName}
-                onChange={e => {
-                  setLastName(e.target.value);
-                }}
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                disabled={fromInvite}
-                autoComplete="lname"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                disabled={fromInvite}
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={e => {
-                  setEmail(e.target.value);
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="passwordField"
-                label="Password"              
-                id="password"
-                type="password"
-                autoFocus={fromInvite}        
-                autoComplete="new-password"  
-                value={password}
-                onChange={e => {
-                  setPassword(e.target.value);
-                }}
-              />
-            </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              autoComplete="fname"
+              name="firstName"
+              value={firstName}
+              onChange={e => {
+                setFirstName(e.target.value);
+              }}
+              variant="outlined"
+              required
+              fullWidth
+              id="firstName"
+              label="First Name"
+              autoFocus
+              disabled={fromInvite}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              variant="outlined"
+              required
+              value={lastName}
+              onChange={e => {
+                setLastName(e.target.value);
+              }}
+              fullWidth
+              id="lastName"
+              label="Last Name"
+              name="lastName"
+              disabled={fromInvite}
+              autoComplete="lname"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="email"
+              disabled={fromInvite}
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={e => {
+                setEmail(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              name="passwordField"
+              label="Password"              
+              id="password"
+              type="password"
+              autoFocus={fromInvite}        
+              autoComplete="new-password"  
+              value={password}
+              onChange={e => {
+                setPassword(e.target.value);
+              }}
+            />
+          </Grid>
 
-            <Grid item xs={12}>
-              <PasswordRequirements
-                password={password}
-              />
-            </Grid>
+          <Grid item xs={12}>
+            <PasswordRequirements
+              password={password}
+            />
+          </Grid>
 
             
+        </Grid>
+        <Button
+          type="button"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={register}
+        >
+          {
+            fromInvite ?
+              'Complete Sign Up'
+              :
+              'Sign Up'
+          }
+          
+        </Button>
+        <Grid container justify="flex-end">
+          <Grid item>
+            <Link href="/login" variant="body2">
+              Already have an account?
+            </Link>
           </Grid>
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={register}
-          >
-            {
-              fromInvite ?
-                'Complete Sign Up'
-                :
-                'Sign Up'
-            }
-           
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/login" variant="body2">
-                Already have an account?
-              </Link>
-            </Grid>
-          </Grid>
-       
+        </Grid>
+      
       </div>
       <Box mt={5}>
         <Copyright />

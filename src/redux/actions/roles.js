@@ -53,9 +53,9 @@ export function rolesFetchData() {
 
     }
     catch(error) {    
-      alert(error)
+      //alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
       dispatch(rolesHasErrored(true))
     }
   };
@@ -66,7 +66,7 @@ export function rolesPermissionsFetchData() {
   return async (dispatch) => {
 
     try {
-      let url =  apiBase + '/permission'
+      let url =  apiBase + '/role/permissions'
       const result = await axios.get(url)       
       if (result.status === 200) {
         dispatch(rolesPermissionsFetchDataSuccess(result))
@@ -74,9 +74,9 @@ export function rolesPermissionsFetchData() {
 
     }
     catch(error) {    
-      alert(error)
+      //alert(error)
       let errorType = error.response.status
-      handleError(errorType)
+      handleError(dispatch, errorType)
       dispatch(rolesPermissionsHasErrored(true))
     }
   };

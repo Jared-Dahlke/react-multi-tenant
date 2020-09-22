@@ -15,7 +15,6 @@ import TableList from "../views/TableList/TableList.js";
 import Users from "../views/Users/Users";
 import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
-import EditUser from '../views/Users/EditUser'
 
 
 // Redux
@@ -24,20 +23,25 @@ import {usersFetchData} from '../redux/actions/users.js'
 import {rolesFetchData} from '../redux/actions/roles.js'
 import { setUserId} from "../redux/actions/auth.js";
 import {userProfileFetchData} from '../redux/actions/auth.js'
+import EditUser from '../views/Users/EditUser'
+import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
+import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
+import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
+
 let ps;
 
 const switchRoutes = (
   <Switch>
     <Route
-      path='/admin/profile'
+      path='/admin/settings/profile'
       component={UserProfile}
     />
     <Route
-      path='/admin/accounts'
+      path='/admin/settings/accounts'
       component={TableList}
     />
     <Route
-      path='/admin/users'
+      path='/admin/settings/users'
       render={({ match: { url } }) => (
         <>
           <Route path={`${url}/`} component={Users} exact />
@@ -48,11 +52,26 @@ const switchRoutes = (
     />
 
     <Route
-      path='/admin/RolesPermissions'
+      path='/admin/settings/RolesPermissions'
       component={RolesPermissions}
     />
+
+    <Route
+      path='/admin/settings/brandProfiles'
+      render={({ match: { url } }) => (
+        <>
+          <Route path={`${url}/`} component={BrandProfiles} exact />
+          <Route path={`${url}/create`} component={CreateBrandProfile} />      
+        </>
+      )}
+    />
+
+    <Route
+      path='/admin/discovery/home'
+      component={DiscoveryHome}
+    />
     
-    <Redirect from="/admin" to="/admin/profile" />
+    <Redirect from="/admin" to="/admin/settings/profile" />
   </Switch>
 );
 

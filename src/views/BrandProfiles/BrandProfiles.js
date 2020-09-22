@@ -12,11 +12,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import {usersFetchData, deleteUser} from '../../redux/actions/users.js'
+import {fetchBrandProfiles} from '../../redux/actions/brandProfiles.js'
 import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 import { Facebook } from 'react-content-loader'
 import CustomAlert from '../../components/CustomAlert.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
@@ -31,78 +31,76 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users.data,
-    hasErrored: state.usersHasErrored,
-    userDeleted: state.userDeleted,
-    userDeletedError: state.userDeletedError
+    brandProfiles: state.brandProfiles
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsersData: () => dispatch(usersFetchData()),
-    deleteUser: (userId) => dispatch(deleteUser(userId))
+    fetchBrandProfiles: () => dispatch(fetchBrandProfiles()),
+    //deleteBrandProfile: (profileId) => dispatch(deleteBrandProfile(profileId))
   }
 }
 
-function Users(props) {
+function BrandProfiles(props) {
 
-  let history = useHistory();
+  console.log(props)
+  //let history = useHistory();
   const classes = useStyles();
   const tableClasses = useTableStyles();
-  const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)
-  const [userToDelete, setUserToDelete] = React.useState({})
+  //const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)
+  //const [userToDelete, setUserToDelete] = React.useState({})
 
-  const {fetchUsersData} = props
+  const {fetchBrandProfiles} = props
 
   React.useEffect(() => { 
-    fetchUsersData()
-  }, [fetchUsersData])
+    fetchBrandProfiles()
+  }, [fetchBrandProfiles])
 
 
   const tableCellClasses = classnames(classes.tableCell, {
     [classes.tableCellRTL]: false
   });
 
-  const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
+  const userHeaders = ['Profile Name','Website','']
 
-  const handleEditUserClick = (user) => {
-    let url = '/admin/settings/users/edit/' + encodeURIComponent(JSON.stringify(user))
-    history.push(url)
-  }
+  //const handleEditUserClick = (profile) => {
+  //  let url = '/admin/settings/brandProfiles/edit/' + encodeURIComponent(JSON.stringify(profile))
+  //  history.push(url)
+  //}
 
-  const handleDeleteUserClick = (user) => {
-    handleOpenDeleteUserAlert(user)
-    setUserToDelete(user)
-  }
+  //const handleDeleteUserClick = (user) => {
+  //handleOpenDeleteUserAlert(user)
+  //setUserToDelete(user)
+  //}
 
-  const handleCloseDeleteUserAlert =() =>{
-    setDeleteUserAlertIsOpen(false)
-    setUserToDelete({})
-  }
+  //const handleCloseDeleteUserAlert =() =>{
+  //setDeleteUserAlertIsOpen(false)
+  //setUserToDelete({})
+  //}
 
-  const handleOpenDeleteUserAlert = () => {
-    setDeleteUserAlertIsOpen(true)
-  }
+  //const handleOpenDeleteUserAlert = () => {
+  //setDeleteUserAlertIsOpen(true)
+  //}
 
-  const handleDeleteUser = () => {
-    setDeleteUserAlertIsOpen(false)
-    props.deleteUser(userToDelete.userId)
-    setUserToDelete({})
-  }
+  //const handleDeleteUser = () => {
+  //setDeleteUserAlertIsOpen(false)
+  //props.deleteUser(userToDelete.userId)
+  //setUserToDelete({})
+  //}
 
   return (                                   
  
     <GridContainer spacing={2}>
 
       <CustomAlert
-        open={deleteUserAlertIsOpen}
-        handleClose={handleCloseDeleteUserAlert}
+        open={false}
+        //handleClose={handleCloseDeleteUserAlert}
         contentText={'Are you sure you want to delete this user?'}
         cancelText={'Cancel'}
         proceedText={'Yes'}
         titleText={'Delete User'}
-        handleConfirm={()=>{handleDeleteUser()}}
+        //handleConfirm={()=>{handleDeleteUser()}}
       />
 
       <Snackbar
@@ -110,7 +108,7 @@ function Users(props) {
         color="success"
         icon={Success}
         message={"User succesfully deleted"}
-        open={props.userDeleted}
+        //open={props.userDeleted}
       />
 
       <Snackbar
@@ -118,14 +116,14 @@ function Users(props) {
         color="danger"
         icon={Error}
         message={"There was an error deleting this user. Please try again later."}
-        open={props.userDeletedError}
+        //open={props.userDeletedError}
       />
       
             
       <Grid container justify="flex-end">
 
         <GridItem >
-          <Button href="/admin/settings/users/create" color="primary">Create New User</Button>
+          <Button href="/admin/settings/brandProfiles/create" color="primary">Create New Profile</Button>
         </GridItem>
         
         
@@ -140,7 +138,7 @@ function Users(props) {
             
          
 
-            {props.users ?
+            {props.brandProfiles ?
             
 
               <Table className={classes.table}>
@@ -163,15 +161,12 @@ function Users(props) {
               
 
                 <TableBody>
-                  {props.users && props.users.map(user => (
-                    <TableRow key={user.userId} className={classes.tableRow}>
+                  {props.brandProfiles && props.brandProfiles.map(profile => (
+                    <TableRow key={profile.brandProfileId} className={classes.tableRow}>
                     
-                      <TableCell className={tableCellClasses}>{user.firstName}</TableCell>
-                      <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
-                      <TableCell className={tableCellClasses}>{user.company}</TableCell>
-                      <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                      <TableCell className={tableCellClasses}>{user.internal? 'true' : 'false'}</TableCell>
-                      
+                      <TableCell className={tableCellClasses}>{profile.brandProfileName}</TableCell>
+                      <TableCell className={tableCellClasses}>{profile.website}</TableCell>
+                     
                       <TableCell className={classes.tableActions}>
                         <Tooltip
                           id="tooltip-top"
@@ -182,7 +177,7 @@ function Users(props) {
                           <IconButton
                             aria-label="Edit"
                             className={classes.tableActionButton}
-                            onClick={()=>handleEditUserClick(user)}
+                            //onClick={()=>handleEditUserClick(user)}
                           >
                             <Edit
                               className={
@@ -200,7 +195,7 @@ function Users(props) {
                           <IconButton
                             aria-label="Close"
                             className={classes.tableActionButton}
-                            onClick={()=>{handleDeleteUserClick(user)}}
+                            //onClick={()=>{handleDeleteUserClick(user)}}
                           >
                             <Close
                               className={
@@ -239,4 +234,4 @@ function Users(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Users)
+export default connect(mapStateToProps, mapDispatchToProps)(BrandProfiles)

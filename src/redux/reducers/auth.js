@@ -1,6 +1,7 @@
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_USER, SET_USER_ID} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER, SET_USER_ID} from '../action-types/auth'
 import {User} from '../../models/user'
-let newUser = new User(' ', ' ', ' ', ' ', ' ', ' ', ' ')
+
+let newUser = new User(' ', ' ', ' ', ' ', ' ', ' ', [], [])
 
 const initialState = {
   token: null,
@@ -44,6 +45,15 @@ export function isLoggedIn(state = false, action) {
 export function userId(state = null, action){
   switch (action.type) {
   case SET_USER_ID:
+    return action.payload;
+  default:
+    return state;
+  }
+}
+
+export function showAlert(state = false, action) {
+  switch (action.type) {
+  case SET_SHOW_ALERT:
     return action.payload;
   default:
     return state;

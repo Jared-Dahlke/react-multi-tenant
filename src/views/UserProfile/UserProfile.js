@@ -9,6 +9,8 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import ListItem from "@material-ui/core/ListItem";
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
 
 // Validation
 import * as v from "../../validations";
@@ -88,6 +90,7 @@ function UserProfile({
   const [edit, setEdit] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
   const [passwordObject, setPasswordObject] = useState(passwordDefaultState);
+  const [showAlertMessage, setShowAlertMessage] = useState(false);
 
   const classes = useStyles();
 
@@ -118,12 +121,15 @@ function UserProfile({
     setEdit(false);
     setUserForm(userProfile);
   };
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     setUserForm(userForm);
-    setUserForm(userForm);
     setEdit(false);
-    await updateUserData(userForm);
+    setShowAlertMessage(true);
+    setTimeout(function () {
+      setShowAlertMessage(false);
+    }, 2000);
+    updateUserData(userForm);
   };
 
   const submitPassword = (e) => {
@@ -262,6 +268,16 @@ function UserProfile({
               >
                 {edit ? "Save" : "Edit Profile"}
               </Button>
+
+              <Snackbar
+                place="bc"
+                color="success"
+                icon={AddAlert}
+                message="User profile was updated"
+                open={showAlertMessage}
+                // closeNotification={() => setShowAlertMessage(false)}
+                // close
+              />
             </CardFooter>
           </Card>
         </GridItem>
