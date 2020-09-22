@@ -1,19 +1,12 @@
 import React from 'react'
-import GridContainer from '../../components/Grid/GridContainer'
-import GridItem from "../../components/Grid/GridItem.js";
-import GridList from '@material-ui/core/GridList'
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
 import CardFooter from '../../components/Card/CardFooter'
-//import Card from '@material-ui/core/Card'
 import CardBody from "../../components/Card/CardBody.js";
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
-//import StepButton from '@material-ui/core/StepButton';
-//import StepIcon from '@material-ui/core/StepIcon'
-//import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {primaryColor} from '../../assets/jss/material-dashboard-react'
 import CardHeader from '../../components/Card/CardHeader';
@@ -59,19 +52,6 @@ const useStyles = makeStyles((theme) => ({
 
 function getSteps() {
   return ['Basic Info', 'Create an ad group', 'Create an ad'];
-}
-
-function getStepContent(stepIndex) {
-  switch (stepIndex) {
-  case 0:
-    return '';
-  case 1:
-    return '';
-  case 2:
-    return '';
-  default:
-    return 'Unknown stepIndex';
-  }
 }
 
 
@@ -124,7 +104,7 @@ export default function CreateBrandProfiles (props) {
         </CardHeader>
         <CardBody>
 
-        {activeStep === 0 ?
+          {activeStep === 0 ?
             <BasicInfo/> 
             : activeStep === 1 ?
               <div>step 2</div> 
@@ -132,44 +112,42 @@ export default function CreateBrandProfiles (props) {
                 <div> step 3</div> 
                 : 
                 <div></div>
-           }
+          }
           
           
           
         </CardBody>          
-     <CardFooter>
+        <CardFooter>
 
-     <div style={{position: 'fixed', bottom: 30, right: 70}}>
-              {activeStep === steps.length ? (
+          <div style={{position: 'fixed', bottom: 30, right: 70}}>
+            {activeStep === steps.length ? (
+              <div>
+                <Typography className={classes.instructions}></Typography>
+                <Button onClick={handleReset}>Reset</Button>
+              </div>
+            ) : (
+              <div>
+                
                 <div>
-                  <Typography className={classes.instructions}></Typography>
-                  <Button onClick={handleReset}>Reset</Button>
+                  <Button
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    className={classes.backButton}
+                  >
+                    Back
+                  </Button>
+                  <Button variant="contained" color="primary" onClick={handleNext}>
+                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  </Button>
                 </div>
-              ) : (
-                <div>
-                  
-                  <div>
-                    <Button
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      className={classes.backButton}
-                    >
-                      Back
-                    </Button>
-                    <Button variant="contained" color="primary" onClick={handleNext}>
-                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+          </div>
      
 
-     </CardFooter>
+        </CardFooter>
 
-           
-
-         </Card>
+      </Card>
     </div>
 
   )

@@ -61,7 +61,6 @@ export default function BasicInfo (props) {
             title='Industry'
             search={true}
             treeContainerHeight={200}
-            minimal={true}
           />
         </GridItem>
       </GridContainer>

@@ -1,6 +1,7 @@
 //The below 2 warnings exist when using the rc-tree component. They both appear to be related to AntDesign which is used in this component. 
 //Warning: `children` of Tree is deprecated. Please use `treeData` instead.
 //Warning: Second param return from event is node data instead of TreeNode instance. Please read value directly instead of reading from `props`.
+/*eslint-disable no-sequences */
 import './index.less'
 import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
@@ -10,13 +11,9 @@ import {defaultFont} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
 import Card from "../Card/Card.js"
 import CardBody from "../Card/CardBody.js"
-import CardHeader from "../Card/CardHeader.js"
 import { withStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
-import classNames from "classnames";
 import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
-
-//const useStyles = makeStyles(styles);
 
 const styles = {
   cardCategoryWhite: {
@@ -52,11 +49,6 @@ const styles = {
   },
 }
 
-
-const labelClasses = classNames({
-  [" " + inputStyles.labelRootError]: false,
-  [" " + inputStyles.labelRootSuccess]: true
-});
 
 class Demo extends React.Component {
   static defaultProps = {
@@ -119,15 +111,6 @@ class Demo extends React.Component {
     })
   }
 
-  onFocus=()=>{
-    console.log('focused')
-    this.setState({showTree: true})
-  }
-  onBlur=()=>{
-    console.log('blured')
-    //this.setState({showTree: false})
-  }
-
   triggerChecked = () => {
     this.setState({
       checkedKeys: [`0-0-${parseInt(Math.random() * 3, 10)}-key`],
@@ -162,21 +145,17 @@ class Demo extends React.Component {
       autoExpandParent = true
     }
 
-    const { classes } = this.props
-
-    
     return (
 
       <Card >
         <CardBody>
 
-       <InputLabel
-          classes={inputStyles.labelRoot + ' ' + inputStyles.labelClasses}
-          //htmlFor={id}
-         // {...labelProps}
-        >
-          {this.props.title}
-        </InputLabel>
+          <InputLabel
+            className={inputStyles.labelRoot, inputStyles.labelClasses}
+            id="titleLabel"
+          >
+            {this.props.title}
+          </InputLabel>
 
         
 
@@ -206,7 +185,7 @@ class Demo extends React.Component {
 
         
          
-         <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
+          <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
     
             <Tree
               checkable
@@ -218,7 +197,6 @@ class Demo extends React.Component {
               onSelect={this.onSelect}
               selectedKeys={this.state.selectedKeys}
               filterTreeNode={this.filterTreeNode}
-              style={{}}
             >
               {loop(this.props.data)}
             </Tree>
@@ -228,7 +206,7 @@ class Demo extends React.Component {
         
        
 
-          </CardBody>
+        </CardBody>
 
       </Card>
         
