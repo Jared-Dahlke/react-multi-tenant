@@ -17,7 +17,7 @@ import CustomPassword from "../../components/CustomPasswordRequirements/CustomPa
 // Redux
 import { userProfileFetchData } from "../../redux/actions/auth.js";
 import { connect } from "react-redux";
-
+import { updateUserData } from "../../redux/actions/users.js";
 // Icons
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ClearRounded from "@material-ui/icons/ClearRounded";
@@ -60,6 +60,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserProfile: () => dispatch(userProfileFetchData()),
+    updateUserData: (userData) => dispatch(updateUserData(userData)),
   };
 };
 
@@ -78,7 +79,11 @@ const passwordDefaultState = {
   confirmNewPassword: "",
 };
 
-function UserProfile({ fetchUserProfile, user: { userProfile, loading } }) {
+function UserProfile({
+  fetchUserProfile,
+  updateUserData,
+  user: { userProfile, loading },
+}) {
   const [userForm, setUserForm] = useState(defaultState);
   const [edit, setEdit] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
@@ -113,9 +118,12 @@ function UserProfile({ fetchUserProfile, user: { userProfile, loading } }) {
     setEdit(false);
     setUserForm(userProfile);
   };
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    disableEdit();
+    setUserForm(userForm);
+    setUserForm(userForm);
+    setEdit(false);
+    await updateUserData(userForm);
   };
 
   const submitPassword = (e) => {
@@ -321,16 +329,17 @@ function UserProfile({ fetchUserProfile, user: { userProfile, loading } }) {
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomPassword password={newPassword} />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
                       {(newPassword.length > 0 ||
                         confirmNewPassword.length > 0) && (
                         <ListItem>
                           <ListItemIcon className={classes.minWidth}>
                             {newPassword === confirmNewPassword ? (
-                              <CheckCircle className={classes.green} />
+                              <CheckCircle
+                                className={classes.green}
+                                fontSize="small"
+                              />
                             ) : (
-                              <ClearRounded />
+                              <ClearRounded fontSize="small" />
                             )}
                           </ListItemIcon>
                           {newPassword === confirmNewPassword
