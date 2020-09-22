@@ -3,6 +3,7 @@ import Person from "@material-ui/icons/Person";
 import People from "@material-ui/icons/People"
 import AccountTree from "@material-ui/icons/AccountTree"
 import LockOpenIcon from "@material-ui/icons/LockOpen"
+import Business from '@material-ui/icons/Business'
 import UserProfile from "./views/UserProfile/UserProfile.js";
 import TableList from "./views/TableList/TableList.js";
 import Users from "./views/Users/Users";
@@ -34,6 +35,13 @@ const settingsRoutes = [
     path: "/settings/rolesPermissions",
     name: "Roles",
     icon: LockOpenIcon,
+    component: RolesPermissions,
+    layout: "/admin"
+  },
+  {
+    path: "/settings/brandProfiles",
+    name: "Brand Profiles",
+    icon: Business,
     component: RolesPermissions,
     layout: "/admin"
   }
