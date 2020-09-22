@@ -12,6 +12,11 @@ import Card from "../Card/Card.js"
 import CardBody from "../Card/CardBody.js"
 import CardHeader from "../Card/CardHeader.js"
 import { withStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import classNames from "classnames";
+import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
+
+//const useStyles = makeStyles(styles);
 
 const styles = {
   cardCategoryWhite: {
@@ -48,8 +53,10 @@ const styles = {
 }
 
 
-
-
+const labelClasses = classNames({
+  [" " + inputStyles.labelRootError]: false,
+  [" " + inputStyles.labelRootSuccess]: true
+});
 
 class Demo extends React.Component {
   static defaultProps = {
@@ -63,7 +70,8 @@ class Demo extends React.Component {
     autoExpandParent: true,
     selectedKeys: [],
     treeData: [],
-    inputValue: ''
+    inputValue: '',
+    showTree: false
   }
 
   
@@ -111,11 +119,22 @@ class Demo extends React.Component {
     })
   }
 
+  onFocus=()=>{
+    console.log('focused')
+    this.setState({showTree: true})
+  }
+  onBlur=()=>{
+    console.log('blured')
+    //this.setState({showTree: false})
+  }
+
   triggerChecked = () => {
     this.setState({
       checkedKeys: [`0-0-${parseInt(Math.random() * 3, 10)}-key`],
     })
   }
+
+  
 
   
 
@@ -148,27 +167,34 @@ class Demo extends React.Component {
     
     return (
 
-      <Card style={{paddingTop: '27px'}}>
-
-        <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>{this.props.title}</h4>
-          <p className={classes.cardCategoryWhite}></p>
-        </CardHeader>
-
+      <Card >
         <CardBody>
+
+       <InputLabel
+          classes={inputStyles.labelRoot + ' ' + inputStyles.labelClasses}
+          //htmlFor={id}
+         // {...labelProps}
+        >
+          {this.props.title}
+        </InputLabel>
+
+        
+
 
           {this.props.search ?
           
             <CustomInput
-              labelText="Search"
+              
+              labelText={"Search"}
               id="treeSearch"
+
               formControlProps={{
                 fullWidth: true
               }}
               inputProps={{
                 disabled: false,
                 value: this.state.inputValue,
-                onChange: this.onChange
+                onChange: this.onChange,             
               }}       
             />
 
@@ -178,9 +204,9 @@ class Demo extends React.Component {
           
           }
 
+        
          
-
-          <GridList cellHeight={this.props.treeContainerHeight}  cols={1}>
+         <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
     
             <Tree
               checkable
@@ -199,8 +225,10 @@ class Demo extends React.Component {
 
 
           </GridList>
+        
+       
 
-        </CardBody>
+          </CardBody>
 
       </Card>
         

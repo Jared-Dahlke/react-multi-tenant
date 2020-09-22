@@ -48,6 +48,9 @@ export default function BasicInfo (props) {
             formControlProps={{
               fullWidth: true
             }}
+            inputProps={{
+              value: "https://twitter.com/"
+            }}
           />
         </GridItem>
       </GridContainer>
