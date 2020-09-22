@@ -4,7 +4,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "../components/Navbars/Navbar.js";
-import Footer from "../components/Footer/Footer.js";
+//import Footer from "../components/Footer/Footer.js";
 import Sidebar from "../components/Sidebar/Sidebar.js";
 import routes from "../routes.js"
 import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js";
@@ -150,7 +150,7 @@ function Admin({ ...rest }) {
         ) : (
           <div className={classes.map}>{switchRoutes}</div>
         )}
-        {getRoute() ? <Footer /> : null}
+        {/*getRoute() ? <Footer /> : null*/}
         
       </div>
     </div>
