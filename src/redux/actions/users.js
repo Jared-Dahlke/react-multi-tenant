@@ -46,10 +46,17 @@ export function usersFetchData() {
   return async (dispatch) => {
     try {
       let params = {
+<<<<<<< HEAD
         account: true,
         role: true,
         permission: true,
       };
+=======
+        accounts: true,
+        roles: true
+      }
+     
+>>>>>>> b46d947da73a54a98b69598ee1b73985d7a0d1bd
 
       const result = await axios.get(url, {
         params,

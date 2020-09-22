@@ -6,7 +6,7 @@ export class User {
     }
     
    
-    if (!firstName || !lastName || !company || !email || !roles || !accounts || internal == undefined) {
+    if (!firstName || !lastName || !company || !email || !roles || !accounts || internal === undefined) {
       throw new Error('invalid User arguments: missing required argument')
     }
 

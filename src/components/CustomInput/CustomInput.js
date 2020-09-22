@@ -42,6 +42,7 @@ export default function CustomInput(props) {
     <FormControl
       {...formControlProps}
       className={formControlProps.className + " " + classes.formControl}
+      
     >
 
       
@@ -85,5 +86,6 @@ CustomInput.propTypes = {
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
   success: PropTypes.bool,
-  handleClear: PropTypes.func
+  handleClear: PropTypes.func,
+  styling: PropTypes.object
 };

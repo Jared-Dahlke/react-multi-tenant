@@ -1,6 +1,7 @@
 //The below 2 warnings exist when using the rc-tree component. They both appear to be related to AntDesign which is used in this component. 
 //Warning: `children` of Tree is deprecated. Please use `treeData` instead.
 //Warning: Second param return from event is node data instead of TreeNode instance. Please read value directly instead of reading from `props`.
+/*eslint-disable no-sequences */
 import './index.less'
 import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
@@ -10,8 +11,9 @@ import {defaultFont} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
 import Card from "../Card/Card.js"
 import CardBody from "../Card/CardBody.js"
-import CardHeader from "../Card/CardHeader.js"
 import { withStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
 
 const styles = {
   cardCategoryWhite: {
@@ -48,9 +50,6 @@ const styles = {
 }
 
 
-
-
-
 class Demo extends React.Component {
   static defaultProps = {
     multiple: true,
@@ -63,7 +62,8 @@ class Demo extends React.Component {
     autoExpandParent: true,
     selectedKeys: [],
     treeData: [],
-    inputValue: ''
+    inputValue: '',
+    showTree: false
   }
 
   
@@ -119,6 +119,8 @@ class Demo extends React.Component {
 
   
 
+  
+
   render() {
 
     
@@ -143,32 +145,35 @@ class Demo extends React.Component {
       autoExpandParent = true
     }
 
-    const { classes } = this.props
-
-    
     return (
 
-      <Card style={{paddingTop: '27px'}}>
-
-        <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>{this.props.title}</h4>
-          <p className={classes.cardCategoryWhite}></p>
-        </CardHeader>
-
+      <Card >
         <CardBody>
+
+          <InputLabel
+            className={inputStyles.labelRoot, inputStyles.labelClasses}
+            id="titleLabel"
+          >
+            {this.props.title}
+          </InputLabel>
+
+        
+
 
           {this.props.search ?
           
             <CustomInput
-              labelText="Search"
+              
+              labelText={"Search"}
               id="treeSearch"
+
               formControlProps={{
                 fullWidth: true
               }}
               inputProps={{
                 disabled: false,
                 value: this.state.inputValue,
-                onChange: this.onChange
+                onChange: this.onChange,             
               }}       
             />
 
@@ -178,9 +183,9 @@ class Demo extends React.Component {
           
           }
 
+        
          
-
-          <GridList cellHeight={this.props.treeContainerHeight}  cols={1}>
+          <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
     
             <Tree
               checkable
@@ -192,13 +197,14 @@ class Demo extends React.Component {
               onSelect={this.onSelect}
               selectedKeys={this.state.selectedKeys}
               filterTreeNode={this.filterTreeNode}
-              style={{}}
             >
               {loop(this.props.data)}
             </Tree>
 
 
           </GridList>
+        
+       
 
         </CardBody>
 
