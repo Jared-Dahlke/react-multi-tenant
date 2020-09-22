@@ -41,9 +41,8 @@ export function usersFetchData() {
     try {
 
       let params = {
-        account: true,
-        role: true,
-        permission: true
+        accounts: true,
+        roles: true
       }
      
 
