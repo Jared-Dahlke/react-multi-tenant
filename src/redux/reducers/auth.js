@@ -26,7 +26,7 @@ export function user(state = initialState, action) {
       ...state,
       loading: false,
       userProfile: action.payload
-  }
+    }
   default:
     return state;
   }
