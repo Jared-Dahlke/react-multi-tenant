@@ -86,6 +86,7 @@ function UserProfile({
   updateUserData,
   user: { userProfile, loading },
 }) {
+
   const [userForm, setUserForm] = useState(defaultState);
   const [edit, setEdit] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
@@ -129,6 +130,7 @@ function UserProfile({
     setTimeout(function () {
       setShowAlertMessage(false);
     }, 2000);
+    userForm.userType = userProfile.userType
     updateUserData(userForm);
   };
 

@@ -101,7 +101,10 @@ export function updateUserData(user) {
   let url = apiBase + `/user/${userId}`;
   return async (dispatch) => {
     try {
-      const result = await axios.patch(url, user);
+      let myUser = new User(user.userId, user.firstName, user.lastName, user.company, user.email, user.userType, [], [])
+      delete myUser.accounts
+      delete myUser.roles
+      const result = await axios.patch(url, myUser);
       if (result.status === 200) {
         dispatch(setUser(result.data.user));
       }
@@ -158,8 +161,8 @@ export const inviteUser = (user) => {
   delete user.internal
   user.userName = 'placeholder'
   user.phoneNumber= '123123123'
-  user.roles=[{roleId: 11},{roleId: 12}]
-  
+  //user.roles=[{roleId: 11},{roleId: 12}]
+
   let url =  apiBase + `/user`
   return (dispatch) => {
     dispatch(usersAddUser(user));

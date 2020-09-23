@@ -121,7 +121,11 @@ function CreateUser  (props) {
     setInviteButtonDisabled(true)
     let mockAccounts = []
     let userType = internalUserChecked ? 'Internal' : 'External'
-    let newUser = new User(null, firstName, lastName, company, email, userType, selectedRoles, mockAccounts)
+    let userRoles = []
+    for (const role of selectedRoles) {
+      userRoles.push({roleId: role})
+    }
+    let newUser = new User(null, firstName, lastName, company, email, userType, userRoles, mockAccounts)
     props.addNewUser(newUser)
     setShowAlertMessage(true)
     setTimeout(function() {
@@ -129,7 +133,7 @@ function CreateUser  (props) {
       setInviteButtonDisabled(false)
     }, 4000)
   }
-
+  //[{roleId: 11},{roleId: 12}]
 
   return (
     <Card>
