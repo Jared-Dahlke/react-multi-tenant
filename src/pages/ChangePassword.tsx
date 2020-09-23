@@ -1,6 +1,6 @@
-import React, { useState }  from "react";
+import React, {useState} from "react"
 // import PropTypes from "prop-types"
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -10,14 +10,19 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {setShowAlert, changePassword} from '../redux/actions/auth';
 import Snackbar from "../components/Snackbar/Snackbar";
 import AddAlert from '@material-ui/icons/AddAlert'
+import * as v from '../validations';
 
-const mapStateToProps = (state : any) => {
-  return { 
+// Components
+import CustomPasswordRequirements from '../components/CustomPasswordRequirements/CustomPasswordRequirements';
+import CustomPasswordMatchChecker from '../components/CustomPasswordRequirements/CustomPasswordMatchChecker'
+
+const mapStateToProps = (state: any) => {
+  return {
     isLoggedIn: state.isLoggedIn,
     showAlert: state.showAlert
   };
@@ -27,8 +32,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     changePassword: (password: string, userId: string, token: string) => dispatch(changePassword(password, userId, token)),
     setShowAlert: (showAlert: boolean) => dispatch(setShowAlert(showAlert))
-  }
-}
+  };
+};
 
 function Copyright() {
   return (
@@ -42,7 +47,6 @@ function Copyright() {
     </Typography>
   );
 }
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -62,6 +66,12 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  minWidth: {
+    minWidth: '30px',
+  },
+  green: {
+    color: 'green',
+  },
 }));
 
 function PasswordChange(props: any) {
@@ -71,16 +81,30 @@ function PasswordChange(props: any) {
   const [password_confirmation, setPasswordConfirmation] = useState("");
 
   async function postChangePassword() {
-    if (password === password_confirmation){
-      props.changePassword(password, userId, token)
+    if (password === password_confirmation) {
+      props.changePassword(password, userId, token);
     } else {
       alert('Passwords do not match.')
     }
 
-    setTimeout(function() {
+    setTimeout(function () {
       props.setShowAlert(false)
-    }, 4000)
+    }, 4000);
   }
+
+  const passwordChecker = (password: String) => {
+    const isValid = v.isValidPassword(password);
+    const testValid = v.invalidPasswordObject(password);
+
+    if (isValid && password.length >= 6 && password_confirmation.length >= 6) {
+      if (password === password_confirmation && testValid[0].satisfied) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  };
 
   if (props.isLoggedIn) {
     return <Redirect to='./admin/settings/profile' />;
@@ -90,9 +114,7 @@ function PasswordChange(props: any) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-
-        </Avatar>
+        <Avatar className={classes.avatar}></Avatar>
         <Typography component="h1" variant="h5">
           Change your Password
         </Typography>
@@ -114,7 +136,7 @@ function PasswordChange(props: any) {
                 }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -139,6 +161,7 @@ function PasswordChange(props: any) {
             color="primary"
             className={classes.submit}
             onClick={postChangePassword}
+            disabled={!passwordChecker(password)}
           >
             Change Password
           </Button>
@@ -152,6 +175,12 @@ function PasswordChange(props: any) {
               <Link href="/signup" variant="body2">
                 {"Don't have an account?"}
               </Link>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs>
+              <CustomPasswordRequirements password={password} />
+              <CustomPasswordMatchChecker password={password} password_confirmation={password_confirmation} />
             </Grid>
           </Grid>
         </form>
@@ -172,8 +201,7 @@ function PasswordChange(props: any) {
   );
 }
 
-
-const ChangePassword = connect(mapStateToProps, mapDispatchToProps)(PasswordChange)
+const ChangePassword = connect(mapStateToProps,mapDispatchToProps)(PasswordChange);
 
 // ChangePassword.propTypes = {
 //   token: PropTypes.string.isRequired,
