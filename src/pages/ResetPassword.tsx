@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 function PasswordReset(props: any) {
   const classes = useStyles();
-  const [email, setEmail] = useState("rahul@sightly.com");
+  const [email, setEmail] = useState("");
 
   async function postResetPassword() {
     props.resetPassword(email)

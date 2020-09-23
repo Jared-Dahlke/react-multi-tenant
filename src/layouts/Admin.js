@@ -21,8 +21,8 @@ import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
 import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
 import {rolesFetchData} from '../redux/actions/roles.js'
-import { setUserId} from "../redux/actions/auth.js";
-import {userProfileFetchData} from '../redux/actions/auth.js'
+import {userProfileFetchData, setUserId} from '../redux/actions/auth.js'
+import {accountsFetchData} from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
 import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
@@ -82,7 +82,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchUsersData: () => dispatch(usersFetchData()),
     fetchRoles: () => dispatch(rolesFetchData()),
     setUserId: (userId) => dispatch(setUserId(userId)),
-    userProfileFetchData: () => dispatch(userProfileFetchData())
+    userProfileFetchData: () => dispatch(userProfileFetchData()),
+    accountsFetchData: () => dispatch(accountsFetchData())
   }
 }
 
@@ -134,12 +135,13 @@ function Admin({ ...rest }) {
     }
   }
   //preload critical data into the application
-  const {fetchUsersData, fetchRoles, userProfileFetchData} = rest
+  const {fetchUsersData, fetchRoles, userProfileFetchData, accountsFetchData} = rest
   React.useEffect(() => {
     fetchUsersData()
+    accountsFetchData()
     fetchRoles()
     userProfileFetchData()
-  }, [fetchUsersData, fetchRoles,userProfileFetchData])
+  }, [fetchUsersData, fetchRoles,userProfileFetchData, accountsFetchData])
 
   return (
     <div className={classes.wrapper}>

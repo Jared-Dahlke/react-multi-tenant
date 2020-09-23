@@ -131,7 +131,6 @@ class Demo extends React.Component {
   render() {
 
     const switcherIcon = obj => {
-      console.log(obj)
       if (obj.isLeaf) {
         return (null)
       }

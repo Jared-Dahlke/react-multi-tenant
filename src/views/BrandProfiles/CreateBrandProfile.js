@@ -59,6 +59,26 @@ export default function CreateBrandProfiles (props) {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [basicInfo, setBasicInfo] = React.useState({
+    profileName: '',
+    websiteUrl: '',
+    twitterProfile: '',
+    verticals:[],
+    subVerticals: []
+  })
+
+  const handleChangeBasicInfo=(e)=>{
+    console.log('handle change basic info')
+    console.log(e)
+    setBasicInfo({ ...basicInfo, [e.target.name]: e.target.value });
+  }
+
+  const handleClearBasicInfo=(name, value)=>{
+    console.log('handle clear basic info')
+    setBasicInfo({ ...basicInfo, [name]: value });
+  }
+  
+  
   const steps = getSteps();
 
   const handleNext = () => {
@@ -72,7 +92,6 @@ export default function CreateBrandProfiles (props) {
   const handleReset = () => {
     setActiveStep(0);
   };
-
 
   return (
    
@@ -105,7 +124,7 @@ export default function CreateBrandProfiles (props) {
         <CardBody>
 
           {activeStep === 0 ?
-            <BasicInfo/> 
+            <BasicInfo basicInfo={basicInfo} handleChange={handleChangeBasicInfo} handleClear={handleClearBasicInfo}/> 
             : activeStep === 1 ?
               <div>step 2</div> 
               : activeStep === 2 ?
