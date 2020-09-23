@@ -1,4 +1,4 @@
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER, USERS_ADD_USER} from '../action-types/users'
+import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER, USERS_ADD_USER, USER_ADDED} from '../action-types/users'
 
 
 export function usersHasErrored(state = false, action) {
@@ -14,6 +14,15 @@ export function userDeleted(state = false, action) {
   switch (action.type) {
   case USER_DELETED:
     return action.userDeleted;
+  default:
+    return state;
+  }
+}
+
+export function userAdded(state = false, action) {
+  switch (action.type) {
+  case USER_ADDED:
+    return action.userAdded;
   default:
     return state;
   }

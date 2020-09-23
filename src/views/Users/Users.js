@@ -64,7 +64,7 @@ function Users(props) {
     [classes.tableCellRTL]: false
   });
 
-  const userHeaders = ['First Name','Last Name', 'Company','Email','Internal','']
+  const userHeaders = ['First Name','Last Name', 'Company','Email','User Type','']
 
   const handleEditUserClick = (user) => {
     let url = '/admin/settings/users/edit/' + encodeURIComponent(JSON.stringify(user))
@@ -137,9 +137,6 @@ function Users(props) {
           
           <CardBody>
 
-            
-         
-
             {props.users ?
             
 
@@ -170,7 +167,7 @@ function Users(props) {
                       <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
                       <TableCell className={tableCellClasses}>{user.company}</TableCell>
                       <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                      <TableCell className={tableCellClasses}>{user.internal? 'true' : 'false'}</TableCell>
+                      <TableCell className={tableCellClasses}>{user.userType}</TableCell>
                       
                       <TableCell className={classes.tableActions}>
                         <Tooltip

@@ -3,6 +3,7 @@ import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
 import CustomInput from "../../../components/CustomInput/CustomInput.js";
 import CustomTree from '../../../components/Tree/CustomTree'
+import Grid from '@material-ui/core/Grid'
 
 const dummyVerticals = [
   {"title":"Dummy Automotive",
@@ -17,21 +18,26 @@ const dummyVerticals = [
 
 export default function BasicInfo (props) {
   return (
-    <div >
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={3}>
+    <div>
+      <GridContainer justify="left">
+        <GridItem xs={12} sm={12} md={6}>
+          
           <CustomInput
             labelText="Brand Profile Name"
             id="brand-profile-name"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
+             
             }}
             inputProps={{
               disabled: false
             }}
           />
         </GridItem>
-        <GridItem xs={12} sm={12} md={3}>
+      </GridContainer>
+
+      <GridContainer justify="left">
+        <GridItem xs={12} sm={12} md={6}>
           <CustomInput
             labelText="Website URL"
             id="website-url"
@@ -40,8 +46,9 @@ export default function BasicInfo (props) {
             }}
           />
         </GridItem>
-
-        <GridItem xs={12} sm={12} md={4}>
+      </GridContainer>
+      <GridContainer justify="left">
+        <GridItem xs={12} sm={12} md={6}>
           <CustomInput
             labelText="Twitter Profile"
             id="twitter-profile"
