@@ -8,22 +8,19 @@ import Card from "../../components/Card/Card.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-import ListItem from "@material-ui/core/ListItem";
 import Snackbar from "@material-ui/core/Snackbar";
 import AddAlert from "@material-ui/icons/AddAlert";
 
 // Validation
 import * as v from "../../validations";
 import CustomPassword from "../../components/CustomPasswordRequirements/CustomPasswordRequirements.js";
+import CustomPasswordMatchChecker from '../../components/CustomPasswordRequirements/CustomPasswordMatchChecker'
 
 // Redux
 import { userProfileFetchData } from "../../redux/actions/auth.js";
 import { connect } from "react-redux";
 import { updateUserData } from "../../redux/actions/users.js";
-// Icons
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ClearRounded from "@material-ui/icons/ClearRounded";
-import CheckCircle from "@material-ui/icons/CheckCircle";
+
 
 const styles = {
   cardCategoryWhite: {
@@ -345,24 +342,7 @@ function UserProfile({
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomPassword password={newPassword} />
-                      {(newPassword.length > 0 ||
-                        confirmNewPassword.length > 0) && (
-                        <ListItem>
-                          <ListItemIcon className={classes.minWidth}>
-                            {newPassword === confirmNewPassword ? (
-                              <CheckCircle
-                                className={classes.green}
-                                fontSize="small"
-                              />
-                            ) : (
-                              <ClearRounded fontSize="small" />
-                            )}
-                          </ListItemIcon>
-                          {newPassword === confirmNewPassword
-                            ? "Passwords Match"
-                            : "Password Must Match"}
-                        </ListItem>
-                      )}
+                      <CustomPasswordMatchChecker password={newPassword} password_confirmation={confirmNewPassword}/>
                     </GridItem>
                   </GridContainer>
                 </CardBody>

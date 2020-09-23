@@ -15,14 +15,11 @@ import Container from '@material-ui/core/Container';
 import {setShowAlert, changePassword} from '../redux/actions/auth';
 import Snackbar from "../components/Snackbar/Snackbar";
 import AddAlert from '@material-ui/icons/AddAlert'
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ClearRounded from '@material-ui/icons/ClearRounded';
-import CheckCircle from '@material-ui/icons/CheckCircle';
 import * as v from '../validations';
 
 // Components
 import CustomPasswordRequirements from '../components/CustomPasswordRequirements/CustomPasswordRequirements';
+import CustomPasswordMatchChecker from '../components/CustomPasswordRequirements/CustomPasswordMatchChecker'
 
 const mapStateToProps = (state: any) => {
   return {
@@ -183,20 +180,7 @@ function PasswordChange(props: any) {
           <Grid container>
             <Grid item xs>
               <CustomPasswordRequirements password={password} />
-              {(password.length > 0 || password_confirmation.length > 0) && (
-                <ListItem>
-                  <ListItemIcon className={classes.minWidth}>
-                    {password === password_confirmation ? (
-                      <CheckCircle className={classes.green} fontSize="small" />
-                    ) : (
-                      <ClearRounded fontSize="small" />
-                    )}
-                  </ListItemIcon>
-                  {password === password_confirmation
-                    ? 'Passwords Match'
-                    : 'Password Must Match'}
-                </ListItem>
-              )}
+              <CustomPasswordMatchChecker password={password} password_confirmation={password_confirmation} />
             </Grid>
           </Grid>
         </form>
