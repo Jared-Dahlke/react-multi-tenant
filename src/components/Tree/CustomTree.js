@@ -158,7 +158,7 @@ class Demo extends React.Component {
         }
         if (item.children) {
           return (
-          <TreeNode   style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item.key} title={<TreeTitle title={item.title}/>} disableCheckbox={item.key === 'mydisabledkey'}>
+            <TreeNode   style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item.key} title={<TreeTitle title={item.title}/>} disableCheckbox={item.key === 'mydisabledkey'}>
               {loop(item.children)}
             </TreeNode>
           )
