@@ -7,13 +7,18 @@ import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
 import GridList from '@material-ui/core/GridList'
 import "rc-tree/assets/index.css"
-import {defaultFont} from "../../assets/jss/material-dashboard-react"
+import {defaultFont, primaryColor, grayColor} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
 import Card from "../Card/Card.js"
 import CardBody from "../Card/CardBody.js"
 import { withStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
+import Folder from '@material-ui/icons/FolderRounded'
+import AddBox from '@material-ui/icons/AddBoxSharp'
+import MinusBox from '@material-ui/icons/IndeterminateCheckBox'
+import Checked from '@material-ui/icons/CheckBox'
+import Unchecked from '@material-ui/icons/CheckBoxOutlineBlank'
 
 const styles = {
   cardCategoryWhite: {
@@ -121,7 +126,29 @@ class Demo extends React.Component {
 
   
 
+  
+
   render() {
+
+    const switcherIcon = obj => {
+      console.log(obj)
+      if (obj.isLeaf) {
+        return (null)
+      }
+      if (obj.expanded) {
+        return(<MinusBox  style={{ fontSize: 14, color: 'white', backgroundColor: 'black'}}/>) 
+      }
+      return (<AddBox style={{ fontSize: 14, color: 'white', backgroundColor: 'black'}}/>)
+    };
+
+    const Icon = ({ selected }) => {
+      return selected? <Checked></Checked> : <Unchecked></Unchecked>
+     }
+
+     const TreeTitle = ({title}) => {
+       return <div style={{font: defaultFont, marginLeft: 5}}>{title}</div>
+     }
+    
 
     
     const loop = data =>
@@ -131,12 +158,12 @@ class Demo extends React.Component {
         }
         if (item.children) {
           return (
-            <TreeNode style={{fontFamily: defaultFont.fontFamily, fontWeight: defaultFont.fontWeight, lineHeight: defaultFont.lineHeight}} key={item.key} title={item.title} disableCheckbox={item.key === 'mydisabledkey'}>
+          <TreeNode   style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item.key} title={<TreeTitle title={item.title}/>} disableCheckbox={item.key === 'mydisabledkey'}>
               {loop(item.children)}
             </TreeNode>
           )
         }
-        return <TreeNode style={{fontFamily: defaultFont.fontFamily, fontWeight: defaultFont.fontWeight, lineHeight: defaultFont.lineHeight}} key={item.key} title={item.title} />
+        return <TreeNode style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item.key} title={<TreeTitle title={item.title}/>} />
       })
     let { expandedKeys } = this.state
     let { autoExpandParent } = this.state
@@ -188,6 +215,10 @@ class Demo extends React.Component {
           <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
     
             <Tree
+              
+              showIcon={false}
+              showLine={false}
+              switcherIcon={switcherIcon}
               checkable
               onExpand={this.onExpand}
               expandedKeys={expandedKeys}

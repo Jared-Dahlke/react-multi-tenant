@@ -81,12 +81,12 @@ function CreateUser  (props) {
  
 
   const classes = useStyles()
-  const [selectedRoles, setSelectedRoles] = React.useState([])
+  const [selectedRoles, setSelectedRoles] = React.useState([11])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
-  const [email, setEmail] = React.useState('')
-  const [firstName, setFirstName] = React.useState('')
-  const [lastName, setLastName] = React.useState('')
-  const [company, setCompany] = React.useState('')
+  const [email, setEmail] = React.useState('test@xyz.com')
+  const [firstName, setFirstName] = React.useState('testFirst')
+  const [lastName, setLastName] = React.useState('testLast')
+  const [company, setCompany] = React.useState('testCompanyxuzx')
   const [inviteButtonDisabled, setInviteButtonDisabled] = React.useState(false)
 
   const handleRoleSelect = (event) => {
@@ -120,7 +120,8 @@ function CreateUser  (props) {
   const handleInviteUserClick = () => {
     setInviteButtonDisabled(true)
     let mockAccounts = []
-    let newUser = new User(null, firstName, lastName, company, email, internalUserChecked, selectedRoles, mockAccounts)
+    let userType = internalUserChecked ? 'Internal' : 'External'
+    let newUser = new User(null, firstName, lastName, company, email, userType, selectedRoles, mockAccounts)
     props.addNewUser(newUser)
     setShowAlertMessage(true)
     setTimeout(function() {

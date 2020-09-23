@@ -5,6 +5,7 @@ import {
   USER_DELETED_ERROR,
   USERS_REMOVE_USER,
   USERS_ADD_USER,
+  USER_ADDED
 } from "../action-types/users";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
@@ -25,6 +26,12 @@ export function userDeleted(bool) {
   return {
     type: USER_DELETED,
     userDeleted: bool,
+  };
+}
+export function userAdded(bool) {
+  return {
+    type: USER_ADDED,
+    userAdded: bool,
   };
 }
 export function userDeletedError(bool) {
@@ -142,21 +149,34 @@ export const deleteUser = (userId) => {
 };
 
 export const inviteUser = (user) => {
-  //let url =  apiBase + `/user/${userId}`
+  console.log(user)
+  user.password = 'testasdfa!'
+
+ 
+  
+  delete user.userId
+  delete user.internal
+  user.userName = 'placeholder'
+  user.phoneNumber= '123123123'
+  user.roles=[{roleId: 11},{roleId: 12}]
+  
+  let url =  apiBase + `/user`
   return (dispatch) => {
     dispatch(usersAddUser(user));
-    //axios.delete(url)
-    //.then(response => {
-    //    dispatch(userDeleted(true))
-    //    setTimeout(() => {
-    //      dispatch(userDeleted(false))
-    //    }, 2000);
-    //})
-    //.catch(error => {
-    //    dispatch(userDeletedError(true))
-    //    setTimeout(() => {
-    //      dispatch(userDeletedError(false))
-    //    }, 2000);
-    //})
+    axios.post(url, user)
+    .then(response => {
+       dispatch(userAdded(true))
+       setTimeout(() => {
+         dispatch(userAdded(false))
+       }, 2000);
+    })
+    .catch(error => {
+      console.log('invite user error')
+      console.log(error)
+      //dispatch(userDeletedError(true))
+      //setTimeout(() => {
+      //  dispatch(userDeletedError(false))
+      //}, 2000);
+    })
   };
 };
