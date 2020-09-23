@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState} from "react"
 // import PropTypes from "prop-types"
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import { connect } from 'react-redux'
+import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,8 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {setShowAlert, changePassword} from '../redux/actions/auth';
-import Snackbar from '../components/Snackbar/Snackbar';
-import AddAlert from '@material-ui/icons/AddAlert';
+import Snackbar from "../components/Snackbar/Snackbar";
+import AddAlert from '@material-ui/icons/AddAlert'
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ClearRounded from '@material-ui/icons/ClearRounded';
@@ -27,15 +27,14 @@ import CustomPasswordRequirements from '../components/CustomPasswordRequirements
 const mapStateToProps = (state: any) => {
   return {
     isLoggedIn: state.isLoggedIn,
-    showAlert: state.showAlert,
+    showAlert: state.showAlert
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    changePassword: (password: string, userId: string, token: string) =>
-      dispatch(changePassword(password, userId, token)),
-    setShowAlert: (showAlert: boolean) => dispatch(setShowAlert(showAlert)),
+    changePassword: (password: string, userId: string, token: string) => dispatch(changePassword(password, userId, token)),
+    setShowAlert: (showAlert: boolean) => dispatch(setShowAlert(showAlert))
   };
 };
 
@@ -79,20 +78,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PasswordChange(props: any) {
-  const {userId, token} = props;
+  const { userId, token } = props;
   const classes = useStyles();
-  const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setPasswordConfirmation] = useState("");
 
   async function postChangePassword() {
     if (password === password_confirmation) {
       props.changePassword(password, userId, token);
     } else {
-      alert('Passwords do not match.');
+      alert('Passwords do not match.')
     }
 
     setTimeout(function () {
-      props.setShowAlert(false);
+      props.setShowAlert(false)
     }, 4000);
   }
 
@@ -111,7 +110,7 @@ function PasswordChange(props: any) {
   };
 
   if (props.isLoggedIn) {
-    return <Redirect to="./admin/settings/profile" />;
+    return <Redirect to='./admin/settings/profile' />;
   }
 
   return (
@@ -135,7 +134,7 @@ function PasswordChange(props: any) {
                 name="password"
                 autoComplete="password"
                 value={password}
-                onChange={(e) => {
+                onChange={e => {
                   setPassword(e.target.value);
                 }}
               />
@@ -152,7 +151,7 @@ function PasswordChange(props: any) {
                 name="password_confirmation"
                 autoComplete="password_confirmation"
                 value={password_confirmation}
-                onChange={(e) => {
+                onChange={e => {
                   setPasswordConfirmation(e.target.value);
                 }}
               />
@@ -218,10 +217,7 @@ function PasswordChange(props: any) {
   );
 }
 
-const ChangePassword = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PasswordChange);
+const ChangePassword = connect(mapStateToProps,mapDispatchToProps)(PasswordChange);
 
 // ChangePassword.propTypes = {
 //   token: PropTypes.string.isRequired,
