@@ -8,7 +8,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 
 const useStyles = makeStyles((theme) => ({
@@ -23,15 +23,18 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   color: {
-    color: primaryColor[0]
+    color: primaryColor[0],
+    
   },
   step: {
     "&$completed": {
-      color: primaryColor[0]
+      color: primaryColor[0],
+      
     },
     "&$active": {
       color: primaryColor[0]
-    }
+    },
+    color: blackColor
   },
   active: {}, //needed so that the &$active tag works
   completed: {},

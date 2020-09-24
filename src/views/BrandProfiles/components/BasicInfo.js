@@ -5,6 +5,7 @@ import CustomInput from "../../../components/CustomInput/CustomInput.js";
 import CustomTree from '../../../components/Tree/CustomTree'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import * as v from '../../../validations'
+import { whiteColor, grayColor } from '../../../assets/jss/material-dashboard-react.js';
 
 const dummyVerticals = [
   {"title":"Dummy Automotive",
@@ -87,7 +88,7 @@ export default function BasicInfo (props) {
             }}
             inputProps={{
               value: props.basicInfo.twitterProfile,
-              startAdornment: <InputAdornment position="start">https://twitter.com/</InputAdornment>,
+              startAdornment: <InputAdornment position="start"><div style={{color: grayColor[3]}}>https://twitter.com/</div></InputAdornment>,
               name: "twitterProfile",
               onChange: props.handleChange,
             }}
