@@ -1,7 +1,8 @@
 import {
   drawerWidth,
   transition,
-  container
+  container,
+  blackColor
 } from "../../../jss/material-dashboard-react.js"  //"../assets/jss/material-dashboard-react.js";
 
 const appStyle = theme => ({
@@ -9,6 +10,17 @@ const appStyle = theme => ({
     position: "relative",
     top: "0",
     height: "100vh"
+  },
+  authPanel: {
+    overflow: "auto",
+    position: "relative",
+    float: "right",
+    ...transition,
+    height: "100vh",
+    minHeight: '100%',
+    width: "100%",
+    overflowScrolling: "touch",
+    backgroundColor: blackColor
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {

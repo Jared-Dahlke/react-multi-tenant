@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import Button from '../components/CustomButtons/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
@@ -14,21 +14,24 @@ import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import {setAuthToken} from '../redux/actions/auth.js'
 import PasswordRequirements from '../components/CustomPasswordRequirements/CustomPasswordRequirements'
+import CustomInput from '../components/CustomInput/CustomInput'
+import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 
 import config from '../config.js'
+import { whiteColor } from "../assets/jss/material-dashboard-react";
 const queryString = require('query-string');
 
 const apiBase = config.apiGateway.MOCKURL;
 
-const mapStateToProps = (state : any) => {
+const mapStateToProps = (state) => {
   return { 
     authToken: state.authToken
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    setAuthToken: (authToken: any) => dispatch(setAuthToken(authToken))
+    setAuthToken: (authToken) => dispatch(setAuthToken(authToken))
   }
 }
 
@@ -47,7 +50,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -68,10 +71,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Signup(props: any) {
+const useAdminStyles = makeStyles(adminStyle);
+
+function Signup(props) {
 
   
   const classes = useStyles();
+  const adminClasses = useAdminStyles()
 
   const parsed = queryString.parse(props.location.search)
   const [fromInvite] = useState(!!parsed.fromInvite)
@@ -107,6 +113,7 @@ function Signup(props: any) {
   }
 
   return (
+  <div className={adminClasses.authPanel}>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -118,71 +125,76 @@ function Signup(props: any) {
         </Typography>
        
         <Grid container spacing={2}>
+
           <Grid item xs={12} sm={6}>
-            <TextField
-              autoComplete="fname"
-              name="firstName"
-              value={firstName}
-              onChange={e => {
-                setFirstName(e.target.value);
-              }}
-              variant="outlined"
-              required
-              fullWidth
-              id="firstName"
-              label="First Name"
-              autoFocus
+            <CustomInput
+              labelText="First Name"
+              id="firstname"
               disabled={fromInvite}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              variant="outlined"
-              required
-              value={lastName}
-              onChange={e => {
-                setLastName(e.target.value);
+              formControlProps={{
+                fullWidth: true
               }}
-              fullWidth
+              inputProps={{           
+                value: firstName,
+                onChange: (e)=>setFirstName(e.target.value),
+              
+              }}
+              handleClear={()=>setFirstName('')}          
+            />         
+          </Grid>
+
+          <Grid item xs={12} sm={6}>    
+            <CustomInput
+              labelText="Last Name"
               id="lastName"
-              label="Last Name"
-              name="lastName"
               disabled={fromInvite}
-              autoComplete="lname"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{           
+                value: lastName,
+                onChange: (e)=>setLastName(e.target.value),
+                
+              }}
+              handleClear={()=>setLastName('')}          
             />
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              id="email"
-              disabled={fromInvite}
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={e => {
-                setEmail(e.target.value);
+
+          <Grid item xs={12}>         
+            <CustomInput
+              labelText="Email address"
+              id="email-address"
+              formControlProps={{
+                fullWidth: true
               }}
+              inputProps={{
+                type: 'email',
+                value: email,
+                onChange: (e)=>setEmail(e.target.value)
+              }}
+              handleClear={()=>setEmail('')}
+              
             />
           </Grid>
+          
           <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              name="passwordField"
-              label="Password"              
-              id="password"
-              type="password"
-              autoFocus={fromInvite}        
-              autoComplete="new-password"  
-              value={password}
-              onChange={e => {
-                setPassword(e.target.value);
-              }}
-            />
+          <form>
+             <CustomInput
+                labelText="Password"
+                id="password"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  type: 'password',
+                  value: password,
+                  onChange: (e)=>setPassword(e.target.value),
+                  autoComplete: "current-password"
+                }}
+                handleClear={()=>setPassword('')}
+                
+              />
+          </form>
           </Grid>
 
           <Grid item xs={12}>
@@ -193,35 +205,37 @@ function Signup(props: any) {
 
             
         </Grid>
-        <Button
-          type="button"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={register}
-        >
-          {
-            fromInvite ?
-              'Complete Sign Up'
-              :
-              'Sign Up'
-          }
-          
-        </Button>
+
+        <Button     
+            id="register"  
+            color="primary"         
+            onClick={register}
+            fullWidth={true}
+            style={{marginTop:'10px'}}
+          >
+            
+            {
+              fromInvite ?
+                'Complete Sign Up'
+                :
+                'Sign Up'
+            }
+          </Button>
+
+
+      
         <Grid container justify="flex-end">
-          <Grid item>
-            <Link href="/login" variant="body2">
+          <Grid item style={{marginTop:'10px'}}>
+            <Link href="/login" variant="body2" style={{color: whiteColor}}>
               Already have an account?
             </Link>
           </Grid>
         </Grid>
       
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+      
     </Container>
+    </div>
   );
 }
 

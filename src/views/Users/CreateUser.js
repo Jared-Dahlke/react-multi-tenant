@@ -142,7 +142,7 @@ function CreateUser  (props) {
       
         <GridContainer>
           <GridItem xs={12} sm={12} md={8}>
-            <Card>
+            <Card >
             
               <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>Invite a new user</h4>

@@ -24,6 +24,7 @@ import { updateUserData } from "../../redux/actions/users.js";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ClearRounded from "@material-ui/icons/ClearRounded";
 import CheckCircle from "@material-ui/icons/CheckCircle";
+import { primaryColor } from "../../assets/jss/material-dashboard-react.js";
 
 const styles = {
   cardCategoryWhite: {
@@ -167,14 +168,7 @@ function UserProfile({
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>
-                {edit ? "Edit Profile" : "My Profile"}
-              </h4>
-              <p className={classes.cardCategoryWhite}>
-                {edit ? "Complete your profile" : "Your profile information"}
-              </p>
-            </CardHeader>
+           
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={5}>
@@ -186,7 +180,7 @@ function UserProfile({
                     }}
                     inputProps={{
                       disabled: true,
-                      value: company,
+                      value: company
                     }}
                     success={edit && v.isCompanySuccess(company)}
                     error={edit && v.isCompanyError(company)}
@@ -268,7 +262,7 @@ function UserProfile({
                 onClick={edit ? onSubmit : enableEdit}
                 disabled={!formIsValid()}
               >
-                {edit ? "Save" : "Edit Profile"}
+                {edit ? "Save" : "Edit"}
               </Button>
 
               <Snackbar
@@ -302,6 +296,7 @@ function UserProfile({
                 <CardBody>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
+                      <form>
                       <CustomInput
                         labelText="Current Password"
                         formControlProps={{
@@ -312,13 +307,16 @@ function UserProfile({
                           value: oldPassword,
                           name: "oldPassword",
                           onChange: onPasswordChange,
+                         
                         }}
                       />
+                      </form>
                     </GridItem>
                   </GridContainer>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
-                      <CustomInput
+                      <form>                      
+                        <CustomInput
                         labelText="New Password"
                         formControlProps={{
                           fullWidth: true,
@@ -330,8 +328,10 @@ function UserProfile({
                           onChange: onPasswordChange,
                         }}
                       />
+                      </form>
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
+                      <form>
                       <CustomInput
                         labelText="Confirm Password"
                         formControlProps={{
@@ -344,6 +344,7 @@ function UserProfile({
                           onChange: onPasswordChange,
                         }}
                       />
+                      </form>
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomPassword password={newPassword} />

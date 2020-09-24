@@ -16,6 +16,7 @@ import CustomInput from "../CustomInput/CustomInput.js";
 import Button from "../CustomButtons/Button.js"
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 import {setAuthToken, setLoggedIn} from '../../redux/actions/auth.js'
+import { blackColor } from "../../assets/jss/material-dashboard-react.js";
 
 const useStyles = makeStyles(styles);
 
@@ -77,7 +78,7 @@ function AdminNavbarLinks(props) {
             }
           }}
         />
-        <Button color="white" aria-label="edit" justIcon round>
+        <Button color="transparent" aria-label="edit" justIcon round>
           <Search />
         </Button>
       </div>

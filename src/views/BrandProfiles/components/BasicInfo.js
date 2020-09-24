@@ -18,12 +18,26 @@ const dummyVerticals = [
   {"title":"Test","key":"0-2-key"}]
 
 
+
 export default function BasicInfo (props) {
+
+  const isValidForm=(props)=>{
+    if(
+      v.isBrandProfileNameSuccess(props.basicInfo.profileName) &&
+      v.isWebsiteUrlSuccess(props.basicInfo.websiteUrl) &&
+      v.isTwitterProfileSuccess(props.basicInfo.twitterProfile)
+    ) {
+      return true
+    }
+    return false
+  }
+
+
   return (
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
-          
+          {isValidForm(props) ? 'valid' : 'invalid'}
           <CustomInput
             labelText="Brand Profile Name"
             id="brand-profile-name"

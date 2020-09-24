@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import Button from '../components/CustomButtons/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
@@ -15,18 +15,20 @@ import {setShowAlert, resetPassword} from '../redux/actions/auth.js';
 import Snackbar from "../components/Snackbar/Snackbar";
 import AddAlert from '@material-ui/icons/AddAlert';
 import {isEmailError} from "../validations";
+import CustomInput from '../components/CustomInput/CustomInput'
 
-const mapStateToProps = (state : any) => {
+
+const mapStateToProps = (state) => {
   return { 
     isLoggedIn: state.isLoggedIn,
     showAlert: state.showAlert
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    resetPassword: (email: string) => dispatch(resetPassword(email)),
-    setShowAlert: (showAlert: boolean) => dispatch(setShowAlert(showAlert))
+    resetPassword: (email) => dispatch(resetPassword(email)),
+    setShowAlert: (showAlert) => dispatch(setShowAlert(showAlert))
   }
 }
 
@@ -46,7 +48,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -64,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PasswordReset(props: any) {
+function PasswordReset(props) {
   const classes = useStyles();
   const [email, setEmail] = useState("");
 
@@ -81,6 +83,9 @@ function PasswordReset(props: any) {
   }
 
   return (
+    <div style={{position: "relative",
+  top: "0",
+  height: "100vh"}}>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -93,29 +98,31 @@ function PasswordReset(props: any) {
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={e => {
-                  setEmail(e.target.value);
-                }}
-                error={isEmailError(email)}
-              />
+
+            <CustomInput
+              labelText="Email address"
+              id="email-address"
+              name="email"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                type: 'email',
+                value: email,
+                onChange: (e)=>setEmail(e.target.value)
+              }}
+              handleClear={()=>setEmail('')}
+              
+            />
+
+
             </Grid>
             
           </Grid>
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
+          <Button   
+            style={{marginTop:'10px'}}       
+            fullWidth          
+            color="primary"       
             disabled={isEmailError(email)}
             onClick={postResetPassword}
           >
@@ -136,6 +143,7 @@ function PasswordReset(props: any) {
         <Copyright />
       </Box>
     </Container>
+    </div>
   );
 }
 

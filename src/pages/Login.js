@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import Button from '../components/CustomButtons/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
@@ -12,17 +12,20 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {login} from '../redux/actions/auth.js'
+import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
+import { whiteColor } from "../assets/jss/material-dashboard-react.js";
+import CustomInput from '../components/CustomInput/CustomInput'
 
-const mapStateToProps = (state : any) => {
+const mapStateToProps = (state) => {
   return { 
     authToken: state.authToken,
     isLoggedIn: state.isLoggedIn
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    login: (credentials: any) => dispatch(login(credentials))
+    login: (credentials) => dispatch(login(credentials))
   }
 }
 
@@ -41,10 +44,12 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    height: '100%'
+
   },
   avatar: {
     margin: theme.spacing(1),
@@ -57,17 +62,21 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  input: {
+    color: whiteColor
+  }
 }));
+const useAdminStyles = makeStyles(adminStyle)
 
-
-function Login(props: any) {
+function Login(props) {
 
   const classes = useStyles();
+  const adminClasses = useAdminStyles()
   const referer = props.location.state ? props.location.state.referer : '/admin/settings/profile';
   const [userName, setUserName] = useState("jared@sightly.com");
   const [password, setPassword] = useState("test");
 
-  async function postLogin() {
+  const postLogin =() =>{
     let credentials = {
       username: userName,
       password: password
@@ -80,9 +89,10 @@ function Login(props: any) {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
+  <div className={adminClasses.authPanel}>
+    <Container maxWidth="xs">
+      
+      <div className={classes.paper} >
         <Avatar className={classes.avatar}>
           {/*<LockOutlinedIcon />*/} 
         </Avatar>
@@ -90,65 +100,65 @@ function Login(props: any) {
           Sign in
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            value={userName}
-            onChange={e => {
-              setUserName(e.target.value);
-            }}
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={e => {
-              setPassword(e.target.value);
-            }}
-            autoComplete="current-password"
-          />
+
+        <CustomInput
+          labelText="Email address"
+          id="email-address"
+          formControlProps={{
+            fullWidth: true
+          }}
+          inputProps={{
+            type: 'email',
+            value: userName,
+            onChange: (e)=>setUserName(e.target.value)
+          }}
+          handleClear={()=>setUserName('')}
           
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
+        />
+
+        <CustomInput
+          labelText="Password"
+          id="password"
+          formControlProps={{
+            fullWidth: true
+          }}
+          inputProps={{
+            type: 'password',
+            value: password,
+            onChange: (e)=>setPassword(e.target.value),
+            autoComplete: "current-password"
+          }}
+          handleClear={()=>setPassword('')}
+          
+        />
+
+          <Button       
+            color="primary"         
             onClick={postLogin}
+            fullWidth={true}
+            style={{marginTop:'10px'}}
           >
+            
             Sign In
           </Button>
-          <Grid container>
+         
+          <Grid style={{marginTop:'10px'}} container>
             <Grid item xs>
-              <Link href="/resetPassword" variant="body2">
+              <Link href="/resetPassword" variant="body2" style={{color: whiteColor}}>
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/signup" variant="body2">
+              <Link href="/signup" variant="body2" style={{color: whiteColor}}>
                 {"Don't have an account?"}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
+     
     </Container>
+    </div>
   );
 }
 

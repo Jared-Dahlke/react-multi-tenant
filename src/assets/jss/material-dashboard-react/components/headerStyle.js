@@ -43,7 +43,7 @@ const headerStyle = () => ({
     fontSize: "18px",
     borderRadius: "3px",
     textTransform: "none",
-    color: "inherit",
+    color: whiteColor,
     margin: "0",
     "&:hover,&:focus": {
       background: "transparent"
