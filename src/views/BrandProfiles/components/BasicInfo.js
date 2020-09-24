@@ -5,6 +5,9 @@ import CustomInput from "../../../components/CustomInput/CustomInput.js";
 import CustomTree from '../../../components/Tree/CustomTree'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import * as v from '../../../validations'
+import { whiteColor, grayColor } from '../../../assets/jss/material-dashboard-react.js';
+import {Field} from 'formik'
+import FormikInput from '../../../components/CustomInput/FormikInput'
 
 const dummyVerticals = [
   {"title":"Dummy Automotive",
@@ -17,84 +20,59 @@ const dummyVerticals = [
   {"title":"Test","key":"0-2-key"}]
 
 
+  
+  
 
 export default function BasicInfo (props) {
 
-  const isValidForm=(props)=>{
-    if(
-      v.isBrandProfileNameSuccess(props.basicInfo.profileName) &&
-      v.isWebsiteUrlSuccess(props.basicInfo.websiteUrl) &&
-      v.isTwitterProfileSuccess(props.basicInfo.twitterProfile)
-    ) {
-      return true
-    }
-    return false
-  }
+  console.log('basic info props')
+  console.log(props)
 
 
   return (
+    
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
-          {isValidForm(props) ? 'valid' : 'invalid'}
-          <CustomInput
-            labelText="Brand Profile Name"
-            id="brand-profile-name"
+          <FormikInput 
+            name="basicInfoProfileName" 
+            labelText="Profile Name" 
+            validate={v.isBrandProfileNameError}
             formControlProps={{
-              fullWidth: true,
-             
+              fullWidth: true
             }}
-            inputProps={{
-              value: props.basicInfo.profileName,
-              name: "profileName",
-              onChange: props.handleChange,
-              disabled: false
-            }}
-            success={v.isBrandProfileNameSuccess(props.basicInfo.profileName)}
-            error={v.isBrandProfileNameError(props.basicInfo.profileName)}
-            handleClear={()=>props.handleClear('profileName', '')}
-          />
+          />     
         </GridItem>
       </GridContainer>
 
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
-          <CustomInput
-            labelText="Website URL"
-            id="website-url"
+
+          <FormikInput 
+            name="basicInfoWebsiteUrl" 
+            validate={v.isWebsiteUrlError}
+            labelText="Website" 
             formControlProps={{
               fullWidth: true
             }}
-            inputProps={{
-              value: props.basicInfo.websiteUrl,
-              name: "websiteUrl",
-              onChange: props.handleChange,
-              disabled: false
-            }}
-            success={v.isWebsiteUrlSuccess(props.basicInfo.websiteUrl)}
-            error={v.isWebsiteUrlError(props.basicInfo.websiteUrl)}
-            handleClear={()=>props.handleClear('websiteUrl', '')}
           />
+
         </GridItem>
       </GridContainer>
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
-          <CustomInput
-            labelText="Twitter Profile"
-            id="twitter-profile"
+          <FormikInput 
+            name="basicInfoTwitterProfile" 
+            validate={v.isTwitterProfileError}
+            labelText="Twitter Profile" 
             formControlProps={{
               fullWidth: true
             }}
-            inputProps={{
-              value: props.basicInfo.twitterProfile,
-              startAdornment: <InputAdornment position="start">https://twitter.com/</InputAdornment>,
-              name: "twitterProfile",
-              onChange: props.handleChange,
+            inputProps={{            
+              startAdornment: <InputAdornment position="start"><div style={{color: grayColor[3]}}>https://twitter.com/</div></InputAdornment>,       
             }}
-            success={v.isTwitterProfileSuccess(props.basicInfo.twitterProfile)}
-            error={v.isTwitterProfileError(props.basicInfo.twitterProfile)}
-            handleClear={()=>props.handleClear('twitterProfile', '')}
           />
+
           {/*<FormHelperText id="my-helper-text">{'https://twitter.com/' + props.basicInfo.twitterProfile}</FormHelperText>*/}
         </GridItem>
       </GridContainer>
@@ -109,5 +87,6 @@ export default function BasicInfo (props) {
         </GridItem>
       </GridContainer>
     </div>
+    
   )
 }

@@ -173,34 +173,33 @@ class Demo extends React.Component {
 
     return (
 
-      <Card >
-        <CardBody>
+      
+        <div>
 
-          <InputLabel
-            className={inputStyles.labelRoot, inputStyles.labelClasses}
-            id="titleLabel"
-            style={{color: whiteColor}}
-          >
-            {this.props.title}
-          </InputLabel>
+          
 
         
 
 
           {this.props.search ?
           
-            <CustomInput
-              
-              labelText={"Search"}
+            <CustomInput         
+              labelText={this.props.title}
               id="treeSearch"
-
               formControlProps={{
-                fullWidth: true
+                fullWidth: true,
+                
               }}
+              labelProps={{
+                shrink: true
+              }}
+            
               inputProps={{
                 disabled: false,
                 value: this.state.inputValue,
-                onChange: this.onChange,             
+                onChange: this.onChange, 
+                variant: 'filled'      ,              
+                placeholder:'Search....'
               }}       
             />
 
@@ -237,9 +236,8 @@ class Demo extends React.Component {
         
        
 
-        </CardBody>
+        </div>
 
-      </Card>
         
 
     )

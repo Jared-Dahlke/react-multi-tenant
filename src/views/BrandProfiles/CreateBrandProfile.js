@@ -8,8 +8,11 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
+import {Formik} from 'formik'
+import * as v from '../../validations'
+
 
 const useStyles = makeStyles((theme) => ({
   stepper: {
@@ -23,15 +26,18 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   color: {
-    color: primaryColor[0]
+    color: primaryColor[0],
+    
   },
   step: {
     "&$completed": {
-      color: primaryColor[0]
+      color: primaryColor[0],
+      
     },
     "&$active": {
       color: primaryColor[0]
-    }
+    },
+    color: blackColor
   },
   active: {}, //needed so that the &$active tag works
   completed: {},
@@ -85,8 +91,30 @@ export default function CreateBrandProfiles (props) {
     setActiveStep(0);
   };
 
+  
+
   return (
-   
+    <Formik
+      validateOnMount
+      initialValues={{
+        
+          basicInfoProfileName: '',
+          basicInfoWebsiteUrl: '',
+          basicInfoTwitterProfile: ''
+                 
+      }}
+      // user this for form level validation (pros: can validate against different fields, cons: slower)
+      /*validate={values=>{
+        console.log('running validate')     
+        const errors = {basicInfo:{}}
+        if(!v.isWebsiteUrlSuccess(values.basicInfo.websiteUrl)) {
+          console.log('triggering errror')
+          errors.basicInfo.websiteUrl = true
+          
+        }
+        return errors
+      }} */
+    > 
     <div>
 
       <Stepper classes={{ root: classes.stepper}}  activeStep={activeStep} alternativeLabel>
@@ -158,6 +186,8 @@ export default function CreateBrandProfiles (props) {
 
       </Card>
     </div>
+    
+    </Formik>
 
   )
 }
