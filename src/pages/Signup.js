@@ -14,6 +14,8 @@ import {setAuthToken} from '../redux/actions/auth.js'
 import PasswordRequirements from '../components/CustomPasswordRequirements/CustomPasswordRequirements'
 import CustomInput from '../components/CustomInput/CustomInput'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
+import logo from '../assets/img/sightly_icon.png'
+import {logoStyle} from '../assets/jss/material-dashboard-react'
 
 import config from '../config.js'
 import { whiteColor } from "../assets/jss/material-dashboard-react";
@@ -103,11 +105,12 @@ function Signup(props) {
         <CssBaseline />
         <div className={classes.paper}>
          
+          <img src={logo} alt="logo" style={logoStyle} />
          
         
           <Grid container spacing={2}>
 
-            <Grid item xs={12} sm={6}>
+            {/*<Grid item xs={12} sm={6}>
               <CustomInput
                 labelText="First Name"
                 id="firstname"
@@ -139,7 +142,8 @@ function Signup(props) {
                 }}
                 handleClear={()=>setLastName('')}          
               />
-            </Grid>
+            </Grid> */}
+            
 
             <Grid item xs={12}>         
               <CustomInput

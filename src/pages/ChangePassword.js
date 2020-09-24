@@ -2,20 +2,20 @@ import React, { useState }  from "react";
 // import PropTypes from "prop-types"
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
+import CustomInput from '../components/CustomInput/CustomInput'
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {setShowAlert, changePassword} from '../redux/actions/auth';
 import Snackbar from "../components/Snackbar/Snackbar";
 import AddAlert from '@material-ui/icons/AddAlert'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
+import Button from '../components/CustomButtons/Button'
+import { whiteColor } from "../assets/jss/material-dashboard-react";
+import logo from '../assets/img/sightly_icon.png'
+import {logoStyle} from '../assets/jss/material-dashboard-react'
 
 const mapStateToProps = (state) => {
   return { 
@@ -83,61 +83,73 @@ function PasswordChange(props) {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
+
+        <img src={logo} alt="logo" style={logoStyle} />
          
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="password"
-                  label="Password"
-                  type="password"
-                  name="password"
-                  autoComplete="password"
-                  value={password}
-                  onChange={e => {
-                    setPassword(e.target.value);
-                  }}
-                />
+
+              <CustomInput
+              labelText="Password"
+              id="password"
+              name="password"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                type: 'password',
+                value: password,
+                onChange: (e)=>setPassword(e.target.value),
+                autoComplete: "current-password"
+              }}
+              handleClear={()=>setPassword('')}
+              
+            />
+
               </Grid>
               
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="password_confirmation"
-                  label="Password Confirmation"
-                  type="password"
-                  name="password_confirmation"
-                  autoComplete="password_confirmation"
-                  value={password_confirmation}
-                  onChange={e => {
-                    setPasswordConfirmation(e.target.value);
-                  }}
-                />
+
+              <CustomInput
+              labelText="Password"
+              id="password_confirmation"
+              name="password_confirmation"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                type: 'password',
+                value: password_confirmation,
+                onChange: (e)=>setPasswordConfirmation(e.target.value),
+                autoComplete: "password_confirmation"
+              }}
+              handleClear={()=>setPasswordConfirmation('')}
+              
+            />
+
               </Grid>
             </Grid>
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
+
+            <Button       
+              color="primary"         
               onClick={postChangePassword}
+              fullWidth={true}
+              style={{marginTop:'10px'}}
             >
+              
               Change Password
             </Button>
-            <Grid container>
+
+
+            <Grid container style={{marginTop:'10px'}}>
               <Grid item xs>
-                <Link href="/login" variant="body2">
+                <Link style={{color: whiteColor}} href="/login" variant="body2">
                   Login
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link style={{color: whiteColor}} href="/signup" variant="body2">
                   {"Don't have an account?"}
                 </Link>
               </Grid>

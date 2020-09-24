@@ -7,7 +7,7 @@ import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
 import GridList from '@material-ui/core/GridList'
 import "rc-tree/assets/index.css"
-import {defaultFont} from "../../assets/jss/material-dashboard-react"
+import {defaultFont, whiteColor} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
 import Card from "../Card/Card.js"
 import CardBody from "../Card/CardBody.js"
@@ -145,7 +145,7 @@ class Demo extends React.Component {
     // }
 
     const TreeTitle = ({title}) => {
-      return <div style={{font: defaultFont, marginLeft: 5}}>{title}</div>
+      return <div style={{font: defaultFont, marginLeft: 5, color: whiteColor}}>{title}</div>
     }
     
 
@@ -179,6 +179,7 @@ class Demo extends React.Component {
           <InputLabel
             className={inputStyles.labelRoot, inputStyles.labelClasses}
             id="titleLabel"
+            style={{color: whiteColor}}
           >
             {this.props.title}
           </InputLabel>

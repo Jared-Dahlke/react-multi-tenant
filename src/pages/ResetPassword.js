@@ -15,6 +15,8 @@ import Snackbar from "../components/Snackbar/Snackbar";
 import AddAlert from '@material-ui/icons/AddAlert';
 import {isEmailError} from "../validations";
 import CustomInput from '../components/CustomInput/CustomInput'
+import logo from '../assets/img/sightly_icon.png'
+import {logoStyle} from '../assets/jss/material-dashboard-react'
 
 
 const mapStateToProps = (state) => {
@@ -74,6 +76,8 @@ function PasswordReset(props) {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
+
+          <img src={logo} alt="logo" style={logoStyle} />
          
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>

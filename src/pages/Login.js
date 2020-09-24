@@ -1,17 +1,18 @@
 import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
-import Avatar from '@material-ui/core/Avatar';
 import Button from '../components/CustomButtons/Button';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {login} from '../redux/actions/auth.js'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import { whiteColor } from "../assets/jss/material-dashboard-react.js";
 import CustomInput from '../components/CustomInput/CustomInput'
+import logo from "../assets/img/sightly_icon.png";
+import sightlyFull from '../assets/img/sightly_full.png'
+import {logoStyle} from '../assets/jss/material-dashboard-react'
 
 const mapStateToProps = (state) => {
   return { 
@@ -77,6 +78,8 @@ function Login(props) {
       <Container maxWidth="xs">
         
         <div className={classes.paper} >
+
+         <img src={logo} alt="logo" style={logoStyle} />
          
          
           <form className={classes.form} noValidate>

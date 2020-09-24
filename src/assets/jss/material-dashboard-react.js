@@ -260,6 +260,19 @@ const cardLink = {
   }
 }
 
+const logoStyle = {
+    width: "130px", 
+    verticalAlign: "middle",
+    border: "0"
+}
+
+
+const logoStyleBrand = {
+  width: "130px", 
+  verticalAlign: "middle",
+  border: "0"
+}
+
 export {
   hexToRgb,
   //variables
@@ -297,5 +310,7 @@ export {
   title,
   cardTitle,
   cardSubtitle,
-  cardLink
+  cardLink,
+  logoStyle,
+  logoStyleBrand
 }
