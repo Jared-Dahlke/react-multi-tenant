@@ -11,6 +11,7 @@ import styles from "../../assets/jss/material-dashboard-react/components/buttonS
 import { Checkbox } from "@material-ui/core";
 import taskstyles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js"
+import { whiteColor } from "../../assets/jss/material-dashboard-react.js";
 const useStyles = makeStyles(styles);
 const useTaskStyles = makeStyles(taskstyles);
 
@@ -50,10 +51,12 @@ export default function RegularButton(props) {
               checked: taskClasses.checked,
               root: taskClasses.root
             }}
+            
           />
         }
         label={labelText}
-        classes={{label: inputClasses.labelRoot}}      
+        classes={{label: inputClasses.labelRoot}}   
+        style={{color: whiteColor}}   
       />
 
     </FormControl>

@@ -3,7 +3,8 @@ import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
 import CustomInput from "../../../components/CustomInput/CustomInput.js";
 import CustomTree from '../../../components/Tree/CustomTree'
-import Grid from '@material-ui/core/Grid'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import * as v from '../../../validations'
 
 const dummyVerticals = [
   {"title":"Dummy Automotive",
@@ -16,12 +17,26 @@ const dummyVerticals = [
   {"title":"Test","key":"0-2-key"}]
 
 
+
 export default function BasicInfo (props) {
+
+  const isValidForm=(props)=>{
+    if(
+      v.isBrandProfileNameSuccess(props.basicInfo.profileName) &&
+      v.isWebsiteUrlSuccess(props.basicInfo.websiteUrl) &&
+      v.isTwitterProfileSuccess(props.basicInfo.twitterProfile)
+    ) {
+      return true
+    }
+    return false
+  }
+
+
   return (
     <div>
-      <GridContainer justify="left">
+      <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
-          
+          {isValidForm(props) ? 'valid' : 'invalid'}
           <CustomInput
             labelText="Brand Profile Name"
             id="brand-profile-name"
@@ -30,13 +45,19 @@ export default function BasicInfo (props) {
              
             }}
             inputProps={{
+              value: props.basicInfo.profileName,
+              name: "profileName",
+              onChange: props.handleChange,
               disabled: false
             }}
+            success={v.isBrandProfileNameSuccess(props.basicInfo.profileName)}
+            error={v.isBrandProfileNameError(props.basicInfo.profileName)}
+            handleClear={()=>props.handleClear('profileName', '')}
           />
         </GridItem>
       </GridContainer>
 
-      <GridContainer justify="left">
+      <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <CustomInput
             labelText="Website URL"
@@ -44,10 +65,19 @@ export default function BasicInfo (props) {
             formControlProps={{
               fullWidth: true
             }}
+            inputProps={{
+              value: props.basicInfo.websiteUrl,
+              name: "websiteUrl",
+              onChange: props.handleChange,
+              disabled: false
+            }}
+            success={v.isWebsiteUrlSuccess(props.basicInfo.websiteUrl)}
+            error={v.isWebsiteUrlError(props.basicInfo.websiteUrl)}
+            handleClear={()=>props.handleClear('websiteUrl', '')}
           />
         </GridItem>
       </GridContainer>
-      <GridContainer justify="left">
+      <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <CustomInput
             labelText="Twitter Profile"
@@ -56,9 +86,16 @@ export default function BasicInfo (props) {
               fullWidth: true
             }}
             inputProps={{
-              value: "https://twitter.com/"
+              value: props.basicInfo.twitterProfile,
+              startAdornment: <InputAdornment position="start">https://twitter.com/</InputAdornment>,
+              name: "twitterProfile",
+              onChange: props.handleChange,
             }}
+            success={v.isTwitterProfileSuccess(props.basicInfo.twitterProfile)}
+            error={v.isTwitterProfileError(props.basicInfo.twitterProfile)}
+            handleClear={()=>props.handleClear('twitterProfile', '')}
           />
+          {/*<FormHelperText id="my-helper-text">{'https://twitter.com/' + props.basicInfo.twitterProfile}</FormHelperText>*/}
         </GridItem>
       </GridContainer>
       <GridContainer>

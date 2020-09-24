@@ -7,18 +7,18 @@ import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
 import GridList from '@material-ui/core/GridList'
 import "rc-tree/assets/index.css"
-import {defaultFont, primaryColor, grayColor} from "../../assets/jss/material-dashboard-react"
+import {defaultFont, whiteColor} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
 import Card from "../Card/Card.js"
 import CardBody from "../Card/CardBody.js"
 import { withStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
-import Folder from '@material-ui/icons/FolderRounded'
+//import Folder from '@material-ui/icons/FolderRounded'
 import AddBox from '@material-ui/icons/AddBoxSharp'
 import MinusBox from '@material-ui/icons/IndeterminateCheckBox'
-import Checked from '@material-ui/icons/CheckBox'
-import Unchecked from '@material-ui/icons/CheckBoxOutlineBlank'
+//import Checked from '@material-ui/icons/CheckBox'
+//import Unchecked from '@material-ui/icons/CheckBoxOutlineBlank'
 
 const styles = {
   cardCategoryWhite: {
@@ -131,7 +131,6 @@ class Demo extends React.Component {
   render() {
 
     const switcherIcon = obj => {
-      console.log(obj)
       if (obj.isLeaf) {
         return (null)
       }
@@ -141,13 +140,13 @@ class Demo extends React.Component {
       return (<AddBox style={{ fontSize: 14, color: 'white', backgroundColor: 'black'}}/>)
     };
 
-    const Icon = ({ selected }) => {
-      return selected? <Checked></Checked> : <Unchecked></Unchecked>
-     }
+    //const Icon = ({ selected }) => {
+    //  return selected? <Checked></Checked> : <Unchecked></Unchecked>
+    // }
 
-     const TreeTitle = ({title}) => {
-       return <div style={{font: defaultFont, marginLeft: 5}}>{title}</div>
-     }
+    const TreeTitle = ({title}) => {
+      return <div style={{font: defaultFont, marginLeft: 5, color: whiteColor}}>{title}</div>
+    }
     
 
     
@@ -180,6 +179,7 @@ class Demo extends React.Component {
           <InputLabel
             className={inputStyles.labelRoot, inputStyles.labelClasses}
             id="titleLabel"
+            style={{color: whiteColor}}
           >
             {this.props.title}
           </InputLabel>

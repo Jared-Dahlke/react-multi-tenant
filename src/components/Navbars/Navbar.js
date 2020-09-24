@@ -26,6 +26,12 @@ export default function Header(props) {
       if(url.includes('/brandProfiles/create')) {
         name = 'Create a Brand Profile'
       }
+      if(url.includes('/users/edit')) {
+        name = 'Edit a User'
+      }
+      if(url.includes('/users/create')) {
+        name = 'Invite a User'
+      }
       return null;
     });
     return name;
@@ -39,7 +45,7 @@ export default function Header(props) {
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={classes.title}>
+          <Button color="transparent" href="#"  className={classes.title}>
             {makeBrand()}
           </Button>
         </div>

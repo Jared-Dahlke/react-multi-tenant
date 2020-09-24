@@ -8,20 +8,12 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor} from '../../assets/jss/material-dashboard-react'
-import CardHeader from '../../components/Card/CardHeader';
+import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-   
-   
-  },
-  card: {
-    //height: '100%'
-  },
   stepper: {
-    
+    backgroundColor: blackColor
   },
   fixBottom: {
     position: 'fixed',
@@ -59,6 +51,26 @@ export default function CreateBrandProfiles (props) {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [basicInfo, setBasicInfo] = React.useState({
+    profileName: '',
+    websiteUrl: '',
+    twitterProfile: '',
+    verticals:[],
+    subVerticals: []
+  })
+
+  const handleChangeBasicInfo=(e)=>{
+    console.log('handle change basic info')
+    console.log(e)
+    setBasicInfo({ ...basicInfo, [e.target.name]: e.target.value });
+  }
+
+  const handleClearBasicInfo=(name, value)=>{
+    console.log('handle clear basic info')
+    setBasicInfo({ ...basicInfo, [name]: value });
+  }
+  
+  
   const steps = getSteps();
 
   const handleNext = () => {
@@ -72,7 +84,6 @@ export default function CreateBrandProfiles (props) {
   const handleReset = () => {
     setActiveStep(0);
   };
-
 
   return (
    
@@ -91,21 +102,19 @@ export default function CreateBrandProfiles (props) {
                 } 
               }}
             >
-              {label}
+              <div style={{color: whiteColor}}>{label}</div>
             </StepLabel>
           </Step>
         ))}
       </Stepper>
       
     
-      <Card classes={{root: classes.card}}>
-        <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>{steps[activeStep]}</h4>           
-        </CardHeader>
+      <Card >
+        
         <CardBody>
 
           {activeStep === 0 ?
-            <BasicInfo/> 
+            <BasicInfo basicInfo={basicInfo} handleChange={handleChangeBasicInfo} handleClear={handleClearBasicInfo}/> 
             : activeStep === 1 ?
               <div>step 2</div> 
               : activeStep === 2 ?

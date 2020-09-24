@@ -1,7 +1,8 @@
 import {
   primaryColor,
   blackColor,
-  hexToRgb
+  hexToRgb,
+  whiteColor
 } from "../../../assets/jss/material-dashboard-react.js";
 
 const checkboxAdnRadioStyle = {
@@ -20,14 +21,14 @@ const checkboxAdnRadioStyle = {
   checkedIcon: {
     width: "15px",
     height: "15px",
-    border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
+    border: "1px solid rgba(" + hexToRgb(whiteColor) + ", .54)",
     borderRadius: "3px"
   },
   uncheckedIcon: {
     width: "0px",
     height: "0px",
     padding: "7.5px",
-    border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
+    border: "1px solid rgba(" + hexToRgb(whiteColor) + ", .54)",
     borderRadius: "3px"
   },
   radio: {

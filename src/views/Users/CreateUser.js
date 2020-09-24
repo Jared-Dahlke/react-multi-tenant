@@ -6,7 +6,6 @@ import GridContainer from "../../components/Grid/GridContainer.js"
 import CustomInput from "../../components/CustomInput/CustomInput.js"
 import Button from "../../components/CustomButtons/Button.js"
 import Card from "../../components/Card/Card.js"
-import CardHeader from "../../components/Card/CardHeader.js"
 import CardBody from "../../components/Card/CardBody.js"
 import CardFooter from "../../components/Card/CardFooter.js"
 import {connect} from 'react-redux'
@@ -136,18 +135,14 @@ function CreateUser  (props) {
   //[{roleId: 11},{roleId: 12}]
 
   return (
-    <Card>
+    <div>
 
-      <CardBody>
+
       
         <GridContainer>
           <GridItem xs={12} sm={12} md={8}>
-            <Card>
+            <Card >
             
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Invite a new user</h4>
-                <p className={classes.cardCategoryWhite}></p>
-              </CardHeader>
               
               <CardBody>
                 <GridContainer>
@@ -297,13 +292,9 @@ function CreateUser  (props) {
         />
 
        
-            
-      </CardBody>
-
-    
       
                
-    </Card>
+    </div>
   )
 }
 

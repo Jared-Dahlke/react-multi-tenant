@@ -11,6 +11,7 @@ import styles from "../../assets/jss/material-dashboard-react/components/customI
 import dropdownStyles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
+import { whiteColor } from "../../assets/jss/material-dashboard-react.js";
 
 const useStyles = makeStyles(styles);
 const useDropdownStyles = makeStyles(dropdownStyles)
@@ -61,6 +62,7 @@ export default function CustomSelect(props) {
           classes={{
             underline: underlineClasses
           }}
+          style={{color: whiteColor}}
         />}
         value={value}
         onChange={handleItemSelect}
@@ -77,9 +79,10 @@ export default function CustomSelect(props) {
             <MenuItem 
               key={role.roleId} 
               value={role.roleId}
-              className={dropDownClasses.dropdownItem}
+            
+              
             >
-              {role.roleName}
+             {role.roleName}
             </MenuItem>
 
           )})

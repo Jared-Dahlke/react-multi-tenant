@@ -77,7 +77,7 @@ function AdminNavbarLinks(props) {
             }
           }}
         />
-        <Button color="white" aria-label="edit" justIcon round>
+        <Button color="transparent" aria-label="edit" justIcon round>
           <Search />
         </Button>
       </div>

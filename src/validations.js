@@ -13,6 +13,36 @@ export function isLastNameSuccess (text) {
   return text.length > 1
 }
 
+export function isBrandProfileNameError (text) {
+  return text.length > 0 && text.length < 2
+}
+
+export function isBrandProfileNameSuccess (text) {
+  return text.length > 1
+}
+
+export function isWebsiteUrlSuccess (text) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(text);
+}
+
+export function isWebsiteUrlError (text) {
+  return !isWebsiteUrlSuccess(text) && text.length > 0
+}
+
+export function isTwitterProfileSuccess (text) {
+  return text.length > 1 && !text.includes('twitter.com')
+}
+
+export function isTwitterProfileError (text) {
+  return (text.length > 0 && text.length <= 1) || text.includes('twitter.com')
+}
+
 export function isFirstNameError (text) {
   return text.length > 0 && text.length < 2
 }

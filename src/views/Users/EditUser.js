@@ -6,7 +6,6 @@ import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import CustomSelect from '../../components/CustomSelect/CustomSelect'
@@ -99,18 +98,14 @@ function EditUser(props) {
   }
   
   return (
-    <Card>
+    <div>
 
-      <CardBody>
       
         <GridContainer>
           <GridItem xs={12} sm={12} md={8}>
             <Card>
             
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Edit User</h4>
-                <p className={classes.cardCategoryWhite}></p>
-              </CardHeader>
+             
               
               <CardBody>
                 <GridContainer>
@@ -261,13 +256,11 @@ function EditUser(props) {
         />
 
        
-            
-      </CardBody>
-
+       
     
       
                
-    </Card>
+    </div>
   );
 }
 
