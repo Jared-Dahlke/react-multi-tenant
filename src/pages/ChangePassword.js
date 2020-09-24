@@ -84,7 +84,7 @@ function PasswordChange(props) {
         <CssBaseline />
         <div className={classes.paper}>
 
-        <img src={logo} alt="logo" style={logoStyle} />
+          <img src={logo} alt="logo" style={logoStyle} />
          
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
