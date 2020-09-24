@@ -14,12 +14,9 @@ export function isLastNameSuccess (text) {
 }
 
 export function isBrandProfileNameError (text) {
-  return text.length > 0 && text.length < 2
+  return text.length < 2
 }
 
-export function isBrandProfileNameSuccess (text) {
-  return text.length > 1
-}
 
 export function isWebsiteUrlSuccess (text) {
   var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -32,7 +29,7 @@ export function isWebsiteUrlSuccess (text) {
 }
 
 export function isWebsiteUrlError (text) {
-  return !isWebsiteUrlSuccess(text) && text.length > 0
+  return !isWebsiteUrlSuccess(text)
 }
 
 export function isTwitterProfileSuccess (text) {
@@ -40,7 +37,7 @@ export function isTwitterProfileSuccess (text) {
 }
 
 export function isTwitterProfileError (text) {
-  return (text.length > 0 && text.length <= 1) || text.includes('twitter.com')
+  return text.length <= 1 || text.includes('twitter.com')
 }
 
 export function isFirstNameError (text) {

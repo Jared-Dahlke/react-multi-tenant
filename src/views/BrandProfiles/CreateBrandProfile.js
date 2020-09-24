@@ -10,6 +10,9 @@ import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
 import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
+import {Formik} from 'formik'
+import * as v from '../../validations'
+
 
 const useStyles = makeStyles((theme) => ({
   stepper: {
@@ -88,8 +91,30 @@ export default function CreateBrandProfiles (props) {
     setActiveStep(0);
   };
 
+  
+
   return (
-   
+    <Formik
+      validateOnMount
+      initialValues={{
+        
+          basicInfoProfileName: '',
+          basicInfoWebsiteUrl: '',
+          basicInfoTwitterProfile: ''
+                 
+      }}
+      // user this for form level validation (pros: can validate against different fields, cons: slower)
+      /*validate={values=>{
+        console.log('running validate')     
+        const errors = {basicInfo:{}}
+        if(!v.isWebsiteUrlSuccess(values.basicInfo.websiteUrl)) {
+          console.log('triggering errror')
+          errors.basicInfo.websiteUrl = true
+          
+        }
+        return errors
+      }} */
+    > 
     <div>
 
       <Stepper classes={{ root: classes.stepper}}  activeStep={activeStep} alternativeLabel>
@@ -161,6 +186,8 @@ export default function CreateBrandProfiles (props) {
 
       </Card>
     </div>
+    
+    </Formik>
 
   )
 }
