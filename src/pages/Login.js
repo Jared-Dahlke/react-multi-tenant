@@ -3,11 +3,8 @@ import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '../components/CustomButtons/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -27,19 +24,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     login: (credentials) => dispatch(login(credentials))
   }
-}
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Sightly
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -89,75 +73,71 @@ function Login(props) {
   }
 
   return (
-  <div className={adminClasses.authPanel}>
-    <Container maxWidth="xs">
-      
-      <div className={classes.paper} >
-        <Avatar className={classes.avatar}>
-          {/*<LockOutlinedIcon />*/} 
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-
-        <CustomInput
-          labelText="Email address"
-          id="email-address"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: 'email',
-            value: userName,
-            onChange: (e)=>setUserName(e.target.value)
-          }}
-          handleClear={()=>setUserName('')}
-          
-        />
-
-        <CustomInput
-          labelText="Password"
-          id="password"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: 'password',
-            value: password,
-            onChange: (e)=>setPassword(e.target.value),
-            autoComplete: "current-password"
-          }}
-          handleClear={()=>setPassword('')}
-          
-        />
-
-          <Button       
-            color="primary"         
-            onClick={postLogin}
-            fullWidth={true}
-            style={{marginTop:'10px'}}
-          >
-            
-            Sign In
-          </Button>
+    <div className={adminClasses.authPanel}>
+      <Container maxWidth="xs">
+        
+        <div className={classes.paper} >
          
-          <Grid style={{marginTop:'10px'}} container>
-            <Grid item xs>
-              <Link href="/resetPassword" variant="body2" style={{color: whiteColor}}>
-                Forgot password?
-              </Link>
+         
+          <form className={classes.form} noValidate>
+
+            <CustomInput
+              labelText="Email address"
+              id="email-address"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                type: 'email',
+                value: userName,
+                onChange: (e)=>setUserName(e.target.value)
+              }}
+              handleClear={()=>setUserName('')}
+              
+            />
+
+            <CustomInput
+              labelText="Password"
+              id="password"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                type: 'password',
+                value: password,
+                onChange: (e)=>setPassword(e.target.value),
+                autoComplete: "current-password"
+              }}
+              handleClear={()=>setPassword('')}
+              
+            />
+
+            <Button       
+              color="primary"         
+              onClick={postLogin}
+              fullWidth={true}
+              style={{marginTop:'10px'}}
+            >
+              
+              Sign In
+            </Button>
+          
+            <Grid style={{marginTop:'10px'}} container>
+              <Grid item xs>
+                <Link href="/resetPassword" variant="body2" style={{color: whiteColor}}>
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/signup" variant="body2" style={{color: whiteColor}}>
+                  {"Don't have an account?"}
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2" style={{color: whiteColor}}>
-                {"Don't have an account?"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-     
-    </Container>
+          </form>
+        </div>
+      
+      </Container>
     </div>
   );
 }

@@ -40,7 +40,7 @@ export function isTwitterProfileSuccess (text) {
 }
 
 export function isTwitterProfileError (text) {
-  return text.length > 0 && text.length <= 1 || text.includes('twitter.com')
+  return (text.length > 0 && text.length <= 1) || text.includes('twitter.com')
 }
 
 export function isFirstNameError (text) {

@@ -4,7 +4,6 @@ import { Redirect } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '../components/CustomButtons/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -31,20 +30,6 @@ const mapDispatchToProps = (dispatch) => {
     setShowAlert: (showAlert) => dispatch(setShowAlert(showAlert))
   }
 }
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Sightly
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -84,65 +69,58 @@ function PasswordReset(props) {
 
   return (
     <div style={{position: "relative",
-  top: "0",
-  height: "100vh"}}>
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+      top: "0",
+      height: "100vh"}}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+         
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
 
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Forgot your Password
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+                <CustomInput
+                  labelText="Email address"
+                  id="email-address"
+                  name="email"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    type: 'email',
+                    value: email,
+                    onChange: (e)=>setEmail(e.target.value)
+                  }}
+                  handleClear={()=>setEmail('')}
+                  
+                />
 
-            <CustomInput
-              labelText="Email address"
-              id="email-address"
-              name="email"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                type: 'email',
-                value: email,
-                onChange: (e)=>setEmail(e.target.value)
-              }}
-              handleClear={()=>setEmail('')}
+
+              </Grid>
               
-            />
-
-
             </Grid>
-            
-          </Grid>
-          <Button   
-            style={{marginTop:'10px'}}       
-            fullWidth          
-            color="primary"       
-            disabled={isEmailError(email)}
-            onClick={postResetPassword}
-          >
-            Reset
-          </Button>
-        </form>
-      </div>
-      <Snackbar
-        place="bc"
-        color="success"
-        icon={AddAlert}
-        message="Reset password email sent. Check Your email."
-        open={props.showAlert}
-        closeNotification={() => props.setShowAlert(false)}
-        close
-      />
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
+            <Button   
+              style={{marginTop:'10px'}}       
+              fullWidth          
+              color="primary"       
+              disabled={isEmailError(email)}
+              onClick={postResetPassword}
+            >
+              Reset Password
+            </Button>
+          </form>
+        </div>
+        <Snackbar
+          place="bc"
+          color="success"
+          icon={AddAlert}
+          message="Reset password email sent. Check Your email."
+          open={props.showAlert}
+          closeNotification={() => props.setShowAlert(false)}
+          close
+        />
+       
+      </Container>
     </div>
   );
 }

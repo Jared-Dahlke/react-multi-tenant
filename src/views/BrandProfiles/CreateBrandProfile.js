@@ -9,7 +9,6 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
 import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-dashboard-react'
-import CardHeader from '../../components/Card/CardHeader';
 import BasicInfo from './components/BasicInfo'
 
 const useStyles = makeStyles((theme) => ({

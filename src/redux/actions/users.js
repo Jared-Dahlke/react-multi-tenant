@@ -167,19 +167,19 @@ export const inviteUser = (user) => {
   return (dispatch) => {
     dispatch(usersAddUser(user));
     axios.post(url, user)
-    .then(response => {
-       dispatch(userAdded(true))
-       setTimeout(() => {
-         dispatch(userAdded(false))
-       }, 2000);
-    })
-    .catch(error => {
-      console.log('invite user error')
-      console.log(error)
-      //dispatch(userDeletedError(true))
-      //setTimeout(() => {
-      //  dispatch(userDeletedError(false))
-      //}, 2000);
-    })
+      .then(response => {
+        dispatch(userAdded(true))
+        setTimeout(() => {
+          dispatch(userAdded(false))
+        }, 2000);
+      })
+      .catch(error => {
+        console.log('invite user error')
+        console.log(error)
+        //dispatch(userDeletedError(true))
+        //setTimeout(() => {
+        //  dispatch(userDeletedError(false))
+        //}, 2000);
+      })
   };
 };

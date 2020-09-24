@@ -11,7 +11,7 @@ import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
 // core components
 import styles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
-import {whiteColor, grayColor, blackColor} from '../../assets/jss/material-dashboard-react'
+import {whiteColor} from '../../assets/jss/material-dashboard-react'
 const useStyles = makeStyles(styles);
 
 export default function CustomInput(props) {

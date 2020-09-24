@@ -16,7 +16,6 @@ import CustomInput from "../CustomInput/CustomInput.js";
 import Button from "../CustomButtons/Button.js"
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 import {setAuthToken, setLoggedIn} from '../../redux/actions/auth.js'
-import { blackColor } from "../../assets/jss/material-dashboard-react.js";
 
 const useStyles = makeStyles(styles);
 

@@ -5,7 +5,6 @@ import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import ListItem from "@material-ui/core/ListItem";
@@ -24,7 +23,6 @@ import { updateUserData } from "../../redux/actions/users.js";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ClearRounded from "@material-ui/icons/ClearRounded";
 import CheckCircle from "@material-ui/icons/CheckCircle";
-import { primaryColor } from "../../assets/jss/material-dashboard-react.js";
 
 const styles = {
   cardCategoryWhite: {
@@ -297,19 +295,19 @@ function UserProfile({
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <form>
-                      <CustomInput
-                        labelText="Current Password"
-                        formControlProps={{
-                          fullWidth: true,
-                        }}
-                        inputProps={{
-                          type: "password",
-                          value: oldPassword,
-                          name: "oldPassword",
-                          onChange: onPasswordChange,
-                         
-                        }}
-                      />
+                        <CustomInput
+                          labelText="Current Password"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            type: "password",
+                            value: oldPassword,
+                            name: "oldPassword",
+                            onChange: onPasswordChange,
+                          
+                          }}
+                        />
                       </form>
                     </GridItem>
                   </GridContainer>
@@ -317,33 +315,33 @@ function UserProfile({
                     <GridItem xs={12} sm={12} md={6}>
                       <form>                      
                         <CustomInput
-                        labelText="New Password"
-                        formControlProps={{
-                          fullWidth: true,
-                        }}
-                        inputProps={{
-                          type: "password",
-                          value: newPassword,
-                          name: "newPassword",
-                          onChange: onPasswordChange,
-                        }}
-                      />
+                          labelText="New Password"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            type: "password",
+                            value: newPassword,
+                            name: "newPassword",
+                            onChange: onPasswordChange,
+                          }}
+                        />
                       </form>
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
                       <form>
-                      <CustomInput
-                        labelText="Confirm Password"
-                        formControlProps={{
-                          fullWidth: true,
-                        }}
-                        inputProps={{
-                          type: "password",
-                          value: confirmNewPassword,
-                          name: "confirmNewPassword",
-                          onChange: onPasswordChange,
-                        }}
-                      />
+                        <CustomInput
+                          labelText="Confirm Password"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            type: "password",
+                            value: confirmNewPassword,
+                            name: "confirmNewPassword",
+                            onChange: onPasswordChange,
+                          }}
+                        />
                       </form>
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
