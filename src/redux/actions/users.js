@@ -53,7 +53,7 @@ export function usersFetchData() {
   return async (dispatch) => {
     try {
       let params = {
-        accounts: true,
+       
         roles: true
       }
      
@@ -63,31 +63,48 @@ export function usersFetchData() {
       });
 
       if (result.status === 200) {
+        console.log(result)
         let users = { data: [] };
         for (const user of result.data) {
+
           let roles = [];
-          for (const role of user.roles) {
-            if (role.roleId) roles.push(role.roleId);
+          try {
+
+            
+            for (const role of user.roles) {
+              if (role.roleId) roles.push(role.roleId);
+            }
+
+          } catch (error) {
+            alert('Error trying to add roles to /user in the fetchUsers function: ' + error)
+            return
           }
           
+          
+          try{
+            let newUser = new User(
+              user.userId,
+              user.firstName,
+              user.lastName,
+              user.company,
+              user.email,
+              user.userType,
+              roles
+            );
+            users.data.push(newUser);
 
-          let newUser = new User(
-            user.userId,
-            user.firstName,
-            user.lastName,
-            user.company,
-            user.email,
-            user.userType,
-            roles
-          );
-          users.data.push(newUser);
+          } catch (error) {
+            
+          }
+          
         }
         dispatch(usersFetchDataSuccess(users));
       }
     } catch (error) {
-      let errorType = error.response.status;
-      handleError(dispatch, errorType);
-      dispatch(usersHasErrored(true));
+      alert('Error on fetch users: ' +JSON.stringify(error,null,2))
+      //let errorType = error.response.status;
+      //handleError(dispatch, errorType);
+      //dispatch(usersHasErrored(true));
     }
   };
 }
@@ -170,6 +187,7 @@ export const inviteUser = (user) => {
         }, 2000);
       })
       .catch(error => {
+
         console.log('invite user error')
         console.log(error)
         //dispatch(userDeletedError(true))

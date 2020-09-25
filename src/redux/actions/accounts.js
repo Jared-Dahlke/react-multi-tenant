@@ -20,7 +20,7 @@ export function accountsFetchDataSuccess(accounts) {
 }
 
 export function accountsFetchData() {
-  let url = apiBase + "/account";
+  let url = apiBase + "/user/accounts";
   return async (dispatch) => {
     try {
       
@@ -46,8 +46,9 @@ export function accountsFetchData() {
         */
       }
     } catch (error) {
-      let errorType = error.response.status;
-      handleError(dispatch, errorType);
+      alert('Error on fetch accounts: ' +JSON.stringify(error,null,2))
+      //let errorType = error.response.status;
+      //handleError(dispatch, errorType);
       //dispatch(usersHasErrored(true));
     }
   };
