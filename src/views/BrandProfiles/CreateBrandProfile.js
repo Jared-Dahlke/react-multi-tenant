@@ -10,7 +10,7 @@ import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
 import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
-import {Formik} from 'formik'
+import {Formik, Form} from 'formik'
 import * as v from '../../validations'
 
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   step: {
     "&$completed": {
-      color: primaryColor[0],
+      color: 'green',
       
     },
     "&$active": {
@@ -53,7 +53,7 @@ function getSteps() {
 }
 
 
-export default function CreateBrandProfiles (props) {
+function CreateBrandProfiles (props) {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -65,16 +65,6 @@ export default function CreateBrandProfiles (props) {
     subVerticals: []
   })
 
-  const handleChangeBasicInfo=(e)=>{
-    console.log('handle change basic info')
-    console.log(e)
-    setBasicInfo({ ...basicInfo, [e.target.name]: e.target.value });
-  }
-
-  const handleClearBasicInfo=(name, value)=>{
-    console.log('handle clear basic info')
-    setBasicInfo({ ...basicInfo, [name]: value });
-  }
   
   
   const steps = getSteps();
@@ -91,11 +81,55 @@ export default function CreateBrandProfiles (props) {
     setActiveStep(0);
   };
 
+  //if touched with no errors then validated
+  //if you dont have multiple 'sub forms' you can just check form.isValid instead of doing this whole function
+  const stepValidated=(index, formik) =>{
+    console.log('running step validated')
+
+    let errors = formik.errors
+    let errorCount = Object.keys(errors).length
+    console.log(errorCount)
+    console.log(errors)
+
+    
+
+    if (errorCount === 0) return true 
+
+    for (const [key, value] of Object.entries(errors)) {
+      console.log(key, value);
+      if(index === 0) {
+        if(key.includes('basicInfo')) {
+          return false
+        }
+      }
+      if(index === 1) {
+        if(key.includes('step2')) {
+          return false
+        }
+      }
+      if(index === 2) {
+        if(key.includes('step3')) {
+          return false
+        }
+      }
+      
+    }
+
+    return true
+
+      
+  }
+
+  {/**<Formik 
+    validateOnMount={true} 
+    initialValues={useMemo(() => { return { email: '' } }, [])}
+    ...  */}
+
   
 
   return (
     <Formik
-      validateOnMount
+      validateOnMount={true}
       initialValues={{
         
           basicInfoProfileName: '',
@@ -104,37 +138,58 @@ export default function CreateBrandProfiles (props) {
                  
       }}
       // user this for form level validation (pros: can validate against different fields, cons: slower)
-      /*validate={values=>{
-        console.log('running validate')     
-        const errors = {basicInfo:{}}
-        if(!v.isWebsiteUrlSuccess(values.basicInfo.websiteUrl)) {
-          console.log('triggering errror')
-          errors.basicInfo.websiteUrl = true
+      //validate={(values,props)=>{
+      //  console.log('running validate')
+      //  console.log(values)     
+      //  console.log(props)
+      //  const errors = {} // 'test***'
+        //if (errors.length > 0) {
+          //for (const error of errors) {
           
-        }
-        return errors
-      }} */
+          //}
+        //}
+        
+        //if {
+        //  console.log('triggering errror')
+       //   errors.basicInfo.websiteUrl = true
+          
+       // }
+     //   return errors
+      //}}
     > 
+    {formik => (
     <div>
 
       <Stepper classes={{ root: classes.stepper}}  activeStep={activeStep} alternativeLabel>
-        {steps.map((label, index) => (
-          <Step key={label}>
+        {steps.map((label, index) => {
+          
+          let labelColor = whiteColor
+          //if (stepValidated(index, formik)) {
+          //  labelColor = 'green'
+          //}
             
-            <StepLabel 
-              StepIconProps={{ 
-                classes: { 
-                  root: classes.step,
-                  completed: classes.completed,
-                  active: classes.active
-                } 
-              }}
-            >
-              <div style={{color: whiteColor}}>{label}</div>
-            </StepLabel>
-          </Step>
-        ))}
+          
+          return (
+
+            <Step key={label}>              
+              <StepLabel 
+                StepIconProps={{ 
+                  classes: { 
+                    root: classes.step,
+                    completed: classes.completed,
+                    active: classes.active
+                  } 
+                }}
+              >
+                <div style={{color: labelColor}}>{label}</div>
+              </StepLabel>
+            </Step>
+
+          )
+        })}
       </Stepper>
+
+      <div style={{color:'white'}}>{JSON.stringify(formik,null,4)}></div>
       
     
       <Card >
@@ -142,7 +197,11 @@ export default function CreateBrandProfiles (props) {
         <CardBody>
 
           {activeStep === 0 ?
-            <BasicInfo basicInfo={basicInfo} handleChange={handleChangeBasicInfo} handleClear={handleClearBasicInfo}/> 
+          <div>
+            <Form name="form1">
+              <BasicInfo basicInfo={basicInfo}/> 
+            </Form>
+          </div>
             : activeStep === 1 ?
               <div>step 2</div> 
               : activeStep === 2 ?
@@ -186,8 +245,12 @@ export default function CreateBrandProfiles (props) {
 
       </Card>
     </div>
+
+    )}
     
     </Formik>
 
   )
 }
+
+export default CreateBrandProfiles
