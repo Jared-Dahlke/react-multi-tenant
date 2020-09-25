@@ -69,10 +69,7 @@ export function usersFetchData() {
           for (const role of user.roles) {
             if (role.roleId) roles.push(role.roleId);
           }
-          let accounts = [];
-          for (const account of user.accounts) {
-            if (account.accountId) accounts.push(account.accountId);
-          }
+          
 
           let newUser = new User(
             user.userId,
@@ -81,8 +78,7 @@ export function usersFetchData() {
             user.company,
             user.email,
             user.userType,
-            roles,
-            accounts
+            roles
           );
           users.data.push(newUser);
         }

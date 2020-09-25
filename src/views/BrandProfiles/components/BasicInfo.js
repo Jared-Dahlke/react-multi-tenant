@@ -57,6 +57,7 @@ export default function BasicInfo (props) {
             }}
           />
 
+
         </GridItem>
       </GridContainer>
       <GridContainer>
