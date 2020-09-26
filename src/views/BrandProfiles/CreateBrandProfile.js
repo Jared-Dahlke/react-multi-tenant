@@ -164,9 +164,9 @@ function CreateBrandProfiles (props) {
         {steps.map((label, index) => {
           
           let labelColor = whiteColor
-          //if (stepValidated(index, formik)) {
-          //  labelColor = 'green'
-          //}
+          if (stepValidated(index, formik)) {
+            labelColor = 'green'
+          }
             
           
           return (
