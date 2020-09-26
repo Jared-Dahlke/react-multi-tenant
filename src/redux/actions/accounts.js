@@ -38,7 +38,6 @@ export function accountsFetchData() {
       const result = await axios.get(url);
 
       if (result.status === 200) {
-        console.log('success')
         let accounts = { data: result.data };
         
         dispatch(accountsFetchDataSuccess(accounts));
@@ -90,8 +89,6 @@ export function fetchSiteData(accountId) {
       }
 
       localStorage.setItem('currentAccountId', accountId)
-      
-      console.log(accountId)
       dispatch(setCurrentAccountId(accountId))
       dispatch(userProfileFetchData())
       dispatch(usersFetchData(accountId))

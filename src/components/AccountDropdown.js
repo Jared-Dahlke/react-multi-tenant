@@ -12,6 +12,8 @@ import { blackColor, whiteColor, defaultFont, primaryColor, grayColor } from '..
 import { withStyles } from '@material-ui/core/styles'
 import Card from './Card/Card'
 import CardBody from './Card/CardBody'
+import CustomInput from './CustomInput/CustomInput';
+import {fetchSiteData} from '../redux/actions/accounts'
 
 const useStyles = makeStyles({
   root: {
@@ -39,13 +41,14 @@ const useStyles = makeStyles({
 
 const mapStateToProps = (state) => {
   return {
-    accounts: state.accounts
+    accounts: state.accounts,
+    currentAccountId: state.currentAccountId
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    //fetchRolesPermissions: () => dispatch(rolesPermissionsFetchData())
+    fetchSiteData: (accountId) => dispatch(fetchSiteData(accountId))
   }
 }
 
@@ -135,6 +138,20 @@ function SimplePopover(props) {
     setAnchorEl(null);
   };
 
+  const getAccountName=(accountId)=>{
+    if (props.accounts && props.accounts.data && props.accounts.data.length >  0){
+      for (const account of props.accounts.data) {
+        if(account.accountId == accountId) {
+          return account.accountName
+        }
+      }
+
+    } else {
+      return ''
+    }
+    
+  }
+
 
   //tree stuff:
   const [expanded, setExpanded] = React.useState([]);
@@ -144,21 +161,35 @@ function SimplePopover(props) {
     setExpanded(nodeIds);
   };
 
-  const handleSelect = (event, nodeIds) => {
-    setSelected(nodeIds);
+  const handleSelect = (event, accountId) => {
+    setSelected(accountId);
+    props.fetchSiteData(accountId)
+    console.log(accountId)
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'accounts-popover' : undefined;
 
   //const [selectedAccount, setSelectedAccount] = React.useState([])
+
+  let accountId = props.currentAccountId
+  if(!accountId){
+    accountId = localStorage.getItem('currentAccountId')
+  }
  
+  const selectedAccountName = getAccountName(accountId)
 
   return (
     <div>
-      <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-        {selected}
-      </Button>
+      <div aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+        <CustomInput        
+        formControlProps={{fullWidth: true}} 
+        labelText={'Selected Account'} 
+        inputProps={{value: selectedAccountName, disabled: true}}
+        valueColor={primaryColor[0]}
+        />
+       
+      </div>
       <Popover
         id={id}
         open={open}

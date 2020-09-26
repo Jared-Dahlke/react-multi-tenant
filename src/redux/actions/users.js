@@ -63,7 +63,6 @@ export function usersFetchData(accountId) {
       });
 
       if (result.status === 200) {
-        console.log(result)
         let users = { data: [] };
         for (const user of result.data) {
 
@@ -165,10 +164,7 @@ export const deleteUser = (userId) => {
 };
 
 export const inviteUser = (user) => {
-  console.log(user)
   user.password = 'testasdfa!'
-
- 
   
   delete user.userId
   delete user.internal

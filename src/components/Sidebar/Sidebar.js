@@ -179,6 +179,11 @@ export default function Sidebar(props) {
         </div>
         {logoText}
       </a>
+
+      
+        <AccountDropdown/>
+      
+
     </div>
   );
   return (

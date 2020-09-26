@@ -44,8 +44,7 @@ const mapDispatchToProps = (dispatch) => {
 
 function BrandProfiles(props) {
 
-  console.log(props)
-  //let history = useHistory();
+
   const classes = useStyles();
   const tableClasses = useTableStyles();
   //const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)

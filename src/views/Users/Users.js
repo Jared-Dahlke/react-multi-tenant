@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
     userDeleted: state.userDeleted,
     userDeletedError: state.userDeletedError,
     currentAccount: state.currentAccount
-  }
+  }   
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -56,7 +56,6 @@ function Users(props) {
 
   const {fetchUsersData} = props
 
-  console.log(props)
 
   const currentAccountId = localStorage.getItem('currentAccountId')
 

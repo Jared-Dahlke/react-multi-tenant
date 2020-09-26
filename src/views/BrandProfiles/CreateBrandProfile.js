@@ -84,19 +84,15 @@ function CreateBrandProfiles (props) {
   //if touched with no errors then validated
   //if you dont have multiple 'sub forms' you can just check form.isValid instead of doing this whole function
   const stepValidated=(index, formik) =>{
-    console.log('running step validated')
 
     let errors = formik.errors
     let errorCount = Object.keys(errors).length
-    console.log(errorCount)
-    console.log(errors)
 
-    
 
     if (errorCount === 0) return true 
 
     for (const [key, value] of Object.entries(errors)) {
-      console.log(key, value);
+
       if(index === 0) {
         if(key.includes('basicInfo')) {
           return false

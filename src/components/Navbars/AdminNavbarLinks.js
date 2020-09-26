@@ -66,9 +66,7 @@ function AdminNavbarLinks(props) {
   };
   return (
     <div>
-      <div className={classes.searchWrapper}>
-        <AccountDropdown/>
-      </div>
+      
 
 
       <div className={classes.manager}>

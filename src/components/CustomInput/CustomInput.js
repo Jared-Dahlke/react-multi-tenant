@@ -63,7 +63,7 @@ export default function CustomInput(props) {
         }}
         id={id}
         {...inputProps}
-        style={{color: whiteColor}}
+        style={{color: props.valueColor ? props.valueColor : whiteColor}}
         autoComplete="adf"
       />
       {error ? (
@@ -89,5 +89,6 @@ CustomInput.propTypes = {
   error: PropTypes.bool,
   success: PropTypes.bool,
   handleClear: PropTypes.func,
-  styling: PropTypes.object
+  styling: PropTypes.object,
+  valueColor: PropTypes.string
 };
