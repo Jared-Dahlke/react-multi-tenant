@@ -171,15 +171,8 @@ class Demo extends React.Component {
       autoExpandParent = true
     }
 
-    return (
-
-      
+    return (    
         <div>
-
-          
-
-        
-
 
           {this.props.search ?
           
@@ -210,7 +203,6 @@ class Demo extends React.Component {
           }
 
         
-         
           <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
     
             <Tree

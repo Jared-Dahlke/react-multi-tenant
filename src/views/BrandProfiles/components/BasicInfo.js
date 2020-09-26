@@ -25,10 +25,6 @@ const dummyVerticals = [
 
 export default function BasicInfo (props) {
 
-  console.log('basic info props')
-  console.log(props)
-
-
   return (
     
     <div>
@@ -37,10 +33,13 @@ export default function BasicInfo (props) {
           <FormikInput 
             name="basicInfoProfileName" 
             labelText="Profile Name" 
+            
             validate={v.isBrandProfileNameError}
             formControlProps={{
               fullWidth: true
+              
             }}
+            
           />     
         </GridItem>
       </GridContainer>

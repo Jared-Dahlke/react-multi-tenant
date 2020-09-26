@@ -14,7 +14,10 @@ export function isLastNameSuccess (text) {
 }
 
 export function isBrandProfileNameError (text) {
-  return text.length < 2
+  if (text.length < 2) {
+    return 'must be greater than two characters'
+  }
+  return false
 }
 
 
@@ -29,15 +32,21 @@ export function isWebsiteUrlSuccess (text) {
 }
 
 export function isWebsiteUrlError (text) {
-  return !isWebsiteUrlSuccess(text)
+  if (!isWebsiteUrlSuccess(text)) {
+    return 'must have a valid URL format, e.g. website.com'
+  }
+  return 
 }
 
-export function isTwitterProfileSuccess (text) {
-  return text.length > 1 && !text.includes('twitter.com')
-}
 
 export function isTwitterProfileError (text) {
-  return text.length <= 1 || text.includes('twitter.com')
+  if(text.length <= 1) {
+    return 'required*'
+  }
+  if (text.includes('twitter.com')) {
+    return 'only enter your twitter handle'
+  }
+  return false
 }
 
 export function isFirstNameError (text) {

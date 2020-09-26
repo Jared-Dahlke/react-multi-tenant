@@ -9,7 +9,9 @@ const appStyle = theme => ({
   wrapper: {
     position: "relative",
     top: "0",
-    height: "100vh"
+    height: "100vh",
+    backgroundColor: blackColor
+   
   },
   authPanel: {
     overflow: "auto",
@@ -20,7 +22,8 @@ const appStyle = theme => ({
     minHeight: '100%',
     width: "100%",
     overflowScrolling: "touch",
-    backgroundColor: blackColor
+    backgroundColor: blackColor,
+    
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {

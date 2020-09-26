@@ -11,8 +11,9 @@ import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
 // core components
 import styles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
-import {whiteColor} from '../../assets/jss/material-dashboard-react'
+import {whiteColor, dangerColor} from '../../assets/jss/material-dashboard-react'
 import {Field} from 'formik'
+import FormHelperText from '@material-ui/core/FormHelperText'
 const useStyles = makeStyles(styles);
 
 
@@ -47,12 +48,14 @@ export default function CustomInput(props) {
   return (
     <Field name={props.name} validate={props.validate}>
       {({field, form}) =>
+      
 
       <FormControl
         {...formControlProps}
         className={formControlProps.className + " " + classes.formControl}
         
       >
+        
 
 
 
@@ -80,9 +83,22 @@ export default function CustomInput(props) {
           style={{color: whiteColor}}
           autoComplete="adf"
         />
+        <FormHelperText id="component-helper-text" style={{color: dangerColor[0]}}></FormHelperText>
+
         {form.errors[field.name] && (field.value.length > 0 || form.touched[field.name]) ? (
           
           <div>
+            <FormHelperText 
+              id="component-helper-text" 
+              style={{
+                color: dangerColor[0], 
+                position: 'absolute',
+                bottom: '-1'
+              }}
+            >
+              {form.errors[field.name]}
+            </FormHelperText>
+
             <Clear className={classes.feedback + " " + classes.labelRootError}/>
           </div>
           /*<Clear className={classes.feedback + " " + classes.labelRootError} />*/
