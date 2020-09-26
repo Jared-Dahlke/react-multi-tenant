@@ -48,12 +48,12 @@ export function usersFetchDataSuccess(users) {
   };
 }
 
-export function usersFetchData() {
-  let url = apiBase + "/user";
+export function usersFetchData(accountId) {
+  //currentAccount.accountId = 394
+  let url = apiBase + `/account/${accountId}/users`;
   return async (dispatch) => {
     try {
-      let params = {
-       
+      let params = {     
         roles: true
       }
      

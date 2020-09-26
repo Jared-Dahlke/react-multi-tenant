@@ -1,11 +1,15 @@
 import {
  
-  ACCOUNTS_FETCH_DATA_SUCCESS
+  ACCOUNTS_FETCH_DATA_SUCCESS,
+  SET_CURRENT_ACCOUNT_ID
   
 } from "../action-types/accounts";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
 import config from "../../config.js";
+import {userProfileFetchData} from '../actions/auth'
+import {usersFetchData} from '../actions/users'
+import {rolesFetchData} from '../actions/roles'
 //import { Account } from "../../models/user";
 
 
@@ -19,8 +23,15 @@ export function accountsFetchDataSuccess(accounts) {
   };
 }
 
+export function setCurrentAccountId(accountId) {
+  return {
+    type: SET_CURRENT_ACCOUNT_ID,
+    accountId,
+  };
+}
+
 export function accountsFetchData() {
-  let url = apiBase + "/user/accounts";
+  let url = apiBase + "/user/207/accounts";
   return async (dispatch) => {
     try {
       
@@ -28,28 +39,66 @@ export function accountsFetchData() {
 
       if (result.status === 200) {
         console.log('success')
-        /*let accounts = { data: [] };
-        for (const account of result.data) {       
-          let newAccount = new Account(
-            account.userId,
-            account.firstName,
-            account.lastName,
-            account.company,
-
-            let users
-            account.email,
-            account.userType
-          );
-          users.data.push(newUser);
-        }
-        dispatch(usersFetchDataSuccess(users));
-        */
+        let accounts = { data: result.data };
+        
+        dispatch(accountsFetchDataSuccess(accounts));
+        
       }
     } catch (error) {
       alert('Error on fetch accounts: ' +JSON.stringify(error,null,2))
       //let errorType = error.response.status;
       //handleError(dispatch, errorType);
       //dispatch(usersHasErrored(true));
+    }
+  };
+}
+
+
+export function fetchSiteData(accountId) {
+  
+  return async (dispatch) => {
+    try {
+
+      let userId = localStorage.getItem('userId')
+
+      let accountsUrl = apiBase + `/user/${userId}/accounts`;
+      
+      const result = await axios.get(accountsUrl);
+
+      let accounts = { data: result.data };
+
+      dispatch(accountsFetchDataSuccess(accounts));
+
+      if(!accountId) {
+        let accountIdFromLocalStorage = localStorage.getItem('currentAccountId')
+        if(accountIdFromLocalStorage) {
+          let userStillHasAccessToThisAccount = false
+          for (const account of result.data) {
+            if(account.accountId == accountIdFromLocalStorage) {
+              userStillHasAccessToThisAccount = true
+            }
+          }
+          if(!userStillHasAccessToThisAccount) {
+            accountId = result.data[0].accountId
+          } else {
+            accountId = accountIdFromLocalStorage
+          }
+        } else {
+          accountId = result.data[0].accountId
+        }
+        //accountId = result.data[0].accountId
+      }
+
+      localStorage.setItem('currentAccountId', accountId)
+      
+      console.log(accountId)
+      dispatch(setCurrentAccountId(accountId))
+      dispatch(userProfileFetchData())
+      dispatch(usersFetchData(accountId))
+      dispatch(rolesFetchData(accountId))
+
+    } catch (error) {
+      alert('Error on fetch site data: ' +JSON.stringify(error,null,2))
     }
   };
 }

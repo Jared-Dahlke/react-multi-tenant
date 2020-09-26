@@ -44,7 +44,7 @@ export function rolesFetchData() {
     dispatch(rolesIsLoading(true));
     
     try {
-      let url =  apiBase + '/role'
+      let url =  apiBase + '/account/394/roles?permissions=false'
       const result = await axios.get(url)       
       dispatch(rolesIsLoading(false));
       if (result.status === 200) {
@@ -66,7 +66,9 @@ export function rolesPermissionsFetchData() {
   return async (dispatch) => {
 
     try {
-      let url =  apiBase + '/role/permissions'
+
+
+      let url =  apiBase + '/account/394/roles?permissions=true'
       const result = await axios.get(url)       
       if (result.status === 200) {
         dispatch(rolesPermissionsFetchDataSuccess(result))

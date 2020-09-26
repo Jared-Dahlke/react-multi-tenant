@@ -36,7 +36,7 @@ export function fetchBrandProfiles() {
       //    let newBrandProfile = new BrandProfile(brandProfile.brandProfileId, brandProfile.brandProfileName, brandProfile.website, brandProfile.twitterName, brandProfile.industryVertical, brandProfile.industrySubVertical)
       //    brandProfiles.data.push(newBrandProfile)
       //  }
-      console.log('inside getcfh brand profile')
+     
       dispatch(brandProfilesFetchDataSuccess(mockBrandProfiles))
       //}
 

@@ -22,7 +22,7 @@ import { connect } from "react-redux";
 import {usersFetchData} from '../redux/actions/users.js'
 import {rolesFetchData} from '../redux/actions/roles.js'
 import {userProfileFetchData, setUserId} from '../redux/actions/auth.js'
-import {accountsFetchData} from '../redux/actions/accounts.js'
+import {accountsFetchData, fetchSiteData} from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
 import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
@@ -77,15 +77,15 @@ const switchRoutes = (
 
 const useStyles = makeStyles(styles);
 
+
+
 const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchUsersData: () => dispatch(usersFetchData()),
-    fetchRoles: () => dispatch(rolesFetchData()),
-    setUserId: (userId) => dispatch(setUserId(userId)),
-    userProfileFetchData: () => dispatch(userProfileFetchData()),
-    accountsFetchData: () => dispatch(accountsFetchData())
+  return {  
+    setUserId: (userId) => dispatch(setUserId(userId)), 
+    fetchSiteData: ()=>dispatch(fetchSiteData())  
   }
 }
+
 
 
 function Admin({ ...rest }) {
@@ -134,14 +134,17 @@ function Admin({ ...rest }) {
       
     }
   }
+
+  
   //preload critical data into the application
-  const {fetchUsersData, fetchRoles, userProfileFetchData, accountsFetchData} = rest
+  const {fetchSiteData} = rest
   React.useEffect(() => {
-    fetchUsersData()
-    accountsFetchData()
-    fetchRoles()
-    userProfileFetchData()
-  }, [fetchUsersData, fetchRoles,userProfileFetchData, accountsFetchData])
+    fetchSiteData()
+  
+    
+  }, [fetchSiteData])
+
+  
 
   return (
     <div className={classes.wrapper}>

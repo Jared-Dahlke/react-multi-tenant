@@ -19,7 +19,7 @@ const settingsRoutes = [
   },
   {
     path: "/settings/accounts",
-    name: "Accounts",
+    name: "Account Profile",
     icon: AccountTree,
     component: TableList,
     layout: "/admin"

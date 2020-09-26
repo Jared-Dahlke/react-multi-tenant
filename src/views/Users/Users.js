@@ -34,13 +34,14 @@ const mapStateToProps = (state) => {
     users: state.users.data,
     hasErrored: state.usersHasErrored,
     userDeleted: state.userDeleted,
-    userDeletedError: state.userDeletedError
+    userDeletedError: state.userDeletedError,
+    currentAccount: state.currentAccount
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsersData: () => dispatch(usersFetchData()),
+    fetchUsersData: (currentAccountId) => dispatch(usersFetchData(currentAccountId)),
     deleteUser: (userId) => dispatch(deleteUser(userId))
   }
 }
@@ -55,8 +56,12 @@ function Users(props) {
 
   const {fetchUsersData} = props
 
+  console.log(props)
+
+  const currentAccountId = localStorage.getItem('currentAccountId')
+
   React.useEffect(() => { 
-    fetchUsersData()
+    fetchUsersData(currentAccountId)
   }, [fetchUsersData])
 
 

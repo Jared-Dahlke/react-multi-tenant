@@ -18,6 +18,7 @@ import styles from "../../assets/jss/material-dashboard-react/components/sidebar
 import Settings from '@material-ui/icons/Settings'
 import PieChart from '@material-ui/icons/PieChart'
 import SettingsRoutes from '../../routes'
+import AccountDropdown from '../../components/AccountDropdown'
 
 const useStyles = makeStyles(styles);
 
@@ -198,6 +199,9 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
+         
+         
+
           <div className={classes.sidebarWrapper}>
              <AdminNavbarLinks />
             {links}
@@ -222,6 +226,7 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
+          
           <div className={classes.sidebarWrapper}>{links}</div>
           {image !== undefined ? (
             <div
