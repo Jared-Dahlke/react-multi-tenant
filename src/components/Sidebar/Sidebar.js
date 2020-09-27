@@ -108,6 +108,11 @@ export default function Sidebar(props) {
                     [" " + classes[color]]: activeRoute(setting.layout + setting.path)
                   });
 
+                  let itemClass = classes.nestedItemLink
+                  if(setting.path === '/settings/users' || setting.path === '/settings/rolesPermissions' || setting.path === '/settings/brandProfiles') {
+                    itemClass = classes.subNestedItemLink
+                  }
+
                   return (
 
                     <NavLink
@@ -117,7 +122,7 @@ export default function Sidebar(props) {
                       key={key}          
                     >
 
-                      <ListItem button inset="true" className={classes.nestedItemLink + subListItemClasses}>
+                      <ListItem button inset="true" className={itemClass + subListItemClasses}>
                         
                         
 

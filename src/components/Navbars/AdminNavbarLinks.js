@@ -17,6 +17,7 @@ import Button from "../CustomButtons/Button.js"
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 import {setAuthToken, setLoggedIn} from '../../redux/actions/auth.js'
 import AccountDropdown from '../../components/AccountDropdown'
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles(styles);
 
@@ -64,6 +65,11 @@ function AdminNavbarLinks(props) {
     props.setAuthToken(null);
     props.setLoggedIn(false)
   };
+
+  const goToProfile=()=>{
+
+  }
+
   return (
     <div>
       
@@ -188,12 +194,14 @@ function AdminNavbarLinks(props) {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
+                    <Link to="/admin/settings/profile" style={{ textDecoration: 'none' }}>
                     <MenuItem
                       onClick={handleCloseProfile}
                       className={classes.dropdownItem}
                     >
                       Profile
                     </MenuItem>
+                    </Link>
                     <MenuItem
                       onClick={handleCloseProfile}
                       className={classes.dropdownItem}

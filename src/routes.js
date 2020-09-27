@@ -15,14 +15,16 @@ const settingsRoutes = [
     name: "My Profile",
     icon: Person,
     component: UserProfile,
-    layout: "/admin"
+    layout: "/admin",
+    hide: true
   },
   {
     path: "/settings/accounts",
-    name: "Account Profile",
+    name: "Account",
     icon: AccountTree,
     component: TableList,
-    layout: "/admin"
+    layout: "/admin",
+    hide: true
   },
   {
     path: "/settings/users",
@@ -40,7 +42,7 @@ const settingsRoutes = [
   },
   {
     path: "/settings/brandProfiles",
-    name: "Brand Profiles",
+    name: "Profiles",
     icon: Business,
     component: RolesPermissions,
     layout: "/admin"
