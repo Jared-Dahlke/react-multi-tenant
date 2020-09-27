@@ -1,15 +1,16 @@
 import {
  
   ACCOUNTS_FETCH_DATA_SUCCESS,
-  SET_CURRENT_ACCOUNT_ID
+  SET_CURRENT_ACCOUNT_ID,
+  SET_CURRENT_ACCOUNT
   
 } from "../action-types/accounts";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
 import config from "../../config.js";
 import {userProfileFetchData} from '../actions/auth'
-import {usersFetchData} from '../actions/users'
-import {rolesFetchData} from '../actions/roles'
+import {usersFetchData, usersFetchDataSuccess} from '../actions/users'
+import {rolesFetchData, rolesFetchDataSuccess} from '../actions/roles'
 import {findAccountNodeByAccountId} from '../../utils'
 //import { Account } from "../../models/user";
 
@@ -59,6 +60,18 @@ export function accountsFetchData() {
       //dispatch(usersHasErrored(true));
     }
   };
+}
+
+export function clearSiteData() {
+  return (dispatch) => {
+
+    dispatch(accountsFetchDataSuccess({}));
+    dispatch(setCurrentAccountId(null))
+    dispatch(usersFetchDataSuccess({}))
+    dispatch(rolesFetchDataSuccess({}))
+
+  }
+  
 }
 
 

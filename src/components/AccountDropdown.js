@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Card from './Card/Card'
 import CardBody from './Card/CardBody'
 import CustomInput from './CustomInput/CustomInput';
-import {fetchSiteData} from '../redux/actions/accounts'
+import {fetchSiteData, clearSiteData} from '../redux/actions/accounts'
 import {findAccountNodeByAccountId} from '../utils'
 
 const useStyles = makeStyles({
@@ -49,7 +49,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchSiteData: (accountId) => dispatch(fetchSiteData(accountId))
+    fetchSiteData: (accountId) => dispatch(fetchSiteData(accountId)),
+    clearSiteData: ()=> dispatch(clearSiteData())
   }
 }
 
@@ -130,6 +131,8 @@ const Tree = (props)=>{
 function SimplePopover(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedAccountName, setSelectedAccountName] = React.useState('');
+
 
   //popover stuff:
   const handleClick = (event) => {
@@ -155,9 +158,14 @@ function SimplePopover(props) {
 
   const handleSelect = (event, accountId) => {
     event.persist()
+    
     let iconClicked = event.target.closest(".MuiTreeItem-iconContainer")
     if(!iconClicked) {
       setSelected(accountId);
+      setSelectedAccountName(event.target.textContent)
+      setAnchorEl(null);
+      props.clearSiteData()
+      
       props.fetchSiteData(accountId)
     }
   };
@@ -165,22 +173,16 @@ function SimplePopover(props) {
   const open = Boolean(anchorEl);
   const id = open ? 'accounts-popover' : undefined;
 
-  //const [selectedAccount, setSelectedAccount] = React.useState([])
-
   let accountId = props.currentAccountId
   if(!accountId){
     accountId = localStorage.getItem('currentAccountId')
   }
- 
-  let selectedAccount = ''
-  if(props.accounts.data) {
-    selectedAccount = findAccountNodeByAccountId(accountId, props.accounts.data)
-  }
 
-  let selectedAccountName = ''
-  if (selectedAccount) {
-    selectedAccountName = selectedAccount.accountName
+  if(selectedAccountName.length < 1 && props.accounts && props.accounts.data) {
+    setSelectedAccountName(props.accounts.data[0].accountName)
   }
+ 
+
   
 
   return (
