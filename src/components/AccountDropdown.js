@@ -14,6 +14,7 @@ import Card from './Card/Card'
 import CardBody from './Card/CardBody'
 import CustomInput from './CustomInput/CustomInput';
 import {fetchSiteData} from '../redux/actions/accounts'
+import {findAccountNodeByAccountId} from '../utils'
 
 const useStyles = makeStyles({
   root: {
@@ -139,18 +140,6 @@ function SimplePopover(props) {
     setAnchorEl(null);
   };
 
-  
-
-  function findNode (accountId, array) {
-    for (const node of array) {
-      if (node.accountId == accountId) return node;
-      if (node.children) {
-        const child = findNode(accountId, node.children);
-        if (child) return child;
-      }
-    }
-  }
-
 
   //tree stuff:
   const [expanded, setExpanded] = React.useState([]);
@@ -185,15 +174,13 @@ function SimplePopover(props) {
  
   let selectedAccount = ''
   if(props.accounts.data) {
-    selectedAccount = findNode(accountId, props.accounts.data)
+    selectedAccount = findAccountNodeByAccountId(accountId, props.accounts.data)
   }
 
   let selectedAccountName = ''
   if (selectedAccount) {
     selectedAccountName = selectedAccount.accountName
   }
-    
-  
   
 
   return (

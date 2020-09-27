@@ -56,11 +56,22 @@ export function usersFetchData(accountId) {
       let params = {     
         roles: true
       }
-     
 
-      const result = await axios.get(url, {
-        params,
-      });
+      let result = []
+     
+      try {
+
+        result = await axios.get(url, {
+          params,
+        });
+
+      } catch (error) {
+        console.log(error)
+        if(result.status === 401) {
+          handleError(dispatch, result.status);
+        }
+      }
+      
 
       if (result.status === 200) {
         let users = { data: [] };
