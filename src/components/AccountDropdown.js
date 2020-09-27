@@ -87,8 +87,8 @@ const Tree = (props)=>{
             key={item.accountId} 
             nodeId={String(item.accountId)} 
             label={item.accountName} 
-           
-           
+            //onIconClick={(event) => {event.preventDefault();}}
+           //onLabelClick={(event) => {event.preventDefault();}}
           >
             {loop(item.children)}
           </StyledTreeItem>
@@ -100,7 +100,7 @@ const Tree = (props)=>{
         nodeId={String(item.accountId)} 
         key={item.accountId} 
         label={item.accountName} 
-      
+        //onLabelClick={props.handleSelect}
       />
       )
   })
@@ -118,6 +118,7 @@ const Tree = (props)=>{
       selected={props.selected}
       onNodeToggle={props.handleToggle}
       onNodeSelect={props.handleSelect}
+      
     >
       {props.data && props.data.length > 0 && loop(props.data)}
       
@@ -158,13 +159,20 @@ function SimplePopover(props) {
   const [selected, setSelected] = React.useState([]);
 
   const handleToggle = (event, nodeIds) => {
-    setExpanded(nodeIds);
+    event.persist()
+    let iconClicked = event.target.closest(".MuiTreeItem-iconContainer")
+    if(iconClicked) {
+      setExpanded(nodeIds);
+    }
   };
 
   const handleSelect = (event, accountId) => {
-    setSelected(accountId);
-    props.fetchSiteData(accountId)
-    console.log(accountId)
+    event.persist()
+    let iconClicked = event.target.closest(".MuiTreeItem-iconContainer")
+    if(!iconClicked) {
+      setSelected(accountId);
+      props.fetchSiteData(accountId)
+    }
   };
 
   const open = Boolean(anchorEl);
@@ -183,10 +191,13 @@ function SimplePopover(props) {
     <div>
       <div aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
         <CustomInput        
-        formControlProps={{fullWidth: true}} 
-        labelText={'Selected Account'} 
-        inputProps={{value: selectedAccountName, disabled: true}}
-        valueColor={primaryColor[0]}
+          formControlProps={{fullWidth: true}} 
+          labelProps={{
+            shrink: true
+          }}
+          labelText={'Selected Account'} 
+          inputProps={{value: selectedAccountName, disabled: true}}
+          valueColor={primaryColor[0]}
         />
        
       </div>
