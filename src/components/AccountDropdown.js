@@ -139,18 +139,16 @@ function SimplePopover(props) {
     setAnchorEl(null);
   };
 
-  const getAccountName=(accountId)=>{
-    if (props.accounts && props.accounts.data && props.accounts.data.length >  0){
-      for (const account of props.accounts.data) {
-        if(account.accountId == accountId) {
-          return account.accountName
-        }
-      }
+  
 
-    } else {
-      return ''
+  function findNode (accountId, array) {
+    for (const node of array) {
+      if (node.accountId == accountId) return node;
+      if (node.children) {
+        const child = findNode(accountId, node.children);
+        if (child) return child;
+      }
     }
-    
   }
 
 
@@ -185,7 +183,18 @@ function SimplePopover(props) {
     accountId = localStorage.getItem('currentAccountId')
   }
  
-  const selectedAccountName = getAccountName(accountId)
+  let selectedAccount = ''
+  if(props.accounts.data) {
+    selectedAccount = findNode(accountId, props.accounts.data)
+  }
+
+  let selectedAccountName = ''
+  if (selectedAccount) {
+    selectedAccountName = selectedAccount.accountName
+  }
+    
+  
+  
 
   return (
     <div>
@@ -196,7 +205,10 @@ function SimplePopover(props) {
             shrink: true
           }}
           labelText={'Selected Account'} 
-          inputProps={{value: selectedAccountName, disabled: true}}
+          inputProps={{
+            value: selectedAccountName, 
+            disabled: true
+          }}
           valueColor={primaryColor[0]}
         />
        
