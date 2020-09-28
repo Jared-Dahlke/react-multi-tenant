@@ -22,7 +22,7 @@ axios.interceptors.response.use(response => {
   return response;
 }, error => {
   if (error.response.status === 401) {
-  
+    
     const store = configureStore()
     localStorage.removeItem('token')
     localStorage.removeItem('userId')

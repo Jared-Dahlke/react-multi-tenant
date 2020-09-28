@@ -178,7 +178,13 @@ export const deleteUser = (userId) => {
 
 
 export const createUser = (user) => {
-  user.password = 'testasdfa!'
+  
+  if(user.password && user.password.length > 0) {
+    
+  } else {
+    user.password = 'testasdfa!'
+  }
+  
   
   delete user.userId
   delete user.internal
@@ -186,11 +192,17 @@ export const createUser = (user) => {
   user.phoneNumber= '123123123'
   //user.roles=[{roleId: 11},{roleId: 12}]
 
+  console.log('here')
+  console.log(user)
+
   let url =  apiBase + `/user`
   return (dispatch) => {
+    console.log('after dispatch')
     dispatch(usersAddUser(user));
+    console.log('after')
     axios.post(url, user)
       .then(response => {
+        console.log(response)
         dispatch(userAdded(true))
         setTimeout(() => {
           dispatch(userAdded(false))

@@ -7,19 +7,16 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import axios from 'axios';
 import {setAuthToken} from '../redux/actions/auth.js'
 import PasswordRequirements from '../components/CustomPasswordRequirements/CustomPasswordRequirements'
 import CustomInput from '../components/CustomInput/CustomInput'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import logo from '../assets/img/sightly_icon.png'
 import {logoStyle} from '../assets/jss/material-dashboard-react'
-import config from '../config.js'
 import { whiteColor } from "../assets/jss/material-dashboard-react";
-import {createUser} from '../redux/actions/users'
+import {register} from '../redux/actions/auth'
 const queryString = require('query-string');
 
-const apiBase = config.apiGateway.MOCKURL;
 
 const mapStateToProps = (state) => {
   return { 
@@ -30,7 +27,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setAuthToken: (authToken) => dispatch(setAuthToken(authToken)),
-    createUser: (user)=> dispatch(createUser(user))
+    register: (user)=> dispatch(register(user))
   }
 }
 
@@ -66,37 +63,50 @@ function Signup(props) {
   const adminClasses = useAdminStyles()
 
   const parsed = queryString.parse(props.location.search)
+
   const [fromInvite] = useState(!!parsed.fromInvite)
-  const [email, setEmail] = useState(parsed.email);
+
+  let initialEmail = 'adfad@mytest.com'
+  if(fromInvite) {
+    initialEmail = parsed.email
+  }
+  const [email, setEmail] = useState(initialEmail);
   const [firstName, setFirstName] = useState(parsed.firstName)
   const [lastName, setLastName] = useState(parsed.lastName)
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("adsfadsffa3D!");
   const [isLoggedIn, setLoggedIn] = useState(false);
 
-  async function register () {
-    let url = apiBase + '/register'
-    var result = null;
-    try {
-
-      result = await axios.post(url, {
+  const postRegister= (event)=> {
+    event.preventDefault()
+   // try {
+      let user = {
         email,
         password
-      })
-
-      if (result.status === 200) {
-        props.setAuthToken(result.data.token);
-        localStorage.setItem("token", result.data.token);
-        setLoggedIn(true)
       }
 
-    } catch (err) {
-      alert(err.response.data.error)
-    }
+      try{
+        props.register(user)
+      }
+      catch(err) {
+        alert(err)
+      }
+      
+
+      //if (result.status === 200) {
+      //  props.setAuthToken(result.data.token);
+      //  localStorage.setItem("token", result.data.token);
+     //   setLoggedIn(true)
+     // }
+
+   // } catch (err) {
+   //   console.log('error in signup page')
+   //   alert(err)
+   // }
   }
 
-  if (isLoggedIn) {
-    return <Redirect to='/admin/profile' />;
-  }
+  //if (isLoggedIn) {
+    //return <Redirect to='/admin/profile' />;
+  //}
 
   return (
     <div className={adminClasses.authPanel}>
@@ -162,7 +172,7 @@ function Signup(props) {
             </Grid>
             
             <Grid item xs={12}>
-              <form>
+             
                 <CustomInput
                   labelText="Password"
                   id="password"
@@ -177,7 +187,7 @@ function Signup(props) {
                   }}
                   handleClear={()=>setPassword('')}                  
                 />
-              </form>
+              
             </Grid>
 
             <Grid item xs={12}>
@@ -190,9 +200,9 @@ function Signup(props) {
           </Grid>
 
           <Button     
-            id="register"  
+          
             color="primary"         
-            onClick={register}
+            onClick={postRegister}
             fullWidth={true}
             style={{marginTop:'10px'}}
           >
