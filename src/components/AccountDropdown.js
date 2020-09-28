@@ -204,6 +204,7 @@ function SimplePopover(props) {
           labelProps={{
             shrink: true
           }}
+          bigFont ={true} 
           labelText={'Selected Account'} 
           inputProps={{
             value: nameToUse, 

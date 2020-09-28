@@ -20,6 +20,7 @@ import { userProfileFetchData } from "../../redux/actions/auth.js";
 import { connect } from "react-redux";
 import { updateUserData } from "../../redux/actions/users.js";
 
+import {FormLoader} from '../../components/SkeletonLoader'
 
 const styles = {
   cardCategoryWhite: {
@@ -52,6 +53,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     token: state.authToken,
+    userProfileIsLoading: state.userProfileIsLoading
   };
 };
 
@@ -80,6 +82,7 @@ const passwordDefaultState = {
 function UserProfile({
   fetchUserProfile,
   updateUserData,
+  userProfileIsLoading,
   user: { userProfile, loading },
 }) {
 
@@ -163,8 +166,10 @@ function UserProfile({
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-           
+          {!userProfileIsLoading ?
+          <div>
             <CardBody>
+              
               <GridContainer>
                 <GridItem xs={12} sm={12} md={5}>
                   <CustomInput
@@ -246,6 +251,8 @@ function UserProfile({
               </GridContainer>
               <GridContainer></GridContainer>
             </CardBody>
+           
+
             <CardFooter>
               {edit && (
                 <Button color="primary" onClick={disableEdit}>
@@ -270,6 +277,10 @@ function UserProfile({
                 // close
               />
             </CardFooter>
+            </div>
+             :
+             <FormLoader/>
+           }
           </Card>
         </GridItem>
 

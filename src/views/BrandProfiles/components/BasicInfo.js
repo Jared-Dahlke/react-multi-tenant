@@ -6,7 +6,7 @@ import CustomTree from '../../../components/Tree/CustomTree'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import * as v from '../../../validations'
 import { whiteColor, grayColor } from '../../../assets/jss/material-dashboard-react.js';
-import {Field} from 'formik'
+import {Field, Formik} from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 
 const dummyVerticals = [
@@ -25,13 +25,31 @@ const dummyVerticals = [
 
 export default function BasicInfo (props) {
 
+  console.log('basic info props')
+  console.log(props.masterFormik)
+
   const [checkedKeys, setCheckedKeys] = React.useState([])
  
   const onCheck = checkedKeys => {
     setCheckedKeys(checkedKeys)
   }
 
+  props.masterFormik.isValid = true
+
   return (
+    <Formik
+      validateOnMount={true}
+      initialValues={{
+        
+        basicInfoProfileName: '',
+        basicInfoWebsiteUrl: '',
+        basicInfoTwitterProfile: ''
+               
+    }}
+      
+    > 
+   
+    
     
     <div>
       <GridContainer>
@@ -79,7 +97,6 @@ export default function BasicInfo (props) {
             }}
           />
 
-          {/*<FormHelperText id="my-helper-text">{'https://twitter.com/' + props.basicInfo.twitterProfile}</FormHelperText>*/}
         </GridItem>
       </GridContainer>
       <GridContainer>
@@ -96,20 +113,12 @@ export default function BasicInfo (props) {
             checkedKeys={checkedKeys}
           />
 
-          {/**<CustomTree
-                        data={props.accounts.data}
-                        title='Account Access'
-                        keyProp='accountId'
-                        labelProp='accountName'
-                        valueProp='accountId'
-                        search={true}
-                        treeContainerHeight={150}
-                        onCheck={onCheck}
-                        checkedKeys={checkedKeys}
-                      /> */}
+       
         </GridItem>
       </GridContainer>
-    </div>
+     </div>
     
+    </Formik>
+
   )
 }

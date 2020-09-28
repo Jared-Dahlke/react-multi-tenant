@@ -12,6 +12,7 @@ import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-da
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
 import {Formik, Form} from 'formik'
+import {Debug} from '../Debug'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -128,9 +129,7 @@ function CreateBrandProfiles (props) {
       validateOnMount={true}
       initialValues={{
         
-          basicInfoProfileName: '',
-          basicInfoWebsiteUrl: '',
-          basicInfoTwitterProfile: ''
+         
                  
       }}
       // user this for form level validation (pros: can validate against different fields, cons: slower)
@@ -185,15 +184,15 @@ function CreateBrandProfiles (props) {
         })}
       </Stepper>
 
+      <Debug/>
+
       <Card >
         
         <CardBody>
 
           {activeStep === 0 ?
-          <div>
-            <Form name="form1">
-              <BasicInfo basicInfo={basicInfo}/> 
-            </Form>
+          <div>         
+            <BasicInfo basicInfo={basicInfo} masterFormik={formik}/>            
           </div>
             : activeStep === 1 ?
               <TopCompetitors/>

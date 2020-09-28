@@ -1,4 +1,4 @@
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER, SET_USER_ID} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER, SET_USER_ID, USER_PROFILE_IS_LOADING} from '../action-types/auth'
 import {User} from '../../models/user'
 
 let newUser = new User(' ', ' ', ' ', ' ', ' ', ' ', [], [])
@@ -14,6 +14,16 @@ export function authToken(state = null, action) {
   switch (action.type) {
   case SET_AUTH_TOKEN:
     return action.payload;
+  default:
+    return state;
+  }
+}
+
+
+export function userProfileIsLoading(state = true, action) {
+  switch (action.type) {
+  case USER_PROFILE_IS_LOADING:
+    return action.userProfileIsLoading;
   default:
     return state;
   }

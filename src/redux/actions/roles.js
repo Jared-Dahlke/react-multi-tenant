@@ -1,5 +1,5 @@
 //import axios from 'axios';
-import {ROLES_HAS_ERRORED, ROLES_PERMISSIONS_HAS_ERRORED, ROLES_IS_LOADING, ROLES_FETCH_DATA_SUCCESS, ROLES_PERMISSIONS_FETCH_DATA_SUCCESS} from '../action-types/roles'
+import {ROLES_HAS_ERRORED, ROLES_PERMISSIONS_HAS_ERRORED, ROLES_IS_LOADING, ROLES_PERMISSIONS_IS_LOADING, ROLES_FETCH_DATA_SUCCESS, ROLES_PERMISSIONS_FETCH_DATA_SUCCESS} from '../action-types/roles'
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 import config from '../../config'
@@ -21,6 +21,13 @@ export function rolesPermissionsHasErrored(bool) {
 export function rolesIsLoading(bool) {
   return {
     type: ROLES_IS_LOADING,
+    isLoading: bool
+  };
+}
+
+export function rolesPermissionsIsLoading(bool) {
+  return {
+    type: ROLES_PERMISSIONS_IS_LOADING,
     isLoading: bool
   };
 }
@@ -65,13 +72,17 @@ export function rolesFetchData(accountId) {
 export function rolesPermissionsFetchData(accountId) {
   return async (dispatch) => {
 
+   // dispatch(rolesPermissionsIsLoading(true));
+
     try {
 
 
       let url =  apiBase + `/account/${accountId}/roles?permissions=true`
-      const result = await axios.get(url)       
+      const result = await axios.get(url)  
+         
       if (result.status === 200) {
         dispatch(rolesPermissionsFetchDataSuccess(result))
+        dispatch(rolesPermissionsIsLoading(false));  
       }
 
     }

@@ -1,10 +1,20 @@
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER, USERS_ADD_USER, USER_ADDED} from '../action-types/users'
+import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER, USERS_ADD_USER, USER_ADDED, USERS_IS_LOADING} from '../action-types/users'
 
 
 export function usersHasErrored(state = false, action) {
   switch (action.type) {
   case USERS_HAS_ERRORED:
     return action.hasErrored;
+  default:
+    return state;
+  }
+}
+
+
+export function usersIsLoading(state = true, action) {
+  switch (action.type) {
+  case USERS_IS_LOADING:
+    return action.usersIsLoading;
   default:
     return state;
   }
