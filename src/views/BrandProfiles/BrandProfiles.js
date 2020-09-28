@@ -137,7 +137,7 @@ function BrandProfiles(props) {
             
          
 
-            {props.brandProfiles ?
+            {props.brandProfiles && props.brandProfiles.length > 0 ?
             
 
               <Table className={classes.table}>

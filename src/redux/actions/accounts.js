@@ -10,7 +10,8 @@ import handleError from "../../errorHandling";
 import config from "../../config.js";
 import {userProfileFetchData} from '../actions/auth'
 import {usersFetchData, usersFetchDataSuccess} from '../actions/users'
-import {rolesFetchData, rolesFetchDataSuccess} from '../actions/roles'
+import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesPermissionsFetchDataSuccess} from '../actions/roles'
+import {brandProfilesFetchDataSuccess, fetchBrandProfiles} from '../actions/brandProfiles'
 import {findAccountNodeByAccountId} from '../../utils'
 //import { Account } from "../../models/user";
 
@@ -32,8 +33,15 @@ export function setCurrentAccountId(accountId) {
   };
 }
 
-export function accountsFetchData() {
-  let url = apiBase + "/user/207/accounts";
+export function setCurrentAccount(accountId) {
+  return {
+    type: SET_CURRENT_ACCOUNT,
+    accountId,
+  };
+}
+
+export function accountsFetchData(userId) {
+  let url = apiBase + `/user/${userId}/accounts`;
   return async (dispatch) => {
     try {
       
@@ -62,13 +70,17 @@ export function accountsFetchData() {
   };
 }
 
+
+
 export function clearSiteData() {
   return (dispatch) => {
 
-    dispatch(accountsFetchDataSuccess({}));
+    dispatch(accountsFetchDataSuccess([]));
     dispatch(setCurrentAccountId(null))
-    dispatch(usersFetchDataSuccess({}))
-    dispatch(rolesFetchDataSuccess({}))
+    dispatch(usersFetchDataSuccess([]))
+    dispatch(rolesFetchDataSuccess([]))
+    dispatch(rolesPermissionsFetchDataSuccess([]))
+    dispatch(brandProfilesFetchDataSuccess([]))
 
   }
   
@@ -126,10 +138,13 @@ export function fetchSiteData(accountId) {
       }
 
       localStorage.setItem('currentAccountId', accountId)
+      dispatch(setCurrentAccount(accountId))
       dispatch(setCurrentAccountId(accountId))
       dispatch(userProfileFetchData())
       dispatch(usersFetchData(accountId))
+      dispatch(rolesPermissionsFetchData(accountId))
       dispatch(rolesFetchData(accountId))
+      dispatch(fetchBrandProfiles(accountId))
 
     } catch (error) {
       console.log('caught in account action')

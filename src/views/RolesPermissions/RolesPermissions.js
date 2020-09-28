@@ -54,7 +54,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchRolesPermissions: () => dispatch(rolesPermissionsFetchData())
+    fetchRolesPermissions: (accountId) => dispatch(rolesPermissionsFetchData(accountId))
   }
 }
 
@@ -69,7 +69,8 @@ function RolesPermissions(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    fetchRolesPermissions()
+    let currentAccountId = localStorage.getItem('currentAccountId')
+    fetchRolesPermissions(currentAccountId)
   }, [fetchRolesPermissions])
 
 
@@ -94,7 +95,7 @@ function RolesPermissions(props) {
           
           <CardBody>
 
-              {props.rolesPermissions ?
+              {props.rolesPermissions && props.rolesPermissions.length > 0 ?
               
               
             

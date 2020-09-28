@@ -70,7 +70,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchRoles: () => dispatch(rolesFetchData()),
     addNewUser: (user) => dispatch(inviteUser(user))
   }
 }
@@ -80,7 +79,7 @@ function CreateUser  (props) {
  
 
   const classes = useStyles()
-  const [selectedRoles, setSelectedRoles] = React.useState([11])
+  const [selectedRoles, setSelectedRoles] = React.useState([])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
   const [email, setEmail] = React.useState('test@xyz.com')
   const [firstName, setFirstName] = React.useState('testFirst')

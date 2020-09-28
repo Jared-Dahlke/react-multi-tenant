@@ -5,10 +5,19 @@ import GridContainer from "../../components/Grid/GridContainer.js";
 import Table from "../../components/Table/Table.js";
 import Card from "../../components/Card/Card.js";
 import CardBody from "../../components/Card/CardBody.js";
+import {connect} from 'react-redux'
+
+const mapStateToProps = (state) => {
+  return {
+    accounts: state.accounts
+  };
+};
 
 
 
-export default function TableList() {
+function TableList(props) {
+
+  
 
   return (
     <GridContainer>
@@ -20,10 +29,12 @@ export default function TableList() {
             
             CURRENT ACCOUNT INFORMATION
 
-            -name   -budget -etc..... (basic info)
+            <pre>{JSON.stringify(props.accounts.data,null,2)}</pre>
           </CardBody>
         </Card>
       </GridItem>
     </GridContainer>
   );
 }
+
+export default connect(mapStateToProps, null)(TableList);

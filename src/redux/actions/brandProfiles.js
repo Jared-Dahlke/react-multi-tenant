@@ -21,9 +21,11 @@ export function brandProfilesFetchDataSuccess(brandProfiles) {
   };
 }
 
-export function fetchBrandProfiles() {
 
-  //let url =  apiBase + '/brandProfiles'
+
+export function fetchBrandProfiles(accountId) {
+
+  //let url =  apiBase + '/brandProfiles/accountId'
   return async (dispatch) => {
     try {
 

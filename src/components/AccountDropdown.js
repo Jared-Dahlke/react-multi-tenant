@@ -14,7 +14,7 @@ import Card from './Card/Card'
 import CardBody from './Card/CardBody'
 import CustomInput from './CustomInput/CustomInput';
 import {fetchSiteData, clearSiteData} from '../redux/actions/accounts'
-import {findAccountNodeByAccountId} from '../utils'
+import {getCurrentAccount} from '../utils'
 
 const useStyles = makeStyles({
   root: {
@@ -165,7 +165,6 @@ function SimplePopover(props) {
       setSelectedAccountName(event.target.textContent)
       setAnchorEl(null);
       props.clearSiteData()
-      
       props.fetchSiteData(accountId)
     }
   };
@@ -178,11 +177,25 @@ function SimplePopover(props) {
     accountId = localStorage.getItem('currentAccountId')
   }
 
-  if(selectedAccountName.length < 1 && props.accounts && props.accounts.data) {
-    setSelectedAccountName(props.accounts.data[0].accountName)
-  }
- 
+  //if(selectedAccountName.length < 1 && props.accounts && props.accounts.data) {
+  //  setSelectedAccountName(props.accounts.data[0].accountName)
+  //}
 
+  let ca =  {accountName: ''}
+  let nameToUse = selectedAccountName
+  if (props.accounts.data) {
+    ca = getCurrentAccount(props.accounts.data)
+    console.log('ca')
+    console.log(ca)
+    if(ca) {
+      nameToUse = ca.accountName
+    }
+    
+  }
+
+  
+ 
+  //console.log('selected blah:' + selectedBlah)
   
 
   return (
@@ -195,7 +208,7 @@ function SimplePopover(props) {
           }}
           labelText={'Selected Account'} 
           inputProps={{
-            value: selectedAccountName, 
+            value: nameToUse, 
             disabled: true
           }}
           valueColor={primaryColor[0]}

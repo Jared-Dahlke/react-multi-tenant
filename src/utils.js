@@ -7,3 +7,25 @@ export function findAccountNodeByAccountId (accountId, array) {
     }
   }
 }
+
+export function markAllAccountsAsCurrentFalse (array) {
+  for (const node of array) {
+    node.current = false
+    if (node.children) {     
+        markAllAccountsAsCurrentFalse(node.children)     
+    }
+  }
+}
+
+export function getCurrentAccount (accounts) {
+ // console.log('get current account')
+ if (accounts) {
+  for (var i = 0; i < accounts.length; i++) {
+      if (accounts[i].current == true) {
+          return accounts[i];
+      }
+      var found = getCurrentAccount(accounts[i].children);
+      if (found) return found;
+  }
+}
+}
