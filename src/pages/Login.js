@@ -10,9 +10,7 @@ import {login} from '../redux/actions/auth.js'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import { whiteColor } from "../assets/jss/material-dashboard-react.js";
 import CustomInput from '../components/CustomInput/CustomInput'
-import logo from "../assets/img/sightly_icon.png";
 import svgLogo from '../assets/img/sightly-logo.svg'
-import sightlyFull from '../assets/img/sightly_full.png'
 import {logoStyle} from '../assets/jss/material-dashboard-react'
 
 const mapStateToProps = (state) => {
@@ -80,7 +78,7 @@ function Login(props) {
         
         <div className={classes.paper} >
 
-         <img src={svgLogo} alt="logo" style={logoStyle} />
+          <img src={svgLogo} alt="logo" style={logoStyle} />
          
          
           <form className={classes.form} noValidate>

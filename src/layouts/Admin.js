@@ -16,13 +16,10 @@ import Users from "../views/Users/Users";
 import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
 
-
 // Redux
 import { connect } from "react-redux";
-import {usersFetchData} from '../redux/actions/users.js'
-import {rolesFetchData} from '../redux/actions/roles.js'
-import {userProfileFetchData, setUserId} from '../redux/actions/auth.js'
-import {accountsFetchData, fetchSiteData} from '../redux/actions/accounts.js'
+import {setUserId} from '../redux/actions/auth.js'
+import {fetchSiteData} from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
 import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
@@ -140,8 +137,6 @@ function Admin({ ...rest }) {
   const {fetchSiteData} = rest
   React.useEffect(() => {
     fetchSiteData()
-  
-    
   }, [fetchSiteData])
 
   

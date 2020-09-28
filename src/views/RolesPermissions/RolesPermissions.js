@@ -17,7 +17,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { blackColor, whiteColor, grayColor, grayCardHeader, primaryColor } from "../../assets/jss/material-dashboard-react.js";
+import { blackColor, whiteColor, grayColor, primaryColor } from "../../assets/jss/material-dashboard-react.js";
 
 const useMStyles = makeStyles((theme) => ({
   root: {
@@ -95,10 +95,10 @@ function RolesPermissions(props) {
           
           <CardBody>
 
-              {props.rolesPermissions && props.rolesPermissions.length > 0 ?
-              
-              
+            {props.rolesPermissions && props.rolesPermissions.length > 0 ?
             
+            
+          
               <div className={mclasses.root}>
                 {props.rolesPermissions && props.rolesPermissions.length > 0 && props.rolesPermissions.map(role=>{
                   return (
@@ -115,42 +115,42 @@ function RolesPermissions(props) {
                       </AccordionSummary>
 
                       <AccordionDetails>
-                      <Table className={classes.table}>
-                        <TableHead className={tableClasses["primaryTableHeader"]}>
-                          <TableRow className={tableClasses.tableHeadRow}>
-                            {headers.map((prop, key) => {
-                              return (
-                                <TableCell
-                                  className={tableClasses.tableCell + " " + tableClasses.tableHeadCell}
-                                  key={key}
-                                >
-                                  {prop}
-                                </TableCell>
-                              );
-                            })}
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {role.permissions && role.permissions.length > 0 && role.permissions.map(permission=> (
+                        <Table className={classes.table}>
+                          <TableHead className={tableClasses["primaryTableHeader"]}>
+                            <TableRow className={tableClasses.tableHeadRow}>
+                              {headers.map((prop, key) => {
+                                return (
+                                  <TableCell
+                                    className={tableClasses.tableCell + " " + tableClasses.tableHeadCell}
+                                    key={key}
+                                  >
+                                    {prop}
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {role.permissions && role.permissions.length > 0 && role.permissions.map(permission=> (
 
-                            <TableRow key={role.roleId} className={classes.tableRow}>
+                              <TableRow key={role.roleId} className={classes.tableRow}>
 
-                            <TableCell className={tableCellClasses}>{permission.moduleName}</TableCell>
-                            <TableCell className={tableCellClasses}>{permission.permissionName}</TableCell>
-                            <TableCell className={tableCellClasses}>{permission.permissionDescription}</TableCell>
+                                <TableCell className={tableCellClasses}>{permission.moduleName}</TableCell>
+                                <TableCell className={tableCellClasses}>{permission.permissionName}</TableCell>
+                                <TableCell className={tableCellClasses}>{permission.permissionDescription}</TableCell>
 
 
-                          </TableRow>
+                              </TableRow>
 
-                          )
-                          
+                            )
+                              
 
-                        )}
-                        </TableBody>
-                      </Table>
-                    </AccordionDetails>
+                            )}
+                          </TableBody>
+                        </Table>
+                      </AccordionDetails>
 
-                  </Accordion>
+                    </Accordion>
 
                   )
                   
@@ -159,10 +159,10 @@ function RolesPermissions(props) {
 
                 })}
               </div>   
+            
               
-                
-              
-              
+            
+            
 
               :
 

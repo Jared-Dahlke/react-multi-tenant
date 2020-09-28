@@ -11,7 +11,7 @@ export function accounts(state = [], action) {
     markAllAccountsAsCurrentFalse(newAccounts)
     let account = findAccountNodeByAccountId(action.accountId, newAccounts)
     account.current = true
-    accounts = {data: newAccounts}
+    let accounts = {data: newAccounts}
     return accounts;
   default:
     return state;

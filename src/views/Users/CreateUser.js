@@ -9,20 +9,15 @@ import Card from "../../components/Card/Card.js"
 import CardBody from "../../components/Card/CardBody.js"
 import CardFooter from "../../components/Card/CardFooter.js"
 import {connect} from 'react-redux'
-import {rolesFetchData} from '../../redux/actions/roles'
 import {inviteUser} from '../../redux/actions/users'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
 import Snackbar from "../../components/Snackbar/Snackbar"
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
-import PrettyJson from '../../PrettyJson'
-
 import CustomTree from '../../components/Tree/CustomTree'
 import { User } from "../../models/user.js"
 import {getTopLevelChecked} from '../../utils'
-
-const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
 
 
 const styles = {
@@ -81,8 +76,6 @@ const mapDispatchToProps = (dispatch) => {
 
 function CreateUser  (props) {
  
-
-  const classes = useStyles()
   const [selectedRoles, setSelectedRoles] = React.useState([])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
   const [email, setEmail] = React.useState('test@xyz.com')

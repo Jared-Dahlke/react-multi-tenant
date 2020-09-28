@@ -9,16 +9,9 @@ import GridList from '@material-ui/core/GridList'
 import "rc-tree/assets/index.css"
 import {defaultFont, whiteColor} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
-import Card from "../Card/Card.js"
-import CardBody from "../Card/CardBody.js"
 import { withStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
-//import Folder from '@material-ui/icons/FolderRounded'
 import AddBox from '@material-ui/icons/AddBoxSharp'
 import MinusBox from '@material-ui/icons/IndeterminateCheckBox'
-//import Checked from '@material-ui/icons/CheckBox'
-//import Unchecked from '@material-ui/icons/CheckBoxOutlineBlank'
 
 const styles = {
   cardCategoryWhite: {
@@ -151,63 +144,63 @@ class Demo extends React.Component {
     }
 
     return (    
-        <div>
+      <div>
 
-          {this.props.search ?
-          
-            <CustomInput         
-              labelText={this.props.title}
-              id="treeSearch"
-              formControlProps={{
-                fullWidth: true,
-                
-              }}
-              labelProps={{
-                shrink: true
-              }}
-            
-              inputProps={{
-                disabled: false,
-                value: this.state.inputValue,
-                onChange: this.onChange, 
-                variant: 'filled'      ,              
-                placeholder:'Search....'
-              }}       
-            />
-
-            :
-          
-            null
-          
-          }
-
+        {this.props.search ?
         
-          <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
-    
-            <Tree
-              checkStrictly
-              showIcon={false}
-              showLine={false}
-              switcherIcon={switcherIcon}
-              checkable
-              onExpand={this.onExpand}
-              expandedKeys={expandedKeys}
-              autoExpandParent={autoExpandParent}
-              onCheck={this.props.onCheck}
-              checkedKeys={this.props.checkedKeys}
-              onSelect={this.props.onSelect}
-              selectedKeys={this.props.selectedKeys}
-              filterTreeNode={this.filterTreeNode}
-            >
-              {loop(this.props.data)}
-            </Tree>
+          <CustomInput         
+            labelText={this.props.title}
+            id="treeSearch"
+            formControlProps={{
+              fullWidth: true,
+              
+            }}
+            labelProps={{
+              shrink: true
+            }}
+          
+            inputProps={{
+              disabled: false,
+              value: this.state.inputValue,
+              onChange: this.onChange, 
+              variant: 'filled'      ,              
+              placeholder:'Search....'
+            }}       
+          />
 
-
-          </GridList>
+          :
         
-       
+          null
+        
+        }
 
-        </div>
+      
+        <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
+  
+          <Tree
+            checkStrictly
+            showIcon={false}
+            showLine={false}
+            switcherIcon={switcherIcon}
+            checkable
+            onExpand={this.onExpand}
+            expandedKeys={expandedKeys}
+            autoExpandParent={autoExpandParent}
+            onCheck={this.props.onCheck}
+            checkedKeys={this.props.checkedKeys}
+            onSelect={this.props.onSelect}
+            selectedKeys={this.props.selectedKeys}
+            filterTreeNode={this.filterTreeNode}
+          >
+            {loop(this.props.data)}
+          </Tree>
+
+
+        </GridList>
+      
+      
+
+      </div>
 
         
 

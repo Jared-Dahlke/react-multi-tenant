@@ -8,10 +8,9 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import {Formik, Form} from 'formik'
-import * as v from '../../validations'
 
 
 const useStyles = makeStyles((theme) => ({

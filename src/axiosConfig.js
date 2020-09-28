@@ -21,14 +21,14 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(response => {
   return response;
 }, error => {
- if (error.response.status === 401) {
+  if (error.response.status === 401) {
   
-  const store = configureStore()
-  localStorage.removeItem('token')
-  localStorage.removeItem('userId')
-  store.dispatch(setAuthToken(null))
-  window.location.href = '/login';
-  console.log('error in interceptor:' + error)
+    const store = configureStore()
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
+    store.dispatch(setAuthToken(null))
+    window.location.href = '/login';
+    console.log('error in interceptor:' + error)
   
  }
  return error;
