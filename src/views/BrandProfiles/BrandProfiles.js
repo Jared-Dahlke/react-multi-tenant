@@ -22,6 +22,7 @@ import CustomAlert from '../../components/CustomAlert.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import Success from "@material-ui/icons/Check";
 import Error from '@material-ui/icons/Error'
+import {Link} from 'react-router-dom'
 
 
 const MyFacebookLoader = () => <Facebook />
@@ -44,8 +45,7 @@ const mapDispatchToProps = (dispatch) => {
 
 function BrandProfiles(props) {
 
-  console.log(props)
-  //let history = useHistory();
+
   const classes = useStyles();
   const tableClasses = useTableStyles();
   //const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)
@@ -123,7 +123,10 @@ function BrandProfiles(props) {
       <Grid container justify="flex-end">
 
         <GridItem >
-          <Button href="/admin/settings/brandProfiles/create" color="primary">Create New Profile</Button>
+          <Link style={{ textDecoration: 'none' }} to={"/admin/settings/brandProfiles/create"}>
+            <Button  color="primary">Create New Profile</Button>
+          </Link>
+         
         </GridItem>
         
         
@@ -138,7 +141,7 @@ function BrandProfiles(props) {
             
          
 
-            {props.brandProfiles ?
+            {props.brandProfiles && props.brandProfiles.length > 0 ?
             
 
               <Table className={classes.table}>

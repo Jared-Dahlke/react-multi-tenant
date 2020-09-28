@@ -25,6 +25,12 @@ const dummyVerticals = [
 
 export default function BasicInfo (props) {
 
+  const [checkedKeys, setCheckedKeys] = React.useState([])
+ 
+  const onCheck = checkedKeys => {
+    setCheckedKeys(checkedKeys)
+  }
+
   return (
     
     <div>
@@ -81,9 +87,26 @@ export default function BasicInfo (props) {
           <CustomTree
             data={dummyVerticals}
             title='Industry'
+            keyProp='key'
+            labelProp='title'
+            valueProp='key'
             search={true}
             treeContainerHeight={200}
+            onCheck={onCheck}
+            checkedKeys={checkedKeys}
           />
+
+          {/**<CustomTree
+                        data={props.accounts.data}
+                        title='Account Access'
+                        keyProp='accountId'
+                        labelProp='accountName'
+                        valueProp='accountId'
+                        search={true}
+                        treeContainerHeight={150}
+                        onCheck={onCheck}
+                        checkedKeys={checkedKeys}
+                      /> */}
         </GridItem>
       </GridContainer>
     </div>

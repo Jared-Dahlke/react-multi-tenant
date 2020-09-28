@@ -18,6 +18,7 @@ import styles from "../../assets/jss/material-dashboard-react/components/sidebar
 import Settings from '@material-ui/icons/Settings'
 import PieChart from '@material-ui/icons/PieChart'
 import SettingsRoutes from '../../routes'
+import AccountDropdown from '../../components/AccountDropdown'
 
 const useStyles = makeStyles(styles);
 
@@ -107,6 +108,11 @@ export default function Sidebar(props) {
                     [" " + classes[color]]: activeRoute(setting.layout + setting.path)
                   });
 
+                  let itemClass = classes.nestedItemLink
+                  if(setting.path === '/settings/users' || setting.path === '/settings/rolesPermissions' || setting.path === '/settings/brandProfiles') {
+                    itemClass = classes.subNestedItemLink
+                  }
+
                   return (
 
                     <NavLink
@@ -116,7 +122,7 @@ export default function Sidebar(props) {
                       key={key}          
                     >
 
-                      <ListItem button inset="true" className={classes.nestedItemLink + subListItemClasses}>
+                      <ListItem button inset="true" className={itemClass + subListItemClasses}>
                         
                         
 
@@ -178,6 +184,11 @@ export default function Sidebar(props) {
         </div>
         {logoText}
       </a>
+
+      
+        <AccountDropdown/>
+      
+
     </div>
   );
   return (
@@ -198,6 +209,9 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
+         
+         
+
           <div className={classes.sidebarWrapper}>
              <AdminNavbarLinks />
             {links}
@@ -222,6 +236,7 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
+          
           <div className={classes.sidebarWrapper}>{links}</div>
           {image !== undefined ? (
             <div

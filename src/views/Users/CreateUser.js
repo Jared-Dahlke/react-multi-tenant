@@ -9,18 +9,15 @@ import Card from "../../components/Card/Card.js"
 import CardBody from "../../components/Card/CardBody.js"
 import CardFooter from "../../components/Card/CardFooter.js"
 import {connect} from 'react-redux'
-import {rolesFetchData} from '../../redux/actions/roles'
-import {inviteUser} from '../../redux/actions/users'
+import {createUser} from '../../redux/actions/users'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
 import Snackbar from "../../components/Snackbar/Snackbar"
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
-
 import CustomTree from '../../components/Tree/CustomTree'
 import { User } from "../../models/user.js"
-
-const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
+import {getTopLevelChecked} from '../../utils'
 
 
 const styles = {
@@ -64,29 +61,47 @@ const mapStateToProps = (state) => {
   return {
     roles: state.roles.data,
     hasErrored: state.rolesHasErrored,
-    isLoading: state.rolesIsLoading
+    isLoading: state.rolesIsLoading,
+    accounts: state.accounts,
+    currentAccountId: state.currentAccountId
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchRoles: () => dispatch(rolesFetchData()),
-    addNewUser: (user) => dispatch(inviteUser(user))
+    addNewUser: (user) => dispatch(createUser(user))
   }
 }
 
 
 function CreateUser  (props) {
  
-
-  const classes = useStyles()
-  const [selectedRoles, setSelectedRoles] = React.useState([11])
+  const [selectedRoles, setSelectedRoles] = React.useState([])
   const [internalUserChecked, setInternalUserChecked] = React.useState(false)
   const [email, setEmail] = React.useState('test@xyz.com')
   const [firstName, setFirstName] = React.useState('testFirst')
   const [lastName, setLastName] = React.useState('testLast')
   const [company, setCompany] = React.useState('testCompanyxuzx')
   const [inviteButtonDisabled, setInviteButtonDisabled] = React.useState(false)
+
+  const [checkedKeys, setCheckedKeys] = React.useState([])
+  const [topLevelCheckedAccounts, setTopLevelCheckedAccounts] = React.useState([])
+
+
+  const onCheck = checkedKeys => {
+    setCheckedKeys(checkedKeys)
+    if(checkedKeys.checked && checkedKeys.checked.length > 0) {
+      let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
+      let checkedAccounts = getTopLevelChecked(checkedKeys,accountsCopy)
+      let accounts = []
+      for (const accountId of checkedAccounts) {
+        accounts.push({accountId: accountId})
+      }
+      setTopLevelCheckedAccounts(accounts)
+    }
+  }
+
+
 
   const handleRoleSelect = (event) => {
     setSelectedRoles(event.target.value)
@@ -118,21 +133,29 @@ function CreateUser  (props) {
 
   const handleInviteUserClick = () => {
     setInviteButtonDisabled(true)
-    let mockAccounts = []
     let userType = internalUserChecked ? 'Internal' : 'External'
     let userRoles = []
     for (const role of selectedRoles) {
       userRoles.push({roleId: role})
     }
-    let newUser = new User(null, firstName, lastName, company, email, userType, userRoles, mockAccounts)
+
+    let accountsToLink = []
+    if(topLevelCheckedAccounts.length > 0) {
+      accountsToLink = topLevelCheckedAccounts
+    } else {
+      let currentAccountId = localStorage.getItem('currentAccountId')
+      accountsToLink = [{accountId: currentAccountId}]
+    }
+
+    let newUser = new User('placeholder', firstName, lastName, company, email, userType, userRoles, accountsToLink)
     props.addNewUser(newUser)
     setShowAlertMessage(true)
     setTimeout(function() {
       setShowAlertMessage(false)
       setInviteButtonDisabled(false)
-    }, 4000)
+    }, 2000)
   }
-  //[{roleId: 11},{roleId: 12}]
+
 
   return (
     <div>
@@ -236,15 +259,27 @@ function CreateUser  (props) {
                   </GridItem>
 
                  {
-                   selectedRoles.includes(11) ?
+                   selectedRoles ?
 
                   <GridItem xs={12} sm={12} md={8}>
-                    <CustomTree
-                      data={myData}
-                      title='Account Access'
-                      search={true}
-                      treeContainerHeight={150}
-                    />
+                    {props.accounts.data && props.accounts.data.length > 0 ?
+                      <CustomTree
+                        data={props.accounts.data}
+                        title='Account Access'
+                        keyProp='accountId'
+                        labelProp='accountName'
+                        valueProp='accountId'
+                        search={true}
+                        treeContainerHeight={150}
+                        onCheck={onCheck}
+                        checkedKeys={checkedKeys}
+                      />
+                  
+                    :
+                    <div/>
+                    
+                    }
+                    
                   </GridItem>
 
                    :
@@ -252,7 +287,12 @@ function CreateUser  (props) {
                    null
                  }
 
-                  
+                
+                 
+                :
+                 <div></div>
+                }
+                 
                   
                 
 

@@ -1,6 +1,6 @@
 
 export class User {
-  constructor (userId, firstName, lastName, company, email, userType, roles) {
+  constructor (userId, firstName, lastName, company, email, userType, roles, accounts) {
 
     if (arguments.length !== 7) {
       //throw new Error('invalid User argument count')
@@ -17,5 +17,6 @@ export class User {
     this.email = email
     this.userType = userType
     this.roles = roles
+    this.accounts = accounts
   }
 }

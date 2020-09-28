@@ -21,9 +21,11 @@ export function brandProfilesFetchDataSuccess(brandProfiles) {
   };
 }
 
-export function fetchBrandProfiles() {
 
-  //let url =  apiBase + '/brandProfiles'
+
+export function fetchBrandProfiles(accountId) {
+
+  //let url =  apiBase + '/brandProfiles/accountId'
   return async (dispatch) => {
     try {
 
@@ -36,7 +38,7 @@ export function fetchBrandProfiles() {
       //    let newBrandProfile = new BrandProfile(brandProfile.brandProfileId, brandProfile.brandProfileName, brandProfile.website, brandProfile.twitterName, brandProfile.industryVertical, brandProfile.industrySubVertical)
       //    brandProfiles.data.push(newBrandProfile)
       //  }
-      console.log('inside getcfh brand profile')
+     
       dispatch(brandProfilesFetchDataSuccess(mockBrandProfiles))
       //}
 

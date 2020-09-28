@@ -48,22 +48,32 @@ export function usersFetchDataSuccess(users) {
   };
 }
 
-export function usersFetchData() {
-  let url = apiBase + "/user";
+export function usersFetchData(accountId) {
+  //currentAccount.accountId = 394
+  let url = apiBase + `/account/${accountId}/users`;
   return async (dispatch) => {
     try {
-      let params = {
-       
+      let params = {     
         roles: true
       }
-     
 
-      const result = await axios.get(url, {
-        params,
-      });
+      let result = []
+     
+      try {
+
+        result = await axios.get(url, {
+          params,
+        });
+
+      } catch (error) {
+        console.log(error)
+        if(result.status === 401) {
+          handleError(dispatch, result.status);
+        }
+      }
+      
 
       if (result.status === 200) {
-        console.log(result)
         let users = { data: [] };
         for (const user of result.data) {
 
@@ -164,11 +174,17 @@ export const deleteUser = (userId) => {
   };
 };
 
-export const inviteUser = (user) => {
-  console.log(user)
-  user.password = 'testasdfa!'
 
- 
+
+
+export const createUser = (user) => {
+  
+  if(user.password && user.password.length > 0) {
+    
+  } else {
+    user.password = 'testasdfa!'
+  }
+  
   
   delete user.userId
   delete user.internal
@@ -176,11 +192,17 @@ export const inviteUser = (user) => {
   user.phoneNumber= '123123123'
   //user.roles=[{roleId: 11},{roleId: 12}]
 
+  console.log('here')
+  console.log(user)
+
   let url =  apiBase + `/user`
   return (dispatch) => {
+    console.log('after dispatch')
     dispatch(usersAddUser(user));
+    console.log('after')
     axios.post(url, user)
       .then(response => {
+        console.log(response)
         dispatch(userAdded(true))
         setTimeout(() => {
           dispatch(userAdded(false))
@@ -194,6 +216,21 @@ export const inviteUser = (user) => {
         //setTimeout(() => {
         //  dispatch(userDeletedError(false))
         //}, 2000);
+      })
+  };
+};
+
+export const linkRoleToUser = (userId, roleId) => {
+  
+  let url =  apiBase + `/user?userId=${userId}`
+  return (dispatch) => {
+    axios.post(url, roleId)
+      .then(response => {
+        console.log(response)      
+      })
+      .catch(error => {
+        console.log('link role to user error')
+        console.log(error)       
       })
   };
 };

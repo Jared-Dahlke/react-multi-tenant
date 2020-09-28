@@ -22,6 +22,7 @@ import CustomAlert from '../../components/CustomAlert.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import Success from "@material-ui/icons/Check";
 import Error from '@material-ui/icons/Error'
+import {Link} from 'react-router-dom'
 
 
 const MyFacebookLoader = () => <Facebook />
@@ -34,13 +35,14 @@ const mapStateToProps = (state) => {
     users: state.users.data,
     hasErrored: state.usersHasErrored,
     userDeleted: state.userDeleted,
-    userDeletedError: state.userDeletedError
-  }
+    userDeletedError: state.userDeletedError,
+    currentAccount: state.currentAccount
+  }   
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsersData: () => dispatch(usersFetchData()),
+    fetchUsersData: (currentAccountId) => dispatch(usersFetchData(currentAccountId)),
     deleteUser: (userId) => dispatch(deleteUser(userId))
   }
 }
@@ -55,8 +57,11 @@ function Users(props) {
 
   const {fetchUsersData} = props
 
+
+  const currentAccountId = localStorage.getItem('currentAccountId')
+
   React.useEffect(() => { 
-    fetchUsersData()
+    fetchUsersData(currentAccountId)
   }, [fetchUsersData])
 
 
@@ -125,7 +130,10 @@ function Users(props) {
       <Grid container justify="flex-end">
 
         <GridItem >
-          <Button href="/admin/settings/users/create" color="primary">Create New User</Button>
+          <Link style={{ textDecoration: 'none' }} to={"/admin/settings/users/create"}>
+          <Button  color="primary">Create New User</Button>
+          </Link>
+          
         </GridItem>
         
         

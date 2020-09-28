@@ -49,7 +49,13 @@ export function users(state = [], action) {
     users = {data: newState}
     return users;
   case USERS_ADD_USER:
-    let stateData = JSON.parse(JSON.stringify(state.data))
+    console.log('adding user')
+    console.log(state.data)
+    let stateData = []
+    if(state.data && state.data.length > 0) {
+      stateData = JSON.parse(JSON.stringify(state.data))
+    }  
+    console.log('added user')
     stateData.push(action.user)
     users = {data: stateData}
     return users;

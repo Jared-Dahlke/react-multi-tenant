@@ -11,11 +11,10 @@ import Hidden from "@material-ui/core/Hidden";
 import Poppers from "@material-ui/core/Popper";
 import Divider from "@material-ui/core/Divider";
 import Person from "@material-ui/icons/Person";
-import Search from "@material-ui/icons/Search";
-import CustomInput from "../CustomInput/CustomInput.js";
 import Button from "../CustomButtons/Button.js"
 import styles from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.js"
 import {setAuthToken, setLoggedIn} from '../../redux/actions/auth.js'
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles(styles);
 
@@ -37,13 +36,6 @@ function AdminNavbarLinks(props) {
   const classes = useStyles();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
-  /* const handleClickNotification = event => {
-    if (openNotification && openNotification.contains(event.target)) {
-      setOpenNotification(null);
-    } else {
-      setOpenNotification(event.currentTarget);
-    }
-  }; */
   const handleCloseNotification = () => {
     setOpenNotification(null);
   };
@@ -63,24 +55,14 @@ function AdminNavbarLinks(props) {
     props.setAuthToken(null);
     props.setLoggedIn(false)
   };
+
+  const goToProfile=()=>{
+
+  }
+
   return (
     <div>
-      <div className={classes.searchWrapper}>
-        <CustomInput
-          formControlProps={{
-            className: classes.margin + " " + classes.search
-          }}
-          inputProps={{
-            placeholder: "Search",
-            inputProps: {
-              "aria-label": "Search"
-            }
-          }}
-        />
-        <Button color="transparent" aria-label="edit" justIcon round>
-          <Search />
-        </Button>
-      </div>
+      
 
 
       <div className={classes.manager}>
@@ -202,12 +184,14 @@ function AdminNavbarLinks(props) {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
+                    <Link to="/admin/settings/profile" style={{ textDecoration: 'none' }}>
                     <MenuItem
                       onClick={handleCloseProfile}
                       className={classes.dropdownItem}
                     >
                       Profile
                     </MenuItem>
+                    </Link>
                     <MenuItem
                       onClick={handleCloseProfile}
                       className={classes.dropdownItem}

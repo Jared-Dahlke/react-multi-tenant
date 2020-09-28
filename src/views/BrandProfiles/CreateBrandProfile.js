@@ -8,10 +8,10 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
+import TopCompetitors from './components/TopCompetitors'
 import {Formik, Form} from 'formik'
-import * as v from '../../validations'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,14 +49,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Basic Info', 'Create an ad group', 'Create an ad'];
+  return ['Basic Info', 'Top Competitors', 'Sensitive Content'];
 }
 
 
 function CreateBrandProfiles (props) {
 
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(1);
   const [basicInfo, setBasicInfo] = React.useState({
     profileName: '',
     websiteUrl: '',
@@ -84,19 +84,15 @@ function CreateBrandProfiles (props) {
   //if touched with no errors then validated
   //if you dont have multiple 'sub forms' you can just check form.isValid instead of doing this whole function
   const stepValidated=(index, formik) =>{
-    console.log('running step validated')
 
     let errors = formik.errors
     let errorCount = Object.keys(errors).length
-    console.log(errorCount)
-    console.log(errors)
 
-    
 
     if (errorCount === 0) return true 
 
     for (const [key, value] of Object.entries(errors)) {
-      console.log(key, value);
+
       if(index === 0) {
         if(key.includes('basicInfo')) {
           return false
@@ -189,9 +185,6 @@ function CreateBrandProfiles (props) {
         })}
       </Stepper>
 
-      <div style={{color:'white'}}>{JSON.stringify(formik,null,4)}></div>
-      
-    
       <Card >
         
         <CardBody>
@@ -203,7 +196,7 @@ function CreateBrandProfiles (props) {
             </Form>
           </div>
             : activeStep === 1 ?
-              <div>step 2</div> 
+              <TopCompetitors/>
               : activeStep === 2 ?
                 <div> step 3</div> 
                 : 

@@ -91,6 +91,30 @@ export function login(credentials) {
   };
 }
 
+export function register(credentials) {
+  let url = apiBase + "/user";
+  return async (dispatch) => {
+    try {
+      const result = await axios.post(url, {
+        username: credentials.username,
+        password: credentials.password,
+      });
+
+      //if (!result.data.jwt) {
+     //   alert(
+     //    "We were unable to authenticate this user. Please try again later."
+       // );
+       // return;
+     // }
+     console.log(result)
+
+    } catch (error) {
+      alert(error);
+     
+    }
+  };
+}
+
 function parseJwt(token) {
   var base64Url = token.split(".")[1];
   var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
