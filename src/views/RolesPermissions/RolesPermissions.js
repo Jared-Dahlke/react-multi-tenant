@@ -10,14 +10,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import classnames from "classnames";
-import { Facebook } from 'react-content-loader'
-
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { blackColor, whiteColor, grayColor, primaryColor } from "../../assets/jss/material-dashboard-react.js";
+import {FormLoader} from '../../components/SkeletonLoader'
 
 const useMStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +39,6 @@ const useMStyles = makeStyles((theme) => ({
 }));
 
 
-const MyFacebookLoader = () => <Facebook />
 
 const useTableStyles = makeStyles(tableStyles);
 const useStyles = makeStyles(styles);
@@ -48,7 +46,8 @@ const useStyles = makeStyles(styles);
 const mapStateToProps = (state) => {
   return {
     rolesPermissions: state.rolesPermissions.data,
-    hasErrored: state.rolesPermissionsHasErrored
+    hasErrored: state.rolesPermissionsHasErrored,
+    rolesPermissionsIsLoading: state.rolesPermissionsIsLoading
   }
 }
 
@@ -95,7 +94,7 @@ function RolesPermissions(props) {
           
           <CardBody>
 
-            {props.rolesPermissions && props.rolesPermissions.length > 0 ?
+            {props.rolesPermissions && props.rolesPermissions.length > 0 && !props.rolesPermissionsIsLoading  ?
             
             
           
@@ -104,7 +103,6 @@ function RolesPermissions(props) {
                   return (
 
                     <Accordion className={mclasses.background} key={role.roleId} expanded={expanded === role.roleId} onChange={handleChange(role.roleId)}>
-
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon className={mclasses.accordianIcons} />}
                         aria-controls="panel1bh-content"
@@ -113,7 +111,6 @@ function RolesPermissions(props) {
                         <Typography className={mclasses.heading}>{role.roleName}</Typography>
                         <Typography className={mclasses.secondaryHeading}>{role.roleDescription}</Typography>
                       </AccordionSummary>
-
                       <AccordionDetails>
                         <Table className={classes.table}>
                           <TableHead className={tableClasses["primaryTableHeader"]}>
@@ -134,39 +131,29 @@ function RolesPermissions(props) {
                             {role.permissions && role.permissions.length > 0 && role.permissions.map(permission=> (
 
                               <TableRow key={role.roleId} className={classes.tableRow}>
-
                                 <TableCell className={tableCellClasses}>{permission.moduleName}</TableCell>
                                 <TableCell className={tableCellClasses}>{permission.permissionName}</TableCell>
                                 <TableCell className={tableCellClasses}>{permission.permissionDescription}</TableCell>
-
-
                               </TableRow>
-
                             )
                               
-
                             )}
                           </TableBody>
                         </Table>
                       </AccordionDetails>
-
                     </Accordion>
-
                   )
                   
                   
-
-
                 })}
               </div>   
             
-              
-            
-            
+              : props.rolesPermissionsIsLoading ?
 
+              <FormLoader/>
+             
               :
-
-              <MyFacebookLoader/>
+              <h2 style={{color:whiteColor}}>This account has no roles...</h2>
 
             }
 

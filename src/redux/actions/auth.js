@@ -4,6 +4,7 @@ import {
   SET_USER,
   SET_USER_ID,
   SET_SHOW_ALERT,
+  USER_PROFILE_IS_LOADING
 } from "../action-types/auth";
 import axios from "../../axiosConfig";
 import config from "../../config";
@@ -19,6 +20,13 @@ export function setShowAlert(payload) {
   return { type: SET_SHOW_ALERT, payload };
 }
 
+export function userProfileIsLoading(bool) {
+  return {
+    type: USER_PROFILE_IS_LOADING,
+    userProfileIsLoading: bool,
+  };
+}
+
 export function setUser(payload) {
   return { type: SET_USER, payload };
 }
@@ -26,12 +34,6 @@ export function setUser(payload) {
 export function setLoggedIn(payload) {
   return { type: SET_LOGGED_IN, payload };
 }
-// export function loadUserProfile(payload){
-//   return {
-//     type: USER_LOADED,
-//     payload
-//   }
-// }
 
 export function setUserId(payload) {
   return {
@@ -91,30 +93,6 @@ export function login(credentials) {
   };
 }
 
-export function register(credentials) {
-  let url = apiBase + "/user";
-  return async (dispatch) => {
-    try {
-      const result = await axios.post(url, {
-        username: credentials.username,
-        password: credentials.password,
-      });
-
-      //if (!result.data.jwt) {
-     //   alert(
-     //    "We were unable to authenticate this user. Please try again later."
-       // );
-       // return;
-     // }
-     console.log(result)
-
-    } catch (error) {
-      alert(error);
-     
-    }
-  };
-}
-
 function parseJwt(token) {
   var base64Url = token.split(".")[1];
   var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -145,6 +123,7 @@ export function userProfileFetchData() {
       if (result.status === 200) {
         let user = result.data;
         dispatch(setUser(user));
+        dispatch(userProfileIsLoading(false))
       }
     } catch (error) {
       alert(error);

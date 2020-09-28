@@ -4,3 +4,4 @@ export const USER_LOADED = 'USER_LOADED';
 export const SET_USER_ID = 'SET_USER_ID'
 export const SET_SHOW_ALERT = 'SET_SHOW_ALERT';
 export const SET_USER = 'SET_USER';
+export const USER_PROFILE_IS_LOADING = 'USER_PROFILE_IS_LOADING';

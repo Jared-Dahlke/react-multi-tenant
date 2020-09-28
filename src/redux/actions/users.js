@@ -5,7 +5,8 @@ import {
   USER_DELETED_ERROR,
   USERS_REMOVE_USER,
   USERS_ADD_USER,
-  USER_ADDED
+  USER_ADDED,
+  USERS_IS_LOADING
 } from "../action-types/users";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
@@ -48,8 +49,14 @@ export function usersFetchDataSuccess(users) {
   };
 }
 
+export function usersIsLoading(bool) {
+  return {
+    type: USERS_IS_LOADING,
+    usersIsLoading: bool,
+  };
+}
+
 export function usersFetchData(accountId) {
-  //currentAccount.accountId = 394
   let url = apiBase + `/account/${accountId}/users`;
   return async (dispatch) => {
     try {
@@ -71,6 +78,8 @@ export function usersFetchData(accountId) {
           handleError(dispatch, result.status);
         }
       }
+
+      dispatch(usersIsLoading(false))
       
 
       if (result.status === 200) {

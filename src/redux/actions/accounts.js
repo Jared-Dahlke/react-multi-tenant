@@ -9,8 +9,8 @@ import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
 import config from "../../config.js";
 import {userProfileFetchData} from '../actions/auth'
-import {usersFetchData, usersFetchDataSuccess} from '../actions/users'
-import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesPermissionsFetchDataSuccess} from '../actions/roles'
+import {usersFetchData, usersFetchDataSuccess, usersIsLoading} from '../actions/users'
+import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesPermissionsFetchDataSuccess, rolesPermissionsIsLoading} from '../actions/roles'
 import {brandProfilesFetchDataSuccess, fetchBrandProfiles} from '../actions/brandProfiles'
 import {findAccountNodeByAccountId} from '../../utils'
 //import { Account } from "../../models/user";
@@ -73,6 +73,8 @@ export function accountsFetchData(userId) {
 export function clearSiteData() {
   return (dispatch) => {
 
+    dispatch(rolesPermissionsIsLoading(true))
+    dispatch(usersIsLoading(true))
     dispatch(accountsFetchDataSuccess([]));
     dispatch(setCurrentAccountId(null))
     dispatch(usersFetchDataSuccess([]))

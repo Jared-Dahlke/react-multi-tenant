@@ -1,4 +1,4 @@
-import {ROLES_HAS_ERRORED, ROLES_PERMISSIONS_HAS_ERRORED, ROLES_IS_LOADING, ROLES_FETCH_DATA_SUCCESS, ROLES_PERMISSIONS_FETCH_DATA_SUCCESS} from '../action-types/roles'
+import {ROLES_HAS_ERRORED, ROLES_PERMISSIONS_HAS_ERRORED, ROLES_IS_LOADING, ROLES_PERMISSIONS_IS_LOADING, ROLES_FETCH_DATA_SUCCESS, ROLES_PERMISSIONS_FETCH_DATA_SUCCESS} from '../action-types/roles'
 
 export function rolesHasErrored(state = false, action) {
   switch (action.type) {
@@ -22,6 +22,15 @@ export function rolesPermissionsHasErrored(state = false, action) {
 export function rolesIsLoading(state = false, action) {
   switch (action.type) {
   case ROLES_IS_LOADING:
+    return action.isLoading;
+  default:
+    return state;
+  }
+}
+
+export function rolesPermissionsIsLoading(state = true, action) {
+  switch (action.type) {
+  case ROLES_PERMISSIONS_IS_LOADING:
     return action.isLoading;
   default:
     return state;

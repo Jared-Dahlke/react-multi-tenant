@@ -17,15 +17,15 @@ import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 import { useHistory } from "react-router-dom";
-import { Facebook } from 'react-content-loader'
 import CustomAlert from '../../components/CustomAlert.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import Success from "@material-ui/icons/Check";
 import Error from '@material-ui/icons/Error'
 import {Link} from 'react-router-dom'
+import { whiteColor, blackColor, grayColor } from "../../assets/jss/material-dashboard-react.js";
+import {FormLoader} from '../../components/SkeletonLoader'
 
 
-const MyFacebookLoader = () => <Facebook />
 const useTableStyles = makeStyles(tableStyles);
 
 const useStyles = makeStyles(styles);
@@ -36,7 +36,8 @@ const mapStateToProps = (state) => {
     hasErrored: state.usersHasErrored,
     userDeleted: state.userDeleted,
     userDeletedError: state.userDeletedError,
-    currentAccount: state.currentAccount
+    currentAccount: state.currentAccount,
+    usersIsLoading: state.usersIsLoading
   }   
 }
 
@@ -145,7 +146,7 @@ function Users(props) {
           
           <CardBody>
 
-            {props.users ?
+            {props.users && props.users.length > 0 ?
             
 
               <Table className={classes.table}>
@@ -168,7 +169,8 @@ function Users(props) {
               
 
                 <TableBody>
-                  {props.users && props.users.map(user => (
+
+                  {props.users && props.users.length > 0 && props.users.map(user => (
                     <TableRow key={user.userId} className={classes.tableRow}>
                     
                       <TableCell className={tableCellClasses}>{user.firstName}</TableCell>
@@ -221,9 +223,13 @@ function Users(props) {
                 </TableBody>
               </Table>
 
+              : props.usersIsLoading ? 
+
+              <FormLoader/>
+
               :
 
-              <MyFacebookLoader/>
+              <h2 style={{color:whiteColor}}>This account has no users...</h2>
 
             }
           </CardBody>
