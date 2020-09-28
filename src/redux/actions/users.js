@@ -177,7 +177,7 @@ export const deleteUser = (userId) => {
 
 
 
-export const inviteUser = (user) => {
+export const createUser = (user) => {
   user.password = 'testasdfa!'
   
   delete user.userId

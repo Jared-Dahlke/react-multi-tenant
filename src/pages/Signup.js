@@ -1,12 +1,10 @@
 import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
-import Avatar from '@material-ui/core/Avatar';
 import Button from '../components/CustomButtons/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
@@ -16,9 +14,9 @@ import CustomInput from '../components/CustomInput/CustomInput'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import logo from '../assets/img/sightly_icon.png'
 import {logoStyle} from '../assets/jss/material-dashboard-react'
-
 import config from '../config.js'
 import { whiteColor } from "../assets/jss/material-dashboard-react";
+import {createUser} from '../redux/actions/users'
 const queryString = require('query-string');
 
 const apiBase = config.apiGateway.MOCKURL;
@@ -31,7 +29,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setAuthToken: (authToken) => dispatch(setAuthToken(authToken))
+    setAuthToken: (authToken) => dispatch(setAuthToken(authToken)),
+    createUser: (user)=> dispatch(createUser(user))
   }
 }
 

@@ -9,7 +9,7 @@ import Card from "../../components/Card/Card.js"
 import CardBody from "../../components/Card/CardBody.js"
 import CardFooter from "../../components/Card/CardFooter.js"
 import {connect} from 'react-redux'
-import {inviteUser} from '../../redux/actions/users'
+import {createUser} from '../../redux/actions/users'
 import CustomCheckbox from "../../components/CustomCheckbox/Checkbox"
 import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
 import Snackbar from "../../components/Snackbar/Snackbar"
@@ -69,7 +69,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addNewUser: (user) => dispatch(inviteUser(user))
+    addNewUser: (user) => dispatch(createUser(user))
   }
 }
 
