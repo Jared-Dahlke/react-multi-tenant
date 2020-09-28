@@ -185,9 +185,6 @@ function CreateBrandProfiles (props) {
         })}
       </Stepper>
 
-      <div style={{color:'white'}}>{JSON.stringify(formik,null,4)}></div>
-      
-    
       <Card >
         
         <CardBody>
