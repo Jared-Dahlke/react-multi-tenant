@@ -174,6 +174,9 @@ export const deleteUser = (userId) => {
   };
 };
 
+
+
+
 export const inviteUser = (user) => {
   user.password = 'testasdfa!'
   
@@ -201,6 +204,21 @@ export const inviteUser = (user) => {
         //setTimeout(() => {
         //  dispatch(userDeletedError(false))
         //}, 2000);
+      })
+  };
+};
+
+export const linkRoleToUser = (userId, roleId) => {
+  
+  let url =  apiBase + `/user?userId=${userId}`
+  return (dispatch) => {
+    axios.post(url, roleId)
+      .then(response => {
+        console.log(response)      
+      })
+      .catch(error => {
+        console.log('link role to user error')
+        console.log(error)       
       })
   };
 };

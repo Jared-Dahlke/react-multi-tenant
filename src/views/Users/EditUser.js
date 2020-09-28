@@ -14,6 +14,7 @@ import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
+import {updateUserData} from '../../redux/actions/users'
 
 const styles = {
   cardCategoryWhite: {
@@ -39,6 +40,12 @@ const useStyles = makeStyles(styles);
 const mapStateToProps = (state) => {
   return { 
     roles: state.roles.data
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateUserData: (userData) => dispatch(updateUserData(userData)),
   };
 };
 
@@ -77,7 +84,8 @@ function EditUser(props) {
 
   const handleInternalUserChecked = () => {
     let currentUser = {...user}
-    currentUser.internal = !currentUser.internal
+    let newType = currentUser.userType === 'Internal' ? 'External' : 'Internal'
+    currentUser.userType = newType
     setUser(currentUser)
   }
 
@@ -90,11 +98,12 @@ function EditUser(props) {
 
   const handleSaveClick = () => {
     setSaveButtonDisabled(true)
+    props.updateUserData(user)
     setShowAlertMessage(true)
     setTimeout(function() {
       setShowAlertMessage(false)
       setSaveButtonDisabled(false)
-    }, 4000)
+    }, 2000)
   }
   
   return (
@@ -213,7 +222,7 @@ function EditUser(props) {
 
                   <GridItem xs={12} sm={12} md={12}>
                     <CustomCheckbox
-                      checked={user.internal}
+                      checked={user.userType === 'Internal'}
                       //tabIndex={-1}
                       changed={handleInternalUserChecked}
                       formControlProps={{
@@ -255,13 +264,9 @@ function EditUser(props) {
           close
         />
 
-       
-       
-    
-      
-               
+          
     </div>
   );
 }
 
-export default connect(mapStateToProps, null)(EditUser)
+export default connect(mapStateToProps, mapDispatchToProps)(EditUser)

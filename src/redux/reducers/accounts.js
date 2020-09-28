@@ -7,16 +7,11 @@ export function accounts(state = [], action) {
   case ACCOUNTS_FETCH_DATA_SUCCESS:
     return action.accounts;
   case SET_CURRENT_ACCOUNT:
-    console.log('inside set current account')
     let newAccounts = JSON.parse(JSON.stringify(state.data))
     markAllAccountsAsCurrentFalse(newAccounts)
     let account = findAccountNodeByAccountId(action.accountId, newAccounts)
-    console.log('account found from find account node by account')
-    console.log(account)
     account.current = true
     accounts = {data: newAccounts}
-    console.log('about to return from set current account in reducer:')
-    console.log(accounts)
     return accounts;
   default:
     return state;

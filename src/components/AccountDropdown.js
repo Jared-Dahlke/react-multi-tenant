@@ -185,8 +185,6 @@ function SimplePopover(props) {
   let nameToUse = selectedAccountName
   if (props.accounts.data) {
     ca = getCurrentAccount(props.accounts.data)
-    console.log('ca')
-    console.log(ca)
     if(ca) {
       nameToUse = ca.accountName
     }

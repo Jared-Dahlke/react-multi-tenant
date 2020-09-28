@@ -63,9 +63,7 @@ export function accountsFetchData(userId) {
       }
     } catch (error) {
       alert('Error on fetch accounts: ' +JSON.stringify(error,null,2))
-      //let errorType = error.response.status;
-      //handleError(dispatch, errorType);
-      //dispatch(usersHasErrored(true));
+
     }
   };
 }
@@ -96,32 +94,17 @@ export function fetchSiteData(accountId) {
 
       let accountsUrl = apiBase + `/user/${userId}/accounts`;
       
-      let result = []
-     // try {
-        result = await axios.get(accountsUrl);
-       // console.log('made it here')
-     // } catch (error) {
-       // console.log(result)
-       // if(result.status == 401) {
-       //   handleError(dispatch, result.status);
-       // }
-     // }
-      console.log('made it here')
-      
+      let result = await axios.get(accountsUrl);
       let accounts = { data: result.data };
-      console.log(accounts.data)
 
       dispatch(accountsFetchDataSuccess(accounts));
 
       if(!accountId) {
-        console.log('no account id')
         let accountIdFromLocalStorage = localStorage.getItem('currentAccountId')
-        console.log(accountIdFromLocalStorage)
         if(accountIdFromLocalStorage) {
           let userStillHasAccessToThisAccount = false
 
           let node = findAccountNodeByAccountId(accountIdFromLocalStorage, result.data)
-          console.log('node:' + JSON.stringify(node))
           if(node) {
             userStillHasAccessToThisAccount = true
           }
@@ -134,7 +117,6 @@ export function fetchSiteData(accountId) {
         } else {
           accountId = result.data[0].accountId
         }
-        //accountId = result.data[0].accountId
       }
 
       localStorage.setItem('currentAccountId', accountId)
@@ -149,7 +131,6 @@ export function fetchSiteData(accountId) {
     } catch (error) {
       console.log('caught in account action')
       console.log(error)
-      //alert('Error on fetch site data: ' +JSON.stringify(error,null,2))
     }
   };
 }

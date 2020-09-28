@@ -16,9 +16,11 @@ import CustomSelect from "../../components/CustomSelect/CustomSelect.js"
 import Snackbar from "../../components/Snackbar/Snackbar"
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
+import PrettyJson from '../../PrettyJson'
 
 import CustomTree from '../../components/Tree/CustomTree'
 import { User } from "../../models/user.js"
+import {getTopLevelChecked} from '../../utils'
 
 const myData = [{"title":"Dummy Account","key":"0-0-key","children":[{"title":"0-0-0-label","key":"0-0-0-key","children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key","children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},{"title":"0-1-label","key":"0-1-key","children":[{"title":"0-1-0-label","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},{"title":"0-2-label","key":"0-2-key"}]
 
@@ -64,7 +66,8 @@ const mapStateToProps = (state) => {
   return {
     roles: state.roles.data,
     hasErrored: state.rolesHasErrored,
-    isLoading: state.rolesIsLoading
+    isLoading: state.rolesIsLoading,
+    accounts: state.accounts
   }
 }
 
@@ -86,6 +89,19 @@ function CreateUser  (props) {
   const [lastName, setLastName] = React.useState('testLast')
   const [company, setCompany] = React.useState('testCompanyxuzx')
   const [inviteButtonDisabled, setInviteButtonDisabled] = React.useState(false)
+
+  const [selectedKeys, setSelectedKeys] = React.useState([])
+  const [checkedKeys, setCheckedKeys] = React.useState([])
+
+
+  const onCheck = checkedKeys => {
+    setCheckedKeys(checkedKeys)
+  }
+
+
+  const onSelect = (selectedKeys, info) => {
+    setSelectedKeys(selectedKeys)
+  }
 
   const handleRoleSelect = (event) => {
     setSelectedRoles(event.target.value)
@@ -123,7 +139,7 @@ function CreateUser  (props) {
     for (const role of selectedRoles) {
       userRoles.push({roleId: role})
     }
-    let newUser = new User(null, firstName, lastName, company, email, userType, userRoles, mockAccounts)
+    let newUser = new User('placeholder', firstName, lastName, company, email, userType, userRoles, mockAccounts)
     props.addNewUser(newUser)
     setShowAlertMessage(true)
     setTimeout(function() {
@@ -132,6 +148,13 @@ function CreateUser  (props) {
     }, 4000)
   }
   //[{roleId: 11},{roleId: 12}]
+
+  if(props.accounts && props.accounts.data && checkedKeys.checked && checkedKeys.checked.length > 0) {
+    let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
+    let test = getTopLevelChecked(checkedKeys,accountsCopy)
+    console.log(test)
+  }
+  
 
   return (
     <div>
@@ -235,15 +258,29 @@ function CreateUser  (props) {
                   </GridItem>
 
                  {
-                   selectedRoles.includes(11) ?
+                   selectedRoles ?
 
                   <GridItem xs={12} sm={12} md={8}>
-                    <CustomTree
-                      data={myData}
-                      title='Account Access'
-                      search={true}
-                      treeContainerHeight={150}
-                    />
+                    {props.accounts.data && props.accounts.data.length > 0 ?
+                      <CustomTree
+                        data={props.accounts.data}
+                        title='Account Access'
+                        keyProp='accountId'
+                        labelProp='accountName'
+                        valueProp='accountId'
+                        search={true}
+                        treeContainerHeight={150}
+                        onCheck={onCheck}
+                        onSelect={onSelect}
+                        selectedKeys={selectedKeys}
+                        checkedKeys={checkedKeys}
+                      />
+                  
+                    :
+                    <div/>
+                    
+                    }
+                    
                   </GridItem>
 
                    :
@@ -251,7 +288,19 @@ function CreateUser  (props) {
                    null
                  }
 
-                  
+                 <div style={{color:'white'}}>
+                   selected: 
+                   {JSON.stringify(selectedKeys)}
+                   checked:
+                  {JSON.stringify(checkedKeys)}
+                  </div> 
+
+                 
+                 
+                :
+                 <div></div>
+                }
+                 
                   
                 
 

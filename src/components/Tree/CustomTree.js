@@ -65,7 +65,6 @@ class Demo extends React.Component {
   state = {
     expandedKeys: [],
     autoExpandParent: true,
-    selectedKeys: [],
     treeData: [],
     inputValue: '',
     showTree: false
@@ -83,11 +82,7 @@ class Demo extends React.Component {
     })
   }
 
-  onCheck = checkedKeys => {
-    this.setState({
-      checkedKeys,
-    })
-  }
+  
 
 
   filterTreeNode = treeNode => {
@@ -101,11 +96,6 @@ class Demo extends React.Component {
     return false
   }
 
-  onSelect = (selectedKeys, info) => {
-    this.setState({
-      selectedKeys,
-    })
-  }
 
 
 
@@ -116,17 +106,6 @@ class Demo extends React.Component {
     })
   }
 
-  triggerChecked = () => {
-    this.setState({
-      checkedKeys: [`0-0-${parseInt(Math.random() * 3, 10)}-key`],
-    })
-  }
-
-  
-
-  
-
-  
 
   render() {
 
@@ -157,12 +136,12 @@ class Demo extends React.Component {
         }
         if (item.children) {
           return (
-            <TreeNode   style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item.key} title={<TreeTitle title={item.title}/>} disableCheckbox={item.key === 'mydisabledkey'}>
+            <TreeNode   style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item[this.props.keyProp]} title={<TreeTitle title={item[this.props.labelProp]}/>} disableCheckbox={item.key === 'mydisabledkey'}>
               {loop(item.children)}
             </TreeNode>
           )
         }
-        return <TreeNode style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item.key} title={<TreeTitle title={item.title}/>} />
+        return <TreeNode style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item[this.props.keyProp]} title={<TreeTitle title={item[this.props.labelProp]}/>} />
       })
     let { expandedKeys } = this.state
     let { autoExpandParent } = this.state
@@ -206,7 +185,7 @@ class Demo extends React.Component {
           <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
     
             <Tree
-              
+              checkStrictly
               showIcon={false}
               showLine={false}
               switcherIcon={switcherIcon}
@@ -214,10 +193,10 @@ class Demo extends React.Component {
               onExpand={this.onExpand}
               expandedKeys={expandedKeys}
               autoExpandParent={autoExpandParent}
-              onCheck={this.onCheck}
-              checkedKeys={this.state.checkedKeys}
-              onSelect={this.onSelect}
-              selectedKeys={this.state.selectedKeys}
+              onCheck={this.props.onCheck}
+              checkedKeys={this.props.checkedKeys}
+              onSelect={this.props.onSelect}
+              selectedKeys={this.props.selectedKeys}
               filterTreeNode={this.filterTreeNode}
             >
               {loop(this.props.data)}
