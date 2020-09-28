@@ -67,7 +67,8 @@ const mapStateToProps = (state) => {
     roles: state.roles.data,
     hasErrored: state.rolesHasErrored,
     isLoading: state.rolesIsLoading,
-    accounts: state.accounts
+    accounts: state.accounts,
+    currentAccountId: state.currentAccountId
   }
 }
 
@@ -90,18 +91,24 @@ function CreateUser  (props) {
   const [company, setCompany] = React.useState('testCompanyxuzx')
   const [inviteButtonDisabled, setInviteButtonDisabled] = React.useState(false)
 
-  const [selectedKeys, setSelectedKeys] = React.useState([])
   const [checkedKeys, setCheckedKeys] = React.useState([])
+  const [topLevelCheckedAccounts, setTopLevelCheckedAccounts] = React.useState([])
 
 
   const onCheck = checkedKeys => {
     setCheckedKeys(checkedKeys)
+    if(checkedKeys.checked && checkedKeys.checked.length > 0) {
+      let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
+      let checkedAccounts = getTopLevelChecked(checkedKeys,accountsCopy)
+      let accounts = []
+      for (const accountId of checkedAccounts) {
+        accounts.push({accountId: accountId})
+      }
+      setTopLevelCheckedAccounts(accounts)
+    }
   }
 
 
-  const onSelect = (selectedKeys, info) => {
-    setSelectedKeys(selectedKeys)
-  }
 
   const handleRoleSelect = (event) => {
     setSelectedRoles(event.target.value)
@@ -133,28 +140,29 @@ function CreateUser  (props) {
 
   const handleInviteUserClick = () => {
     setInviteButtonDisabled(true)
-    let mockAccounts = []
     let userType = internalUserChecked ? 'Internal' : 'External'
     let userRoles = []
     for (const role of selectedRoles) {
       userRoles.push({roleId: role})
     }
-    let newUser = new User('placeholder', firstName, lastName, company, email, userType, userRoles, mockAccounts)
+
+    let accountsToLink = []
+    if(topLevelCheckedAccounts.length > 0) {
+      accountsToLink = topLevelCheckedAccounts
+    } else {
+      let currentAccountId = localStorage.getItem('currentAccountId')
+      accountsToLink = [{accountId: currentAccountId}]
+    }
+
+    let newUser = new User('placeholder', firstName, lastName, company, email, userType, userRoles, accountsToLink)
     props.addNewUser(newUser)
     setShowAlertMessage(true)
     setTimeout(function() {
       setShowAlertMessage(false)
       setInviteButtonDisabled(false)
-    }, 4000)
+    }, 2000)
   }
-  //[{roleId: 11},{roleId: 12}]
 
-  if(props.accounts && props.accounts.data && checkedKeys.checked && checkedKeys.checked.length > 0) {
-    let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
-    let test = getTopLevelChecked(checkedKeys,accountsCopy)
-    console.log(test)
-  }
-  
 
   return (
     <div>
@@ -271,8 +279,6 @@ function CreateUser  (props) {
                         search={true}
                         treeContainerHeight={150}
                         onCheck={onCheck}
-                        onSelect={onSelect}
-                        selectedKeys={selectedKeys}
                         checkedKeys={checkedKeys}
                       />
                   
@@ -288,14 +294,7 @@ function CreateUser  (props) {
                    null
                  }
 
-                 <div style={{color:'white'}}>
-                   selected: 
-                   {JSON.stringify(selectedKeys)}
-                   checked:
-                  {JSON.stringify(checkedKeys)}
-                  </div> 
-
-                 
+                
                  
                 :
                  <div></div>
