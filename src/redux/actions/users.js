@@ -267,11 +267,6 @@ export const deleteUser = (userId) => {
 
 export const createUser = (user) => {
   
-  if(user.password && user.password.length > 0) {
-    
-  } else {
-    user.password = 'testasdfa!'
-  }
   
   
   delete user.userId
@@ -283,7 +278,7 @@ export const createUser = (user) => {
   console.log('here')
   console.log(user)
 
-  let url =  apiBase + `/user`
+  let url =  apiBase + `/user/invite`
   return (dispatch) => {
     console.log('after dispatch')
     dispatch(usersAddUser(user));

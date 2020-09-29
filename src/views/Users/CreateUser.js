@@ -124,7 +124,7 @@ function CreateUser  (props) {
   }
 
   const formIsValid = () => {
-    if ((v.isCompanySuccess(company)) && (v.isEmailSuccess(email)) && (v.isFirstNameSuccess(firstName)) && (v.isLastNameSuccess(lastName)) && (v.isRoleSuccess(selectedRoles)) ) return true
+    if ((v.isCompanySuccess(company)) && (v.isEmailSuccess(email)) && (v.isFirstNameSuccess(firstName)) && (v.isLastNameSuccess(lastName)) && (v.isRoleSuccess(selectedRoles)) && checkedKeys.checked &&  checkedKeys.checked.length > 0) return true
     return false
   }
 

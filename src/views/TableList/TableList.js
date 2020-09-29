@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
   root: {
     minWidth: 150,
+    color: 'black'
   },
   bullet: {
     display: 'inline-block',
@@ -38,8 +39,8 @@ function OutlinedCard(props) {
     <Card className={classes.root} variant="outlined">
       <CardContent>
        
-        <Typography variant="h5" component="h2">
-          {props.nodeData.nodeName}
+        <Typography  variant="h5" component="h2">
+          {props.nodeData.name}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
           adjective
@@ -67,20 +68,7 @@ class NodeLabel extends React.PureComponent {
     const {className, nodeData} = this.props
     return (
 
-      <div style={{width: '220px',
-        height: '50px',
-        background: '#FFFFFF',
-        border: '1px solid rgba(0, 0, 0, 0.78)',
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        borderRadius: '3px',
-        position: 'absolute',
-        left: '-110px',
-        display: 'flex'}}
-      >
-
-        {nodeData.name}
-
-      </div>
+      <OutlinedCard nodeData={nodeData}/>
      
 
     )
