@@ -60,8 +60,6 @@ const mapDispatchToProps = (dispatch) => {
 
 function EditUser(props) {
 
-  console.log('edit user mounted')
-
   let parsedUserId = JSON.parse(props.match.params.user) 
   const [userIdUnderEdit, setUserIdUnderEdit] = React.useState(parsedUserId)
   const [user, setUser] = React.useState({email:'',firstName:'',lastName:'',company:'',roles:[],accounts:[]})
@@ -78,7 +76,6 @@ function EditUser(props) {
   }
 
   const onCheck = checkedKeys => {
-    console.log(checkedKeys)
     setCheckedKeys(checkedKeys)
     if(checkedKeys.checked && checkedKeys.checked.length > 0) {
       let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
@@ -117,7 +114,7 @@ function EditUser(props) {
   }
 
   const formIsValid = () => {
-    if ((v.isCompanySuccess(user.company)) && (v.isEmailSuccess(user.email)) && (v.isFirstNameSuccess(user.firstName)) && (v.isLastNameSuccess(user.lastName)) && (v.isRoleSuccess(user.roles)) ) return true
+    if ((v.isCompanySuccess(user.company)) && (v.isEmailSuccess(user.email)) && (v.isFirstNameSuccess(user.firstName)) && (v.isLastNameSuccess(user.lastName)) && (v.isRoleSuccess(user.roles)) && checkedKeys.checked && checkedKeys.checked.length > 0) return true
     return false
   }
 
@@ -130,9 +127,7 @@ function EditUser(props) {
     for (const role of user.roles) {
       roles.push({roleId: role})
     }
-    props.updateUserRoles(user, roles)
-    console.log('final result after processign:')
-    console.log(topLevelCheckedAccounts)
+    props.updateUserRoles(user, roles)   
     let accounts = []
     for (const account of topLevelCheckedAccounts) {
       accounts.push({accountId: account.accountId})
@@ -147,7 +142,6 @@ function EditUser(props) {
 
   
 
-
   React.useEffect(() => { 
 
     
@@ -155,18 +149,12 @@ function EditUser(props) {
       for (const user of props.users.data) {
              if(user.userId === userIdUnderEdit) {
                let userCopy = JSON.parse(JSON.stringify(user))
-               console.log('about to set this user:')
-               console.log(userCopy)
                setUser(userCopy)
                let checkedAccounts = {checked: [], halfChecked:[]}
                if(userCopy.accounts){
                  for (const account of userCopy.accounts) {
                    checkedAccounts.checked.push(String(account.accountId))
                  }
-                 // set the checked keys for tree UI
-                 //setCheckedKeys(checkedAccounts)
-                
-                 // call the onCheck function which triggers the 
                  onCheck(checkedAccounts)
                }             
                return
@@ -175,18 +163,9 @@ function EditUser(props) {
     }
   }, [props.users])
 
-  //setFinalChecks()
-
-    
   return (
     <div>
 
-      {/*props.users && props.users.data ?
-       <pre style={{color:'white'}}>{JSON.stringify(checkedKeys,null,2)}</pre>
-      :
-      null
-      */}
-     
         <GridContainer>
           <GridItem xs={12} sm={12} md={8}>
             <Card>
