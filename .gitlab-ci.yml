@@ -1,7 +1,7 @@
 stages:
   - build
   - deploy
-
+  - deploy-to-google
 
 build-staging:
   # Official docker image.
@@ -72,3 +72,36 @@ deploy-to-staging:
 
   only:
     - /^sprint-.*$/
+    
+
+
+
+#section name
+deploy-to-staging-google-cloud-run:
+  stage: deploy-to-google
+  image: google/cloud-sdk
+  services:
+    - docker:dind
+  script:
+      - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
+      - gcloud auth activate-service-account --key-file gcloud-service-key.json
+      - gcloud config set project $GCP_PROJECT_ID
+      - gcloud builds submit . --config=googlecloudbuild-staging.yaml
+  #only:
+  #  - /^sprint-.*$/
+  #TEST BRAND NEW DEPLOY TO GOOGLE CLOUD RUN
+
+
+#section name
+deploy-to-prod-google-cloud-run:
+  stage: deploy-to-google
+  image: google/cloud-sdk
+  services:
+    - docker:dind
+  script:
+      - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
+      - gcloud auth activate-service-account --key-file gcloud-service-key.json
+      - gcloud config set project $GCP_PROJECT_ID
+      - gcloud builds submit . --config=googlecloudbuild-prod.yaml
+  only:
+    - master
