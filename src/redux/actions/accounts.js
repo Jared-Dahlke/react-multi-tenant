@@ -8,11 +8,12 @@ import {
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
 import config from "../../config.js";
-import {userProfileFetchData} from '../actions/auth'
+import {userProfileFetchData, setAuthToken} from '../actions/auth'
 import {usersFetchData, usersFetchDataSuccess, usersIsLoading} from '../actions/users'
 import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesPermissionsFetchDataSuccess, rolesPermissionsIsLoading} from '../actions/roles'
 import {brandProfilesFetchDataSuccess, fetchBrandProfiles} from '../actions/brandProfiles'
 import {findAccountNodeByAccountId} from '../../utils'
+import { useHistory } from "react-router-dom";
 //import { Account } from "../../models/user";
 
 
@@ -88,6 +89,7 @@ export function clearSiteData() {
 
 
 export function fetchSiteData(accountId) {
+
   
   return async (dispatch) => {
       try {
@@ -98,6 +100,14 @@ export function fetchSiteData(accountId) {
       
       let result = await axios.get(accountsUrl);
       let accounts = { data: result.data };
+      if(!result.data[0]) {
+        console.log('user has no accounts')
+        alert('You have no accounts assigned to you. Please contact your inviter')
+        window.location.href = '/login'
+        localStorage.removeItem('token')
+        //dispatch(setAuthToken(null))
+        return
+      }
 
       dispatch(accountsFetchDataSuccess(accounts));
 

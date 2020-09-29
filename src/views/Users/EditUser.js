@@ -14,7 +14,10 @@ import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
-import {updateUserData} from '../../redux/actions/users'
+import {updateUserData, updateUserRoles, updateUserAccounts, fetchUserAccounts} from '../../redux/actions/users'
+import {getTopLevelChecked, setTopLevelCheckedAccounts} from '../../utils'
+import PrettyJson from "../../PrettyJson.js";
+
 
 const styles = {
   cardCategoryWhite: {
@@ -39,29 +42,52 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    roles: state.roles.data
+    roles: state.roles.data,
+    accounts: state.accounts,
+    users: state.users
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateUserData: (userData) => dispatch(updateUserData(userData)),
+    fetchUserAccounts: (userId)=>dispatch(fetchUserAccounts(userId)),
+    updateUserRoles: (user, roles) => dispatch(updateUserRoles(user, roles)),
+    updateUserAccounts: (user, accounts) => dispatch(updateUserAccounts(user, accounts)),
   };
 };
 
 
 function EditUser(props) {
 
-  let parsedParams = JSON.parse(decodeURIComponent(props.match.params.user)) 
-  const [user, setUser] = React.useState(parsedParams)
+  console.log('edit user mounted')
+
+  let parsedUserId = JSON.parse(props.match.params.user) 
+  const [userIdUnderEdit, setUserIdUnderEdit] = React.useState(parsedUserId)
+  const [user, setUser] = React.useState({email:'',firstName:'',lastName:'',company:'',roles:[],accounts:[]})
   const classes = useStyles();
-  const [selectedRoles] = React.useState([])
+  const [selectedRoles, setSelectedRoles] = React.useState([])
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
+  const [checkedKeys, setCheckedKeys] = React.useState([])
+  const [topLevelCheckedAccounts, setTopLevelCheckedAccounts] = React.useState([])
 
   const handleFirstNameChange = (text) => {
     let currentUser = {...user}
     currentUser.firstName = text
     setUser(currentUser)
+  }
+
+  const onCheck = checkedKeys => {
+    setCheckedKeys(checkedKeys)
+    if(checkedKeys.checked && checkedKeys.checked.length > 0) {
+      let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
+      let checkedAccounts = getTopLevelChecked(checkedKeys,accountsCopy)
+      let accounts = []
+      for (const accountId of checkedAccounts) {
+        accounts.push({accountId: accountId})
+      }
+      setTopLevelCheckedAccounts(accounts)
+    }
   }
 
   const handleLastNameChange = (text) => {
@@ -99,17 +125,56 @@ function EditUser(props) {
   const handleSaveClick = () => {
     setSaveButtonDisabled(true)
     props.updateUserData(user)
+    let roles= []
+    for (const role of user.roles) {
+      roles.push({roleId: role})
+    }
+    props.updateUserRoles(user, roles)
+    let accounts = []
+    for (const account of topLevelCheckedAccounts) {
+      accounts.push({accountId: account.accountId})
+    }
+    props.updateUserAccounts(user, accounts)
     setShowAlertMessage(true)
     setTimeout(function() {
       setShowAlertMessage(false)
       setSaveButtonDisabled(false)
     }, 2000)
   }
-  
+
+
+  React.useEffect(() => { 
+    
+    if(props.users && props.users.data && props.users.data.length > 0) {
+      for (const user of props.users.data) {
+             if(user.userId === userIdUnderEdit) {
+               let userCopy = JSON.parse(JSON.stringify(user))
+               console.log('about to set this user:')
+               console.log(userCopy)
+               setUser(userCopy)
+               let checkedAccounts = {checked: [], halfChecked:[]}
+               if(userCopy.accounts){
+                 for (const account of userCopy.accounts) {
+                   checkedAccounts.checked.push(String(account.accountId))
+                 }
+                 setCheckedKeys(checkedAccounts)
+               }             
+               return
+             }
+      }   
+    }
+  }, [props.users])
+
+    
   return (
     <div>
 
-      
+      {/*props.users && props.users.data ?
+       <pre style={{color:'white'}}>{JSON.stringify(checkedKeys,null,2)}</pre>
+      :
+      null
+      */}
+     
         <GridContainer>
           <GridItem xs={12} sm={12} md={8}>
             <Card>
@@ -203,15 +268,31 @@ function EditUser(props) {
                   </GridItem>
 
                   {
-                    selectedRoles.includes(11) ?
+                    selectedRoles.includes(11) || true ?  //TODO: make sure user only sees tree if they are admin
 
                       <GridItem xs={12} sm={12} md={8}>
+                        {props.accounts.data && props.accounts.data.length > 0 ?
                         <CustomTree
                           //data={myData}
+
+                          data={props.accounts.data}
+                        
+                        keyProp='accountId'
+                        labelProp='accountName'
+                        valueProp='accountId'
+                        search={true}
+                        
+                        onCheck={onCheck}
+                        checkedKeys={checkedKeys}
+
+
                           title='Account Access'
                           search={true}
                           treeContainerHeight={150}
                         />
+                        :
+                        null
+                        }
                       </GridItem>
 
                       :

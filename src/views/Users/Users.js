@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import {usersFetchData, deleteUser} from '../../redux/actions/users.js'
+import {usersFetchData, deleteUser, fetchUserAccounts} from '../../redux/actions/users.js'
 import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
@@ -44,7 +44,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsersData: (currentAccountId) => dispatch(usersFetchData(currentAccountId)),
-    deleteUser: (userId) => dispatch(deleteUser(userId))
+    deleteUser: (userId) => dispatch(deleteUser(userId)),
+    fetchUserAccounts: (userId)=>dispatch(fetchUserAccounts(userId))
   }
 }
 
@@ -73,7 +74,8 @@ function Users(props) {
   const userHeaders = ['First Name','Last Name', 'Company','Email','User Type','']
 
   const handleEditUserClick = (user) => {
-    let url = '/admin/settings/users/edit/' + encodeURIComponent(JSON.stringify(user))
+    props.fetchUserAccounts(user.userId)
+    let url = `/admin/settings/users/edit/${user.userId}`
     history.push(url)
   }
 

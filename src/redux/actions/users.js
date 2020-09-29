@@ -6,7 +6,8 @@ import {
   USERS_REMOVE_USER,
   USERS_ADD_USER,
   USER_ADDED,
-  USERS_IS_LOADING
+  USERS_IS_LOADING,
+  USERS_SET_USER_ACCOUNTS
 } from "../action-types/users";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
@@ -81,8 +82,13 @@ export function usersFetchData(accountId) {
 
       dispatch(usersIsLoading(false))
       
-
       if (result.status === 200) {
+        if(!result.data[0]) {
+          alert('This account has no users associated with it. There should always be at least one user (yourself). Please contact your inviter')
+          window.location.href = '/login'
+          localStorage.removeItem('token')
+          return
+        }
         let users = { data: [] };
         for (const user of result.data) {
 
@@ -98,8 +104,7 @@ export function usersFetchData(accountId) {
             alert('Error trying to add roles to /user in the fetchUsers function: ' + error)
             return
           }
-          
-          
+                  
           try{
             let newUser = new User(
               user.userId,
@@ -128,6 +133,33 @@ export function usersFetchData(accountId) {
   };
 }
 
+export function fetchUserAccounts(userId) {
+  let url = apiBase + `/user/${userId}/accounts`;
+  return async (dispatch) => {
+    try {
+      
+      let result = []
+     
+      try {
+
+        result = await axios.get(url);
+
+      } catch (error) {
+        console.log(error)      
+      }
+      
+      if (result.status === 200) {
+        console.log('got accounts for user')
+        console.log(result)
+        //append to users main object
+        dispatch(usersSetUserAccounts(userId, result.data))
+      }
+    } catch (error) {
+      alert('Error on fetch users: ' +JSON.stringify(error,null,2))
+    }
+  };
+}
+
 export function updateUserData(user) {
   let userId = user.userId;
   let url = apiBase + `/user/${userId}`;
@@ -138,16 +170,47 @@ export function updateUserData(user) {
       delete myUser.roles
       const result = await axios.patch(url, myUser);
       if (result.status === 200) {
-        dispatch(setUser(result.data.user));
+       // console.log('updating user through update user data')
+       // console.log(result.data.user)
+       // dispatch(setUser(result.data.user));
       }
     } catch (error) {
       alert(error);
-      let errorType = error.response.status;
-      handleError(dispatch,errorType);
-      dispatch(usersHasErrored(true));
     }
   };
 }
+
+export function updateUserRoles(user, roles) {
+  let userId = user.userId;
+  let url = apiBase + `/user/${userId}/roles`;
+  return async (dispatch) => {
+    try {
+      const result = await axios.patch(url, roles);
+      if (result.status === 200) {
+       // dispatch(setUser(result.data.user));
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+}
+
+
+export function updateUserAccounts(user, accounts) {
+  let userId = user.userId;
+  let url = apiBase + `/user/${userId}/accounts`;
+  return async (dispatch) => {
+    try {
+      const result = await axios.patch(url, accounts);
+      if (result.status === 200) {
+       // dispatch(setUser(result.data.user));
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+}
+
 export function usersRemoveUser(userId) {
   return {
     type: USERS_REMOVE_USER,
@@ -159,6 +222,15 @@ export function usersAddUser(user) {
   return {
     type: USERS_ADD_USER,
     user,
+  };
+}
+
+
+export function usersSetUserAccounts(userId, accounts) {
+  let payload = {userId, accounts}
+  return {
+    type: USERS_SET_USER_ACCOUNTS,
+    payload,
   };
 }
 

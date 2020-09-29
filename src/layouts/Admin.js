@@ -43,7 +43,7 @@ const switchRoutes = (
         <>
           <Route path={`${url}/`} component={Users} exact />
           <Route path={`${url}/create`} component={CreateUser} />      
-          <Route path={`${url}/edit/:user`} component={EditUser} />   
+          <Route path={`${url}/edit/:user`} render={(props) => <EditUser {...props} foo="bar"/>} />   
         </>
       )}
     />

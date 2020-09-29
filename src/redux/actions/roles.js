@@ -3,6 +3,7 @@ import {ROLES_HAS_ERRORED, ROLES_PERMISSIONS_HAS_ERRORED, ROLES_IS_LOADING, ROLE
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 import config from '../../config'
+import {setAuthToken} from './auth'
 const apiBase = config.apiGateway.URL;
 
 export function rolesHasErrored(bool) {
@@ -55,6 +56,12 @@ export function rolesFetchData(accountId) {
       const result = await axios.get(url)       
       dispatch(rolesIsLoading(false));
       if (result.status === 200) {
+        if(!result.data[0]) {
+          alert('This account has no roles associated with it. Please contact your inviter')
+          window.location.href = '/login'
+          localStorage.removeItem('token')
+          return
+        }
         dispatch(rolesFetchDataSuccess(result))
       }
 
@@ -81,6 +88,12 @@ export function rolesPermissionsFetchData(accountId) {
       const result = await axios.get(url)  
          
       if (result.status === 200) {
+        if(!result.data[0]) {
+          alert('This account has no roles associated with it. Please contact your inviter')
+          window.location.href = '/login'
+          localStorage.removeItem('token')
+          return
+        }
         dispatch(rolesPermissionsFetchDataSuccess(result))
         dispatch(rolesPermissionsIsLoading(false));  
       }

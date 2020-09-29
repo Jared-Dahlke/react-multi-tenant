@@ -15,6 +15,7 @@ import CardBody from './Card/CardBody'
 import CustomInput from './CustomInput/CustomInput';
 import {fetchSiteData, clearSiteData} from '../redux/actions/accounts'
 import {getCurrentAccount} from '../utils'
+import CardStyles from '../assets/jss/material-dashboard-react/components/cardStyle'
 
 const useStyles = makeStyles({
   root: {
@@ -24,11 +25,10 @@ const useStyles = makeStyles({
     maxWidth: 400,
   },
   popoverContent: {
-    padding: '15px',
+   // padding: '15px',
     //margin:'15px',
-    width: '300px',
-    backgroundColor: blackColor,
-    color: whiteColor
+    width: '400px',
+
   },
   selected: {
     "&::selected": {
@@ -36,9 +36,9 @@ const useStyles = makeStyles({
     }
   }
 
-
-
 });
+
+const useCardStyles = makeStyles(CardStyles)
 
 const mapStateToProps = (state) => {
   return {
@@ -57,6 +57,7 @@ const mapDispatchToProps = (dispatch) => {
 const Tree = (props)=>{
 
   const classes = useStyles();
+  
 
   const StyledTreeItem = withStyles({
     label: {
@@ -98,7 +99,7 @@ const Tree = (props)=>{
       }
       return ( 
       <StyledTreeItem 
-        style={{fontSize: 16, fontFamily: defaultFont.fontFamily, color:'white'}} 
+        style={{fontSize: 16, fontFamily: defaultFont.fontFamily, color: whiteColor}} 
         nodeId={String(item.accountId)} 
         key={item.accountId} 
         label={item.accountName} 
@@ -130,6 +131,7 @@ const Tree = (props)=>{
 
 function SimplePopover(props) {
   const classes = useStyles();
+  const cardClasses = useCardStyles()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedAccountName, setSelectedAccountName] = React.useState('');
 
@@ -191,11 +193,6 @@ function SimplePopover(props) {
     
   }
 
-  
- 
-  //console.log('selected blah:' + selectedBlah)
-  
-
   return (
     <div>
       <div aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
@@ -232,16 +229,25 @@ function SimplePopover(props) {
           horizontal: 'center',
         }}
       >
-        <div className={classes.popoverContent}>
-        
+        <div className={classes.popoverContent} >
+       
+          <Card style={{margin:0,padding:0, backgroundColor: blackColor}}>
 
-          <Tree
-            expanded={expanded}
-            selected={selected}
-            handleToggle={handleToggle}
-            handleSelect={handleSelect}
-            data={props.accounts.data}
-          />
+            <CardBody>
+
+              <Tree
+                expanded={expanded}
+                selected={selected}
+                handleToggle={handleToggle}
+                handleSelect={handleSelect}
+                data={props.accounts.data}
+              />
+
+            </CardBody>
+          
+           
+          
+          </Card>
         
           
          
