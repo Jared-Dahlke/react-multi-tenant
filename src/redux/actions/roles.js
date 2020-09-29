@@ -58,9 +58,9 @@ export function rolesFetchData(accountId) {
       if (result.status === 200) {
         if(!result.data[0]) {
           alert('This account has no roles associated with it. Please contact your inviter')
-          window.location.href = '/login'
-          localStorage.removeItem('token')
-          return
+          //window.location.href = '/login'
+          //localStorage.removeItem('token')
+          //return
         }
         dispatch(rolesFetchDataSuccess(result))
       }
@@ -90,9 +90,9 @@ export function rolesPermissionsFetchData(accountId) {
       if (result.status === 200) {
         if(!result.data[0]) {
           alert('This account has no roles associated with it. Please contact your inviter')
-          window.location.href = '/login'
-          localStorage.removeItem('token')
-          return
+          //window.location.href = '/login'
+          //localStorage.removeItem('token')
+          //return
         }
         dispatch(rolesPermissionsFetchDataSuccess(result))
         dispatch(rolesPermissionsIsLoading(false));  

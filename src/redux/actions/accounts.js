@@ -103,9 +103,9 @@ export function fetchSiteData(accountId) {
       console.log(result)
       if(!result.data[0]) {
         alert('You have no accounts assigned to you. Please contact your inviter')
-        window.location.href = '/login'
-        localStorage.removeItem('token')
-        return
+        //window.location.href = '/login'
+        //localStorage.removeItem('token')
+        //return
       }
 
       dispatch(accountsFetchDataSuccess(accounts));
