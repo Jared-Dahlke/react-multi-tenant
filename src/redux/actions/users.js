@@ -197,6 +197,13 @@ export function updateUserRoles(user, roles) {
 
 
 export function updateUserAccounts(user, accounts) {
+  console.log('showing accounts from update user accounts')
+  console.log(accounts)
+  if(accounts.length < 1) {
+    alert('User not saved. Each user must have at least one account assigned to them.')
+    return
+  }
+  
   let userId = user.userId;
   let url = apiBase + `/user/${userId}/accounts`;
   return async (dispatch) => {
