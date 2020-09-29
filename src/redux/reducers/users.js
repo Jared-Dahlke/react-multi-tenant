@@ -1,4 +1,14 @@
-import {USERS_HAS_ERRORED, USERS_FETCH_DATA_SUCCESS, USER_DELETED, USER_DELETED_ERROR, USERS_REMOVE_USER, USERS_ADD_USER, USER_ADDED, USERS_IS_LOADING} from '../action-types/users'
+import {
+  USERS_HAS_ERRORED, 
+  USERS_FETCH_DATA_SUCCESS, 
+  USER_DELETED, 
+  USER_DELETED_ERROR, 
+  USERS_REMOVE_USER, 
+  USERS_ADD_USER, 
+  USER_ADDED, 
+  USERS_IS_LOADING,
+  USERS_SET_USER_ACCOUNTS
+} from '../action-types/users'
 
 
 export function usersHasErrored(state = false, action) {
@@ -59,15 +69,22 @@ export function users(state = [], action) {
     users = {data: newState}
     return users;
   case USERS_ADD_USER:
-    console.log('adding user')
-    console.log(state.data)
     let stateData = []
     if(state.data && state.data.length > 0) {
       stateData = JSON.parse(JSON.stringify(state.data))
     }  
-    console.log('added user')
     stateData.push(action.user)
     users = {data: stateData}
+    return users;
+  case USERS_SET_USER_ACCOUNTS:
+    let stateCopy = []
+    if(state.data && state.data.length > 0) {
+      stateCopy = JSON.parse(JSON.stringify(state.data))
+    }  
+    for (const user of stateCopy) {
+      if(user.userId === action.payload.userId) user.accounts = action.payload.accounts
+    }
+    users = {data: stateCopy}
     return users;
   default:
     return state;

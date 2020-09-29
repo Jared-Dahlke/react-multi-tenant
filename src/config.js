@@ -4,6 +4,7 @@ const development = {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
     MOCKURL: "https://reqres.in/api", //mock api
     URL: "http://localhost:4000"
+   //URL: "https://api-cont-intell-user-account-staging-zu7blp7gxa-uw.a.run.app"
   }
 }
 

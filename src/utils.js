@@ -8,6 +8,7 @@ export function findAccountNodeByAccountId (accountId, array) {
   }
 }
 
+
 export function markAllAccountsAsCurrentFalse (array) {
   for (const node of array) {
     node.current = false
