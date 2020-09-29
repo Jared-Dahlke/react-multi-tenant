@@ -130,11 +130,7 @@ function Login(props) {
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item>
-                <Link href="/signup" variant="body2" style={{color: whiteColor}}>
-                  {"Don't have an account?"}
-                </Link>
-              </Grid>
+             
             </Grid>
           </form>
         </div>

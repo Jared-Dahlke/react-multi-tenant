@@ -161,12 +161,12 @@ export function changePassword(password, userId, token) {
       });
 
       if (result.status === 200) {
-        dispatch(setShowAlert(true));
+        
+        window.location.href = '/login'
+        //dispatch(setShowAlert(true));
       }
     } catch (error) {
-      alert(error);
-      let errorType = error.response.status;
-      handleError(dispatch, errorType);
+      alert(error);     
     }
   };
 }

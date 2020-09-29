@@ -149,9 +149,7 @@ function PasswordChange(props) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link style={{color: whiteColor}} href="/signup" variant="body2">
-                  {"Don't have an account?"}
-                </Link>
+               
               </Grid>
             </Grid>
           </form>
