@@ -100,12 +100,11 @@ export function fetchSiteData(accountId) {
       
       let result = await axios.get(accountsUrl);
       let accounts = { data: result.data };
+      console.log(result)
       if(!result.data[0]) {
-        console.log('user has no accounts')
         alert('You have no accounts assigned to you. Please contact your inviter')
-        window.location.href = '/login'
-        localStorage.removeItem('token')
-        //dispatch(setAuthToken(null))
+        //window.location.href = '/login'
+        //localStorage.removeItem('token')
         return
       }
 

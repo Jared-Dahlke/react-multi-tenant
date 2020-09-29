@@ -15,7 +15,7 @@ import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
 import * as v from '../../validations'
 import {updateUserData, updateUserRoles, updateUserAccounts, fetchUserAccounts} from '../../redux/actions/users'
-import {getTopLevelChecked, setTopLevelCheckedAccounts} from '../../utils'
+import {getTopLevelChecked} from '../../utils'
 import PrettyJson from "../../PrettyJson.js";
 
 
@@ -78,6 +78,7 @@ function EditUser(props) {
   }
 
   const onCheck = checkedKeys => {
+    console.log(checkedKeys)
     setCheckedKeys(checkedKeys)
     if(checkedKeys.checked && checkedKeys.checked.length > 0) {
       let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
@@ -130,6 +131,8 @@ function EditUser(props) {
       roles.push({roleId: role})
     }
     props.updateUserRoles(user, roles)
+    console.log('final result after processign:')
+    console.log(topLevelCheckedAccounts)
     let accounts = []
     for (const account of topLevelCheckedAccounts) {
       accounts.push({accountId: account.accountId})
@@ -142,8 +145,11 @@ function EditUser(props) {
     }, 2000)
   }
 
+  
+
 
   React.useEffect(() => { 
+
     
     if(props.users && props.users.data && props.users.data.length > 0) {
       for (const user of props.users.data) {
@@ -157,13 +163,19 @@ function EditUser(props) {
                  for (const account of userCopy.accounts) {
                    checkedAccounts.checked.push(String(account.accountId))
                  }
-                 setCheckedKeys(checkedAccounts)
+                 // set the checked keys for tree UI
+                 //setCheckedKeys(checkedAccounts)
+                
+                 // call the onCheck function which triggers the 
+                 onCheck(checkedAccounts)
                }             
                return
              }
       }   
     }
   }, [props.users])
+
+  //setFinalChecks()
 
     
   return (
