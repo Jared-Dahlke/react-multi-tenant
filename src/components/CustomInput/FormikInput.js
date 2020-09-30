@@ -80,7 +80,7 @@ export default function CustomInput(props) {
           id={id}
           {...inputProps}
           {...field}
-          style={{color: whiteColor}}
+          style={{color: props.inputColor ? props.inputColor : whiteColor}}
           autoComplete="adf"
         />
         <FormHelperText id="component-helper-text" style={{color: dangerColor[0]}}></FormHelperText>
@@ -125,5 +125,6 @@ CustomInput.propTypes = {
   error: PropTypes.bool,
   success: PropTypes.bool,
   handleClear: PropTypes.func,
-  styling: PropTypes.object
+  styling: PropTypes.object,
+  inputColor: PropTypes.string
 };
