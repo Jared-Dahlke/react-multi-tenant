@@ -1,4 +1,4 @@
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER, SET_USER_ID, USER_PROFILE_IS_LOADING} from '../action-types/auth'
+import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_SHOW_ALERT, SET_USER, SET_USER_ID, USER_PROFILE_IS_LOADING, SUCCESS_PASSWORD_CHANGED} from '../action-types/auth'
 import {User} from '../../models/user'
 
 let newUser = new User(' ', ' ', ' ', ' ', ' ', ' ', [], [])
@@ -24,6 +24,16 @@ export function userProfileIsLoading(state = true, action) {
   switch (action.type) {
   case USER_PROFILE_IS_LOADING:
     return action.userProfileIsLoading;
+  default:
+    return state;
+  }
+}
+
+
+export function successPasswordChanged(state = false, action) {
+  switch (action.type) {
+  case SUCCESS_PASSWORD_CHANGED:
+    return action.successPasswordChanged;
   default:
     return state;
   }

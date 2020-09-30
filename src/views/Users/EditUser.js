@@ -17,7 +17,7 @@ import * as v from '../../validations'
 import {updateUserData, updateUserRoles, updateUserAccounts, fetchUserAccounts} from '../../redux/actions/users'
 import {getTopLevelChecked} from '../../utils'
 import PrettyJson from "../../PrettyJson.js";
-
+import {FormLoader} from '../../components/SkeletonLoader'
 
 const styles = {
   cardCategoryWhite: {
@@ -44,7 +44,8 @@ const mapStateToProps = (state) => {
   return { 
     roles: state.roles.data,
     accounts: state.accounts,
-    users: state.users
+    users: state.users,
+    editUserUserAccountsLoading: state.editUserUserAccountsLoading
   };
 };
 
@@ -262,27 +263,21 @@ function EditUser(props) {
                     selectedRoles.includes(11) || true ?  //TODO: make sure user only sees tree if they are admin
 
                       <GridItem xs={12} sm={12} md={8}>
-                        {props.accounts.data && props.accounts.data.length > 0 ?
+                        {props.accounts.data && props.accounts.data.length > 0 && !props.editUserUserAccountsLoading ?
                         <CustomTree
-                          //data={myData}
-
-                          data={props.accounts.data}
-                        
-                        keyProp='accountId'
-                        labelProp='accountName'
-                        valueProp='accountId'
-                        search={true}
-                        
-                        onCheck={onCheck}
-                        checkedKeys={checkedKeys}
-
-
+                          data={props.accounts.data}                     
+                          keyProp='accountId'
+                          labelProp='accountName'
+                          valueProp='accountId'
+                          search={true}                        
+                          onCheck={onCheck}
+                          checkedKeys={checkedKeys}
                           title='Account Access'
                           search={true}
                           treeContainerHeight={150}
                         />
                         :
-                        null
+                        <FormLoader/>
                         }
                       </GridItem>
 

@@ -5,7 +5,7 @@ import AccountTree from "@material-ui/icons/AccountTree"
 import LockOpenIcon from "@material-ui/icons/LockOpen"
 import Business from '@material-ui/icons/Business'
 import UserProfile from "./views/UserProfile/UserProfile.js";
-import TableList from "./views/TableList/TableList.js";
+import Account from "./views/Account/Account";
 import Users from "./views/Users/Users";
 import RolesPermissions from "./views/RolesPermissions/RolesPermissions";
 
@@ -19,10 +19,10 @@ const settingsRoutes = [
     hide: true
   },
   {
-    path: "/settings/accounts",
+    path: "/settings/account",
     name: "Account",
     icon: AccountTree,
-    component: TableList,
+    component: Account,
     layout: "/admin",
     hide: true
   },

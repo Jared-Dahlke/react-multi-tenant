@@ -266,6 +266,23 @@ const logoStyle = {
     border: "0"
 }
 
+const logoStyleAccount = {
+  width: "100px", 
+  verticalAlign: "middle",
+  border: "0",
+  padding:'0',
+
+  backgroundColor: blackColor
+}
+
+const logoStyleAccountChrome = {
+  width: "130px", 
+  verticalAlign: "middle",
+  border: "0",
+  margin:"20px",
+  backgroundColor: blackColor
+}
+
 
 const logoStyleBrand = {
   width: "130px", 
@@ -312,5 +329,7 @@ export {
   cardSubtitle,
   cardLink,
   logoStyle,
-  logoStyleBrand
+  logoStyleAccount,
+  logoStyleBrand,
+  logoStyleAccountChrome
 }

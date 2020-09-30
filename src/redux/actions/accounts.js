@@ -2,8 +2,8 @@ import {
  
   ACCOUNTS_FETCH_DATA_SUCCESS,
   SET_CURRENT_ACCOUNT_ID,
-  SET_CURRENT_ACCOUNT
-  
+  SET_CURRENT_ACCOUNT,
+  TREE_ACCOUNTS_CONVERT_DATA_SUCCESS
 } from "../action-types/accounts";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
@@ -14,6 +14,7 @@ import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesP
 import {brandProfilesFetchDataSuccess, fetchBrandProfiles} from '../actions/brandProfiles'
 import {findAccountNodeByAccountId} from '../../utils'
 import { useHistory } from "react-router-dom";
+import { editUserUserAccountsLoading } from "../actions/users";
 //import { Account } from "../../models/user";
 
 
@@ -24,6 +25,14 @@ export function accountsFetchDataSuccess(accounts) {
   return {
     type: ACCOUNTS_FETCH_DATA_SUCCESS,
     accounts,
+  };
+}
+
+
+export function treeAccountsConvertDataSuccess(treeAccounts) {
+  return {
+    type: TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
+    treeAccounts,
   };
 }
 
@@ -41,33 +50,6 @@ export function setCurrentAccount(accountId) {
   };
 }
 
-export function accountsFetchData(userId) {
-  let url = apiBase + `/user/${userId}/accounts`;
-  return async (dispatch) => {
-    try {
-      
-      let result = []
-      try {
-        result = await axios.get(url);
-      } catch (error) {
-        console.log('error fetching accounts')
-        if(result.status === 401) {
-          handleError(dispatch, result.status);
-        }
-      }
-
-      if (result.status === 200) {
-        let accounts = { data: result.data };
-        
-        dispatch(accountsFetchDataSuccess(accounts));
-        
-      }
-    } catch (error) {
-      alert('Error on fetch accounts: ' +JSON.stringify(error,null,2))
-
-    }
-  };
-}
 
 
 
@@ -76,6 +58,7 @@ export function clearSiteData() {
 
     dispatch(rolesPermissionsIsLoading(true))
     dispatch(usersIsLoading(true))
+    dispatch(editUserUserAccountsLoading(true))
     dispatch(accountsFetchDataSuccess([]));
     dispatch(setCurrentAccountId(null))
     dispatch(usersFetchDataSuccess([]))
@@ -88,9 +71,28 @@ export function clearSiteData() {
 }
 
 
+function convertToTree(accountsdata) {
+let accounts = accountsdata.data
+  if(accounts.length === 1) return accounts
+
+  let ta = [
+    {
+      accountId: 0, 
+      accountName: 'You',
+      accountTypeName: 'You',
+      children: [],
+      
+    }
+  ]
+  for (const account of accounts) {
+    ta[0].children.push(account)
+  }
+
+  return ta
+}
+
 export function fetchSiteData(accountId) {
 
-  
   return async (dispatch) => {
       try {
 
@@ -100,7 +102,6 @@ export function fetchSiteData(accountId) {
       
       let result = await axios.get(accountsUrl);
       let accounts = { data: result.data };
-      console.log(result)
       if(!result.data[0]) {
         alert('You have no accounts assigned to you. Please contact your inviter')
         //window.location.href = '/login'
@@ -109,6 +110,10 @@ export function fetchSiteData(accountId) {
       }
 
       dispatch(accountsFetchDataSuccess(accounts));
+
+      let accountsCopy = JSON.parse(JSON.stringify(accounts))
+      let convertedAccounts = convertToTree(accountsCopy)
+      dispatch(treeAccountsConvertDataSuccess(convertedAccounts))
 
       if(!accountId) {
         let accountIdFromLocalStorage = localStorage.getItem('currentAccountId')

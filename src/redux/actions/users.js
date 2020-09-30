@@ -7,7 +7,8 @@ import {
   USERS_ADD_USER,
   USER_ADDED,
   USERS_IS_LOADING,
-  USERS_SET_USER_ACCOUNTS
+  USERS_SET_USER_ACCOUNTS,
+  EDIT_USER_USER_ACCOUNTS_LOADING
 } from "../action-types/users";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
@@ -55,6 +56,13 @@ export function usersIsLoading(bool) {
     type: USERS_IS_LOADING,
     usersIsLoading: bool,
   };
+}
+
+export function editUserUserAccountsLoading(bool) {
+  return {
+    type: EDIT_USER_USER_ACCOUNTS_LOADING,
+    editUserUserAccountsLoading: bool
+  }
 }
 
 export function usersFetchData(accountId) {
@@ -125,17 +133,16 @@ export function usersFetchData(accountId) {
         dispatch(usersFetchDataSuccess(users));
       }
     } catch (error) {
-      alert('Error on fetch users: ' +JSON.stringify(error,null,2))
-      //let errorType = error.response.status;
-      //handleError(dispatch, errorType);
-      //dispatch(usersHasErrored(true));
+      alert('Error on fetch users usersFetchData: ' +JSON.stringify(error,null,2))
     }
   };
 }
 
 export function fetchUserAccounts(userId) {
+  
   let url = apiBase + `/user/${userId}/accounts`;
   return async (dispatch) => {
+    dispatch(editUserUserAccountsLoading(true))
     try {
       
       let result = []
@@ -149,13 +156,11 @@ export function fetchUserAccounts(userId) {
       }
       
       if (result.status === 200) {
-        console.log('got accounts for user')
-        console.log(result)
-        //append to users main object
         dispatch(usersSetUserAccounts(userId, result.data))
+        dispatch(editUserUserAccountsLoading(false))
       }
     } catch (error) {
-      alert('Error on fetch users: ' +JSON.stringify(error,null,2))
+      alert('Error on fetch users: ' + JSON.stringify(error,null,2))
     }
   };
 }
@@ -197,8 +202,6 @@ export function updateUserRoles(user, roles) {
 
 
 export function updateUserAccounts(user, accounts) {
-  console.log('showing accounts from update user accounts')
-  console.log(accounts)
   if(accounts.length < 1) {
     alert('User not saved. Each user must have at least one account assigned to them.')
     return
@@ -273,32 +276,20 @@ export const createUser = (user) => {
   delete user.internal
   user.userName = 'placeholder'
   user.phoneNumber= '123123123'
-  //user.roles=[{roleId: 11},{roleId: 12}]
-
-  console.log('here')
-  console.log(user)
 
   let url =  apiBase + `/user/invite`
   return (dispatch) => {
-    console.log('after dispatch')
     dispatch(usersAddUser(user));
-    console.log('after')
     axios.post(url, user)
       .then(response => {
-        console.log(response)
         dispatch(userAdded(true))
         setTimeout(() => {
           dispatch(userAdded(false))
         }, 2000);
       })
       .catch(error => {
-
         console.log('invite user error')
         console.log(error)
-        //dispatch(userDeletedError(true))
-        //setTimeout(() => {
-        //  dispatch(userDeletedError(false))
-        //}, 2000);
       })
   };
 };

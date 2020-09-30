@@ -178,13 +178,14 @@ class Demo extends React.Component {
         <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
   
           <Tree
+            defaultExpandAll={true}
             checkStrictly
             showIcon={false}
             showLine={false}
             switcherIcon={switcherIcon}
             checkable
             onExpand={this.onExpand}
-            expandedKeys={expandedKeys}
+            //expandedKeys={expandedKeys}
             autoExpandParent={autoExpandParent}
             onCheck={this.props.onCheck}
             checkedKeys={this.props.checkedKeys}
