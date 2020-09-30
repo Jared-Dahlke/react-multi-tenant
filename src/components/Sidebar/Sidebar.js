@@ -109,7 +109,7 @@ export default function Sidebar(props) {
                   });
 
                   let itemClass = classes.nestedItemLink
-                  if(setting.path === '/settings/users' || setting.path === '/settings/rolesPermissions' || setting.path === '/settings/brandProfiles') {
+                  if(setting.path === '/settings/users' || setting.path === '/settings/rolesPermissions' || setting.path === '/settings/brandProfiles' || setting.path === '/settings/brandMentality') {
                     itemClass = classes.subNestedItemLink
                   }
 
