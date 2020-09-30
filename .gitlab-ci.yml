@@ -87,9 +87,8 @@ deploy-to-staging-google-cloud-run:
       - gcloud auth activate-service-account --key-file gcloud-service-key.json
       - gcloud config set project $GCP_PROJECT_ID
       - gcloud builds submit . --config=googlecloudbuild-staging.yaml
-  #only:
-  #  - /^sprint-.*$/
-  #TEST BRAND NEW DEPLOY TO GOOGLE CLOUD RUN
+  only:
+    - /^sprint-.*$/
 
 
 #section name
