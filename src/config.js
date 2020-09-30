@@ -13,7 +13,9 @@ const staging = {
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
     MOCKURL: "https://reqres.in/api/staging", //mock api
-    URL: "http://52.250.22.66:4000"
+    //URL: "http://52.250.22.66:4000"
+    //URL: "https://api-cont-intell-user-account-staging-zu7blp7gxa-uw.a.run.app"
+    URL: "https://reqres.in/api/staging"
   }
 }
 
