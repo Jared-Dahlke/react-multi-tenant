@@ -8,7 +8,7 @@ import {
 const iconsStyle = {
   iframe: {
     width: "100%",
-    height: "500px",
+    height: "650px",
     border: "0",
     ...boxShadow
   },
