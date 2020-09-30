@@ -58,10 +58,15 @@ const switchRoutes = (
       path='/admin/settings/brandProfiles'
       render={({ match: { url } }) => (
         <>
-          <Route path={`${url}/`} component={TestBrandProfile} exact />
+          <Route path={`${url}/`} component={BrandProfiles} exact />
           <Route path={`${url}/create`} component={CreateBrandProfile} />      
         </>
       )}
+    />
+
+    <Route
+      path='/admin/settings/brandMentality'
+      component={TestBrandProfile}
     />
 
     <Route

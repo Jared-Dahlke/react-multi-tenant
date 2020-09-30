@@ -47,7 +47,7 @@ function BrandProfiles(props) {
 <iframe
                 className={classes.iframe}
                 src="https://form.jotform.com/202726463369158"
-                title="Brand Profile"
+                title="Brand Mentality"
               >
                 <p>Your browser does not support iframes.</p>
               </iframe>

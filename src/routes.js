@@ -8,6 +8,7 @@ import UserProfile from "./views/UserProfile/UserProfile.js";
 import Account from "./views/Account/Account";
 import Users from "./views/Users/Users";
 import RolesPermissions from "./views/RolesPermissions/RolesPermissions";
+import Assignment from '@material-ui/icons/Assignment'
 
 const settingsRoutes = [
   {
@@ -42,11 +43,18 @@ const settingsRoutes = [
   },
   {
     path: "/settings/brandProfiles",
-    name: "Profiles",
+    name: "Brand Profiles",
     icon: Business,
-    component: RolesPermissions,
+    component: '',
     layout: "/admin"
-  }
+  },
+  {
+    path: "/settings/brandMentality",
+    name: "Brand Mentality",
+    icon: Assignment,
+    component: '',
+    layout: "/admin"
+  },
 ];
 
 export default settingsRoutes;
