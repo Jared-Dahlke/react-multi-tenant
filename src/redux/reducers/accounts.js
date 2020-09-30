@@ -1,4 +1,4 @@
-import { ACCOUNTS_FETCH_DATA_SUCCESS, SET_CURRENT_ACCOUNT_ID, SET_IS_SWITCHING_ACCOUNTS, SET_CURRENT_ACCOUNT} from '../action-types/accounts'
+import { ACCOUNTS_FETCH_DATA_SUCCESS, SET_CURRENT_ACCOUNT_ID, SET_IS_SWITCHING_ACCOUNTS, SET_CURRENT_ACCOUNT, TREE_ACCOUNTS_CONVERT_DATA_SUCCESS} from '../action-types/accounts'
 import {findAccountNodeByAccountId, markAllAccountsAsCurrentFalse} from '../../utils'
 
 
@@ -13,6 +13,16 @@ export function accounts(state = [], action) {
     account.current = true
     let accounts = {data: newAccounts}
     return accounts;
+  default:
+    return state;
+  }
+}
+
+
+export function treeAccounts(state = [], action) {
+  switch (action.type) {
+  case TREE_ACCOUNTS_CONVERT_DATA_SUCCESS:
+    return action.treeAccounts;
   default:
     return state;
   }

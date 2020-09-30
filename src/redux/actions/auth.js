@@ -4,7 +4,8 @@ import {
   SET_USER,
   SET_USER_ID,
   SET_SHOW_ALERT,
-  USER_PROFILE_IS_LOADING
+  USER_PROFILE_IS_LOADING,
+  SUCCESS_PASSWORD_CHANGED
 } from "../action-types/auth";
 import axios from "../../axiosConfig";
 import config from "../../config";
@@ -18,6 +19,13 @@ export function setAuthToken(payload) {
 
 export function setShowAlert(payload) {
   return { type: SET_SHOW_ALERT, payload };
+}
+
+export function successPasswordChanged(bool) {
+  return { 
+    type: SUCCESS_PASSWORD_CHANGED, 
+    successPasswordChanged: bool, 
+  };
 }
 
 export function userProfileIsLoading(bool) {
@@ -161,9 +169,11 @@ export function changePassword(password, userId, token) {
       });
 
       if (result.status === 200) {
-        
         window.location.href = '/login'
-        //dispatch(setShowAlert(true));
+        dispatch(successPasswordChanged(true));
+        setTimeout(() => {
+          dispatch(successPasswordChanged(false));
+        }, 1000);
       }
     } catch (error) {
       alert(error);     

@@ -20,7 +20,8 @@ import {logoStyle} from '../assets/jss/material-dashboard-react'
 const mapStateToProps = (state) => {
   return { 
     isLoggedIn: state.isLoggedIn,
-    showAlert: state.showAlert
+    showAlert: state.showAlert,
+    successPasswordChanged: state.successPasswordChanged
   };
 };
 
@@ -69,9 +70,7 @@ function PasswordChange(props) {
       alert('Passwords do not match.')
     }
 
-    setTimeout(function() {
-      props.setShowAlert(false)
-    }, 4000)
+    
   }
 
   if (props.isLoggedIn) {
@@ -159,7 +158,7 @@ function PasswordChange(props) {
           color="success"
           icon={AddAlert}
           message="Password has been reset. Please proceed to login with your new password."
-          open={props.showAlert}
+          open={props.successPasswordChanged}
           closeNotification={() => props.setShowAlert(false)}
           close
         />

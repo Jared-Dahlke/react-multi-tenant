@@ -7,7 +7,8 @@ import {
   USERS_ADD_USER, 
   USER_ADDED, 
   USERS_IS_LOADING,
-  USERS_SET_USER_ACCOUNTS
+  USERS_SET_USER_ACCOUNTS,
+  EDIT_USER_USER_ACCOUNTS_LOADING
 } from '../action-types/users'
 
 
@@ -29,6 +30,17 @@ export function usersIsLoading(state = true, action) {
     return state;
   }
 }
+
+export function editUserUserAccountsLoading(state = true, action) {
+  switch (action.type) {
+  case EDIT_USER_USER_ACCOUNTS_LOADING:
+    return action.editUserUserAccountsLoading;
+  default:
+    return state;
+  }
+}
+
+
 
 export function userDeleted(state = false, action) {
   switch (action.type) {
