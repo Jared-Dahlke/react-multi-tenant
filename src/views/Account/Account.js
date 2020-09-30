@@ -29,6 +29,7 @@ import logo from '../../assets/img/sightly_icon.png'
 import {logoStyleAccountChrome} from '../../assets/jss/material-dashboard-react'
 import FullScreenDialog from './AccountDialog'
 import AccountCard from './AccountCard'
+import {fetchAccountUsers} from '../../redux/actions/accounts'
 
 
 const useStyles = makeStyles({
@@ -103,9 +104,19 @@ const containerStyles = {
 
 const mapStateToProps = (state) => {
   return {
-    treeAccounts: state.treeAccounts
+    treeAccounts: state.treeAccounts,
+    users: state.users,
+    accounts: state.accounts,
+    editAccountAccountUsersLoading: state.editAccountAccountUsersLoading
   };
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchAccountUsers: (accountId)=>dispatch(fetchAccountUsers(accountId))
+  }
+}
+
 
 
 class CenteredTree extends React.PureComponent {
@@ -154,6 +165,8 @@ class CenteredTree extends React.PureComponent {
       open:true,
       account
     })
+
+    this.props.fetchAccountUsers(account.accountId)
   }
 
   handleClose=()=>{
@@ -187,11 +200,14 @@ class CenteredTree extends React.PureComponent {
       <div style={containerStyles} ref={tc => (this.treeContainer = tc)}>
 
         <FullScreenDialog 
-        open={dialogOpen}
-        handleClose={this.handleClose}
-        handleSave={this.handleSave}
-        handleOpen={this.handleOpen}
-        account={this.state.account}
+          open={dialogOpen}
+          handleClose={this.handleClose}
+          handleSave={this.handleSave}
+          handleOpen={this.handleOpen}
+          account={this.state.account}
+          users={this.props.users}
+          accounts={this.props.accounts}
+          editAccountAccountUsersLoading={this.props.editAccountAccountUsersLoading}
         />
 
 
@@ -248,4 +264,4 @@ class CenteredTree extends React.PureComponent {
 }
 
 
-export default connect(mapStateToProps, null)(CenteredTree);
+export default connect(mapStateToProps, mapDispatchToProps)(CenteredTree);

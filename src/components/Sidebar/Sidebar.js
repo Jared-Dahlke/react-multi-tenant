@@ -140,8 +140,6 @@ export default function Sidebar(props) {
                           />
 
                           
-                          
-                          
                 
                         <ListItemText  
                           primary={setting.name} 

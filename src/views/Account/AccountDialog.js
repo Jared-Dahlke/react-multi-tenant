@@ -30,7 +30,14 @@ import Draggable from 'react-draggable';
 import { blackColor, whiteColor } from '../../assets/jss/material-dashboard-react';
 import {Formik} from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
+import FormikSelect from '../../components/CustomSelect/FormikSelect'
+import * as Yup from "yup";
+import {Debug} from '../Debug'
+
 import * as v from '../../validations'
+
+import "./styles.css";
+import { findAccountNodeByAccountId } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -53,7 +60,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function PaperComponent(props) {
   return (
     <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
-      <Paper {...props} style={{backgroundColor: whiteColor}} />
+      <Paper {...props} style={{backgroundColor: whiteColor, height:'400px'}} />
     </Draggable>
   );
 }
@@ -64,29 +71,112 @@ function TableText(props) {
   )
 }
 
+const schemaValidation = Yup.object().shape({
+  users: Yup.array()
+    .min(1, "Select at least one field")
+    .of(
+      Yup.object()
+        .shape({
+          label: Yup.string(),
+          value: Yup.string()
+        })
+        .transform(v => v === '' ? null : v)
+    ),
+  disclosureStatus: Yup.object()
+    .shape({
+      label: Yup.string(),
+      value: Yup.number()
+    })
+    .nullable()
+    .required("Status is required")
+});
+
+
 
 
 export default function FullScreenDialog(props) {
   const classes = useStyles();
   const [editing, setEditing] = React.useState(true)
+  const [selectedRoles, setSelectedRoles] = React.useState([])
+ 
+
+  const handleSelectUser=(event)=> {
+    setSelectedRoles(event.target.value)
+  }
+
   console.log('props from dialog')
   console.log(props)
 
+  const convertUsers = (users)=>{
+    let newUsers = []
+      if(users && users.length > 0) {
+        for (const user of users) {
+          newUsers.push({value: user.userId, label: user.firstName + ' ' + user.lastName})
+        }
+
+      }
+      
+      return newUsers
+  }
+
+  const getCurrentAccountUsers=(accounts)=>{
+    let currentAccountUsers = []
+    if (props.account && props.account.accountId) {
+      let currentAccountId =  props.account.accountId
+      let currentAccount = findAccountNodeByAccountId(currentAccountId,accounts)
+      if (currentAccount.users && currentAccount.users.length > 0) {
+        for (const user of currentAccount.users) {
+          currentAccountUsers.push({value: user.userId, label: user.firstName + ' ' + user.lastName})
+        }
+
+      }
+      
+
+    }
+    
+
+    return currentAccountUsers
+  }
+
   
+
+  const allUsers = React.useMemo(() => convertUsers(props.users.data), [props.users.data]);
+
+  const accountUsers = React.useMemo(() => getCurrentAccountUsers(props.accounts.data), [props.accounts.data]);
+
+  console.log('all accounts')
+  //console.log(allAccounts)
+     
+  
+  //const allUsers = [{value: 1, label: 'Joe'},{value: 2, label: 'Sue'},{value: 3, label: 'John'}]
 
   
   let account = props.account && props.account.accountId ? props.account : {accountName: '', accountId: 'placeholder', contactName: '', contactEmail: ''}
 
   return (
     <Formik
+      enableReinitialize
       validateOnMount={true}
+      validateOnChange={true}
+      validationSchema={() => schemaValidation}
       initialValues={{
         
-        contactName: 'adf', // account.contactName ,
-        contactEmail: 'asdfaff' // account.contactEmail      
-    }}     
-    > 
-    {formik => (
+        contactName: account.contactName ? account.contactName : '', // account.contactName ,
+        contactEmail: account.contactEmail ? account.contactEmail : '', // account.contactEmail     
+        accountTypeName: account.accountTypeName ? account.accountTypeName : '' ,
+        users: accountUsers,
+        brandType: 'Brand'
+    }} 
+    render={({
+      values,
+      errors,
+      touched,
+      setFieldValue,
+      setFieldTouched,
+      validateField,
+      validateForm,
+      isSubmitting
+    }) => (
     <div>
 
       <Dialog
@@ -95,8 +185,11 @@ export default function FullScreenDialog(props) {
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
       >
+
+
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
           {account.accountName}
+         
         </DialogTitle>
         <DialogContent>
 
@@ -132,6 +225,46 @@ export default function FullScreenDialog(props) {
             }}
             inputColor={blackColor}
           />
+
+
+
+            <FormikSelect
+            id="users"
+            name="users"
+            label="Users"
+            placeholder="Select Users"
+            options={allUsers}
+            value={values.users}
+            isMulti={true}
+            onChange={setFieldValue}
+            onBlur={setFieldTouched}
+            validateField={validateField}
+            validateForm={validateForm}
+            touched={touched.users}
+            error={errors.users}
+            isClearable={true}
+            backspaceRemovesValue={true}
+          />
+
+           
+
+          <FormikInput 
+            name="brandType" 
+            validate={v.isEmailError}
+            labelText="Contact Email" 
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{            
+                    
+            }}
+            inputColor={blackColor}
+          />
+
+<pre style={{color:'black'}}>Errors: {JSON.stringify(errors)}</pre>
+<pre style={{color:'black'}}>Touched: {JSON.stringify(touched)}</pre>
+
+         
 
 
           </div>
@@ -177,9 +310,7 @@ export default function FullScreenDialog(props) {
 
         }
 
-          
-        
-
+   
         </DialogContent>
         <DialogActions>
           
@@ -187,7 +318,7 @@ export default function FullScreenDialog(props) {
             editing ?
             <div>
 
-              <Button autoFocus onClick={()=>props.handleSave(formik.values)} color="primary">
+              <Button autoFocus onClick={()=>props.handleSave(values)} color="primary">
                 Save
               </Button>
 
@@ -221,67 +352,8 @@ export default function FullScreenDialog(props) {
       </Dialog>
 
 
-      {/** <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={props.handleClose} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Account Details
-            </Typography>
-            <Button autoFocus color="inherit" onClick={props.handleClose}>
-              save
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <List>
-          <ListItem>
-            <ListItemText primary="Account Name" secondary={account.accountName} />
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText primary="Parent Account" secondary={account.parentAccountName} />
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText primary="Children Accounts" />
-          </ListItem>
-
-          <ListItem>
-
-            <TableContainer className={classes.table} component={Paper}>
-                  <Table className={classes.table} size="small" aria-label="a dense table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell align="right">Margin</TableCell>    
-                        <TableCell align="right">Type</TableCell>                   
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {account.children && account.children.length > 0 && account.children.map(child=>{
-                      return (
-                        <TableRow key={child.accountId}>
-                          <TableCell component="th" scope="row">
-                            {child.accountName}
-                          </TableCell>
-                          <TableCell align="right">{child.accountMargin}</TableCell>
-                          <TableCell align="right">{child.accountTypeName}</TableCell>                         
-                        </TableRow>
-                      )
-                    })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                
-            
-          </ListItem>
-        </List>
-      </Dialog>
-    */}
       </div>
     )}
-    </Formik>
+    />
   );
 }
