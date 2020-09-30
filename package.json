@@ -39,7 +39,8 @@
     "react-scripts": "3.4.0",
     "redux": "4.0.5",
     "redux-thunk": "2.3.0",
-    "typescript": "3.7.5"
+    "typescript": "3.7.5",
+    "yup": "0.29.3"
   },
   "scripts": {
     "build-staging": "cross-env REACT_APP_STAGE=staging react-scripts build",

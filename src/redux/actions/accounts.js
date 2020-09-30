@@ -3,7 +3,9 @@ import {
   ACCOUNTS_FETCH_DATA_SUCCESS,
   SET_CURRENT_ACCOUNT_ID,
   SET_CURRENT_ACCOUNT,
-  TREE_ACCOUNTS_CONVERT_DATA_SUCCESS
+  TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
+  EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
+  ACCOUNTS_SET_ACCOUNT_USERS
 } from "../action-types/accounts";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
@@ -151,3 +153,47 @@ export function fetchSiteData(accountId) {
   };
 }
 
+
+export function editAccountAccountUsersLoading(bool) {
+  return {
+    type: EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
+    editAccountAccountUsersLoading: bool
+  }
+}
+
+
+export function accountsSetAccountUsers(accountId, users) {
+  let payload = {accountId, users}
+  return {
+    type: ACCOUNTS_SET_ACCOUNT_USERS,
+    payload,
+  };
+}
+
+
+export function fetchAccountUsers(accountId) {
+  
+  let url = apiBase + `/account/${accountId}/users`;
+  return async (dispatch) => {
+    dispatch(editAccountAccountUsersLoading(true))
+    try {
+      
+      let result = []
+     
+      try {
+
+        result = await axios.get(url);
+
+      } catch (error) {
+        console.log(error)      
+      }
+      
+      if (result.status === 200) {
+        dispatch(accountsSetAccountUsers(accountId, result.data))
+        dispatch(editAccountAccountUsersLoading(false))
+      }
+    } catch (error) {
+      alert('Error on fetch users: ' + JSON.stringify(error,null,2))
+    }
+  };
+}
