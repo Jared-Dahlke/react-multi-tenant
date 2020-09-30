@@ -24,7 +24,7 @@ import EditUser from '../views/Users/EditUser'
 import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
-
+import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
 
 let ps;
 
@@ -58,7 +58,7 @@ const switchRoutes = (
       path='/admin/settings/brandProfiles'
       render={({ match: { url } }) => (
         <>
-          <Route path={`${url}/`} component={BrandProfiles} exact />
+          <Route path={`${url}/`} component={TestBrandProfile} exact />
           <Route path={`${url}/create`} component={CreateBrandProfile} />      
         </>
       )}

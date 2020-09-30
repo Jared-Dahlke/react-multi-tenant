@@ -14,7 +14,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import {fetchBrandProfiles} from '../../redux/actions/brandProfiles.js'
 import {connect} from 'react-redux'
-import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
 //import { useHistory } from "react-router-dom";
 import { Facebook } from 'react-content-loader'
@@ -24,85 +23,43 @@ import Success from "@material-ui/icons/Check";
 import Error from '@material-ui/icons/Error'
 import {Link} from 'react-router-dom'
 
+import Hidden from "@material-ui/core/Hidden";
 
-const MyFacebookLoader = () => <Facebook />
-const useTableStyles = makeStyles(tableStyles);
+import styles from "../../assets/jss/material-dashboard-react/views/iconsStyle.js";
 
 const useStyles = makeStyles(styles);
 
-const mapStateToProps = (state) => {
-  return {
-    brandProfiles: state.brandProfiles
-  }
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchBrandProfiles: () => dispatch(fetchBrandProfiles()),
-    //deleteBrandProfile: (profileId) => dispatch(deleteBrandProfile(profileId))
-  }
-}
+
 
 function BrandProfiles(props) {
 
 
   const classes = useStyles();
-  const tableClasses = useTableStyles();
-  //const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)
-  //const [userToDelete, setUserToDelete] = React.useState({})
+ 
 
-  const {fetchBrandProfiles} = props
-
-  React.useEffect(() => { 
-    fetchBrandProfiles()
-  }, [fetchBrandProfiles])
-
-
-  const tableCellClasses = classnames(classes.tableCell, {
-    [classes.tableCellRTL]: false
-  });
-
-  const userHeaders = ['Profile Name','Website','']
-
-  //const handleEditUserClick = (profile) => {
-  //  let url = '/admin/settings/brandProfiles/edit/' + encodeURIComponent(JSON.stringify(profile))
-  //  history.push(url)
-  //}
-
-  //const handleDeleteUserClick = (user) => {
-  //handleOpenDeleteUserAlert(user)
-  //setUserToDelete(user)
-  //}
-
-  //const handleCloseDeleteUserAlert =() =>{
-  //setDeleteUserAlertIsOpen(false)
-  //setUserToDelete({})
-  //}
-
-  //const handleOpenDeleteUserAlert = () => {
-  //setDeleteUserAlertIsOpen(true)
-  //}
-
-  //const handleDeleteUser = () => {
-  //setDeleteUserAlertIsOpen(false)
-  //props.deleteUser(userToDelete.userId)
-  //setUserToDelete({})
-  //}
 
   return (                                   
  
-    <GridContainer spacing={2}>
+    <CardBody>
+    <Hidden only={["sm", "xs"]}>
 
-  
-        <script type="text/javascript" src="https://form.jotform.com/jsform/202726463369158"></script>
-   
+<iframe
+                className={classes.iframe}
+                src="https://form.jotform.com/202726463369158"
+                title="Brand Profile"
+              >
+                <p>Your browser does not support iframes.</p>
+              </iframe>
+</Hidden>
+   </CardBody>
 
-     
-    </GridContainer>
+            
+
     
 
            
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandProfiles)
+export default BrandProfiles
