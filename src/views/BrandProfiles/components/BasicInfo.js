@@ -56,14 +56,11 @@ export default function BasicInfo (props) {
         <GridItem xs={12} sm={12} md={6}>
           <FormikInput 
             name="basicInfoProfileName" 
-            labelText="Profile Name" 
-            
+            labelText="Profile Name"           
             validate={v.isBrandProfileNameError}
             formControlProps={{
-              fullWidth: true
-              
-            }}
-            
+              fullWidth: true            
+            }}            
           />     
         </GridItem>
       </GridContainer>

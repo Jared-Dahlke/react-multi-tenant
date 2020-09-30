@@ -27,6 +27,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardFooter from "../../components/Card/CardFooter.js";
 import logo from '../../assets/img/sightly_icon.png'
 import {logoStyleAccountChrome} from '../../assets/jss/material-dashboard-react'
+import FullScreenDialog from './AccountDialog'
+import AccountCard from './AccountCard'
 
 
 const useStyles = makeStyles({
@@ -55,18 +57,23 @@ const useStyles = makeStyles({
        
         <CardContent>
 
-            <Typography   variant="h5" component="h3">
+            <Typography   component="h4">
             {props.nodeData.accountName}
             </Typography>
 
-            <GridContainer justify='center'>      
+             <GridContainer justify='center'>      
                 <GridContainer justify='center'>        
                 <CardActions style={{color:primaryColor[0]}}>
-                View Details    
+                 <div onClick={()=>props.handleViewAccount(props.nodeData)}>
+                  View Details    
+                  </div>
+               
                   </CardActions>  
                          
                 </GridContainer>
-            </GridContainer>
+            </GridContainer> 
+
+           
           
           
         </CardContent>
@@ -108,8 +115,6 @@ class CenteredTree extends React.PureComponent {
   yOffset = 80;
   yClearance = 150;
 
-  
-
 
   componentDidMount() {
     const dimensions = this.treeContainer.getBoundingClientRect();
@@ -117,14 +122,17 @@ class CenteredTree extends React.PureComponent {
       translate: {
         x: dimensions.width / 2,
         y: this.yOffset
-      }
-    });
+      },
+      open: false,
+      account: {accountName: ''}
+    });   
 
     console.log('receiving props')
     console.log(this.props.treeAccounts)
     //console.log(JSON.stringify(this.props.accounts.data))
     //let myAccounts = this.convertToHier(this.props.accounts.data)
   }
+
 
   componentDidUpdate() {
     console.log('component did update')
@@ -140,8 +148,23 @@ class CenteredTree extends React.PureComponent {
 
   }
 
-   handleViewAccount=()=>{
-    alert('clicked')
+   handleViewAccount=(account)=>{
+
+    this.setState({
+      open:true,
+      account
+    })
+  }
+
+  handleClose=()=>{
+    this.setState({
+      open:false
+    })
+  }
+
+  handleSave=(values)=>{
+    console.log('handle save')
+    console.log(values)
   }
   
 
@@ -157,10 +180,20 @@ class CenteredTree extends React.PureComponent {
 
   render() {
 
+    let dialogOpen = this.state.open ? this.state.open : false
     
     //console.log(JSON.stringify(this.props.accounts.data))
     return (
       <div style={containerStyles} ref={tc => (this.treeContainer = tc)}>
+
+        <FullScreenDialog 
+        open={dialogOpen}
+        handleClose={this.handleClose}
+        handleSave={this.handleSave}
+        handleOpen={this.handleOpen}
+        account={this.state.account}
+        />
+
 
        
        
@@ -169,11 +202,11 @@ class CenteredTree extends React.PureComponent {
 
             <Tree
               data={this.props.treeAccounts}
-            // collapsible={false}
+              collapsible={false}
               translate={this.state.translate}
               scaleExtent={{ min: 1, max: 3 }}
               allowForeignObjects
-             pathFunc="straight"
+              pathFunc="straight"
               orientation="vertical"
               nodeSvgShape={{ shape: "none" }}
               nodeSize={{ x: 200, y: this.yClearance }}
