@@ -92,7 +92,7 @@ export function usersFetchData(accountId) {
       
       if (result.status === 200) {
         if(!result.data[0]) {
-          alert('This account has no users associated with it. There should always be at least one user (yourself). Please contact your inviter')
+          //alert('This account has no users associated with it. There should always be at least one user (yourself). Please contact your inviter')
           //window.location.href = '/login'
           //localStorage.removeItem('token')
           //return
