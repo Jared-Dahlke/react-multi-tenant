@@ -8,11 +8,15 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
 import {Formik, Form} from 'formik'
 import {Debug} from '../Debug'
+import * as Yup from "yup";
+import GridContainer from '../../components/Grid/GridContainer'
+import GridItem from '../../components/Grid/GridItem'
+import GridList from '@material-ui/core/GridList'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +53,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const schemaValidation = Yup.object().shape({
+ 
+  basicInfoIndustry: Yup.array().typeError('Wrong type')
+    .min(1, "Select at least one field")
+    .of(
+      Yup.object()
+        .shape({
+          label: Yup.string(),
+          value: Yup.string()
+        })
+        .transform(v => v === '' ? null : v)
+    ),
+  basicInfoProfileName: Yup.string()
+    .min(2, "Must be greater than 1 character")
+    .max(50, "Must be less than 50 characters")
+    .required('Required'),
+  basicInfoWebsiteUrl: Yup.string()
+    .matches(
+      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      'Enter correct url!'
+    )
+  .required('Required'),
+
+  basicInfoTwitterProfile: Yup.string()
+  .min(2, "Must be greater than 1 character")
+  .max(50, "Must be less than 30 characters")
+  .required('Required'),
+  
+  
+});
+
 function getSteps() {
   return ['Basic Info', 'Top Competitors', 'Sensitive Content'];
 }
@@ -57,7 +93,7 @@ function getSteps() {
 function CreateBrandProfiles (props) {
 
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(1);
+  const [activeStep, setActiveStep] = React.useState(0);
   const [basicInfo, setBasicInfo] = React.useState({
     profileName: '',
     websiteUrl: '',
@@ -66,8 +102,6 @@ function CreateBrandProfiles (props) {
     subVerticals: []
   })
 
-  
-  
   const steps = getSteps();
 
   const handleNext = () => {
@@ -82,87 +116,69 @@ function CreateBrandProfiles (props) {
     setActiveStep(0);
   };
 
-  //if touched with no errors then validated
-  //if you dont have multiple 'sub forms' you can just check form.isValid instead of doing this whole function
-  const stepValidated=(index, formik) =>{
+  const doLoop=(errors, formName)=>{
 
-    let errors = formik.errors
-    let errorCount = Object.keys(errors).length
-
-
-    if (errorCount === 0) return true 
-
-    for (const [key, value] of Object.entries(errors)) {
-
-      if(index === 0) {
-        if(key.includes('basicInfo')) {
-          return false
-        }
+    for (var prop in errors) {
+      if (Object.prototype.hasOwnProperty.call(errors, prop)) {
+         if(prop.includes(formName)) {
+           return false
+         }
       }
-      if(index === 1) {
-        if(key.includes('step2')) {
-          return false
-        }
-      }
-      if(index === 2) {
-        if(key.includes('step3')) {
-          return false
-        }
-      }
-      
     }
-
     return true
 
-      
   }
 
+  const stepValidated = (index, errors) => {
+    if(!errors || errors.length < 1) {
+      //return false
+    }
+    if(index === 0) {
+      return doLoop(errors,'basicInfo')  
+    }
+    return true
+  }
+
+ 
   {/**<Formik 
     validateOnMount={true} 
     initialValues={useMemo(() => { return { email: '' } }, [])}
     ...  */}
 
-  
-
-  return (
+return (
     <Formik
+      enableReinitialize
       validateOnMount={true}
+      // validateOnChange={true}
+      validationSchema={() => schemaValidation}
       initialValues={{
         
-         
-                 
-      }}
-      // user this for form level validation (pros: can validate against different fields, cons: slower)
-      //validate={(values,props)=>{
-      //  console.log('running validate')
-      //  console.log(values)     
-      //  console.log(props)
-      //  const errors = {} // 'test***'
-        //if (errors.length > 0) {
-          //for (const error of errors) {
-          
-          //}
-        //}
-        
-        //if {
-        //  console.log('triggering errror')
-       //   errors.basicInfo.websiteUrl = true
-          
-       // }
-     //   return errors
-      //}}
-    > 
-    {formik => (
-    <div>
+        basicInfoProfileName: '',
+        basicInfoWebsiteUrl: '',
+        basicInfoTwitterProfile: '',
+        basicInfoIndustry: []
+
+        }}
+        render={({
+          values,
+          errors,
+          touched,
+          setFieldValue,
+          setFieldTouched,
+          validateField,
+          validateForm,
+          isSubmitting,
+          isValid
+        }) => (
+      <div>
 
       <Stepper classes={{ root: classes.stepper}}  activeStep={activeStep} alternativeLabel>
         {steps.map((label, index) => {
           
           let labelColor = whiteColor
-          if (stepValidated(index, formik)) {
+          if (stepValidated(index, errors)) {
             labelColor = 'green'
-          }
-            
+          }           
           
           return (
 
@@ -184,18 +200,26 @@ function CreateBrandProfiles (props) {
         })}
       </Stepper>
 
-      <Debug/>
+      <GridContainer justify='center'>
 
-      <Card >
+
+      <GridItem xs={12} sm={12} md={11} >
+
+    
+
+      <Card style={{backgroundColor: blackColor}}>
+        
+        
         
         <CardBody>
+          <GridList cols={1} cellHeight={400} style={{overflowX:"hidden"}}>
 
           {activeStep === 0 ?
           <div>         
-            <BasicInfo basicInfo={basicInfo} masterFormik={formik}/>            
+            <BasicInfo setFieldValue={setFieldValue} errors={errors}/>            
           </div>
             : activeStep === 1 ?
-              <TopCompetitors/>
+              <TopCompetitors setFieldValue={setFieldValue}/>
               : activeStep === 2 ?
                 <div> step 3</div> 
                 : 
@@ -203,7 +227,7 @@ function CreateBrandProfiles (props) {
           }
           
           
-          
+          </GridList>
         </CardBody>          
         <CardFooter>
 
@@ -231,16 +255,18 @@ function CreateBrandProfiles (props) {
               </div>
             )}
           </div>
-     
+   
 
         </CardFooter>
-
-      </Card>
-    </div>
-
-    )}
     
-    </Formik>
+      </Card>
+
+      </GridItem>
+      </GridContainer>
+    </div>
+  
+  )}
+/>
 
   )
 }

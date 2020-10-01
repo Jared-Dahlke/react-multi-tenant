@@ -7,11 +7,15 @@ import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
 import GridList from '@material-ui/core/GridList'
 import "rc-tree/assets/index.css"
-import {defaultFont, whiteColor} from "../../assets/jss/material-dashboard-react"
+import {defaultFont, whiteColor, dangerColor} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
 import { withStyles } from '@material-ui/core/styles'
 import AddBox from '@material-ui/icons/AddBoxSharp'
 import MinusBox from '@material-ui/icons/IndeterminateCheckBox'
+import Clear from "@material-ui/icons/Clear";
+import Check from "@material-ui/icons/Check";
+import FormHelperText from '@material-ui/core/FormHelperText'
+import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js"
 
 const styles = {
   cardCategoryWhite: {
@@ -165,7 +169,8 @@ class Demo extends React.Component {
               onChange: this.onChange, 
               variant: 'filled'      ,              
               placeholder:'Search....'
-            }}       
+            }}   
+            success={!this.props.errors[this.props.name]}    
           />
 
           :
@@ -176,10 +181,12 @@ class Demo extends React.Component {
 
       
         <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
+
+       
   
           <Tree
             defaultExpandAll={true}
-            checkStrictly
+            checkStrictly={!this.props.cascade}
             showIcon={false}
             showLine={false}
             switcherIcon={switcherIcon}
@@ -198,6 +205,24 @@ class Demo extends React.Component {
 
 
         </GridList>
+
+        {this.props.errors[this.props.name] ? (
+            
+           
+              <FormHelperText 
+                id="component-helper-text" 
+                style={{
+                  color: dangerColor[0],
+                  
+                }}
+              >
+                {this.props.errors[this.props.name]}
+              </FormHelperText>
+
+            /*<Clear className={classes.feedback + " " + classes.labelRootError} />*/
+            
+          ) : null
+         }
       
       
 

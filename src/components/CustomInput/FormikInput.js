@@ -85,7 +85,7 @@ export default function CustomInput(props) {
         />
         <FormHelperText id="component-helper-text" style={{color: dangerColor[0]}}></FormHelperText>
 
-        {form.errors[field.name] && (field.value.length > 0 || form.touched[field.name]) ? (
+        {form.errors[field.name]  ? (
           
           <div>
             <FormHelperText 
