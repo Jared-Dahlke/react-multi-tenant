@@ -75,13 +75,23 @@ const schemaValidation = Yup.object().shape({
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
       'Enter correct url!'
     )
-  .required('Required'),
+    .required('Required'),
 
   basicInfoTwitterProfile: Yup.string()
-  .min(2, "Must be greater than 1 character")
-  .max(50, "Must be less than 30 characters")
-  .required('Required'),
-  
+    .min(2, "Must be greater than 1 character")
+    .max(50, "Must be less than 30 characters")
+    .required('Required'),
+  topCompetitors: Yup.array().typeError('Wrong type')
+      .min(1, "You have to create at least one competitor")
+      .of(
+        Yup.object()
+          .shape({
+            label: Yup.string(),
+            value: Yup.string()
+          })
+          .transform(v => v === '' ? null : v)
+      ),
+    
   
 });
 
@@ -93,7 +103,7 @@ function getSteps() {
 function CreateBrandProfiles (props) {
 
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(1);
   const [basicInfo, setBasicInfo] = React.useState({
     profileName: '',
     websiteUrl: '',
@@ -116,8 +126,7 @@ function CreateBrandProfiles (props) {
     setActiveStep(0);
   };
 
-  const doLoop=(errors, formName)=>{
-
+  const isValid=(errors, formName)=>{
     for (var prop in errors) {
       if (Object.prototype.hasOwnProperty.call(errors, prop)) {
          if(prop.includes(formName)) {
@@ -126,15 +135,18 @@ function CreateBrandProfiles (props) {
       }
     }
     return true
-
   }
 
   const stepValidated = (index, errors) => {
+    console.log('running step validated')
     if(!errors || errors.length < 1) {
       //return false
     }
     if(index === 0) {
-      return doLoop(errors,'basicInfo')  
+      return isValid(errors,'basicInfo')  
+    }
+    if(index === 1) {
+      return isValid(errors,'topCompetitors')  
     }
     return true
   }
@@ -156,7 +168,9 @@ return (
         basicInfoProfileName: '',
         basicInfoWebsiteUrl: '',
         basicInfoTwitterProfile: '',
-        basicInfoIndustry: []
+        basicInfoIndustry: [],
+        
+        topCompetitors: []
 
         }}
         render={({
@@ -181,6 +195,7 @@ return (
           }           
           
           return (
+         
 
             <Step key={label}>              
               <StepLabel 
@@ -195,6 +210,8 @@ return (
                 <div style={{color: labelColor}}>{label}</div>
               </StepLabel>
             </Step>
+
+           
 
           )
         })}
@@ -219,7 +236,9 @@ return (
             <BasicInfo setFieldValue={setFieldValue} errors={errors}/>            
           </div>
             : activeStep === 1 ?
-              <TopCompetitors setFieldValue={setFieldValue}/>
+              <div>  
+                <TopCompetitors setFieldValue={setFieldValue} errors={errors}/>
+              </div>
               : activeStep === 2 ?
                 <div> step 3</div> 
                 : 
@@ -248,7 +267,7 @@ return (
                   >
                     Back
                   </Button>
-                  <Button variant="contained" color="primary" onClick={handleNext}>
+                  <Button variant="contained" color="primary" onClick={handleNext} disabled={!stepValidated(activeStep,errors)}>
                     {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                   </Button>
                 </div>

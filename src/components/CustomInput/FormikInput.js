@@ -99,7 +99,8 @@ export default function CustomInput(props) {
               {form.errors[field.name]}
             </FormHelperText>
 
-            <Clear className={classes.feedback + " " + classes.labelRootError}/>
+            {/** <Clear className={classes.feedback + " " + classes.labelRootError}/>*/}
+            
           </div>
           /*<Clear className={classes.feedback + " " + classes.labelRootError} />*/
           
