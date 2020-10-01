@@ -20,44 +20,33 @@ const dummyVerticals = [
   {"title":"Test","key":"0-2-key"}]
 
 
-  
-  
+
 
 export default function BasicInfo (props) {
 
   console.log('basic info props')
-  console.log(props.masterFormik)
+  console.log(props)
 
   const [checkedKeys, setCheckedKeys] = React.useState([])
  
   const onCheck = checkedKeys => {
     setCheckedKeys(checkedKeys)
+
+    console.log(checkedKeys)
+    let checked = []
+    for (const item of checkedKeys) {
+      checked.push({item})
+    }
+    props.setFieldValue('basicInfoIndustry', checked)
   }
 
-  props.masterFormik.isValid = true
-
   return (
-    <Formik
-      validateOnMount={true}
-      initialValues={{
-        
-        basicInfoProfileName: '',
-        basicInfoWebsiteUrl: '',
-        basicInfoTwitterProfile: ''
-               
-    }}
-      
-    > 
-   
-    
-    
     <div>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
+      <GridContainer justify="center">
+        <GridItem xs={12} sm={12} md={10}>
           <FormikInput 
             name="basicInfoProfileName" 
             labelText="Profile Name"           
-            validate={v.isBrandProfileNameError}
             formControlProps={{
               fullWidth: true            
             }}            
@@ -65,12 +54,11 @@ export default function BasicInfo (props) {
         </GridItem>
       </GridContainer>
 
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
+      <GridContainer justify="center">
+        <GridItem xs={12} sm={12} md={10}>
 
           <FormikInput 
             name="basicInfoWebsiteUrl" 
-            validate={v.isWebsiteUrlError}
             labelText="Website" 
             formControlProps={{
               fullWidth: true
@@ -80,11 +68,10 @@ export default function BasicInfo (props) {
 
         </GridItem>
       </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
+      <GridContainer justify="center">
+        <GridItem xs={12} sm={12} md={10}>
           <FormikInput 
             name="basicInfoTwitterProfile" 
-            validate={v.isTwitterProfileError}
             labelText="Twitter Profile" 
             formControlProps={{
               fullWidth: true
@@ -96,8 +83,8 @@ export default function BasicInfo (props) {
 
         </GridItem>
       </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
+      <GridContainer justify="center">
+        <GridItem xs={12} sm={12} md={10}>
           <CustomTree
             data={dummyVerticals}
             title='Industry'
@@ -108,14 +95,12 @@ export default function BasicInfo (props) {
             treeContainerHeight={200}
             onCheck={onCheck}
             checkedKeys={checkedKeys}
-          />
-
-       
+            cascade={true}
+            errors={props.errors}
+            name="basicInfoIndustry"
+          />       
         </GridItem>
       </GridContainer>
      </div>
-    
-    </Formik>
-
   )
 }

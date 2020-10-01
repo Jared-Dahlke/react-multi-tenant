@@ -350,16 +350,15 @@ function UserProfile(props) {
 
             <CardFooter>  
               {
-                current.accountName === "Sightly" ?
+                current.accountName === "Sightly" || (current.children && current.children.length > 0) ?
 
-                null
+                  null
 
                 :
 
-                <Button color="danger" onClick={handleDeleteAccount}>
-                  Delete
-                </Button>
-
+                  <Button color="danger" onClick={handleDeleteAccount}>
+                    Delete
+                  </Button>
 
               }
             
