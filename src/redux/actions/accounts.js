@@ -5,7 +5,9 @@ import {
   SET_CURRENT_ACCOUNT,
   TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
   EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
-  ACCOUNTS_SET_ACCOUNT_USERS
+  ACCOUNTS_SET_ACCOUNT_USERS,
+  ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
+  ACCOUNTS_UPDATE_ACCOUNT
 } from "../action-types/accounts";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
@@ -31,6 +33,24 @@ export function accountsFetchDataSuccess(accounts) {
 }
 
 
+export function accountTypesFetchDataSuccess(accountTypes) {
+  return {
+    type: ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
+    accountTypes,
+  };
+}
+
+
+export function accountsUpdateAccount(account) {
+  return {
+    type: ACCOUNTS_UPDATE_ACCOUNT,
+    account,
+  };
+}
+
+
+
+
 export function treeAccountsConvertDataSuccess(treeAccounts) {
   return {
     type: TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
@@ -52,6 +72,42 @@ export function setCurrentAccount(accountId) {
   };
 }
 
+export function updateAccount(account) {
+  
+  let accountId = account.accountId;
+  let url = apiBase + `/account/${accountId}`;
+  return async (dispatch) => {
+    dispatch(accountsUpdateAccount(account))
+    try {     
+      const result = await axios.patch(url, account);
+      if (result.status === 200) {
+       console.log('updated account')
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+}
+
+export const deleteAccount = (accountId) => {
+  let url = apiBase + `/account/${accountId}`;
+  return (dispatch) => {   
+    axios
+      .delete(url)
+      .then((response) => {
+       // dispatch(userDeleted(true));
+        setTimeout(() => {
+         // dispatch(userDeleted(false));
+        }, 2000);
+      })
+      .catch((error) => {
+        //dispatch(userDeletedError(true));
+        setTimeout(() => {
+         // dispatch(userDeletedError(false));
+        }, 2000);
+      });
+  };
+};
 
 
 
@@ -67,6 +123,7 @@ export function clearSiteData() {
     dispatch(rolesFetchDataSuccess([]))
     dispatch(rolesPermissionsFetchDataSuccess([]))
     dispatch(brandProfilesFetchDataSuccess([]))
+    dispatch(accountTypesFetchDataSuccess([]))
 
   }
   
@@ -111,6 +168,14 @@ export function fetchSiteData(accountId) {
         //return
       }
 
+      //cleans up the delete accounts api error: https://sightly.atlassian.net/browse/EN-4228
+      for (const [index, account] of result.data.entries()) {
+        console.log(account)
+        if(!account) {
+          let removed = result.data.splice(index, 1)
+        }
+      }
+
       dispatch(accountsFetchDataSuccess(accounts));
 
       let accountsCopy = JSON.parse(JSON.stringify(accounts))
@@ -138,6 +203,7 @@ export function fetchSiteData(accountId) {
       }
 
       localStorage.setItem('currentAccountId', accountId)
+      dispatch(fetchAccountTypes())
       dispatch(setCurrentAccount(accountId))
       dispatch(setCurrentAccountId(accountId))
       dispatch(userProfileFetchData())
@@ -145,6 +211,7 @@ export function fetchSiteData(accountId) {
       dispatch(rolesPermissionsFetchData(accountId))
       dispatch(rolesFetchData(accountId))
       dispatch(fetchBrandProfiles(accountId))
+      
 
     } catch (error) {
       console.log('caught in account action')
@@ -169,6 +236,8 @@ export function accountsSetAccountUsers(accountId, users) {
     payload,
   };
 }
+
+
 
 
 export function fetchAccountUsers(accountId) {
@@ -197,3 +266,27 @@ export function fetchAccountUsers(accountId) {
     }
   };
 }
+
+export function fetchAccountTypes() {
+  
+  let url = apiBase + `/account/types`;
+  return async (dispatch) => {
+    
+    try {     
+      let result = []    
+      try {
+        result = await axios.get(url);
+      } catch (error) {
+        console.log(error)      
+      }
+      console.log(result.data)
+      
+      if (result.status === 200) {
+        dispatch(accountTypesFetchDataSuccess(result.data))     
+      }
+    } catch (error) {
+      alert('Error on fetch account types: ' + JSON.stringify(error,null,2))
+    }
+  };
+}
+

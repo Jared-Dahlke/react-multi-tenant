@@ -134,7 +134,7 @@ function Users(props) {
 
         <GridItem >
           <Link style={{ textDecoration: 'none' }} to={"/admin/settings/users/create"}>
-          <Button  color="primary">Create New User</Button>
+            <Button  color="primary">Create New User</Button>
           </Link>
           
         </GridItem>
