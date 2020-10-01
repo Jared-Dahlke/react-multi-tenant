@@ -2,7 +2,7 @@
 steps:
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/front-end-prod', '.' ]
+    args: [ 'build', '-f', 'dockerfile.production', '-t', 'gcr.io/$PROJECT_ID/front-end-prod', '.' ]
   # push the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'gcr.io/$PROJECT_ID/front-end-prod']
