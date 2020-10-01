@@ -232,7 +232,7 @@ export default function FullScreenDialog(props) {
 
 
 
-            <FormikSelect
+          <FormikSelect
             id="users"
             name="users"
             label="Users"

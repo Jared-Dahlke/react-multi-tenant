@@ -1,4 +1,4 @@
-import { ACCOUNTS_FETCH_DATA_SUCCESS, ACCOUNTS_SET_ACCOUNT_USERS, SET_CURRENT_ACCOUNT_ID, SET_IS_SWITCHING_ACCOUNTS, SET_CURRENT_ACCOUNT, TREE_ACCOUNTS_CONVERT_DATA_SUCCESS, EDIT_ACCOUNT_ACCOUNT_USERS_LOADING} from '../action-types/accounts'
+import {ACCOUNTS_UPDATE_ACCOUNT, ACCOUNT_TYPES_FETCH_DATA_SUCCESS, ACCOUNTS_FETCH_DATA_SUCCESS, ACCOUNTS_SET_ACCOUNT_USERS, SET_CURRENT_ACCOUNT_ID, SET_IS_SWITCHING_ACCOUNTS, SET_CURRENT_ACCOUNT, TREE_ACCOUNTS_CONVERT_DATA_SUCCESS, EDIT_ACCOUNT_ACCOUNT_USERS_LOADING, ACCOUNTS_SET_ACCOUNT_TYPES} from '../action-types/accounts'
 import {findAccountNodeByAccountId, markAllAccountsAsCurrentFalse} from '../../utils'
 
 
@@ -24,9 +24,38 @@ export function accounts(state = [], action) {
      // }
       let newAccountState = {data: stateCopy}
       return newAccountState;
+  case ACCOUNTS_UPDATE_ACCOUNT:
+    console.log('account update account')
+    console.log(action)
+      let accountsCopy = []
+      if(state.data && state.data.length > 0) {
+        accountsCopy = JSON.parse(JSON.stringify(state.data))
+      }  
+      // for (const account of stateCopy) {
+        let copyAccount = findAccountNodeByAccountId(action.account.accountId,accountsCopy)
+        copyAccount.accountMargin = action.account.accountMargin
+        copyAccount.accountName = action.account.accountName
+        copyAccount.accoutTypeId = action.account.accountTypeId
+        copyAccount.accountTypeName = action.account.accountTypeName
+        copyAccount.contactEmail = action.account.contactEmail
+        copyAccount.contactName = action.account.contactName
+      // }
+      let newState = {data: accountsCopy}
+      return newState;
   default:
     return state;
   }
+}
+
+export function accountTypes(state=[], action) {
+  
+  switch (action.type) {
+    
+    case ACCOUNT_TYPES_FETCH_DATA_SUCCESS:
+      return action.accountTypes;
+    default:
+      return state;
+    }
 }
 
 

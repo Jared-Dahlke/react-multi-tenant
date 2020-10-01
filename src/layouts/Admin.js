@@ -11,7 +11,7 @@ import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js
 import bgImage from "../assets/img/sightly_image.jpg";
 import logo from "../assets/img/sightly_icon.png";
 import UserProfile from "../views/UserProfile/UserProfile.js";
-import Account from "../views/Account/Account.js";
+import Account from "../views/Account/SimpleAccount/SimpleAccount";
 import Users from "../views/Users/Users";
 import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
@@ -25,6 +25,7 @@ import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
+import CreateAccount from '../views/Account/SimpleAccount/CreateAccount'
 
 let ps;
 
@@ -38,6 +39,18 @@ const switchRoutes = (
       path='/admin/settings/account'
       component={Account}
     />
+
+    <Route
+      path='/admin/settings/account'
+      render={({ match: { url } }) => (
+        <>
+          <Route path={`${url}/`} component={Account} exact />
+          <Route path={`${url}/create`} component={CreateAccount} />      
+        </>
+      )}
+    />
+
+
     <Route
       path='/admin/settings/users'
       render={({ match: { url } }) => (
