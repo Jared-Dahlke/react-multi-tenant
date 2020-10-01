@@ -28,7 +28,7 @@ import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import * as Yup from "yup";
 import {getCurrentAccount} from '../../../utils'
 import { whiteColor } from "../../../assets/jss/material-dashboard-react.js";
-import {updateAccount, deleteAccount, setCurrentAccount} from "../../../redux/actions/accounts"
+import {updateAccount, deleteAccount, createAccount} from "../../../redux/actions/accounts"
 //import {FormLoader} from '../../../components/SkeletonLoader'
 
 
@@ -63,7 +63,8 @@ const mapStateToProps = (state) => {
   return {
     currentAccountId: state.currentAccountId,
     accounts: state.accounts,
-    accountTypes: state.accountTypes
+    accountTypes: state.accountTypes,
+    isSwitchingAccounts: state.isSwitchingAccounts
    
   };
 };
@@ -73,7 +74,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchUserProfile: () => dispatch(userProfileFetchData()),
     updateUserData: (userData) => dispatch(updateUserData(userData)),
     updateAccount: (account)=> dispatch(updateAccount(account)),
-    deleteAccount: (accountId)=> dispatch(deleteAccount(accountId))
+    deleteAccount: (accountId)=> dispatch(deleteAccount(accountId)),
+    createAccount: (account)=> dispatch(createAccount(account))
   };
 };
 
@@ -122,15 +124,26 @@ function UserProfile(props) {
   const classes = useStyles();
 
   const [current, setCurrent] = React.useState({})
+  
 
   const handleCreateChild=()=> {
     console.log(current)
+    let levelId = current.accountLevelId + 1
+    if (levelId > 3) {
+      levelId = 3
+    }
     let childAccount = {
-      accountName: 'Child',
+      accountName: 'New Child',
       accountTypeId: props.accountTypes[0].accountTypeId,
-      accountLevelId: 'current accountlevelid + 1 max 3'
+      accountLevelId: levelId,
+      accountMargin: 0,
+      contactName: ' ',
+      contactEmail:'placeholder@placeholder.com',
+      parentAccountId: current.accountId
 
     }
+    props.createAccount(childAccount)
+
   }
 
   const handleDeleteAccount=()=>{
@@ -142,8 +155,7 @@ function UserProfile(props) {
       props.deleteAccount(props.currentAccountId)    
     } else {
 
-    }
-    
+    }   
   }
 
   const formatAccountTypes=(accountTypes)=>{
@@ -235,7 +247,7 @@ function UserProfile(props) {
 
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-            {accountLoading ?
+            {accountLoading || props.isSwitchingAccounts ?
             <FormLoader/>
           :
           <div>

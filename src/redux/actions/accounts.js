@@ -7,19 +7,16 @@ import {
   EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
   ACCOUNTS_SET_ACCOUNT_USERS,
   ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
-  ACCOUNTS_UPDATE_ACCOUNT
+  ACCOUNTS_UPDATE_ACCOUNT,
+  SET_IS_SWITCHING_ACCOUNTS
 } from "../action-types/accounts";
 import axios from "../../axiosConfig";
-import handleError from "../../errorHandling";
 import config from "../../config.js";
 import {userProfileFetchData, setAuthToken} from '../actions/auth'
-import {usersFetchData, usersFetchDataSuccess, usersIsLoading} from '../actions/users'
+import {usersFetchData, usersFetchDataSuccess, usersIsLoading, editUserUserAccountsLoading} from '../actions/users'
 import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesPermissionsFetchDataSuccess, rolesPermissionsIsLoading} from '../actions/roles'
 import {brandProfilesFetchDataSuccess, fetchBrandProfiles} from '../actions/brandProfiles'
 import {findAccountNodeByAccountId} from '../../utils'
-import { useHistory } from "react-router-dom";
-import { editUserUserAccountsLoading } from "../actions/users";
-//import { Account } from "../../models/user";
 
 
 const apiBase = config.apiGateway.URL;
@@ -72,6 +69,15 @@ export function setCurrentAccount(accountId) {
   };
 }
 
+
+export function isSwitchingAccounts(bool) {
+  return {
+    type: SET_IS_SWITCHING_ACCOUNTS,
+    isSwitchingAccounts: bool,
+  };
+}
+
+
 export function updateAccount(account) {
   
   let accountId = account.accountId;
@@ -91,20 +97,35 @@ export function updateAccount(account) {
 
 export const deleteAccount = (accountId) => {
   let url = apiBase + `/account/${accountId}`;
-  return (dispatch) => {   
+  return (dispatch) => {  
+    dispatch(isSwitchingAccounts(true)) 
     axios
       .delete(url)
       .then((response) => {
-       // dispatch(userDeleted(true));
-        setTimeout(() => {
-         // dispatch(userDeleted(false));
-        }, 2000);
+        dispatch(fetchSiteData());
+        
       })
       .catch((error) => {
         //dispatch(userDeletedError(true));
         setTimeout(() => {
          // dispatch(userDeletedError(false));
         }, 2000);
+      });
+  };
+};
+
+
+export const createAccount = (account) => {
+  let url = apiBase + `/account`;
+  return (dispatch) => {
+    dispatch(isSwitchingAccounts(true))   
+    axios
+      .post(url, account)
+      .then((response) => {      
+        dispatch(fetchSiteData(response.data.accountId))
+      })
+      .catch((error) => {
+        //error
       });
   };
 };
@@ -211,6 +232,7 @@ export function fetchSiteData(accountId) {
       dispatch(rolesPermissionsFetchData(accountId))
       dispatch(rolesFetchData(accountId))
       dispatch(fetchBrandProfiles(accountId))
+      dispatch(isSwitchingAccounts(false)) 
       
 
     } catch (error) {
