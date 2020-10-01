@@ -13,7 +13,6 @@ const staging = {
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
     MOCKURL: "https://reqres.in/api/staging", //mock api
-    //URL: "http://52.250.22.66:4000"
     URL: "https://api-cont-intell-user-account-staging-zu7blp7gxa-uw.a.run.app"
   }
 }
@@ -22,8 +21,8 @@ const production = {
   environment: 'production',
   apiGateway: {
     REGION: "YOUR_PROD_API_GATEWAY_REGION",
-    URL: "https://reqres.in/api",
-    MOCKURL:"never used"
+    MOCKURL:"never used",
+    URL: "https://api-cont-intell-user-account-prod-zu7blp7gxa-uw.a.run.app"
   }
 };
 
