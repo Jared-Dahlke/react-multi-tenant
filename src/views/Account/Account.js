@@ -61,6 +61,7 @@ const useStyles = makeStyles({
             <Typography   component="h4">
             {props.nodeData.accountName}
             </Typography>
+         
 
              <GridContainer justify='center'>      
                 <GridContainer justify='center'>        
@@ -72,21 +73,10 @@ const useStyles = makeStyles({
                   </CardActions>  
                          
                 </GridContainer>
-            </GridContainer> 
-
-           
-          
+            </GridContainer>        
           
         </CardContent>
 
-      
-        
-
-
-          
-         
-     
-     
       </GridContainer>
     </Card>
  }
