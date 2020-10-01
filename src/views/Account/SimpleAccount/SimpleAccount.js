@@ -134,6 +134,10 @@ function UserProfile(props) {
   }
 
   const handleDeleteAccount=()=>{
+    if(current.accountName === "Sightly") {
+      alert('You cannot delete the top level Sightly account')
+      return
+    }
     if (confirm('Are you sure you want to delete this account?')) {
       props.deleteAccount(props.currentAccountId)    
     } else {
@@ -333,9 +337,20 @@ function UserProfile(props) {
            
 
             <CardFooter>  
-            <Button color="danger" onClick={handleDeleteAccount}>
-              Delete
-            </Button>
+              {
+                current.accountName === "Sightly" ?
+
+                null
+
+                :
+
+                <Button color="danger" onClick={handleDeleteAccount}>
+                  Delete
+                </Button>
+
+
+              }
+            
 
             <Button color="primary" onClick={()=>handleMySubmit(values)}>
               Save
