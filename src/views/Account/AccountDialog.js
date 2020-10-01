@@ -120,7 +120,12 @@ export default function FullScreenDialog(props) {
   }
 
   const getCurrentAccountUsers=(accounts)=>{
+    console.log('in get current account users')
+    console.log(accounts)
+    
+    //console.log(props.account.accountId)
     let currentAccountUsers = []
+    if (!accounts) return currentAccountUsers
     if (props.account && props.account.accountId) {
       let currentAccountId =  props.account.accountId
       let currentAccount = findAccountNodeByAccountId(currentAccountId,accounts)
@@ -131,7 +136,6 @@ export default function FullScreenDialog(props) {
 
       }
       
-
     }
     
 
