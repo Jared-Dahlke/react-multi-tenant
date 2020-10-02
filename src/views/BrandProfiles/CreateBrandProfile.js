@@ -8,7 +8,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor, grayColor, successColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
 import {Formik, Form} from 'formik'
@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
+import Scenarios from './components/Scenarios'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,13 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
   step: {
     "&$completed": {
-      color: 'green',
+      color: primaryColor[0],
       
     },
     "&$active": {
       color: primaryColor[0]
     },
-    color: blackColor
+    color: grayColor[3]
   },
   active: {}, //needed so that the &$active tag works
   completed: {},
@@ -91,19 +92,34 @@ const schemaValidation = Yup.object().shape({
           })
           .transform(v => v === '' ? null : v)
       ),
+    scenarios: Yup.array().of(
+        Yup.string().max(0, 'not hit').required('required')
+      )
+    
     
   
 });
 
 function getSteps() {
-  return ['Basic Info', 'Top Competitors', 'Sensitive Content'];
+  return ['Basic Info', 'Top Competitors', 'Scenarios'];
 }
 
+const scenarios = [
+  'Injury/death due to tragedy/sickness',
+  'Death due to natural causes', 
+  'Social issues/BLM related content', 
+  'Environmental Issues',
+  'Natural Disasters and resulting impact',
+  'Corporate Strikes',
+  'Protests (in general vs a specific topic)',
+  'Response to negative press about competitors',
+  'Respoonse to positive press about competitors'
+]
 
 function CreateBrandProfiles (props) {
 
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(1);
+  const [activeStep, setActiveStep] = React.useState(2);
   const [basicInfo, setBasicInfo] = React.useState({
     profileName: '',
     websiteUrl: '',
@@ -170,7 +186,9 @@ return (
         basicInfoTwitterProfile: '',
         basicInfoIndustry: [],
         
-        topCompetitors: []
+        topCompetitors: [],
+
+        scenarios: scenarios
 
         }}
         render={({
@@ -182,7 +200,8 @@ return (
           validateField,
           validateForm,
           isSubmitting,
-          isValid
+          isValid,
+          arrayHelpers
         }) => (
       <div>
 
@@ -191,7 +210,7 @@ return (
           
           let labelColor = whiteColor
           if (stepValidated(index, errors)) {
-            labelColor = 'green'
+           // labelColor = 'green'
           }           
           
           return (
@@ -240,7 +259,9 @@ return (
                 <TopCompetitors setFieldValue={setFieldValue} errors={errors}/>
               </div>
               : activeStep === 2 ?
-                <div> step 3</div> 
+                <div> 
+                  <Scenarios setFieldValue={setFieldValue} errors={errors} arrayHelpers={arrayHelpers} values={values}/>
+                </div> 
                 : 
                 <div></div>
           }

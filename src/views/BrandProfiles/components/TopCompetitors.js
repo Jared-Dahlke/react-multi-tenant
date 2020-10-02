@@ -50,7 +50,7 @@ var dummyTopCompetitors = [
 
 
 
-const competitorHeaders = ['Name', 'Twitter Profile','YouTube Channel','Website','']
+const competitorHeaders = ['Name', 'Twitter Profile','Website','']
 
 export default function TopCompetitors (props) {
 
@@ -59,12 +59,6 @@ export default function TopCompetitors (props) {
   const [competitors, setCompetitors] = React.useState(dummyTopCompetitors)
 
   const [addingNew, setAddingNew] = React.useState(false)
-
-  const [newName, setNewName] = React.useState('')
-  const [newTwitterProfile, setNewTwitterProfile] = React.useState('')
-  const [newYoutTubeChannel, setNewYouTubeChannel] = React.useState('')
-  const [newWebsite, setNewWebsite] = React.useState('')
-
 
 
   const classes = useStyles();
@@ -81,7 +75,6 @@ export default function TopCompetitors (props) {
       competitorId: UUID.v4(), 
       competitorName: values.newName, 
       competitorTwitterProfile: values.newTwitterProfile,
-      competitorYouTubeChannel: values.newYouTubeChannel, 
       competitorWebsite: values.newWebsite
     }
     let oldCompetitors = JSON.parse(JSON.stringify(competitors))
@@ -163,8 +156,7 @@ export default function TopCompetitors (props) {
                     initialValues={{
                       
                         newName: '',
-                        newTwitterProfile: '',
-                        newYouTubeChannel: '',
+                        newTwitterProfile: '',                     
                         newWebsite: ''
                               
                     }}
@@ -212,20 +204,7 @@ export default function TopCompetitors (props) {
                           }}
                         />
                       </TableCell>
-                      <TableCell className={tableCellClasses}>
-                        <FormikInput
-                          labelProps={{shrink: true}}
-                          name='newYouTubeChannel'
-                          inputProps={{
-                            startAdornment: <InputAdornment position="start"><div style={{color: grayColor[3]}}>https://youtube.com/</div></InputAdornment>,  
-                          }}
-                          labelText="Competitor YouTube"                               
-                          validate={v.isTwitterProfileError}
-                          formControlProps={{
-                            fullWidth: true                        
-                          }}
-                        />
-                      </TableCell>
+                     
                       <TableCell className={tableCellClasses}>
                         <FormikInput
                           labelProps={{shrink: true}}
@@ -301,7 +280,7 @@ export default function TopCompetitors (props) {
                     
                       <TableCell className={tableCellClasses}>{competitor.competitorName}</TableCell>
                       <TableCell className={tableCellClasses}>{competitor.competitorTwitterProfile}</TableCell>
-                      <TableCell className={tableCellClasses}>{competitor.competitorYouTubeChannel}</TableCell>
+          
                       <TableCell className={tableCellClasses}>{competitor.competitorWebsite}</TableCell>
                      
                       <TableCell className={classes.tableActions}>
