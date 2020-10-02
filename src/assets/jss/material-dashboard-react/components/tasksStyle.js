@@ -40,8 +40,8 @@ const tasksStyle = {
     padding: "0"
   },
   tableActionButtonIcon: {
-    width: "17px",
-    height: "17px"
+    width: "20px",
+    height: "20px"
   },
   edit: {
     backgroundColor: "transparent",
@@ -51,6 +51,11 @@ const tasksStyle = {
   close: {
     backgroundColor: "transparent",
     color: dangerColor[0],
+    boxShadow: "none"
+  },
+  save: {
+    backgroundColor: "transparent",
+    color: primaryColor[0],
     boxShadow: "none"
   }
 };

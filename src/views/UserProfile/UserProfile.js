@@ -1,20 +1,26 @@
-import React from "react";
-import {connect} from 'react-redux'
-// @material-ui/core components
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-// core components
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardAvatar from "../../components/Card/CardAvatar.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
 
-import avatar from "../../assets/img/faces/marc.jpg";
+// Validation
+import * as v from "../../validations";
+import CustomPassword from "../../components/CustomPasswordRequirements/CustomPasswordRequirements.js";
+import CustomPasswordMatchChecker from '../../components/CustomPasswordRequirements/CustomPasswordMatchChecker'
+
+// Redux
+import { userProfileFetchData } from "../../redux/actions/auth.js";
+import { connect } from "react-redux";
+import { updateUserData } from "../../redux/actions/users.js";
+
+import {FormLoader} from '../../components/SkeletonLoader'
 
 const styles = {
   cardCategoryWhite: {
@@ -22,7 +28,7 @@ const styles = {
     margin: "0",
     fontSize: "14px",
     marginTop: "0",
-    marginBottom: "0"
+    marginBottom: "0",
   },
   cardTitleWhite: {
     color: "#FFFFFF",
@@ -31,64 +37,173 @@ const styles = {
     fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
-    textDecoration: "none"
-  }
+    textDecoration: "none",
+  },
+  minWidth: {
+    minWidth: "30px",
+  },
+  green: {
+    color: "green",
+  },
 };
 
 const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
-  return { 
-    authToken: state.authToken
+  return {
+    user: state.user,
+    token: state.authToken,
+    userProfileIsLoading: state.userProfileIsLoading
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserProfile: () => dispatch(userProfileFetchData()),
+    updateUserData: (userData) => dispatch(updateUserData(userData)),
+  };
+};
 
+const defaultState = {
+  userId: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  company: "",
+  phoneNumber: "",
+  userName: "",
+};
+const passwordDefaultState = {
+  oldPassword: "",
+  newPassword: "",
+  confirmNewPassword: "",
+};
 
-function UserProfile(props) {
+function UserProfile({
+  fetchUserProfile,
+  updateUserData,
+  userProfileIsLoading,
+  user: { userProfile, loading },
+}) {
+
+  const [userForm, setUserForm] = useState(defaultState);
+  const [edit, setEdit] = useState(false);
+  const [editPassword, setEditPassword] = useState(false);
+  const [passwordObject, setPasswordObject] = useState(passwordDefaultState);
+  const [showAlertMessage, setShowAlertMessage] = useState(false);
 
   const classes = useStyles();
+
+  useEffect(() => {
+    if (!userProfile) fetchUserProfile();
+    if (!loading && userProfile) {
+      const userData = { ...defaultState };
+      for (const key in userProfile) {
+        if (key in userData) {
+          userData[key] = userProfile[key];
+        }
+      }
+      setUserForm(userData);
+    }
+  }, [fetchUserProfile, userProfile, loading]);
+
+  const onChange = (e) => {
+    setUserForm({ ...userForm, [e.target.name]: e.target.value });
+  };
+  const onPasswordChange = (e) => {
+    setPasswordObject({ ...passwordObject, [e.target.name]: e.target.value });
+  };
+
+  const enableEdit = () => {
+    setEdit(true);
+  };
+  const disableEdit = () => {
+    setEdit(false);
+    setUserForm(userProfile);
+  };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setUserForm(userForm);
+    setEdit(false);
+    setShowAlertMessage(true);
+    setTimeout(function () {
+      setShowAlertMessage(false);
+    }, 2000);
+    userForm.userType = userProfile.userType
+    updateUserData(userForm);
+  };
+
+  const submitPassword = (e) => {
+    e.preventDefault();
+    disablePasswordEdit();
+  };
+
+  const enablePasswordEdit = () => {
+    setEditPassword(true);
+  };
+  const disablePasswordEdit = () => {
+    setEditPassword(false);
+    setPasswordObject(passwordDefaultState);
+  };
+
+  const formIsValid = () => {
+    if (
+      v.isCompanySuccess(company) &&
+      v.isEmailSuccess(email) &&
+      v.isFirstNameSuccess(firstName) &&
+      v.isLastNameSuccess(lastName)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const { firstName, lastName, email, company } = userForm;
+  const { oldPassword, newPassword, confirmNewPassword } = passwordObject;
 
   return (
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
-            </CardHeader>
+          {!userProfileIsLoading ?
+          <div>
             <CardBody>
+              
               <GridContainer>
                 <GridItem xs={12} sm={12} md={5}>
                   <CustomInput
                     labelText="Company (disabled)"
                     id="company-disabled"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
-                      disabled: true
+                      disabled: true,
+                      value: company
                     }}
+                    success={edit && v.isCompanySuccess(company)}
+                    error={edit && v.isCompanyError(company)}
+                    handleClear={() =>
+                      setUserForm({ ...userForm, company: "" })
+                    }
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
-                  <CustomInput
-                    labelText="Username"
-                    id="username"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Email address"
-                    id="email-address"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      disabled: edit ? false : true,
+                      value: email,
+                      name: "email",
+                      onChange: onChange,
+                    }}
+                    success={edit && v.isEmailSuccess(email)}
+                    error={edit && v.isEmailError(email)}
+                    handleClear={() => setUserForm({ ...userForm, email: "" })}
                   />
                 </GridItem>
               </GridContainer>
@@ -98,8 +213,19 @@ function UserProfile(props) {
                     labelText="First Name"
                     id="first-name"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
+                    inputProps={{
+                      disabled: edit ? false : true,
+                      value: firstName,
+                      name: "firstName",
+                      onChange: onChange,
+                    }}
+                    success={edit && v.isFirstNameSuccess(firstName)}
+                    error={edit && v.isFirstNameError(firstName)}
+                    handleClear={() =>
+                      setUserForm({ ...userForm, firstName: "" })
+                    }
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
@@ -107,86 +233,148 @@ function UserProfile(props) {
                     labelText="Last Name"
                     id="last-name"
                     formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="City"
-                    id="city"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Country"
-                    id="country"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Postal Code"
-                    id="postal-code"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
-                  <CustomInput
-                    labelText="cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
-                    id="about-me"
-                    formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
-                      multiline: true,
-                      rows: 5
+                      disabled: edit ? false : true,
+                      value: lastName,
+                      name: "lastName",
+                      onChange: onChange,
                     }}
+                    success={edit && v.isLastNameSuccess(lastName)}
+                    error={edit && v.isLastNameError(lastName)}
+                    handleClear={() =>
+                      setUserForm({ ...userForm, lastName: "" })
+                    }
                   />
                 </GridItem>
               </GridContainer>
+              <GridContainer></GridContainer>
             </CardBody>
+           
+
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              {edit && (
+                <Button color="primary" onClick={disableEdit}>
+                  Cancel
+                </Button>
+              )}
+              <Button
+                color="primary"
+                onClick={edit ? onSubmit : enableEdit}
+                disabled={!formIsValid()}
+              >
+                {edit ? "Save" : "Edit"}
+              </Button>
+
+              <Snackbar
+                place="bc"
+                color="success"
+                icon={AddAlert}
+                message="User profile was updated"
+                open={showAlertMessage}
+                // closeNotification={() => setShowAlertMessage(false)}
+                // close
+              />
             </CardFooter>
+            </div>
+             :
+             <FormLoader/>
+           }
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Rick James</h4>
-              <p className={classes.description}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut...
-              </p>
-              <Button color="primary" round>
-                Follow
+
+        <GridItem xs={12} sm={12} md={6}>
+          <GridContainer>
+            <GridItem xs={12} sm={12} md={5}>
+              <Button
+                onClick={
+                  editPassword ? disablePasswordEdit : enablePasswordEdit
+                }
+              >
+                Change Password
               </Button>
-            </CardBody>
-          </Card>
+            </GridItem>
+          </GridContainer>
+          <GridItem>
+            <Card>
+              {editPassword && (
+                <CardBody>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <form>
+                        <CustomInput
+                          labelText="Current Password"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            type: "password",
+                            value: oldPassword,
+                            name: "oldPassword",
+                            onChange: onPasswordChange,
+                          
+                          }}
+                        />
+                      </form>
+                    </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <form>                      
+                        <CustomInput
+                          labelText="New Password"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            type: "password",
+                            value: newPassword,
+                            name: "newPassword",
+                            onChange: onPasswordChange,
+                          }}
+                        />
+                      </form>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <form>
+                        <CustomInput
+                          labelText="Confirm Password"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                          inputProps={{
+                            type: "password",
+                            value: confirmNewPassword,
+                            name: "confirmNewPassword",
+                            onChange: onPasswordChange,
+                          }}
+                        />
+                      </form>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomPassword password={newPassword} />
+                      <CustomPasswordMatchChecker password={newPassword} password_confirmation={confirmNewPassword}/>
+                    </GridItem>
+                  </GridContainer>
+                </CardBody>
+              )}
+              {editPassword && (
+                <CardFooter>
+                  <Button color="primary" onClick={disablePasswordEdit}>
+                    Cancel
+                  </Button>
+                  <Button color="primary" onClick={submitPassword}>
+                    Save
+                  </Button>
+                </CardFooter>
+              )}
+            </Card>
+          </GridItem>
         </GridItem>
       </GridContainer>
     </div>
   );
 }
 
-const MyUserProfile = connect(mapStateToProps)(UserProfile)
-
-export default MyUserProfile;
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);

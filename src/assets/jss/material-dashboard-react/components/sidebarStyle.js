@@ -132,13 +132,45 @@ const sidebarStyle = theme => ({
       color: whiteColor
     }
   },
+  nested: {
+    paddingLeft: theme.spacing(4),
+    color: 'white !important'
+  },
   itemLink: {
     width: "auto",
     transition: "all 300ms linear",
     margin: "10px 15px 0",
     borderRadius: "3px",
     position: "relative",
-    display: "block",
+    // display: "block",
+    padding: "10px 15px",
+    backgroundColor: "transparent",
+    ...defaultFont
+  },
+  nestedItemLink: {
+    width: "auto",
+    transition: "all 300ms linear",
+    marginTop: "10px",
+    marginLeft: '30px',
+    marginRight: '15px',
+    marginBottom: 0,
+    borderRadius: "3px",
+    position: "relative",
+    // display: "block",
+    padding: "10px 15px",
+    backgroundColor: "transparent",
+    ...defaultFont
+  },
+  subNestedItemLink: {
+    width: "auto",
+    transition: "all 300ms linear",
+    marginTop: "10px",
+    marginLeft: '75px',
+    marginRight: '15px',
+    marginBottom: 0,
+    borderRadius: "3px",
+    position: "relative",
+    // display: "block",
     padding: "10px 15px",
     backgroundColor: "transparent",
     ...defaultFont
@@ -154,6 +186,7 @@ const sidebarStyle = theme => ({
     verticalAlign: "middle",
     color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
   },
+  
   itemText: {
     ...defaultFont,
     margin: "0",

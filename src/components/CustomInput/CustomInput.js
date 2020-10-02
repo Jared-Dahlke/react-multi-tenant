@@ -11,7 +11,7 @@ import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
 // core components
 import styles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js" //"assets/jss/material-dashboard-react/components/customInputStyle.js";
-
+import {whiteColor} from '../../assets/jss/material-dashboard-react'
 const useStyles = makeStyles(styles);
 
 export default function CustomInput(props) {
@@ -38,10 +38,12 @@ export default function CustomInput(props) {
   const marginTop = classNames({
     [classes.marginTop]: labelText === undefined
   });
+  
   return (
     <FormControl
       {...formControlProps}
       className={formControlProps.className + " " + classes.formControl}
+      
     >
 
       
@@ -49,6 +51,7 @@ export default function CustomInput(props) {
         <InputLabel
           className={classes.labelRoot + labelClasses}
           htmlFor={id}
+         
           {...labelProps}
         >
           {labelText}
@@ -62,6 +65,8 @@ export default function CustomInput(props) {
         }}
         id={id}
         {...inputProps}
+        style={{color: props.valueColor ? props.valueColor : whiteColor}}
+        autoComplete="adf"
       />
       {error ? (
         
@@ -85,5 +90,7 @@ CustomInput.propTypes = {
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
   success: PropTypes.bool,
-  handleClear: PropTypes.func
+  handleClear: PropTypes.func,
+  styling: PropTypes.object,
+  valueColor: PropTypes.string
 };

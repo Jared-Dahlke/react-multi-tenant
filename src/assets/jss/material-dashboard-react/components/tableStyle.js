@@ -39,19 +39,23 @@ const tableStyle = theme => ({
     borderSpacing: "0",
     borderCollapse: "collapse"
   },
-  tableHeadCell: {
-    color: "inherit",
-    ...defaultFont,
-    "&, &$tableCell": {
-      fontSize: "1em"
-    }
-  },
+ 
   tableCell: {
     ...defaultFont,
     lineHeight: "1.42857143",
     padding: "12px 8px",
     verticalAlign: "middle",
-    fontSize: "0.8125rem"
+    fontSize: "0.8125rem",
+    
+
+  },
+  tableHeadCell: {
+    
+    ...defaultFont,
+    color: primaryColor[0],
+    "&, &$tableCell": {
+      fontSize: "1em"
+    }
   },
   tableResponsive: {
     width: "100%",

@@ -4,62 +4,104 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "../components/Navbars/Navbar.js";
-import Footer from "../components/Footer/Footer.js";
+//import Footer from "../components/Footer/Footer.js";
 import Sidebar from "../components/Sidebar/Sidebar.js";
 import routes from "../routes.js"
 import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import bgImage from "../assets/img/sightly_image.jpg";
 import logo from "../assets/img/sightly_icon.png";
 import UserProfile from "../views/UserProfile/UserProfile.js";
-import TableList from "../views/TableList/TableList.js";
+import Account from "../views/Account/SimpleAccount/SimpleAccount";
 import Users from "../views/Users/Users";
 import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";
+
+// Redux
 import { connect } from "react-redux";
-import {usersFetchData} from '../redux/actions/users.js'
-import {rolesFetchData} from '../redux/actions/roles.js'
+import {setUserId} from '../redux/actions/auth.js'
+import {fetchSiteData} from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
+import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
+import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
+import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
+import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
+import CreateAccount from '../views/Account/SimpleAccount/CreateAccount'
 
 let ps;
 
 const switchRoutes = (
   <Switch>
     <Route
-      path='/admin/profile'
+      path='/admin/settings/profile'
       component={UserProfile}
     />
     <Route
-      path='/admin/accounts'
-      component={TableList}
+      path='/admin/settings/account'
+      component={Account}
     />
+
     <Route
-      path='/admin/users'
+      path='/admin/settings/account'
+      render={({ match: { url } }) => (
+        <>
+          <Route path={`${url}/`} component={Account} exact />
+          <Route path={`${url}/create`} component={CreateAccount} />      
+        </>
+      )}
+    />
+
+
+    <Route
+      path='/admin/settings/users'
       render={({ match: { url } }) => (
         <>
           <Route path={`${url}/`} component={Users} exact />
           <Route path={`${url}/create`} component={CreateUser} />      
-          <Route path={`${url}/edit`} component={EditUser} />   
+          <Route path={`${url}/edit/:user`} render={(props) => <EditUser {...props} foo="bar"/>} />   
         </>
       )}
     />
 
     <Route
-      path='/admin/RolesPermissions'
+      path='/admin/settings/RolesPermissions'
       component={RolesPermissions}
     />
+
+    <Route
+      path='/admin/settings/brandProfiles'
+      render={({ match: { url } }) => (
+        <>
+          <Route path={`${url}/`} component={BrandProfiles} exact />
+          <Route path={`${url}/create`} component={CreateBrandProfile} />      
+        </>
+      )}
+    />
+
+    <Route
+      path='/admin/settings/brandMentality'
+      component={TestBrandProfile}
+    />
+
+    <Route
+      path='/admin/discover/home'
+      component={DiscoveryHome}
+    />
     
-    <Redirect from="/admin" to="/admin/profile" />
+    <Redirect from="/admin" to="/admin/settings/profile" />
   </Switch>
 );
 
 const useStyles = makeStyles(styles);
 
+
+
 const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchUsersData: () => dispatch(usersFetchData()),
-    fetchRoles: () => dispatch(rolesFetchData())
+  return {  
+    setUserId: (userId) => dispatch(setUserId(userId)), 
+    fetchSiteData: ()=>dispatch(fetchSiteData())  
   }
 }
+
 
 
 function Admin({ ...rest }) {
@@ -99,12 +141,24 @@ function Admin({ ...rest }) {
     };
   }, [mainPanel]);
 
+
+  var userId = rest.userId
+  if(!userId){
+    let userId = localStorage.getItem("userId")
+    if (userId) {
+      rest.setUserId(userId)
+      
+    }
+  }
+
+  
   //preload critical data into the application
-  const {fetchUsersData, fetchRoles} = rest
+  const {fetchSiteData} = rest
   React.useEffect(() => {
-    fetchUsersData()
-    fetchRoles()
-  }, [fetchUsersData, fetchRoles])
+    fetchSiteData()
+  }, [fetchSiteData])
+
+  
 
   return (
     <div className={classes.wrapper}>
@@ -132,7 +186,7 @@ function Admin({ ...rest }) {
         ) : (
           <div className={classes.map}>{switchRoutes}</div>
         )}
-        {getRoute() ? <Footer /> : null}
+        {/*getRoute() ? <Footer /> : null*/}
         
       </div>
     </div>

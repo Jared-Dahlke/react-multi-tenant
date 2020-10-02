@@ -1,17 +1,21 @@
 //The below 2 warnings exist when using the rc-tree component. They both appear to be related to AntDesign which is used in this component. 
 //Warning: `children` of Tree is deprecated. Please use `treeData` instead.
 //Warning: Second param return from event is node data instead of TreeNode instance. Please read value directly instead of reading from `props`.
+/*eslint-disable no-sequences */
 import './index.less'
 import React from 'react'
 import Tree, { TreeNode } from 'rc-tree'
 import GridList from '@material-ui/core/GridList'
 import "rc-tree/assets/index.css"
-import {defaultFont} from "../../assets/jss/material-dashboard-react"
+import {defaultFont, whiteColor, dangerColor} from "../../assets/jss/material-dashboard-react"
 import CustomInput from "../CustomInput/CustomInput.js"
-import Card from "../Card/Card.js"
-import CardBody from "../Card/CardBody.js"
-import CardHeader from "../Card/CardHeader.js"
 import { withStyles } from '@material-ui/core/styles'
+import AddBox from '@material-ui/icons/AddBoxSharp'
+import MinusBox from '@material-ui/icons/IndeterminateCheckBox'
+import Clear from "@material-ui/icons/Clear";
+import Check from "@material-ui/icons/Check";
+import FormHelperText from '@material-ui/core/FormHelperText'
+import inputStyles from "../../assets/jss/material-dashboard-react/components/customInputStyle.js"
 
 const styles = {
   cardCategoryWhite: {
@@ -48,9 +52,6 @@ const styles = {
 }
 
 
-
-
-
 class Demo extends React.Component {
   static defaultProps = {
     multiple: true,
@@ -61,9 +62,9 @@ class Demo extends React.Component {
   state = {
     expandedKeys: [],
     autoExpandParent: true,
-    selectedKeys: [],
     treeData: [],
-    inputValue: ''
+    inputValue: '',
+    showTree: false
   }
 
   
@@ -78,11 +79,7 @@ class Demo extends React.Component {
     })
   }
 
-  onCheck = checkedKeys => {
-    this.setState({
-      checkedKeys,
-    })
-  }
+  
 
 
   filterTreeNode = treeNode => {
@@ -96,11 +93,6 @@ class Demo extends React.Component {
     return false
   }
 
-  onSelect = (selectedKeys, info) => {
-    this.setState({
-      selectedKeys,
-    })
-  }
 
 
 
@@ -111,15 +103,27 @@ class Demo extends React.Component {
     })
   }
 
-  triggerChecked = () => {
-    this.setState({
-      checkedKeys: [`0-0-${parseInt(Math.random() * 3, 10)}-key`],
-    })
-  }
-
-  
 
   render() {
+
+    const switcherIcon = obj => {
+      if (obj.isLeaf) {
+        return (null)
+      }
+      if (obj.expanded) {
+        return(<MinusBox  style={{ fontSize: 14, color: 'white', backgroundColor: 'black'}}/>) 
+      }
+      return (<AddBox style={{ fontSize: 14, color: 'white', backgroundColor: 'black'}}/>)
+    };
+
+    //const Icon = ({ selected }) => {
+    //  return selected? <Checked></Checked> : <Unchecked></Unchecked>
+    // }
+
+    const TreeTitle = ({title}) => {
+      return <div style={{font: defaultFont, marginLeft: 5, color: whiteColor}}>{title}</div>
+    }
+    
 
     
     const loop = data =>
@@ -129,12 +133,12 @@ class Demo extends React.Component {
         }
         if (item.children) {
           return (
-            <TreeNode style={{fontFamily: defaultFont.fontFamily, fontWeight: defaultFont.fontWeight, lineHeight: defaultFont.lineHeight}} key={item.key} title={item.title} disableCheckbox={item.key === 'mydisabledkey'}>
+            <TreeNode   style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item[this.props.keyProp]} title={<TreeTitle title={item[this.props.labelProp]}/>} disableCheckbox={item.key === 'mydisabledkey'}>
               {loop(item.children)}
             </TreeNode>
           )
         }
-        return <TreeNode style={{fontFamily: defaultFont.fontFamily, fontWeight: defaultFont.fontWeight, lineHeight: defaultFont.lineHeight}} key={item.key} title={item.title} />
+        return <TreeNode style={{fontSize: 16, fontFamily: defaultFont.fontFamily}} key={item[this.props.keyProp]} title={<TreeTitle title={item[this.props.labelProp]}/>} />
       })
     let { expandedKeys } = this.state
     let { autoExpandParent } = this.state
@@ -143,66 +147,86 @@ class Demo extends React.Component {
       autoExpandParent = true
     }
 
-    const { classes } = this.props
+    return (    
+      <div>
 
-    
-    return (
-
-      <Card style={{paddingTop: '27px'}}>
-
-        <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>{this.props.title}</h4>
-          <p className={classes.cardCategoryWhite}></p>
-        </CardHeader>
-
-        <CardBody>
-
-          {this.props.search ?
+        {this.props.search ?
+        
+          <CustomInput         
+            labelText={this.props.title}
+            id="treeSearch"
+            formControlProps={{
+              fullWidth: true,
+              
+            }}
+            labelProps={{
+              shrink: true
+            }}
           
-            <CustomInput
-              labelText="Search"
-              id="treeSearch"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: false,
-                value: this.state.inputValue,
-                onChange: this.onChange
-              }}       
-            />
+            inputProps={{
+              disabled: false,
+              value: this.state.inputValue,
+              onChange: this.onChange, 
+              variant: 'filled'      ,              
+              placeholder:'Search....'
+            }}   
+            success={this.props.errors && !this.props.errors[this.props.name]}    
+          />
 
-            :
-          
-            null
-          
-          }
+          :
+        
+          null
+        
+        }
 
-         
+      
+        <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
 
-          <GridList cellHeight={this.props.treeContainerHeight}  cols={1}>
-    
-            <Tree
-              checkable
-              onExpand={this.onExpand}
-              expandedKeys={expandedKeys}
-              autoExpandParent={autoExpandParent}
-              onCheck={this.onCheck}
-              checkedKeys={this.state.checkedKeys}
-              onSelect={this.onSelect}
-              selectedKeys={this.state.selectedKeys}
-              filterTreeNode={this.filterTreeNode}
-              style={{}}
-            >
-              {loop(this.props.data)}
-            </Tree>
+       
+          <Tree
+            defaultExpandAll={true}
+            checkStrictly={!this.props.cascade}
+            showIcon={false}
+            showLine={false}
+            switcherIcon={switcherIcon}
+            checkable
+            onExpand={this.onExpand}
+            //expandedKeys={expandedKeys}
+            autoExpandParent={autoExpandParent}
+            onCheck={this.props.onCheck}
+            checkedKeys={this.props.checkedKeys}
+            onSelect={this.props.onSelect}
+            selectedKeys={this.props.selectedKeys}
+            filterTreeNode={this.filterTreeNode}
+          >
+            {loop(this.props.data)}
+          </Tree>
 
 
-          </GridList>
+        </GridList>
 
-        </CardBody>
+        {this.props.errors && this.props.errors[this.props.name] ? (
+            
+           
+              <FormHelperText 
+                id="component-helper-text" 
+                style={{
+                  color: dangerColor[0],
+                  
+                }}
+              >
+                {this.props.errors && this.props.errors[this.props.name] ? this.props.errors[this.props.name] : ''}
+              </FormHelperText>
 
-      </Card>
+            /*<Clear className={classes.feedback + " " + classes.labelRootError} />*/
+            
+          ) : null
+         }
+      
+      
+
+      </div>
+
         
 
     )

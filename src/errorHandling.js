@@ -1,12 +1,12 @@
 
-import store from './redux/store/index'
-import {SET_AUTH_TOKEN} from './redux/action-types/auth'
+import {setAuthToken} from './redux/actions/auth'
 
-export default function handleError(responseCode) {
+export default function handleError(dispatch, responseCode) {
   switch (responseCode) {
-  case 401:
+  case 500:
     localStorage.removeItem('token')
-    store.dispatch(SET_AUTH_TOKEN, null)
+    dispatch(setAuthToken(null))
+    alert('Internal server error')
     break
 
   default:

@@ -39,6 +39,9 @@ const customInputStyle = {
     lineHeight: "1.42857",
     letterSpacing: "unset"
   },
+  labelBig: {
+    fontSize:'16px !important'
+  },
   labelRootError: {
     color: dangerColor[0]
   },

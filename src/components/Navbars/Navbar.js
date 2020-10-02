@@ -22,6 +22,16 @@ export default function Header(props) {
       if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
         name = prop.name;
       }
+      let url = window.location.href
+      if(url.includes('/brandProfiles/create')) {
+        name = 'Build a Brand Profile'
+      }
+      if(url.includes('/users/edit')) {
+        name = 'Edit a User'
+      }
+      if(url.includes('/users/create')) {
+        name = 'Invite a User'
+      }
       return null;
     });
     return name;
@@ -35,7 +45,7 @@ export default function Header(props) {
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={classes.title}>
+          <Button color="transparent" href="#"  className={classes.title}>
             {makeBrand()}
           </Button>
         </div>

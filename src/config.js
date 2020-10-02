@@ -1,57 +1,32 @@
 const development = {
-  //s3: {
-  //  BUCKET: "YOUR_DEV_S3_UPLOADS_BUCKET_NAME"
-  //},
+  environment: 'development',
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
     MOCKURL: "https://reqres.in/api", //mock api
     URL: "http://localhost:4000"
+   //URL: "https://api-cont-intell-user-account-staging-zu7blp7gxa-uw.a.run.app"
   }
-  //cognito: {
-  //  REGION: "YOUR_DEV_COGNITO_REGION",
-  //  USER_POOL_ID: "YOUR_DEV_COGNITO_USER_POOL_ID",
-  //  APP_CLIENT_ID: "YOUR_DEV_COGNITO_APP_CLIENT_ID",
-  //  IDENTITY_POOL_ID: "YOUR_DEV_IDENTITY_POOL_ID"
-  //}
 }
 
 const staging = {
-  //s3: {
-  //  BUCKET: "YOUR_DEV_S3_UPLOADS_BUCKET_NAME"
-  //},
+  environment: 'staging',
   apiGateway: {
     REGION: "YOUR_DEV_API_GATEWAY_REGION",
     MOCKURL: "https://reqres.in/api/staging", //mock api
-    URL: "http://52.250.22.66:4000"
+    URL: "https://api-cont-intell-user-account-staging-zu7blp7gxa-uw.a.run.app"
   }
-  //cognito: {
-  //  REGION: "YOUR_DEV_COGNITO_REGION",
-  //  USER_POOL_ID: "YOUR_DEV_COGNITO_USER_POOL_ID",
-  //  APP_CLIENT_ID: "YOUR_DEV_COGNITO_APP_CLIENT_ID",
-  //  IDENTITY_POOL_ID: "YOUR_DEV_IDENTITY_POOL_ID"
-  //}
 }
 
 const production = {
-  //s3: {
-  //  BUCKET: "YOUR_PROD_S3_UPLOADS_BUCKET_NAME"
-  //},
+  environment: 'production',
   apiGateway: {
     REGION: "YOUR_PROD_API_GATEWAY_REGION",
-    URL: "https://reqres.in/api",
-    MOCKURL:"never used"
+    MOCKURL:"never used",
+    URL: "https://api-cont-intell-user-account-prod-zu7blp7gxa-uw.a.run.app"
   }
-  //cognito: {
-  //  REGION: "YOUR_PROD_COGNITO_REGION",
-  //  USER_POOL_ID: "YOUR_PROD_COGNITO_USER_POOL_ID",
-  //  APP_CLIENT_ID: "YOUR_PROD_COGNITO_APP_CLIENT_ID",
-  //  IDENTITY_POOL_ID: "YOUR_PROD_IDENTITY_POOL_ID"
-  //}
 };
 
-
 var config = production
-//let config;
 switch(process.env.REACT_APP_STAGE) {
 case 'staging':
   config = staging
@@ -62,7 +37,6 @@ case 'development':
 default: 
   config = production
 }
-
 
 
 export default {
