@@ -15,7 +15,7 @@ export function isLastNameSuccess (text) {
 
 export function isBrandProfileNameError (text) {
   if (text.length < 2) {
-    return 'must be greater than two characters'
+    return 'at least two characters'
   }
   return false
 }
@@ -33,7 +33,7 @@ export function isWebsiteUrlSuccess (text) {
 
 export function isWebsiteUrlError (text) {
   if (!isWebsiteUrlSuccess(text)) {
-    return 'must have a valid URL format, e.g. website.com'
+    return 'must be a URL'
   }
   return 
 }

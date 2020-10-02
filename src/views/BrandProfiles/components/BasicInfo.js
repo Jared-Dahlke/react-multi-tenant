@@ -42,8 +42,8 @@ export default function BasicInfo (props) {
 
   return (
     <div>
-      <GridContainer justify="center">
-        <GridItem xs={12} sm={12} md={10}>
+      <GridContainer >
+        <GridItem xs={12} sm={8} md={4}>
           <FormikInput 
             name="basicInfoProfileName" 
             labelText="Profile Name"           
@@ -54,8 +54,8 @@ export default function BasicInfo (props) {
         </GridItem>
       </GridContainer>
 
-      <GridContainer justify="center">
-        <GridItem xs={12} sm={12} md={10}>
+      <GridContainer>
+        <GridItem xs={12} sm={8} md={4}>
 
           <FormikInput 
             name="basicInfoWebsiteUrl" 
@@ -68,8 +68,8 @@ export default function BasicInfo (props) {
 
         </GridItem>
       </GridContainer>
-      <GridContainer justify="center">
-        <GridItem xs={12} sm={12} md={10}>
+      <GridContainer>
+        <GridItem xs={12} sm={8} md={4}>
           <FormikInput 
             name="basicInfoTwitterProfile" 
             labelText="Twitter Profile" 
@@ -83,8 +83,8 @@ export default function BasicInfo (props) {
 
         </GridItem>
       </GridContainer>
-      <GridContainer justify="center">
-        <GridItem xs={12} sm={12} md={10}>
+      <GridContainer>
+        <GridItem xs={12} sm={8} md={6}>
           <CustomTree
             data={dummyVerticals}
             title='Industry'

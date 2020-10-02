@@ -8,7 +8,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor, grayColor, successColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
 import {Formik, Form} from 'formik'
@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
+import Scenarios from './components/Scenarios'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,13 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
   step: {
     "&$completed": {
-      color: 'green',
+      color: primaryColor[0],
       
     },
     "&$active": {
       color: primaryColor[0]
     },
-    color: blackColor
+    color: grayColor[3]
   },
   active: {}, //needed so that the &$active tag works
   completed: {},
@@ -75,25 +76,50 @@ const schemaValidation = Yup.object().shape({
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
       'Enter correct url!'
     )
-  .required('Required'),
+    .required('Required'),
 
   basicInfoTwitterProfile: Yup.string()
-  .min(2, "Must be greater than 1 character")
-  .max(50, "Must be less than 30 characters")
-  .required('Required'),
-  
+    .min(2, "Must be greater than 1 character")
+    .max(50, "Must be less than 30 characters")
+    .required('Required'),
+  topCompetitors: Yup.array().typeError('Wrong type')
+      .min(1, "You have to create at least one competitor")
+      .of(
+        Yup.object()
+          .shape({
+            label: Yup.string(),
+            value: Yup.string()
+          })
+          .transform(v => v === '' ? null : v)
+      ),
+    scenarios: Yup.array().of(
+        Yup.string().max(0, 'not hit').required('required')
+      )
+    
+    
   
 });
 
 function getSteps() {
-  return ['Basic Info', 'Top Competitors', 'Sensitive Content'];
+  return ['Basic Info', 'Top Competitors', 'Scenarios'];
 }
 
+const scenarios = [
+  'Injury/death due to tragedy/sickness',
+  'Death due to natural causes', 
+  'Social issues/BLM related content', 
+  'Environmental Issues',
+  'Natural Disasters and resulting impact',
+  'Corporate Strikes',
+  'Protests (in general vs a specific topic)',
+  'Response to negative press about competitors',
+  'Respoonse to positive press about competitors'
+]
 
 function CreateBrandProfiles (props) {
 
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(2);
   const [basicInfo, setBasicInfo] = React.useState({
     profileName: '',
     websiteUrl: '',
@@ -116,8 +142,7 @@ function CreateBrandProfiles (props) {
     setActiveStep(0);
   };
 
-  const doLoop=(errors, formName)=>{
-
+  const isValid=(errors, formName)=>{
     for (var prop in errors) {
       if (Object.prototype.hasOwnProperty.call(errors, prop)) {
          if(prop.includes(formName)) {
@@ -126,15 +151,18 @@ function CreateBrandProfiles (props) {
       }
     }
     return true
-
   }
 
   const stepValidated = (index, errors) => {
+    console.log('running step validated')
     if(!errors || errors.length < 1) {
       //return false
     }
     if(index === 0) {
-      return doLoop(errors,'basicInfo')  
+      return isValid(errors,'basicInfo')  
+    }
+    if(index === 1) {
+      return isValid(errors,'topCompetitors')  
     }
     return true
   }
@@ -156,7 +184,11 @@ return (
         basicInfoProfileName: '',
         basicInfoWebsiteUrl: '',
         basicInfoTwitterProfile: '',
-        basicInfoIndustry: []
+        basicInfoIndustry: [],
+        
+        topCompetitors: [],
+
+        scenarios: scenarios
 
         }}
         render={({
@@ -168,7 +200,8 @@ return (
           validateField,
           validateForm,
           isSubmitting,
-          isValid
+          isValid,
+          arrayHelpers
         }) => (
       <div>
 
@@ -177,10 +210,11 @@ return (
           
           let labelColor = whiteColor
           if (stepValidated(index, errors)) {
-            labelColor = 'green'
+           // labelColor = 'green'
           }           
           
           return (
+         
 
             <Step key={label}>              
               <StepLabel 
@@ -195,6 +229,8 @@ return (
                 <div style={{color: labelColor}}>{label}</div>
               </StepLabel>
             </Step>
+
+           
 
           )
         })}
@@ -219,9 +255,13 @@ return (
             <BasicInfo setFieldValue={setFieldValue} errors={errors}/>            
           </div>
             : activeStep === 1 ?
-              <TopCompetitors setFieldValue={setFieldValue}/>
+              <div>  
+                <TopCompetitors setFieldValue={setFieldValue} errors={errors}/>
+              </div>
               : activeStep === 2 ?
-                <div> step 3</div> 
+                <div> 
+                  <Scenarios setFieldValue={setFieldValue} errors={errors} arrayHelpers={arrayHelpers} values={values}/>
+                </div> 
                 : 
                 <div></div>
           }
@@ -248,7 +288,7 @@ return (
                   >
                     Back
                   </Button>
-                  <Button variant="contained" color="primary" onClick={handleNext}>
+                  <Button variant="contained" color="primary" onClick={handleNext} disabled={!stepValidated(activeStep,errors)}>
                     {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                   </Button>
                 </div>

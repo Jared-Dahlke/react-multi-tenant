@@ -24,7 +24,7 @@ export default function Header(props) {
       }
       let url = window.location.href
       if(url.includes('/brandProfiles/create')) {
-        name = 'Create a Brand Profile'
+        name = 'Build a Brand Profile'
       }
       if(url.includes('/users/edit')) {
         name = 'Edit a User'

@@ -5,7 +5,7 @@ import CustomInput from "../../../components/CustomInput/CustomInput.js";
 import CustomTree from '../../../components/Tree/CustomTree'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import * as v from '../../../validations'
-import { whiteColor, grayColor } from '../../../assets/jss/material-dashboard-react.js';
+import { whiteColor, grayColor, dangerColor } from '../../../assets/jss/material-dashboard-react.js';
 import {Field, Formik} from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import Grid from "@material-ui/core/Grid"
@@ -33,6 +33,8 @@ import {Link} from 'react-router-dom'
 import {Debug} from '../../Debug'
 import Save from '@material-ui/icons/Save'
 import {default as UUID} from "node-uuid";
+import FormHelperText from '@material-ui/core/FormHelperText'
+
 
 const MyFacebookLoader = () => <Facebook />
 
@@ -41,14 +43,14 @@ const useTableStyles = makeStyles(tableStyles);
 const useStyles = makeStyles(styles);
 
 var dummyTopCompetitors = [
-  {competitorId: 1, competitorName: 'My COmpetitor', competitorTwitterProfile: 'www.twitter.com/competitor',competitorYouTubeChannel: 'youtube.com/competitorchannel', competitorWebsite: 'www.mycompetitor.com'},
+ /* {competitorId: 1, competitorName: 'My COmpetitor', competitorTwitterProfile: 'www.twitter.com/competitor',competitorYouTubeChannel: 'youtube.com/competitorchannel', competitorWebsite: 'www.mycompetitor.com'},
   {competitorId: 2, competitorName: 'Test competitor', competitorTwitterProfile: 'www.twitter.com/someHandle',competitorYouTubeChannel: 'youtube.com/someChannel', competitorWebsite: 'www.someWebsite.com'},
-  {competitorId: 3, competitorName: 'Some Company', competitorTwitterProfile: 'www.twitter.com/handleTest',competitorYouTubeChannel: 'youtube.com/channelTest', competitorWebsite: 'www.myTestWebsite.com'},
+  {competitorId: 3, competitorName: 'Some Company', competitorTwitterProfile: 'www.twitter.com/handleTest',competitorYouTubeChannel: 'youtube.com/channelTest', competitorWebsite: 'www.myTestWebsite.com'}, */
 ]
 
 
 
-const competitorHeaders = ['Name', 'Twitter Profile','YouTube Channel','Website','']
+const competitorHeaders = ['Name', 'Twitter Profile','Website','']
 
 export default function TopCompetitors (props) {
 
@@ -57,12 +59,6 @@ export default function TopCompetitors (props) {
   const [competitors, setCompetitors] = React.useState(dummyTopCompetitors)
 
   const [addingNew, setAddingNew] = React.useState(false)
-
-  const [newName, setNewName] = React.useState('')
-  const [newTwitterProfile, setNewTwitterProfile] = React.useState('')
-  const [newYoutTubeChannel, setNewYouTubeChannel] = React.useState('')
-  const [newWebsite, setNewWebsite] = React.useState('')
-
 
 
   const classes = useStyles();
@@ -74,16 +70,17 @@ export default function TopCompetitors (props) {
 
   const handleSaveNew=(values)=>{
     console.log(values)
+    setAddingNew(false)
     let newCompetitor = {
       competitorId: UUID.v4(), 
       competitorName: values.newName, 
       competitorTwitterProfile: values.newTwitterProfile,
-      competitorYouTubeChannel: values.newYouTubeChannel, 
       competitorWebsite: values.newWebsite
     }
     let oldCompetitors = JSON.parse(JSON.stringify(competitors))
     oldCompetitors.push(newCompetitor)
     setCompetitors(oldCompetitors)
+    props.setFieldValue('topCompetitors', oldCompetitors)
   }
 
   const handleDeleteCompetitor=(competitorId)=> {
@@ -93,6 +90,7 @@ export default function TopCompetitors (props) {
       if(competitor.competitorId !== competitorId) newComps.push(competitor)
     }
     setCompetitors(newComps)
+    props.setFieldValue('topCompetitors', newComps)
   }
 
 
@@ -111,9 +109,25 @@ export default function TopCompetitors (props) {
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           
-          <CardBody>           
+          <CardBody>  
 
-            {dummyTopCompetitors && dummyTopCompetitors.length > 0 ?
+            {props.errors.topCompetitors ? (        
+                    <FormHelperText 
+                      id="component-helper-text" 
+                      style={{
+                        color: dangerColor[0],  
+                        fontSize: '16px'                   
+                      }}
+                    >
+                      {props.errors.topCompetitors}
+                    </FormHelperText>
+
+                      
+                    ) : null
+                  }         
+
+          
+            
             
               <Table className={classes.table}>
 
@@ -135,47 +149,14 @@ export default function TopCompetitors (props) {
               
 
                 <TableBody>
-                  {competitors && competitors.length > 0 && competitors.map(competitor => (
-                    <TableRow key={competitor.competitorId} className={classes.tableRow}>
-                    
-                      <TableCell className={tableCellClasses}>{competitor.competitorName}</TableCell>
-                      <TableCell className={tableCellClasses}>{competitor.competitorTwitterProfile}</TableCell>
-                      <TableCell className={tableCellClasses}>{competitor.competitorYouTubeChannel}</TableCell>
-                      <TableCell className={tableCellClasses}>{competitor.competitorWebsite}</TableCell>
-                     
-                      <TableCell className={classes.tableActions}>
-                        
-                        <Tooltip
-                          id="tooltip-top-start"
-                          title="Remove"
-                          placement="top"
-                          classes={{ tooltip: classes.tooltip }}
-                        >
-                          <IconButton
-                            aria-label="Close"
-                            className={classes.tableActionButton}
-                            onClick={()=>{handleDeleteCompetitor(competitor.competitorId)}}
-                          >
-                            <Close
-                              className={
-                                classes.tableActionButtonIcon + " " + classes.close
-                              }
-                            />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
 
-                    </TableRow>
-                  ))}
-
-                  {addingNew ?
+                {addingNew ?
                   <Formik
                     validateOnMount={true}
                     initialValues={{
                       
                         newName: '',
-                        newTwitterProfile: '',
-                        newYouTubeChannel: '',
+                        newTwitterProfile: '',                     
                         newWebsite: ''
                               
                     }}
@@ -223,20 +204,7 @@ export default function TopCompetitors (props) {
                           }}
                         />
                       </TableCell>
-                      <TableCell className={tableCellClasses}>
-                        <FormikInput
-                          labelProps={{shrink: true}}
-                          name='newYouTubeChannel'
-                          inputProps={{
-                            startAdornment: <InputAdornment position="start"><div style={{color: grayColor[3]}}>https://youtube.com/</div></InputAdornment>,  
-                          }}
-                          labelText="Competitor YouTube"                               
-                          validate={v.isTwitterProfileError}
-                          formControlProps={{
-                            fullWidth: true                        
-                          }}
-                        />
-                      </TableCell>
+                     
                       <TableCell className={tableCellClasses}>
                         <FormikInput
                           labelProps={{shrink: true}}
@@ -306,14 +274,47 @@ export default function TopCompetitors (props) {
                 :
                 null
                 }
+
+                  {competitors && competitors.length > 0 && competitors.map(competitor => (
+                    <TableRow key={competitor.competitorId} className={classes.tableRow}>
+                    
+                      <TableCell className={tableCellClasses}>{competitor.competitorName}</TableCell>
+                      <TableCell className={tableCellClasses}>{competitor.competitorTwitterProfile}</TableCell>
+          
+                      <TableCell className={tableCellClasses}>{competitor.competitorWebsite}</TableCell>
+                     
+                      <TableCell className={classes.tableActions}>
+                        
+                        <Tooltip
+                          id="tooltip-top-start"
+                          title="Remove"
+                          placement="top"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
+                          <IconButton
+                            aria-label="Close"
+                            className={classes.tableActionButton}
+                            onClick={()=>{handleDeleteCompetitor(competitor.competitorId)}}
+                          >
+                            <Close
+                              className={
+                                classes.tableActionButtonIcon + " " + classes.close
+                              }
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+
+                    </TableRow>
+                  ))}
+
+                  
                 </TableBody>
+
+                  
+
               </Table>
 
-              :
-
-              <MyFacebookLoader/>
-
-            }
           </CardBody>
         </Card>
 
