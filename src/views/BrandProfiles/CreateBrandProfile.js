@@ -19,6 +19,8 @@ import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
 import Scenarios from './components/Scenarios'
 import {mapValues} from 'lodash'
+import {createBrandProfile, fetchBrandProfiles} from '../../redux/actions/brandProfiles'
+import { connect } from "react-redux";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,6 +56,23 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
 }));
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    
+    createBrandProfile: (brandProfile)=> dispatch(createBrandProfile(brandProfile))   
+  };
+};
+
+
+const mapStateToProps = (state) => {
+  return {
+    currentAccountId: state.currentAccountId,
+   
+   
+  };
+};
 
 
 const scenarios = [
@@ -116,8 +135,6 @@ const schemaValidation = Yup.object().shape({
           .transform(v => v === '' ? null : v)
       ),
   
-    
-  
 });
 
 function getSteps() {
@@ -126,22 +143,28 @@ function getSteps() {
 
 
 
-
-
 function CreateBrandProfiles (props) {
 
-  const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(2);
-  
 
+
+  const classes = useStyles();
+  const [activeStep, setActiveStep] = React.useState(0);
 
   const steps = getSteps();
 
-  const handleNext = () => {
+  const handleNext = (values) => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
     if(activeStep === steps.length - 1) {
       console.log('save me')
+      console.log(values)
+      let brandProfile = {
+        accountId: props.currentAccountId,
+        brandName: values.basicInfoProfileName,
+        websiteUrl: values.basicInfoWebsiteUrl,
+        twitterProfileUrl: values.basicInfoTwitterProfile
+      }
+      props.createBrandProfile(brandProfile)
     }
   };
 
@@ -195,11 +218,6 @@ function CreateBrandProfiles (props) {
     return true
   }
 
- 
-  {/**<Formik 
-    validateOnMount={true} 
-    initialValues={useMemo(() => { return { email: '' } }, [])}
-    ...  */}
 
   const  getInitialValues=(inputs)=> {
 
@@ -208,7 +226,6 @@ function CreateBrandProfiles (props) {
         basicInfoWebsiteUrl: '',
         basicInfoTwitterProfile: '',
         basicInfoIndustry: [],
-        
         topCompetitors: [],
       };
   
@@ -283,8 +300,6 @@ return (
     
 
       <Card style={{backgroundColor: blackColor}}>
-        <Debug/>
-        
         
         
         <CardBody>
@@ -328,7 +343,7 @@ return (
                   >
                     Back
                   </Button>
-                  <Button variant="contained" color="primary" onClick={handleNext} disabled={!stepValidated(activeStep,errors,values)}>
+                  <Button variant="contained" color="primary" onClick={()=>handleNext(values)} disabled={!stepValidated(activeStep,errors,values)}>
                     {activeStep === steps.length - 1 ? 'Save' : 'Next'}
                   </Button>
                 </div>
@@ -351,4 +366,4 @@ return (
   )
 }
 
-export default CreateBrandProfiles
+export default connect(mapStateToProps, mapDispatchToProps)(CreateBrandProfiles);
