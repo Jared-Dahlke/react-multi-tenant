@@ -57,8 +57,8 @@ function Login(props) {
   const classes = useStyles();
   const adminClasses = useAdminStyles()
   const referer = props.location.state ? props.location.state.referer : '/admin/settings/profile';
-  const [userName, setUserName] = useState("jared@sightly.com");
-  const [password, setPassword] = useState("test");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
   const postLogin =() =>{
     let credentials = {

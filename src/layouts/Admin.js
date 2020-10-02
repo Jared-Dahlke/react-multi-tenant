@@ -83,7 +83,7 @@ const switchRoutes = (
     />
 
     <Route
-      path='/admin/discovery/home'
+      path='/admin/discover/home'
       component={DiscoveryHome}
     />
     

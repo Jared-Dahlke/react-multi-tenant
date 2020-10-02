@@ -156,11 +156,12 @@ export function fetchUserAccounts(userId) {
       }
       
       if (result.status === 200) {
+        console.log(result.data)
         dispatch(usersSetUserAccounts(userId, result.data))
         dispatch(editUserUserAccountsLoading(false))
       }
     } catch (error) {
-      alert('Error on fetch users: ' + JSON.stringify(error,null,2))
+      alert('Error on fetch user accounts: ' + JSON.stringify(error,null,2))
     }
   };
 }
