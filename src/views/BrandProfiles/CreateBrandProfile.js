@@ -8,7 +8,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography';
-import {primaryColor, blackColor, whiteColor, grayColor, successColor} from '../../assets/jss/material-dashboard-react'
+import {primaryColor, blackColor, whiteColor, grayColor} from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
 import {Formik, Form} from 'formik'

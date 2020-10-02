@@ -22,7 +22,7 @@ import Snackbar from '../../components/Snackbar/Snackbar'
 import Success from "@material-ui/icons/Check";
 import Error from '@material-ui/icons/Error'
 import {Link} from 'react-router-dom'
-import { whiteColor, blackColor, grayColor } from "../../assets/jss/material-dashboard-react.js";
+import { whiteColor } from "../../assets/jss/material-dashboard-react.js";
 import {FormLoader} from '../../components/SkeletonLoader'
 
 
