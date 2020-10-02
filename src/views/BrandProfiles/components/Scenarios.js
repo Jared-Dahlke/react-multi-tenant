@@ -1,14 +1,8 @@
 import React from 'react'
-
-
-import {Debug} from '../../Debug'
 import CustomRadio from '../../../components/CustomRadio/CustomRadio'
 
 
-
-export default function TopCompetitors (props) {
-
- 
+export default function Scenarios (props) {
 
   return (
     
@@ -17,20 +11,18 @@ export default function TopCompetitors (props) {
      <div>
       
      {
-       props.values.scenarios.map((scenario, index)=>{
+       props.scenarios.map((scenario, index)=>{
          return (
-          <CustomRadio key={index} labelText={scenario} setFieldValue={props.setFieldValue} errors={props.errors} index={index} name={`scenarios.${index}`}/>
+         
+            <CustomRadio key={index} labelText={scenario} validateField={props.validateField} values={props.values} touched={props.touched} setFieldValue={props.setFieldValue} errors={props.errors} index={index} fieldName={'scenarios.scenario'+ index}/>
+        
          )
 
        })
      }
-        
-    
-     
+   
      </div> 
-
-           
-    
+     
     
   )
 }
