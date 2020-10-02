@@ -15,7 +15,7 @@ import config from "../../config.js";
 import {userProfileFetchData, setAuthToken} from '../actions/auth'
 import {usersFetchData, usersFetchDataSuccess, usersIsLoading, editUserUserAccountsLoading} from '../actions/users'
 import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesPermissionsFetchDataSuccess, rolesPermissionsIsLoading} from '../actions/roles'
-import {brandProfilesFetchDataSuccess, fetchBrandProfiles} from '../actions/brandProfiles'
+import {brandProfilesFetchDataSuccess, fetchBrandProfiles, brandProfilesIsLoading} from '../actions/brandProfiles'
 import {findAccountNodeByAccountId} from '../../utils'
 
 
@@ -137,6 +137,7 @@ export function clearSiteData() {
 
     dispatch(rolesPermissionsIsLoading(true))
     dispatch(usersIsLoading(true))
+    dispatch(brandProfilesIsLoading(true))
     dispatch(editUserUserAccountsLoading(true))
     dispatch(accountsFetchDataSuccess([]));
     dispatch(setCurrentAccountId(null))
@@ -184,8 +185,8 @@ export function fetchSiteData(accountId) {
       let accounts = { data: result.data };
       if(!result.data[0]) {
         alert('You have no accounts assigned to you. Please contact your inviter')
-       // window.location.href = '/login'
-       // localStorage.removeItem('token')
+        window.location.href = '/login'
+        localStorage.removeItem('token')
         return
       }
 
@@ -232,8 +233,7 @@ export function fetchSiteData(accountId) {
       dispatch(rolesPermissionsFetchData(accountId))
       dispatch(rolesFetchData(accountId))
       dispatch(fetchBrandProfiles(accountId))
-      dispatch(isSwitchingAccounts(false)) 
-      
+      dispatch(isSwitchingAccounts(false))       
 
     } catch (error) {
       console.log('caught in account action')
@@ -258,8 +258,6 @@ export function accountsSetAccountUsers(accountId, users) {
     payload,
   };
 }
-
-
 
 
 export function fetchAccountUsers(accountId) {
@@ -288,6 +286,9 @@ export function fetchAccountUsers(accountId) {
     }
   };
 }
+
+
+
 
 export function fetchAccountTypes() {
   

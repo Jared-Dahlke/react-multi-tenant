@@ -4,7 +4,7 @@ import {roles, rolesHasErrored, rolesIsLoading, rolesPermissionsIsLoading, roles
 import {authToken, isLoggedIn, showAlert, user, userProfileIsLoading, successPasswordChanged} from './auth'
 import {users, usersHasErrored, userDeleted, userDeletedError, userAdded, usersIsLoading, editUserUserAccountsLoading} from './users'
 import {accounts, currentAccountId, isSwitchingAccounts, treeAccounts, editAccountAccountUsersLoading, accountTypes} from './accounts'
-import {brandProfiles} from './brandProfiles'
+import {brandProfiles, brandProfilesIsLoading} from './brandProfiles'
 
 
 export default combineReducers({
@@ -33,5 +33,6 @@ export default combineReducers({
   treeAccounts,
   editUserUserAccountsLoading,
   editAccountAccountUsersLoading,
-  accountTypes
+  accountTypes,
+  brandProfilesIsLoading
 })

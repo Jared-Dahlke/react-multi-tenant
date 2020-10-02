@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import {fetchBrandProfiles} from '../../redux/actions/brandProfiles.js'
+import {fetchBrandProfiles, deleteBrandProfile} from '../../redux/actions/brandProfiles.js'
 import {connect} from 'react-redux'
 import styles from "../../assets/jss/material-dashboard-react/components/tasksStyle.js";
 import tableStyles from "../../assets/jss/material-dashboard-react/components/tableStyle.js";
@@ -23,6 +23,8 @@ import Snackbar from '../../components/Snackbar/Snackbar'
 import Success from "@material-ui/icons/Check";
 import Error from '@material-ui/icons/Error'
 import {Link} from 'react-router-dom'
+import {FormLoader} from '../../components/SkeletonLoader'
+import { whiteColor } from "../../assets/jss/material-dashboard-react.js";
 
 
 const MyFacebookLoader = () => <Facebook />
@@ -32,14 +34,16 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return {
-    brandProfiles: state.brandProfiles
+    brandProfiles: state.brandProfiles,
+    currentAccountId: state.currentAccountId,
+    brandProfilesIsLoading: state.brandProfilesIsLoading
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchBrandProfiles: () => dispatch(fetchBrandProfiles()),
-    //deleteBrandProfile: (profileId) => dispatch(deleteBrandProfile(profileId))
+    fetchBrandProfiles: (accountId) => dispatch(fetchBrandProfiles(accountId)),
+    deleteBrandProfile: (brandProfileId) => dispatch(deleteBrandProfile(brandProfileId))
   }
 }
 
@@ -53,8 +57,10 @@ function BrandProfiles(props) {
 
   const {fetchBrandProfiles} = props
 
+  let currentAccountId= localStorage.getItem('currentAccountId')
+
   React.useEffect(() => { 
-    fetchBrandProfiles()
+    fetchBrandProfiles(currentAccountId)
   }, [fetchBrandProfiles])
 
 
@@ -64,30 +70,11 @@ function BrandProfiles(props) {
 
   const userHeaders = ['Profile Name','Website','']
 
-  //const handleEditUserClick = (profile) => {
-  //  let url = '/admin/settings/brandProfiles/edit/' + encodeURIComponent(JSON.stringify(profile))
-  //  history.push(url)
-  //}
+  const handleDeleteBrandProfileClick=(brandProfileId)=>{
+    props.deleteBrandProfile(brandProfileId)
+    console.log('delete me')
+  }
 
-  //const handleDeleteUserClick = (user) => {
-  //handleOpenDeleteUserAlert(user)
-  //setUserToDelete(user)
-  //}
-
-  //const handleCloseDeleteUserAlert =() =>{
-  //setDeleteUserAlertIsOpen(false)
-  //setUserToDelete({})
-  //}
-
-  //const handleOpenDeleteUserAlert = () => {
-  //setDeleteUserAlertIsOpen(true)
-  //}
-
-  //const handleDeleteUser = () => {
-  //setDeleteUserAlertIsOpen(false)
-  //props.deleteUser(userToDelete.userId)
-  //setUserToDelete({})
-  //}
 
   return (                                   
  
@@ -133,13 +120,11 @@ function BrandProfiles(props) {
       </Grid>
             
               
-      <GridItem xs={12} sm={12} md={12}>
+      <GridItem xs={12} sm={12} md={8}>
         <Card>
           
           <CardBody>
 
-            
-         
 
             {props.brandProfiles && props.brandProfiles.length > 0 ?
             
@@ -167,19 +152,20 @@ function BrandProfiles(props) {
                   {props.brandProfiles && props.brandProfiles.map(profile => (
                     <TableRow key={profile.brandProfileId} className={classes.tableRow}>
                     
-                      <TableCell className={tableCellClasses}>{profile.brandProfileName}</TableCell>
-                      <TableCell className={tableCellClasses}>{profile.website}</TableCell>
+                      <TableCell className={tableCellClasses}>{profile.brandName}</TableCell>
+                      <TableCell className={tableCellClasses}>{profile.websiteUrl}</TableCell>
                      
                       <TableCell className={classes.tableActions}>
-                        <Tooltip
+                        {/**<Tooltip
                           id="tooltip-top"
-                          title="Edit User"
+                          title="(Edit Brand Profile"
                           placement="top"
                           classes={{ tooltip: classes.tooltip }}
                         >
                           <IconButton
                             aria-label="Edit"
                             className={classes.tableActionButton}
+                            disabled
                             //onClick={()=>handleEditUserClick(user)}
                           >
                             <Edit
@@ -188,7 +174,8 @@ function BrandProfiles(props) {
                               }
                             />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip> */}
+                        
                         <Tooltip
                           id="tooltip-top-start"
                           title="Remove"
@@ -198,7 +185,7 @@ function BrandProfiles(props) {
                           <IconButton
                             aria-label="Close"
                             className={classes.tableActionButton}
-                            //onClick={()=>{handleDeleteUserClick(user)}}
+                            onClick={()=>{handleDeleteBrandProfileClick(profile.brandProfileId)}}
                           >
                             <Close
                               className={
@@ -214,11 +201,16 @@ function BrandProfiles(props) {
                 </TableBody>
               </Table>
 
-              :
+            : props.brandProfilesIsLoading ? 
 
-              <MyFacebookLoader/>
+            <FormLoader/>
+
+            :
+
+            <h2 style={{color:whiteColor}}>{'This account'} has no brand profiles...</h2>
 
             }
+
           </CardBody>
         </Card>
 
