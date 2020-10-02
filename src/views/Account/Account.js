@@ -1,7 +1,7 @@
 import React from "react";
 // core components
 
-import { makeStyles } from '@material-ui/core/styles';
+/*import { makeStyles } from '@material-ui/core/styles';
 import {connect} from 'react-redux'
 import Tree from 'react-d3-tree';
 import GridItem from "../../components/Grid/GridItem.js";
@@ -255,3 +255,4 @@ class CenteredTree extends React.PureComponent {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(CenteredTree);
+*/
