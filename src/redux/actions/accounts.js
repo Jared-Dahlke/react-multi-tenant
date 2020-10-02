@@ -284,7 +284,7 @@ export function fetchAccountUsers(accountId) {
         dispatch(editAccountAccountUsersLoading(false))
       }
     } catch (error) {
-      alert('Error on fetch users: ' + JSON.stringify(error,null,2))
+      alert('Error on fetch account users: ' + JSON.stringify(error,null,2))
     }
   };
 }

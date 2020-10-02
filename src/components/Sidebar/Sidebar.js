@@ -46,7 +46,7 @@ export default function Sidebar(props) {
   });
 
   const listItemClassesDiscovery = classNames({
-    [" " + classes[color]]: activeRoute('/admin/discovery')
+    [" " + classes[color]]: activeRoute('/admin/discover')
   });
 
   const whiteFontClasses = classNames({
@@ -58,7 +58,7 @@ export default function Sidebar(props) {
 
     <List className={classes.list}>
       <NavLink
-        to={'/admin/discovery/home'}
+        to={'/admin/discover/home'}
         className={classes.item}
         activeClassName="active"
         key={'1'}          
@@ -69,7 +69,7 @@ export default function Sidebar(props) {
             className={classNames(classes.itemIcon, whiteFontClasses)}
           />
           <ListItemText
-            primary={'Discovery'}
+            primary={'Discover'}
             className={classNames(classes.itemText, whiteFontClasses)}
             disableTypography={true}
           />          
@@ -109,9 +109,9 @@ export default function Sidebar(props) {
                   });
 
                   let itemClass = classes.nestedItemLink
-                  if(setting.path === '/settings/users' || setting.path === '/settings/rolesPermissions' || setting.path === '/settings/brandProfiles' || setting.path === '/settings/brandMentality') {
-                    itemClass = classes.subNestedItemLink
-                  }
+                  //if(setting.path === '/settings/users' || setting.path === '/settings/rolesPermissions' || setting.path === '/settings/brandProfiles' || setting.path === '/settings/brandMentality') {
+                  //  itemClass = classes.subNestedItemLink
+                  //}
 
                   return (
 

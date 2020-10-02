@@ -170,7 +170,7 @@ class Demo extends React.Component {
               variant: 'filled'      ,              
               placeholder:'Search....'
             }}   
-            success={!this.props.errors[this.props.name]}    
+            success={this.props.errors && !this.props.errors[this.props.name]}    
           />
 
           :
@@ -183,7 +183,6 @@ class Demo extends React.Component {
         <GridList style={{marginTop: 10}} cellHeight={this.props.treeContainerHeight}  cols={1}>
 
        
-  
           <Tree
             defaultExpandAll={true}
             checkStrictly={!this.props.cascade}
@@ -206,7 +205,7 @@ class Demo extends React.Component {
 
         </GridList>
 
-        {this.props.errors[this.props.name] ? (
+        {this.props.errors && this.props.errors[this.props.name] ? (
             
            
               <FormHelperText 
@@ -216,7 +215,7 @@ class Demo extends React.Component {
                   
                 }}
               >
-                {this.props.errors[this.props.name]}
+                {this.props.errors && this.props.errors[this.props.name] ? this.props.errors[this.props.name] : ''}
               </FormHelperText>
 
             /*<Clear className={classes.feedback + " " + classes.labelRootError} />*/

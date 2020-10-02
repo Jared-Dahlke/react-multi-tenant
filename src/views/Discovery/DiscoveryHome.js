@@ -50,7 +50,7 @@ function DiscoveryHome(props) {
             <Card>
             
               <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Discovery</h4>
+                <h4 className={classes.cardTitleWhite}>Discover</h4>
                 <p className={classes.cardCategoryWhite}></p>
               </CardHeader>
               

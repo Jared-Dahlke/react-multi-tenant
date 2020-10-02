@@ -71,7 +71,7 @@ function Users(props) {
     [classes.tableCellRTL]: false
   });
 
-  const userHeaders = ['First Name','Last Name', 'Company','Email','User Type','']
+  const userHeaders = ['First Name','Last Name', 'Company','Email','']
 
   const handleEditUserClick = (user) => {
     props.fetchUserAccounts(user.userId)
@@ -179,7 +179,7 @@ function Users(props) {
                       <TableCell className={tableCellClasses}>{user.lastName}</TableCell>
                       <TableCell className={tableCellClasses}>{user.company}</TableCell>
                       <TableCell className={tableCellClasses}>{user.email}</TableCell>
-                      <TableCell className={tableCellClasses}>{user.userType}</TableCell>
+                     
                       
                       <TableCell className={classes.tableActions}>
                         <Tooltip
