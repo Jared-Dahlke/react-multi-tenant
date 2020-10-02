@@ -144,8 +144,6 @@ function EditUser(props) {
   
 
   React.useEffect(() => { 
-
-    
     if(props.users && props.users.data && props.users.data.length > 0) {
       for (const user of props.users.data) {
              if(user.userId === userIdUnderEdit) {
@@ -163,6 +161,7 @@ function EditUser(props) {
       }   
     }
   }, [props.users])
+
 
   return (
     <div>

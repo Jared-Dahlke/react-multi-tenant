@@ -18,6 +18,7 @@ import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
 import Scenarios from './components/Scenarios'
+import {mapValues} from 'lodash'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,6 +55,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const scenarios = [
+  'Injury/death due to tragedy/sickness',
+  'Death due to natural causes', 
+  'Social issues/BLM related content', 
+  'Environmental Issues',
+  'Natural Disasters and resulting impact',
+  'Corporate Strikes',
+  'Protests (in general vs a specific topic)',
+  'Response to negative press about competitors',
+  'Respoonse to positive press about competitors'
+]
+
+
+const getScenarioPair = (scenarios)=>{
+  let newScen =[]
+  scenarios.map((scen, index)=>{
+    newScen.push({scenName: `scenario${index}`, scenLabel: scen })
+  })
+  
+  return newScen
+}
 
 const schemaValidation = Yup.object().shape({
  
@@ -92,10 +115,7 @@ const schemaValidation = Yup.object().shape({
           })
           .transform(v => v === '' ? null : v)
       ),
-    scenarios: Yup.array().of(
-        Yup.string().max(0, 'not hit').required('required')
-      )
-    
+  
     
   
 });
@@ -104,34 +124,25 @@ function getSteps() {
   return ['Basic Info', 'Top Competitors', 'Scenarios'];
 }
 
-const scenarios = [
-  'Injury/death due to tragedy/sickness',
-  'Death due to natural causes', 
-  'Social issues/BLM related content', 
-  'Environmental Issues',
-  'Natural Disasters and resulting impact',
-  'Corporate Strikes',
-  'Protests (in general vs a specific topic)',
-  'Response to negative press about competitors',
-  'Respoonse to positive press about competitors'
-]
+
+
+
 
 function CreateBrandProfiles (props) {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(2);
-  const [basicInfo, setBasicInfo] = React.useState({
-    profileName: '',
-    websiteUrl: '',
-    twitterProfile: '',
-    verticals:[],
-    subVerticals: []
-  })
+  
+
 
   const steps = getSteps();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    if(activeStep === steps.length - 1) {
+      console.log('save me')
+    }
   };
 
   const handleBack = () => {
@@ -141,6 +152,19 @@ function CreateBrandProfiles (props) {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  const isScenarioValid = (values)=>{
+    for (var key in values.scenarios) {
+      // check also if property is not inherited from prototype
+      if (values.scenarios.hasOwnProperty(key)) { 
+        var value = values.scenarios[key];
+        if(value.length < 1) {
+          return false
+        }
+      }
+    }
+    return true
+  }
 
   const isValid=(errors, formName)=>{
     for (var prop in errors) {
@@ -153,8 +177,8 @@ function CreateBrandProfiles (props) {
     return true
   }
 
-  const stepValidated = (index, errors) => {
-    console.log('running step validated')
+  const stepValidated = (index, errors, values) => {
+    
     if(!errors || errors.length < 1) {
       //return false
     }
@@ -163,6 +187,10 @@ function CreateBrandProfiles (props) {
     }
     if(index === 1) {
       return isValid(errors,'topCompetitors')  
+    }
+
+    if(index === 2) {
+      return isScenarioValid(values)
     }
     return true
   }
@@ -173,24 +201,35 @@ function CreateBrandProfiles (props) {
     initialValues={useMemo(() => { return { email: '' } }, [])}
     ...  */}
 
-return (
-    <Formik
-      enableReinitialize
-      validateOnMount={true}
-      // validateOnChange={true}
-      validationSchema={() => schemaValidation}
-      initialValues={{
-        
+  const  getInitialValues=(inputs)=> {
+
+      const initialValues = {
         basicInfoProfileName: '',
         basicInfoWebsiteUrl: '',
         basicInfoTwitterProfile: '',
         basicInfoIndustry: [],
         
         topCompetitors: [],
+      };
+  
+      let scenarios = {}
+      inputs.forEach((field) => {
+        scenarios[field.scenName] = ''
+         
+       
+      });
+      initialValues.scenarios = scenarios
+  
+      return initialValues;
+    }
 
-        scenarios: scenarios
-
-        }}
+return (
+    <Formik
+      enableReinitialize
+      validateOnMount={true}
+      // validateOnChange={true}
+      validationSchema={() => schemaValidation}
+      initialValues={getInitialValues(getScenarioPair(scenarios))}
         render={({
           values,
           errors,
@@ -209,7 +248,7 @@ return (
         {steps.map((label, index) => {
           
           let labelColor = whiteColor
-          if (stepValidated(index, errors)) {
+          if (stepValidated(index, errors, values)) {
            // labelColor = 'green'
           }           
           
@@ -244,6 +283,7 @@ return (
     
 
       <Card style={{backgroundColor: blackColor}}>
+        <Debug/>
         
         
         
@@ -260,7 +300,7 @@ return (
               </div>
               : activeStep === 2 ?
                 <div> 
-                  <Scenarios setFieldValue={setFieldValue} errors={errors} arrayHelpers={arrayHelpers} values={values}/>
+                  <Scenarios scenarios={scenarios} validateField={validateField} setFieldValue={setFieldValue} errors={errors} arrayHelpers={arrayHelpers} values={values} touched={touched}/>
                 </div> 
                 : 
                 <div></div>
@@ -288,8 +328,8 @@ return (
                   >
                     Back
                   </Button>
-                  <Button variant="contained" color="primary" onClick={handleNext} disabled={!stepValidated(activeStep,errors)}>
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  <Button variant="contained" color="primary" onClick={handleNext} disabled={!stepValidated(activeStep,errors,values)}>
+                    {activeStep === steps.length - 1 ? 'Save' : 'Next'}
                   </Button>
                 </div>
               </div>

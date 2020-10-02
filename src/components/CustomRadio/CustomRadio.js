@@ -22,10 +22,10 @@ const useStyles = makeStyles(styles);
 
 export default function CustomRadio (props) {
 
-  const handleChange=(name, index)=>{
-    console.log('handle change')
-    console.log(name)
-    //delete props.errors[name][index]
+
+  const handleChange=(name, e)=>{
+    e.persist()
+    props.setFieldValue(name, e.target.value)
   }
 
   const classes = useStyles();
@@ -40,7 +40,13 @@ export default function CustomRadio (props) {
       
       
           <GridItem xs={6} sm={6} md={6}>
-              <RadioGroup onChange={()=>handleChange(props.name, props.index)}  aria-label="position"  defaultValue="top" row>
+              <RadioGroup 
+                onChange={(e)=>handleChange(props.fieldName, e)}  
+                aria-label="position"  
+                defaultValue="top" 
+                row
+                value={props.values.fieldName}                     
+              >
                 
                 <FormControlLabel 
                   value="block" 
@@ -49,10 +55,11 @@ export default function CustomRadio (props) {
                   } 
                   label="Block" 
                   style={{color: whiteColor}} 
+                  name={props.fieldName}
                 />
 
-                <FormControlLabel value="monitor" control={<Radio classes={{root: classes.radio, checked: classes.checked}}/>} label="Monitor" style={{color: whiteColor}}/>
-                <FormControlLabel value="target" control={<Radio classes={{root: classes.radio, checked: classes.checked}}/>} label="Target" style={{color: whiteColor}}/>
+                <FormControlLabel name={props.fieldName} value="monitor" control={<Radio classes={{root: classes.radio, checked: classes.checked}}/>} label="Monitor" style={{color: whiteColor}}/>
+                <FormControlLabel name={props.fieldName} value="target" control={<Radio classes={{root: classes.radio, checked: classes.checked}}/>} label="Target" style={{color: whiteColor}}/>
                 
               </RadioGroup>
               <div style={{color: blackColor, height: 15}}/>

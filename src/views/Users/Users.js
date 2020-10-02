@@ -99,6 +99,8 @@ function Users(props) {
     setUserToDelete({})
   }
 
+  console.log(props)
+
   return (                                   
  
     <GridContainer spacing={2}>
@@ -231,20 +233,15 @@ function Users(props) {
 
               :
 
-              <h2 style={{color:whiteColor}}>This account has no users...</h2>
+              <h2 style={{color:whiteColor}}>{'This account'} has no users directly linked to it; however, users linked to any of its parent accounts will have access to this account.</h2>
 
             }
           </CardBody>
         </Card>
 
-        
-
          
       </GridItem>
 
-   
-
-     
     </GridContainer>
     
 
