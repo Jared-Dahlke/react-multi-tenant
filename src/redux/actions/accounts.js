@@ -184,9 +184,9 @@ export function fetchSiteData(accountId) {
       let accounts = { data: result.data };
       if(!result.data[0]) {
         alert('You have no accounts assigned to you. Please contact your inviter')
-        //window.location.href = '/login'
-        //localStorage.removeItem('token')
-        //return
+        window.location.href = '/login'
+        localStorage.removeItem('token')
+        return
       }
 
       //cleans up the delete accounts api error: https://sightly.atlassian.net/browse/EN-4228

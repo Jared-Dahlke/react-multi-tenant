@@ -1,8 +1,6 @@
 import React from 'react'
 import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
-import CustomInput from "../../../components/CustomInput/CustomInput.js";
-import CustomTree from '../../../components/Tree/CustomTree'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import * as v from '../../../validations'
 import { whiteColor, grayColor, dangerColor } from '../../../assets/jss/material-dashboard-react.js';

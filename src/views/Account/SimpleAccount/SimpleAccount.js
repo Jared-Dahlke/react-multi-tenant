@@ -1,36 +1,27 @@
 /*eslint-disable no-restricted-globals*/
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "../../../components/Grid/GridItem.js";
 import GridContainer from "../../../components/Grid/GridContainer.js";
-import CustomInput from "../../../components/CustomInput/CustomInput.js";
 import Button from "../../../components/CustomButtons/Button.js";
 import Card from "../../../components/Card/Card.js";
 import CardBody from "../../../components/Card/CardBody.js";
 import CardFooter from "../../../components/Card/CardFooter.js";
 import Snackbar from "@material-ui/core/Snackbar";
 import AddAlert from "@material-ui/icons/AddAlert";
-import debounce from 'just-debounce-it';
-
 import Grid from '@material-ui/core/Grid'
-import {Link} from 'react-router-dom'
 
 // Redux
 import { userProfileFetchData } from "../../../redux/actions/auth.js";
 import { connect } from "react-redux";
 import { updateUserData } from "../../../redux/actions/users.js";
-
-
 import {FormLoader} from '../../../components/SkeletonLoader'
-import {Formik, useFormikContext} from 'formik'
+import {Formik} from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import * as Yup from "yup";
 import {getCurrentAccount} from '../../../utils'
-import { whiteColor } from "../../../assets/jss/material-dashboard-react.js";
 import {updateAccount, deleteAccount, createAccount} from "../../../redux/actions/accounts"
-//import {FormLoader} from '../../../components/SkeletonLoader'
-
 
 const styles = {
   cardCategoryWhite: {
