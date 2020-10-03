@@ -263,7 +263,9 @@ function EditUser(props) {
 
                       <GridItem xs={12} sm={12} md={8}>
                         {props.accounts.data && props.accounts.data.length > 0 && !props.editUserUserAccountsLoading ?
+                        
                         <CustomTree
+                          id="EditUserAccountTree"
                           data={props.accounts.data}                     
                           keyProp='accountId'
                           labelProp='accountName'
@@ -275,6 +277,7 @@ function EditUser(props) {
                           search={true}
                           treeContainerHeight={150}
                         />
+                       
                         :
                         <FormLoader/>
                         }
