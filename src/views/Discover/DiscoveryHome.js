@@ -15,10 +15,14 @@ import Tabs from './components/Tabs'
 import useWindowDimensions from '../../hooks/WindowDimensions'
 import GridList from '@material-ui/core/GridList'
 
+const bodyHeight = 500
+const borderRad = 4
+
+
 const styles = {
   myheader: {
-    backgroundColor: grayColor[3],
-   
+    backgroundColor: whiteColor,
+    borderRadius: borderRad,
     height: '60px'
 
   },
@@ -27,9 +31,9 @@ const styles = {
   },
   col: {
     marginTop: '25px',
-    height: '500px',
-    backgroundColor: grayColor[3],
-    diplay: 'flex'
+    height: bodyHeight,
+    backgroundColor: whiteColor,
+    borderRadius: borderRad
     //width: '33%'
   }
 };
@@ -51,7 +55,7 @@ function DiscoveryHome(props) {
 
 
   //const { height, width } = useWindowDimensions();
-  const bodyHeight = 500
+  
   //console.log(windowHeight)
 
 
@@ -63,10 +67,11 @@ function DiscoveryHome(props) {
           
           
 
-        <GridItem xs={12} sm={12} md={12} style={{height: `${bodyHeight}px`, backgroundColor: blackColor}}>
-            
+           <GridItem xs={12} sm={12} md={12} style={{height: bodyHeight + 80, backgroundColor: blackColor}}>
+
             <GridItem xs={12} sm={12} md={12} style={styles.myheader}>
             </GridItem>
+            
             
             <Grid 
               container 
@@ -77,12 +82,11 @@ function DiscoveryHome(props) {
                 <div style={styles.col} />
               </Grid>
 
-              <Grid  item style={{width: '65%'}}>
+              <Grid   style={{width: '65%'}}>
                 <div style={styles.col}>
-                  <GridList  style={{marginTop: 10}} cellHeight={300}  cols={1}>>
-                      <div style={{height: '1000px', backgroundColor: 'green', flex: 1}}>test</div> 
-                  </GridList>
-                        {/*<Tabs mainHeight={bodyHeight} categories={props.categories}/>*/}
+                   
+                        <Tabs bodyHeight={bodyHeight} borderRad={borderRad} categories={props.categories}/>
+                    
                 </div>
               </Grid>
 
