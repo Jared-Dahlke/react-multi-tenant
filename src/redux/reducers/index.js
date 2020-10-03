@@ -5,6 +5,7 @@ import {authToken, isLoggedIn, showAlert, user, userProfileIsLoading, successPas
 import {users, usersHasErrored, userDeleted, userDeletedError, userAdded, usersIsLoading, editUserUserAccountsLoading} from './users'
 import {accounts, currentAccountId, isSwitchingAccounts, treeAccounts, editAccountAccountUsersLoading, accountTypes} from './accounts'
 import {brandProfiles, brandProfilesIsLoading} from './brandProfiles'
+import {categories} from './discover/channels'
 
 
 export default combineReducers({
@@ -34,5 +35,7 @@ export default combineReducers({
   editUserUserAccountsLoading,
   editAccountAccountUsersLoading,
   accountTypes,
-  brandProfilesIsLoading
+  brandProfilesIsLoading,
+
+  categories
 })

@@ -12,16 +12,14 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import tableStyle from '../../../assets/jss/material-dashboard-react/components/tableStyle';
 
-
+import ListBuilderRow from './ListBuilderRow'
 
 export default function ListBuilderTable(props) {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      backgroundColor: 'yellow', //theme.palette.background.paper,
-      width: '100%',
-     // height:'100%',
-      //backgroundColor: whiteColor
+      //backgroundColor: 'yellow', //theme.palette.background.paper,
+     padding: 0
     },
   }));
 
@@ -32,24 +30,28 @@ export default function ListBuilderTable(props) {
 
   return (
     <div className={classes.root}>
-      <Table className={classes.table}>
-        <TableBody>
- 
-            <TableRow key={'0'} className={classes.tableRow}>
-            
-              <TableCell >
-                  Checkbox
-              </TableCell>
-
-              <TableCell >
-                  Data
-              </TableCell>
       
-             </TableRow>
-          
+      <Table className={classes.table}>
+        <TableBody style={{height: props.bodyHeight}}>
+
+          {props.data && props.data.length > 0 && props.data.map((item, index)=>{
+
+            return (
+
+              <ListBuilderRow 
+              rowStyle={classes.tableRow}
+              item={item}
+              key={index}
+              />          
+
+            )
+          })}
+ 
+            
 
           </TableBody>
         </Table>
+      
     </div>
   );
 }

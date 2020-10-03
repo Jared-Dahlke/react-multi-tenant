@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import {setUserId} from '../redux/actions/auth.js'
 import {fetchSiteData} from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
-import DiscoveryHome from '../views/Discovery/DiscoveryHome.js'
+import DiscoveryHome from '../views/Discover/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'

@@ -13,12 +13,16 @@ import Box from '@material-ui/core/Box'
 import { blackColor, whiteColor, grayColor } from "../../assets/jss/material-dashboard-react.js";
 import Tabs from './components/Tabs'
 import useWindowDimensions from '../../hooks/WindowDimensions'
+import GridList from '@material-ui/core/GridList'
+
+const bodyHeight = 500
+const borderRad = 4
 
 
 const styles = {
   myheader: {
-    backgroundColor: grayColor[3],
-   
+    backgroundColor: whiteColor,
+    borderRadius: borderRad,
     height: '60px'
 
   },
@@ -27,8 +31,9 @@ const styles = {
   },
   col: {
     marginTop: '25px',
-    height: '500px',
-    backgroundColor: grayColor[3]
+    height: bodyHeight,
+    backgroundColor: whiteColor,
+    borderRadius: borderRad
     //width: '33%'
   }
 };
@@ -39,16 +44,18 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    roles: state.roles.data
+    categories: state.categories
   };
 };
 
 
 function DiscoveryHome(props) {
 
+  console.log(props.categories)
 
-  const { height, width } = useWindowDimensions();
-  const bodyHeight = height - 200
+
+  //const { height, width } = useWindowDimensions();
+  
   //console.log(windowHeight)
 
 
@@ -60,11 +67,11 @@ function DiscoveryHome(props) {
           
           
 
-          <GridItem xs={12} sm={12} md={12} style={{height: `${bodyHeight}px`, backgroundColor: blackColor}}>
+           <GridItem xs={12} sm={12} md={12} style={{height: bodyHeight + 80, backgroundColor: blackColor}}>
 
             <GridItem xs={12} sm={12} md={12} style={styles.myheader}>
-
-          </GridItem>
+            </GridItem>
+            
             
             <Grid 
               container 
@@ -75,9 +82,11 @@ function DiscoveryHome(props) {
                 <div style={styles.col} />
               </Grid>
 
-              <Grid  item style={{width: '65%'}}>
+              <Grid   style={{width: '65%'}}>
                 <div style={styles.col}>
-                  <Tabs mainHeight={bodyHeight}/>
+                   
+                        <Tabs bodyHeight={bodyHeight} borderRad={borderRad} categories={props.categories}/>
+                    
                 </div>
               </Grid>
 

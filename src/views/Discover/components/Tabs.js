@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { blackColor, grayColor, whiteColor } from '../../../assets/jss/material-dashboard-react';
 import ListBuilderTable from './ListBuilderTable'
+import GridList from '@material-ui/core/GridList'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,10 +50,11 @@ export default function FullWidthTabs(props) {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      backgroundColor: theme.palette.background.paper,
+     // backgroundColor: 'blue', //theme.palette.background.paper,
       width: '100%',
-      height: props.mainHeight,
-      backgroundColor: whiteColor
+      height: props.bodyHeight,
+      borderRadius: props.borderRad
+      
     },
   }));
 
@@ -70,7 +72,7 @@ export default function FullWidthTabs(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="default" style={{borderRadius: props.borderRad}}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -88,9 +90,19 @@ export default function FullWidthTabs(props) {
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
         onChangeIndex={handleChangeIndex}
+        style={{borderRadius: props.borderRad}}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <ListBuilderTable/>
+
+          <div style={{width:'100%', height: 50, margin: 10}}>search</div>
+         
+          <GridList cols={1} cellHeight={props.bodyHeight - 122} style={{overflowX:"hidden", margin: '-24px'}}>
+            <div style={{padding: 0}}>
+              <ListBuilderTable data={props.categories} bodyHeight={props.bodyHeight} />                 
+            </div>           
+          </GridList>
+         
+          
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           Channels (10K/25M)
