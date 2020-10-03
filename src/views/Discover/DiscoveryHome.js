@@ -13,7 +13,7 @@ import Box from '@material-ui/core/Box'
 import { blackColor, whiteColor, grayColor } from "../../assets/jss/material-dashboard-react.js";
 import Tabs from './components/Tabs'
 import useWindowDimensions from '../../hooks/WindowDimensions'
-
+import GridList from '@material-ui/core/GridList'
 
 const styles = {
   myheader: {
@@ -28,7 +28,8 @@ const styles = {
   col: {
     marginTop: '25px',
     height: '500px',
-    backgroundColor: grayColor[3]
+    backgroundColor: grayColor[3],
+    diplay: 'flex'
     //width: '33%'
   }
 };
@@ -39,16 +40,18 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    roles: state.roles.data
+    categories: state.categories
   };
 };
 
 
 function DiscoveryHome(props) {
 
+  console.log(props.categories)
 
-  const { height, width } = useWindowDimensions();
-  const bodyHeight = height - 200
+
+  //const { height, width } = useWindowDimensions();
+  const bodyHeight = 500
   //console.log(windowHeight)
 
 
@@ -60,11 +63,10 @@ function DiscoveryHome(props) {
           
           
 
-          <GridItem xs={12} sm={12} md={12} style={{height: `${bodyHeight}px`, backgroundColor: blackColor}}>
-
+        <GridItem xs={12} sm={12} md={12} style={{height: `${bodyHeight}px`, backgroundColor: blackColor}}>
+            
             <GridItem xs={12} sm={12} md={12} style={styles.myheader}>
-
-          </GridItem>
+            </GridItem>
             
             <Grid 
               container 
@@ -77,7 +79,10 @@ function DiscoveryHome(props) {
 
               <Grid  item style={{width: '65%'}}>
                 <div style={styles.col}>
-                  <Tabs mainHeight={bodyHeight}/>
+                  <GridList  style={{marginTop: 10}} cellHeight={300}  cols={1}>>
+                      <div style={{height: '1000px', backgroundColor: 'green', flex: 1}}>test</div> 
+                  </GridList>
+                        {/*<Tabs mainHeight={bodyHeight} categories={props.categories}/>*/}
                 </div>
               </Grid>
 

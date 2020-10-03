@@ -19,9 +19,7 @@ export default function ListBuilderTable(props) {
   const useStyles = makeStyles((theme) => ({
     root: {
       backgroundColor: 'yellow', //theme.palette.background.paper,
-      width: '100%',
-     // height:'100%',
-      //backgroundColor: whiteColor
+      height: props.mainHeight
     },
   }));
 
@@ -33,19 +31,29 @@ export default function ListBuilderTable(props) {
   return (
     <div className={classes.root}>
       <Table className={classes.table}>
-        <TableBody>
- 
-            <TableRow key={'0'} className={classes.tableRow}>
-            
-              <TableCell >
-                  Checkbox
-              </TableCell>
+        <TableBody >
 
-              <TableCell >
-                  Data
-              </TableCell>
-      
+          {props.data && props.data.length > 0 && props.data.map(item=>{
+
+            return (
+
+              <TableRow key={item.category_id} className={classes.tableRow}>
+            
+                <TableCell >
+                    {item.category_name}
+                </TableCell>
+
+                <TableCell >
+                    Data
+                </TableCell>
+        
              </TableRow>
+
+
+            )
+          })}
+ 
+            
           
 
           </TableBody>

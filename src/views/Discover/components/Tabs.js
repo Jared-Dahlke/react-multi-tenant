@@ -49,10 +49,9 @@ export default function FullWidthTabs(props) {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: 'blue', //theme.palette.background.paper,
       width: '100%',
       height: props.mainHeight,
-      backgroundColor: whiteColor
     },
   }));
 
@@ -90,7 +89,10 @@ export default function FullWidthTabs(props) {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <ListBuilderTable/>
+          <div>
+            <ListBuilderTable data={props.categories} />
+          </div>
+          
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           Channels (10K/25M)
