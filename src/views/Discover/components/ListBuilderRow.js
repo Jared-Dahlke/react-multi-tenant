@@ -44,54 +44,58 @@ export default function ListBuilderRow (props) {
         <TableCell style={mainCellStyle}>
 
             <h3 style={{margin: 0, padding: 0}}>{item.categoryName}</h3> 
-            
-              <TableRow>
+              <Table>
+                <TableBody>
+                  <TableRow>
 
-                <TableCell style={countStyle}>
-                  Avails:
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Channels: {channels}
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Subscribers: {subscribers}
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Videos: {videos}
-                </TableCell>
+                    <TableCell style={countStyle}>
+                      Avails:
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Channels: {channels}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Subscribers: {subscribers}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Videos: {videos}
+                    </TableCell>
              
+                  </TableRow>
+                </TableBody>
+              </Table>
 
-              </TableRow>
+              
+            
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell style={countStyle}>
+                      Perf:
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Avg. CPM: $2.3
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Avg. CPC: $1
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Avg. CPV: $3.4
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Avg. CPCV: $3.4
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Avg. CPA: $3.4
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
 
-              <TableRow>
-
-                <TableCell style={countStyle}>
-                  Perf:
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Avg. CPM: $2.3
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Avg. CPC: $1
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Avg. CPV: $3.4
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Avg. CPCV: $3.4
-                </TableCell>
-                <TableCell style={countStyle}>
-                  Avg. CPA: $3.4
-                </TableCell>
-
-              </TableRow>
-          
              
         </TableCell>
 
-        <TableCell >
-            
-        </TableCell>
+    
 
     </TableRow>
 
