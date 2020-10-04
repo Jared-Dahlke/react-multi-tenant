@@ -15,7 +15,7 @@ import Tabs from './components/Tabs'
 import useWindowDimensions from '../../hooks/WindowDimensions'
 import GridList from '@material-ui/core/GridList'
 
-const bodyHeight = 500
+const bodyHeight = 600
 const borderRad = 4
 
 

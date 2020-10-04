@@ -44,7 +44,7 @@ export default function ListBuilderRow (props) {
         <TableCell style={mainCellStyle}>
 
             <h3 style={{margin: 0, padding: 0}}>{item.categoryName}</h3> 
-            <div>
+            
               <TableRow>
 
                 <TableCell style={countStyle}>
@@ -85,7 +85,7 @@ export default function ListBuilderRow (props) {
                 </TableCell>
 
               </TableRow>
-            </div>
+          
              
         </TableCell>
 
