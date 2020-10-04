@@ -33,8 +33,8 @@ export default function ListBuilderTable(props) {
   
 
   return (
-    <div >
-      <GridItem style={{backgroundColor: whiteColor, paddingLeft: 0}}>
+    <div>
+      <GridItem style={{paddingLeft: 0}}>
         <SearchBar value={categorySearch} handleChange={(val)=>setCategorySearch(val)} onRequestSearch={console.log('searched')}/>
       </GridItem>
       

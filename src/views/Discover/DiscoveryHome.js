@@ -14,17 +14,20 @@ import { blackColor, whiteColor, grayColor } from "../../assets/jss/material-das
 import Tabs from './components/Tabs'
 import useWindowDimensions from '../../hooks/WindowDimensions'
 import GridList from '@material-ui/core/GridList'
+import ReactSelect from 'react-select'
+import FilterList from '@material-ui/icons/FilterList'
 
 const bodyHeight = 600
 const borderRad = 4
+const blockHeight = 48
 
 
 const styles = {
   myheader: {
-    backgroundColor: whiteColor,
+    backgroundColor: blackColor,
     borderRadius: borderRad,
-    height: '60px'
-
+    height: '85px',
+    alignItems: 'center'
   },
   mybody: {
     
@@ -35,6 +38,12 @@ const styles = {
     backgroundColor: whiteColor,
     borderRadius: borderRad
     //width: '33%'
+  },
+  colSide: {
+    marginTop: '25px',
+    height: bodyHeight,
+    backgroundColor: blackColor,
+    borderRadius: borderRad
   }
 };
 
@@ -44,14 +53,23 @@ const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
-    categories: state.categories
+    categories: state.categories,
+    brandProfiles: state.brandProfiles
   };
+};
+
+const customSelectStyles = {
+  control: base => ({
+    ...base,
+    height: blockHeight,
+    minHeight: blockHeight
+  })
 };
 
 
 function DiscoveryHome(props) {
 
-  console.log(props.categories)
+  console.log(props)
 
 
   //const { height, width } = useWindowDimensions();
@@ -59,8 +77,16 @@ function DiscoveryHome(props) {
   //console.log(windowHeight)
 
 
+  //const formattedBrandProfiles = React.useMemo(() => formatBrandProfiles(props.accounts.data), [props.accounts.data]);
+
+  
+  //const allUsers = [{value: 1, label: 'Joe'},{value: 2, label: 'Sue'},{value: 3, label: 'John'}]
+
+
 
   const classes = useStyles();
+
+
   
   return (
         <GridContainer>
@@ -69,8 +95,51 @@ function DiscoveryHome(props) {
 
            <GridItem xs={12} sm={12} md={12} style={{height: bodyHeight + 80, backgroundColor: blackColor}}>
 
-            <GridItem xs={12} sm={12} md={12} style={styles.myheader}>
-            </GridItem>
+            <Grid container style={styles.myheader}>
+              <Grid item xs={12} sm={12} md={4}  >
+              
+              <div >
+              
+                  <div style={{fontSize: 14, marginBottom: 10, color: grayColor[0]}}>
+                    Brand Profile
+                  </div>
+              
+                <ReactSelect
+                  styles={customSelectStyles}
+                
+                  id={'brandProfileSelect'}
+                  placeholder={'Brand Profile'}
+                  options={props.brandProfiles}
+                  getOptionLabel ={(option)=>option.brandName}
+                  getOptionValue ={(option)=>option.brandProfileId}
+                  //value={value}
+               //   onChange={this.handleChange}
+               //   onBlur={this.handleBlur}
+                
+                  isMulti={false}
+                  isDisabled={false}
+                  isClearable={false}
+                  backspaceRemovesValue={false}
+                  components={{ ClearIndicator: null }}
+                />
+                </div>
+              </Grid>
+
+              <GridItem xs={12} sm={12} md={2} >
+              
+              </GridItem>
+              <GridItem xs={12} sm={12} md={2} >
+               
+              </GridItem>
+              <GridItem xs={12} sm={12} md={2} >
+               
+              </GridItem>
+              <GridItem xs={12} sm={12} md={2} >
+               
+              </GridItem>
+
+            </Grid>
+            
             
             
             <Grid 
@@ -79,10 +148,71 @@ function DiscoveryHome(props) {
             >
 
               <Grid  item style={{width: '15%'}}>
-                <div style={styles.col} />
+                <div style={styles.colSide}>
+                  <Grid container >
+
+                    <Grid container style={{height: blockHeight}}>
+                      <Grid item xs={10}>                   
+                      </Grid>
+                      <Grid item xs={2}>
+                        <FilterList style={{color: whiteColor}} fontSize="large"/>
+                      </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                    
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Country'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Video Language'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Category'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Kids Content'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Disabled Comments'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Channel Filter'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Creator Type'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Alignment Score'}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} >
+                        <ReactSelect
+                          placeholder={'Clean Rating Score'}
+                        />
+                      </Grid>
+                    </Grid>
+
+                  </Grid>
+                </div>
               </Grid>
 
-              <Grid   style={{width: '65%'}}>
+              <Grid  style={{width: '65%'}}>
                 <div style={styles.col}>
                    
                         <Tabs bodyHeight={bodyHeight} borderRad={borderRad} categories={props.categories}/>
