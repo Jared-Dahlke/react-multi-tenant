@@ -9,6 +9,7 @@ import CardBody from "../../../components/Card/CardBody.js";
 import CardFooter from "../../../components/Card/CardFooter.js";
 import Snackbar from "@material-ui/core/Snackbar";
 import AddAlert from "@material-ui/icons/AddAlert";
+import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
 
 // Redux
@@ -21,7 +22,7 @@ import FormikInput from '../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import * as Yup from "yup";
 import {getCurrentAccount} from '../../../utils'
-import {updateAccount, deleteAccount, createAccount} from "../../../redux/actions/accounts"
+import {updateAccount, deleteAccount, createAccount, accountCreated} from "../../../redux/actions/accounts"
 
 const styles = {
   cardCategoryWhite: {
@@ -55,8 +56,8 @@ const mapStateToProps = (state) => {
     currentAccountId: state.currentAccountId,
     accounts: state.accounts,
     accountTypes: state.accountTypes,
-    isSwitchingAccounts: state.isSwitchingAccounts
-   
+    isSwitchingAccounts: state.isSwitchingAccounts,
+    accountCreated: state.accountCreated
   };
 };
 
@@ -66,7 +67,8 @@ const mapDispatchToProps = (dispatch) => {
     updateUserData: (userData) => dispatch(updateUserData(userData)),
     updateAccount: (account)=> dispatch(updateAccount(account)),
     deleteAccount: (accountId)=> dispatch(deleteAccount(accountId)),
-    createAccount: (account)=> dispatch(createAccount(account))
+    createAccount: (account)=> dispatch(createAccount(account)),
+    setAccountCreated: (val)=> dispatch(accountCreated(val))     
   };
 };
 
@@ -108,17 +110,12 @@ const schemaValidation = Yup.object().shape({
   
 });
 
-function UserProfile(props) {
-
-  console.log(props)
-
-  const classes = useStyles();
+function Account(props) {
 
   const [current, setCurrent] = React.useState({})
   
 
   const handleCreateChild=()=> {
-    console.log(current)
     let levelId = current.accountLevelId + 1
     if (levelId > 3) {
       levelId = 3
@@ -236,7 +233,7 @@ function UserProfile(props) {
       <GridContainer>
 
 
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={6}>
           <Card>
             {accountLoading || props.isSwitchingAccounts ?
             <FormLoader/>
@@ -251,15 +248,15 @@ function UserProfile(props) {
 
               <Grid container justify="flex-end">
 
-<GridItem> 
-    <Button  color="primary" onClick={handleCreateChild}>Create Child Account</Button>
-</GridItem>
+                <GridItem> 
+                    <Button  color="primary" onClick={handleCreateChild}>Create Child Account</Button>
+                </GridItem>
 
 
-</Grid>
+              </Grid>
 
 
-                <GridItem xs={12} sm={12} md={8}>
+                <GridItem xs={12} sm={12} md={12}>
                   <FormikInput
                     name="accountName"
                     labelText="Account Name"
@@ -358,21 +355,21 @@ function UserProfile(props) {
               Save
             </Button>
               <Snackbar
-                place="bc"
-                color="success"
-                icon={AddAlert}
-                message="User profile was updated"
-               // open={showAlertMessage}
-                // closeNotification={() => setShowAlertMessage(false)}
-                // close
-              />
+                autoHideDuration={2000}
+                place="bc"             
+                icon={AddAlert}           
+                open={props.accountCreated}
+                onClose={() => props.setAccountCreated(false)}        
+              >
+                <Alert severity="success">Account created!</Alert>
+              </Snackbar>
+
             </CardFooter>
             </div>
         } 
             
           </Card>
         </GridItem>
-
         
       </GridContainer>
     
@@ -381,4 +378,4 @@ function UserProfile(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

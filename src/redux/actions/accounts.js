@@ -8,7 +8,8 @@ import {
   ACCOUNTS_SET_ACCOUNT_USERS,
   ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
   ACCOUNTS_UPDATE_ACCOUNT,
-  SET_IS_SWITCHING_ACCOUNTS
+  SET_IS_SWITCHING_ACCOUNTS,
+  SET_ACCOUNT_CREATED
 } from "../action-types/accounts";
 import axios from "../../axiosConfig";
 import config from "../../config.js";
@@ -79,6 +80,14 @@ export function isSwitchingAccounts(bool) {
 }
 
 
+export function accountCreated(bool) {
+  return {
+    type: SET_ACCOUNT_CREATED,
+    accountCreated: bool,
+  };
+}
+
+
 export function updateAccount(account) {
   
   let accountId = account.accountId;
@@ -122,7 +131,8 @@ export const createAccount = (account) => {
     dispatch(isSwitchingAccounts(true))   
     axios
       .post(url, account)
-      .then((response) => {      
+      .then((response) => { 
+        dispatch(accountCreated(true))     
         dispatch(fetchSiteData(response.data.accountId))
       })
       .catch((error) => {

@@ -25,7 +25,7 @@ import DiscoveryHome from '../views/Discover/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
-import CreateAccount from '../views/Account/SimpleAccount/CreateAccount'
+
 
 let ps;
 
@@ -39,17 +39,6 @@ const switchRoutes = (
       path='/admin/settings/account'
       component={Account}
     />
-
-    <Route
-      path='/admin/settings/account'
-      render={({ match: { url } }) => (
-        <>
-          <Route path={`${url}/`} component={Account} exact />
-          <Route path={`${url}/create`} component={CreateAccount} />      
-        </>
-      )}
-    />
-
 
     <Route
       path='/admin/settings/users'
