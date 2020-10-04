@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CustomInput from '../components/CustomInput/CustomInput'
-import Link from '@material-ui/core/Link';
+import {Link} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -143,7 +143,7 @@ function PasswordChange(props) {
 
             <Grid container style={{marginTop:'10px'}}>
               <Grid item xs>
-                <Link style={{color: whiteColor}} href="/login" variant="body2">
+                <Link style={{color: whiteColor}} to="/login" >
                   Login
                 </Link>
               </Grid>

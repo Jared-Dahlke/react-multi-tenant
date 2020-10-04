@@ -13,7 +13,7 @@ import {isEmailError} from "../validations";
 import CustomInput from '../components/CustomInput/CustomInput'
 import logo from '../assets/img/sightly_icon.png'
 import {logoStyle} from '../assets/jss/material-dashboard-react'
-
+import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 
 const mapStateToProps = (state) => {
   return { 
@@ -29,9 +29,10 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
-    paddingTop: theme.spacing(8),
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -49,7 +50,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const useAdminStyles= makeStyles(adminStyle)
+
+
+
 function PasswordReset(props) {
+  const adminClasses = useAdminStyles()
   const classes = useStyles();
   const [email, setEmail] = useState("");
 
@@ -66,9 +73,7 @@ function PasswordReset(props) {
   }
 
   return (
-    <div style={{position: "relative",
-      top: "0",
-      height: "100vh"}}>
+    <div className={adminClasses.authPanel}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>

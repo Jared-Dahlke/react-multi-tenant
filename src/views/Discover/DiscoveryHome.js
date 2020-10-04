@@ -4,18 +4,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import Grid from '@material-ui/core/Grid'
-import Card from "../../components/Card/Card.js";
-import CardHeader from "../../components/Card/CardHeader.js";
-import CardBody from "../../components/Card/CardBody.js";
-import CardFooter from "../../components/Card/CardFooter.js";
-import Paper from '@material-ui/core/Paper'
-import Box from '@material-ui/core/Box'
-import { blackColor, whiteColor, grayColor } from "../../assets/jss/material-dashboard-react.js";
+import { blackColor, whiteColor, grayColor} from "../../assets/jss/material-dashboard-react.js";
 import Tabs from './components/Tabs'
-import useWindowDimensions from '../../hooks/WindowDimensions'
-import GridList from '@material-ui/core/GridList'
 import ReactSelect from 'react-select'
 import FilterList from '@material-ui/icons/FilterList'
+import ListIcon from '@material-ui/icons/List'
+import { TableRow, TableCell, Table, TableBody, DialogContentText, Card, CardContent, Typography } from '@material-ui/core'
 
 const bodyHeight = 600
 const borderRad = 4
@@ -44,8 +38,22 @@ const styles = {
     height: bodyHeight,
     backgroundColor: blackColor,
     borderRadius: borderRad
+  },
+  colSideWhite: {
+    marginTop: '25px',
+    //maxHeight: bodyHeight,
+    backgroundColor: whiteColor,
+    borderRadius: borderRad,
+    padding: 10
+    
   }
 };
+
+function TableText(props) {
+  return (
+    <DialogContentText style={{color: props.header ? blackColor : '', marginBottom: 0}}>{props.text}</DialogContentText>
+  )
+}
 
 
 
@@ -145,9 +153,10 @@ function DiscoveryHome(props) {
             <Grid 
               container 
               justify="space-between"    
+             
             >
 
-              <Grid  item style={{width: '15%'}}>
+              <Grid  item xs={12} sm={12} md={2} >
                 <div style={styles.colSide}>
                   <Grid container >
 
@@ -212,7 +221,7 @@ function DiscoveryHome(props) {
                 </div>
               </Grid>
 
-              <Grid  style={{width: '65%'}}>
+              <Grid  item xs={12} sm={12} md={7}>
                 <div style={styles.col}>
                    
                         <Tabs bodyHeight={bodyHeight} borderRad={borderRad} categories={props.categories}/>
@@ -220,8 +229,50 @@ function DiscoveryHome(props) {
                 </div>
               </Grid>
 
-              <Grid  item style={{width: '15%'}}>
-                <div style={styles.col} />
+              <Grid  item xs={12} sm={12} md={2}>
+                <div style={styles.colSideWhite}>
+                 
+                  
+                        <Grid item xs={12} sm={12} md={12}>
+                        
+                              <Typography variant="subtitle2"  color="textSecondary" gutterBottom>
+                                Channel Research Summary
+                              </Typography>                                        
+                              <Typography variant="caption">
+                              <b>Objective:</b> Awareness <br/>
+                              <b>Categories:</b> 5 <br/>
+                              <b>Channels:</b> 5,000 <br/>
+                              <b>Videos:</b> 100,000 <br/>
+                              <b>Countries:</b> US, CA, MX <br/>
+                              <b>Languages:</b> En, Sp, Fr <br/>
+                              <b>Kids Content:</b> No <br/>
+                              <b>Disabled Comments:</b> No <br/>
+                              <b>Creator Types:</b> All <br/>
+                              <b>Avg. Alignment Score:</b> Low Risk <br/>
+                              <b>Avg. Clean Rating Score:</b> Low Risk <br/>
+                              </Typography>
+                            <br/>
+                                            
+                              <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+                                Ad Insights Summary
+                              </Typography>                                        
+                              <Typography variant="caption">
+                              <b>Total Videos:</b>  <br/>
+                              <b>Total Video Views:</b>  <br/>
+                              <b>Comments:</b>  <br/>
+                              <b>Likes:</b> <br/>
+                              <b>Dislikes:</b>  <br/>
+                              <b>Favorites:</b><br/>
+                              <b>Avg. CPM:</b>  <br/>
+                              <b>Avg. CPC:</b>  <br/>
+                              <b>Avg CPV:</b>  <br/>
+                              <b>Avg. CPA:</b>                      
+                              </Typography>
+                          
+                          </Grid>
+                   
+                     
+                </div>
               </Grid>
 
             </Grid>
