@@ -147,7 +147,7 @@ function DiscoveryHome(props) {
               justify="space-between"    
             >
 
-              <Grid  item style={{width: '15%'}}>
+              <Grid  item xs={12} sm={12} md={2} style={{width: '15%'}}>
                 <div style={styles.colSide}>
                   <Grid container >
 
@@ -212,7 +212,7 @@ function DiscoveryHome(props) {
                 </div>
               </Grid>
 
-              <Grid  style={{width: '65%'}}>
+              <Grid  item xs={12} sm={12} md={7}>
                 <div style={styles.col}>
                    
                         <Tabs bodyHeight={bodyHeight} borderRad={borderRad} categories={props.categories}/>
@@ -220,7 +220,7 @@ function DiscoveryHome(props) {
                 </div>
               </Grid>
 
-              <Grid  item style={{width: '15%'}}>
+              <Grid  item xs={12} sm={12} md={2}>
                 <div style={styles.col} />
               </Grid>
 

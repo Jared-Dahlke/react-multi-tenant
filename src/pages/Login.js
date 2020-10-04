@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Button from '../components/CustomButtons/Button';
-import Link from '@material-ui/core/Link';
+import {Link} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -126,7 +126,7 @@ function Login(props) {
           
             <Grid style={{marginTop:'10px'}} container>
               <Grid item xs>
-                <Link href="/resetPassword" variant="body2" style={{color: whiteColor}}>
+                <Link to="/resetPassword"  style={{color: whiteColor}}>
                   Forgot password?
                 </Link>
               </Grid>
