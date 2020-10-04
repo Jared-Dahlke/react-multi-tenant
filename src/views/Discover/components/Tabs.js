@@ -10,6 +10,7 @@ import Box from '@material-ui/core/Box';
 import { blackColor, grayColor, whiteColor } from '../../../assets/jss/material-dashboard-react';
 import ListBuilderTable from './ListBuilderTable'
 import GridList from '@material-ui/core/GridList'
+import SearchBar from './SearchBar'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -23,8 +24,8 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
+        <Box p={3} style={{padding: 16}}>
+        {children}
         </Box>
       )}
     </div>
@@ -48,6 +49,8 @@ function a11yProps(index) {
 
 export default function FullWidthTabs(props) {
 
+  
+
   const useStyles = makeStyles((theme) => ({
     root: {
      // backgroundColor: 'blue', //theme.palette.background.paper,
@@ -69,6 +72,8 @@ export default function FullWidthTabs(props) {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
+
+  
 
   return (
     <div className={classes.root}>
@@ -92,15 +97,9 @@ export default function FullWidthTabs(props) {
         onChangeIndex={handleChangeIndex}
         style={{borderRadius: props.borderRad}}
       >
-        <TabPanel value={value} index={0} dir={theme.direction}>
+        <TabPanel value={value} index={0} dir={theme.direction} style={{backgroundColor: whiteColor}}>
 
-          <div style={{width:'100%', height: 50, margin: 10}}>search</div>
-         
-          <GridList cols={1} cellHeight={props.bodyHeight - 122} style={{overflowX:"hidden", margin: '-24px'}}>
-            <div style={{padding: 0}}>
-              <ListBuilderTable data={props.categories} bodyHeight={props.bodyHeight} />                 
-            </div>           
-          </GridList>
+          <ListBuilderTable data={props.categories} bodyHeight={props.bodyHeight} />   
          
           
         </TabPanel>

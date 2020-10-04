@@ -24,6 +24,7 @@
     "formik": "2.1.4",
     "just-debounce-it": "1.1.0",
     "lodash": "4.17.20",
+    "material-ui-search-bar": "1.0.0",
     "node-uuid": "1.4.8",
     "numeral": "2.0.6",
     "perfect-scrollbar": "1.5.0",
