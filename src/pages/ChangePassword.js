@@ -142,17 +142,6 @@ function PasswordChange(props) {
               Change Password
             </Button>
 
-
-            <Grid container style={{marginTop:'10px'}}>
-              <Grid item xs>
-                <Link style={{color: whiteColor}} to="/login" >
-                  Login
-                </Link>
-              </Grid>
-              <Grid item>
-               
-              </Grid>
-            </Grid>
           </form>
         </div>
     
