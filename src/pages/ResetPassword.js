@@ -6,9 +6,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {setShowAlert, resetPassword} from '../redux/actions/auth.js';
-import Snackbar from "../components/Snackbar/Snackbar";
-import AddAlert from '@material-ui/icons/AddAlert';
+import {setAlert, resetPassword} from '../redux/actions/auth.js';
+import Alert from '@material-ui/lab/Alert';
 import {isEmailError} from "../validations";
 import CustomInput from '../components/CustomInput/CustomInput'
 import logo from '../assets/img/sightly_icon.png'
@@ -18,14 +17,14 @@ import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyl
 const mapStateToProps = (state) => {
   return { 
     isLoggedIn: state.isLoggedIn,
-    showAlert: state.showAlert
+    alert: state.alert
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     resetPassword: (email) => dispatch(resetPassword(email)),
-    setShowAlert: (showAlert) => dispatch(setShowAlert(showAlert))
+    setAlert: (alert) => dispatch(setAlert(alert))
   }
 }
 
@@ -62,10 +61,6 @@ function PasswordReset(props) {
 
   async function postResetPassword() {
     props.resetPassword(email)
-
-    setTimeout(function() {
-      props.setShowAlert(false)
-    }, 4000)
   }
 
   if (props.isLoggedIn) {
@@ -81,6 +76,7 @@ function PasswordReset(props) {
           <img src={logo} alt="logo" style={logoStyle} />
          
           <form className={classes.form} noValidate>
+            { props.alert.show && <Alert severity={props.alert.severity} onClose={() => props.setAlert({show: false})}>{props.alert.message}</Alert> }
             <Grid container spacing={2}>
               <Grid item xs={12}>
 
@@ -115,16 +111,7 @@ function PasswordReset(props) {
             </Button>
           </form>
         </div>
-        <Snackbar
-          place="bc"
-          color="success"
-          icon={AddAlert}
-          message="Reset password email sent. Check Your email."
-          open={props.showAlert}
-          closeNotification={() => props.setShowAlert(false)}
-          close
-        />
-       
+
       </Container>
     </div>
   );

@@ -6,7 +6,8 @@ import {Link} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {login} from '../redux/actions/auth.js'
+import {login, setAlert} from '../redux/actions/auth.js'
+import Alert from '@material-ui/lab/Alert';
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import { whiteColor } from "../assets/jss/material-dashboard-react.js";
 import CustomInput from '../components/CustomInput/CustomInput'
@@ -16,13 +17,15 @@ import {logoStyle} from '../assets/jss/material-dashboard-react'
 const mapStateToProps = (state) => {
   return { 
     authToken: state.authToken,
-    isLoggedIn: state.isLoggedIn
+    isLoggedIn: state.isLoggedIn,
+    alert: state.alert
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (credentials) => dispatch(login(credentials))
+    login: (credentials) => dispatch(login(credentials)),
+    setAlert: (alert) => dispatch(setAlert(alert))
   }
 }
 
@@ -82,6 +85,7 @@ function Login(props) {
          
          
           <form className={classes.form} noValidate>
+            { props.alert.show && <Alert severity={props.alert.severity} onClose={() => props.setAlert({show: false})}>{props.alert.message}</Alert> }
 
             <CustomInput
               labelText="Email address"

@@ -3,9 +3,9 @@ import {
   SET_LOGGED_IN,
   SET_USER,
   SET_USER_ID,
-  SET_SHOW_ALERT,
+  SET_ALERT,
   USER_PROFILE_IS_LOADING,
-  SUCCESS_PASSWORD_CHANGED
+  // SUCCESS_PASSWORD_CHANGED
 } from "../action-types/auth";
 import axios from "../../axiosConfig";
 import config from "../../config";
@@ -17,16 +17,16 @@ export function setAuthToken(payload) {
   return { type: SET_AUTH_TOKEN, payload };
 }
 
-export function setShowAlert(payload) {
-  return { type: SET_SHOW_ALERT, payload };
+export function setAlert(payload) {
+  return { type: SET_ALERT, payload };
 }
 
-export function successPasswordChanged(bool) {
-  return { 
-    type: SUCCESS_PASSWORD_CHANGED, 
-    successPasswordChanged: bool, 
-  };
-}
+// export function successPasswordChanged(bool) {
+//   return { 
+//     type: SUCCESS_PASSWORD_CHANGED, 
+//     successPasswordChanged: bool, 
+//   };
+// }
 
 export function userProfileIsLoading(bool) {
   return {
@@ -77,9 +77,10 @@ export function login(credentials) {
       });
 
       if (!result.data.jwt) {
-        alert(
-          "We were unable to authenticate this user. Please try again later."
-        );
+        dispatch(setAlert({show: true, message: "We were unable to authenticate this user. Please try again later.", severity: "error"}));
+        setTimeout(() => {
+          dispatch(setAlert({show: false}));
+        }, 5000);
         return;
       }
 
@@ -95,7 +96,7 @@ export function login(credentials) {
       }
     } catch (error) {
       alert(error);
-      let errorType = error.response.status;
+      let errorType = error.status;
       handleError(dispatch, errorType);
     }
   };
@@ -150,12 +151,21 @@ export function resetPassword(email) {
       });
 
       if (result.status === 200) {
-        dispatch(setShowAlert(true));
+        dispatch(setAlert({show: true, message: "Reset password email sent. Check Your email.", severity: "success"}));
+        setTimeout(() => {
+          dispatch(setAlert({show: false}));
+        }, 5000);
+      } else {
+        dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
+        setTimeout(() => {
+          dispatch(setAlert({show: false}));
+        }, 5000);
       }
     } catch (error) {
-      alert(error);
-      let errorType = error.response.status;
-      handleError(dispatch, errorType);
+      dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
+      setTimeout(() => {
+        dispatch(setAlert({show: false}));
+      }, 5000);
     }
   };
 }
@@ -169,14 +179,22 @@ export function changePassword(password, userId, token) {
       });
 
       if (result.status === 200) {
-        window.location.href = '/login'
-        dispatch(successPasswordChanged(true));
+        dispatch(setAlert({show: true, message: "Password has been reset. Please proceed to login with your new password.", severity: "success"}));
         setTimeout(() => {
-          dispatch(successPasswordChanged(false));
-        }, 1000);
+          dispatch(setAlert({show: false}));
+          window.location.href = '/login'
+        }, 5000);
+      } else {
+        dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
+        setTimeout(() => {
+          dispatch(setAlert({show: false}));
+        }, 5000);
       }
     } catch (error) {
-      alert(error);     
+      dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
+      setTimeout(() => {
+        dispatch(setAlert({show: false}));
+      }, 5000);  
     }
   };
 }
