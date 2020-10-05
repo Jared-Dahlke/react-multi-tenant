@@ -41,7 +41,8 @@ export function categoriesFetchDataSuccess(categories) {
 
 
 export function fetchChannels(categoryIds) {
-  
+  console.log('fetch channels')
+  console.log(categoryIds)
   let url =  apiBase + `/discover/channels`  //TODO: eventually the api should filter by category id, but i will do it here for the demo
   return async (dispatch) => {
     try {
@@ -50,11 +51,16 @@ export function fetchChannels(categoryIds) {
      
       if (result.status === 200) {
         let filteredChannels = []
+        let myCount = 0
         for (const channel of result.data) {
-          if(categoryIds.contains(channel.channelid)) {
+
+          if(categoryIds.includes(channel.categoryId) && myCount < 100) {
             filteredChannels.push(channel)
+            myCount = myCount + 1
           }
         }
+        console.log('about to dispatch channels')
+        console.log(filteredChannels)
         dispatch(channelsFetchDataSuccess(filteredChannels))
         console.log(result)
       }

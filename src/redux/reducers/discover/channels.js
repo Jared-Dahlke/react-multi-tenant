@@ -1,4 +1,4 @@
-import {CATEGORIES_FETCH_DATA_SUCCESS} from '../../action-types/discover/channels'
+import {CATEGORIES_FETCH_DATA_SUCCESS, CHANNELS_FETCH_DATA_SUCCESS} from '../../action-types/discover/channels'
 
 export function categories(state = [], action) {
   switch (action.type) {

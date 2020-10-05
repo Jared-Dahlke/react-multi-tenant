@@ -100,16 +100,21 @@ export default function FullWidthTabs(props) {
         <TabPanel value={value} index={0} dir={theme.direction} style={{backgroundColor: whiteColor}}>
 
           <ListBuilderTable 
-          data={props.categories} 
-          bodyHeight={props.bodyHeight} 
-          handleButtonGroupChange={props.handleButtonGroupChange}
+            data={props.categories} 
+            bodyHeight={props.bodyHeight} 
+            handleButtonGroupChange={props.handleButtonGroupChange}
           />   
-         
-          
+
         </TabPanel>
+
         <TabPanel value={value} index={1} dir={theme.direction}>
-          Channels (10K/25M)
+          <ListBuilderTable 
+            data={props.channels} 
+            bodyHeight={props.bodyHeight} 
+            handleButtonGroupChange={props.handleButtonGroupChange}
+          />
         </TabPanel>
+
         <TabPanel value={value} index={2} dir={theme.direction}>
           Videos (2M/500M)
         </TabPanel>

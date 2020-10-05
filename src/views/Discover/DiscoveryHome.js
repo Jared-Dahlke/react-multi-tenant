@@ -84,8 +84,22 @@ function DiscoveryHome(props) {
 
   console.log(props)
 
-  const handleButtonGroupChange =(e)=>{
-    console.log(e)
+  const [selectedCategories, setSelectedCategories] = React.useState([])
+
+  const handleButtonGroupChange =(value, categoryId)=>{
+    console.log(value)
+    let addedCategory = {categoryId: categoryId, value: value}
+    let categoriesCopy = JSON.parse(JSON.stringify(selectedCategories))
+    categoriesCopy.push(addedCategory)
+    setSelectedCategories(categoriesCopy)
+    let categoryIdsArray = []
+    for (const category of categoriesCopy) {
+      if(!categoryIdsArray.includes(category.categoryId)) {
+        categoryIdsArray.push(category.categoryId)
+      }
+      
+    }
+    props.fetchChannels(categoryIdsArray)
   }
 
 
@@ -107,6 +121,10 @@ function DiscoveryHome(props) {
   
   return (
         <GridContainer >
+
+
+<pre style={{color:'white'}}>Channels: {props.channels.length}</pre>
+
           
           
 
@@ -234,6 +252,7 @@ function DiscoveryHome(props) {
                         bodyHeight={bodyHeight} 
                         borderRad={borderRad} 
                         categories={props.categories}
+                        channels={props.channels}
                         handleButtonGroupChange={handleButtonGroupChange}
                         />
                     
