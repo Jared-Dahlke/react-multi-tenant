@@ -1,4 +1,4 @@
-import {BRAND_PROFILES_FETCH_DATA_SUCCESS, REMOVE_BRAND_PROFILE, ADD_BRAND_PROFILE, BRAND_PROFILES_IS_LOADING} from '../action-types/brandProfiles'
+import {BRAND_PROFILES_FETCH_DATA_SUCCESS, REMOVE_BRAND_PROFILE, ADD_BRAND_PROFILE, BRAND_PROFILES_IS_LOADING, HAS_BRAND_PROFILES} from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
   switch (action.type) {
@@ -26,6 +26,16 @@ export function brandProfilesIsLoading(state = true, action) {
   switch (action.type) {
   case BRAND_PROFILES_IS_LOADING:
     return action.brandProfilesIsLoading;
+  default:
+    return state;
+  }
+}
+
+
+export function hasBrandProfiles(state = true, action) {
+  switch (action.type) {
+  case HAS_BRAND_PROFILES:
+    return action.hasBrandProfiles;
   default:
     return state;
   }

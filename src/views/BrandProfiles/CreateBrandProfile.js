@@ -21,6 +21,8 @@ import Scenarios from './components/Scenarios'
 import {mapValues} from 'lodash'
 import {createBrandProfile, fetchBrandProfiles} from '../../redux/actions/brandProfiles'
 import { connect } from "react-redux";
+import Joyride from 'react-joyride'
+import {getTours} from '../../Tour'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -149,6 +151,7 @@ function CreateBrandProfiles (props) {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [showTour, setShowTour] = React.useState(false)
 
   const steps = getSteps();
 
@@ -156,8 +159,6 @@ function CreateBrandProfiles (props) {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
     if(activeStep === steps.length - 1) {
-      console.log('save me')
-      console.log(values)
       let brandProfile = {
         accountId: props.currentAccountId,
         brandName: values.basicInfoProfileName,
@@ -165,6 +166,7 @@ function CreateBrandProfiles (props) {
         twitterProfileUrl: values.basicInfoTwitterProfile
       }
       props.createBrandProfile(brandProfile)
+      setShowTour(true)
     }
   };
 
@@ -291,6 +293,12 @@ return (
           )
         })}
       </Stepper>
+
+        <Joyride
+          steps={getTours('takeToDiscover')}
+          run={showTour}
+        />
+
 
       <GridContainer justify='center'>
 
