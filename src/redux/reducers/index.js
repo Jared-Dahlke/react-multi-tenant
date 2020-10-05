@@ -3,8 +3,8 @@ import {combineReducers} from 'redux'
 import {roles, rolesHasErrored, rolesIsLoading, rolesPermissionsIsLoading, rolesPermissions, rolesPermissionsHasErrored} from './roles'
 import {authToken, isLoggedIn, showAlert, user, userProfileIsLoading, successPasswordChanged} from './auth'
 import {users, usersHasErrored, userDeleted, userDeletedError, userAdded, usersIsLoading, editUserUserAccountsLoading} from './users'
-import {accounts, currentAccountId, isSwitchingAccounts, treeAccounts, editAccountAccountUsersLoading, accountTypes} from './accounts'
-import {brandProfiles, brandProfilesIsLoading} from './brandProfiles'
+import {accounts, currentAccountId, isSwitchingAccounts, treeAccounts, editAccountAccountUsersLoading, accountTypes, accountCreated} from './accounts'
+import {brandProfiles, brandProfilesIsLoading, hasBrandProfiles} from './brandProfiles'
 import {categories} from './discover/channels'
 
 
@@ -36,6 +36,8 @@ export default combineReducers({
   editAccountAccountUsersLoading,
   accountTypes,
   brandProfilesIsLoading,
+  accountCreated,
+  hasBrandProfiles,
 
   categories
 })

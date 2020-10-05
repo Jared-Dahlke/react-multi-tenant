@@ -110,9 +110,13 @@ function BrandProfiles(props) {
       <Grid container justify="flex-end">
 
         <GridItem >
+          {props.brandProfiles && props.brandProfiles.length > 0 ?
           <Link style={{ textDecoration: 'none' }} to={"/admin/settings/brandProfiles/create"}>
             <Button  color="primary">Create New Profile</Button>
           </Link>
+            :
+            null}
+          
          
         </GridItem>
         
@@ -203,11 +207,13 @@ function BrandProfiles(props) {
 
             : props.brandProfilesIsLoading ? 
 
-            <FormLoader/>
+              <FormLoader/>
 
             :
 
-            <h2 style={{color:whiteColor}}>{'This account'} has no brand profiles...</h2>
+              <Link style={{ textDecoration: 'none' }} to={"/admin/settings/brandProfiles/create"}>
+                <Button  color="primary">Create New Profile</Button>
+              </Link>
 
             }
 

@@ -63,17 +63,19 @@ export default function Sidebar(props) {
         activeClassName="active"
         key={'1'}          
       >     
-        <ListItem  button className={classes.itemLink + listItemClassesDiscovery}>         
-        
-          <PieChart
-            className={classNames(classes.itemIcon, whiteFontClasses)}
-          />
-          <ListItemText
-            primary={'Discover'}
-            className={classNames(classes.itemText, whiteFontClasses)}
-            disableTypography={true}
-          />          
-        </ListItem>
+        <div className="discoverLink">
+          <ListItem  button className={classes.itemLink + listItemClassesDiscovery}>         
+          
+            <PieChart
+              className={classNames(classes.itemIcon, whiteFontClasses)}
+            />
+            <ListItemText
+              primary={'Discover'}
+              className={classNames(classes.itemText, whiteFontClasses)}
+              disableTypography={true}
+            />          
+          </ListItem>
+        </div>
       </NavLink>
     </List>
 
@@ -119,12 +121,14 @@ export default function Sidebar(props) {
                       to={setting.layout + setting.path}
                       className={classes.item}
                       activeClassName="active"
-                      key={key}          
+                      key={key}   
+                       
                     >
+                      <div className={setting.path.includes('brand') ? 'brandProfileLink':'test'}>
 
                       <ListItem button inset="true" className={itemClass + subListItemClasses}>
                         
-                        
+                     
 
                           <setting.icon 
                             style={{color: 'white',width: "24px",
@@ -147,6 +151,8 @@ export default function Sidebar(props) {
                           disableTypography={true}
                         />
                       </ListItem>
+
+                      </div>
 
                     </NavLink>
 

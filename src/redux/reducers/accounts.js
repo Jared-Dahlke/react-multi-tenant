@@ -1,4 +1,4 @@
-import {ACCOUNTS_UPDATE_ACCOUNT, ACCOUNT_TYPES_FETCH_DATA_SUCCESS, ACCOUNTS_FETCH_DATA_SUCCESS, ACCOUNTS_SET_ACCOUNT_USERS, SET_CURRENT_ACCOUNT_ID, SET_IS_SWITCHING_ACCOUNTS, SET_CURRENT_ACCOUNT, TREE_ACCOUNTS_CONVERT_DATA_SUCCESS, EDIT_ACCOUNT_ACCOUNT_USERS_LOADING, ACCOUNTS_SET_ACCOUNT_TYPES} from '../action-types/accounts'
+import {SET_ACCOUNT_CREATED, ACCOUNTS_UPDATE_ACCOUNT, ACCOUNT_TYPES_FETCH_DATA_SUCCESS, ACCOUNTS_FETCH_DATA_SUCCESS, ACCOUNTS_SET_ACCOUNT_USERS, SET_CURRENT_ACCOUNT_ID, SET_IS_SWITCHING_ACCOUNTS, SET_CURRENT_ACCOUNT, TREE_ACCOUNTS_CONVERT_DATA_SUCCESS, EDIT_ACCOUNT_ACCOUNT_USERS_LOADING, ACCOUNTS_SET_ACCOUNT_TYPES} from '../action-types/accounts'
 import {findAccountNodeByAccountId, markAllAccountsAsCurrentFalse} from '../../utils'
 
 
@@ -96,4 +96,15 @@ export function isSwitchingAccounts(state = false, action) {
     return state;
   }
 }
+
+
+export function accountCreated(state = false, action) {
+  switch (action.type) {
+  case SET_ACCOUNT_CREATED:
+    return action.accountCreated;
+  default:
+    return state;
+  }
+}
+
 

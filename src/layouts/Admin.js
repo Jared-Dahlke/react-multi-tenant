@@ -25,7 +25,8 @@ import DiscoveryHome from '../views/Discover/DiscoveryHome.js'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
-import CreateAccount from '../views/Account/SimpleAccount/CreateAccount'
+import Joyride from 'react-joyride'
+import {getTours} from '../Tour'
 
 let ps;
 
@@ -39,17 +40,6 @@ const switchRoutes = (
       path='/admin/settings/account'
       component={Account}
     />
-
-    <Route
-      path='/admin/settings/account'
-      render={({ match: { url } }) => (
-        <>
-          <Route path={`${url}/`} component={Account} exact />
-          <Route path={`${url}/create`} component={CreateAccount} />      
-        </>
-      )}
-    />
-
 
     <Route
       path='/admin/settings/users'
@@ -102,6 +92,13 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    brandProfiles: state.brandProfiles,
+    hasBrandProfiles: state.hasBrandProfiles
+  }
+}
+
 
 
 function Admin({ ...rest }) {
@@ -110,6 +107,8 @@ function Admin({ ...rest }) {
   const [image] = React.useState(bgImage);
   const [color] = React.useState("blue");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+
  
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -162,6 +161,10 @@ function Admin({ ...rest }) {
 
   return (
     <div className={classes.wrapper}>
+      <Joyride
+        steps={getTours()}
+        run={!rest.hasBrandProfiles}
+      />
       <Sidebar
         routes={routes}
         logoText={"Sightly"}
@@ -193,4 +196,4 @@ function Admin({ ...rest }) {
   );
 }
 
-export default connect(null,mapDispatchToProps)(Admin)
+export default connect(mapStateToProps,mapDispatchToProps)(Admin)
