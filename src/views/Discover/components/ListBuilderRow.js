@@ -1,10 +1,18 @@
 import React from 'react'
 import {Table, TableCell, TableBody, TableRow, TableHead, Button} from '@material-ui/core'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import ToggleButton from '@material-ui/lab/ToggleButton'
 import Checkbox from '@material-ui/core/Checkbox'
 var numeral = require('numeral');
 
 export default function ListBuilderRow (props) {
+
+  const [view, setView] = React.useState('');
+  
+  const handleChange = (event, nextView, categoryId) => {
+    setView(nextView);
+    props.handleButtonGroupChange(nextView, categoryId)
+  };
 
   let item = props.item
 
@@ -89,13 +97,13 @@ export default function ListBuilderRow (props) {
         <ToggleButtonGroup 
         size="small" 
         aria-label="small outlined button group" 
-        onChange={()=>console.log('clicked')} 
-       
-        value="target"
+        onChange={(event, nextView)=>{handleChange(event,nextView, item.categoryId)}}
+        exclusive
+        value={view}
         >
-          <Button value="Target">Target</Button>
-          <Button value="Monitor">Monitor</Button>
-          <Button value="Block">Block</Button>
+          <ToggleButton value="Target">Target</ToggleButton>
+          <ToggleButton value="Monitor">Monitor</ToggleButton>
+          <ToggleButton value="Block">Block</ToggleButton>
         </ToggleButtonGroup>
 
             
