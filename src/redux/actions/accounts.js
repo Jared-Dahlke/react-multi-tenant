@@ -249,8 +249,8 @@ export function fetchSiteData(accountId) {
       dispatch(isSwitchingAccounts(false))    
       
       dispatch(fetchCategories())
-      dispatch(fetchChannels())
-      dispatch(fetchVideos())
+      //dispatch(fetchChannels())
+      //dispatch(fetchVideos())
 
     } catch (error) {
       console.log('caught in account action')

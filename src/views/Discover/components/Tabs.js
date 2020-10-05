@@ -99,7 +99,11 @@ export default function FullWidthTabs(props) {
       >
         <TabPanel value={value} index={0} dir={theme.direction} style={{backgroundColor: whiteColor}}>
 
-          <ListBuilderTable data={props.categories} bodyHeight={props.bodyHeight} />   
+          <ListBuilderTable 
+          data={props.categories} 
+          bodyHeight={props.bodyHeight} 
+          handleButtonGroupChange={props.handleButtonGroupChange}
+          />   
          
           
         </TabPanel>
