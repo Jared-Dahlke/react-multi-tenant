@@ -1,5 +1,6 @@
 import React from 'react'
-import {Table, TableCell, TableBody, TableRow, TableHead} from '@material-ui/core'
+import {Table, TableCell, TableBody, TableRow, TableHead, Button} from '@material-ui/core'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import Checkbox from '@material-ui/core/Checkbox'
 var numeral = require('numeral');
 
@@ -19,7 +20,7 @@ export default function ListBuilderRow (props) {
   }
   let mainCellStyle= {
     padding: 8,
-  //  verticalAlign: 'top'
+    //  verticalAlign: 'top'
    
   }
 
@@ -27,19 +28,7 @@ export default function ListBuilderRow (props) {
     
 
     <TableRow key={item.categoryId} className={props.rowStyle}>
-
-        <TableCell style={mainCellStyle}>
-
-          <Checkbox
-            checked={false}
-            //tabIndex={-1}
-            //changed={handleInternalUserChecked}
-           
-            //labelText="Internal User"                 
-          />  
-
-        </TableCell>
-                     
+          
     
         <TableCell style={mainCellStyle}>
 
@@ -91,6 +80,25 @@ export default function ListBuilderRow (props) {
                   </TableRow>
                 </TableBody>
               </Table>
+
+             
+        </TableCell>
+
+        <TableCell style={mainCellStyle}>
+
+        <ToggleButtonGroup 
+        size="small" 
+        aria-label="small outlined button group" 
+        onChange={()=>console.log('clicked')} 
+       
+        value="target"
+        >
+          <Button value="Target">Target</Button>
+          <Button value="Monitor">Monitor</Button>
+          <Button value="Block">Block</Button>
+        </ToggleButtonGroup>
+
+            
 
              
         </TableCell>

@@ -10,6 +10,7 @@ import ReactSelect from 'react-select'
 import FilterList from '@material-ui/icons/FilterList'
 import ListIcon from '@material-ui/icons/List'
 import { TableRow, TableCell, Table, TableBody, DialogContentText, Card, CardContent, Typography } from '@material-ui/core'
+import {fetchChannels} from '../../redux/actions/discover/channels'
 
 const bodyHeight = 600
 const borderRad = 4
@@ -18,7 +19,7 @@ const blockHeight = 48
 
 const styles = {
   myheader: {
-    backgroundColor: blackColor,
+    backgroundColor: whiteColor,
     borderRadius: borderRad,
     height: '85px',
     alignItems: 'center'
@@ -35,18 +36,12 @@ const styles = {
   },
   colSide: {
     marginTop: '25px',
+    padding: 8,
     height: bodyHeight,
-    backgroundColor: blackColor,
+    backgroundColor: whiteColor,
     borderRadius: borderRad
   },
-  colSideWhite: {
-    marginTop: '25px',
-    //maxHeight: bodyHeight,
-    backgroundColor: whiteColor,
-    borderRadius: borderRad,
-    padding: 10
-    
-  }
+ 
 };
 
 function TableText(props) {
@@ -62,9 +57,19 @@ const useStyles = makeStyles(styles);
 const mapStateToProps = (state) => {
   return { 
     categories: state.categories,
+    channels: state.channels,
     brandProfiles: state.brandProfiles
   };
 };
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchChannels: (categoryIds) => dispatch(fetchChannels(categoryIds))
+  
+  }
+}
+
 
 const customSelectStyles = {
   control: base => ({
@@ -78,6 +83,10 @@ const customSelectStyles = {
 function DiscoveryHome(props) {
 
   console.log(props)
+
+  const handleButtonGroupChange =(e)=>{
+    console.log(e)
+  }
 
 
   //const { height, width } = useWindowDimensions();
@@ -97,7 +106,7 @@ function DiscoveryHome(props) {
 
   
   return (
-        <GridContainer>
+        <GridContainer >
           
           
 
@@ -113,8 +122,7 @@ function DiscoveryHome(props) {
                   </div>
               
                 <ReactSelect
-                  styles={customSelectStyles}
-                
+                  styles={customSelectStyles}              
                   id={'brandProfileSelect'}
                   placeholder={'Brand Profile'}
                   options={props.brandProfiles}
@@ -152,8 +160,7 @@ function DiscoveryHome(props) {
             
             <Grid 
               container 
-              justify="space-between"    
-             
+              justify="space-evenly"                
             >
 
               <Grid  item xs={12} sm={12} md={2} >
@@ -164,7 +171,7 @@ function DiscoveryHome(props) {
                       <Grid item xs={10}>                   
                       </Grid>
                       <Grid item xs={2}>
-                        <FilterList style={{color: whiteColor}} fontSize="large"/>
+                        <FilterList style={{color: blackColor}} fontSize="large"/>
                       </Grid>
                     </Grid>
 
@@ -216,64 +223,24 @@ function DiscoveryHome(props) {
                         />
                       </Grid>
                     </Grid>
-
                   </Grid>
                 </div>
               </Grid>
 
-              <Grid  item xs={12} sm={12} md={7}>
+              <Grid  item xs={12} sm={12} md={8}>
                 <div style={styles.col}>
                    
-                        <Tabs bodyHeight={bodyHeight} borderRad={borderRad} categories={props.categories}/>
+                        <Tabs 
+                        bodyHeight={bodyHeight} 
+                        borderRad={borderRad} 
+                        categories={props.categories}
+                        handleButtonGroupChange={handleButtonGroupChange}
+                        />
                     
                 </div>
               </Grid>
 
-              <Grid  item xs={12} sm={12} md={2}>
-                <div style={styles.colSideWhite}>
-                 
-                  
-                        <Grid item xs={12} sm={12} md={12}>
-                        
-                              <Typography variant="subtitle2"  color="textSecondary" gutterBottom>
-                                Channel Research Summary
-                              </Typography>                                        
-                              <Typography variant="caption">
-                              <b>Objective:</b> Awareness <br/>
-                              <b>Categories:</b> 5 <br/>
-                              <b>Channels:</b> 5,000 <br/>
-                              <b>Videos:</b> 100,000 <br/>
-                              <b>Countries:</b> US, CA, MX <br/>
-                              <b>Languages:</b> En, Sp, Fr <br/>
-                              <b>Kids Content:</b> No <br/>
-                              <b>Disabled Comments:</b> No <br/>
-                              <b>Creator Types:</b> All <br/>
-                              <b>Avg. Alignment Score:</b> Low Risk <br/>
-                              <b>Avg. Clean Rating Score:</b> Low Risk <br/>
-                              </Typography>
-                            <br/>
-                                            
-                              <Typography variant="subtitle2" color="textSecondary" gutterBottom>
-                                Ad Insights Summary
-                              </Typography>                                        
-                              <Typography variant="caption">
-                              <b>Total Videos:</b>  <br/>
-                              <b>Total Video Views:</b>  <br/>
-                              <b>Comments:</b>  <br/>
-                              <b>Likes:</b> <br/>
-                              <b>Dislikes:</b>  <br/>
-                              <b>Favorites:</b><br/>
-                              <b>Avg. CPM:</b>  <br/>
-                              <b>Avg. CPC:</b>  <br/>
-                              <b>Avg CPV:</b>  <br/>
-                              <b>Avg. CPA:</b>                      
-                              </Typography>
-                          
-                          </Grid>
-                   
-                     
-                </div>
-              </Grid>
+              
 
             </Grid>
 
@@ -285,4 +252,4 @@ function DiscoveryHome(props) {
   );
 }
 
-export default connect(mapStateToProps, null)(DiscoveryHome)
+export default connect(mapStateToProps, mapDispatchToProps)(DiscoveryHome)

@@ -26,12 +26,12 @@ export default function ListBuilderSearchBar (props) {
     <GridContainer style={{backgroundColor: whiteColor,  height: 50, alignItems: 'center'}}>
 
         <Grid item xs={false} sm={8} md={4} style={{paddingLeft: 12}}>  
-          <FormControlLabel
+         {/** <FormControlLabel
             value="end"
             control={<Checkbox style={{paddingRight: 24}}/>}
             label="Select All"
             labelPlacement="end"
-          />     
+          />     */} 
           
         </Grid>
 
@@ -43,6 +43,7 @@ export default function ListBuilderSearchBar (props) {
         <GridItem xs={12} sm={4} md={4}>                          
           <Select
             components={{ DropdownIndicator }}
+            placeholder='Search...'
             // pass other props
            
           />

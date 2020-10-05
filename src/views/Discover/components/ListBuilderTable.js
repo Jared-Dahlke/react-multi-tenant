@@ -52,6 +52,7 @@ export default function ListBuilderTable(props) {
                     rowStyle={classes.tableRow}
                     item={item}
                     key={index}
+                    handleButtonGroupChange={props.handleButtonGroupChange}
                     />          
 
                   )
