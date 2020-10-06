@@ -147,6 +147,7 @@ export function fetchVideos(channels, categories) {
           }
 
         }
+        
         dispatch(videosFetchDataSuccess(filteredVideos))
       }
      

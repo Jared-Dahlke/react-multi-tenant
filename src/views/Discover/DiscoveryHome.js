@@ -13,6 +13,8 @@ import { TableRow, TableCell, Table, TableBody, DialogContentText, Card, CardCon
 import {fetchChannels, categoriesFetchDataSuccess, channelsFetchDataSuccess, fetchVideos, videosFetchDataSuccess} from '../../redux/actions/discover/channels'
 import countryList from 'react-select-country-list'
 import numeral from 'numeral'
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Button from '../../components/CustomButtons/Button'
 
 const bodyHeight = 600
 const borderRad = 4
@@ -79,13 +81,16 @@ const customSelectStyles = {
   })
 };
 
+const downloadClick = ()=> {
+  window.location.href = 'https://storage.googleapis.com/sightlyoutcomeintelligence_temp/channels_and_videos_sample.xlsx'
+                         
+}
 
 
 function DiscoveryHome(props) {
 
   const [tabIndex, setTabIndex] = React.useState(0)
-  const [filters, setFilters] = React.useState({country: 'US'})
-
+  const [filters, setFilters] = React.useState({})
 
   const countries = countryList().getData()
   const languages= [
@@ -125,6 +130,12 @@ function DiscoveryHome(props) {
     console.log(prevFilters)
 
     setFilters(prevFilters)
+
+   
+    handleButtonGroupChange('','dummyId','Channel')
+    
+    props.fetchChannels(props.categories, prevFilters)
+
     // trigger regather
   }
 
@@ -244,7 +255,7 @@ function DiscoveryHome(props) {
   const channelsCount = React.useMemo(()=> selectedCounts(props.channels), [props.channels])
 
   
-  const disableFilters = tabIndex > 0 ? false : true
+  const disableFilters = true  //tabIndex > 0 ? false : true
 
   const classes = useStyles();
 
@@ -473,13 +484,13 @@ function DiscoveryHome(props) {
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Alignment Score'}
-                        
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Clean Rating Score'}
-                      
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                     </Grid>
@@ -502,11 +513,18 @@ function DiscoveryHome(props) {
                       selectedVideosCount={selectedVideosCount}
                       changeTabIndex={(index)=>{setTabIndex(index)}}
                     />
+
+                  <Button color="primary" onClick={downloadClick}>           
+                    <SaveAlt/>
+                    Save & Download List              
+                  </Button>
                     
                 </div>
               </Grid>
 
-              
+       
+
+            
 
             </Grid>
 
