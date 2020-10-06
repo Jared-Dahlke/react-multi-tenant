@@ -1,7 +1,7 @@
 
 import {combineReducers} from 'redux'
 import {roles, rolesHasErrored, rolesIsLoading, rolesPermissionsIsLoading, rolesPermissions, rolesPermissionsHasErrored} from './roles'
-import {authToken, isLoggedIn, showAlert, user, userProfileIsLoading, successPasswordChanged} from './auth'
+import {authToken, isLoggedIn, alert, user, userProfileIsLoading} from './auth'
 import {users, usersHasErrored, userDeleted, userDeletedError, userAdded, usersIsLoading, editUserUserAccountsLoading} from './users'
 import {accounts, currentAccountId, isSwitchingAccounts, treeAccounts, editAccountAccountUsersLoading, accountTypes, accountCreated} from './accounts'
 import {brandProfiles, brandProfilesIsLoading, hasBrandProfiles} from './brandProfiles'
@@ -17,7 +17,7 @@ export default combineReducers({
   rolesIsLoading,
   rolesPermissionsIsLoading,
   isLoggedIn,
-  showAlert,
+  alert,
   users,
   usersHasErrored,
   user,
@@ -30,7 +30,6 @@ export default combineReducers({
   currentAccountId,
   isSwitchingAccounts,
   userProfileIsLoading,
-  successPasswordChanged,
   treeAccounts,
   editUserUserAccountsLoading,
   editAccountAccountUsersLoading,
