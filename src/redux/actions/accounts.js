@@ -17,7 +17,7 @@ import {userProfileFetchData, setAuthToken} from '../actions/auth'
 import {usersFetchData, usersFetchDataSuccess, usersIsLoading, editUserUserAccountsLoading} from '../actions/users'
 import {rolesFetchData, rolesFetchDataSuccess, rolesPermissionsFetchData, rolesPermissionsFetchDataSuccess, rolesPermissionsIsLoading} from '../actions/roles'
 import {brandProfilesFetchDataSuccess, fetchBrandProfiles, brandProfilesIsLoading} from '../actions/brandProfiles'
-import {fetchCategories, fetchChannels, fetchVideos} from '../actions/discover/channels.js'
+import {fetchCategories} from '../actions/discover/channels.js'
 import {findAccountNodeByAccountId} from '../../utils'
 
 
@@ -247,8 +247,6 @@ export function fetchSiteData(accountId) {
       dispatch(isSwitchingAccounts(false))    
       
       dispatch(fetchCategories())
-      //dispatch(fetchChannels())
-      //dispatch(fetchVideos())
 
     } catch (error) {
       console.log('caught in account action')
