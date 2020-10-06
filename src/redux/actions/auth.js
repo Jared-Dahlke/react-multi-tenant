@@ -152,20 +152,11 @@ export function resetPassword(email) {
 
       if (result.status === 200) {
         dispatch(setAlert({show: true, message: "Reset password email sent. Check Your email.", severity: "success"}));
-        setTimeout(() => {
-          dispatch(setAlert({show: false}));
-        }, 5000);
       } else {
         dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
-        setTimeout(() => {
-          dispatch(setAlert({show: false}));
-        }, 5000);
       }
     } catch (error) {
       dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
-      setTimeout(() => {
-        dispatch(setAlert({show: false}));
-      }, 5000);
     }
   };
 }
@@ -186,15 +177,9 @@ export function changePassword(password, userId, token) {
         }, 5000);
       } else {
         dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
-        setTimeout(() => {
-          dispatch(setAlert({show: false}));
-        }, 5000);
       }
     } catch (error) {
       dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
-      setTimeout(() => {
-        dispatch(setAlert({show: false}));
-      }, 5000);  
     }
   };
 }

@@ -10,6 +10,8 @@ import GridItem from "../components/Grid/GridItem.js";
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {setAlert, changePassword} from '../redux/actions/auth';
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
 import Alert from '@material-ui/lab/Alert';
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import Button from '../components/CustomButtons/Button'
@@ -107,7 +109,6 @@ function PasswordChange(props) {
           <img src={logo} alt="logo" style={logoStyle} />
          
           <form className={classes.form} noValidate>
-            { props.alert.show && <Alert severity={props.alert.severity} onClose={() => props.setAlert({show: false})}>{props.alert.message}</Alert> }
             <Grid container spacing={2}>
               <Grid item xs={12}>
 
@@ -168,6 +169,15 @@ function PasswordChange(props) {
               Change Password
             </Button>
 
+            <Snackbar
+              autoHideDuration={5000}
+              place="bc"
+              icon={AddAlert}
+              open={props.alert.show}
+              onClose={() => props.setAlert({show: false})}
+            >
+              <Alert severity={props.alert.severity}>{props.alert.message}</Alert>
+            </Snackbar>
           </form>
         </div>
     

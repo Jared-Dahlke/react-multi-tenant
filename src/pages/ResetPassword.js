@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {setAlert, resetPassword} from '../redux/actions/auth.js';
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
 import Alert from '@material-ui/lab/Alert';
 import {isEmailError} from "../validations";
 import CustomInput from '../components/CustomInput/CustomInput'
@@ -76,7 +78,6 @@ function PasswordReset(props) {
           <img src={logo} alt="logo" style={logoStyle} />
          
           <form className={classes.form} noValidate>
-            { props.alert.show && <Alert severity={props.alert.severity} onClose={() => props.setAlert({show: false})}>{props.alert.message}</Alert> }
             <Grid container spacing={2}>
               <Grid item xs={12}>
 
@@ -109,6 +110,16 @@ function PasswordReset(props) {
             >
               Reset Password
             </Button>
+
+            <Snackbar
+              autoHideDuration={5000}
+              place="bc"
+              icon={AddAlert}
+              open={props.alert.show}
+              onClose={() => props.setAlert({show: false})}
+            >
+              <Alert severity={props.alert.severity}>{props.alert.message}</Alert>
+            </Snackbar>
           </form>
         </div>
 

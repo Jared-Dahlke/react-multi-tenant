@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {login, setAlert} from '../redux/actions/auth.js'
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
 import Alert from '@material-ui/lab/Alert';
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import { whiteColor } from "../assets/jss/material-dashboard-react.js";
@@ -85,7 +87,6 @@ function Login(props) {
          
          
           <form className={classes.form} noValidate>
-            { props.alert.show && <Alert severity={props.alert.severity} onClose={() => props.setAlert({show: false})}>{props.alert.message}</Alert> }
 
             <CustomInput
               labelText="Email address"
@@ -136,6 +137,16 @@ function Login(props) {
               </Grid>
              
             </Grid>
+
+            <Snackbar
+              autoHideDuration={5000}
+              place="bc"
+              icon={AddAlert}
+              open={props.alert.show}
+              onClose={() => props.setAlert({show: false})}
+            >
+              <Alert severity={props.alert.severity}>{props.alert.message}</Alert>
+            </Snackbar>
           </form>
         </div>
       
