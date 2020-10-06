@@ -3,9 +3,55 @@ import {Table, TableCell, TableBody, TableRow, TableHead, Button} from '@materia
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import Checkbox from '@material-ui/core/Checkbox'
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { successColor, dangerColor, warningColor } from '../../../assets/jss/material-dashboard-react'
 var numeral = require('numeral');
 
 export default function ListBuilderRow (props) {
+
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+     // backgroundColor: 'blue', //theme.palette.background.paper,
+    
+      backgroundColor:'yellow',
+      "&.MuiToggleButton-root > .Mui-selected": {
+        backgroundColor: "blue"
+      }
+      
+    },
+    selectedButton: {
+      backgroundColor: 'blue',
+      color: 'yellow'
+    },
+    targetGreen: {
+      "&.Mui-selected": {
+        backgroundColor: successColor[0]
+      },
+      "&.Mui-selected:hover": {
+        backgroundColor: successColor[0]
+      },
+    },
+    monitorYellow: {
+      "&.Mui-selected": {
+        backgroundColor: 'yellow'
+      },
+      "&.Mui-selected:hover": {
+        backgroundColor: 'yellow'
+      },
+    },
+    blockRed: {
+      "&.Mui-selected": {
+        backgroundColor: dangerColor[0]
+      },
+      "&.Mui-selected:hover": {
+        backgroundColor: dangerColor[0]
+      },
+    }
+  }));
+
+  const classes = useStyles();
+
 
   const [view, setView] = React.useState('');
   
@@ -20,6 +66,10 @@ export default function ListBuilderRow (props) {
   let channels = numeral(item.channels).format('0a')
   let videos = numeral(item.channelVideos).format('0a')
 
+  let cpm = numeral(item.averageCPM).format('$00.00')
+  let cpc = numeral(item.averageCPC).format('$.000')
+  let cpv = numeral(item.averageCPV).format('$.000')
+
   let countStyle= {
     border: 0,
     margin: 0,
@@ -31,6 +81,7 @@ export default function ListBuilderRow (props) {
     //  verticalAlign: 'top'
    
   }
+
 
   return (
     
@@ -104,19 +155,19 @@ export default function ListBuilderRow (props) {
                       Perf:
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPM: $2.3
+                      Avg. CPM: {cpm}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPC: $1
+                      Avg. CPC: {cpc}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPV: $3.4
+                      Avg. CPV: {cpv}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPCV: $3.4
+                      Avg. CPCV: -
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPA: $3.4
+                      Avg. CPA: -
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -133,10 +184,11 @@ export default function ListBuilderRow (props) {
             onChange={(event, nextView)=>{handleChange(event,nextView, item[props.levelId])}}
             exclusive
             value={item.toggleValue}
+            
           >
-            <ToggleButton value="Target">Target</ToggleButton>
-            <ToggleButton value="Monitor">Monitor</ToggleButton>
-            <ToggleButton value="Block">Block</ToggleButton>
+            <ToggleButton value="Target" classes={{selected: classes.targetGreen}}>Target</ToggleButton>
+            <ToggleButton value="Monitor" classes={{selected: classes.monitorYellow}}>Monitor</ToggleButton>
+            <ToggleButton value="Block" classes={{selected: classes.blockRed}}>Block</ToggleButton>
           </ToggleButtonGroup>
   
         </TableCell>

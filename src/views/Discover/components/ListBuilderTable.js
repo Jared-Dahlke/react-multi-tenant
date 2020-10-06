@@ -55,6 +55,9 @@ export default function ListBuilderTable(props) {
                       handleButtonGroupChange={props.handleButtonGroupChange}
                       level={props.level}
                       levelId={props.levelId}
+                      selectedCategoriesCount={props.selectedCategoriesCount}
+                      selectedChannelsCount={props.selectedChannelsCount}
+                      selectedVideosCount={props.selectedVideosCount}
                     />          
 
                   )

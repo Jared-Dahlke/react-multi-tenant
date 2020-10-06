@@ -117,13 +117,26 @@ function DiscoveryHome(props) {
 
   }
 
+  const getSelectedCount=(items)=>{
+    let mycount = 0
+    for (const item of items) {
+      if(item.toggleValue && item.toggleValue.length > 1) {
+        mycount = mycount + 1
+      }
+    }
+    return mycount
+  }
+
   //const { height, width } = useWindowDimensions();
   
   //console.log(windowHeight)
 
 
   //const categoriesWithToggleValue = React.useMemo(() => getCategoriesWithToggleValue(props.categories), [props.categories, selectedCategories]);
-  //const channelsWithToggleValue = React.useMemo(() => getChannelsWithToggleValue(props.channels), [props.channels, selectedCategories]);
+  const selectedCategoriesCount = React.useMemo(() => getSelectedCount(props.categories), [props.categories]);
+  const selectedChannelsCount = React.useMemo(() => getSelectedCount(props.channels), [props.channels]);
+  const selectedVideosCount = React.useMemo(() => getSelectedCount(props.videos), [props.videos]);
+
 
   
   //const allUsers = [{value: 1, label: 'Joe'},{value: 2, label: 'Sue'},{value: 3, label: 'John'}]
@@ -272,6 +285,9 @@ function DiscoveryHome(props) {
                         channels={props.channels}
                         videos={props.videos}
                         handleButtonGroupChange={handleButtonGroupChange}
+                        selectedCategoriesCount={selectedCategoriesCount}
+                        selectedChannelsCount={selectedChannelsCount}
+                        selectedVideosCount={selectedVideosCount}
                         />
                     
                 </div>
