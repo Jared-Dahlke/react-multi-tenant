@@ -97,7 +97,7 @@ export default function ListBuilderRow (props) {
                 </h3> 
 
               : props.level === 'Channel' ?
-                <div>
+                <div> {item.country}
                   <h3 style={{margin: 0, padding: 0}}>
                     {item.title}
                   </h3> 

@@ -67,6 +67,7 @@ export default function FullWidthTabs(props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    props.changeTabIndex(newValue)
   };
 
   const handleChangeIndex = (index) => {

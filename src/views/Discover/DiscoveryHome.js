@@ -13,6 +13,8 @@ import { TableRow, TableCell, Table, TableBody, DialogContentText, Card, CardCon
 import {fetchChannels, categoriesFetchDataSuccess, channelsFetchDataSuccess, fetchVideos, videosFetchDataSuccess} from '../../redux/actions/discover/channels'
 import countryList from 'react-select-country-list'
 import numeral from 'numeral'
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Button from '../../components/CustomButtons/Button'
 
 const bodyHeight = 600
 const borderRad = 4
@@ -24,7 +26,7 @@ const styles = {
     backgroundColor: blackColor,
     borderRadius: borderRad,
     height: '150px',
-    alignItems: 'stretch',
+    alignItems: 'flex-end',
     justify: "flex-start"
   },
   mybody: {
@@ -40,7 +42,7 @@ const styles = {
   colSide: {
     marginTop: '25px',
     padding: 8,
-    height: bodyHeight,
+   // height: bodyHeight,
     backgroundColor: whiteColor,
     borderRadius: borderRad
   },
@@ -62,9 +64,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchChannels: (categories) => dispatch(fetchChannels(categories)),
+    fetchChannels: (categories, filters) => dispatch(fetchChannels(categories, filters)),
     categoriesFetchDataSuccess: (categories) => dispatch(categoriesFetchDataSuccess(categories)),
-    channelsFetchDataSuccess: (channels) => dispatch(channelsFetchDataSuccess(channels)),
+    channelsFetchDataSuccess: (payload) => dispatch(channelsFetchDataSuccess(payload)),
     videosFetchDataSuccess: (videos) => dispatch(videosFetchDataSuccess(videos)),
     fetchVideos: (channels, categories) => dispatch(fetchVideos(channels, categories))
   }
@@ -79,14 +81,16 @@ const customSelectStyles = {
   })
 };
 
-function TableText(props) {
-  return (
-    <DialogContentText style={{color: props.header ? blackColor : '', marginBottom: 0, fontSize: '10px'}}>{props.text}</DialogContentText>
-  )
+const downloadClick = ()=> {
+  window.location.href = 'https://storage.googleapis.com/sightlyoutcomeintelligence_temp/channels_and_videos_sample.xlsx'
+                         
 }
 
 
 function DiscoveryHome(props) {
+
+  const [tabIndex, setTabIndex] = React.useState(0)
+  const [filters, setFilters] = React.useState({})
 
   const countries = countryList().getData()
   const languages= [
@@ -108,11 +112,32 @@ function DiscoveryHome(props) {
     {value:'Turkish', label: 'Turkish'},
     {value:'Vietnamese', label: 'Vietnamese'}
   ]
-
+  
   const boolOptions = [
     {value: 'True', label: 'True'},
     {value: 'False', label: 'False'}
   ]
+
+  const handleFilterChange = (e, type)=>{
+    console.log('handle filter change')
+    console.log(e)
+    let prevFilters = JSON.parse(JSON.stringify(filters))
+    if (type === 'Country') {
+      prevFilters.country = e.value
+    }
+
+    console.log('finished filters:')
+    console.log(prevFilters)
+
+    setFilters(prevFilters)
+
+   
+    handleButtonGroupChange('','dummyId','Channel')
+    
+    props.fetchChannels(props.categories, prevFilters)
+
+    // trigger regather
+  }
 
   const handleButtonGroupChange =(value, id, level)=>{
     if(level === 'Category') {
@@ -124,7 +149,7 @@ function DiscoveryHome(props) {
         }
       }
       props.categoriesFetchDataSuccess(categoriesCopy)
-      props.fetchChannels(categoriesCopy)
+      props.fetchChannels(categoriesCopy, filters)
     }
 
     if(level === 'Channel') {
@@ -134,7 +159,10 @@ function DiscoveryHome(props) {
           channel.toggleValue = value
         }
       }
-      props.channelsFetchDataSuccess(channelsCopy)
+
+      let payload = {channels: channelsCopy, filters: filters}
+      
+      props.channelsFetchDataSuccess(payload)
       props.fetchVideos(channelsCopy, props.categories)
     }
 
@@ -177,7 +205,7 @@ function DiscoveryHome(props) {
       total = total + item[field]
     }
 
-    let avg = numeral(total / targetedItems.length).format('00.00')
+    let avg = numeral(total / targetedItems.length).format('$00.00')
 
     return avg
 
@@ -215,7 +243,6 @@ function DiscoveryHome(props) {
   //console.log(windowHeight)
 
 
-  //const categoriesWithToggleValue = React.useMemo(() => getCategoriesWithToggleValue(props.categories), [props.categories, selectedCategories]);
   const selectedCategoriesCount = React.useMemo(() => getSelectedCount(props.categories), [props.categories]);
   const selectedChannelsCount = React.useMemo(() => getSelectedCount(props.channels), [props.channels]);
   const selectedVideosCount = React.useMemo(() => getSelectedCount(props.videos), [props.videos]);
@@ -228,9 +255,7 @@ function DiscoveryHome(props) {
   const channelsCount = React.useMemo(()=> selectedCounts(props.channels), [props.channels])
 
   
-  //const allUsers = [{value: 1, label: 'Joe'},{value: 2, label: 'Sue'},{value: 3, label: 'John'}]
-
-
+  const disableFilters = true  //tabIndex > 0 ? false : true
 
   const classes = useStyles();
 
@@ -243,30 +268,25 @@ function DiscoveryHome(props) {
            <GridItem xs={12} sm={12} md={12} style={{height: bodyHeight + 80, backgroundColor: blackColor}}>
 
             <Grid container style={styles.myheader}>
-              <Grid item xs={12} sm={12} md={3}  >
-              
-              <div >
-              
-                 
-                <ReactSelect
-                  styles={customSelectStyles}              
-                  id={'brandProfileSelect'}
-                  placeholder={'Brand Profile'}
-                  options={props.brandProfiles}
-                  getOptionLabel ={(option)=>option.brandName}
-                  getOptionValue ={(option)=>option.brandProfileId}
-                  //value={value}
-               //   onChange={this.handleChange}
-               //   onBlur={this.handleBlur}
-                
-                  isMulti={false}
-                  isDisabled={false}
-                  isClearable={false}
-                  backspaceRemovesValue={false}
-                  components={{ ClearIndicator: null }}
-                />
-                </div>
-              </Grid>
+                <Grid item xs={12} sm={12} md={3}  >                         
+                    <ReactSelect
+                      styles={customSelectStyles}              
+                      id={'brandProfileSelect'}
+                      placeholder={'Brand Profile'}
+                      options={props.brandProfiles}
+                      getOptionLabel ={(option)=>option.brandName}
+                      getOptionValue ={(option)=>option.brandProfileId}
+                      //value={value}
+                  //   onChange={this.handleChange}
+                  //   onBlur={this.handleBlur}
+                    
+                      isMulti={false}
+                      isDisabled={false}
+                      isClearable={false}
+                      backspaceRemovesValue={false}
+                      components={{ ClearIndicator: null }}
+                    />             
+                </Grid>
 
               <Grid item item xs={12} sm={12} md={1}>
 
@@ -418,49 +438,59 @@ function DiscoveryHome(props) {
                         <ReactSelect
                           placeholder={'Country'}
                           options={countries}
+                          onChange={(e)=>{handleFilterChange(e, 'Country')}}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Video Language'}
                           options={languages}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Category'}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Kids Content'}
                           options={boolOptions}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Disabled Comments'}
                           options={boolOptions}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Channel Filter'}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Creator Type'}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Alignment Score'}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Clean Rating Score'}
+                          isDisabled={disableFilters}
                         />
                       </Grid>
                     </Grid>
@@ -471,22 +501,30 @@ function DiscoveryHome(props) {
               <Grid  item xs={12} sm={12} md={10}>
                 <div style={styles.col}>
                    
-                        <Tabs 
-                        bodyHeight={bodyHeight} 
-                        borderRad={borderRad} 
-                        categories={props.categories}
-                        channels={props.channels}
-                        videos={props.videos}
-                        handleButtonGroupChange={handleButtonGroupChange}
-                        selectedCategoriesCount={selectedCategoriesCount}
-                        selectedChannelsCount={selectedChannelsCount}
-                        selectedVideosCount={selectedVideosCount}
-                        />
+                    <Tabs 
+                      bodyHeight={bodyHeight} 
+                      borderRad={borderRad} 
+                      categories={props.categories}
+                      channels={props.channels}
+                      videos={props.videos}
+                      handleButtonGroupChange={handleButtonGroupChange}
+                      selectedCategoriesCount={selectedCategoriesCount}
+                      selectedChannelsCount={selectedChannelsCount}
+                      selectedVideosCount={selectedVideosCount}
+                      changeTabIndex={(index)=>{setTabIndex(index)}}
+                    />
+
+                  <Button color="primary" onClick={downloadClick}>           
+                    <SaveAlt/>
+                    Save & Download List              
+                  </Button>
                     
                 </div>
               </Grid>
 
-              
+       
+
+            
 
             </Grid>
 
