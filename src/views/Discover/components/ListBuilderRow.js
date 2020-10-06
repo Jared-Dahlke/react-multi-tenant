@@ -66,6 +66,10 @@ export default function ListBuilderRow (props) {
   let channels = numeral(item.channels).format('0a')
   let videos = numeral(item.channelVideos).format('0a')
 
+  let cpm = numeral(item.averageCPM).format('$00.00')
+  let cpc = numeral(item.averageCPC).format('$.000')
+  let cpv = numeral(item.averageCPV).format('$.000')
+
   let countStyle= {
     border: 0,
     margin: 0,
@@ -77,6 +81,7 @@ export default function ListBuilderRow (props) {
     //  verticalAlign: 'top'
    
   }
+
 
   return (
     
@@ -150,19 +155,19 @@ export default function ListBuilderRow (props) {
                       Perf:
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPM: $2.3
+                      Avg. CPM: {cpm}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPC: $1
+                      Avg. CPC: {cpc}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPV: $3.4
+                      Avg. CPV: {cpv}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPCV: $3.4
+                      Avg. CPCV: -
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPA: $3.4
+                      Avg. CPA: -
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -179,11 +184,7 @@ export default function ListBuilderRow (props) {
             onChange={(event, nextView)=>{handleChange(event,nextView, item[props.levelId])}}
             exclusive
             value={item.toggleValue}
-            classes={{
-            // class name, e.g. `classes-nesting-root-x`
-             
-              //label: classes.label, // class name, e.g. `classes-nesting-label-x`
-            }}
+            
           >
             <ToggleButton value="Target" classes={{selected: classes.targetGreen}}>Target</ToggleButton>
             <ToggleButton value="Monitor" classes={{selected: classes.monitorYellow}}>Monitor</ToggleButton>

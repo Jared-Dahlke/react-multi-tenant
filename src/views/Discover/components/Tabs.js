@@ -91,8 +91,8 @@ export default function FullWidthTabs(props) {
           aria-label="full width tabs example"
         >
           <Tab label={categoryLabel} {...a11yProps(0)} />
-          <Tab label={channelLabel} {...a11yProps(1)} />
-          <Tab label={videoLabel} {...a11yProps(2)} />
+          <Tab label={channelLabel} {...a11yProps(1)} disabled={props.selectedCategoriesCount < 1} />
+          <Tab label={videoLabel} {...a11yProps(2)} disabled={props.selectedCategoriesCount < 1} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -108,7 +108,7 @@ export default function FullWidthTabs(props) {
             bodyHeight={props.bodyHeight} 
             handleButtonGroupChange={props.handleButtonGroupChange}
             level="Category"
-            levelId="categoryId"
+            levelId="categoryId"          
           />   
 
         </TabPanel>
@@ -119,7 +119,7 @@ export default function FullWidthTabs(props) {
             bodyHeight={props.bodyHeight} 
             handleButtonGroupChange={props.handleButtonGroupChange}
             level="Channel"
-            levelId="channelId"
+            levelId="channelId"       
           />
         </TabPanel>
 
@@ -129,7 +129,7 @@ export default function FullWidthTabs(props) {
             bodyHeight={props.bodyHeight} 
             handleButtonGroupChange={props.handleButtonGroupChange}
             level="Video"
-            levelId="videoId"
+            levelId="videoId"          
           />
         </TabPanel>
       </SwipeableViews>
