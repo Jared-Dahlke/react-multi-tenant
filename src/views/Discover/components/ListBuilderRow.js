@@ -155,19 +155,19 @@ export default function ListBuilderRow (props) {
                       Perf:
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPM: {cpm}
+                      CPM: {cpm}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPC: {cpc}
+                      CPC: {cpc}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPV: {cpv}
+                      CPV: {cpv}
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPCV: -
+                      CPCV: -
                     </TableCell>
                     <TableCell style={countStyle}>
-                      Avg. CPA: -
+                      CPA: -
                     </TableCell>
                   </TableRow>
                 </TableBody>
