@@ -158,6 +158,20 @@ function UserProfile({
     return false;
   };
 
+  const passwordIsValid = () => {
+    let isValid = true;
+    for (var prop of v.invalidPasswordObject(newPassword)) {
+      if (!prop.satisfied){
+        isValid = false;
+        break;
+      }
+    }
+    if (newPassword === confirmNewPassword)
+      return isValid;
+    else
+      return false;
+  };
+
   const { firstName, lastName, email, company } = userForm;
   const { oldPassword, newPassword, confirmNewPassword } = passwordObject;
 
@@ -364,7 +378,7 @@ function UserProfile({
                   <Button color="primary" onClick={disablePasswordEdit}>
                     Cancel
                   </Button>
-                  <Button color="primary" onClick={submitPassword}>
+                  <Button color="primary" disabled={!passwordIsValid()} onClick={submitPassword}>
                     Save
                   </Button>
                 </CardFooter>
