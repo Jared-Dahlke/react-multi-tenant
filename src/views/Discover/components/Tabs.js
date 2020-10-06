@@ -73,6 +73,10 @@ export default function FullWidthTabs(props) {
     setValue(index);
   };
 
+  let categoryLabel = `Categories (${props.selectedCategoriesCount}/15)`
+  let channelLabel = `Channels (${props.selectedChannelsCount}/304k)`
+  let videoLabel = `Videos (${props.selectedVideosCount}/698k)`
+
   
 
   return (
@@ -86,9 +90,9 @@ export default function FullWidthTabs(props) {
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="Categories (2/17)" {...a11yProps(0)} />
-          <Tab label="Channels (10K/25M)" {...a11yProps(1)} />
-          <Tab label="Videos (2M/500M)" {...a11yProps(2)} />
+          <Tab label={categoryLabel} {...a11yProps(0)} />
+          <Tab label={channelLabel} {...a11yProps(1)} />
+          <Tab label={videoLabel} {...a11yProps(2)} />
         </Tabs>
       </AppBar>
       <SwipeableViews

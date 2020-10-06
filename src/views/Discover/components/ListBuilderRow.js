@@ -3,9 +3,55 @@ import {Table, TableCell, TableBody, TableRow, TableHead, Button} from '@materia
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import Checkbox from '@material-ui/core/Checkbox'
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { successColor, dangerColor, warningColor } from '../../../assets/jss/material-dashboard-react'
 var numeral = require('numeral');
 
 export default function ListBuilderRow (props) {
+
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+     // backgroundColor: 'blue', //theme.palette.background.paper,
+    
+      backgroundColor:'yellow',
+      "&.MuiToggleButton-root > .Mui-selected": {
+        backgroundColor: "blue"
+      }
+      
+    },
+    selectedButton: {
+      backgroundColor: 'blue',
+      color: 'yellow'
+    },
+    targetGreen: {
+      "&.Mui-selected": {
+        backgroundColor: successColor[0]
+      },
+      "&.Mui-selected:hover": {
+        backgroundColor: successColor[0]
+      },
+    },
+    monitorYellow: {
+      "&.Mui-selected": {
+        backgroundColor: 'yellow'
+      },
+      "&.Mui-selected:hover": {
+        backgroundColor: 'yellow'
+      },
+    },
+    blockRed: {
+      "&.Mui-selected": {
+        backgroundColor: dangerColor[0]
+      },
+      "&.Mui-selected:hover": {
+        backgroundColor: dangerColor[0]
+      },
+    }
+  }));
+
+  const classes = useStyles();
+
 
   const [view, setView] = React.useState('');
   
@@ -133,10 +179,15 @@ export default function ListBuilderRow (props) {
             onChange={(event, nextView)=>{handleChange(event,nextView, item[props.levelId])}}
             exclusive
             value={item.toggleValue}
+            classes={{
+            // class name, e.g. `classes-nesting-root-x`
+             
+              //label: classes.label, // class name, e.g. `classes-nesting-label-x`
+            }}
           >
-            <ToggleButton value="Target">Target</ToggleButton>
-            <ToggleButton value="Monitor">Monitor</ToggleButton>
-            <ToggleButton value="Block">Block</ToggleButton>
+            <ToggleButton value="Target" classes={{selected: classes.targetGreen}}>Target</ToggleButton>
+            <ToggleButton value="Monitor" classes={{selected: classes.monitorYellow}}>Monitor</ToggleButton>
+            <ToggleButton value="Block" classes={{selected: classes.blockRed}}>Block</ToggleButton>
           </ToggleButtonGroup>
   
         </TableCell>
