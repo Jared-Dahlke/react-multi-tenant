@@ -1,4 +1,4 @@
-import {CATEGORIES_FETCH_DATA_SUCCESS, CHANNELS_FETCH_DATA_SUCCESS} from '../../action-types/discover/channels'
+import {CATEGORIES_FETCH_DATA_SUCCESS, CHANNELS_FETCH_DATA_SUCCESS, VIDEOS_FETCH_DATA_SUCCESS} from '../../action-types/discover/channels'
 
 export function categories(state = [], action) {
   switch (action.type) {
@@ -15,6 +15,17 @@ export function channels(state = [], action) {
   case CHANNELS_FETCH_DATA_SUCCESS:
     //TODO: the getchannels api should accept categories as an input, for now i will filter by categories here
     return action.channels;
+  default:
+    return state;
+  }
+}
+
+
+export function videos(state = [], action) {
+  switch (action.type) {
+  case VIDEOS_FETCH_DATA_SUCCESS:
+    //TODO: the getchannels api should accept categories as an input, for now i will filter by categories here
+    return action.videos;
   default:
     return state;
   }

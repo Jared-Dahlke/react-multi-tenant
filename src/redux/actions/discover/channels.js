@@ -3,12 +3,11 @@
 //GET/discover/videos
 import axios from "../../../axiosConfig";
 import config from "../../../config.js";
-import {CATEGORIES_FETCH_DATA_SUCCESS, CHANNELS_FETCH_DATA_SUCCESS} from '../../action-types/discover/channels'
+import {CATEGORIES_FETCH_DATA_SUCCESS, CHANNELS_FETCH_DATA_SUCCESS, VIDEOS_FETCH_DATA_SUCCESS} from '../../action-types/discover/channels'
 
 const apiBase = config.apiGateway.URL;
 
 export function fetchCategories() {
-  console.log('fetch categories')
   let url =  apiBase + `/discover/categories`
   return async (dispatch) => {
     try {
@@ -39,10 +38,16 @@ export function categoriesFetchDataSuccess(categories) {
 }
 
 
+function getToggleValue(categoryId, categories){
+  for (const category of categories) {
+    if(category.categoryId === categoryId) {
+      return category.toggleValue
+    }
+  }
+}
 
-export function fetchChannels(categoryIds) {
-  console.log('fetch channels')
-  console.log(categoryIds)
+
+export function fetchChannels(categories) {
   let url =  apiBase + `/discover/channels`  //TODO: eventually the api should filter by category id, but i will do it here for the demo
   return async (dispatch) => {
     try {
@@ -50,19 +55,29 @@ export function fetchChannels(categoryIds) {
       const result = await axios.get(url)       
      
       if (result.status === 200) {
+
+
+        let categoryIdsArray = []
+        for (const category of categories) {
+          if(!categoryIdsArray.includes(category.categoryId) && category.toggleValue) {
+            categoryIdsArray.push(category.categoryId)
+          }         
+        }
+
+
         let filteredChannels = []
         let myCount = 0
         for (const channel of result.data) {
 
-          if(categoryIds.includes(channel.categoryId) && myCount < 100) {
+          if(categoryIdsArray.includes(channel.categoryId) && myCount < 80) {
+            channel.toggleValue = getToggleValue(channel.categoryId, categories)
             filteredChannels.push(channel)
             myCount = myCount + 1
           }
-        }
-        console.log('about to dispatch channels')
-        console.log(filteredChannels)
-        dispatch(channelsFetchDataSuccess(filteredChannels))
-        console.log(result)
+
+        }    
+        dispatch(channelsFetchDataSuccess(filteredChannels))   
+        dispatch(fetchVideos(filteredChannels, categories))   
       }
      
     }
@@ -72,6 +87,8 @@ export function fetchChannels(categoryIds) {
     }
   };
 }
+
+
 
 
 export function channelsFetchDataSuccess(channels) {
@@ -81,16 +98,54 @@ export function channelsFetchDataSuccess(channels) {
   };
 }
 
-export function fetchVideos() {
-  
-  let url =  apiBase + `/discover/videos`
+function getChannelToggleValue(channelId, channels){
+  for (const channel of channels) {
+    if(channel.channelId === channelId) {
+      return channel.toggleValue
+    }
+  }
+}
+
+
+
+
+export function fetchVideos(channels, categories) {
+  let url =  apiBase + `/discover/videos`  //TODO: eventually the api should filter by channel id, but i will do it here for the demo
   return async (dispatch) => {
     try {
 
       const result = await axios.get(url)       
      
       if (result.status === 200) {
-        console.log(result)
+
+
+        let channelIdsArray = []
+        for (const channel of channels) {
+          if(!channelIdsArray.includes(channel.channelId) && channel.toggleValue) {
+            channelIdsArray.push(channel.channelId)
+          }         
+        }
+
+        let categoryIdsArray = []
+        for (const category of categories) {
+          if(!categoryIdsArray.includes(category.categoryId) && category.toggleValue) {
+            categoryIdsArray.push(category.categoryId)
+          }         
+        }
+
+
+        let filteredVideos = []
+        let myCount = 0
+        for (const video of result.data) {
+
+          if(channelIdsArray.includes(video.channelId) && categoryIdsArray.includes(video.categoryId) && myCount < 80) {
+            video.toggleValue = getChannelToggleValue(video.channelId, channels)
+            filteredVideos.push(video)
+            myCount = myCount + 1
+          }
+
+        }
+        dispatch(videosFetchDataSuccess(filteredVideos))
       }
      
     }
@@ -98,5 +153,12 @@ export function fetchVideos() {
      alert(error)
      console.log(error)
     }
+  };
+}
+
+export function videosFetchDataSuccess(videos) {
+  return {
+    type: VIDEOS_FETCH_DATA_SUCCESS,
+    videos,
   };
 }

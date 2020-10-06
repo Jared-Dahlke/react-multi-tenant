@@ -2,12 +2,10 @@
 
 export const getTours=(type)=>{
   let hadTour = localStorage.getItem('toured')
-  console.log('hadtour')
-  console.log(hadTour)
   if(hadTour) {
     return []
   } else {
-    //localStorage.setItem('toured', 'tourCompleted')
+    localStorage.setItem('toured', 'tourCompleted')
     if(type==='takeToDiscover'){
       return discoverSteps
     } else {
@@ -18,8 +16,6 @@ export const getTours=(type)=>{
 
 }
 
-
-
 const TOUR_STEPS = [   
   {     
     target: ".brandProfileLink",     
@@ -29,7 +25,6 @@ const TOUR_STEPS = [
  
 ]; 
 
-
 const discoverSteps = [   
   {     
     target: ".discoverLink",     
@@ -38,5 +33,3 @@ const discoverSteps = [
   }
  
 ]; 
-
-

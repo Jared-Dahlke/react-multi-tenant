@@ -72,7 +72,6 @@ function BrandProfiles(props) {
 
   const handleDeleteBrandProfileClick=(brandProfileId)=>{
     props.deleteBrandProfile(brandProfileId)
-    console.log('delete me')
   }
 
 

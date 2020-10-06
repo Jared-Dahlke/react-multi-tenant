@@ -25,8 +25,6 @@ export function accounts(state = [], action) {
       let newAccountState = {data: stateCopy}
       return newAccountState;
   case ACCOUNTS_UPDATE_ACCOUNT:
-    console.log('account update account')
-    console.log(action)
       let accountsCopy = []
       if(state.data && state.data.length > 0) {
         accountsCopy = JSON.parse(JSON.stringify(state.data))

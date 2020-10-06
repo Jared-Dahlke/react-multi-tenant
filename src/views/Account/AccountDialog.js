@@ -91,8 +91,6 @@ export default function FullScreenDialog(props) {
     setSelectedRoles(event.target.value)
   }
 
-  console.log('props from dialog')
-  console.log(props)
 
   const convertUsers = (users)=>{
     let newUsers = []
@@ -107,8 +105,6 @@ export default function FullScreenDialog(props) {
   }
 
   const getCurrentAccountUsers=(accounts)=>{
-    console.log('in get current account users')
-    console.log(accounts)
     
     //console.log(props.account.accountId)
     let currentAccountUsers = []

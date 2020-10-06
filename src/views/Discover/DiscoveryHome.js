@@ -10,7 +10,7 @@ import ReactSelect from 'react-select'
 import FilterList from '@material-ui/icons/FilterList'
 import ListIcon from '@material-ui/icons/List'
 import { TableRow, TableCell, Table, TableBody, DialogContentText, Card, CardContent, Typography } from '@material-ui/core'
-import {fetchChannels} from '../../redux/actions/discover/channels'
+import {fetchChannels, categoriesFetchDataSuccess, channelsFetchDataSuccess, fetchVideos, videosFetchDataSuccess} from '../../redux/actions/discover/channels'
 
 const bodyHeight = 600
 const borderRad = 4
@@ -44,13 +44,6 @@ const styles = {
  
 };
 
-function TableText(props) {
-  return (
-    <DialogContentText style={{color: props.header ? blackColor : '', marginBottom: 0}}>{props.text}</DialogContentText>
-  )
-}
-
-
 
 const useStyles = makeStyles(styles);
 
@@ -58,6 +51,7 @@ const mapStateToProps = (state) => {
   return { 
     categories: state.categories,
     channels: state.channels,
+    videos: state.videos,
     brandProfiles: state.brandProfiles
   };
 };
@@ -65,8 +59,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchChannels: (categoryIds) => dispatch(fetchChannels(categoryIds))
-  
+    fetchChannels: (categories) => dispatch(fetchChannels(categories)),
+    categoriesFetchDataSuccess: (categories) => dispatch(categoriesFetchDataSuccess(categories)),
+    channelsFetchDataSuccess: (channels) => dispatch(channelsFetchDataSuccess(channels)),
+    videosFetchDataSuccess: (videos) => dispatch(videosFetchDataSuccess(videos)),
+    fetchVideos: (channels, categories) => dispatch(fetchVideos(channels, categories))
   }
 }
 
@@ -82,33 +79,51 @@ const customSelectStyles = {
 
 function DiscoveryHome(props) {
 
-  console.log(props)
 
-  const [selectedCategories, setSelectedCategories] = React.useState([])
+  const handleButtonGroupChange =(value, id, level)=>{
+    if(level === 'Category') {
 
-  const handleButtonGroupChange =(value, categoryId)=>{
-    console.log(value)
-    let addedCategory = {categoryId: categoryId, value: value}
-    let categoriesCopy = JSON.parse(JSON.stringify(selectedCategories))
-    categoriesCopy.push(addedCategory)
-    setSelectedCategories(categoriesCopy)
-    let categoryIdsArray = []
-    for (const category of categoriesCopy) {
-      if(!categoryIdsArray.includes(category.categoryId)) {
-        categoryIdsArray.push(category.categoryId)
+      let categoriesCopy = JSON.parse(JSON.stringify(props.categories))
+      for (const category of categoriesCopy) {
+        if(category.categoryId === id) {
+          category.toggleValue = value
+        }
       }
-      
+      props.categoriesFetchDataSuccess(categoriesCopy)
+      props.fetchChannels(categoriesCopy)
     }
-    props.fetchChannels(categoryIdsArray)
-  }
 
+    if(level === 'Channel') {
+      let channelsCopy = JSON.parse(JSON.stringify(props.channels))
+      for (const channel of channelsCopy) {
+        if(channel.channelId === id) {
+          channel.toggleValue = value
+        }
+      }
+      props.channelsFetchDataSuccess(channelsCopy)
+      props.fetchVideos(channelsCopy, props.categories)
+    }
+
+    if(level === 'Video') {
+      let videosCopy = JSON.parse(JSON.stringify(props.videos))
+      for (const video of videosCopy) {
+        if(video.videoId === id) {
+          video.toggleValue = value
+        }
+      }
+      props.videosFetchDataSuccess(videosCopy)
+    }
+    
+
+  }
 
   //const { height, width } = useWindowDimensions();
   
   //console.log(windowHeight)
 
 
-  //const formattedBrandProfiles = React.useMemo(() => formatBrandProfiles(props.accounts.data), [props.accounts.data]);
+  //const categoriesWithToggleValue = React.useMemo(() => getCategoriesWithToggleValue(props.categories), [props.categories, selectedCategories]);
+  //const channelsWithToggleValue = React.useMemo(() => getChannelsWithToggleValue(props.channels), [props.channels, selectedCategories]);
 
   
   //const allUsers = [{value: 1, label: 'Joe'},{value: 2, label: 'Sue'},{value: 3, label: 'John'}]
@@ -120,10 +135,11 @@ function DiscoveryHome(props) {
 
   
   return (
-        <GridContainer >
+    <GridContainer >
 
 
 <pre style={{color:'white'}}>Channels: {props.channels.length}</pre>
+<pre style={{color:'white'}}>Selected Categories: {props.categories.length}</pre>
 
           
           
@@ -178,7 +194,8 @@ function DiscoveryHome(props) {
             
             <Grid 
               container 
-              justify="space-evenly"                
+              justify="flex-start"     
+              spacing={1}           
             >
 
               <Grid  item xs={12} sm={12} md={2} >
@@ -245,7 +262,7 @@ function DiscoveryHome(props) {
                 </div>
               </Grid>
 
-              <Grid  item xs={12} sm={12} md={8}>
+              <Grid  item xs={12} sm={12} md={10}>
                 <div style={styles.col}>
                    
                         <Tabs 
@@ -253,6 +270,7 @@ function DiscoveryHome(props) {
                         borderRad={borderRad} 
                         categories={props.categories}
                         channels={props.channels}
+                        videos={props.videos}
                         handleButtonGroupChange={handleButtonGroupChange}
                         />
                     

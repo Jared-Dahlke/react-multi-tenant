@@ -67,7 +67,6 @@ export default function TopCompetitors (props) {
   });
 
   const handleSaveNew=(values)=>{
-    console.log(values)
     setAddingNew(false)
     let newCompetitor = {
       competitorId: UUID.v4(), 

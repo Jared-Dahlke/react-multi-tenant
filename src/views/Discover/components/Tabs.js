@@ -103,6 +103,8 @@ export default function FullWidthTabs(props) {
             data={props.categories} 
             bodyHeight={props.bodyHeight} 
             handleButtonGroupChange={props.handleButtonGroupChange}
+            level="Category"
+            levelId="categoryId"
           />   
 
         </TabPanel>
@@ -112,11 +114,19 @@ export default function FullWidthTabs(props) {
             data={props.channels} 
             bodyHeight={props.bodyHeight} 
             handleButtonGroupChange={props.handleButtonGroupChange}
+            level="Channel"
+            levelId="channelId"
           />
         </TabPanel>
 
         <TabPanel value={value} index={2} dir={theme.direction}>
-          Videos (2M/500M)
+          <ListBuilderTable 
+            data={props.videos} 
+            bodyHeight={props.bodyHeight} 
+            handleButtonGroupChange={props.handleButtonGroupChange}
+            level="Video"
+            levelId="videoId"
+          />
         </TabPanel>
       </SwipeableViews>
     </div>
