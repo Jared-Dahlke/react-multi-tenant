@@ -104,7 +104,7 @@ function PasswordReset(props) {
               style={{marginTop:'10px'}}       
               fullWidth          
               color="primary"       
-              disabled={isEmailError(email)}
+              disabled={!email || isEmailError(email)}
               onClick={postResetPassword}
             >
               Reset Password

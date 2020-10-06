@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import CustomInput from '../components/CustomInput/CustomInput'
 import {Link} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import GridItem from "../components/Grid/GridItem.js";
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {setAlert, changePassword} from '../redux/actions/auth';
@@ -15,6 +16,11 @@ import Button from '../components/CustomButtons/Button'
 import { whiteColor } from "../assets/jss/material-dashboard-react";
 import logo from '../assets/img/sightly_icon.png'
 import {logoStyle} from '../assets/jss/material-dashboard-react'
+
+// Validation
+import * as v from "../validations";
+import CustomPassword from "../components/CustomPasswordRequirements/CustomPasswordRequirements.js";
+import CustomPasswordMatchChecker from '../components/CustomPasswordRequirements/CustomPasswordMatchChecker'
 
 const mapStateToProps = (state) => {
   return { 
@@ -74,6 +80,20 @@ function PasswordChange(props) {
     
   }
 
+  const passwordIsValid = () => {
+    let isValid = true;
+    for (var prop of v.invalidPasswordObject(password)) {
+      if (!prop.satisfied){
+        isValid = false;
+        break;
+      }
+    }
+    if (password === password_confirmation)
+      return isValid;
+    else
+      return false;
+  };
+
   if (props.isLoggedIn) {
     return <Redirect to='./admin/settings/profile' />;
   }
@@ -132,8 +152,14 @@ function PasswordChange(props) {
               </Grid>
             </Grid>
 
+            <Grid item xs={12}>
+              <CustomPassword password={password} />
+              <CustomPasswordMatchChecker password={password} password_confirmation={password_confirmation}/>
+            </Grid>
+
             <Button       
-              color="primary"         
+              color="primary"
+              disabled={!passwordIsValid()}
               onClick={postChangePassword}
               fullWidth={true}
               style={{marginTop:'10px'}}
