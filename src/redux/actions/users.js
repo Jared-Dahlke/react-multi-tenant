@@ -156,7 +156,6 @@ export function fetchUserAccounts(userId) {
       }
       
       if (result.status === 200) {
-        console.log(result.data)
         dispatch(usersSetUserAccounts(userId, result.data))
         dispatch(editUserUserAccountsLoading(false))
       }
@@ -300,8 +299,7 @@ export const linkRoleToUser = (userId, roleId) => {
   let url =  apiBase + `/user?userId=${userId}`
   return (dispatch) => {
     axios.post(url, roleId)
-      .then(response => {
-        console.log(response)      
+      .then(response => {  
       })
       .catch(error => {
         console.log('link role to user error')

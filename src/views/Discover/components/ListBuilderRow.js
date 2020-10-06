@@ -9,9 +9,9 @@ export default function ListBuilderRow (props) {
 
   const [view, setView] = React.useState('');
   
-  const handleChange = (event, nextView, categoryId) => {
-    setView(nextView);
-    props.handleButtonGroupChange(nextView, categoryId)
+  const handleChange = (event, nextView, id) => {
+    //setView(nextView);
+    props.handleButtonGroupChange(nextView, id, props.level)
   };
 
   let item = props.item
@@ -39,8 +39,41 @@ export default function ListBuilderRow (props) {
           
     
         <TableCell style={mainCellStyle}>
+          
+            {props.level === 'Category' ?
+                <h3 style={{margin: 0, padding: 0}}>
+                  {item.categoryName}               
+                </h3> 
 
-            <h3 style={{margin: 0, padding: 0}}>{item.categoryName}</h3> 
+              : props.level === 'Channel' ?
+                <div>
+                  <h3 style={{margin: 0, padding: 0}}>
+                    {item.title}
+                  </h3> 
+                  <h5 style={{margin: 0, padding: 0}}>
+                    {item.categoryName}             
+                  </h5> 
+                </div>
+            
+              : props.level === 'Video' ?
+                <div>
+                  <h3 style={{margin: 0, padding: 0}}>
+                    {item.title}                            
+                  </h3> 
+                  <h5 style={{margin: 0, padding: 0}}>
+                    {item.categoryName}             
+                  </h5> 
+                  <h5 style={{margin: 0, padding: 0}}>
+                    {item.channelName}             
+                  </h5> 
+                </div>
+              :
+              
+              null}
+          
+
+            
+         
               <Table>
                 <TableBody>
                   <TableRow>
@@ -94,21 +127,18 @@ export default function ListBuilderRow (props) {
 
         <TableCell style={mainCellStyle}>
 
-        <ToggleButtonGroup 
-        size="small" 
-        aria-label="small outlined button group" 
-        onChange={(event, nextView)=>{handleChange(event,nextView, item.categoryId)}}
-        exclusive
-        value={view}
-        >
-          <ToggleButton value="Target">Target</ToggleButton>
-          <ToggleButton value="Monitor">Monitor</ToggleButton>
-          <ToggleButton value="Block">Block</ToggleButton>
-        </ToggleButtonGroup>
-
-            
-
-             
+          <ToggleButtonGroup 
+            size="small" 
+            aria-label="small outlined button group" 
+            onChange={(event, nextView)=>{handleChange(event,nextView, item[props.levelId])}}
+            exclusive
+            value={item.toggleValue}
+          >
+            <ToggleButton value="Target">Target</ToggleButton>
+            <ToggleButton value="Monitor">Monitor</ToggleButton>
+            <ToggleButton value="Block">Block</ToggleButton>
+          </ToggleButtonGroup>
+  
         </TableCell>
 
     

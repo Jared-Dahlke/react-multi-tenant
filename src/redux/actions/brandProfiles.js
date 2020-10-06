@@ -28,8 +28,7 @@ export const createBrandProfile = (brandProfile) => {
     dispatch(addBrandProfile(brandProfile));
     axios
       .post(url, brandProfile)
-      .then((response) => {  
-        console.log(response)    
+      .then((response) => {   
        // dispatch(fetchSiteData(response.data.accountId))
       })
       .catch((error) => {
