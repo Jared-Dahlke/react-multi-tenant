@@ -9,8 +9,10 @@ import Tabs from './components/Tabs'
 import ReactSelect from 'react-select'
 import FilterList from '@material-ui/icons/FilterList'
 import ListIcon from '@material-ui/icons/List'
-import { TableRow, TableCell, Table, TableBody, DialogContentText, Card, CardContent, Typography } from '@material-ui/core'
+import { TableRow, TableCell, Table, TableBody, DialogContentText, Card, CardContent, Typography, TableHead } from '@material-ui/core'
 import {fetchChannels, categoriesFetchDataSuccess, channelsFetchDataSuccess, fetchVideos, videosFetchDataSuccess} from '../../redux/actions/discover/channels'
+import countryList from 'react-select-country-list'
+import numeral from 'numeral'
 
 const bodyHeight = 600
 const borderRad = 4
@@ -19,10 +21,11 @@ const blockHeight = 48
 
 const styles = {
   myheader: {
-    backgroundColor: whiteColor,
+    backgroundColor: blackColor,
     borderRadius: borderRad,
-    height: '85px',
-    alignItems: 'center'
+    height: '150px',
+    alignItems: 'stretch',
+    justify: "flex-start"
   },
   mybody: {
     
@@ -76,9 +79,40 @@ const customSelectStyles = {
   })
 };
 
+function TableText(props) {
+  return (
+    <DialogContentText style={{color: props.header ? blackColor : '', marginBottom: 0, fontSize: '10px'}}>{props.text}</DialogContentText>
+  )
+}
+
 
 function DiscoveryHome(props) {
 
+  const countries = countryList().getData()
+  const languages= [
+    {value:'English', label: 'English'},
+    {value:'Arabic', label: 'Arabic'},
+    {value:'Chinese (simplified)', label: 'Chinese (simplified)'},
+    {value:'Chinese (traditional)', label: 'Chinese (traditional)'},    
+    {value:'French', label: 'French'},
+    {value:'German', label: 'German'},
+    {value:'Italian', label: 'Italian'},
+    {value:'Indonesian', label: 'Indonesian'},
+    {value:'Japanese', label: 'Japanese'},
+    {value:'Korean', label: 'Korean'},
+    {value:'Polish', label: 'Polish'},
+    {value:'Portuguese', label: 'Portuguese'},
+    {value:'Russian', label: 'Russian'},
+    {value:'Spanish', label: 'Spanish'},
+    {value:'Thai', label: 'Thai'},
+    {value:'Turkish', label: 'Turkish'},
+    {value:'Vietnamese', label: 'Vietnamese'}
+  ]
+
+  const boolOptions = [
+    {value: 'True', label: 'True'},
+    {value: 'False', label: 'False'}
+  ]
 
   const handleButtonGroupChange =(value, id, level)=>{
     if(level === 'Category') {
@@ -127,6 +161,55 @@ function DiscoveryHome(props) {
     return mycount
   }
 
+  const getAverage=(items, field)=>{
+
+    //get targeted only
+    let itemsCopy = JSON.parse(JSON.stringify(items))
+    let targetedItems = []
+    for (const itemCopy of itemsCopy) {
+      if(itemCopy.toggleValue === 'Target') {
+        targetedItems.push(itemCopy)
+      }
+    }
+
+    var total = 0
+    for (const item of targetedItems) {
+      total = total + item[field]
+    }
+
+    let avg = numeral(total / targetedItems.length).format('00.00')
+
+    return avg
+
+  }
+
+  const selectedCounts = (items) => {
+    let myCount = {
+      target: {       
+        items: 0
+      },
+      monitor: {        
+        items: 0
+      },
+      block: {      
+        items: 0
+      }      
+    }
+    for (const item of items) {    
+      if(item.toggleValue === 'Target') {
+        myCount.target.items = myCount.target.items + 1
+      }
+      if(item.toggleValue === 'Monitor') {
+        myCount.monitor.items = myCount.monitor.items + 1
+      }
+      if(item.toggleValue === 'Block') {
+        myCount.block.items = myCount.block.items + 1
+      }
+      
+    }
+    return myCount
+  }
+
   //const { height, width } = useWindowDimensions();
   
   //console.log(windowHeight)
@@ -137,6 +220,12 @@ function DiscoveryHome(props) {
   const selectedChannelsCount = React.useMemo(() => getSelectedCount(props.channels), [props.channels]);
   const selectedVideosCount = React.useMemo(() => getSelectedCount(props.videos), [props.videos]);
 
+  const avgCpm = React.useMemo(()=> getAverage(props.videos, 'averageCPM'), [props.videos])
+  const avgCpc = React.useMemo(()=> getAverage(props.videos, 'averageCPC'), [props.videos])
+  const avgCpv = React.useMemo(()=> getAverage(props.videos, 'averageCPV'), [props.videos])
+
+  const videosCount = React.useMemo(()=> selectedCounts(props.videos), [props.videos])
+  const channelsCount = React.useMemo(()=> selectedCounts(props.channels), [props.channels])
 
   
   //const allUsers = [{value: 1, label: 'Joe'},{value: 2, label: 'Sue'},{value: 3, label: 'John'}]
@@ -149,25 +238,16 @@ function DiscoveryHome(props) {
   
   return (
     <GridContainer >
-
-
-<pre style={{color:'white'}}>Channels: {props.channels.length}</pre>
-<pre style={{color:'white'}}>Selected Categories: {props.categories.length}</pre>
-
-          
           
 
            <GridItem xs={12} sm={12} md={12} style={{height: bodyHeight + 80, backgroundColor: blackColor}}>
 
             <Grid container style={styles.myheader}>
-              <Grid item xs={12} sm={12} md={4}  >
+              <Grid item xs={12} sm={12} md={3}  >
               
               <div >
               
-                  <div style={{fontSize: 14, marginBottom: 10, color: grayColor[0]}}>
-                    Brand Profile
-                  </div>
-              
+                 
                 <ReactSelect
                   styles={customSelectStyles}              
                   id={'brandProfileSelect'}
@@ -188,16 +268,125 @@ function DiscoveryHome(props) {
                 </div>
               </Grid>
 
-              <GridItem xs={12} sm={12} md={2} >
-              
-              </GridItem>
-              <GridItem xs={12} sm={12} md={2} >
+              <Grid item item xs={12} sm={12} md={1}>
+
+              </Grid>
+
+             
+              <GridItem style={{color: whiteColor}} >
+
+                  <Typography variant="h5" gutterBottom>
+                    {avgCpm}
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom >
+                    AVG CPM
+                  </Typography>
                
               </GridItem>
-              <GridItem xs={12} sm={12} md={2} >
+              <GridItem style={{color: whiteColor}}>
+
+                    <Typography variant="h5" gutterBottom>
+                      {avgCpv}
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom >
+                      AVG CPV
+                    </Typography>
                
               </GridItem>
-              <GridItem xs={12} sm={12} md={2} >
+              <GridItem style={{color: whiteColor}}>
+
+                    <Typography variant="h5" gutterBottom>
+                     {avgCpc}
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom >
+                      AVG CPC
+                    </Typography>
+               
+              </GridItem>
+
+              <GridItem  >
+
+                      <Table className={classes.table} size="small" aria-label="a dense table">
+
+                          <TableHead style={{border: '0px solid white'}}>
+                            <TableRow style={{border: '0px solid white'}}>
+                              
+                                  <TableCell key={'01'} style={{border: '0px solid white'}}>
+                                  </TableCell>
+                                  <TableCell key={'02'} style={{border: '0px solid white', color: whiteColor}}>
+                                    <Typography variant="subtitle2" gutterBottom >
+                                      TARGET
+                                    </Typography>
+                                  </TableCell>
+                                  <TableCell key={'03'} style={{border: '0px solid white', color: whiteColor}}>
+                                    <Typography variant="subtitle2" gutterBottom>
+                                      MONITOR
+                                    </Typography>
+                                  </TableCell>
+                                  <TableCell key={'04'} style={{border: '0px solid white', color: whiteColor}}>
+                                    <Typography variant="subtitle2" gutterBottom >
+                                      BLOCK
+                                    </Typography>
+                                  </TableCell>
+                                
+                            </TableRow>
+                          </TableHead>
+                      
+                      <TableBody>
+
+                         
+                        
+                          <TableRow key={'0'} >
+                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
+                                    <Typography variant="subtitle2"  gutterBottom >
+                                      CHANNELS
+                                    </Typography>
+                            </TableCell>
+                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
+                                    <Typography variant="h5" gutterBottom >
+                                      {channelsCount.target.items}
+                                    </Typography>
+                            </TableCell>  
+                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
+                                    <Typography variant="h5" gutterBottom >
+                                    {channelsCount.monitor.items}
+                                    </Typography>
+                            </TableCell>     
+                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
+                                    <Typography variant="h5" gutterBottom >
+                                    {channelsCount.block.items}
+                                    </Typography>
+                            </TableCell>                              
+                          </TableRow>
+                          
+
+                          <TableRow key={'1'}>
+                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
+                                  <Typography variant="subtitle2" gutterBottom >
+                                      VIDEOS
+                                    </Typography>
+                            </TableCell>
+                            <TableCell style={{border: '0px solid white', color: whiteColor}} >
+                                    <Typography variant="h5" gutterBottom >
+                                      {videosCount.target.items}
+                                    </Typography>                  
+                            </TableCell>        
+                            <TableCell style={{border: '0px solid white', color: whiteColor}} >
+                                    <Typography variant="h5" gutterBottom >
+                                      {videosCount.monitor.items}
+                                    </Typography>                  
+                            </TableCell>  
+                            <TableCell style={{border: '0px solid white', color: whiteColor}} >
+                                    <Typography variant="h5" gutterBottom >
+                                      {videosCount.block.items}
+                                    </Typography>                  
+                            </TableCell>                           
+                          </TableRow>
+
+                          
+                        
+                      </TableBody>
+                    </Table>
                
               </GridItem>
 
@@ -228,11 +417,13 @@ function DiscoveryHome(props) {
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Country'}
+                          options={countries}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Video Language'}
+                          options={languages}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
@@ -243,11 +434,13 @@ function DiscoveryHome(props) {
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Kids Content'}
+                          options={boolOptions}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
                         <ReactSelect
                           placeholder={'Disabled Comments'}
+                          options={boolOptions}
                         />
                       </Grid>
                       <Grid item xs={12} sm={12} md={12} >
