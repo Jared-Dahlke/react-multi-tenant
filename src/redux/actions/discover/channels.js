@@ -47,7 +47,7 @@ function getToggleValue(categoryId, categories){
 }
 
 
-export function fetchChannels(categories) {
+export function fetchChannels(categories, filters) {
   let url =  apiBase + `/discover/channels`  //TODO: eventually the api should filter by category id, but i will do it here for the demo
   return async (dispatch) => {
     try {
@@ -75,8 +75,10 @@ export function fetchChannels(categories) {
             myCount = myCount + 1
           }
 
-        }    
-        dispatch(channelsFetchDataSuccess(filteredChannels))   
+        }   
+
+        let payload = {channels: filteredChannels, filters: filters}
+        dispatch(channelsFetchDataSuccess(payload))   
         dispatch(fetchVideos(filteredChannels, categories))   
       }
      
@@ -91,10 +93,10 @@ export function fetchChannels(categories) {
 
 
 
-export function channelsFetchDataSuccess(channels) {
+export function channelsFetchDataSuccess(payload) {
   return {
     type: CHANNELS_FETCH_DATA_SUCCESS,
-    channels,
+    payload
   };
 }
 

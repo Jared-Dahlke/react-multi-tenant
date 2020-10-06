@@ -62,9 +62,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchChannels: (categories) => dispatch(fetchChannels(categories)),
+    fetchChannels: (categories, filters) => dispatch(fetchChannels(categories, filters)),
     categoriesFetchDataSuccess: (categories) => dispatch(categoriesFetchDataSuccess(categories)),
-    channelsFetchDataSuccess: (channels, filters) => dispatch(channelsFetchDataSuccess(channels, filters)),
+    channelsFetchDataSuccess: (payload) => dispatch(channelsFetchDataSuccess(payload)),
     videosFetchDataSuccess: (videos) => dispatch(videosFetchDataSuccess(videos)),
     fetchVideos: (channels, categories) => dispatch(fetchVideos(channels, categories))
   }
@@ -85,7 +85,7 @@ function DiscoveryHome(props) {
 
   const [tabIndex, setTabIndex] = React.useState(0)
   const [filters, setFilters] = React.useState({country: 'US'})
-  
+
 
   const countries = countryList().getData()
   const languages= [
@@ -107,11 +107,26 @@ function DiscoveryHome(props) {
     {value:'Turkish', label: 'Turkish'},
     {value:'Vietnamese', label: 'Vietnamese'}
   ]
-
+  
   const boolOptions = [
     {value: 'True', label: 'True'},
     {value: 'False', label: 'False'}
   ]
+
+  const handleFilterChange = (e, type)=>{
+    console.log('handle filter change')
+    console.log(e)
+    let prevFilters = JSON.parse(JSON.stringify(filters))
+    if (type === 'Country') {
+      prevFilters.country = e.value
+    }
+
+    console.log('finished filters:')
+    console.log(prevFilters)
+
+    setFilters(prevFilters)
+    // trigger regather
+  }
 
   const handleButtonGroupChange =(value, id, level)=>{
     if(level === 'Category') {
@@ -123,7 +138,7 @@ function DiscoveryHome(props) {
         }
       }
       props.categoriesFetchDataSuccess(categoriesCopy)
-      props.fetchChannels(categoriesCopy)
+      props.fetchChannels(categoriesCopy, filters)
     }
 
     if(level === 'Channel') {
@@ -133,8 +148,10 @@ function DiscoveryHome(props) {
           channel.toggleValue = value
         }
       }
+
+      let payload = {channels: channelsCopy, filters: filters}
       
-      props.channelsFetchDataSuccess(channelsCopy, filters)
+      props.channelsFetchDataSuccess(payload)
       props.fetchVideos(channelsCopy, props.categories)
     }
 
@@ -410,6 +427,7 @@ function DiscoveryHome(props) {
                         <ReactSelect
                           placeholder={'Country'}
                           options={countries}
+                          onChange={(e)=>{handleFilterChange(e, 'Country')}}
                           isDisabled={disableFilters}
                         />
                       </Grid>
