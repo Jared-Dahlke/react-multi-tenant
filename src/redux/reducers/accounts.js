@@ -5,7 +5,6 @@ import {findAccountNodeByAccountId, markAllAccountsAsCurrentFalse} from '../../u
 export function accounts(state = [], action) {
   switch (action.type) {
   case ACCOUNTS_FETCH_DATA_SUCCESS:
-    action.accounts.data[0].key='test'
     return action.accounts;
   case SET_CURRENT_ACCOUNT:
     let newAccounts = JSON.parse(JSON.stringify(state.data))
