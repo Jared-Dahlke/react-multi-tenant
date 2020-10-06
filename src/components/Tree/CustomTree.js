@@ -87,6 +87,8 @@ class Demo extends React.Component {
   }
 
   filterFn = key => {
+    console.log('filter fn')
+    console.log(key)
     if (this.state.inputValue && key.indexOf(this.state.inputValue) > -1) {
       return true
     }
@@ -164,11 +166,11 @@ class Demo extends React.Component {
             }}
           
             inputProps={{
-              disabled: false,
+              disabled: true,
               value: this.state.inputValue,
               onChange: this.onChange, 
               variant: 'filled'      ,              
-              placeholder:'Search....'
+              placeholder:''
             }}   
             success={this.props.errors && !this.props.errors[this.props.name]}    
           />
