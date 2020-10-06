@@ -97,7 +97,6 @@ export function updateAccount(account) {
     try {     
       const result = await axios.patch(url, account);
       if (result.status === 200) {
-       console.log('updated account')
       }
     } catch (error) {
       alert(error);
@@ -204,8 +203,7 @@ export function fetchSiteData(accountId) {
       }
 
       //cleans up the delete accounts api error: https://sightly.atlassian.net/browse/EN-4228
-      for (const [index, account] of result.data.entries()) {
-        console.log(account)
+      for (const [index, account] of result.data.entries()) {    
         if(!account) {
           let removed = result.data.splice(index, 1)
         }
@@ -249,8 +247,8 @@ export function fetchSiteData(accountId) {
       dispatch(isSwitchingAccounts(false))    
       
       dispatch(fetchCategories())
-      dispatch(fetchChannels())
-      dispatch(fetchVideos())
+      //dispatch(fetchChannels())
+      //dispatch(fetchVideos())
 
     } catch (error) {
       console.log('caught in account action')
@@ -319,7 +317,6 @@ export function fetchAccountTypes() {
       } catch (error) {
         console.log(error)      
       }
-      console.log(result.data)
       
       if (result.status === 200) {
         dispatch(accountTypesFetchDataSuccess(result.data))     

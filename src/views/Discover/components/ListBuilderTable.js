@@ -49,9 +49,15 @@ export default function ListBuilderTable(props) {
                   return (
 
                     <ListBuilderRow 
-                    rowStyle={classes.tableRow}
-                    item={item}
-                    key={index}
+                      rowStyle={classes.tableRow}
+                      item={item}
+                      key={index}
+                      handleButtonGroupChange={props.handleButtonGroupChange}
+                      level={props.level}
+                      levelId={props.levelId}
+                      selectedCategoriesCount={props.selectedCategoriesCount}
+                      selectedChannelsCount={props.selectedChannelsCount}
+                      selectedVideosCount={props.selectedVideosCount}
                     />          
 
                   )
