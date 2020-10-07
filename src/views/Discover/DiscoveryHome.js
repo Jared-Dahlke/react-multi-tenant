@@ -269,7 +269,7 @@ function DiscoveryHome(props) {
             />             
         </Grid>
        
-        <Grid item xs={0} sm={12} md={9}> 
+        <Grid item xs={12} sm={12} md={9}> 
           <Button color="primary" onClick={downloadClick} style={{width: '100%', height: '100%', margin: 0, pading: 0}}>           
             <SaveAlt/>
             Save & Download List              
@@ -299,7 +299,7 @@ function DiscoveryHome(props) {
               </Grid>             
             
 
-              <Grid item item item xs={0} sm={12} md={6}>
+              <Grid item item item xs={12} sm={12} md={6}>
                   <Table className={classes.table} size="small" aria-label="a dense table">
                       <TableHead style={{border: '0px solid white'}}>
                         <TableRow style={{border: '0px solid white'}}>                           
