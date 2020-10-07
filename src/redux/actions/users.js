@@ -8,8 +8,11 @@ import {
   USER_ADDED,
   USERS_IS_LOADING,
   USERS_SET_USER_ACCOUNTS,
-  EDIT_USER_USER_ACCOUNTS_LOADING
+  EDIT_USER_USER_ACCOUNTS_LOADING,
 } from "../action-types/users";
+import {
+  SET_ALERT,
+} from "../action-types/auth";
 import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
 import config from "../../config.js";
@@ -56,6 +59,10 @@ export function usersIsLoading(bool) {
     type: USERS_IS_LOADING,
     usersIsLoading: bool,
   };
+}
+
+export function setAlert(payload) {
+  return { type: SET_ALERT, payload };
 }
 
 export function editUserUserAccountsLoading(bool) {
@@ -307,3 +314,23 @@ export const linkRoleToUser = (userId, roleId) => {
       })
   };
 };
+
+export function updatePassword(userId, oldPassword, password) {
+  let url = `${apiBase}/user/${userId}/update-password`;
+  return async (dispatch) => {
+    try {
+      const result = await axios.post(url, {
+        password: password,
+        oldPassword: oldPassword
+      });
+
+      if (result.status === 200) {
+        dispatch(setAlert({show: true, message: "Password has been updated.", severity: "success"}));
+      } else {
+        dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
+      }
+    } catch (error) {
+      dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
+    }
+  };
+}
