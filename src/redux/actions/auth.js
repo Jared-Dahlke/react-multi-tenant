@@ -77,7 +77,7 @@ export function login(credentials) {
       });
 
       if (!result.data.jwt) {
-        dispatch(setAlert({show: true, message: "We were unable to authenticate this user. Please try again later.", severity: "error"}));
+        dispatch(setAlert({show: true, message: result.data.message, severity: "error"}));
         setTimeout(() => {
           dispatch(setAlert({show: false}));
         }, 5000);
