@@ -5,7 +5,7 @@ export const getTours=(type)=>{
   if(hadTour) {
     return []
   } else {
-    localStorage.setItem('toured', 'tourCompleted')
+    // localStorage.setItem('toured', 'tourCompleted')
     if(type==='takeToDiscover'){
       return discoverSteps
     } else {
