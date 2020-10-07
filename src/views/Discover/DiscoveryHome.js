@@ -257,7 +257,7 @@ function DiscoveryHome(props) {
               options={props.brandProfiles}
               getOptionLabel ={(option)=>option.brandName}
               getOptionValue ={(option)=>option.brandProfileId}
-              //value={value}
+              value={props.brandProfiles[0]}
           //   onChange={this.handleChange}
           //   onBlur={this.handleBlur}
             

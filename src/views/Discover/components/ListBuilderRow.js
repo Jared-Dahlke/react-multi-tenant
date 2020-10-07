@@ -66,6 +66,15 @@ export default function ListBuilderRow (props) {
   let channels = numeral(item.channels).format('0a')
   let videos = numeral(item.channelVideos).format('0a')
 
+  let views = numeral(item.views).format('0a')
+
+  let comments = numeral(item.comments).format('0a')
+  let likes = numeral(item.likes).format('0a')
+  let dislikes = numeral(item.dislikes).format('0a')
+
+  let channelVideos = numeral(item.videoCount).format('0a')
+  let channelSubscribers = numeral(item.subscribers).format('0.0a')
+
   let cpm = numeral(item.averageCPM).format('$00.00')
   let cpc = numeral(item.averageCPC).format('$.000')
   let cpv = numeral(item.averageCPV).format('$.000')
@@ -92,43 +101,13 @@ export default function ListBuilderRow (props) {
         <TableCell style={mainCellStyle}>
           
             {props.level === 'Category' ?
+            <div>
                 <h3 style={{margin: 0, padding: 0}}>
                   {item.categoryName}               
                 </h3> 
-
-              : props.level === 'Channel' ?
-                <div> {item.country}
-                  <h3 style={{margin: 0, padding: 0}}>
-                    {item.title}
-                  </h3> 
-                  <h5 style={{margin: 0, padding: 0}}>
-                    {item.categoryName}             
-                  </h5> 
-                </div>
-            
-              : props.level === 'Video' ?
-                <div>
-                  <h3 style={{margin: 0, padding: 0}}>
-                    {item.title}                            
-                  </h3> 
-                  <h5 style={{margin: 0, padding: 0}}>
-                    {item.categoryName}             
-                  </h5> 
-                  <h5 style={{margin: 0, padding: 0}}>
-                    {item.channelName}             
-                  </h5> 
-                </div>
-              :
-              
-              null}
-          
-
-            
-         
-              <Table>
+                <Table>
                 <TableBody>
                   <TableRow>
-
                     <TableCell style={countStyle}>
                       Avails:
                     </TableCell>
@@ -144,9 +123,7 @@ export default function ListBuilderRow (props) {
              
                   </TableRow>
                 </TableBody>
-              </Table>
-
-              
+              </Table>           
             
               <Table>
                 <TableBody>
@@ -162,16 +139,124 @@ export default function ListBuilderRow (props) {
                     </TableCell>
                     <TableCell style={countStyle}>
                       CPV: {cpv}
-                    </TableCell>
-                    <TableCell style={countStyle}>
-                      CPCV: -
-                    </TableCell>
-                    <TableCell style={countStyle}>
-                      CPA: -
-                    </TableCell>
+                    </TableCell>                  
                   </TableRow>
                 </TableBody>
               </Table>
+              </div>
+              : props.level === 'Channel' ?
+                <div> {item.country}
+                  <h3 style={{margin: 0, padding: 0}}>
+                    {item.title}
+                  </h3> 
+                  <h5 style={{margin: 0, padding: 0}}>
+                    {item.categoryName}             
+                  </h5> 
+
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell style={countStyle}>
+                      Avails:
+                    </TableCell>
+                  
+                    <TableCell style={countStyle}>
+                      Subscribers: {channelSubscribers}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Videos: {channelVideos}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Views: {views}
+                    </TableCell>
+             
+                  </TableRow>
+                </TableBody>
+              </Table>           
+            
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell style={countStyle}>
+                      Perf:
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      CPM: {cpm}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      CPC: {cpc}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      CPV: {cpv}
+                    </TableCell>                  
+                  </TableRow>
+                </TableBody>
+              </Table>
+                </div>
+            
+              : props.level === 'Video' ?
+                <div>
+                  <h3 style={{margin: 0, padding: 0}}>
+                    {item.title}                            
+                  </h3> 
+                  <h5 style={{margin: 0, padding: 0}}>
+                    {item.categoryName}             
+                  </h5> 
+                  <h5 style={{margin: 0, padding: 0}}>
+                    {item.channelName}             
+                  </h5> 
+                  <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell style={countStyle}>
+                      Avails:
+                    </TableCell>
+                  
+                  
+                    <TableCell style={countStyle}>
+                      Views: {views}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Comments: {comments}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Likes: {likes}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      Dislikes: {dislikes}
+                    </TableCell>
+             
+                  </TableRow>
+                </TableBody>
+              </Table>           
+            
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell style={countStyle}>
+                      Perf:
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      CPM: {cpm}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      CPC: {cpc}
+                    </TableCell>
+                    <TableCell style={countStyle}>
+                      CPV: {cpv}
+                    </TableCell>                  
+                  </TableRow>
+                </TableBody>
+              </Table>
+                </div>
+              :
+              
+              null}
+          
+
+            
+         
+              
 
              
         </TableCell>
