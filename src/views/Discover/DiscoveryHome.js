@@ -296,9 +296,7 @@ function DiscoveryHome(props) {
                   AVG CPC {avgCpc}
                 </Typography>
 
-              </Grid>
-
-              
+              </Grid>             
             
 
               <Grid item item item xs={0} sm={12} md={6}>
