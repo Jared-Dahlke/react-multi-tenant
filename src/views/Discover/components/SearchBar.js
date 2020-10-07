@@ -44,6 +44,7 @@ export default function ListBuilderSearchBar (props) {
           <Select
             components={{ DropdownIndicator }}
             placeholder='Search...'
+            isDisabled
             // pass other props
            
           />

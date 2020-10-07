@@ -17,35 +17,24 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Button from '../../components/CustomButtons/Button'
 
 const bodyHeight = 600
-const borderRad = 4
+const borderRad = 2
 const blockHeight = 48
 
 
 const styles = {
-  myheader: {
-    backgroundColor: blackColor,
+  summaryBody: {
+    backgroundColor: whiteColor,
     borderRadius: borderRad,
-    height: '150px',
-    alignItems: 'flex-end',
-    justify: "flex-start"
-  },
-  mybody: {
-    
   },
   col: {
-    marginTop: '25px',
-    height: bodyHeight,
+    marginTop: '1px',
+    height: '100%',
+   // height: bodyHeight,
     backgroundColor: whiteColor,
     borderRadius: borderRad
     //width: '33%'
   },
-  colSide: {
-    marginTop: '25px',
-    padding: 8,
-   // height: bodyHeight,
-    backgroundColor: whiteColor,
-    borderRadius: borderRad
-  },
+
  
 };
 
@@ -77,7 +66,9 @@ const customSelectStyles = {
   control: base => ({
     ...base,
     height: blockHeight,
-    minHeight: blockHeight
+    minHeight: blockHeight,
+    marginLeft: 0,
+    paddingLeft: 0
   })
 };
 
@@ -119,16 +110,10 @@ function DiscoveryHome(props) {
   ]
 
   const handleFilterChange = (e, type)=>{
-    console.log('handle filter change')
-    console.log(e)
     let prevFilters = JSON.parse(JSON.stringify(filters))
     if (type === 'Country') {
       prevFilters.country = e.value
     }
-
-    console.log('finished filters:')
-    console.log(prevFilters)
-
     setFilters(prevFilters)
 
    
@@ -262,243 +247,213 @@ function DiscoveryHome(props) {
 
   
   return (
-    <GridContainer >
+    <Grid container spacing={1}>
           
+        <Grid item xs={12} sm={12} md={3}  >                         
+            <ReactSelect
+              styles={customSelectStyles}              
+              id={'brandProfileSelect'}
+              placeholder={'Brand Profile'}
+              options={props.brandProfiles}
+              getOptionLabel ={(option)=>option.brandName}
+              getOptionValue ={(option)=>option.brandProfileId}
+              //value={value}
+          //   onChange={this.handleChange}
+          //   onBlur={this.handleBlur}
+            
+              isMulti={false}
+              isDisabled={false}
+              isClearable={false}
+              backspaceRemovesValue={false}
+              components={{ ClearIndicator: null }}
+            />             
+        </Grid>
+       
+        <Grid item xs={0} sm={12} md={9}> 
+          <Button color="primary" onClick={downloadClick} style={{width: '100%', height: '100%', margin: 0, pading: 0}}>           
+            <SaveAlt/>
+            Save & Download List              
+          </Button>                                   
+        </Grid> {/**end dropdown and button top header */}
 
-           <GridItem xs={12} sm={12} md={12} style={{height: bodyHeight + 80, backgroundColor: blackColor}}>
+            
 
-            <Grid container style={styles.myheader}>
-                <Grid item xs={12} sm={12} md={3}  >                         
-                    <ReactSelect
-                      styles={customSelectStyles}              
-                      id={'brandProfileSelect'}
-                      placeholder={'Brand Profile'}
-                      options={props.brandProfiles}
-                      getOptionLabel ={(option)=>option.brandName}
-                      getOptionValue ={(option)=>option.brandProfileId}
-                      //value={value}
-                  //   onChange={this.handleChange}
-                  //   onBlur={this.handleBlur}
-                    
-                      isMulti={false}
-                      isDisabled={false}
-                      isClearable={false}
-                      backspaceRemovesValue={false}
-                      components={{ ClearIndicator: null }}
-                    />             
-                </Grid>
+           <Grid container  alignItems="center" style={styles.summaryBody}> {/**begin summary */}
 
-              <Grid item item xs={12} sm={12} md={1}>
-
-              </Grid>
-
+            <Grid item xs={6} sm={3} md={3} ></Grid>
              
-              <GridItem style={{color: whiteColor}} >
+            <Grid item xs={6} sm={3} md={3} >
 
-                  <Typography variant="h5" gutterBottom>
-                    {avgCpm}
-                  </Typography>
-                  <Typography variant="subtitle1" gutterBottom >
-                    AVG CPM
-                  </Typography>
-               
-              </GridItem>
-              <GridItem style={{color: whiteColor}}>
+                <Typography variant="subtitle1" align="center"  gutterBottom >
+                  AVG CPM {avgCpm}
+                </Typography>                          
 
-                    <Typography variant="h5" gutterBottom>
-                      {avgCpv}
-                    </Typography>
-                    <Typography variant="subtitle1" gutterBottom >
-                      AVG CPV
-                    </Typography>
-               
-              </GridItem>
-              <GridItem style={{color: whiteColor}}>
+                <Typography variant="subtitle1" align="center"  gutterBottom >
+                  AVG CPV {avgCpv}
+                </Typography>            
 
-                    <Typography variant="h5" gutterBottom>
-                     {avgCpc}
-                    </Typography>
-                    <Typography variant="subtitle1" gutterBottom >
-                      AVG CPC
-                    </Typography>
-               
-              </GridItem>
+                <Typography variant="subtitle1" align="center"  gutterBottom >
+                  AVG CPC {avgCpc}
+                </Typography>
 
-              <GridItem  >
-
-                      <Table className={classes.table} size="small" aria-label="a dense table">
-
-                          <TableHead style={{border: '0px solid white'}}>
-                            <TableRow style={{border: '0px solid white'}}>
-                              
-                                  <TableCell key={'01'} style={{border: '0px solid white'}}>
-                                  </TableCell>
-                                  <TableCell key={'02'} style={{border: '0px solid white', color: whiteColor}}>
-                                    <Typography variant="subtitle2" gutterBottom >
-                                      TARGET
-                                    </Typography>
-                                  </TableCell>
-                                  <TableCell key={'03'} style={{border: '0px solid white', color: whiteColor}}>
-                                    <Typography variant="subtitle2" gutterBottom>
-                                      MONITOR
-                                    </Typography>
-                                  </TableCell>
-                                  <TableCell key={'04'} style={{border: '0px solid white', color: whiteColor}}>
-                                    <Typography variant="subtitle2" gutterBottom >
-                                      BLOCK
-                                    </Typography>
-                                  </TableCell>
-                                
-                            </TableRow>
-                          </TableHead>
-                      
-                      <TableBody>
-
-                         
-                        
-                          <TableRow key={'0'} >
-                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
-                                    <Typography variant="subtitle2"  gutterBottom >
-                                      CHANNELS
-                                    </Typography>
-                            </TableCell>
-                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
-                                    <Typography variant="h5" gutterBottom >
-                                      {channelsCount.target.items}
-                                    </Typography>
-                            </TableCell>  
-                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
-                                    <Typography variant="h5" gutterBottom >
-                                    {channelsCount.monitor.items}
-                                    </Typography>
-                            </TableCell>     
-                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
-                                    <Typography variant="h5" gutterBottom >
-                                    {channelsCount.block.items}
-                                    </Typography>
-                            </TableCell>                              
-                          </TableRow>
-                          
-
-                          <TableRow key={'1'}>
-                            <TableCell style={{border: '0px solid white', color: whiteColor}}>
-                                  <Typography variant="subtitle2" gutterBottom >
-                                      VIDEOS
-                                    </Typography>
-                            </TableCell>
-                            <TableCell style={{border: '0px solid white', color: whiteColor}} >
-                                    <Typography variant="h5" gutterBottom >
-                                      {videosCount.target.items}
-                                    </Typography>                  
-                            </TableCell>        
-                            <TableCell style={{border: '0px solid white', color: whiteColor}} >
-                                    <Typography variant="h5" gutterBottom >
-                                      {videosCount.monitor.items}
-                                    </Typography>                  
-                            </TableCell>  
-                            <TableCell style={{border: '0px solid white', color: whiteColor}} >
-                                    <Typography variant="h5" gutterBottom >
-                                      {videosCount.block.items}
-                                    </Typography>                  
-                            </TableCell>                           
-                          </TableRow>
-
-                          
-                        
-                      </TableBody>
-                    </Table>
-               
-              </GridItem>
-
-            </Grid>
-            
-            
-            
-            <Grid 
-              container 
-              justify="flex-start"     
-              spacing={1}           
-            >
-
-              <Grid  item xs={12} sm={12} md={2} >
-                <div style={styles.colSide}>
-                  <Grid container >
-
-                    <Grid container style={{height: blockHeight}}>
-                      <Grid item xs={10}>                   
-                      </Grid>
-                      <Grid item xs={2}>
-                        <FilterList style={{color: blackColor}} fontSize="large"/>
-                      </Grid>
-                    </Grid>
-
-                    <Grid container spacing={1}>
-                    
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Country'}
-                          options={countries}
-                          onChange={(e)=>{handleFilterChange(e, 'Country')}}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Video Language'}
-                          options={languages}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Category'}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Kids Content'}
-                          options={boolOptions}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Disabled Comments'}
-                          options={boolOptions}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Channel Filter'}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Creator Type'}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Alignment Score'}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} >
-                        <ReactSelect
-                          placeholder={'Clean Rating Score'}
-                          isDisabled={disableFilters}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </div>
               </Grid>
 
-              <Grid  item xs={12} sm={12} md={10}>
+              
+            
+
+              <Grid item item item xs={0} sm={12} md={6}>
+                  <Table className={classes.table} size="small" aria-label="a dense table">
+                      <TableHead style={{border: '0px solid white'}}>
+                        <TableRow style={{border: '0px solid white'}}>                           
+                              <TableCell key={'01'} style={{border: '0px solid white'}}>
+                              </TableCell>
+                              <TableCell key={'02'} style={{border: '0px solid white', color: blackColor}}>
+                                <Typography variant="subtitle2" gutterBottom >
+                                  TARGET
+                                </Typography>
+                              </TableCell>
+                              <TableCell key={'03'} style={{border: '0px solid white', color: blackColor}}>
+                                <Typography variant="subtitle2" gutterBottom>
+                                  MONITOR
+                                </Typography>
+                              </TableCell>
+                              <TableCell key={'04'} style={{border: '0px solid white', color: blackColor}}>
+                                <Typography variant="subtitle2" gutterBottom >
+                                  BLOCK
+                                </Typography>
+                              </TableCell>
+                            
+                        </TableRow>
+                      </TableHead>                      
+                  <TableBody>                                              
+                      <TableRow key={'0'} >
+                        <TableCell style={{border: '0px solid white', color: blackColor}}>
+                                <Typography variant="subtitle2"  gutterBottom >
+                                  CHANNELS
+                                </Typography>
+                        </TableCell>
+                        <TableCell style={{border: '0px solid white', color: blackColor}}>
+                                <Typography variant="subtitle1" gutterBottom >
+                                  {channelsCount.target.items}
+                                </Typography>
+                        </TableCell>  
+                        <TableCell style={{border: '0px solid white', color: blackColor}}>
+                                <Typography variant="subtitle1" gutterBottom >
+                                {channelsCount.monitor.items}
+                                </Typography>
+                        </TableCell>     
+                        <TableCell style={{border: '0px solid white', color: blackColor}}>
+                                <Typography variant="subtitle1" gutterBottom >
+                                {channelsCount.block.items}
+                                </Typography>
+                        </TableCell>                              
+                      </TableRow>                          
+                      <TableRow key={'1'}>
+                        <TableCell style={{border: '0px solid white', color: blackColor}}>
+                              <Typography variant="subtitle2" gutterBottom >
+                                  VIDEOS
+                                </Typography>
+                        </TableCell>
+                        <TableCell style={{border: '0px solid white', color: blackColor}} >
+                                <Typography variant="subtitle1" gutterBottom >
+                                  {videosCount.target.items}
+                                </Typography>                  
+                        </TableCell>        
+                        <TableCell style={{border: '0px solid white', color: blackColor}} >
+                                <Typography variant="subtitle1" gutterBottom >
+                                  {videosCount.monitor.items}
+                                </Typography>                  
+                        </TableCell>  
+                        <TableCell style={{border: '0px solid white', color: blackColor}} >
+                                <Typography variant="subtitle1" gutterBottom >
+                                  {videosCount.block.items}
+                                </Typography>                  
+                        </TableCell>                           
+                      </TableRow>
+                  </TableBody>
+                </Table>             
+              </Grid>
+
+          </Grid>
+          
+          
+            
+            
+          <Grid item xs={12} sm={12} md={3} >       {/**begin filters */}       
+
+           
+           <Grid container spacing={1} style={styles.col}>
+              <Grid item xs={9}>                   
+              </Grid>
+              <Grid item xs={3}>
+                <FilterList style={{color: blackColor}} fontSize="large"/>
+              </Grid>
+            
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Country'}
+                  options={countries}
+                  onChange={(e)=>{handleFilterChange(e, 'Country')}}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Video Language'}
+                  options={languages}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Category'}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Kids Content'}
+                  options={boolOptions}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Disabled Comments'}
+                  options={boolOptions}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Channel Filter'}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Creator Type'}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Alignment Score'}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} >
+                <ReactSelect
+                  placeholder={'Clean Rating Score'}
+                  isDisabled={disableFilters}
+                />
+              </Grid>
+            </Grid>
+                   
+          </Grid> {/**end filters */}        
+              
+
+          <Grid  item xs={12} sm={12} md={9}> {/**begin main table */}
                 <div style={styles.col}>
                    
                     <Tabs 
@@ -514,25 +469,14 @@ function DiscoveryHome(props) {
                       changeTabIndex={(index)=>{setTabIndex(index)}}
                     />
 
-                  <Button color="primary" onClick={downloadClick}>           
-                    <SaveAlt/>
-                    Save & Download List              
-                  </Button>
+                  
                     
                 </div>
-              </Grid>
+          </Grid> {/**end main table */}
 
-       
 
-            
+    </Grid>
 
-            </Grid>
-
-          </GridItem>
-            
-         
-          
-        </GridContainer>
   );
 }
 
