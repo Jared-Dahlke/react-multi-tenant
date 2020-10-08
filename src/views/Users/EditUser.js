@@ -18,6 +18,7 @@ import {updateUserData, updateUserRoles, updateUserAccounts, fetchUserAccounts} 
 import {getTopLevelChecked} from '../../utils'
 import PrettyJson from "../../PrettyJson.js";
 import {FormLoader} from '../../components/SkeletonLoader'
+import DropdownTree from '../../components/Tree/DropdownTree'
 
 const styles = {
   cardCategoryWhite: {
@@ -264,19 +265,7 @@ function EditUser(props) {
                       <GridItem xs={12} sm={12} md={8}>
                         {props.accounts.data && props.accounts.data.length > 0 && !props.editUserUserAccountsLoading ?
                         
-                        <CustomTree
-                          id="EditUserAccountTree"
-                          data={props.accounts.data}                     
-                          keyProp='accountId'
-                          labelProp='accountName'
-                          valueProp='accountId'
-                          search={true}                        
-                          onCheck={onCheck}
-                          checkedKeys={checkedKeys}
-                          title='Account Access'
-                          search={true}
-                          treeContainerHeight={150}
-                        />
+                        <DropdownTree data={props.accounts.data}/>
                        
                         :
                         <FormLoader/>
