@@ -19,27 +19,41 @@ import {getTopLevelChecked} from '../../utils'
 import PrettyJson from "../../PrettyJson.js";
 import {FormLoader} from '../../components/SkeletonLoader'
 import DropdownTree from '../../components/Tree/DropdownTree'
+import {Formik} from 'formik'
+import FormikInput from '../../components/CustomInput/FormikInput'
+import FormikSelect from '../../components/CustomSelect/FormikSelect'
+import * as Yup from "yup";
+import {Debug} from '../Debug'
 
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
+const schemaValidation = Yup.object().shape({
+  roles: Yup.array()
+    .min(1, "Select at least one roll")
+    .of(
+      Yup.object()
+        .shape({
+          label: Yup.string(),
+          value: Yup.string()
+        })
+        .transform(v => v === '' ? null : v)
+    ),
+  firstName: Yup.string()
+    .min(2, "Must be greater than 1 character")
+    .max(50, "Must be less than 50 characters")
+    .required('Required'),
+  lastName: Yup.string()
+    .min(2, "Must be greater than 1 character")
+    .max(50, "Must be less than 50 characters")
+    .required('Required'),
+  company: Yup.string()
+    .min(2, "Must be greater than 1 character")
+    .max(50, "Must be less than 50 characters")
+    .required('Required'),
+  email: Yup.string()
+    .email('Invalid email')
+    .required('Required')
+  
+});
 
-const useStyles = makeStyles(styles);
 
 const mapStateToProps = (state) => {
   return { 
@@ -60,22 +74,61 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
+const formatAccountsForTree =(accounts)=>{
+  if(!accounts) return []
+  let accountsCopy = JSON.parse(JSON.stringify(accounts))
+  if( accountsCopy && accountsCopy.length > 0) {
+    addPropsToAccounts(accountsCopy)
+  }
+  return accountsCopy
+}
+
+const addPropsToAccounts=(accounts)=>{
+  for (const account of accounts) {
+    account.value = account.accountId
+    account.label = account.accountName
+    if(account.children) {
+      addPropsToAccounts(account.children)
+    }
+  }
+}
+
+const getGrantedAccounts=(users, userId)=> {
+  if(!users) return []
+  let usersCopy = JSON.parse(JSON.stringify(users))
+  if (usersCopy && usersCopy.length > 0) {
+    for (const user of users) {
+      if(user.userId === userId) {
+        return user.accounts
+      }
+    }
+  }
+}
+
+const getUser=(users, userId)=>{
+  if(!users || users.length < 1) return {firstName: '', lastName: '', email: '', roles: [], accounts: [], company: ''}
+  let usersCopy = JSON.parse(JSON.stringify(users))
+  for (const user of usersCopy) {
+    if(user.userId === userId) return user
+  }
+}
+
+
 function EditUser(props) {
 
   let parsedUserId = JSON.parse(props.match.params.user) 
-  const [userIdUnderEdit, setUserIdUnderEdit] = React.useState(parsedUserId)
-  const [user, setUser] = React.useState({email:'',firstName:'',lastName:'',company:'',roles:[],accounts:[]})
-  const classes = useStyles();
-  const [selectedRoles, setSelectedRoles] = React.useState([])
+
+  let fetchUserAccounts = props.fetchUserAccounts
+
+  React.useEffect(() => { 
+    fetchUserAccounts(parsedUserId)
+  }, [fetchUserAccounts])
+  
+  
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
   const [checkedKeys, setCheckedKeys] = React.useState([])
   const [topLevelCheckedAccounts, setTopLevelCheckedAccounts] = React.useState([])
 
-  const handleFirstNameChange = (text) => {
-    let currentUser = {...user}
-    currentUser.firstName = text
-    setUser(currentUser)
-  }
 
   const onCheck = checkedKeys => {
     setCheckedKeys(checkedKeys)
@@ -90,37 +143,6 @@ function EditUser(props) {
     }
   }
 
-  const handleLastNameChange = (text) => {
-    let currentUser = {...user}
-    currentUser.lastName = text
-    setUser(currentUser)
-  }
-
-  const handleEmailChange = (text) => {
-    let currentUser = {...user}
-    currentUser.email = text
-    setUser(currentUser)
-  }
-
-  const handleRoleChange = (event) => {
-    let currentUser = {...user}
-    currentUser.roles = event.target.value
-    setUser(currentUser)
-  }
-
-  const handleInternalUserChecked = () => {
-    let currentUser = {...user}
-    let newType = currentUser.userType === 'Internal' ? 'External' : 'Internal'
-    currentUser.userType = newType
-    setUser(currentUser)
-  }
-
-  const formIsValid = () => {
-    if ((v.isCompanySuccess(user.company)) && (v.isEmailSuccess(user.email)) && (v.isFirstNameSuccess(user.firstName)) && (v.isLastNameSuccess(user.lastName)) && (v.isRoleSuccess(user.roles)) && checkedKeys.checked && checkedKeys.checked.length > 0) return true
-    return false
-  }
-
-  const [showAlertMessage, setShowAlertMessage] = React.useState(false);
 
   const handleSaveClick = () => {
     setSaveButtonDisabled(true)
@@ -143,159 +165,162 @@ function EditUser(props) {
   }
 
   
+  console.log('parsedUserId')
+  console.log(parsedUserId)
 
-  React.useEffect(() => { 
-    if(props.users && props.users.data && props.users.data.length > 0) {
-      for (const user of props.users.data) {
-             if(user.userId === userIdUnderEdit) {
-               let userCopy = JSON.parse(JSON.stringify(user))
-               setUser(userCopy)
-               let checkedAccounts = {checked: [], halfChecked:[]}
-               if(userCopy.accounts){
-                 for (const account of userCopy.accounts) {
-                   checkedAccounts.checked.push(String(account.accountId))
-                 }
-                 onCheck(checkedAccounts)
-               }             
-               return
-             }
-      }   
-    }
-  }, [props.users])
+
+  let treeAccounts = React.useMemo(()=> formatAccountsForTree(props.accounts.data), [props.accounts.data])
+  let grantedAccounts = React.useMemo(()=> getGrantedAccounts(props.users.data, parsedUserId), [props.users.data])
+  let user = React.useMemo(()=> getUser(props.users.data, parsedUserId), [props.users.data])
+  
+  console.log(props.users.data)
+  console.log('granted accounts')
+  console.log(grantedAccounts)
+ 
+  console.log('user.roles')
+  console.log(user.roles)
 
 
   return (
-    <div>
+    <Formik
+      enableReinitialize
+      validateOnMount={false}
+     // validateOnChange={true}
+      validationSchema={() => schemaValidation}
+      initialValues={{
+        
+        company: user.company,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        roles: user.roles
+       
+    }}
+    render={({
+      values,
+      errors,
+      touched,
+      setFieldValue,
+      setFieldTouched,
+      validateField,
+      validateForm,
+      isSubmitting,
+      isValid,
+      dirty
+    }) => (
+
+      <div>
 
         <GridContainer>
           <GridItem xs={12} sm={12} md={8}>
             <Card>
             
-             
-              
               <CardBody>
                 <GridContainer>
                   
                   <GridItem xs={12} sm={12} md={5}>
-                    <CustomInput
+                    <FormikInput
+                      name="company"
                       labelText="Company"
-                      id="company-disabled"
+                      id="company"
                       formControlProps={{
-                        fullWidth: true
+                        fullWidth: true,
                       }}
-                      inputProps={{
-                        disabled: true,
-                        value: user.company,                      
-                      }}
-                      
+                      inputProps={{ 
+                        disabled: true                 
+                      }}                 
                     />
                   </GridItem>
                 
 
                   <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Email address"
-                      id="email-address"
+                    <FormikInput
+                      name="email"
+                      labelText="Email"
+                      id="email"
                       formControlProps={{
-                        fullWidth: true
+                        fullWidth: true,
                       }}
-                      inputProps={{
-                        type: 'email',
-                        value: user.email,
-                        onChange: (event)=>handleEmailChange(event.target.value)
-                      }}
-                      handleClear={()=>handleEmailChange('')}
-                      error={v.isEmailError(user.email)}
-                      success={v.isEmailSuccess(user.email)}
+                      inputProps={{                                   
+                      }}                 
                     />
                   </GridItem>
 
                   <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
+                    <FormikInput
+                      name="firstName"
                       labelText="First Name"
-                      id="first-name"
+                      id="firstName"
                       formControlProps={{
-                        fullWidth: false
+                        fullWidth: true,
                       }}
-                      inputProps={{
-                        value: user.firstName,
-                        onChange: (event)=>handleFirstNameChange(event.target.value)
-                      }}
-                      handleClear={()=>handleFirstNameChange('')}
-                      error={v.isFirstNameError(user.firstName)}
-                      success={v.isFirstNameSuccess(user.firstName)}
+                      inputProps={{          
+                      }}                 
                     />
                   </GridItem>
 
                   <GridItem xs={12} sm={12} md={8}>
-                    <CustomInput
+                    <FormikInput
+                      name="lastName"
                       labelText="Last Name"
-                      id="last-name"
+                      id="lastName"
                       formControlProps={{
-                        fullWidth: false
+                        fullWidth: true,
                       }}
-                      inputProps={{
-                        value: user.lastName,
-                        onChange: (event)=>handleLastNameChange(event.target.value)
-                      }}
-                      handleClear={()=>handleLastNameChange('')}
-                      error={v.isLastNameError(user.lastName)}
-                      success={v.isLastNameSuccess(user.lastName)}
+                      inputProps={{          
+                      }}                 
                     />
                   </GridItem>
 
                   <GridItem xs={10} sm={10} md={10}>
-                    <CustomSelect
-                      roles={props.roles}
-                      labelText='Role'
-                      handleItemSelect={handleRoleChange}
-                      value={user.roles}
-                      multiple={true}
-                      success={v.isRoleSuccess(user.roles)}
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                     
-                    />
+
+                    <FormikSelect
+                      id="roles"
+                      name="roles"
+                      label="Roles"
+                      placeholder="Roles"
+                      optionLabel="roleName"
+                      optionValue="roleId"
+                      options={props.roles}
+                      value={values.roles}
+                      isMulti={true}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                      validateField={validateField}
+                      validateForm={validateForm}
+                      touched={touched.roles}
+                      error={errors.roles}
+                      isClearable={true}
+                      backspaceRemovesValue={true}
+                    /> 
+
+                   
                   </GridItem>
 
-                  {
-                    selectedRoles.includes(11) || true ?  //TODO: make sure user only sees tree if they are admin
+             
+                 
 
-                      <GridItem xs={12} sm={12} md={8}>
+                      <GridItem xs={12} sm={12} md={8} >
                         {props.accounts.data && props.accounts.data.length > 0 && !props.editUserUserAccountsLoading ?
-                        
-                        <DropdownTree data={props.accounts.data}/>
+                          <div style={{marginTop: 50}}>
+                              <DropdownTree data={treeAccounts} />
+                          </div>
+                          
                        
                         :
-                        <FormLoader/>
+
+                          <FormLoader/>
+
                         }
                       </GridItem>
 
-                      :
-
-                      null
-                  }
-
-
-                  <GridItem xs={12} sm={12} md={12}>
-                    <CustomCheckbox
-                      checked={user.userType === 'Internal'}
-                      //tabIndex={-1}
-                      changed={handleInternalUserChecked}
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      labelText="Internal User"                 
-                    />             
-                  </GridItem>
                 
                 
                 </GridContainer>         
                 
               </CardBody>
               <CardFooter>
-                <Button disabled={!formIsValid() || saveButtonDisabled} onClick={handleSaveClick} color="primary">Save</Button>
+                <Button disabled={!isValid || !dirty} onClick={handleSaveClick} color="primary">Save</Button>
               </CardFooter>
             </Card>
           </GridItem>
@@ -317,14 +342,18 @@ function EditUser(props) {
           color="success"
           icon={AddAlert}
           message="User info is saved"
-          open={showAlertMessage}
-          closeNotification={() => setShowAlertMessage(false)}
+        //  open={showAlertMessage}
+         // closeNotification={() => setShowAlertMessage(false)}
           close
         />
 
+        <Debug/>
+
           
     </div>
-  );
+    )}
+    />
+    );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditUser)

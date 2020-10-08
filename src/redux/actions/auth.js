@@ -50,23 +50,6 @@ export function setUserId(payload) {
   };
 }
 
-export function getUserProfileById(userId) {
-  let url = apiBase + `/user/${userId}`;
-  return async (dispatch) => {
-    try {
-      const result = await axios.get(url);
-      if (result.status === 200) {
-        let user = result.data;
-        dispatch(setUser(user));
-      }
-    } catch (error) {
-      alert(error);
-      let errorType = error.response.status;
-      handleError(errorType);
-    }
-  };
-}
-
 export function login(credentials) {
   let url = apiBase + "/authenticate";
   return async (dispatch) => {

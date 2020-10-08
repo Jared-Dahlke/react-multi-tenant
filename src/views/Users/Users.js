@@ -74,7 +74,6 @@ function Users(props) {
   const userHeaders = ['First Name','Last Name', 'Company','Email','']
 
   const handleEditUserClick = (user) => {
-    props.fetchUserAccounts(user.userId)
     let url = `/admin/settings/users/edit/${user.userId}`
     history.push(url)
   }

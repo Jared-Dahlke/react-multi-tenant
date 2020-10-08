@@ -194,6 +194,7 @@ export function fetchSiteData(accountId) {
       let accountsUrl = apiBase + `/user/${userId}/accounts`;
       
       let result = await axios.get(accountsUrl);
+      //run this result against account schema
       let accounts = { data: result.data };
       if(!result.data[0]) {
         alert('You have no accounts assigned to you. Please contact your inviter')

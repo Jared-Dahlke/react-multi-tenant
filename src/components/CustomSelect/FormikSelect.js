@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
-import { blackColor, whiteColor } from "../../assets/jss/material-dashboard-react";
+import { blackColor, whiteColor, dangerColor } from "../../assets/jss/material-dashboard-react";
+import FormHelperText from '@material-ui/core/FormHelperText'
 
 const customStyles = {
   control: (base, state) => ({
@@ -45,15 +46,18 @@ export default class SelectField extends Component {
   handleChange = value => {
     if(!value) value = []
     //this.props.validateForm()
+    console.log('handle change')
+    console.log(value)
+    
     
     const { onChange, name } = this.props;
 
     onChange(name, value);
+
   };
 
   handleBlur = () => {
     const { onBlur, name } = this.props;
-
     onBlur(name, true);
   };
 
@@ -83,6 +87,8 @@ export default class SelectField extends Component {
 
         <Select
           id={id}
+          getOptionLabel ={(option)=>option[this.props.optionLabel]}
+          getOptionValue ={(option)=>option[this.props.optionValue]}
           placeholder={placeholder}
           options={options}
           value={value}
@@ -97,10 +103,19 @@ export default class SelectField extends Component {
           components={{ ClearIndicator: null }}
           styles={customStyles}
         />
-        
-        
 
-        {touched && error ? <p className="error-text" style={{color: 'red'}}>{error}</p> : null}
+          <FormHelperText 
+              id="component-helper-text" 
+              style={{
+                color: dangerColor[0], 
+                position: 'absolute',
+                bottom: '-1'
+              }}
+            >
+              {error}
+            </FormHelperText>
+        
+        
       </div>
     );
   }

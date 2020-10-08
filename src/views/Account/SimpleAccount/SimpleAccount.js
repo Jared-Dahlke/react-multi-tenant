@@ -23,6 +23,7 @@ import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import * as Yup from "yup";
 import {getCurrentAccount} from '../../../utils'
 import {updateAccount, deleteAccount, createAccount, accountCreated} from "../../../redux/actions/accounts"
+import {Debug} from '../../Debug'
 
 const styles = {
   cardCategoryWhite: {
@@ -146,18 +147,7 @@ function Account(props) {
     }   
   }
 
-  const formatAccountTypes=(accountTypes)=>{
-    let newAccountTypes = []
-    for (const accountType of accountTypes) {
-      newAccountTypes.push({value: accountType.accountTypeId, label: accountType.accountTypeName})
-    } 
-    return newAccountTypes
-  }
 
-  const formatCurrentAccountType =(currentAccount)=>{
-    if(!currentAccount) return {value: '', label: ''}
-    return {value: currentAccount.accountTypeId, label: currentAccount.accountTypeName}
-  }
 
   const handleMySubmit=(values)=>{
     let account={
@@ -166,8 +156,8 @@ function Account(props) {
       accountMargin: values.accountMargin,
       contactEmail: values.contactEmail,
       contactName: values.contactName,
-      accountTypeId: values.accountType.value,
-      accountTypeName: values.accountType.label
+      accountTypeId: values.accountType.accountTypeId,
+      accountTypeName: values.accountType.accountTypeName
     }
     props.updateAccount(account)
   }
@@ -180,10 +170,7 @@ function Account(props) {
   
   }, [props.accounts.data]);
   
-  let allAccountTypes = React.useMemo(() => formatAccountTypes(props.accountTypes), [props.accountTypes, currentAccount]);
-
-  let currentAccountType = React.useMemo(() => formatCurrentAccountType(currentAccount), [currentAccount])
-  
+ 
 
   let accountLoading = false
  
@@ -201,6 +188,8 @@ function Account(props) {
     }
   }
 
+  console.log('current account')
+  console.log(currentAccount)
 
 
   return (
@@ -215,7 +204,7 @@ function Account(props) {
         contactName: currentAccount.contactName,
         contactEmail: currentAccount.contactEmail,
         accountMargin: currentAccount.accountMargin,
-        accountType: currentAccountType,
+        accountType: {accountTypeId: currentAccount.accountTypeId, accountTypeName: currentAccount.accountTypeName},
         parentAccountName: currentAccount.parentAccountName,
         accountId: currentAccount.accountId
     }}
@@ -227,7 +216,9 @@ function Account(props) {
       setFieldTouched,
       validateField,
       validateForm,
-      isSubmitting
+      isSubmitting,
+      isValid,
+      dirty
     }) => (
    
       <GridContainer>
@@ -315,7 +306,9 @@ function Account(props) {
                     name="accountType"
                     label="Account Type"
                     placeholder="Select an Account Type"
-                    options={allAccountTypes}
+                    optionLabel="accountTypeName"
+                    optionValue="accountTypeId"
+                    options={props.accountTypes}
                     value={values.accountType}
                     isMulti={false}
                     onChange={setFieldValue}
@@ -351,7 +344,7 @@ function Account(props) {
               }
             
 
-            <Button color="primary" onClick={()=>handleMySubmit(values)}>
+            <Button disabled={!isValid || !dirty} color="primary" onClick={()=>handleMySubmit(values)}>
               Save
             </Button>
               <Snackbar
@@ -370,6 +363,8 @@ function Account(props) {
             
           </Card>
         </GridItem>
+
+        <Debug/>
         
       </GridContainer>
     

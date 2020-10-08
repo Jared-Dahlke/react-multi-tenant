@@ -77,6 +77,7 @@ export default function CustomInput(props) {
             underline: underlineClasses
           }}
           id={id}
+          
           {...inputProps}
           {...field}
           style={{color: props.inputColor ? props.inputColor : whiteColor}}

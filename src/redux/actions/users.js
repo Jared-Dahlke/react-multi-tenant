@@ -106,36 +106,9 @@ export function usersFetchData(accountId) {
         }
         let users = { data: [] };
         for (const user of result.data) {
-
-          let roles = [];
-          try {
-
             
-            for (const role of user.roles) {
-              if (role.roleId) roles.push(role.roleId);
-            }
-
-          } catch (error) {
-            alert('Error trying to add roles to /user in the fetchUsers function: ' + error)
-            return
-          }
-                  
-          try{
-            let newUser = new User(
-              user.userId,
-              user.firstName,
-              user.lastName,
-              user.company,
-              user.email,
-              user.userType,
-              roles
-            );
-            users.data.push(newUser);
-
-          } catch (error) {
+           users.data.push(user);
             
-          }
-          
         }
         dispatch(usersFetchDataSuccess(users));
       }
