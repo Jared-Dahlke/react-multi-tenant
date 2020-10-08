@@ -10,13 +10,13 @@ import {Field, Formik} from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 
 const dummyVerticals = [
-  {"title":"Dummy Automotive",
+  {"title":"Automotive",
     "key":"0-0-key",
     "children":[{"title":"Car","key":"0-0-0-key",
-      "children":[{"title":"0-0-0-0-label","key":"0-0-0-0-key"},{"title":"0-0-0-1-label","key":"0-0-0-1-key"},{"title":"0-0-0-2-label","key":"0-0-0-2-key"}]},{"title":"0-0-1-label","key":"0-0-1-key",
-      "children":[{"title":"0-0-1-0-label","key":"0-0-1-0-key"},{"title":"0-0-1-1-label","key":"0-0-1-1-key"},{"title":"0-0-1-2-label","key":"0-0-1-2-key"}]},{"title":"0-0-2-label","key":"0-0-2-key"}]},
+      "children":[{"title":"Truck","key":"0-0-0-0-key"},{"title":"Car","key":"0-0-0-1-key"},{"title":"SUV","key":"0-0-0-2-key"}]},{"title":"4Wheeler","key":"0-0-1-key",
+      "children":[{"title":"Suzuki","key":"0-0-1-0-key"},{"title":"Honda","key":"0-0-1-1-key"},{"title":"Yamaha","key":"0-0-1-2-key"}]},{"title":"Kawasaki","key":"0-0-2-key"}]},
   {"title":"Eduction","key":"0-1-key",
-    "children":[{"title":"Books","key":"0-1-0-key","children":[{"title":"0-1-0-0-label","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},
+    "children":[{"title":"Books","key":"0-1-0-key","children":[{"title":"Videos","key":"0-1-0-0-key"},{"title":"0-1-0-1-label","key":"0-1-0-1-key"},{"title":"0-1-0-2-label","key":"0-1-0-2-key"}]},{"title":"0-1-1-label","key":"0-1-1-key","children":[{"title":"0-1-1-0-label","key":"0-1-1-0-key"},{"title":"0-1-1-1-label","key":"0-1-1-1-key"},{"title":"0-1-1-2-label","key":"0-1-1-2-key"}]},{"title":"0-1-2-label","key":"0-1-2-key"}]},
   {"title":"Test","key":"0-2-key"}]
 
 
