@@ -45,6 +45,7 @@
     "react-swipeable-views": "0.13.9",
     "redux": "4.0.5",
     "redux-thunk": "2.3.0",
+    "rsuite": "4.8.2",
     "source-map-explorer": "2.5.0",
     "typescript": "3.7.5",
     "yup": "0.29.3"

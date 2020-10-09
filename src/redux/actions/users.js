@@ -217,6 +217,8 @@ export function usersAddUser(user) {
 
 
 export function usersSetUserAccounts(userId, accounts) {
+  console.log('users set users accounts')
+  console.log(userId, accounts)
   let payload = {userId, accounts}
   return {
     type: USERS_SET_USER_ACCOUNTS,

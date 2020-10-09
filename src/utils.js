@@ -31,16 +31,23 @@ export function getCurrentAccount (accounts) {
 }
 
 export function getTopLevelChecked (checkedAccountIds, allAccounts) {
-  
-checkAllChecked(checkedAccountIds.checked, allAccounts)
+  console.log('get top level checked')
+  console.log(checkedAccountIds)
+  console.log(allAccounts)
+  checkAllChecked(checkedAccountIds, allAccounts)
+  console.log('already checked all checked')
+  console.log(allAccounts)
   let finalListOfIds = getFinals(allAccounts)
+  console.log('final list of ids')
+  console.log(finalListOfIds)
   return finalListOfIds
 }
+
 function checkAllChecked(ids, accounts) {
   for (const id of ids) {
-    let numberId = Number(id)
+    //let numberId = Number(id)
     for (const account of accounts) {
-      if(account.accountId == numberId) {
+      if(account.accountId == id) {
         account.checked = true
         delete account.children
       } else {
@@ -53,6 +60,9 @@ function checkAllChecked(ids, accounts) {
 }
 function getFinals (accounts) {
   let tab = []
+  console.log('get finals')
+  console.log(accounts)
+  console.log(tab)
   for (const account of accounts) {
     if(account.checked) {
       tab.push(account.accountId)

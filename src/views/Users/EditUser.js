@@ -24,6 +24,8 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from "yup";
 import {Debug} from '../Debug'
+import SuiteTree from "../../components/Tree/SuiteTree.js";
+
 
 const schemaValidation = Yup.object().shape({
   roles: Yup.array()
@@ -36,6 +38,9 @@ const schemaValidation = Yup.object().shape({
         })
         .transform(v => v === '' ? null : v)
     ),
+  accounts: Yup.array()
+    .min(1, "Select at least one account")
+    ,
   firstName: Yup.string()
     .min(2, "Must be greater than 1 character")
     .max(50, "Must be less than 50 characters")
@@ -94,12 +99,20 @@ const addPropsToAccounts=(accounts)=>{
 }
 
 const getGrantedAccounts=(users, userId)=> {
+  console.log('inside granted accounts')
+  console.log(users, userId)
   if(!users) return []
+  console.log('made it past chcker')
   let usersCopy = JSON.parse(JSON.stringify(users))
   if (usersCopy && usersCopy.length > 0) {
     for (const user of users) {
       if(user.userId === userId) {
-        return user.accounts
+        if(!user.accounts) return []
+        let accounts = []
+        for (const account of user.accounts) {
+          accounts.push(account.accountId)
+        }
+        return accounts
       }
     }
   }
@@ -118,74 +131,46 @@ function EditUser(props) {
 
   let parsedUserId = JSON.parse(props.match.params.user) 
 
-  let fetchUserAccounts = props.fetchUserAccounts
-
-  React.useEffect(() => { 
-    fetchUserAccounts(parsedUserId)
-  }, [fetchUserAccounts])
-  
-  
-  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
-  const [checkedKeys, setCheckedKeys] = React.useState([])
-  const [topLevelCheckedAccounts, setTopLevelCheckedAccounts] = React.useState([])
-
-
-  const onCheck = checkedKeys => {
-    setCheckedKeys(checkedKeys)
-    if(checkedKeys.checked && checkedKeys.checked.length > 0) {
-      let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
-      let checkedAccounts = getTopLevelChecked(checkedKeys,accountsCopy)
-      let accounts = []
-      for (const accountId of checkedAccounts) {
-        accounts.push({accountId: accountId})
-      }
-      setTopLevelCheckedAccounts(accounts)
-    }
-  }
-
-
-  const handleSaveClick = () => {
-    setSaveButtonDisabled(true)
-    props.updateUserData(user)
-    let roles= []
-    for (const role of user.roles) {
-      roles.push({roleId: role})
-    }
-    props.updateUserRoles(user, roles)   
-    let accounts = []
-    for (const account of topLevelCheckedAccounts) {
-      accounts.push({accountId: account.accountId})
-    }
-    props.updateUserAccounts(user, accounts)
-    setShowAlertMessage(true)
-    setTimeout(function() {
-      setShowAlertMessage(false)
-      setSaveButtonDisabled(false)
-    }, 2000)
-  }
-
-  
-  console.log('parsedUserId')
-  console.log(parsedUserId)
-
-
   let treeAccounts = React.useMemo(()=> formatAccountsForTree(props.accounts.data), [props.accounts.data])
   let grantedAccounts = React.useMemo(()=> getGrantedAccounts(props.users.data, parsedUserId), [props.users.data])
   let user = React.useMemo(()=> getUser(props.users.data, parsedUserId), [props.users.data])
+
+
+
+  const handleSaveClick = (values) => {
+    console.log(values)
+    values.userType='External'
+    values.userId = user.userId
+    
+    props.updateUserData(values)
+    
+    let roles= []
+    for (const role of values.roles) {
+      roles.push({roleId: role.roleId})
+    }
+    props.updateUserRoles(user, roles)   
+    let accounts = []
+    for (const account of values.accounts) {
+      accounts.push({accountId: account})
+    }
+    props.updateUserAccounts(user, accounts) 
+  }
+
+
+  let fetchUserAccounts = props.fetchUserAccounts
   
-  console.log(props.users.data)
-  console.log('granted accounts')
-  console.log(grantedAccounts)
- 
-  console.log('user.roles')
-  console.log(user.roles)
+  React.useEffect(() => {
+    if(!user.accounts) {
+      fetchUserAccounts(parsedUserId)
+    }
+    
+  }, [props.users])
 
 
   return (
     <Formik
       enableReinitialize
       validateOnMount={false}
-     // validateOnChange={true}
       validationSchema={() => schemaValidation}
       initialValues={{
         
@@ -193,7 +178,8 @@ function EditUser(props) {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        roles: user.roles
+        roles: user.roles,
+        accounts: grantedAccounts
        
     }}
     render={({
@@ -302,10 +288,19 @@ function EditUser(props) {
 
                       <GridItem xs={12} sm={12} md={8} >
                         {props.accounts.data && props.accounts.data.length > 0 && !props.editUserUserAccountsLoading ?
-                          <div style={{marginTop: 50}}>
-                              <DropdownTree data={treeAccounts} />
-                          </div>
-                          
+                         
+                              <SuiteTree
+                                name="accounts"
+                                data={treeAccounts}
+                                labelKey='accountName'
+                                valueKey='accountId'    
+                                value={values.accounts}      
+                                onChange={setFieldValue}    
+                                cascade={false}   
+                                error={errors.accounts}     
+                              />
+                       
+                            
                        
                         :
 
@@ -320,7 +315,7 @@ function EditUser(props) {
                 
               </CardBody>
               <CardFooter>
-                <Button disabled={!isValid || !dirty} onClick={handleSaveClick} color="primary">Save</Button>
+                <Button disabled={!isValid || !dirty} onClick={()=>handleSaveClick(values)} color="primary">Save</Button>
               </CardFooter>
             </Card>
           </GridItem>

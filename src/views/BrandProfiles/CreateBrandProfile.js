@@ -21,8 +21,13 @@ import Scenarios from './components/Scenarios'
 import {mapValues} from 'lodash'
 import {createBrandProfile, fetchBrandProfiles} from '../../redux/actions/brandProfiles'
 import { connect } from "react-redux";
-import Joyride from 'react-joyride'
-import {getTours} from '../../Tour'
+//import Joyride from 'react-joyride'
+//import {getTours} from '../../Tour'
+/** <Joyride
+          steps={getTours('takeToDiscover')}
+          run={showTour}
+        />
+ */
 
 
 const useStyles = makeStyles((theme) => ({
@@ -294,11 +299,7 @@ return (
         })}
       </Stepper>
 
-        <Joyride
-          steps={getTours('takeToDiscover')}
-          run={showTour}
-        />
-
+       
 
       <GridContainer justify='center'>
 

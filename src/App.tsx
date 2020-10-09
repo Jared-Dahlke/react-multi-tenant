@@ -8,6 +8,12 @@ import ChangePassword from './pages/ChangePassword';
 import {Provider} from 'react-redux'
 import configureStore from './redux/store/index.js'
 import Admin from "../src/layouts/Admin.js";
+import Joyride from 'react-joyride'
+import {getTours} from './Tour'
+/** <Joyride
+        steps={getTours()}
+        run={true}
+      /> */
 
 const store = configureStore();
 
@@ -15,6 +21,7 @@ function App() {
 
   return (
     <Provider store={store}>
+
       <Router>
         <div>     
           <Route exact path="/" component={Login} />

@@ -89,14 +89,21 @@ export function users(state = [], action) {
     users = {data: stateData}
     return users;
   case USERS_SET_USER_ACCOUNTS:
+    console.log('setting user accounts in reducer')
+    console.log(action)
+    console.log(state)
     let stateCopy = []
     if(state.data && state.data.length > 0) {
       stateCopy = JSON.parse(JSON.stringify(state.data))
     }  
+    console.log('state copy')
+    console.log(stateCopy)
     for (const user of stateCopy) {
       if(user.userId === action.payload.userId) user.accounts = action.payload.accounts
     }
     users = {data: stateCopy}
+    console.log('returning users from reducer')
+    console.log(users)
     return users;
   default:
     return state;
