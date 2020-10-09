@@ -11,7 +11,7 @@ import styles from "../assets/jss/material-dashboard-react/layouts/adminStyle.js
 import bgImage from "../assets/img/sightly_image.jpg";
 import logo from "../assets/img/sightly_icon.png";
 import UserProfile from "../views/UserProfile/UserProfile.js";
-import Account from "../views/Account/SimpleAccount/SimpleAccount";
+import Account from "../views/Account/Account";
 import Users from "../views/Users/Users";
 import CreateUser from "../views/Users/CreateUser.js";
 import RolesPermissions from "../views/RolesPermissions/RolesPermissions.js";

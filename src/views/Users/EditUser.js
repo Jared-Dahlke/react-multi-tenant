@@ -1,29 +1,19 @@
 import React from "react";
 import {connect} from 'react-redux'
-import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
-import CustomInput from "../../components/CustomInput/CustomInput.js";
 import Button from "../../components/CustomButtons/Button.js";
 import Card from "../../components/Card/Card.js";
 import CardBody from "../../components/Card/CardBody.js";
 import CardFooter from "../../components/Card/CardFooter.js";
-import CustomSelect from '../../components/CustomSelect/CustomSelect'
-import CustomTree from '../../components/Tree/CustomTree'
-import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
-import * as v from '../../validations'
 import {updateUserData, updateUserRoles, updateUserAccounts, fetchUserAccounts} from '../../redux/actions/users'
-import {getTopLevelChecked} from '../../utils'
-import PrettyJson from "../../PrettyJson.js";
 import {FormLoader} from '../../components/SkeletonLoader'
-import DropdownTree from '../../components/Tree/DropdownTree'
 import {Formik} from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from "yup";
-import {Debug} from '../Debug'
 import SuiteTree from "../../components/Tree/SuiteTree.js";
 
 
@@ -322,15 +312,7 @@ function EditUser(props) {
           
         </GridContainer>
 
-        <Snackbar
-          place="bc"
-          color="success"
-          //icon={AddAlert}
-          message="User created and Signup invitation is sent"
-          //open={showAlertMessage}
-          //closeNotification={() => setShowAlertMessage(false)}
-          close
-        />
+       
 
         <Snackbar
           place="bc"
@@ -341,8 +323,6 @@ function EditUser(props) {
          // closeNotification={() => setShowAlertMessage(false)}
           close
         />
-
-        <Debug/>
 
           
     </div>

@@ -1,11 +1,17 @@
 import React from 'react'
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
-import 'rsuite/dist/styles/rsuite-default.css';
+//import 'rsuite/dist/styles/rsuite-default.css';
+//import 'rsuite/dist/styles/rsuite-dark.css';
+import 'rsuite/lib/styles/index.less';
 import FormHelperText from '@material-ui/core/FormHelperText'
-import { dangerColor } from '../../assets/jss/material-dashboard-react';
+import { dangerColor, blackColor } from '../../assets/jss/material-dashboard-react';
+import './custom-theme.less';
 
-
-
+const styles = {
+  ".rs-picker-default .rs-btn, .rs-picker-input .rs-btn, .rs-picker-default .rs-picker-toggle, .rs-picker-input .rs-picker-toggle": {
+    backgroundColor: 'black'
+  }
+}
 
 
 export default function SuiteTree(props) {
@@ -22,7 +28,7 @@ export default function SuiteTree(props) {
       <CheckTreePicker 
         defaultExpandAll 
         data={props.data} 
-        style={{ width: 280 }} 
+        
         labelKey={props.labelKey}
         valueKey={props.valueKey}
         value={props.value}
