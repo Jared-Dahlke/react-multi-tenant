@@ -1,89 +1,105 @@
 {
-  "name": "content-intelligence",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@material-ui/core": "4.11.0",
-    "@material-ui/icons": "4.9.1",
-    "@material-ui/lab": "4.0.0-alpha.56",
-    "@sentry/react": "5.24.2",
-    "@sentry/tracing": "5.24.2",
-    "@testing-library/jest-dom": "4.2.4",
-    "@testing-library/react": "9.5.0",
-    "@testing-library/user-event": "7.2.1",
-    "@types/jest": "24.9.1",
-    "@types/node": "12.12.54",
-    "@types/react": "16.9.48",
-    "@types/react-dom": "16.9.8",
-    "@types/react-redux": "7.1.9",
-    "@types/react-router-dom": "5.1.5",
-    "axios": "0.20.0",
-    "check-password-strength": "1.0.13",
-    "classnames": "2.2.6",
-    "customize-cra": "1.0.0",
-    "email-validator": "2.0.4",
-    "formik": "2.1.4",
-    "just-debounce-it": "1.1.0",
-    "less": "3.12.2",
-    "less-loader": "7.0.2",
-    "lodash": "4.17.20",
-    "material-ui-search-bar": "1.0.0",
-    "node-uuid": "1.4.8",
-    "numeral": "2.0.6",
-    "perfect-scrollbar": "1.5.0",
-    "prop-types": "15.7.2",
-    "query-string": "6.13.2",
-    "rc-tree": "3.9.5",
-    "react": "16.13.1",
-    "react-app-rewired": "2.1.6",
-    "react-content-loader": "5.1.1",
-    "react-dom": "16.13.1",
-    "react-joyride": "2.2.1",
-    "react-redux": "7.2.1",
-    "react-router-dom": "5.2.0",
-    "react-scripts": "3.4.0",
-    "react-select": "3.1.0",
-    "react-select-country-list": "2.2.1",
-    "react-swipeable-views": "0.13.9",
-    "redux": "4.0.5",
-    "redux-thunk": "2.3.0",
-    "rsuite": "4.8.2",
-    "source-map-explorer": "2.5.0",
-    "typescript": "3.7.5",
-    "yup": "0.29.3"
-  },
-  "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "build-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired build",
-    "build-production": "cross-env REACT_APP_STAGE=production react-app-rewired build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "start-development": "cross-env REACT_APP_STAGE=development react-app-rewired start",
-    "start-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired start",
-    "start-production": "cross-env REACT_APP_STAGE=production react-app-rewired start"
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "indent": [
-        "warn",
-        2
-      ]
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "cross-env": "^7.0.2"
-  }
+	"name": "content-intelligence",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@material-ui/core": "4.11.0",
+		"@material-ui/icons": "4.9.1",
+		"@material-ui/lab": "4.0.0-alpha.56",
+		"@sentry/react": "5.24.2",
+		"@sentry/tracing": "5.24.2",
+		"@testing-library/jest-dom": "4.2.4",
+		"@testing-library/react": "9.5.0",
+		"@testing-library/user-event": "7.2.1",
+		"@types/jest": "24.9.1",
+		"@types/node": "12.12.54",
+		"@types/react": "16.9.48",
+		"@types/react-dom": "16.9.8",
+		"@types/react-redux": "7.1.9",
+		"@types/react-router-dom": "5.1.5",
+		"axios": "0.20.0",
+		"check-password-strength": "1.0.13",
+		"classnames": "2.2.6",
+		"customize-cra": "1.0.0",
+		"email-validator": "2.0.4",
+		"formik": "2.1.4",
+		"just-debounce-it": "1.1.0",
+		"less": "3.12.2",
+		"less-loader": "7.0.2",
+		"lodash": "4.17.20",
+		"material-ui-search-bar": "1.0.0",
+		"node-uuid": "1.4.8",
+		"numeral": "2.0.6",
+		"perfect-scrollbar": "1.5.0",
+		"prettier-eslint-cli": "5.0.0",
+		"prop-types": "15.7.2",
+		"query-string": "6.13.2",
+		"rc-tree": "3.9.5",
+		"react": "16.13.1",
+		"react-app-rewired": "2.1.6",
+		"react-content-loader": "5.1.1",
+		"react-dom": "16.13.1",
+		"react-joyride": "2.2.1",
+		"react-redux": "7.2.1",
+		"react-router-dom": "5.2.0",
+		"react-scripts": "3.4.0",
+		"react-select": "3.1.0",
+		"react-select-country-list": "2.2.1",
+		"react-swipeable-views": "0.13.9",
+		"redux": "4.0.5",
+		"redux-thunk": "2.3.0",
+		"rsuite": "4.8.2",
+		"source-map-explorer": "2.5.0",
+		"typescript": "3.7.5",
+		"yup": "0.29.3"
+	},
+	"scripts": {
+		"analyze": "source-map-explorer 'build/static/js/*.js'",
+		"build-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired build",
+		"build-production": "cross-env REACT_APP_STAGE=production react-app-rewired build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"start-development": "cross-env REACT_APP_STAGE=development react-app-rewired start",
+		"start-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired start",
+		"start-production": "cross-env REACT_APP_STAGE=production react-app-rewired start"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app"
+		],
+		"env": {
+			"es6": true
+		},
+		"plugins": [
+			"react"
+		],
+		"parser": "babel-eslint",
+		"rules": {
+			"react/jsx-first-prop-new-line": [
+				1,
+				"multiline"
+			],
+			"react/jsx-max-props-per-line": [
+				1,
+				{
+					"maximum": 1
+				}
+			]
+		}
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"cross-env": "^7.0.2"
+	}
 }
