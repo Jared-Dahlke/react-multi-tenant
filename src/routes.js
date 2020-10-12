@@ -58,7 +58,7 @@ export const DiscoverRoutes = [
 	},
 	{
 		path: '/discover/channelResearch',
-		name: 'Chanel Research',
+		name: 'Channel Research',
 		icon: Book,
 		layout: '/admin',
 		hide: true
