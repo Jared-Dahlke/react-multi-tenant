@@ -96,7 +96,7 @@ const downloadClick = () => {
 		'https://storage.googleapis.com/sightlyoutcomeintelligence_temp/channels_and_videos_sample.xlsx'
 }
 
-function DiscoveryHome(props) {
+function ListBuilder(props) {
 	const [tabIndex, setTabIndex] = React.useState(0)
 	const [filters, setFilters] = React.useState({})
 
@@ -518,4 +518,4 @@ function DiscoveryHome(props) {
 	)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DiscoveryHome)
+export default connect(mapStateToProps, mapDispatchToProps)(ListBuilder)

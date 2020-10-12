@@ -1,21 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import SwipeableViews from 'react-swipeable-views'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import {
-	blackColor,
-	grayColor,
-	whiteColor
-} from '../../../assets/jss/material-dashboard-react'
-
-import {
-	Table,
-	TableCell,
-	TableBody,
-	TableRow,
-	TableHead,
-	GridList
-} from '@material-ui/core'
 import tableStyle from '../../../assets/jss/material-dashboard-react/components/tableStyle'
 
 import ListBuilderRow from './ListBuilderRow'
@@ -23,7 +7,6 @@ import SearchBar from './SearchBar'
 import GridItem from '../../../components/Grid/GridItem'
 
 import { FixedSizeList as List } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
 
 export default function ListBuilderTable(props) {
 	const [categorySearch, setCategorySearch] = React.useState('')
