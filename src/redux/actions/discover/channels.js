@@ -65,7 +65,7 @@ export function fetchChannels(categories, filters) {
 				let filteredChannels = []
 				let myCount = 0
 				for (const channel of result.data) {
-					if (categoryIdsArray.includes(channel.categoryId) && myCount < 10) {
+					if (categoryIdsArray.includes(channel.categoryId)) {
 						channel.toggleValue = getToggleValue(channel.categoryId, categories)
 						filteredChannels.push(channel)
 						myCount = myCount + 1
@@ -130,8 +130,7 @@ export function fetchVideos(channels, categories) {
 				for (const video of result.data) {
 					if (
 						channelIdsArray.includes(video.channelId) &&
-						categoryIdsArray.includes(video.categoryId) &&
-						myCount < 80
+						categoryIdsArray.includes(video.categoryId)
 					) {
 						video.toggleValue = getChannelToggleValue(video.channelId, channels)
 						filteredVideos.push(video)
