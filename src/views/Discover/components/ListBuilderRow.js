@@ -5,7 +5,11 @@ import {
 	TableBody,
 	TableRow,
 	TableHead,
-	Button
+	Button,
+	ListItem,
+	ListItemSecondaryAction,
+	ListItemText,
+	Typography
 } from '@material-ui/core'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import ToggleButton from '@material-ui/lab/ToggleButton'
@@ -15,7 +19,8 @@ import {
 	successColor,
 	dangerColor,
 	warningColor,
-	blackColor
+	blackColor,
+	whiteColor
 } from '../../../assets/jss/material-dashboard-react'
 var numeral = require('numeral')
 
@@ -100,100 +105,72 @@ export default function ListBuilderRow(props) {
 	}
 
 	return (
-		<TableRow key={item.categoryId} className={props.rowStyle}>
-			<TableCell style={mainCellStyle}>
-				{props.level === 'Category' ? (
-					<div>
-						<h3 style={{ margin: 0, padding: 0 }}>{item.categoryName}</h3>
-						<Table>
-							<TableBody>
-								<TableRow>
-									<TableCell style={countStyle}>Avails:</TableCell>
-									<TableCell style={countStyle}>Channels: {channels}</TableCell>
-									<TableCell style={countStyle}>
-										Subscribers: {subscribers}
-									</TableCell>
-									<TableCell style={countStyle}>Videos: {videos}</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
+		<ListItem key={item.categoryId} className={props.rowStyle}>
+			{props.level === 'Category' ? (
+				<div style={{ color: blackColor }}>
+					<ListItemText
+						primary={item.categoryName}
+						secondary={
+							'Channels: ' +
+							channels +
+							', Subscribers: ' +
+							subscribers +
+							', Videos: ' +
+							videos
+						}
+					/>
 
-						<Table>
-							<TableBody>
-								<TableRow>
-									<TableCell style={countStyle}>Perf:</TableCell>
-									<TableCell style={countStyle}>CPM: {cpm}</TableCell>
-									<TableCell style={countStyle}>CPC: {cpc}</TableCell>
-									<TableCell style={countStyle}>CPV: {cpv}</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
-					</div>
-				) : props.level === 'Channel' ? (
-					<div>
-						{' '}
-						{item.country}
-						<h3 style={{ margin: 0, padding: 0 }}>{item.title}</h3>
-						<h5 style={{ margin: 0, padding: 0 }}>{item.categoryName}</h5>
-						<Table>
-							<TableBody>
-								<TableRow>
-									<TableCell style={countStyle}>Avails:</TableCell>
+					<ListItemText
+						secondary={'CPM: ' + cpm + ', CPC: ' + cpc + ', CPV: ' + cpv}
+					/>
+				</div>
+			) : props.level === 'Channel' ? (
+				<div style={{ color: blackColor }}>
+					<ListItemText
+						primary={item.title + ' (' + item.categoryName + ')'}
+						secondary={
+							'Subscribers: ' +
+							channelSubscribers +
+							', Videos: ' +
+							channelVideos +
+							', Views: ' +
+							views
+						}
+					/>
 
-									<TableCell style={countStyle}>
-										Subscribers: {channelSubscribers}
-									</TableCell>
-									<TableCell style={countStyle}>
-										Videos: {channelVideos}
-									</TableCell>
-									<TableCell style={countStyle}>Views: {views}</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
-						<Table>
-							<TableBody>
-								<TableRow>
-									<TableCell style={countStyle}>Perf:</TableCell>
-									<TableCell style={countStyle}>CPM: {cpm}</TableCell>
-									<TableCell style={countStyle}>CPC: {cpc}</TableCell>
-									<TableCell style={countStyle}>CPV: {cpv}</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
-					</div>
-				) : props.level === 'Video' ? (
-					<div>
-						<h3 style={{ margin: 0, padding: 0 }}>{item.title}</h3>
-						<h5 style={{ margin: 0, padding: 0 }}>{item.categoryName}</h5>
-						<h5 style={{ margin: 0, padding: 0 }}>{item.channelName}</h5>
-						<Table>
-							<TableBody>
-								<TableRow>
-									<TableCell style={countStyle}>Avails:</TableCell>
+					<ListItemText
+						secondary={'CPM: ' + cpm + ', CPC: ' + cpc + ', CPV: ' + cpv}
+					/>
+				</div>
+			) : props.level === 'Video' ? (
+				<div style={{ color: blackColor }}>
+					<ListItemText
+						primary={item.title}
+						secondary={
+							'Category: ' + item.categoryName + ', Chanel: ' + item.channelName
+						}
+					/>
 
-									<TableCell style={countStyle}>Views: {views}</TableCell>
-									<TableCell style={countStyle}>Comments: {comments}</TableCell>
-									<TableCell style={countStyle}>Likes: {likes}</TableCell>
-									<TableCell style={countStyle}>Dislikes: {dislikes}</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
+					<ListItemText
+						secondary={
+							'Views: ' +
+							views +
+							', Comments: ' +
+							comments +
+							', Likes: ' +
+							likes +
+							', Dislikes: ' +
+							dislikes
+						}
+					/>
 
-						<Table>
-							<TableBody>
-								<TableRow>
-									<TableCell style={countStyle}>Perf:</TableCell>
-									<TableCell style={countStyle}>CPM: {cpm}</TableCell>
-									<TableCell style={countStyle}>CPC: {cpc}</TableCell>
-									<TableCell style={countStyle}>CPV: {cpv}</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
-					</div>
-				) : null}
-			</TableCell>
+					<ListItemText
+						secondary={'CPM: ' + cpm + ', CPC: ' + cpc + ', CPV: ' + cpv}
+					/>
+				</div>
+			) : null}
 
-			<TableCell style={mainCellStyle}>
+			<ListItemSecondaryAction>
 				<ToggleButtonGroup
 					size='small'
 					aria-label='small outlined button group'
@@ -219,7 +196,7 @@ export default function ListBuilderRow(props) {
 						Block
 					</ToggleButton>
 				</ToggleButtonGroup>
-			</TableCell>
-		</TableRow>
+			</ListItemSecondaryAction>
+		</ListItem>
 	)
 }
