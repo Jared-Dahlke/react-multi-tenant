@@ -17,6 +17,7 @@ import axios from "../../axiosConfig";
 import handleError from "../../errorHandling";
 import config from "../../config.js";
 import { User } from "../../models/user";
+import { accountsObjValidation } from "../../schemas";
 import { setUser } from "./auth";
 
 const apiBase = config.apiGateway.URL;
@@ -76,12 +77,12 @@ export function usersFetchData(accountId) {
   let url = apiBase + `/account/${accountId}/users`;
   return async (dispatch) => {
     try {
-      let params = {     
+      let params = {
         roles: true
       }
 
       let result = []
-     
+
       try {
 
         result = await axios.get(url, {
@@ -90,15 +91,15 @@ export function usersFetchData(accountId) {
 
       } catch (error) {
         console.log(error)
-        if(result.status === 401) {
+        if (result.status === 401) {
           handleError(dispatch, result.status);
         }
       }
 
       dispatch(usersIsLoading(false))
-      
+
       if (result.status === 200) {
-        if(!result.data[0]) {
+        if (!result.data[0]) {
           //alert('This account has no users associated with it. There should always be at least one user (yourself). Please contact your inviter')
           //window.location.href = '/login'
           //localStorage.removeItem('token')
@@ -106,41 +107,45 @@ export function usersFetchData(accountId) {
         }
         let users = { data: [] };
         for (const user of result.data) {
-            
-           users.data.push(user);
-            
+
+          users.data.push(user);
+
         }
         dispatch(usersFetchDataSuccess(users));
       }
     } catch (error) {
-      alert('Error on fetch users usersFetchData: ' +JSON.stringify(error,null,2))
+      alert('Error on fetch users usersFetchData: ' + JSON.stringify(error, null, 2))
     }
   };
 }
 
 export function fetchUserAccounts(userId) {
-  
+
   let url = apiBase + `/user/${userId}/accounts`;
   return async (dispatch) => {
     dispatch(editUserUserAccountsLoading(true))
     try {
-      
+
       let result = []
-     
+
       try {
 
         result = await axios.get(url);
 
       } catch (error) {
-        console.log(error)      
+        console.log(error)
       }
-      
+
       if (result.status === 200) {
+        accountsObjValidation.validate(result.data).catch(function (err) {
+          console.log(err.name, err.errors);
+          alert("Could not validate accounts data");
+        });
         dispatch(usersSetUserAccounts(userId, result.data))
         dispatch(editUserUserAccountsLoading(false))
       }
     } catch (error) {
-      alert('Error on fetch user accounts: ' + JSON.stringify(error,null,2))
+      alert('Error on fetch user accounts: ' + JSON.stringify(error, null, 2))
     }
   };
 }
@@ -155,9 +160,9 @@ export function updateUserData(user) {
       delete myUser.roles
       const result = await axios.patch(url, myUser);
       if (result.status === 200) {
-       // console.log('updating user through update user data')
-       // console.log(result.data.user)
-       // dispatch(setUser(result.data.user));
+        // console.log('updating user through update user data')
+        // console.log(result.data.user)
+        // dispatch(setUser(result.data.user));
       }
     } catch (error) {
       alert(error);
@@ -172,7 +177,7 @@ export function updateUserRoles(user, roles) {
     try {
       const result = await axios.patch(url, roles);
       if (result.status === 200) {
-       // dispatch(setUser(result.data.user));
+        // dispatch(setUser(result.data.user));
       }
     } catch (error) {
       alert(error);
@@ -182,18 +187,18 @@ export function updateUserRoles(user, roles) {
 
 
 export function updateUserAccounts(user, accounts) {
-  if(accounts.length < 1) {
+  if (accounts.length < 1) {
     alert('User not saved. Each user must have at least one account assigned to them.')
     return
   }
-  
+
   let userId = user.userId;
   let url = apiBase + `/user/${userId}/accounts`;
   return async (dispatch) => {
     try {
       const result = await axios.patch(url, accounts);
       if (result.status === 200) {
-       // dispatch(setUser(result.data.user));
+        // dispatch(setUser(result.data.user));
       }
     } catch (error) {
       alert(error);
@@ -219,7 +224,7 @@ export function usersAddUser(user) {
 export function usersSetUserAccounts(userId, accounts) {
   console.log('users set users accounts')
   console.log(userId, accounts)
-  let payload = {userId, accounts}
+  let payload = { userId, accounts }
   return {
     type: USERS_SET_USER_ACCOUNTS,
     payload,
@@ -251,15 +256,15 @@ export const deleteUser = (userId) => {
 
 
 export const createUser = (user) => {
-  
-  
-  
+
+
+
   delete user.userId
   delete user.internal
   user.userName = 'placeholder'
-  user.phoneNumber= '123123123'
+  user.phoneNumber = '123123123'
 
-  let url =  apiBase + `/user/invite`
+  let url = apiBase + `/user/invite`
   return (dispatch) => {
     dispatch(usersAddUser(user));
     axios.post(url, user)
@@ -277,15 +282,15 @@ export const createUser = (user) => {
 };
 
 export const linkRoleToUser = (userId, roleId) => {
-  
-  let url =  apiBase + `/user?userId=${userId}`
+
+  let url = apiBase + `/user?userId=${userId}`
   return (dispatch) => {
     axios.post(url, roleId)
-      .then(response => {  
+      .then(response => {
       })
       .catch(error => {
         console.log('link role to user error')
-        console.log(error)       
+        console.log(error)
       })
   };
 };
@@ -300,12 +305,12 @@ export function updatePassword(userId, oldPassword, password) {
       });
 
       if (result.status === 200) {
-        dispatch(setAlert({show: true, message: "Password has been updated.", severity: "success"}));
+        dispatch(setAlert({ show: true, message: "Password has been updated.", severity: "success" }));
       } else {
-        dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
+        dispatch(setAlert({ show: true, message: result.response.data.Error, severity: "error" }));
       }
     } catch (error) {
-      dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
+      dispatch(setAlert({ show: true, message: error.response.data.message, severity: "error" }));
     }
   };
 }
