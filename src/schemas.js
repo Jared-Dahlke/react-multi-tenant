@@ -13,11 +13,12 @@ export const accountsObjValidation = Yup.array()
 			accountTypeName: Yup.string().required(),
 			contactEmail: Yup.string().required(),
 			contactName: Yup.string().required(),
-			parentAccountId: Yup.number(),
+			// parentAccountId: Yup.number(),
 			// parentAccountName: Yup.string().required(),
-			children: Yup.array()
+			children: Yup.array().nullable()
 		})
 	)
+	.nullable()
 
 export const usersWithRolesObjValidation = Yup.array()
 	.min(1, 'No Users associated with account')
@@ -73,9 +74,9 @@ export const userObjValidation = Yup.object().shape({
 	lastName: Yup.string().required(),
 	email: Yup.string().required(),
 	company: Yup.string().required(),
-	phoneNumber: Yup.string().required(),
-	createdDate: Yup.string().required(),
-	userType: Yup.string().required()
+	userType: Yup.string().required(),
+	roles: Yup.array(),
+	accounts: Yup.array()
 })
 
 export const accountTypesObjValidation = Yup.array()

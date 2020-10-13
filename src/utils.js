@@ -31,15 +31,8 @@ export function getCurrentAccount(accounts) {
 }
 
 export function getTopLevelChecked(checkedAccountIds, allAccounts) {
-	console.log('get top level checked')
-	console.log(checkedAccountIds)
-	console.log(allAccounts)
 	checkAllChecked(checkedAccountIds, allAccounts)
-	console.log('already checked all checked')
-	console.log(allAccounts)
 	let finalListOfIds = getFinals(allAccounts)
-	console.log('final list of ids')
-	console.log(finalListOfIds)
 	return finalListOfIds
 }
 
@@ -58,9 +51,6 @@ function checkAllChecked(ids, accounts) {
 }
 function getFinals(accounts) {
 	let tab = []
-	console.log('get finals')
-	console.log(accounts)
-	console.log(tab)
 	for (const account of accounts) {
 		if (account.checked) {
 			tab.push(account.accountId)
