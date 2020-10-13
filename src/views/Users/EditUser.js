@@ -23,7 +23,7 @@ import SuiteTree from '../../components/Tree/SuiteTree.js'
 
 const schemaValidation = Yup.object().shape({
 	roles: Yup.array()
-		.min(1, 'Select at least one roll')
+		.min(1, 'Select at least one role')
 		.of(
 			Yup.object()
 				.shape({
