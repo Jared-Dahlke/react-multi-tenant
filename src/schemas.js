@@ -14,8 +14,8 @@ export const accountsObjValidation = Yup.array()
         accountTypeName: Yup.string().required(),
         contactEmail: Yup.string().required(),
         contactName: Yup.string().required(),
-        parentAccountId: Yup.number().required(),
-        parentAccountName: Yup.string().required(),
+        // parentAccountId: Yup.number().required(),
+        // parentAccountName: Yup.string().required(),
         children: Yup.array()
       })
   )
@@ -48,28 +48,25 @@ export const usersWithRolesObjValidation = Yup.array()
   )
 
 export const rolesAndPermissionsObjValidation = Yup.array()
-  .min(1, "No Users associated with account")
+  .min(1, "No roles associated with account")
   .of(
     Yup.object()
       .shape({
-        userId: Yup.number().required(),
-        firstName: Yup.string().required(),
-        lastName: Yup.string().required(),
-        email: Yup.string().required(),
-        company: Yup.string().required(),
-        phoneNumber: Yup.string().required(),
-        userName: Yup.string().required(),
+        roleId: Yup.number().required(),
+        roleName: Yup.string().required(),
+        roleDescription: Yup.string().required(),
         userType: Yup.string().required(),
-        roles: Yup.array()
-          .min(1, "No Roles associated with User")
+        default: Yup.string().required(),
+        permissions: Yup.array()
+          .min(1, "No permissions for given role")
           .of(
             Yup.object()
-              .shape({
-                roleId: Yup.number().required(),
-                roleName: Yup.string().required(),
-                roleDescription: Yup.string().required(),
-                userType: Yup.string().required()
-              })
+            // .shape({
+            //   permissionId: Yup.number().required(),
+            //   permissionName: Yup.string().required(),
+            //   permissionDescription: Yup.string().required(),
+            //   moduleName: Yup.string().required()
+            // })
           )
       })
   )
