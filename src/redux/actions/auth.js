@@ -10,6 +10,7 @@ import {
 import axios from "../../axiosConfig";
 import config from "../../config";
 import handleError from "../../errorHandling";
+import { userObjValidation } from "../../schemas";
 
 const apiBase = config.apiGateway.URL;
 
@@ -22,9 +23,9 @@ export function setAlert(payload) {
 }
 
 // export function successPasswordChanged(bool) {
-//   return { 
-//     type: SUCCESS_PASSWORD_CHANGED, 
-//     successPasswordChanged: bool, 
+//   return {
+//     type: SUCCESS_PASSWORD_CHANGED,
+//     successPasswordChanged: bool,
 //   };
 // }
 
@@ -60,9 +61,9 @@ export function login(credentials) {
       });
 
       if (!result.data.jwt) {
-        dispatch(setAlert({show: true, message: result.data.message, severity: "error"}));
+        dispatch(setAlert({ show: true, message: result.data.message, severity: "error" }));
         setTimeout(() => {
-          dispatch(setAlert({show: false}));
+          dispatch(setAlert({ show: false }));
         }, 5000);
         return;
       }
@@ -70,6 +71,10 @@ export function login(credentials) {
       if (result.status === 200) {
         let token = result.data.jwt;
         let user = result.data.user;
+        userObjValidation.validate(user).catch(function (err) {
+          console.log(err.name, err.errors);
+          alert("Could not validate user data");
+        });
         dispatch(setAuthToken(token));
         dispatch(setUser(user));
         dispatch(setUserId(user.userId));
@@ -114,6 +119,10 @@ export function userProfileFetchData() {
       const result = await axios.get(url);
       if (result.status === 200) {
         let user = result.data;
+        userObjValidation.validate(user).catch(function (err) {
+          console.log(err.name, err.errors);
+          alert("Could not validate user data");
+        });
         dispatch(setUser(user));
         dispatch(userProfileIsLoading(false))
       }
@@ -134,12 +143,12 @@ export function resetPassword(email) {
       });
 
       if (result.status === 200) {
-        dispatch(setAlert({show: true, message: "Reset password email sent. Check Your email.", severity: "success"}));
+        dispatch(setAlert({ show: true, message: "Reset password email sent. Check Your email.", severity: "success" }));
       } else {
-        dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
+        dispatch(setAlert({ show: true, message: result.response.data.Error, severity: "error" }));
       }
     } catch (error) {
-      dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
+      dispatch(setAlert({ show: true, message: error.response.data.message, severity: "error" }));
     }
   };
 }
@@ -153,16 +162,16 @@ export function changePassword(password, userId, token) {
       });
 
       if (result.status === 200) {
-        dispatch(setAlert({show: true, message: "Password has been reset. Please proceed to login with your new password.", severity: "success"}));
+        dispatch(setAlert({ show: true, message: "Password has been reset. Please proceed to login with your new password.", severity: "success" }));
         setTimeout(() => {
-          dispatch(setAlert({show: false}));
+          dispatch(setAlert({ show: false }));
           window.location.href = '/login'
         }, 5000);
       } else {
-        dispatch(setAlert({show: true, message: result.response.data.Error, severity: "error"}));
+        dispatch(setAlert({ show: true, message: result.response.data.Error, severity: "error" }));
       }
     } catch (error) {
-      dispatch(setAlert({show: true, message: error.response.data.message, severity: "error"}));
+      dispatch(setAlert({ show: true, message: error.response.data.message, severity: "error" }));
     }
   };
 }

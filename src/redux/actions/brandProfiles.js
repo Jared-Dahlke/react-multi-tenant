@@ -1,8 +1,10 @@
 
-import {BRAND_PROFILES_FETCH_DATA_SUCCESS, REMOVE_BRAND_PROFILE, ADD_BRAND_PROFILE, BRAND_PROFILES_IS_LOADING, HAS_BRAND_PROFILES} from '../action-types/brandProfiles'
+import { BRAND_PROFILES_FETCH_DATA_SUCCESS, REMOVE_BRAND_PROFILE, ADD_BRAND_PROFILE, BRAND_PROFILES_IS_LOADING, HAS_BRAND_PROFILES } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import handleError from '../../errorHandling';
 import config from '../../config.js'
+import { brandProfilesObjValidation } from "../../schemas";
+
 const apiBase = config.apiGateway.URL
 
 
@@ -24,12 +26,12 @@ export function brandProfilesFetchDataSuccess(brandProfiles) {
 export const createBrandProfile = (brandProfile) => {
   let url = apiBase + `/brand-profile`;
   return (dispatch) => {
-    
+
     dispatch(addBrandProfile(brandProfile));
     axios
       .post(url, brandProfile)
-      .then((response) => {   
-       // dispatch(fetchSiteData(response.data.accountId))
+      .then((response) => {
+        // dispatch(fetchSiteData(response.data.accountId))
       })
       .catch((error) => {
         //error
@@ -62,11 +64,11 @@ export const deleteBrandProfile = (brandProfileId) => {
       .delete(url)
       .then((response) => {
         //dispatch(userDeleted(true));
-       
+
       })
       .catch((error) => {
         //dispatch(userDeletedError(true));
-       
+
       });
   };
 };
@@ -76,24 +78,28 @@ export const deleteBrandProfile = (brandProfileId) => {
 
 export function fetchBrandProfiles(accountId) {
 
-  let url =  apiBase + `/account/${accountId}/brand-profiles?competitors=true`
+  let url = apiBase + `/account/${accountId}/brand-profiles?competitors=true`
   return async (dispatch) => {
     dispatch(brandProfilesIsLoading(true))
     try {
 
-      const result = await axios.get(url)       
-     
+      const result = await axios.get(url)
+
       if (result.status === 200) {
-        let brandProfiles = result.data   
-        if(brandProfiles.length < 1) {
+        let brandProfiles = result.data
+        if (brandProfiles.length < 1) {
           dispatch(hasBrandProfiles(false))
-        } 
+        }
+        brandProfilesObjValidation.validate(result.data).catch(function (err) {
+          console.log(err.name, err.errors);
+          alert("Could not validate account's brand profiles data");
+        });
         dispatch(brandProfilesFetchDataSuccess(brandProfiles))
         dispatch(brandProfilesIsLoading(false))
       }
 
     }
-    catch(error) {    
+    catch (error) {
       let errorType = error.response.status
       handleError(dispatch, errorType)
       //dispatch(usersHasErrored(true))
@@ -117,4 +123,3 @@ export function hasBrandProfiles(bool) {
   };
 }
 
-     
