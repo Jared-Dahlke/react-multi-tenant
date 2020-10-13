@@ -1,34 +1,54 @@
-import {SET_AUTH_TOKEN, SET_LOGGED_IN, SET_ALERT, SET_USER, SET_USER_ID, USER_PROFILE_IS_LOADING} from '../action-types/auth'
-import {User} from '../../models/user'
+import {
+	SET_AUTH_TOKEN,
+	SET_LOGGED_IN,
+	SET_ALERT,
+	SET_USER,
+	SET_USER_ID,
+	USER_PROFILE_IS_LOADING
+} from '../action-types/auth'
 
-let newUser = new User(' ', ' ', ' ', ' ', ' ', ' ', [], [])
+import { userObjValidation } from '../../schemas'
+
+let newUser = {
+	userId: 0,
+	firstName: ' ',
+	lastName: ' ',
+	company: ' ',
+	email: ' ',
+	userType: ' ',
+	roles: [],
+	accounts: []
+}
+
+userObjValidation.validate(newUser).catch(function(err) {
+	console.log(err.name, err.errors)
+	alert('Could not validate new user')
+})
 
 const initialState = {
-  token: null,
-  isAuthenticated: null,
-  loading: true,
-  userProfile: newUser,
+	token: null,
+	isAuthenticated: null,
+	loading: true,
+	userProfile: newUser
 }
 
 export function authToken(state = null, action) {
-  switch (action.type) {
-  case SET_AUTH_TOKEN:
-    return action.payload;
-  default:
-    return state;
-  }
+	switch (action.type) {
+		case SET_AUTH_TOKEN:
+			return action.payload
+		default:
+			return state
+	}
 }
-
 
 export function userProfileIsLoading(state = true, action) {
-  switch (action.type) {
-  case USER_PROFILE_IS_LOADING:
-    return action.userProfileIsLoading;
-  default:
-    return state;
-  }
+	switch (action.type) {
+		case USER_PROFILE_IS_LOADING:
+			return action.userProfileIsLoading
+		default:
+			return state
+	}
 }
-
 
 // export function successPasswordChanged(state = false, action) {
 //   switch (action.type) {
@@ -39,43 +59,42 @@ export function userProfileIsLoading(state = true, action) {
 //   }
 // }
 
-
 export function user(state = initialState, action) {
-  switch (action.type) {
-  case SET_USER:
-    return {
-      ...state,
-      loading: false,
-      userProfile: action.payload
-    }
-  default:
-    return state;
-  }
+	switch (action.type) {
+		case SET_USER:
+			return {
+				...state,
+				loading: false,
+				userProfile: action.payload
+			}
+		default:
+			return state
+	}
 }
 
 export function isLoggedIn(state = false, action) {
-  switch (action.type) {
-  case SET_LOGGED_IN:
-    return action.payload;
-  default:
-    return state;
-  }
+	switch (action.type) {
+		case SET_LOGGED_IN:
+			return action.payload
+		default:
+			return state
+	}
 }
 
-export function userId(state = null, action){
-  switch (action.type) {
-  case SET_USER_ID:
-    return action.payload;
-  default:
-    return state;
-  }
+export function userId(state = null, action) {
+	switch (action.type) {
+		case SET_USER_ID:
+			return action.payload
+		default:
+			return state
+	}
 }
 
 export function alert(state = false, action) {
-  switch (action.type) {
-  case SET_ALERT:
-    return action.payload;
-  default:
-    return state;
-  }
+	switch (action.type) {
+		case SET_ALERT:
+			return action.payload
+		default:
+			return state
+	}
 }

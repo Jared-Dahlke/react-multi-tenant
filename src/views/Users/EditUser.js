@@ -89,10 +89,7 @@ const addPropsToAccounts = (accounts) => {
 }
 
 const getGrantedAccounts = (users, userId) => {
-	console.log('inside granted accounts')
-	console.log(users, userId)
 	if (!users) return []
-	console.log('made it past chcker')
 	let usersCopy = JSON.parse(JSON.stringify(users))
 	if (usersCopy && usersCopy.length > 0) {
 		for (const user of users) {
@@ -140,7 +137,6 @@ function EditUser(props) {
 	])
 
 	const handleSaveClick = (values) => {
-		console.log(values)
 		values.userType = 'External'
 		values.userId = user.userId
 
