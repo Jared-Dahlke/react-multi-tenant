@@ -104,13 +104,13 @@ export const brandProfilesObjValidation = Yup.array()
         competitors: Yup.array()
           .of(
             Yup.object()
-              .shape({
-                brandProfileId: Yup.number().required(),
-                competitorId: Yup.number().required(),
-                competitorName: Yup.string().required(),
-                websiteUrl: Yup.string().required(),
-                twitterProfileUrl: Yup.string().required()
-              })
+            // .shape({
+            //   brandProfileId: Yup.number().required(),
+            //   competitorId: Yup.number().required(),
+            //   competitorName: Yup.string().required(),
+            //   websiteUrl: Yup.string().required(),
+            //   twitterProfileUrl: Yup.string().required()
+            // })
           )
       })
   )
