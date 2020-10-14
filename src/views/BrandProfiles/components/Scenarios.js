@@ -2,23 +2,28 @@ import React from 'react'
 import CustomRadio from '../../../components/CustomRadio/CustomRadio'
 
 export default function Scenarios(props) {
+	console.log('scenarioprops')
+	console.log(props)
 	return (
 		<div>
-			{props.scenarios.map((scenario, index) => {
-				return (
-					<CustomRadio
-						key={index}
-						labelText={scenario}
-						validateField={props.validateField}
-						values={props.values}
-						touched={props.touched}
-						setFieldValue={props.setFieldValue}
-						errors={props.errors}
-						index={index}
-						fieldName={'scenarios.scenario' + index}
-					/>
-				)
-			})}
+			{props.scenarios &&
+				props.scenarios.length > 0 &&
+				props.scenarios.map((scenario, index) => {
+					let scenIndex = index + 1
+					return (
+						<CustomRadio
+							key={scenIndex}
+							labelText={scenario.scenLabel}
+							validateField={props.validateField}
+							values={props.values}
+							touched={props.touched}
+							setFieldValue={props.setFieldValue}
+							errors={props.errors}
+							index={scenIndex}
+							fieldName={'scenarios.scenario' + scenIndex}
+						/>
+					)
+				})}
 		</div>
 	)
 }

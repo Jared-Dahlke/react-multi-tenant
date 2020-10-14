@@ -29,12 +29,6 @@ export const SettingsRoutes = [
 		layout: '/admin'
 	},
 	{
-		path: '/settings/rolesPermissions',
-		name: 'Roles',
-		icon: LockOpenIcon,
-		layout: '/admin'
-	},
-	{
 		path: '/settings/brandProfiles',
 		name: 'Brand Profiles',
 		icon: Business,

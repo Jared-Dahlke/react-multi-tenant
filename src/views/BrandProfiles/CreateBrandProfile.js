@@ -27,6 +27,7 @@ import {
 	fetchBrandScenariosProperties
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
+import { Debug } from '../Debug'
 //import Joyride from 'react-joyride'
 //import {getTours} from '../../Tour'
 /** <Joyride
@@ -83,26 +84,20 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const scenarios = [
-	'Injury/death due to tragedy/sickness',
-	'Death due to natural causes',
-	'Social issues/BLM related content',
-	'Environmental Issues',
-	'Natural Disasters and resulting impact',
-	'Corporate Strikes',
-	'Protests (in general vs a specific topic)',
-	'Response to negative press about competitors',
-	'Respoonse to positive press about competitors'
-]
+const formatScenario = (scenarioProps) => {
+	if (!scenarioProps || !scenarioProps.scenario) return []
 
-const getScenarioPair = (scenarios) => {
-	let newScen = []
+	let formattedScenarios = []
 
-	scenarios.forEach((scen, index) => {
-		newScen.push({ scenName: `scenario${index}`, scenLabel: scen })
+	scenarioProps.scenario.forEach((scen, index) => {
+		formattedScenarios.push({
+			scenName: `scenario${index + 1}`,
+			scenLabel: scen.scenarioName,
+			scenId: scen.scenarioId
+		})
 	})
 
-	return newScen
+	return formattedScenarios
 }
 
 const schemaValidation = Yup.object().shape({
@@ -150,10 +145,15 @@ function getSteps() {
 }
 
 function CreateBrandProfiles(props) {
-	//let fetchBrandScenariosProperties = props.fetchBrandScenariosProperties
-	//React.useEffect(() => {
-	//	fetchBrandScenariosProperties()
-	//}, [fetchBrandScenariosProperties])
+	let fetchBrandScenariosProperties = props.fetchBrandScenariosProperties
+	React.useEffect(() => {
+		fetchBrandScenariosProperties()
+	}, [fetchBrandScenariosProperties])
+
+	const scenarios = React.useMemo(
+		() => formatScenario(props.scenarioProperties),
+		[props.scenarioProperties]
+	)
 
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
@@ -223,7 +223,9 @@ function CreateBrandProfiles(props) {
 		return true
 	}
 
-	const getInitialValues = (inputs) => {
+	const getInitialValues = () => {
+		//	let inputs = getScenarioPair(scenarios)
+
 		const initialValues = {
 			basicInfoProfileName: '',
 			basicInfoWebsiteUrl: '',
@@ -232,22 +234,23 @@ function CreateBrandProfiles(props) {
 			topCompetitors: []
 		}
 
-		let scenarios = {}
-		inputs.forEach((field) => {
-			scenarios[field.scenName] = ''
+		let scenariosWithValue = {}
+		scenarios.forEach((field) => {
+			scenariosWithValue[field.scenName] = ''
 		})
-		initialValues.scenarios = scenarios
+
+		initialValues.scenarios = scenariosWithValue
 
 		return initialValues
 	}
 
 	return (
 		<Formik
-			enableReinitialize
+			//	enableReinitialize
 			validateOnMount={true}
 			// validateOnChange={true}
 			validationSchema={() => schemaValidation}
-			initialValues={getInitialValues(getScenarioPair(scenarios))}
+			initialValues={getInitialValues()}
 			render={({
 				values,
 				errors,
