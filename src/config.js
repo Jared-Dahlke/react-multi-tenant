@@ -6,6 +6,13 @@ const development = {
   }
 }
 
+const demo = {
+  environment: 'demo',
+  apiGateway: {
+    URL: "https://api-cont-intell-user-account-demo-zu7blp7gxa-uw.a.run.app"
+  }
+}
+
 const staging = {
   environment: 'staging',
   apiGateway: {
@@ -24,6 +31,9 @@ var config = production
 switch(process.env.REACT_APP_STAGE) {
 case 'staging':
   config = staging
+  break
+case 'demo':
+  config = demo
   break
 case 'development':
   config = development
