@@ -14,7 +14,6 @@ import UserProfile from '../views/UserProfile/UserProfile.js'
 import Account from '../views/Account/Account'
 import Users from '../views/Users/Users'
 import CreateUser from '../views/Users/CreateUser.js'
-import RolesPermissions from '../views/RolesPermissions/RolesPermissions.js'
 
 // Redux
 import { connect } from 'react-redux'
@@ -46,11 +45,6 @@ const switchRoutes = (
 					/>
 				</>
 			)}
-		/>
-
-		<Route
-			path='/admin/settings/RolesPermissions'
-			component={RolesPermissions}
 		/>
 
 		<Route
