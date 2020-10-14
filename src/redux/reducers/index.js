@@ -36,7 +36,8 @@ import {
 	brandProfiles,
 	brandProfilesIsLoading,
 	hasBrandProfiles,
-	scenarioProperties
+	scenarioProperties,
+	industryVerticals
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
@@ -70,6 +71,7 @@ export default combineReducers({
 	accountCreated,
 	hasBrandProfiles,
 	scenarioProperties,
+	industryVerticals,
 	categories,
 	channels,
 	videos

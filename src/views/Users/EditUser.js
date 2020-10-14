@@ -10,7 +10,7 @@ import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
 import {
 	updateUserData,
-	updateUserRoles,
+	updateUserRole,
 	updateUserAccounts,
 	fetchUserAccounts
 } from '../../redux/actions/users'
@@ -20,18 +20,12 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
+import { Debug } from '../Debug'
 
 const schemaValidation = Yup.object().shape({
-	roles: Yup.array()
-		.min(1, 'Select at least one role')
-		.of(
-			Yup.object()
-				.shape({
-					label: Yup.string(),
-					value: Yup.string()
-				})
-				.transform((v) => (v === '' ? null : v))
-		),
+	roleId: Yup.number()
+		.typeError('Required')
+		.required('Required'),
 	accounts: Yup.array().min(1, 'Select at least one account'),
 	firstName: Yup.string()
 		.min(2, 'Must be greater than 1 character')
@@ -63,7 +57,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		updateUserData: (userData) => dispatch(updateUserData(userData)),
 		fetchUserAccounts: (userId) => dispatch(fetchUserAccounts(userId)),
-		updateUserRoles: (user, roles) => dispatch(updateUserRoles(user, roles)),
+		updateUserRole: (user, roleId) => dispatch(updateUserRole(user, roleId)),
 		updateUserAccounts: (user, accounts) =>
 			dispatch(updateUserAccounts(user, accounts))
 	}
@@ -137,17 +131,16 @@ function EditUser(props) {
 		parsedUserId
 	])
 
-	const handleSaveClick = (values) => {
-		values.userType = 'External'
+	const handleSaveClick = (values, resetForm) => {
+		values.userType = values.email.toLowerCase().includes('sightly.com')
+			? 'Internal'
+			: 'External'
+
 		values.userId = user.userId
 
 		props.updateUserData(values)
 
-		let roles = []
-		for (const role of values.roles) {
-			roles.push({ roleId: role.roleId })
-		}
-		props.updateUserRoles(user, roles)
+		props.updateUserRole(user, values.roleId)
 		let accounts = []
 		for (const account of values.accounts) {
 			accounts.push({ accountId: account })
@@ -173,7 +166,7 @@ function EditUser(props) {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				email: user.email,
-				roles: user.roles,
+				roleId: user.roleId,
 				accounts: grantedAccounts
 			}}
 			render={({
@@ -186,115 +179,120 @@ function EditUser(props) {
 				validateForm,
 				isSubmitting,
 				isValid,
-				dirty
+				dirty,
+				resetForm
 			}) => (
 				<div>
 					<GridContainer>
 						<GridItem xs={12} sm={12} md={8}>
 							<Card>
-								<CardBody>
-									<GridContainer>
-										<GridItem xs={12} sm={12} md={5}>
-											<FormikInput
-												name='company'
-												labelText='Company'
-												id='company'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													disabled: true
-												}}
-											/>
-										</GridItem>
+								{props.editUserUserAccountsLoading ? (
+									<FormLoader />
+								) : (
+									<div>
+										<CardBody>
+											<GridContainer>
+												<GridItem xs={12} sm={12} md={5}>
+													<FormikInput
+														name='company'
+														labelText='Company'
+														id='company'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{
+															disabled: true
+														}}
+													/>
+												</GridItem>
 
-										<GridItem xs={12} sm={12} md={6}>
-											<FormikInput
-												name='email'
-												labelText='Email'
-												id='email'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{}}
-											/>
-										</GridItem>
+												<GridItem xs={12} sm={12} md={6}>
+													<FormikInput
+														name='email'
+														labelText='Email'
+														id='email'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{}}
+													/>
+												</GridItem>
 
-										<GridItem xs={12} sm={12} md={4}>
-											<FormikInput
-												name='firstName'
-												labelText='First Name'
-												id='firstName'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{}}
-											/>
-										</GridItem>
+												<GridItem xs={12} sm={12} md={4}>
+													<FormikInput
+														name='firstName'
+														labelText='First Name'
+														id='firstName'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{}}
+													/>
+												</GridItem>
 
-										<GridItem xs={12} sm={12} md={8}>
-											<FormikInput
-												name='lastName'
-												labelText='Last Name'
-												id='lastName'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{}}
-											/>
-										</GridItem>
+												<GridItem xs={12} sm={12} md={8}>
+													<FormikInput
+														name='lastName'
+														labelText='Last Name'
+														id='lastName'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{}}
+													/>
+												</GridItem>
 
-										<GridItem xs={12} sm={12} md={12}>
-											{props.accounts.data &&
-											props.accounts.data.length > 0 &&
-											!props.editUserUserAccountsLoading ? (
-												<SuiteTree
-													name='accounts'
-													data={treeAccounts}
-													labelKey='accountName'
-													valueKey='accountId'
-													value={values.accounts}
-													onChange={setFieldValue}
-													cascade={false}
-													error={errors.accounts}
-												/>
-											) : (
-												<FormLoader />
-											)}
-										</GridItem>
+												<GridItem xs={12} sm={12} md={5}>
+													{props.accounts.data &&
+													props.accounts.data.length > 0 &&
+													!props.editUserUserAccountsLoading ? (
+														<SuiteTree
+															name='accounts'
+															data={treeAccounts}
+															labelKey='accountName'
+															valueKey='accountId'
+															value={values.accounts}
+															onChange={setFieldValue}
+															cascade={false}
+															error={errors.accounts}
+														/>
+													) : null}
+												</GridItem>
+												<GridItem xs={12} sm={12} md={7}></GridItem>
 
-										<GridItem xs={10} sm={10} md={12}>
-											<FormikSelect
-												id='roles'
-												name='roles'
-												label='Roles'
-												placeholder='Roles'
-												optionLabel='roleName'
-												optionValue='roleId'
-												options={props.roles}
-												value={values.roles}
-												isMulti={true}
-												onChange={setFieldValue}
-												onBlur={setFieldTouched}
-												validateField={validateField}
-												validateForm={validateForm}
-												touched={touched.roles}
-												error={errors.roles}
-												isClearable={true}
-												backspaceRemovesValue={true}
-											/>
-										</GridItem>
-									</GridContainer>
-								</CardBody>
-								<CardFooter>
-									<Button
-										disabled={!isValid || !dirty}
-										onClick={() => handleSaveClick(values)}
-										color='primary'
-									>
-										Save
-									</Button>
-								</CardFooter>
+												<GridItem xs={10} sm={10} md={5}>
+													<FormikSelect
+														id='role'
+														name='roleId'
+														label='Role'
+														placeholder='Role'
+														optionLabel='roleName'
+														optionValue='roleId'
+														options={props.roles}
+														value={values.roleId}
+														onChange={setFieldValue}
+														onBlur={setFieldTouched}
+														validateField={validateField}
+														validateForm={validateForm}
+														touched={touched.roleId}
+														error={errors.roleId}
+														isClearable={true}
+														backspaceRemovesValue={true}
+													/>
+												</GridItem>
+											</GridContainer>
+										</CardBody>
+										<CardFooter>
+											<Button
+												disabled={!isValid || !dirty}
+												onClick={() => handleSaveClick(values, resetForm)}
+												color='primary'
+											>
+												Save
+											</Button>
+										</CardFooter>
+									</div>
+								)}
 							</Card>
 						</GridItem>
 					</GridContainer>

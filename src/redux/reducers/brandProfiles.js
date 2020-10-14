@@ -4,7 +4,8 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SCENARIO_PROPERTIES_FETCH
+	SCENARIO_PROPERTIES_FETCH,
+	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -54,6 +55,15 @@ export function scenarioProperties(state = [], action) {
 	switch (action.type) {
 		case SCENARIO_PROPERTIES_FETCH:
 			return action.scenarioProperties
+		default:
+			return state
+	}
+}
+
+export function industryVerticals(state = [], action) {
+	switch (action.type) {
+		case BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS:
+			return action.industryVerticals
 		default:
 			return state
 	}

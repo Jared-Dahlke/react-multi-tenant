@@ -1,29 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
-import GridItem from '../../components/Grid/GridItem.js'
-import GridContainer from '../../components/Grid/GridContainer.js'
 import Grid from '@material-ui/core/Grid'
 import {
 	blackColor,
-	whiteColor,
-	grayColor
+	whiteColor
 } from '../../assets/jss/material-dashboard-react.js'
 import Tabs from './components/Tabs'
-import ReactSelect from 'react-select'
+import InputPicker from 'rsuite/lib/InputPicker'
 import FilterList from '@material-ui/icons/FilterList'
-import ListIcon from '@material-ui/icons/List'
-import {
-	TableRow,
-	TableCell,
-	Table,
-	TableBody,
-	DialogContentText,
-	Card,
-	CardContent,
-	Typography,
-	TableHead
-} from '@material-ui/core'
+import { ListItemText } from '@material-ui/core'
 import {
 	fetchChannels,
 	categoriesFetchDataSuccess,
@@ -36,22 +22,24 @@ import numeral from 'numeral'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Button from '../../components/CustomButtons/Button'
 
+import InputGroup from 'rsuite/lib/InputGroup'
+import Input from 'rsuite/lib/Input'
+import Icon from 'rsuite/lib/Icon'
+
 const bodyHeight = 600
 const borderRad = 2
 const blockHeight = 48
 
 const styles = {
 	summaryBody: {
-		backgroundColor: whiteColor,
-		borderRadius: borderRad
+		backgroundColor: blackColor,
+		borderRadius: borderRad,
+		color: whiteColor
 	},
 	col: {
 		marginTop: '1px',
 		height: '100%',
-		// height: bodyHeight,
-		backgroundColor: whiteColor,
 		borderRadius: borderRad
-		//width: '33%'
 	}
 }
 
@@ -79,16 +67,6 @@ const mapDispatchToProps = (dispatch) => {
 		fetchVideos: (channels, categories) =>
 			dispatch(fetchVideos(channels, categories))
 	}
-}
-
-const customSelectStyles = {
-	control: (base) => ({
-		...base,
-		height: blockHeight,
-		minHeight: blockHeight,
-		marginLeft: 0,
-		paddingLeft: 0
-	})
 }
 
 const downloadClick = () => {
@@ -233,10 +211,6 @@ function ListBuilder(props) {
 		return myCount
 	}
 
-	//const { height, width } = useWindowDimensions();
-
-	//console.log(windowHeight)
-
 	const selectedCategoriesCount = React.useMemo(
 		() => getSelectedCount(props.categories),
 		[props.categories]
@@ -271,25 +245,27 @@ function ListBuilder(props) {
 
 	const classes = useStyles()
 
+	const CustomInputGroup = ({ placeholder, ...props }) => (
+		<InputGroup {...props}>
+			<Input placeholder={placeholder} />
+			<InputGroup.Addon style={{ backgroundColor: blackColor }}>
+				<Icon icon='search' style={{ backgroundColor: blackColor }} />
+			</InputGroup.Addon>
+		</InputGroup>
+	)
+
 	return (
 		<Grid container spacing={1}>
 			<Grid item xs={12} sm={12} md={3}>
-				<ReactSelect
-					styles={customSelectStyles}
+				<InputPicker
 					id={'brandProfileSelect'}
 					placeholder={'Brand Profile'}
 					options={props.brandProfiles}
-					getOptionLabel={(option) => option.brandName}
-					getOptionValue={(option) => option.brandProfileId}
+					labelKey={'brandName'}
+					valueKey={'brandProfileId'}
 					value={props.brandProfiles[0]}
-					//   onChange={this.handleChange}
-					//   onBlur={this.handleBlur}
-
-					isMulti={false}
-					isDisabled={false}
-					isClearable={false}
-					backspaceRemovesValue={false}
-					components={{ ClearIndicator: null }}
+					style={{ width: '100%' }}
+					size='lg'
 				/>
 			</Grid>
 			<Grid item xs={12} sm={12} md={9}>
@@ -301,139 +277,21 @@ function ListBuilder(props) {
 					<SaveAlt />
 					Save & Download List
 				</Button>
-			</Grid>{' '}
-			{/**end dropdown and button top header */}
-			<Grid container alignItems='center' style={styles.summaryBody}>
-				{' '}
-				{/**begin summary */}
-				<Grid item xs={6} sm={3} md={3}></Grid>
-				<Grid item xs={6} sm={3} md={3} style={{ color: blackColor }}>
-					<Typography variant='subtitle1' align='center' gutterBottom>
-						AVG CPM {avgCpm}
-					</Typography>
-
-					<Typography variant='subtitle1' align='center' gutterBottom>
-						AVG CPV {avgCpv}
-					</Typography>
-
-					<Typography variant='subtitle1' align='center' gutterBottom>
-						AVG CPC {avgCpc}
-					</Typography>
-				</Grid>
-				<Grid item item item xs={12} sm={12} md={6}>
-					<Table
-						className={classes.table}
-						size='small'
-						aria-label='a dense table'
-					>
-						<TableHead style={{ border: '0px solid white' }}>
-							<TableRow style={{ border: '0px solid white' }}>
-								<TableCell
-									key={'01'}
-									style={{ border: '0px solid white' }}
-								></TableCell>
-								<TableCell
-									key={'02'}
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle2' gutterBottom>
-										TARGET
-									</Typography>
-								</TableCell>
-								<TableCell
-									key={'03'}
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle2' gutterBottom>
-										MONITOR
-									</Typography>
-								</TableCell>
-								<TableCell
-									key={'04'}
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle2' gutterBottom>
-										BLOCK
-									</Typography>
-								</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							<TableRow key={'0'}>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle2' gutterBottom>
-										CHANNELS
-									</Typography>
-								</TableCell>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle1' gutterBottom>
-										{channelsCount.target.items}
-									</Typography>
-								</TableCell>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle1' gutterBottom>
-										{channelsCount.monitor.items}
-									</Typography>
-								</TableCell>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle1' gutterBottom>
-										{channelsCount.block.items}
-									</Typography>
-								</TableCell>
-							</TableRow>
-							<TableRow key={'1'}>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle2' gutterBottom>
-										VIDEOS
-									</Typography>
-								</TableCell>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle1' gutterBottom>
-										{videosCount.target.items}
-									</Typography>
-								</TableCell>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle1' gutterBottom>
-										{videosCount.monitor.items}
-									</Typography>
-								</TableCell>
-								<TableCell
-									style={{ border: '0px solid white', color: blackColor }}
-								>
-									<Typography variant='subtitle1' gutterBottom>
-										{videosCount.block.items}
-									</Typography>
-								</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</Grid>
 			</Grid>
+			{/**end dropdown and button top header */}
+			{/**begin filters */}
 			<Grid item xs={12} sm={12} md={3}>
-				{' '}
-				{/**begin filters */}
 				<Grid container spacing={1} style={styles.col}>
-					<Grid item xs={9}></Grid>
-					<Grid item xs={3}>
-						<FilterList style={{ color: blackColor }} fontSize='large' />
+					<Grid item xs={12} sm={12} md={12}></Grid>
+					<Grid item xs={12} sm={12} md={12}></Grid>
+					<Grid item xs={10}></Grid>
+					<Grid item xs={2}>
+						<FilterList style={{ color: whiteColor }} fontSize='large' />
 					</Grid>
 
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Country'}
 							options={countries}
 							onChange={(e) => {
@@ -443,49 +301,60 @@ function ListBuilder(props) {
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Video Language'}
 							options={languages}
 							isDisabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect placeholder={'Category'} isDisabled={disableFilters} />
+						<InputPicker
+							style={{ width: '100%' }}
+							placeholder={'Category'}
+							isDisabled={disableFilters}
+						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Kids Content'}
 							options={boolOptions}
 							isDisabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Disabled Comments'}
 							options={boolOptions}
 							isDisabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Channel Filter'}
 							isDisabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Creator Type'}
 							isDisabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Alignment Score'}
 							isDisabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
-						<ReactSelect
+						<InputPicker
+							style={{ width: '100%' }}
 							placeholder={'Clean Rating Score'}
 							isDisabled={disableFilters}
 						/>
@@ -493,10 +362,62 @@ function ListBuilder(props) {
 				</Grid>
 			</Grid>{' '}
 			{/**end filters */}
+			{/**begin main table */}
 			<Grid item xs={12} sm={12} md={9}>
-				{' '}
-				{/**begin main table */}
 				<div style={styles.col}>
+					{/**begin summary */}
+					<Grid
+						container
+						align='center'
+						justify='center'
+						alignItems='center'
+						style={styles.summaryBody}
+					>
+						<Grid item xs={12} sm={12} md={4}>
+							<ListItemText
+								primary={'Averages'}
+								secondary={
+									'CPM: ' + avgCpm + ', CPC: ' + avgCpc + ', CPV: ' + avgCpv
+								}
+								secondaryTypographyProps={{ color: whiteColor }}
+							/>
+						</Grid>
+
+						<Grid item xs={12} sm={12} md={3}>
+							<ListItemText
+								primary={'Channel Count'}
+								secondary={
+									'Target: ' +
+									channelsCount.target.items +
+									', Monitor: ' +
+									channelsCount.monitor.items +
+									', Block: ' +
+									channelsCount.block.items
+								}
+								secondaryTypographyProps={{ color: whiteColor }}
+							/>
+						</Grid>
+						<Grid item xs={12} sm={12} md={3}>
+							<ListItemText
+								primary={'Video Count'}
+								secondary={
+									'Target: ' +
+									videosCount.target.items +
+									', Monitor: ' +
+									videosCount.monitor.items +
+									', Block: ' +
+									videosCount.block.items
+								}
+								secondaryTypographyProps={{ color: whiteColor }}
+							/>
+						</Grid>
+
+						<Grid item xs={12} sm={12} md={2}>
+							<CustomInputGroup size='lg' placeholder='Search...' disabled />
+						</Grid>
+					</Grid>
+					{/**end summary */}
+
 					<Tabs
 						bodyHeight={bodyHeight}
 						borderRad={borderRad}

@@ -1,39 +1,26 @@
 /* eslint-disable semi, indent, no-mixed-operators, no-underscore-dangle */
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import GridItem from '../../components/Grid/GridItem.js'
 import GridContainer from '../../components/Grid/GridContainer.js'
-import CustomInput from '../../components/CustomInput/CustomInput.js'
 import Button from '../../components/CustomButtons/Button.js'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import { connect } from 'react-redux'
 import { createUser } from '../../redux/actions/users'
-import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
-import CustomSelect from '../../components/CustomSelect/CustomSelect.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
-import * as v from '../../validations'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
 import { Formik } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import { default as UUID } from 'node-uuid'
-import { getTopLevelChecked } from '../../utils'
 
 const schemaValidation = Yup.object().shape({
-	roles: Yup.array()
-		.min(1, 'Select at least one role')
-		.of(
-			Yup.object()
-				.shape({
-					label: Yup.string(),
-					value: Yup.string()
-				})
-				.transform((v) => (v === '' ? null : v))
-		),
+	roleId: Yup.number()
+		.typeError('Required')
+		.required('Required'),
 	accounts: Yup.array().min(1, 'Select at least one account'),
 	firstName: Yup.string()
 		.min(2, 'Must be greater than 1 character')
@@ -70,13 +57,6 @@ const mapDispatchToProps = (dispatch) => {
 
 function CreateUser(props) {
 	const handleInviteUserClick = (values) => {
-		console.log(values)
-
-		let userRoles = []
-		for (const role of values.roles) {
-			userRoles.push({ roleId: role.roleId })
-		}
-
 		let accountsToLink = []
 		for (const account of values.accounts) {
 			accountsToLink.push({ accountId: account })
@@ -93,7 +73,7 @@ function CreateUser(props) {
 			company: values.company,
 			email: values.email,
 			userType: type,
-			roles: userRoles,
+			roleId: values.roleId,
 			accounts: accountsToLink
 		}
 		props.addNewUser(newUser)
@@ -109,7 +89,7 @@ function CreateUser(props) {
 				firstName: 'testfirst',
 				lastName: 'testLast',
 				email: 'test@test.com',
-				roles: [],
+				roleId: '',
 				accounts: []
 			}}
 			render={({
@@ -190,23 +170,20 @@ function CreateUser(props) {
 
 										<GridItem xs={10} sm={10} md={12}>
 											<FormikSelect
-												id='roles'
-												name='roles'
-												label='Roles'
-												placeholder='Roles'
+												id='role'
+												name='roleId'
+												label='Role'
+												placeholder='Role'
 												optionLabel='roleName'
 												optionValue='roleId'
 												options={props.roles}
-												value={values.roles}
-												isMulti={true}
+												value={values.roleId}
 												onChange={setFieldValue}
 												onBlur={setFieldTouched}
 												validateField={validateField}
 												validateForm={validateForm}
-												touched={touched.roles}
-												error={errors.roles}
-												isClearable={true}
-												backspaceRemovesValue={true}
+												touched={touched.roleId}
+												error={errors.roleId}
 											/>
 										</GridItem>
 									</GridContainer>

@@ -23,7 +23,8 @@ module.exports = override(
 				'@picker-tree-node-hover-bg': '#2d2d2d',
 				'@text-color': '#FFF',
 				'@font-family-base': '"Roboto", "Helvetica", "Arial", sans-serif',
-				'@font-size-base': '16px'
+				'@font-size-base': '16px',
+				'@input-bg-disabled': '#2d2d2d'
 			}
 		}
 	})

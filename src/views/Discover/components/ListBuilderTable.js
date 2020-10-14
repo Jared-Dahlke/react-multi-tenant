@@ -45,16 +45,8 @@ export default function ListBuilderTable(props) {
 
 	return (
 		<div>
-			<GridItem style={{ paddingLeft: 0 }}>
-				<SearchBar
-					value={categorySearch}
-					handleChange={(val) => setCategorySearch(val)}
-					onRequestSearch={console.log('searched')}
-				/>
-			</GridItem>
-
 			<List
-				height={props.bodyHeight - 150}
+				height={props.bodyHeight - 100}
 				itemCount={props.data.length}
 				itemSize={140}
 				width={'100%'}

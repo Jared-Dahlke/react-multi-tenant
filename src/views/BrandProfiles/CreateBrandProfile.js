@@ -24,7 +24,8 @@ import GridList from '@material-ui/core/GridList'
 import Scenarios from './components/Scenarios'
 import {
 	createBrandProfile,
-	fetchBrandScenariosProperties
+	fetchBrandScenariosProperties,
+	fetchBrandIndustryVerticals
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { Debug } from '../Debug'
@@ -73,7 +74,8 @@ const mapDispatchToProps = (dispatch) => {
 		createBrandProfile: (brandProfile) =>
 			dispatch(createBrandProfile(brandProfile)),
 		fetchBrandScenariosProperties: () =>
-			dispatch(fetchBrandScenariosProperties())
+			dispatch(fetchBrandScenariosProperties()),
+		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals())
 	}
 }
 
@@ -146,9 +148,11 @@ function getSteps() {
 
 function CreateBrandProfiles(props) {
 	let fetchBrandScenariosProperties = props.fetchBrandScenariosProperties
+	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
 	React.useEffect(() => {
 		fetchBrandScenariosProperties()
-	}, [fetchBrandScenariosProperties])
+		fetchBrandIndustryVerticals()
+	}, [fetchBrandScenariosProperties, fetchBrandIndustryVerticals])
 
 	const scenarios = React.useMemo(
 		() => formatScenario(props.scenarioProperties),

@@ -108,7 +108,7 @@ export default function FullWidthTabs(props) {
 				axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
 				index={value}
 				onChangeIndex={handleChangeIndex}
-				style={{ borderRadius: props.borderRad }}
+				style={{ borderRadius: props.borderRad, backgroundColor: whiteColor }}
 			>
 				<TabPanel
 					value={value}
@@ -127,7 +127,12 @@ export default function FullWidthTabs(props) {
 					) : null}
 				</TabPanel>
 
-				<TabPanel value={value} index={1} dir={theme.direction}>
+				<TabPanel
+					value={value}
+					index={1}
+					dir={theme.direction}
+					style={{ backgroundColor: whiteColor }}
+				>
 					{props.channels && props.channels.length > 0 ? (
 						<ListBuilderTable
 							data={props.channels}
@@ -139,7 +144,12 @@ export default function FullWidthTabs(props) {
 					) : null}
 				</TabPanel>
 
-				<TabPanel value={value} index={2} dir={theme.direction}>
+				<TabPanel
+					value={value}
+					index={2}
+					dir={theme.direction}
+					style={{ backgroundColor: whiteColor }}
+				>
 					{props.videos && props.videos.length > 0 ? (
 						<ListBuilderTable
 							data={props.videos}

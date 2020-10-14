@@ -18,7 +18,6 @@ import Settings from '@material-ui/icons/Settings'
 import PieChart from '@material-ui/icons/PieChart'
 import { SettingsRoutes, DiscoverRoutes } from '../../routes'
 import AccountDropdown from '../../components/AccountDropdown'
-import WbIncandescentIcon from '@material-ui/icons/WbIncandescent'
 
 const useStyles = makeStyles(styles)
 
