@@ -191,10 +191,9 @@ function Account(props) {
 				contactName: currentAccount.contactName,
 				contactEmail: currentAccount.contactEmail,
 				accountMargin: currentAccount.accountMargin,
-				accountType: {
-					accountTypeId: currentAccount.accountTypeId,
-					accountTypeName: currentAccount.accountTypeName
-				},
+
+				accountTypeId: currentAccount.accountTypeId,
+
 				parentAccountName: currentAccount.parentAccountName,
 				accountId: currentAccount.accountId
 			}}
@@ -277,22 +276,19 @@ function Account(props) {
 
 												<FormikSelect
 													id='accountType'
-													name='accountType'
+													name='accountTypeId'
 													label='Account Type'
 													placeholder='Select an Account Type'
 													optionLabel='accountTypeName'
 													optionValue='accountTypeId'
 													options={props.accountTypes}
-													value={values.accountType}
-													isMulti={false}
+													value={values.accountTypeId}
 													onChange={setFieldValue}
 													onBlur={setFieldTouched}
 													validateField={validateField}
 													validateForm={validateForm}
-													touched={touched.accountType}
-													error={errors.accountType}
-													isClearable={true}
-													backspaceRemovesValue={true}
+													touched={touched.accountTypeId}
+													error={errors.accountTypeId}
 												/>
 											</GridItem>
 										</GridContainer>

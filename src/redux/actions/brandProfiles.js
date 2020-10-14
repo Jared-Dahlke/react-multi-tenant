@@ -4,20 +4,14 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SCENARIO_PROPERTIES_FETCH
+	SCENARIO_PROPERTIES_FETCH,
+	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
 import { brandProfilesObjValidation } from '../../schemas'
 
 const apiBase = config.apiGateway.URL
-
-/*let mockBrandProfiles = [
-  {brandProfileId: 1, brandProfileName: 'Trendy', website:'www.bruen.com', twitter: 'twitter.com/water', industryVertical: 'Food', industrySubVertical: 'Liquid'},
-  {brandProfileId: 2, brandProfileName: 'Conservative', website:'www.pkm.com', twitter: 'twitter.com/you', industryVertical: 'Food', industrySubVertical: 'Liquid'},
-  {brandProfileId: 3, brandProfileName: 'Progressive', website:'www.M4A1.com', twitter: 'twitter.com/knowthe', industryVertical: 'Food', industrySubVertical: 'Liquid'},
-  {brandProfileId: 4, brandProfileName: 'Emo', website:'www.Origin.com', twitter: 'twitter.com/thing', industryVertical: 'Food', industrySubVertical: 'Liquid'},
-]*/
 
 export function brandProfilesFetchDataSuccess(brandProfiles) {
 	return {
@@ -130,5 +124,27 @@ export function fetchBrandScenariosProperties() {
 		} catch (error) {
 			alert(error)
 		}
+	}
+}
+
+export function fetchBrandIndustryVerticals() {
+	let url = apiBase + `/brand-profile/industry-verticals`
+	return async (dispatch) => {
+		try {
+			const result = await axios.get(url)
+			console.log('RESULT', result)
+			if (result.status === 200) {
+				dispatch(brandIndustryVerticalsFetchDataSuccess(result.data))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function brandIndustryVerticalsFetchDataSuccess(industryVerticals) {
+	return {
+		type: BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+		industryVerticals
 	}
 }

@@ -2,8 +2,6 @@ import React from 'react'
 import CustomRadio from '../../../components/CustomRadio/CustomRadio'
 
 export default function Scenarios(props) {
-	console.log('scenarioprops')
-	console.log(props)
 	return (
 		<div>
 			{props.scenarios &&
