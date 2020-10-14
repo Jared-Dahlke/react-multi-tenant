@@ -13,11 +13,10 @@ import {
 import axios from '../../axiosConfig'
 import config from '../../config.js'
 import {
-	accountsObjValidation,
 	accountTypesObjValidation,
 	usersWithRolesObjValidation
 } from '../../schemas'
-import { userProfileFetchData, setAuthToken } from '../actions/auth'
+import { userProfileFetchData } from '../actions/auth'
 import {
 	usersFetchData,
 	usersFetchDataSuccess,
@@ -198,17 +197,6 @@ export function fetchSiteData(accountId) {
 				window.location.href = '/login'
 				localStorage.removeItem('token')
 				return
-			}
-			//accountsObjValidation.validate(result.data).catch(function(err) {
-			//	console.log(err.name, err.errors)
-			//	alert('Could not validate accounts data in fetch site data')
-			//})
-
-			//cleans up the delete accounts api error: https://sightly.atlassian.net/browse/EN-4228
-			for (const [index, account] of result.data.entries()) {
-				if (!account) {
-					let removed = result.data.splice(index, 1)
-				}
 			}
 
 			dispatch(accountsFetchDataSuccess(accounts))

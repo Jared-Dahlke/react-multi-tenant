@@ -17,7 +17,6 @@ import {
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
 import { Formik } from 'formik'
-import { Debug } from '../Debug'
 import * as Yup from 'yup'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
@@ -98,7 +97,8 @@ const scenarios = [
 
 const getScenarioPair = (scenarios) => {
 	let newScen = []
-	scenarios.map((scen, index) => {
+
+	scenarios.forEach((scen, index) => {
 		newScen.push({ scenName: `scenario${index}`, scenLabel: scen })
 	})
 
@@ -157,7 +157,6 @@ function CreateBrandProfiles(props) {
 
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
-	const [showTour, setShowTour] = React.useState(false)
 
 	const steps = getSteps()
 
@@ -172,7 +171,6 @@ function CreateBrandProfiles(props) {
 				twitterProfileUrl: values.basicInfoTwitterProfile
 			}
 			props.createBrandProfile(brandProfile)
-			setShowTour(true)
 		}
 	}
 

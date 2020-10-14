@@ -130,10 +130,11 @@ function EditUser(props) {
 	)
 	let grantedAccounts = React.useMemo(
 		() => getGrantedAccounts(props.users.data, parsedUserId),
-		[props.users.data]
+		[props.users.data, parsedUserId]
 	)
 	let user = React.useMemo(() => getUser(props.users.data, parsedUserId), [
-		props.users.data
+		props.users.data,
+		parsedUserId
 	])
 
 	const handleSaveClick = (values) => {
@@ -160,7 +161,7 @@ function EditUser(props) {
 		if (!user.accounts) {
 			fetchUserAccounts(parsedUserId)
 		}
-	}, [props.users])
+	}, [props.users, parsedUserId, user.accounts, fetchUserAccounts])
 
 	return (
 		<Formik

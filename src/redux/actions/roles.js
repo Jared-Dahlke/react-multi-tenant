@@ -10,7 +10,6 @@ import {
 import axios from '../../axiosConfig'
 import config from '../../config'
 import { rolesAndPermissionsObjValidation } from '../../schemas'
-import { setAuthToken } from './auth'
 
 const apiBase = config.apiGateway.URL
 
