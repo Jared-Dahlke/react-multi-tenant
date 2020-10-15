@@ -1,24 +1,16 @@
 import React from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import tableStyle from '../../../assets/jss/material-dashboard-react/components/tableStyle'
+import { makeStyles } from '@material-ui/core/styles'
 
 import ListBuilderRow from './ListBuilderRow'
-import SearchBar from './SearchBar'
-import GridItem from '../../../components/Grid/GridItem'
 
 import { FixedSizeList as List } from 'react-window'
 
 export default function ListBuilderTable(props) {
-	const [categorySearch, setCategorySearch] = React.useState('')
-
 	const useStyles = makeStyles((theme) => ({
 		root: {
-			//backgroundColor: 'yellow', //theme.palette.background.paper,
 			padding: 0
 		}
 	}))
-
-	const tableClasses = useStyles(tableStyle)
 
 	const classes = useStyles()
 

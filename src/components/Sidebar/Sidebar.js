@@ -12,12 +12,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import Collapse from '@material-ui/core/Collapse'
-import AdminNavbarLinks from '../../components/Navbars/AdminNavbarLinks.js'
 import styles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 import Settings from '@material-ui/icons/Settings'
 import PieChart from '@material-ui/icons/PieChart'
 import { SettingsRoutes, DiscoverRoutes, EngageRoutes } from '../../routes'
-import AccountDropdown from '../../components/AccountDropdown'
 import OfflineBolt from '@material-ui/icons/OfflineBolt'
 
 const useStyles = makeStyles(styles)
@@ -375,8 +373,6 @@ export default function Sidebar(props) {
 				</div>
 				{logoText}
 			</a>
-
-			<AccountDropdown />
 		</div>
 	)
 	return (
@@ -384,7 +380,7 @@ export default function Sidebar(props) {
 			<Hidden mdUp implementation='css'>
 				<Drawer
 					variant='temporary'
-					anchor={'right'}
+					anchor={'left'}
 					open={props.open}
 					classes={{
 						paper: classNames(classes.drawerPaper, {
@@ -394,31 +390,6 @@ export default function Sidebar(props) {
 					onClose={props.handleDrawerToggle}
 					ModalProps={{
 						keepMounted: true // Better open performance on mobile.
-					}}
-				>
-					{brand}
-
-					<div className={classes.sidebarWrapper}>
-						<AdminNavbarLinks />
-						{links}
-					</div>
-					{image !== undefined ? (
-						<div
-							className={classes.background}
-							style={{ backgroundImage: 'url(' + image + ')' }}
-						/>
-					) : null}
-				</Drawer>
-			</Hidden>
-			<Hidden smDown implementation='css'>
-				<Drawer
-					anchor={props.rtlActive ? 'right' : 'left'}
-					variant='permanent'
-					open
-					classes={{
-						paper: classNames(classes.drawerPaper, {
-							[classes.drawerPaperRTL]: props.rtlActive
-						})
 					}}
 				>
 					{brand}

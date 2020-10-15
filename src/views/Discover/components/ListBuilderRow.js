@@ -1,20 +1,12 @@
 import React from 'react'
 import {
-	Table,
-	TableCell,
-	TableBody,
-	TableRow,
-	TableHead,
-	Button,
 	ListItem,
 	ListItemSecondaryAction,
-	ListItemText,
-	Typography
+	ListItemText
 } from '@material-ui/core'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import ToggleButton from '@material-ui/lab/ToggleButton'
-import Checkbox from '@material-ui/core/Checkbox'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import {
 	successColor,
 	dangerColor,
@@ -66,43 +58,25 @@ export default function ListBuilderRow(props) {
 
 	const classes = useStyles()
 
-	const [view, setView] = React.useState('')
-
 	const handleChange = (event, nextView, id) => {
-		//setView(nextView);
 		props.handleButtonGroupChange(nextView, id, props.level)
 	}
 
 	let item = props.item
 
+	//memoizing these will not benefit performance because they would still re-render every time user makes target selection either way
 	let subscribers = numeral(item.channelSubscribers).format('0.0a')
 	let channels = numeral(item.channels).format('0a')
 	let videos = numeral(item.channelVideos).format('0a')
-
 	let views = numeral(item.views).format('0a')
-
 	let comments = numeral(item.comments).format('0a')
 	let likes = numeral(item.likes).format('0a')
 	let dislikes = numeral(item.dislikes).format('0a')
-
 	let channelVideos = numeral(item.videoCount).format('0a')
 	let channelSubscribers = numeral(item.subscribers).format('0.0a')
-
 	let cpm = numeral(item.averageCPM).format('$00.00')
 	let cpc = numeral(item.averageCPC).format('$.000')
 	let cpv = numeral(item.averageCPV).format('$.000')
-
-	let countStyle = {
-		border: 0,
-		margin: 0,
-		padding: 0,
-		paddingRight: 12
-	}
-	let mainCellStyle = {
-		padding: 8,
-		color: blackColor
-		//  verticalAlign: 'top'
-	}
 
 	return (
 		<ListItem key={item.categoryId} className={props.rowStyle}>

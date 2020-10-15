@@ -11,8 +11,8 @@ import Snackbar from '@material-ui/core/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
 import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
+import AccountDropdown from '../../components/AccountDropdown'
 
-// Redux
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../redux/actions/users.js'
@@ -211,6 +211,7 @@ function Account(props) {
 			}) => (
 				<GridContainer>
 					<GridItem xs={12} sm={12} md={6}>
+						<AccountDropdown />
 						<Card>
 							{accountLoading || props.isSwitchingAccounts ? (
 								<FormLoader />
