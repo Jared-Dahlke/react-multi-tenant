@@ -16,8 +16,9 @@ import AdminNavbarLinks from '../../components/Navbars/AdminNavbarLinks.js'
 import styles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 import Settings from '@material-ui/icons/Settings'
 import PieChart from '@material-ui/icons/PieChart'
-import { SettingsRoutes, DiscoverRoutes } from '../../routes'
+import { SettingsRoutes, DiscoverRoutes, EngageRoutes } from '../../routes'
 import AccountDropdown from '../../components/AccountDropdown'
+import OfflineBolt from '@material-ui/icons/OfflineBolt'
 
 const useStyles = makeStyles(styles)
 
@@ -31,6 +32,7 @@ export default function Sidebar(props) {
 
 	const [openCollapse, setOpenCollapse] = React.useState(true)
 	const [openCollapseDiscover, setOpenCollapseDiscover] = React.useState(true)
+	const [openCollapseEngage, setOpenCollapseEngage] = React.useState(true)
 
 	function handleOpenSettings() {
 		setOpenCollapse(!openCollapse)
@@ -38,6 +40,10 @@ export default function Sidebar(props) {
 
 	function handleOpenDiscover() {
 		setOpenCollapseDiscover(!openCollapseDiscover)
+	}
+
+	function handleOpenEngage() {
+		setOpenCollapseEngage(!openCollapseEngage)
 	}
 
 	const { color, logo, image, logoText, routes } = props
@@ -48,6 +54,10 @@ export default function Sidebar(props) {
 
 	const listItemClassesDiscover = classNames({
 		[' ' + classes[color]]: activeRoute('/admin/discover')
+	})
+
+	const listItemClassesEngage = classNames({
+		[' ' + classes[color]]: activeRoute('/admin/engage')
 	})
 
 	const whiteFontClasses = classNames({
@@ -153,7 +163,106 @@ export default function Sidebar(props) {
 				</Collapse>
 			</List>
 
-			{/**end discover slinky , begin settings slinky*/}
+			{/**end discover slinky , begin engage slinky*/}
+
+			{/**begin engage slinky */}
+
+			<List className={classes.list}>
+				<ListItem
+					onClick={handleOpenEngage}
+					button
+					className={classes.itemLink + listItemClassesEngage}
+				>
+					<OfflineBolt
+						className={classNames(classes.itemIcon, whiteFontClasses)}
+					/>
+
+					<ListItemText
+						primary={'Engage'}
+						className={classNames(classes.itemText, whiteFontClasses)}
+						disableTypography={true}
+					/>
+					{openCollapseDiscover ? (
+						<ExpandLess
+							className={classNames(classes.itemIcon, whiteFontClasses)}
+						/>
+					) : (
+						<ExpandMore
+							className={classNames(classes.itemIcon, whiteFontClasses)}
+						/>
+					)}
+				</ListItem>
+
+				<Collapse in={openCollapseEngage} timeout='auto' unmountOnExit>
+					<List>
+						{EngageRoutes.map((setting, key) => {
+							const whiteFontClassesNest = classNames({
+								[' ' + classes.whiteFont]: true
+							})
+
+							const subListItemClasses = classNames({
+								[' ' + classes[color]]: activeRoute(
+									setting.layout + setting.path
+								)
+							})
+
+							let itemClass = classes.nestedItemLink
+							//if(setting.path === '/settings/users' || setting.path === '/settings/rolesPermissions' || setting.path === '/settings/brandProfiles' || setting.path === '/settings/brandMentality') {
+							//  itemClass = classes.subNestedItemLink
+							//}
+
+							return (
+								<NavLink
+									to={setting.layout + setting.path}
+									className={classes.item}
+									activeClassName='active'
+									key={key}
+								>
+									<div
+										className={
+											setting.path.includes('brand')
+												? 'brandProfileLink'
+												: 'test'
+										}
+									>
+										<ListItem
+											button
+											inset='true'
+											className={itemClass + subListItemClasses}
+										>
+											<setting.icon
+												style={{
+													color: 'white',
+													width: '24px',
+													height: '30px',
+													fontSize: '24px',
+													lineHeight: '30px',
+													float: 'left',
+													marginRight: '15px',
+													marginLeft: '15px',
+													textAlign: 'center',
+													verticalAlign: 'middle'
+												}}
+											/>
+
+											<ListItemText
+												primary={setting.name}
+												className={classNames(
+													classes.itemText,
+													whiteFontClassesNest
+												)}
+												disableTypography={true}
+											/>
+										</ListItem>
+									</div>
+								</NavLink>
+							)
+						})}
+					</List>
+				</Collapse>
+			</List>
+
+			{/**end engage slinky , begin settings slinky*/}
 
 			<List className={classes.list}>
 				<ListItem
@@ -275,7 +384,7 @@ export default function Sidebar(props) {
 			<Hidden mdUp implementation='css'>
 				<Drawer
 					variant='temporary'
-					anchor={props.rtlActive ? 'left' : 'right'}
+					anchor={'right'}
 					open={props.open}
 					classes={{
 						paper: classNames(classes.drawerPaper, {

@@ -77,6 +77,7 @@ const downloadClick = () => {
 function ListBuilder(props) {
 	const [tabIndex, setTabIndex] = React.useState(0)
 	const [filters, setFilters] = React.useState({})
+	const [currentBrandProfileId, setCurrentBrandProfileId] = React.useState('')
 
 	const countries = countryList().getData()
 	const languages = [
@@ -243,7 +244,11 @@ function ListBuilder(props) {
 
 	const disableFilters = true //tabIndex > 0 ? false : true
 
-	const classes = useStyles()
+	React.useEffect(() => {
+		if (props.brandProfiles && props.brandProfiles.length > 0) {
+			setCurrentBrandProfileId(props.brandProfiles[0].brandProfileId)
+		}
+	}, [props.brandProfiles])
 
 	const CustomInputGroup = ({ placeholder, ...props }) => (
 		<InputGroup {...props}>
@@ -260,10 +265,10 @@ function ListBuilder(props) {
 				<InputPicker
 					id={'brandProfileSelect'}
 					placeholder={'Brand Profile'}
-					options={props.brandProfiles}
+					data={props.brandProfiles}
 					labelKey={'brandName'}
 					valueKey={'brandProfileId'}
-					value={props.brandProfiles[0]}
+					value={currentBrandProfileId}
 					style={{ width: '100%' }}
 					size='lg'
 				/>
@@ -297,7 +302,7 @@ function ListBuilder(props) {
 							onChange={(e) => {
 								handleFilterChange(e, 'Country')
 							}}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
@@ -305,14 +310,14 @@ function ListBuilder(props) {
 							style={{ width: '100%' }}
 							placeholder={'Video Language'}
 							options={languages}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Category'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
@@ -320,7 +325,7 @@ function ListBuilder(props) {
 							style={{ width: '100%' }}
 							placeholder={'Kids Content'}
 							options={boolOptions}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
@@ -328,35 +333,35 @@ function ListBuilder(props) {
 							style={{ width: '100%' }}
 							placeholder={'Disabled Comments'}
 							options={boolOptions}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Channel Filter'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Creator Type'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Alignment Score'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Clean Rating Score'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 				</Grid>
@@ -379,7 +384,7 @@ function ListBuilder(props) {
 								secondary={
 									'CPM: ' + avgCpm + ', CPC: ' + avgCpc + ', CPV: ' + avgCpv
 								}
-								secondaryTypographyProps={{ color: whiteColor }}
+								secondaryTypographyProps={{ color: 'initial' }}
 							/>
 						</Grid>
 
@@ -394,7 +399,7 @@ function ListBuilder(props) {
 									', Block: ' +
 									channelsCount.block.items
 								}
-								secondaryTypographyProps={{ color: whiteColor }}
+								secondaryTypographyProps={{ color: 'initial' }}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={12} md={3}>
@@ -408,7 +413,7 @@ function ListBuilder(props) {
 									', Block: ' +
 									videosCount.block.items
 								}
-								secondaryTypographyProps={{ color: whiteColor }}
+								secondaryTypographyProps={{ color: 'initial' }}
 							/>
 						</Grid>
 

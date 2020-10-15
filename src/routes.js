@@ -1,11 +1,11 @@
-import Person from '@material-ui/icons/Person'
-import People from '@material-ui/icons/People'
-import AccountTree from '@material-ui/icons/AccountTree'
+import Person from '@material-ui/icons/PersonOutlined'
+import People from '@material-ui/icons/PeopleOutlined'
+import AccountTree from '@material-ui/icons/AccountTreeOutlined'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
-import Business from '@material-ui/icons/Business'
-import Assignment from '@material-ui/icons/Assignment'
-import Book from '@material-ui/icons/Book'
-import Build from '@material-ui/icons/Build'
+import Business from '@material-ui/icons/BusinessOutlined'
+import Assignment from '@material-ui/icons/AssignmentOutlined'
+import Book from '@material-ui/icons/BookOutlined'
+import Build from '@material-ui/icons/BuildOutlined'
 
 export const SettingsRoutes = [
 	{
@@ -44,16 +44,19 @@ export const SettingsRoutes = [
 
 export const DiscoverRoutes = [
 	{
-		path: '/discover/listBuilder',
-		name: 'List Builder',
-		icon: Build,
-		layout: '/admin',
-		hide: true
-	},
-	{
 		path: '/discover/channelResearch',
 		name: 'Channel Research',
 		icon: Book,
+		layout: '/admin',
+		hide: true
+	}
+]
+
+export const EngageRoutes = [
+	{
+		path: '/engage/listBuilder',
+		name: 'List Builder',
+		icon: Build,
 		layout: '/admin',
 		hide: true
 	}

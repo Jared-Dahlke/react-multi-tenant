@@ -10,6 +10,7 @@ import {
 } from '../../../assets/jss/material-dashboard-react.js'
 import { Field, Formik } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
+import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 
 export default function BasicInfo(props) {
 	const [checkedKeys, setCheckedKeys] = React.useState([])
@@ -70,7 +71,24 @@ export default function BasicInfo(props) {
 				</GridItem>
 			</GridContainer>
 			<GridContainer>
-				<GridItem xs={12} sm={8} md={6}></GridItem>
+				<GridItem xs={10} sm={10} md={4}>
+					<FormikSelect
+						id='industryVertical'
+						name='basicInfoIndustryVerticalId'
+						label='Industry Vertical'
+						placeholder='Industry Vertical'
+						optionLabel='industryVerticalName'
+						optionValue='industryVerticalId'
+						options={props.industryVerticals}
+						value={props.values.basicInfoIndustryVerticalId}
+						onChange={props.setFieldValue}
+						onBlur={props.setFieldTouched}
+						validateField={props.validateField}
+						validateForm={props.validateForm}
+						touched={props.touched.basicInfoIndustryVerticalId}
+						error={props.errors.basicInfoIndustryVerticalId}
+					/>
+				</GridItem>
 			</GridContainer>
 		</div>
 	)
