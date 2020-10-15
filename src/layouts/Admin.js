@@ -59,7 +59,7 @@ const switchRoutes = (
 
 		<Route path='/admin/settings/brandMentality' component={TestBrandProfile} />
 
-		<Route path='/admin/discover/listBuilder' component={ListBuilder} />
+		<Route path='/admin/engage/listBuilder' component={ListBuilder} />
 
 		<Route
 			path='/admin/discover/channelResearch'

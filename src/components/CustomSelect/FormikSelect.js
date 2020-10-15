@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { dangerColor } from '../../assets/jss/material-dashboard-react'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import InputPicker from 'rsuite/lib/InputPicker'
+import SelectPicker from 'rsuite/lib/SelectPicker'
 
 export default class SelectField extends Component {
 	handleChange = (value) => {
@@ -36,7 +36,7 @@ export default class SelectField extends Component {
 					</h5>
 				)}
 
-				<InputPicker
+				<SelectPicker
 					id={id}
 					labelKey={this.props.optionLabel}
 					valueKey={this.props.optionValue}
@@ -48,6 +48,7 @@ export default class SelectField extends Component {
 					disabled={isDisabled}
 					cleanable={false}
 					style={{ width: '100%' }}
+					preventOverflow={true}
 				/>
 
 				<FormHelperText

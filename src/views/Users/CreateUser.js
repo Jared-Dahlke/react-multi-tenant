@@ -163,7 +163,7 @@ function CreateUser(props) {
 												valueKey='accountId'
 												value={values.accounts}
 												onChange={setFieldValue}
-												cascade={false}
+												cascade={true}
 												error={errors.accounts}
 											/>
 										</GridItem>

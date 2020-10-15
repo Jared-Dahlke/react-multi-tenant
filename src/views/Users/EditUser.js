@@ -253,7 +253,7 @@ function EditUser(props) {
 															valueKey='accountId'
 															value={values.accounts}
 															onChange={setFieldValue}
-															cascade={false}
+															cascade={true}
 															error={errors.accounts}
 														/>
 													) : null}
@@ -276,8 +276,6 @@ function EditUser(props) {
 														validateForm={validateForm}
 														touched={touched.roleId}
 														error={errors.roleId}
-														isClearable={true}
-														backspaceRemovesValue={true}
 													/>
 												</GridItem>
 											</GridContainer>
