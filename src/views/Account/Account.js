@@ -311,7 +311,7 @@ function Account(props) {
 										)}
 
 										<Button
-											disabled={!isValid || !dirty}
+											disabled={!isValid}
 											color='primary'
 											onClick={() => handleMySubmit(values)}
 										>
