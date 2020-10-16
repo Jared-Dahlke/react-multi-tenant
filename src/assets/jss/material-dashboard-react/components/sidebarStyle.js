@@ -11,9 +11,9 @@ import {
 	dangerColor,
 	whiteColor,
 	grayColor,
-	blackColor,
 	hexToRgb
 } from '../../material-dashboard-react.js'
+import { neutralColor } from '../../colorContants.js'
 
 const sidebarStyle = (theme) => ({
 	drawerPaper: {
@@ -108,7 +108,7 @@ const sidebarStyle = (theme) => ({
 			height: '100%',
 			content: '""',
 			display: 'block',
-			background: blackColor,
+			background: neutralColor,
 			opacity: '.8'
 		}
 	},
@@ -208,7 +208,7 @@ const sidebarStyle = (theme) => ({
 			'0 12px 20px -10px rgba(' +
 			hexToRgb(infoColor[0]) +
 			',.28), 0 4px 20px 0 rgba(' +
-			hexToRgb(blackColor) +
+			hexToRgb(neutralColor) +
 			',.12), 0 7px 8px -5px rgba(' +
 			hexToRgb(infoColor[0]) +
 			',.2)',
@@ -218,7 +218,7 @@ const sidebarStyle = (theme) => ({
 				'0 12px 20px -10px rgba(' +
 				hexToRgb(infoColor[0]) +
 				',.28), 0 4px 20px 0 rgba(' +
-				hexToRgb(blackColor) +
+				hexToRgb(neutralColor) +
 				',.12), 0 7px 8px -5px rgba(' +
 				hexToRgb(infoColor[0]) +
 				',.2)'
@@ -230,7 +230,7 @@ const sidebarStyle = (theme) => ({
 			'0 12px 20px -10px rgba(' +
 			hexToRgb(successColor[0]) +
 			',.28), 0 4px 20px 0 rgba(' +
-			hexToRgb(blackColor) +
+			hexToRgb(neutralColor) +
 			',.12), 0 7px 8px -5px rgba(' +
 			hexToRgb(successColor[0]) +
 			',.2)',
@@ -240,7 +240,7 @@ const sidebarStyle = (theme) => ({
 				'0 12px 20px -10px rgba(' +
 				hexToRgb(successColor[0]) +
 				',.28), 0 4px 20px 0 rgba(' +
-				hexToRgb(blackColor) +
+				hexToRgb(neutralColor) +
 				',.12), 0 7px 8px -5px rgba(' +
 				hexToRgb(successColor[0]) +
 				',.2)'
@@ -252,7 +252,7 @@ const sidebarStyle = (theme) => ({
 			'0 12px 20px -10px rgba(' +
 			hexToRgb(warningColor[0]) +
 			',.28), 0 4px 20px 0 rgba(' +
-			hexToRgb(blackColor) +
+			hexToRgb(neutralColor) +
 			',.12), 0 7px 8px -5px rgba(' +
 			hexToRgb(warningColor[0]) +
 			',.2)',
@@ -262,7 +262,7 @@ const sidebarStyle = (theme) => ({
 				'0 12px 20px -10px rgba(' +
 				hexToRgb(warningColor[0]) +
 				',.28), 0 4px 20px 0 rgba(' +
-				hexToRgb(blackColor) +
+				hexToRgb(neutralColor) +
 				',.12), 0 7px 8px -5px rgba(' +
 				hexToRgb(warningColor[0]) +
 				',.2)'
@@ -274,7 +274,7 @@ const sidebarStyle = (theme) => ({
 			'0 12px 20px -10px rgba(' +
 			hexToRgb(dangerColor[0]) +
 			',.28), 0 4px 20px 0 rgba(' +
-			hexToRgb(blackColor) +
+			hexToRgb(neutralColor) +
 			',.12), 0 7px 8px -5px rgba(' +
 			hexToRgb(dangerColor[0]) +
 			',.2)',
@@ -284,7 +284,7 @@ const sidebarStyle = (theme) => ({
 				'0 12px 20px -10px rgba(' +
 				hexToRgb(dangerColor[0]) +
 				',.28), 0 4px 20px 0 rgba(' +
-				hexToRgb(blackColor) +
+				hexToRgb(neutralColor) +
 				',.12), 0 7px 8px -5px rgba(' +
 				hexToRgb(dangerColor[0]) +
 				',.2)'

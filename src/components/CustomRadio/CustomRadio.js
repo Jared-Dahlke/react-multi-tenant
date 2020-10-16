@@ -6,10 +6,10 @@ import { FormControlLabel, RadioGroup, Radio } from '@material-ui/core'
 import {
 	whiteColor,
 	primaryColor,
-	blackColor,
 	grayColor
 } from '../../assets/jss/material-dashboard-react.js'
 import { makeStyles } from '@material-ui/core/styles'
+import { neutralColor } from '../../assets/jss/colorContants'
 
 const styles = (theme) => ({
 	radio: {
@@ -88,7 +88,7 @@ export default function CustomRadio(props) {
 						name={props.fieldName}
 					/>
 				</RadioGroup>
-				<div style={{ color: blackColor, height: 15 }} />
+				<div style={{ color: neutralColor, height: 15 }} />
 			</GridItem>
 		</GridContainer>
 	)

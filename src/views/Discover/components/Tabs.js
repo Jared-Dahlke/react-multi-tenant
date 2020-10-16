@@ -5,16 +5,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
-import {
-	blackColor,
-	grayColor,
-	whiteColor
-} from '../../../assets/jss/material-dashboard-react'
+import { whiteColor } from '../../../assets/jss/material-dashboard-react'
 import ListBuilderTable from './ListBuilderTable'
-import GridList from '@material-ui/core/GridList'
-import SearchBar from './SearchBar'
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props

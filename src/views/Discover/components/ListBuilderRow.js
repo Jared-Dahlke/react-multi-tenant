@@ -9,11 +9,9 @@ import ToggleButton from '@material-ui/lab/ToggleButton'
 import { makeStyles } from '@material-ui/core/styles'
 import {
 	successColor,
-	dangerColor,
-	warningColor,
-	blackColor,
-	whiteColor
+	dangerColor
 } from '../../../assets/jss/material-dashboard-react'
+import { neutralColor } from '../../../assets/jss/colorContants'
 var numeral = require('numeral')
 
 export default function ListBuilderRow(props) {
@@ -81,7 +79,7 @@ export default function ListBuilderRow(props) {
 	return (
 		<ListItem key={item.categoryId} className={props.rowStyle}>
 			{props.level === 'Category' ? (
-				<div style={{ color: blackColor }}>
+				<div style={{ color: neutralColor }}>
 					<ListItemText
 						primary={item.categoryName}
 						secondary={
@@ -99,7 +97,7 @@ export default function ListBuilderRow(props) {
 					/>
 				</div>
 			) : props.level === 'Channel' ? (
-				<div style={{ color: blackColor }}>
+				<div style={{ color: neutralColor }}>
 					<ListItemText
 						primary={item.title + ' (' + item.categoryName + ')'}
 						secondary={
@@ -117,7 +115,7 @@ export default function ListBuilderRow(props) {
 					/>
 				</div>
 			) : props.level === 'Video' ? (
-				<div style={{ color: blackColor }}>
+				<div style={{ color: neutralColor }}>
 					<ListItemText
 						primary={item.title}
 						secondary={

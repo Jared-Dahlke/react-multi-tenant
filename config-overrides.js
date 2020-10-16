@@ -1,6 +1,9 @@
 const { override, addLessLoader } = require('customize-cra')
 
-const blackColor = '#2d2d2d'
+const neutralColor = process.env.REACT_APP_NEUTRAL
+const neutralLightColor = process.env.REACT_APP_NEUTRAL_LIGHT
+const neutralExtraLightColor = process.env.REACT_APP_NEUTRAL_EXTRA_LIGHT
+const accentColor = process.env.REACT_APP_ACCENT
 
 module.exports = override(
 	addLessLoader({
@@ -8,44 +11,45 @@ module.exports = override(
 		lessOptions: {
 			javascriptEnabled: true,
 			modifyVars: {
-				'@base-color': '#00aeef',
+				'@base-color': accentColor,
 				//	'@primary-color': 'yellow',
 
-				'@dropdown-bg': blackColor,
+				'@dropdown-bg': neutralLightColor,
 
-				'@input-bg': blackColor,
+				'@input-bg': neutralColor,
 				'@input-color': '#FFF',
-				'@picker-select-menu-item-selected-bg': blackColor,
+				'@picker-select-menu-item-selected-bg': neutralLightColor,
+
 				//'@picker-tree-node-active-color': 'purple',
 				// '@picker-select-menu-item-selected-bg' : 'pink',
 				//'@picker-tree-node-active-bg': 'yellow'
 				// '@picker-select-menu-item-selected-color': 'yellow',
 				'@picker-select-item-color': '#FFF',
-				'@picker-menu-item-hover-bg': blackColor,
-				'@picker-tree-node-hover-bg': blackColor,
+				'@picker-menu-item-hover-bg': neutralColor,
+				'@picker-tree-node-hover-bg': neutralLightColor,
 				'@text-color': '#FFF',
 				'@font-family-base': '"Roboto", "Helvetica", "Arial", sans-serif',
 				'@font-size-base': '16px',
-				'@input-bg-disabled': blackColor,
+				'@input-bg-disabled': neutralColor,
 
 				//navbar
-				'@nav-bar-default-bg': blackColor,
+				'@nav-bar-default-bg': neutralColor,
 				'@nav-bar-default-active-color': 'yellow',
 				'@nav-bar-default-font-color': '#FFF',
-				'@nav-bar-default-active-bg': blackColor,
-				'@nav-item-default-hover-bg': blackColor,
-				'@dropdown-link-hover-bg': blackColor,
+				'@nav-bar-default-active-bg': neutralColor,
+				'@nav-item-default-hover-bg': neutralExtraLightColor,
+				'@dropdown-link-hover-bg': neutralLightColor,
 
 				'@btn-default-hover-bg': 'yellow',
 				'@btn-default-active-bg': 'purple',
 				'@btn-default-focus-bg': 'pink',
 				'@nav-subtle-hover-bg': 'red',
 				//	'@nav-bar-subtle-hover-bg': 'green',
-				'@btn-subtle-hover-bg': blackColor,
-				'@btn-subtle-focus-bg': blackColor,
-				//'@btn-subtle-active-color': blackColor,
-				//'@btn-subtle-active-default-color': blackColor,
-				'@btn-subtle-active-default-bg': blackColor
+				'@btn-subtle-hover-bg': neutralColor,
+				'@btn-subtle-focus-bg': neutralColor,
+				//'@btn-subtle-active-color': neutralColor,
+				//'@btn-subtle-active-default-color': neutralColor,
+				'@btn-subtle-active-default-bg': neutralColor
 			}
 		}
 	})
