@@ -85,6 +85,16 @@ export function login(credentials) {
 				dispatch(setUserId(user.userId))
 				localStorage.setItem('token', token)
 				localStorage.setItem('userId', user.userId)
+
+				localStorage.removeItem('permissions')
+				if (user.permissions && user.permissions.length > 0) {
+					let permissionArray = []
+					for (const permission of user.permissions) {
+						permissionArray.push(permission.permissionId)
+					}
+					localStorage.setItem('permissions', permissionArray)
+				}
+
 				dispatch(setLoggedIn(true))
 			}
 		} catch (error) {
