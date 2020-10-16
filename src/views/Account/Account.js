@@ -145,6 +145,14 @@ function Account(props) {
 		}
 	}
 
+	const getAccountTypeNameById = (accountTypeId) => {
+		for (const accountType of props.accountTypes) {
+			if (accountTypeId === accountType.accountTypeId)
+				return accountType.accountTypeName
+		}
+		throw new error('Cannot find accountTypeId in the accountTypes object')
+	}
+
 	const handleMySubmit = (values) => {
 		let account = {
 			accountId: values.accountId,
@@ -152,8 +160,8 @@ function Account(props) {
 			accountMargin: values.accountMargin,
 			contactEmail: values.contactEmail,
 			contactName: values.contactName,
-			accountTypeId: values.accountType.accountTypeId,
-			accountTypeName: values.accountType.accountTypeName
+			accountTypeId: values.accountTypeId,
+			accountTypeName: getAccountTypeNameById(values.accountTypeId)
 		}
 		props.updateAccount(account)
 	}
