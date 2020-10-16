@@ -7,7 +7,13 @@ import ResetPassword from './pages/ResetPassword'
 import ChangePassword from './pages/ChangePassword'
 import { Provider } from 'react-redux'
 import configureStore from './redux/store/index.js'
+
 import Admin from '../src/layouts/Admin.js'
+
+//const Admin = lazy(() => import('../src/layouts/Admin'))
+//const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+//const ChangePassword = lazy(() => import('./pages/ChangePassword'))
+//const Login = lazy(() => import('./pages/Login'))
 
 const store = configureStore()
 
@@ -18,6 +24,7 @@ function App() {
 				<div>
 					<Route exact path='/' component={Login} />
 					<Route path='/login' component={Login} />
+
 					<Route path='/resetPassword' component={ResetPassword} />
 					<Route
 						path='/changePassword/:userId/:token'
@@ -28,6 +35,7 @@ function App() {
 							/>
 						)}
 					/>
+
 					<PrivateRoute path='/admin' component={Admin} />
 				</div>
 			</Router>

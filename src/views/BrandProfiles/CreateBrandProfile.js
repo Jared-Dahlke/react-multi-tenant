@@ -3,14 +3,13 @@ import Button from '../../components/CustomButtons/Button.js'
 import Card from '../../components/Card/Card.js'
 import CardFooter from '../../components/Card/CardFooter'
 import CardBody from '../../components/Card/CardBody.js'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography'
 import {
 	primaryColor,
-	blackColor,
 	whiteColor,
 	grayColor
 } from '../../assets/jss/material-dashboard-react'
@@ -29,6 +28,7 @@ import {
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { Debug } from '../Debug'
+import { neutralColor } from '../../assets/jss/colorContants.js'
 //import Joyride from 'react-joyride'
 //import {getTours} from '../../Tour'
 /** <Joyride
@@ -39,7 +39,7 @@ import { Debug } from '../Debug'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
-		backgroundColor: blackColor
+		backgroundColor: neutralColor
 	},
 	fixBottom: {
 		position: 'fixed',
@@ -82,7 +82,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
 	return {
 		currentAccountId: state.currentAccountId,
-		scenarioProperties: state.scenarioProperties
+		scenarioProperties: state.scenarioProperties,
+		industryVerticals: state.industryVerticals
 	}
 }
 
@@ -103,17 +104,10 @@ const formatScenario = (scenarioProps) => {
 }
 
 const schemaValidation = Yup.object().shape({
-	basicInfoIndustry: Yup.array()
-		.typeError('Wrong type')
-		.min(1, 'Select at least one field')
-		.of(
-			Yup.object()
-				.shape({
-					label: Yup.string(),
-					value: Yup.string()
-				})
-				.transform((v) => (v === '' ? null : v))
-		),
+	// scenarios: Yup.object()
+	basicInfoIndustryVerticalId: Yup.number()
+		.typeError('Required')
+		.required('Required'),
 	basicInfoProfileName: Yup.string()
 		.min(2, 'Must be greater than 1 character')
 		.max(50, 'Must be less than 50 characters')
@@ -121,7 +115,7 @@ const schemaValidation = Yup.object().shape({
 	basicInfoWebsiteUrl: Yup.string()
 		.matches(
 			/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-			'Enter correct url!'
+			'Valid URL required, (e.g. google.com)'
 		)
 		.required('Required'),
 
@@ -234,7 +228,7 @@ function CreateBrandProfiles(props) {
 			basicInfoProfileName: '',
 			basicInfoWebsiteUrl: '',
 			basicInfoTwitterProfile: '',
-			//basicInfoIndustry: [],
+			basicInfoIndustryVerticalId: '',
 			topCompetitors: []
 		}
 
@@ -250,9 +244,9 @@ function CreateBrandProfiles(props) {
 
 	return (
 		<Formik
-			//	enableReinitialize
-			validateOnMount={true}
-			// validateOnChange={true}
+			enableReinitialize
+			//validateOnMount={true}
+			validateOnChange={true}
 			validationSchema={() => schemaValidation}
 			initialValues={getInitialValues()}
 			render={({
@@ -265,7 +259,8 @@ function CreateBrandProfiles(props) {
 				validateForm,
 				isSubmitting,
 				isValid,
-				arrayHelpers
+				arrayHelpers,
+				dirty
 			}) => (
 				<div>
 					<Stepper
@@ -299,7 +294,7 @@ function CreateBrandProfiles(props) {
 
 					<GridContainer justify='center'>
 						<GridItem xs={12} sm={12} md={11}>
-							<Card style={{ backgroundColor: blackColor }}>
+							<Card style={{ backgroundColor: neutralColor }}>
 								<CardBody>
 									<GridList
 										cols={1}
@@ -310,7 +305,11 @@ function CreateBrandProfiles(props) {
 											<div>
 												<BasicInfo
 													setFieldValue={setFieldValue}
+													values={values}
+													touched={touched}
+													industryVerticals={props.industryVerticals}
 													errors={errors}
+													setFieldTouched={setFieldTouched}
 												/>
 											</div>
 										) : activeStep === 1 ? (
@@ -361,7 +360,8 @@ function CreateBrandProfiles(props) {
 														color='primary'
 														onClick={() => handleNext(values)}
 														disabled={
-															!stepValidated(activeStep, errors, values)
+															!stepValidated(activeStep, errors, values) ||
+															!dirty
 														}
 													>
 														{activeStep === steps.length - 1 ? 'Save' : 'Next'}

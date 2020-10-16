@@ -106,7 +106,7 @@ export function rolesPermissionsFetchData(accountId) {
 					.validate(result.data)
 					.catch(function(err) {
 						console.log(err.name, err.errors)
-						alert('Could not validate roles data')
+						alert('Could not validate roles Permissions data')
 					})
 				dispatch(rolesPermissionsFetchDataSuccess(result))
 				dispatch(rolesPermissionsIsLoading(false))
