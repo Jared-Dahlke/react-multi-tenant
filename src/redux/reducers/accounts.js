@@ -52,7 +52,7 @@ export function accounts(state = [], action) {
 			)
 			copyAccount.accountMargin = action.account.accountMargin
 			copyAccount.accountName = action.account.accountName
-			copyAccount.accoutTypeId = action.account.accountTypeId
+			copyAccount.accountTypeId = action.account.accountTypeId
 			copyAccount.accountTypeName = action.account.accountTypeName
 			copyAccount.contactEmail = action.account.contactEmail
 			copyAccount.contactName = action.account.contactName

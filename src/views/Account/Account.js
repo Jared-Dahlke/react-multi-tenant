@@ -146,7 +146,8 @@ function Account(props) {
 	}
 
 	const getAccountTypeNameById = (accountTypeId) => {
-		for (const accountType of props.accountTypes) {
+		let accountTypesCopy = JSON.parse(JSON.stringify(props.accountTypes))
+		for (const accountType of accountTypesCopy) {
 			if (accountTypeId === accountType.accountTypeId)
 				return accountType.accountTypeName
 		}
