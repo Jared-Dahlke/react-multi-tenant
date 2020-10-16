@@ -1,6 +1,6 @@
 /*eslint-disable no-restricted-globals*/
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import GridItem from '../../components/Grid/GridItem.js'
 import GridContainer from '../../components/Grid/GridContainer.js'
 import Button from '../../components/CustomButtons/Button.js'

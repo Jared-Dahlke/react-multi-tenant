@@ -2,13 +2,15 @@ import React from 'react'
 import GridItem from '../Grid/GridItem'
 import GridContainer from '../Grid/GridContainer'
 
-import { FormControlLabel, RadioGroup, Radio } from '@material-ui/core'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import Radio from '@material-ui/core/Radio'
 import {
 	whiteColor,
 	primaryColor,
 	grayColor
 } from '../../assets/jss/material-dashboard-react.js'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import { neutralColor } from '../../assets/jss/colorContants'
 
 const styles = (theme) => ({

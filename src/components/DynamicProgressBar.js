@@ -1,11 +1,9 @@
 import React from 'react'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
-import Row from 'rsuite/lib/Row'
-import Col from 'rsuite/lib/Col'
 import Button from 'rsuite/lib/Button'
 import Progress from 'rsuite/lib/Progress'
 
-const { Circle, Line } = Progress
+const { Line } = Progress
 
 export default class DynamicProgress extends React.Component {
 	constructor() {

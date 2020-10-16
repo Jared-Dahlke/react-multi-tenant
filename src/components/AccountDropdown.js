@@ -4,12 +4,9 @@ import { connect } from 'react-redux'
 import TreePicker from 'rsuite/lib/TreePicker'
 import { fetchSiteData, clearSiteData } from '../redux/actions/accounts'
 import { getCurrentAccount } from '../utils'
-
-import InputLabel from '@material-ui/core/InputLabel'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import ControlLabel from 'rsuite/lib/ControlLabel'
 import FormGroup from 'rsuite/lib/FormGroup'
-import FormControl from 'rsuite/lib/FormControl'
 import Form from 'rsuite/lib/Form'
 
 import styles from '../assets/jss/material-dashboard-react/components/customInputStyle.js' //"assets/jss/material-dashboard-react/components/customInputStyle.js";
@@ -28,11 +25,6 @@ const mapDispatchToProps = (dispatch) => {
 
 function SimplePopover(props) {
 	const classes = useStyles()
-
-	const labelClasses = classNames({
-		[' ' + classes.labelRootError]: false,
-		[' ' + classes.labelRootSuccess]: true
-	})
 
 	const marginTop = classNames({
 		[classes.marginTop]: true

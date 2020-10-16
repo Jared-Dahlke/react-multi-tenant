@@ -1,12 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import Tabs from './components/Tabs'
 import InputPicker from 'rsuite/lib/InputPicker'
 import FilterList from '@material-ui/icons/FilterList'
-import { ListItemText } from '@material-ui/core'
+import ListItemText from '@material-ui/core/ListItemText'
 import {
 	fetchChannels,
 	categoriesFetchDataSuccess,
@@ -40,8 +39,6 @@ const styles = {
 		borderRadius: borderRad
 	}
 }
-
-const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return {

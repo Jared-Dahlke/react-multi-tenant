@@ -5,16 +5,14 @@ import GridContainer from '../../components/Grid/GridContainer.js'
 import Button from '../../components/CustomButtons/Button.js'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
-import {
-	Table,
-	TableCell,
-	TableBody,
-	TableRow,
-	TableHead
-} from '@material-ui/core'
+import Table from '@material-ui/core/Table'
+import TableCell from '@material-ui/core/TableCell'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableHead from '@material-ui/core/TableHead'
 import Edit from '@material-ui/icons/Edit'
 import Close from '@material-ui/icons/Close'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
