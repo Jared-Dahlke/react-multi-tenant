@@ -1,338 +1,315 @@
-import React from "react";
-import {connect} from 'react-redux'
-import { makeStyles } from "@material-ui/core/styles";
-import GridItem from "../../components/Grid/GridItem.js";
-import GridContainer from "../../components/Grid/GridContainer.js";
-import CustomInput from "../../components/CustomInput/CustomInput.js";
-import Button from "../../components/CustomButtons/Button.js";
-import Card from "../../components/Card/Card.js";
-import CardBody from "../../components/Card/CardBody.js";
-import CardFooter from "../../components/Card/CardFooter.js";
-import CustomSelect from '../../components/CustomSelect/CustomSelect'
-import CustomTree from '../../components/Tree/CustomTree'
-import CustomCheckbox from '../../components/CustomCheckbox/Checkbox'
+import React from 'react'
+import { connect } from 'react-redux'
+import GridItem from '../../components/Grid/GridItem.js'
+import GridContainer from '../../components/Grid/GridContainer.js'
+import Button from '../../components/CustomButtons/Button.js'
+import Card from '../../components/Card/Card.js'
+import CardBody from '../../components/Card/CardBody.js'
+import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
-import * as v from '../../validations'
-import {updateUserData, updateUserRoles, updateUserAccounts, fetchUserAccounts} from '../../redux/actions/users'
-import {getTopLevelChecked} from '../../utils'
-import PrettyJson from "../../PrettyJson.js";
-import {FormLoader} from '../../components/SkeletonLoader'
+import {
+	updateUserData,
+	updateUserRole,
+	updateUserAccounts,
+	fetchUserAccounts
+} from '../../redux/actions/users'
+import { FormLoader } from '../../components/SkeletonLoader'
+import { Formik } from 'formik'
+import FormikInput from '../../components/CustomInput/FormikInput'
+import FormikSelect from '../../components/CustomSelect/FormikSelect'
+import * as Yup from 'yup'
+import SuiteTree from '../../components/Tree/SuiteTree.js'
+import { Debug } from '../Debug'
 
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
-
-const useStyles = makeStyles(styles);
+const schemaValidation = Yup.object().shape({
+	roleId: Yup.number()
+		.typeError('Required')
+		.required('Required'),
+	accounts: Yup.array().min(1, 'Select at least one account'),
+	firstName: Yup.string()
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters')
+		.required('Required'),
+	lastName: Yup.string()
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters')
+		.required('Required'),
+	company: Yup.string()
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters')
+		.required('Required'),
+	email: Yup.string()
+		.email('Invalid email')
+		.required('Required')
+})
 
 const mapStateToProps = (state) => {
-  return { 
-    roles: state.roles.data,
-    accounts: state.accounts,
-    users: state.users,
-    editUserUserAccountsLoading: state.editUserUserAccountsLoading
-  };
-};
+	return {
+		roles: state.roles.data,
+		accounts: state.accounts,
+		users: state.users,
+		editUserUserAccountsLoading: state.editUserUserAccountsLoading
+	}
+}
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    updateUserData: (userData) => dispatch(updateUserData(userData)),
-    fetchUserAccounts: (userId)=>dispatch(fetchUserAccounts(userId)),
-    updateUserRoles: (user, roles) => dispatch(updateUserRoles(user, roles)),
-    updateUserAccounts: (user, accounts) => dispatch(updateUserAccounts(user, accounts)),
-  };
-};
+	return {
+		updateUserData: (userData) => dispatch(updateUserData(userData)),
+		fetchUserAccounts: (userId) => dispatch(fetchUserAccounts(userId)),
+		updateUserRole: (user, roleId) => dispatch(updateUserRole(user, roleId)),
+		updateUserAccounts: (user, accounts) =>
+			dispatch(updateUserAccounts(user, accounts))
+	}
+}
 
+const formatAccountsForTree = (accounts) => {
+	if (!accounts) return []
+	let accountsCopy = JSON.parse(JSON.stringify(accounts))
+	if (accountsCopy && accountsCopy.length > 0) {
+		addPropsToAccounts(accountsCopy)
+	}
+	return accountsCopy
+}
+
+const addPropsToAccounts = (accounts) => {
+	for (const account of accounts) {
+		account.value = account.accountId
+		account.label = account.accountName
+		if (account.children) {
+			addPropsToAccounts(account.children)
+		}
+	}
+}
+
+const getGrantedAccounts = (users, userId) => {
+	if (!users) return []
+	let usersCopy = JSON.parse(JSON.stringify(users))
+	if (usersCopy && usersCopy.length > 0) {
+		for (const user of users) {
+			if (user.userId === userId) {
+				if (!user.accounts) return []
+				let accounts = []
+				for (const account of user.accounts) {
+					accounts.push(account.accountId)
+				}
+				return accounts
+			}
+		}
+	}
+}
+
+const getUser = (users, userId) => {
+	if (!users || users.length < 1)
+		return {
+			firstName: '',
+			lastName: '',
+			email: '',
+			roles: [],
+			accounts: [],
+			company: ''
+		}
+	let usersCopy = JSON.parse(JSON.stringify(users))
+	for (const user of usersCopy) {
+		if (user.userId === userId) return user
+	}
+}
 
 function EditUser(props) {
+	let parsedUserId = JSON.parse(props.match.params.user)
 
-  let parsedUserId = JSON.parse(props.match.params.user) 
-  const [userIdUnderEdit, setUserIdUnderEdit] = React.useState(parsedUserId)
-  const [user, setUser] = React.useState({email:'',firstName:'',lastName:'',company:'',roles:[],accounts:[]})
-  const classes = useStyles();
-  const [selectedRoles, setSelectedRoles] = React.useState([])
-  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
-  const [checkedKeys, setCheckedKeys] = React.useState([])
-  const [topLevelCheckedAccounts, setTopLevelCheckedAccounts] = React.useState([])
+	let treeAccounts = React.useMemo(
+		() => formatAccountsForTree(props.accounts.data),
+		[props.accounts.data]
+	)
+	let grantedAccounts = React.useMemo(
+		() => getGrantedAccounts(props.users.data, parsedUserId),
+		[props.users.data, parsedUserId]
+	)
+	let user = React.useMemo(() => getUser(props.users.data, parsedUserId), [
+		props.users.data,
+		parsedUserId
+	])
 
-  const handleFirstNameChange = (text) => {
-    let currentUser = {...user}
-    currentUser.firstName = text
-    setUser(currentUser)
-  }
+	const handleSaveClick = (values, resetForm) => {
+		values.userType = values.email.toLowerCase().includes('sightly.com')
+			? 'Internal'
+			: 'External'
 
-  const onCheck = checkedKeys => {
-    setCheckedKeys(checkedKeys)
-    if(checkedKeys.checked && checkedKeys.checked.length > 0) {
-      let accountsCopy = JSON.parse(JSON.stringify(props.accounts.data))
-      let checkedAccounts = getTopLevelChecked(checkedKeys,accountsCopy)
-      let accounts = []
-      for (const accountId of checkedAccounts) {
-        accounts.push({accountId: accountId})
-      }
-      setTopLevelCheckedAccounts(accounts)
-    }
-  }
+		values.userId = user.userId
 
-  const handleLastNameChange = (text) => {
-    let currentUser = {...user}
-    currentUser.lastName = text
-    setUser(currentUser)
-  }
+		props.updateUserData(values)
 
-  const handleEmailChange = (text) => {
-    let currentUser = {...user}
-    currentUser.email = text
-    setUser(currentUser)
-  }
+		props.updateUserRole(user, values.roleId)
+		let accounts = []
+		for (const account of values.accounts) {
+			accounts.push({ accountId: account })
+		}
+		props.updateUserAccounts(user, accounts)
+	}
 
-  const handleRoleChange = (event) => {
-    let currentUser = {...user}
-    currentUser.roles = event.target.value
-    setUser(currentUser)
-  }
+	let fetchUserAccounts = props.fetchUserAccounts
 
-  const handleInternalUserChecked = () => {
-    let currentUser = {...user}
-    let newType = currentUser.userType === 'Internal' ? 'External' : 'Internal'
-    currentUser.userType = newType
-    setUser(currentUser)
-  }
+	React.useEffect(() => {
+		if (!user.accounts) {
+			fetchUserAccounts(parsedUserId)
+		}
+	}, [props.users, parsedUserId, user.accounts, fetchUserAccounts])
 
-  const formIsValid = () => {
-    if ((v.isCompanySuccess(user.company)) && (v.isEmailSuccess(user.email)) && (v.isFirstNameSuccess(user.firstName)) && (v.isLastNameSuccess(user.lastName)) && (v.isRoleSuccess(user.roles)) && checkedKeys.checked && checkedKeys.checked.length > 0) return true
-    return false
-  }
+	return (
+		<Formik
+			enableReinitialize
+			validateOnMount={false}
+			validationSchema={() => schemaValidation}
+			initialValues={{
+				company: user.company,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				email: user.email,
+				roleId: user.roleId,
+				accounts: grantedAccounts
+			}}
+			render={({
+				values,
+				errors,
+				touched,
+				setFieldValue,
+				setFieldTouched,
+				validateField,
+				validateForm,
+				isSubmitting,
+				isValid,
+				dirty,
+				resetForm
+			}) => (
+				<div>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={8}>
+							<Card>
+								{props.editUserUserAccountsLoading ? (
+									<FormLoader />
+								) : (
+									<div>
+										<CardBody>
+											<GridContainer>
+												<GridItem xs={12} sm={12} md={5}>
+													<FormikInput
+														name='company'
+														labelText='Company'
+														id='company'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{
+															disabled: true
+														}}
+													/>
+												</GridItem>
 
-  const [showAlertMessage, setShowAlertMessage] = React.useState(false);
+												<GridItem xs={12} sm={12} md={6}>
+													<FormikInput
+														name='email'
+														labelText='Email'
+														id='email'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{}}
+													/>
+												</GridItem>
 
-  const handleSaveClick = () => {
-    setSaveButtonDisabled(true)
-    props.updateUserData(user)
-    let roles= []
-    for (const role of user.roles) {
-      roles.push({roleId: role})
-    }
-    props.updateUserRoles(user, roles)   
-    let accounts = []
-    for (const account of topLevelCheckedAccounts) {
-      accounts.push({accountId: account.accountId})
-    }
-    props.updateUserAccounts(user, accounts)
-    setShowAlertMessage(true)
-    setTimeout(function() {
-      setShowAlertMessage(false)
-      setSaveButtonDisabled(false)
-    }, 2000)
-  }
+												<GridItem xs={12} sm={12} md={4}>
+													<FormikInput
+														name='firstName'
+														labelText='First Name'
+														id='firstName'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{}}
+													/>
+												</GridItem>
 
-  
+												<GridItem xs={12} sm={12} md={8}>
+													<FormikInput
+														name='lastName'
+														labelText='Last Name'
+														id='lastName'
+														formControlProps={{
+															fullWidth: true
+														}}
+														inputProps={{}}
+													/>
+												</GridItem>
 
-  React.useEffect(() => { 
-    if(props.users && props.users.data && props.users.data.length > 0) {
-      for (const user of props.users.data) {
-             if(user.userId === userIdUnderEdit) {
-               let userCopy = JSON.parse(JSON.stringify(user))
-               setUser(userCopy)
-               let checkedAccounts = {checked: [], halfChecked:[]}
-               if(userCopy.accounts){
-                 for (const account of userCopy.accounts) {
-                   checkedAccounts.checked.push(String(account.accountId))
-                 }
-                 onCheck(checkedAccounts)
-               }             
-               return
-             }
-      }   
-    }
-  }, [props.users])
+												<GridItem xs={12} sm={12} md={5}>
+													{props.accounts.data &&
+													props.accounts.data.length > 0 &&
+													!props.editUserUserAccountsLoading ? (
+														<SuiteTree
+															name='accounts'
+															data={treeAccounts}
+															labelKey='accountName'
+															valueKey='accountId'
+															value={values.accounts}
+															onChange={setFieldValue}
+															cascade={false}
+															error={errors.accounts}
+														/>
+													) : null}
+												</GridItem>
+												<GridItem xs={12} sm={12} md={7}></GridItem>
 
+												<GridItem xs={10} sm={10} md={5}>
+													<FormikSelect
+														id='role'
+														name='roleId'
+														label='Role'
+														placeholder='Role'
+														optionLabel='roleName'
+														optionValue='roleId'
+														options={props.roles}
+														value={values.roleId}
+														onChange={setFieldValue}
+														onBlur={setFieldTouched}
+														validateField={validateField}
+														validateForm={validateForm}
+														touched={touched.roleId}
+														error={errors.roleId}
+														isClearable={true}
+														backspaceRemovesValue={true}
+													/>
+												</GridItem>
+											</GridContainer>
+										</CardBody>
+										<CardFooter>
+											<Button
+												disabled={!isValid}
+												onClick={() => handleSaveClick(values, resetForm)}
+												color='primary'
+											>
+												Save
+											</Button>
+										</CardFooter>
+									</div>
+								)}
+							</Card>
+						</GridItem>
+					</GridContainer>
 
-  return (
-    <div>
-
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={8}>
-            <Card>
-            
-             
-              
-              <CardBody>
-                <GridContainer>
-                  
-                  <GridItem xs={12} sm={12} md={5}>
-                    <CustomInput
-                      labelText="Company"
-                      id="company-disabled"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true,
-                        value: user.company,                      
-                      }}
-                      
-                    />
-                  </GridItem>
-                
-
-                  <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Email address"
-                      id="email-address"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: 'email',
-                        value: user.email,
-                        onChange: (event)=>handleEmailChange(event.target.value)
-                      }}
-                      handleClear={()=>handleEmailChange('')}
-                      error={v.isEmailError(user.email)}
-                      success={v.isEmailSuccess(user.email)}
-                    />
-                  </GridItem>
-
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="First Name"
-                      id="first-name"
-                      formControlProps={{
-                        fullWidth: false
-                      }}
-                      inputProps={{
-                        value: user.firstName,
-                        onChange: (event)=>handleFirstNameChange(event.target.value)
-                      }}
-                      handleClear={()=>handleFirstNameChange('')}
-                      error={v.isFirstNameError(user.firstName)}
-                      success={v.isFirstNameSuccess(user.firstName)}
-                    />
-                  </GridItem>
-
-                  <GridItem xs={12} sm={12} md={8}>
-                    <CustomInput
-                      labelText="Last Name"
-                      id="last-name"
-                      formControlProps={{
-                        fullWidth: false
-                      }}
-                      inputProps={{
-                        value: user.lastName,
-                        onChange: (event)=>handleLastNameChange(event.target.value)
-                      }}
-                      handleClear={()=>handleLastNameChange('')}
-                      error={v.isLastNameError(user.lastName)}
-                      success={v.isLastNameSuccess(user.lastName)}
-                    />
-                  </GridItem>
-
-                  <GridItem xs={10} sm={10} md={10}>
-                    <CustomSelect
-                      roles={props.roles}
-                      labelText='Role'
-                      handleItemSelect={handleRoleChange}
-                      value={user.roles}
-                      multiple={true}
-                      success={v.isRoleSuccess(user.roles)}
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                     
-                    />
-                  </GridItem>
-
-                  {
-                    selectedRoles.includes(11) || true ?  //TODO: make sure user only sees tree if they are admin
-
-                      <GridItem xs={12} sm={12} md={8}>
-                        {props.accounts.data && props.accounts.data.length > 0 && !props.editUserUserAccountsLoading ?
-                        <CustomTree
-                          data={props.accounts.data}                     
-                          keyProp='accountId'
-                          labelProp='accountName'
-                          valueProp='accountId'
-                          search={true}                        
-                          onCheck={onCheck}
-                          checkedKeys={checkedKeys}
-                          title='Account Access'
-                          search={true}
-                          treeContainerHeight={150}
-                        />
-                        :
-                        <FormLoader/>
-                        }
-                      </GridItem>
-
-                      :
-
-                      null
-                  }
-
-
-                  <GridItem xs={12} sm={12} md={12}>
-                    <CustomCheckbox
-                      checked={user.userType === 'Internal'}
-                      //tabIndex={-1}
-                      changed={handleInternalUserChecked}
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      labelText="Internal User"                 
-                    />             
-                  </GridItem>
-                
-                
-                </GridContainer>         
-                
-              </CardBody>
-              <CardFooter>
-                <Button disabled={!formIsValid() || saveButtonDisabled} onClick={handleSaveClick} color="primary">Save</Button>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          
-        </GridContainer>
-
-        <Snackbar
-          place="bc"
-          color="success"
-          //icon={AddAlert}
-          message="User created and Signup invitation is sent"
-          //open={showAlertMessage}
-          //closeNotification={() => setShowAlertMessage(false)}
-          close
-        />
-
-        <Snackbar
-          place="bc"
-          color="success"
-          icon={AddAlert}
-          message="User info is saved"
-          open={showAlertMessage}
-          closeNotification={() => setShowAlertMessage(false)}
-          close
-        />
-
-          
-    </div>
-  );
+					<Snackbar
+						place='bc'
+						color='success'
+						icon={AddAlert}
+						message='User info is saved'
+						//  open={showAlertMessage}
+						// closeNotification={() => setShowAlertMessage(false)}
+						close
+					/>
+				</div>
+			)}
+		/>
+	)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditUser)

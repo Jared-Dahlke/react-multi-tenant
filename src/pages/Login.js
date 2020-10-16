@@ -2,11 +2,14 @@ import React, { useState }  from "react";
 import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import Button from '../components/CustomButtons/Button';
-import Link from '@material-ui/core/Link';
+import {Link} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {login} from '../redux/actions/auth.js'
+import {login, setAlert} from '../redux/actions/auth.js'
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
+import Alert from '@material-ui/lab/Alert';
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import { whiteColor } from "../assets/jss/material-dashboard-react.js";
 import CustomInput from '../components/CustomInput/CustomInput'
@@ -16,13 +19,15 @@ import {logoStyle} from '../assets/jss/material-dashboard-react'
 const mapStateToProps = (state) => {
   return { 
     authToken: state.authToken,
-    isLoggedIn: state.isLoggedIn
+    isLoggedIn: state.isLoggedIn,
+    alert: state.alert
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (credentials) => dispatch(login(credentials))
+    login: (credentials) => dispatch(login(credentials)),
+    setAlert: (alert) => dispatch(setAlert(alert))
   }
 }
 
@@ -126,12 +131,22 @@ function Login(props) {
           
             <Grid style={{marginTop:'10px'}} container>
               <Grid item xs>
-                <Link href="/resetPassword" variant="body2" style={{color: whiteColor}}>
+                <Link to="/resetPassword"  style={{color: whiteColor}}>
                   Forgot password?
                 </Link>
               </Grid>
              
             </Grid>
+
+            <Snackbar
+              autoHideDuration={5000}
+              place="bc"
+              icon={AddAlert}
+              open={props.alert.show}
+              onClose={() => props.setAlert({show: false})}
+            >
+              <Alert severity={props.alert.severity}>{props.alert.message}</Alert>
+            </Snackbar>
           </form>
         </div>
       

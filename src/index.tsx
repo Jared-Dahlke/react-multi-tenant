@@ -11,7 +11,18 @@ import config from './config.js'
 // will issue a "Warning: findDOMNode is deprecated in StrictMode" warning when those menus are used. Per https://github.com/mui-org/material-ui/issues/13394, Material UI
 // plans to fix this bug in V5, at which point we can upgrade to v5 then remove this wrapper. -Jared
 import { unstable_createMuiStrictModeTheme, ThemeProvider } from '@material-ui/core/styles';
-const theme = unstable_createMuiStrictModeTheme();
+const theme = unstable_createMuiStrictModeTheme({
+  overrides: {
+    MuiInputBase: {
+      input: {
+        '&:-webkit-autofill': {
+          transitionDelay: '9999s',
+          transitionProperty: 'background-color, color',
+        },
+      },
+    },
+  },
+});
 
 if (config.environment !== 'development') {
   

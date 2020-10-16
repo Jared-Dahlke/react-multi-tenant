@@ -4,31 +4,37 @@ import {connect} from 'react-redux'
 import { Redirect } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CustomInput from '../components/CustomInput/CustomInput'
-import Link from '@material-ui/core/Link';
+import {Link} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import GridItem from "../components/Grid/GridItem.js";
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {setShowAlert, changePassword} from '../redux/actions/auth';
-import Snackbar from "../components/Snackbar/Snackbar";
-import AddAlert from '@material-ui/icons/AddAlert'
+import {setAlert, changePassword} from '../redux/actions/auth';
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
+import Alert from '@material-ui/lab/Alert';
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import Button from '../components/CustomButtons/Button'
 import { whiteColor } from "../assets/jss/material-dashboard-react";
 import logo from '../assets/img/sightly_icon.png'
 import {logoStyle} from '../assets/jss/material-dashboard-react'
 
+// Validation
+import * as v from "../validations";
+import CustomPassword from "../components/CustomPasswordRequirements/CustomPasswordRequirements.js";
+import CustomPasswordMatchChecker from '../components/CustomPasswordRequirements/CustomPasswordMatchChecker'
+
 const mapStateToProps = (state) => {
   return { 
     isLoggedIn: state.isLoggedIn,
-    showAlert: state.showAlert,
-    successPasswordChanged: state.successPasswordChanged
+    alert: state.alert
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     changePassword: (password, userId, token) => dispatch(changePassword(password, userId, token)),
-    setShowAlert: (showAlert) => dispatch(setShowAlert(showAlert))
+    setAlert: (alert) => dispatch(setAlert(alert))
   }
 }
 
@@ -67,11 +73,28 @@ function PasswordChange(props) {
     if (password === password_confirmation){
       props.changePassword(password, userId, token)
     } else {
-      alert('Passwords do not match.')
+      props.setAlert({show: true, message: "Passwords do not match.", severity: "error"})
+      setTimeout(() => {
+        props.setAlert({show: false});
+      }, 5000);
     }
 
     
   }
+
+  const passwordIsValid = () => {
+    let isValid = true;
+    for (var prop of v.invalidPasswordObject(password)) {
+      if (!prop.satisfied){
+        isValid = false;
+        break;
+      }
+    }
+    if (password === password_confirmation)
+      return isValid;
+    else
+      return false;
+  };
 
   if (props.isLoggedIn) {
     return <Redirect to='./admin/settings/profile' />;
@@ -89,49 +112,55 @@ function PasswordChange(props) {
             <Grid container spacing={2}>
               <Grid item xs={12}>
 
-              <CustomInput
-              labelText="Password"
-              id="password"
-              name="password"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                type: 'password',
-                value: password,
-                onChange: (e)=>setPassword(e.target.value),
-                autoComplete: "current-password"
-              }}
-              handleClear={()=>setPassword('')}
+                <CustomInput
+                  labelText="Password"
+                  id="password"
+                  name="password"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    type: 'password',
+                    value: password,
+                    onChange: (e)=>setPassword(e.target.value),
+                    autoComplete: "current-password"
+                  }}
+                  handleClear={()=>setPassword('')}
               
-            />
+                />
 
               </Grid>
               
               <Grid item xs={12}>
 
-              <CustomInput
-              labelText="Password"
-              id="password_confirmation"
-              name="password_confirmation"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                type: 'password',
-                value: password_confirmation,
-                onChange: (e)=>setPasswordConfirmation(e.target.value),
-                autoComplete: "password_confirmation"
-              }}
-              handleClear={()=>setPasswordConfirmation('')}
+                <CustomInput
+                  labelText="Password"
+                  id="password_confirmation"
+                  name="password_confirmation"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    type: 'password',
+                    value: password_confirmation,
+                    onChange: (e)=>setPasswordConfirmation(e.target.value),
+                    autoComplete: "password_confirmation"
+                  }}
+                  handleClear={()=>setPasswordConfirmation('')}
               
-            />
+                />
 
               </Grid>
             </Grid>
 
+            <Grid item xs={12}>
+              <CustomPassword password={password} />
+              <CustomPasswordMatchChecker password={password} password_confirmation={password_confirmation}/>
+            </Grid>
+
             <Button       
-              color="primary"         
+              color="primary"
+              disabled={!passwordIsValid()}
               onClick={postChangePassword}
               fullWidth={true}
               style={{marginTop:'10px'}}
@@ -140,28 +169,17 @@ function PasswordChange(props) {
               Change Password
             </Button>
 
-
-            <Grid container style={{marginTop:'10px'}}>
-              <Grid item xs>
-                <Link style={{color: whiteColor}} href="/login" variant="body2">
-                  Login
-                </Link>
-              </Grid>
-              <Grid item>
-               
-              </Grid>
-            </Grid>
+            <Snackbar
+              autoHideDuration={5000}
+              place="bc"
+              icon={AddAlert}
+              open={props.alert.show}
+              onClose={() => props.setAlert({show: false})}
+            >
+              <Alert severity={props.alert.severity}>{props.alert.message}</Alert>
+            </Snackbar>
           </form>
         </div>
-        <Snackbar
-          place="bc"
-          color="success"
-          icon={AddAlert}
-          message="Password has been reset. Please proceed to login with your new password."
-          open={props.successPasswordChanged}
-          closeNotification={() => props.setShowAlert(false)}
-          close
-        />
     
       </Container>
     </div>
@@ -170,10 +188,5 @@ function PasswordChange(props) {
 
 
 const ChangePassword = connect(mapStateToProps, mapDispatchToProps)(PasswordChange)
-
-// ChangePassword.propTypes = {
-//   token: PropTypes.string.isRequired,
-//   userId: PropTypes.string.isRequired
-// }
 
 export default ChangePassword;

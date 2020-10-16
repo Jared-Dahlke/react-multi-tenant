@@ -6,32 +6,34 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {setShowAlert, resetPassword} from '../redux/actions/auth.js';
-import Snackbar from "../components/Snackbar/Snackbar";
-import AddAlert from '@material-ui/icons/AddAlert';
+import {setAlert, resetPassword} from '../redux/actions/auth.js';
+import Snackbar from "@material-ui/core/Snackbar";
+import AddAlert from "@material-ui/icons/AddAlert";
+import Alert from '@material-ui/lab/Alert';
 import {isEmailError} from "../validations";
 import CustomInput from '../components/CustomInput/CustomInput'
 import logo from '../assets/img/sightly_icon.png'
 import {logoStyle} from '../assets/jss/material-dashboard-react'
-
+import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 
 const mapStateToProps = (state) => {
   return { 
     isLoggedIn: state.isLoggedIn,
-    showAlert: state.showAlert
+    alert: state.alert
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     resetPassword: (email) => dispatch(resetPassword(email)),
-    setShowAlert: (showAlert) => dispatch(setShowAlert(showAlert))
+    setAlert: (alert) => dispatch(setAlert(alert))
   }
 }
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
-    paddingTop: theme.spacing(8),
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -49,16 +51,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const useAdminStyles= makeStyles(adminStyle)
+
+
+
 function PasswordReset(props) {
+  const adminClasses = useAdminStyles()
   const classes = useStyles();
   const [email, setEmail] = useState("");
 
   async function postResetPassword() {
     props.resetPassword(email)
-
-    setTimeout(function() {
-      props.setShowAlert(false)
-    }, 4000)
   }
 
   if (props.isLoggedIn) {
@@ -66,9 +70,7 @@ function PasswordReset(props) {
   }
 
   return (
-    <div style={{position: "relative",
-      top: "0",
-      height: "100vh"}}>
+    <div className={adminClasses.authPanel}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -103,23 +105,24 @@ function PasswordReset(props) {
               style={{marginTop:'10px'}}       
               fullWidth          
               color="primary"       
-              disabled={isEmailError(email)}
+              disabled={!email || isEmailError(email)}
               onClick={postResetPassword}
             >
               Reset Password
             </Button>
+
+            <Snackbar
+              autoHideDuration={5000}
+              place="bc"
+              icon={AddAlert}
+              open={props.alert.show}
+              onClose={() => props.setAlert({show: false})}
+            >
+              <Alert severity={props.alert.severity}>{props.alert.message}</Alert>
+            </Snackbar>
           </form>
         </div>
-        <Snackbar
-          place="bc"
-          color="success"
-          icon={AddAlert}
-          message="Reset password email sent. Check Your email."
-          open={props.showAlert}
-          closeNotification={() => props.setShowAlert(false)}
-          close
-        />
-       
+
       </Container>
     </div>
   );

@@ -18,7 +18,7 @@ import CustomPasswordMatchChecker from '../../components/CustomPasswordRequireme
 // Redux
 import { userProfileFetchData } from "../../redux/actions/auth.js";
 import { connect } from "react-redux";
-import { updateUserData } from "../../redux/actions/users.js";
+import { updateUserData, updatePassword } from "../../redux/actions/users.js";
 
 import {FormLoader} from '../../components/SkeletonLoader'
 
@@ -61,6 +61,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserProfile: () => dispatch(userProfileFetchData()),
     updateUserData: (userData) => dispatch(updateUserData(userData)),
+    updatePassword: (userId, oldPassword, newPassword) => dispatch(updatePassword(userId, oldPassword, newPassword)),
   };
 };
 
@@ -82,6 +83,7 @@ const passwordDefaultState = {
 function UserProfile({
   fetchUserProfile,
   updateUserData,
+  updatePassword,
   userProfileIsLoading,
   user: { userProfile, loading },
 }) {
@@ -135,7 +137,8 @@ function UserProfile({
 
   const submitPassword = (e) => {
     e.preventDefault();
-    disablePasswordEdit();
+    const userId = localStorage.getItem('userId')
+    updatePassword(userId, oldPassword, newPassword)
   };
 
   const enablePasswordEdit = () => {
@@ -158,6 +161,20 @@ function UserProfile({
     return false;
   };
 
+  const passwordIsValid = () => {
+    let isValid = true;
+    for (var prop of v.invalidPasswordObject(newPassword)) {
+      if (!prop.satisfied){
+        isValid = false;
+        break;
+      }
+    }
+    if (newPassword === confirmNewPassword)
+      return isValid;
+    else
+      return false;
+  };
+
   const { firstName, lastName, email, company } = userForm;
   const { oldPassword, newPassword, confirmNewPassword } = passwordObject;
 
@@ -166,121 +183,121 @@ function UserProfile({
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
-          {!userProfileIsLoading ?
-          <div>
-            <CardBody>
+            {!userProfileIsLoading ?
+              <div>
+                <CardBody>
               
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={5}>
-                  <CustomInput
-                    labelText="Company (disabled)"
-                    id="company-disabled"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      disabled: true,
-                      value: company
-                    }}
-                    success={edit && v.isCompanySuccess(company)}
-                    error={edit && v.isCompanyError(company)}
-                    handleClear={() =>
-                      setUserForm({ ...userForm, company: "" })
-                    }
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Email address"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      disabled: edit ? false : true,
-                      value: email,
-                      name: "email",
-                      onChange: onChange,
-                    }}
-                    success={edit && v.isEmailSuccess(email)}
-                    error={edit && v.isEmailError(email)}
-                    handleClear={() => setUserForm({ ...userForm, email: "" })}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="First Name"
-                    id="first-name"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      disabled: edit ? false : true,
-                      value: firstName,
-                      name: "firstName",
-                      onChange: onChange,
-                    }}
-                    success={edit && v.isFirstNameSuccess(firstName)}
-                    error={edit && v.isFirstNameError(firstName)}
-                    handleClear={() =>
-                      setUserForm({ ...userForm, firstName: "" })
-                    }
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="Last Name"
-                    id="last-name"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      disabled: edit ? false : true,
-                      value: lastName,
-                      name: "lastName",
-                      onChange: onChange,
-                    }}
-                    success={edit && v.isLastNameSuccess(lastName)}
-                    error={edit && v.isLastNameError(lastName)}
-                    handleClear={() =>
-                      setUserForm({ ...userForm, lastName: "" })
-                    }
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer></GridContainer>
-            </CardBody>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={5}>
+                      <CustomInput
+                        labelText="Company (disabled)"
+                        id="company-disabled"
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          disabled: true,
+                          value: company
+                        }}
+                        success={edit && v.isCompanySuccess(company)}
+                        error={edit && v.isCompanyError(company)}
+                        handleClear={() =>
+                          setUserForm({ ...userForm, company: "" })
+                        }
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        labelText="Email address"
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          disabled: edit ? false : true,
+                          value: email,
+                          name: "email",
+                          onChange: onChange,
+                        }}
+                        success={edit && v.isEmailSuccess(email)}
+                        error={edit && v.isEmailError(email)}
+                        handleClear={() => setUserForm({ ...userForm, email: "" })}
+                      />
+                    </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="First Name"
+                        id="first-name"
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          disabled: edit ? false : true,
+                          value: firstName,
+                          name: "firstName",
+                          onChange: onChange,
+                        }}
+                        success={edit && v.isFirstNameSuccess(firstName)}
+                        error={edit && v.isFirstNameError(firstName)}
+                        handleClear={() =>
+                          setUserForm({ ...userForm, firstName: "" })
+                        }
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Last Name"
+                        id="last-name"
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          disabled: edit ? false : true,
+                          value: lastName,
+                          name: "lastName",
+                          onChange: onChange,
+                        }}
+                        success={edit && v.isLastNameSuccess(lastName)}
+                        error={edit && v.isLastNameError(lastName)}
+                        handleClear={() =>
+                          setUserForm({ ...userForm, lastName: "" })
+                        }
+                      />
+                    </GridItem>
+                  </GridContainer>
+                  <GridContainer></GridContainer>
+                </CardBody>
            
 
-            <CardFooter>
-              {edit && (
-                <Button color="primary" onClick={disableEdit}>
+                <CardFooter>
+                  {edit && (
+                    <Button color="primary" onClick={disableEdit}>
                   Cancel
-                </Button>
-              )}
-              <Button
-                color="primary"
-                onClick={edit ? onSubmit : enableEdit}
-                disabled={!formIsValid()}
-              >
-                {edit ? "Save" : "Edit"}
-              </Button>
+                    </Button>
+                  )}
+                  <Button
+                    color="primary"
+                    onClick={edit ? onSubmit : enableEdit}
+                    disabled={!formIsValid()}
+                  >
+                    {edit ? "Save" : "Edit"}
+                  </Button>
 
-              <Snackbar
-                place="bc"
-                color="success"
-                icon={AddAlert}
-                message="User profile was updated"
-                open={showAlertMessage}
-                // closeNotification={() => setShowAlertMessage(false)}
-                // close
-              />
-            </CardFooter>
-            </div>
-             :
-             <FormLoader/>
-           }
+                  <Snackbar
+                    place="bc"
+                    color="success"
+                    icon={AddAlert}
+                    message="User profile was updated"
+                    open={showAlertMessage}
+                    // closeNotification={() => setShowAlertMessage(false)}
+                    // close
+                  />
+                </CardFooter>
+              </div>
+              :
+              <FormLoader/>
+            }
           </Card>
         </GridItem>
 
@@ -364,7 +381,7 @@ function UserProfile({
                   <Button color="primary" onClick={disablePasswordEdit}>
                     Cancel
                   </Button>
-                  <Button color="primary" onClick={submitPassword}>
+                  <Button color="primary" disabled={!passwordIsValid()} onClick={submitPassword}>
                     Save
                   </Button>
                 </CardFooter>
