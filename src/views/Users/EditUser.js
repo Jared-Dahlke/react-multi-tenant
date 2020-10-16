@@ -282,7 +282,7 @@ function EditUser(props) {
 										</CardBody>
 										<CardFooter>
 											<Button
-												disabled={!isValid || !dirty}
+												disabled={!isValid}
 												onClick={() => handleSaveClick(values, resetForm)}
 												color='primary'
 											>
