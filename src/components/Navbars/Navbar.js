@@ -1,11 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '@material-ui/core/Breadcrumbs'
-import { Navbar, Nav, Icon, Dropdown } from 'rsuite/lib'
-import logo from '../../assets/img/sightly_icon.png'
+
+import Navbar from 'rsuite/lib/Navbar'
+import Nav from 'rsuite/lib/Nav'
+import Icon from 'rsuite/lib/Icon'
+import Dropdown from 'rsuite/lib/Dropdown'
+
+import logo from '../../assets/img/sightly-logo.svg'
 import sidebarStyles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
 

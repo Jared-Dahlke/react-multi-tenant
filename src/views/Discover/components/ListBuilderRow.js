@@ -1,12 +1,10 @@
 import React from 'react'
-import {
-	ListItem,
-	ListItemSecondaryAction,
-	ListItemText
-} from '@material-ui/core'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import ToggleButton from '@material-ui/lab/ToggleButton'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import {
 	successColor,
 	dangerColor

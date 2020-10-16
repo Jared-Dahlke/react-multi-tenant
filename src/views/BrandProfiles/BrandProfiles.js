@@ -5,15 +5,13 @@ import GridContainer from '../../components/Grid/GridContainer.js'
 import Button from '../../components/CustomButtons/Button.js'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
-import {
-	Table,
-	TableCell,
-	TableBody,
-	TableRow,
-	TableHead
-} from '@material-ui/core'
+import Table from '@material-ui/core/Table'
+import TableCell from '@material-ui/core/TableCell'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableHead from '@material-ui/core/TableHead'
 import Close from '@material-ui/icons/Close'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
@@ -24,7 +22,6 @@ import {
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import { Facebook } from 'react-content-loader'
 import CustomAlert from '../../components/CustomAlert.js'
 import Snackbar from '../../components/Snackbar/Snackbar'
 import Success from '@material-ui/icons/Check'

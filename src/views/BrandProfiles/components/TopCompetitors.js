@@ -4,41 +4,28 @@ import GridContainer from '../../../components/Grid/GridContainer.js'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import * as v from '../../../validations'
 import {
-	whiteColor,
 	grayColor,
 	dangerColor
 } from '../../../assets/jss/material-dashboard-react.js'
-import { Field, Formik } from 'formik'
+import { Formik } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import Grid from '@material-ui/core/Grid'
 import Button from '../../../components/CustomButtons/Button.js'
 import Card from '../../../components/Card/Card.js'
 import CardBody from '../../../components/Card/CardBody.js'
-import {
-	Table,
-	TableCell,
-	TableBody,
-	TableRow,
-	TableHead
-} from '@material-ui/core'
-import Edit from '@material-ui/icons/Edit'
+import Table from '@material-ui/core/Table'
+import TableCell from '@material-ui/core/TableCell'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableHead from '@material-ui/core/TableHead'
 import Close from '@material-ui/icons/Close'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
-import { fetchBrandProfiles } from '../../../redux/actions/brandProfiles.js'
-import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-//import { useHistory } from "react-router-dom";
 import { Facebook } from 'react-content-loader'
-import CustomAlert from '../../../components/CustomAlert.js'
-import Snackbar from '../../../components/Snackbar/Snackbar'
-import Success from '@material-ui/icons/Check'
-import Error from '@material-ui/icons/Error'
-import { Link } from 'react-router-dom'
-import { Debug } from '../../Debug'
 import Save from '@material-ui/icons/Save'
 import { default as UUID } from 'node-uuid'
 import FormHelperText from '@material-ui/core/FormHelperText'
