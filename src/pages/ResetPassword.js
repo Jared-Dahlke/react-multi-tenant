@@ -62,7 +62,7 @@ function PasswordReset(props) {
 	}
 
 	if (props.isLoggedIn) {
-		return <Redirect to='./admin/settings/profile' />
+		return <Redirect to='./admin/settings/brandMentality' />
 	}
 
 	return (

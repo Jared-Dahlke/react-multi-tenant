@@ -59,9 +59,17 @@ const useAdminStyles = makeStyles(adminStyle)
 function Login(props) {
 	const classes = useStyles()
 	const adminClasses = useAdminStyles()
-	const referer = props.location.state
+	let referer = props.location.state
 		? props.location.state.referer
 		: '/admin/settings/profile'
+
+	const permission = localStorage.getItem('permissions')
+	const mentalityOnly = permission == 1 ? true : false
+
+	if (mentalityOnly) {
+		referer = 'admin/settings/brandMentality'
+	}
+
 	const [userName, setUserName] = useState('')
 	const [password, setPassword] = useState('')
 
