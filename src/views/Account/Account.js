@@ -154,15 +154,6 @@ function Account(props) {
 		}
 	}
 
-	const getAccountTypeNameById = (accountTypeId) => {
-		let accountTypesCopy = JSON.parse(JSON.stringify(props.accountTypes))
-		for (const accountType of accountTypesCopy) {
-			if (accountTypeId === accountType.accountTypeId)
-				return accountType.accountTypeName
-		}
-		throw new error('Cannot find accountTypeId in the accountTypes object')
-	}
-
 	const handleMySubmit = (values) => {
 		let account = {
 			accountId: values.accountId,
