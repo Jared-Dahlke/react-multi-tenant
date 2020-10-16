@@ -1,16 +1,12 @@
-import {
-	drawerWidth,
-	transition,
-	container,
-	blackColor
-} from '../../../jss/material-dashboard-react.js' //"../assets/jss/material-dashboard-react.js";
+import { transition, container } from '../../../jss/material-dashboard-react.js' //"../assets/jss/material-dashboard-react.js";
+import { neutralColor } from '../../colorContants.js'
 
 const appStyle = (theme) => ({
 	wrapper: {
 		position: 'relative',
 		top: '0',
 		height: '100vh',
-		backgroundColor: blackColor
+		backgroundColor: neutralColor
 	},
 	authPanel: {
 		overflow: 'auto',
@@ -21,7 +17,7 @@ const appStyle = (theme) => ({
 		minHeight: '100%',
 		width: '100%',
 		overflowScrolling: 'touch',
-		backgroundColor: blackColor
+		backgroundColor: neutralColor
 	},
 	mainPanel: {
 		[theme.breakpoints.up('md')]: {

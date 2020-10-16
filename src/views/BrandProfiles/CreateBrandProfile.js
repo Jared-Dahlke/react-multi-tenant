@@ -10,7 +10,6 @@ import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography'
 import {
 	primaryColor,
-	blackColor,
 	whiteColor,
 	grayColor
 } from '../../assets/jss/material-dashboard-react'
@@ -29,6 +28,7 @@ import {
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { Debug } from '../Debug'
+import { neutralColor } from '../../assets/jss/colorContants.js'
 //import Joyride from 'react-joyride'
 //import {getTours} from '../../Tour'
 /** <Joyride
@@ -39,7 +39,7 @@ import { Debug } from '../Debug'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
-		backgroundColor: blackColor
+		backgroundColor: neutralColor
 	},
 	fixBottom: {
 		position: 'fixed',
@@ -294,7 +294,7 @@ function CreateBrandProfiles(props) {
 
 					<GridContainer justify='center'>
 						<GridItem xs={12} sm={12} md={11}>
-							<Card style={{ backgroundColor: blackColor }}>
+							<Card style={{ backgroundColor: neutralColor }}>
 								<CardBody>
 									<GridList
 										cols={1}

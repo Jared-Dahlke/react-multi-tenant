@@ -2,10 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import {
-	blackColor,
-	whiteColor
-} from '../../assets/jss/material-dashboard-react.js'
+import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import Tabs from './components/Tabs'
 import InputPicker from 'rsuite/lib/InputPicker'
 import FilterList from '@material-ui/icons/FilterList'
@@ -25,6 +22,7 @@ import Button from '../../components/CustomButtons/Button'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Input from 'rsuite/lib/Input'
 import Icon from 'rsuite/lib/Icon'
+import { neutralColor } from '../../assets/jss/colorContants.js'
 
 const bodyHeight = 600
 const borderRad = 2
@@ -32,7 +30,7 @@ const blockHeight = 48
 
 const styles = {
 	summaryBody: {
-		backgroundColor: blackColor,
+		backgroundColor: neutralColor,
 		borderRadius: borderRad,
 		color: whiteColor
 	},
@@ -253,8 +251,8 @@ function ListBuilder(props) {
 	const CustomInputGroup = ({ placeholder, ...props }) => (
 		<InputGroup {...props}>
 			<Input placeholder={placeholder} />
-			<InputGroup.Addon style={{ backgroundColor: blackColor }}>
-				<Icon icon='search' style={{ backgroundColor: blackColor }} />
+			<InputGroup.Addon style={{ backgroundColor: neutralColor }}>
+				<Icon icon='search' style={{ backgroundColor: neutralColor }} />
 			</InputGroup.Addon>
 		</InputGroup>
 	)

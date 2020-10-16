@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
@@ -11,11 +10,7 @@ import sidebarStyles from '../../assets/jss/material-dashboard-react/components/
 import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
 
 import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
-import {
-	whiteColor,
-	primaryColor,
-	grayColor
-} from '../../assets/jss/material-dashboard-react.js'
+import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 
 const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)
@@ -31,8 +26,6 @@ function Header(props) {
 	const classes = useStyles()
 	const sidebarClasses = useSidebarStyles()
 	function makeBrand() {
-		var name
-
 		const crumbSize = 20
 
 		let url = window.location.pathname
@@ -160,10 +153,7 @@ function Header(props) {
 
 		return null
 	}
-	const { color } = props
-	const appBarClasses = classNames({
-		[' ' + sidebarClasses[color]]: color
-	})
+
 	var brand = (
 		<div className={sidebarClasses.logoImage}>
 			<img src={logo} alt='logo' className={sidebarClasses.img} />
@@ -210,7 +200,7 @@ function Header(props) {
 
 						<Dropdown
 							title='Engage'
-							icon={<Icon icon='wrench' />}
+							icon={<Icon icon='bolt' />}
 							style={{ marginRight: 15 }}
 						>
 							<NavLink href='/admin/engage/listBuilder' label='List Builder' />

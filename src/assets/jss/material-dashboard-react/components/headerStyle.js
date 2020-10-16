@@ -10,11 +10,12 @@ import {
 	whiteColor,
 	grayColor
 } from '../../material-dashboard-react.js'
+import { neutralExtraLightColor } from '../../colorContants.js'
 
 const headerStyle = () => ({
 	disabledLink: {
 		cursor: 'not-allowed',
-		color: 'grey',
+		color: neutralExtraLightColor,
 		pointerEvents: 'none'
 	},
 	appBar: {
