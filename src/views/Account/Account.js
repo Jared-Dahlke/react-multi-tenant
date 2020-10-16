@@ -115,6 +115,15 @@ const schemaValidation = Yup.object().shape({
 })
 
 function Account(props) {
+	const getAccountTypeNameById = (accountTypeId) => {
+		let accountTypesCopy = JSON.parse(JSON.stringify(props.accountTypes))
+		for (const accountType of accountTypesCopy) {
+			if (accountTypeId === accountType.accountTypeId)
+				return accountType.accountTypeName
+		}
+		throw new error('Cannot find accountTypeId in the accountTypes object')
+	}
+
 	const [current, setCurrent] = React.useState({})
 
 	const handleCreateChild = () => {
@@ -143,15 +152,6 @@ function Account(props) {
 			props.deleteAccount(props.currentAccountId)
 		} else {
 		}
-	}
-
-	const getAccountTypeNameById = (accountTypeId) => {
-		let accountTypesCopy = JSON.parse(JSON.stringify(props.accountTypes))
-		for (const accountType of accountTypesCopy) {
-			if (accountTypeId === accountType.accountTypeId)
-				return accountType.accountTypeName
-		}
-		throw new error('Cannot find accountTypeId in the accountTypes object')
 	}
 
 	const handleMySubmit = (values) => {
