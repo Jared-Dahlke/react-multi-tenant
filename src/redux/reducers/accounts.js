@@ -8,7 +8,9 @@ import {
 	SET_IS_SWITCHING_ACCOUNTS,
 	SET_CURRENT_ACCOUNT,
 	TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
-	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING
+	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
+	SET_ACCOUNT_SAVING,
+	SET_ACCOUNT_SAVED
 } from '../action-types/accounts'
 import {
 	findAccountNodeByAccountId,
@@ -104,6 +106,24 @@ export function isSwitchingAccounts(state = false, action) {
 	switch (action.type) {
 		case SET_IS_SWITCHING_ACCOUNTS:
 			return action.isSwitchingAccounts
+		default:
+			return state
+	}
+}
+
+export function accountSaving(state = false, action) {
+	switch (action.type) {
+		case SET_ACCOUNT_SAVING:
+			return action.accountSaving
+		default:
+			return state
+	}
+}
+
+export function accountSaved(state = false, action) {
+	switch (action.type) {
+		case SET_ACCOUNT_SAVED:
+			return action.accountSaved
 		default:
 			return state
 	}

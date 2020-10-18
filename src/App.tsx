@@ -1,20 +1,16 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, lazy } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import PrivateRoute from './pages/PrivateRoute.js'
-import Login from './pages/Login'
-import ResetPassword from './pages/ResetPassword'
-import ChangePassword from './pages/ChangePassword'
 import { Provider } from 'react-redux'
 import configureStore from './redux/store/index.js'
-import { neutralColor, accentColor } from './assets/jss/colorContants'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import { neutralColor } from './assets/jss/colorContants'
 //import Admin from '../src/layouts/Admin.js'
 
-const Admin = React.lazy(() => import('../src/layouts/Admin'))
-//const ResetPassword = lazy(() => import('./pages/ResetPassword'))
-//const ChangePassword = lazy(() => import('./pages/ChangePassword'))
-//const Login = lazy(() => import('./pages/Login'))
+const Admin = lazy(() => import('../src/layouts/Admin'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+const ChangePassword = lazy(() => import('./pages/ChangePassword'))
+const Login = lazy(() => import('./pages/Login'))
 
 const store = configureStore()
 
@@ -29,9 +25,6 @@ const LoaderPage = () => (
 			color: 'white'
 		}}
 	>
-		<div style={{ color: accentColor, marginRight: 16 }}>
-			<CircularProgress color='inherit' />
-		</div>
 		<div>Loading...</div>
 	</div>
 )
@@ -41,19 +34,26 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<div>
-					<Route exact path='/' component={Login} />
-					<Route path='/login' component={Login} />
+					<Suspense fallback={<LoaderPage />}>
+						<Route exact path='/' component={Login} />
+						<Route path='/login' component={Login} />
+					</Suspense>
 
-					<Route path='/resetPassword' component={ResetPassword} />
-					<Route
-						path='/changePassword/:userId/:token'
-						render={({ match }) => (
-							<ChangePassword
-								userId={match.params.userId}
-								token={match.params.token}
-							/>
-						)}
-					/>
+					<Suspense fallback={<LoaderPage />}>
+						<Route path='/resetPassword' component={ResetPassword} />
+					</Suspense>
+
+					<Suspense fallback={<LoaderPage />}>
+						<Route
+							path='/changePassword/:userId/:token'
+							render={({ match }) => (
+								<ChangePassword
+									userId={match.params.userId}
+									token={match.params.token}
+								/>
+							)}
+						/>
+					</Suspense>
 					<Suspense fallback={<LoaderPage />}>
 						<PrivateRoute path='/admin' component={Admin} />
 					</Suspense>

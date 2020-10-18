@@ -12,7 +12,11 @@ import logo from '../../assets/img/sightly-logo.svg'
 import sidebarStyles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
 import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
-import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
+import {
+	whiteColor,
+	warningBoxShadow
+} from '../../assets/jss/material-dashboard-react.js'
+import { clearSiteData } from '../../redux/actions/accounts'
 
 const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)
@@ -20,7 +24,8 @@ const useSidebarStyles = makeStyles(sidebarStyles)
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setAuthToken: (authToken) => dispatch(setAuthToken(authToken)),
-		setLoggedIn: (loggedIn) => dispatch(setLoggedIn(loggedIn))
+		setLoggedIn: (loggedIn) => dispatch(setLoggedIn(loggedIn)),
+		clearSiteData: () => dispatch(clearSiteData())
 	}
 }
 
@@ -176,11 +181,19 @@ function Header(props) {
 		localStorage.removeItem('userId')
 		props.setAuthToken(null)
 		props.setLoggedIn(false)
+		props.clearSiteData()
 	}
 
 	const NavLink = (props) => (
 		<Dropdown.Item componentClass={MyLink} {...props} />
 	)
+
+	const handleClickBrand = () => {
+		console.log('clicked')
+		var win = window.open('www.sightly.com', '_blank')
+		win.focus()
+		//	window.location.href =
+	}
 
 	let permissions = localStorage.getItem('permissions')
 	const onlyMentality = permissions == 1 ? true : false
