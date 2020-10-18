@@ -8,7 +8,9 @@ import {
 	USER_ADDED,
 	USERS_IS_LOADING,
 	USERS_SET_USER_ACCOUNTS,
-	EDIT_USER_USER_ACCOUNTS_LOADING
+	EDIT_USER_USER_ACCOUNTS_LOADING,
+	USER_PROFILE_SAVED,
+	USER_PROFILE_SAVING
 } from '../action-types/users'
 
 export function usersHasErrored(state = false, action) {
@@ -24,6 +26,23 @@ export function usersIsLoading(state = true, action) {
 	switch (action.type) {
 		case USERS_IS_LOADING:
 			return action.usersIsLoading
+		default:
+			return state
+	}
+}
+
+export function userProfileSaving(state = false, action) {
+	switch (action.type) {
+		case USER_PROFILE_SAVING:
+			return action.userProfileSaving
+		default:
+			return state
+	}
+}
+export function userProfileSaved(state = false, action) {
+	switch (action.type) {
+		case USER_PROFILE_SAVED:
+			return action.userProfileSaved
 		default:
 			return state
 	}

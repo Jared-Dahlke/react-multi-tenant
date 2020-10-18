@@ -4,16 +4,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '@material-ui/core/Breadcrumbs'
-
 import Navbar from 'rsuite/lib/Navbar'
 import Nav from 'rsuite/lib/Nav'
 import Icon from 'rsuite/lib/Icon'
 import Dropdown from 'rsuite/lib/Dropdown'
-
 import logo from '../../assets/img/sightly-logo.svg'
 import sidebarStyles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
-
 import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 
@@ -223,26 +220,24 @@ function Header(props) {
 							</Dropdown>
 						) : null}
 
-						<Dropdown
-							title='Account Configuration'
-							icon={<Icon icon='sliders' />}
-						>
-							{!onlyMentality ? (
-								<div>
-									<NavLink href='/admin/settings/account' label='Account' />
-									<NavLink href='/admin/settings/users' label='Users' />
-									<NavLink
-										href='/admin/settings/brandProfiles'
-										label='Brand Profiles'
-									/>
-								</div>
-							) : null}
+						{!onlyMentality ? (
+							<Dropdown
+								title='Account Configuration'
+								icon={<Icon icon='sliders' />}
+							>
+								<NavLink href='/admin/settings/account' label='Account' />
+								<NavLink href='/admin/settings/users' label='Users' />
+								<NavLink
+									href='/admin/settings/brandProfiles'
+									label='Brand Profiles'
+								/>
 
-							<NavLink
-								href='/admin/settings/brandMentality'
-								label='Brand Mentality'
-							/>
-						</Dropdown>
+								<NavLink
+									href='/admin/settings/brandMentality'
+									label='Brand Mentality'
+								/>
+							</Dropdown>
+						) : null}
 					</Nav>
 					<Nav pullRight style={{ marginRight: 30 }}>
 						<Dropdown title='' icon={<Icon icon='avatar' />}>

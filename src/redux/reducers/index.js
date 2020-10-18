@@ -21,7 +21,9 @@ import {
 	userDeletedError,
 	userAdded,
 	usersIsLoading,
-	editUserUserAccountsLoading
+	editUserUserAccountsLoading,
+	userProfileSaving,
+	userProfileSaved
 } from './users'
 import {
 	accounts,
@@ -63,6 +65,8 @@ export default combineReducers({
 	currentAccountId,
 	isSwitchingAccounts,
 	userProfileIsLoading,
+	userProfileSaving,
+	userProfileSaved,
 	treeAccounts,
 	editUserUserAccountsLoading,
 	editAccountAccountUsersLoading,

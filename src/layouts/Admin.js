@@ -6,9 +6,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Navbar from '../components/Navbars/Navbar.js'
 import { SettingsRoutes } from '../routes.js'
 import styles from '../assets/jss/material-dashboard-react/layouts/adminStyle.js'
-import UserProfile from '../views/UserProfile/UserProfile.js'
-import Account from '../views/Account/Account'
-import Users from '../views/Users/Users'
 import CreateUser from '../views/Users/CreateUser.js'
 
 // Redux
@@ -16,24 +13,32 @@ import { connect } from 'react-redux'
 import { setUserId } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
-import ListBuilder from '../views/Discover/ListBuilder.js'
-import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
-import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
 import ChannelResearchTemp from '../views/Discover/ChannelResearchTemp'
+import ListBuilder from '../views/Discover/ListBuilder.js'
+import Users from '../views/Users/Users'
+import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
+import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
+import UserProfile from '../views/UserProfile/UserProfile.js'
+import Account from '../views/Account/Account'
 
 let ps
 
 const switchRoutes = (
 	<Switch>
-		<Route path='/admin/settings/profile' component={UserProfile} />
-		<Route path='/admin/settings/account' component={Account} />
+		<Route path='/admin/settings/brandMentality' component={TestBrandProfile} />
+
+		<Route
+			path='/admin/discover/channelResearch'
+			component={ChannelResearchTemp}
+		/>
 
 		<Route
 			path='/admin/settings/users'
 			render={({ match: { url } }) => (
 				<>
 					<Route path={`${url}/`} component={Users} exact />
+
 					<Route path={`${url}/create`} component={CreateUser} />
 					<Route
 						path={`${url}/edit/:user`}
@@ -43,23 +48,21 @@ const switchRoutes = (
 			)}
 		/>
 
+		<Route path='/admin/engage/listBuilder' component={ListBuilder} />
+
+		<Route path='/admin/settings/profile' component={UserProfile} />
+
+		<Route path='/admin/settings/account' component={Account} />
+
 		<Route
 			path='/admin/settings/brandProfiles'
 			render={({ match: { url } }) => (
 				<>
 					<Route path={`${url}/`} component={BrandProfiles} exact />
+
 					<Route path={`${url}/create`} component={CreateBrandProfile} />
 				</>
 			)}
-		/>
-
-		<Route path='/admin/settings/brandMentality' component={TestBrandProfile} />
-
-		<Route path='/admin/engage/listBuilder' component={ListBuilder} />
-
-		<Route
-			path='/admin/discover/channelResearch'
-			component={ChannelResearchTemp}
 		/>
 
 		<Redirect from='/admin' to='/admin/settings/profile' />

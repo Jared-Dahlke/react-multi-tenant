@@ -40,7 +40,7 @@ module.exports = override(
 				'@nav-item-default-hover-bg': neutralExtraLightColor,
 				'@dropdown-link-hover-bg': neutralLightColor,
 
-				'@btn-default-hover-bg': 'yellow',
+				//	'@btn-default-hover-bg': 'yellow',
 				'@btn-default-active-bg': 'purple',
 				'@btn-default-focus-bg': 'pink',
 				'@nav-subtle-hover-bg': 'red',
@@ -49,7 +49,12 @@ module.exports = override(
 				'@btn-subtle-focus-bg': neutralColor,
 				//'@btn-subtle-active-color': neutralColor,
 				//'@btn-subtle-active-default-color': neutralColor,
-				'@btn-subtle-active-default-bg': neutralColor
+				'@btn-subtle-active-default-bg': neutralColor,
+
+				//button
+				'@btn-default-bg': accentColor,
+				'@btn-default-disabled-bg': neutralLightColor,
+				'@btn-default-hover-bg': accentColor
 			}
 		}
 	})

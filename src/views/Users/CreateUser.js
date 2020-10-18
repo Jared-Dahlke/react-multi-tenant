@@ -85,10 +85,10 @@ function CreateUser(props) {
 			validateOnMount={false}
 			validationSchema={() => schemaValidation}
 			initialValues={{
-				company: 'test',
-				firstName: 'testfirst',
-				lastName: 'testLast',
-				email: 'test@test.com',
+				company: '',
+				firstName: '',
+				lastName: '',
+				email: '',
 				roleId: '',
 				accounts: []
 			}}
