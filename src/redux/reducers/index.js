@@ -32,7 +32,9 @@ import {
 	treeAccounts,
 	editAccountAccountUsersLoading,
 	accountTypes,
-	accountCreated
+	accountCreated,
+	accountSaving,
+	accountSaved
 } from './accounts'
 import {
 	brandProfiles,
@@ -78,5 +80,7 @@ export default combineReducers({
 	industryVerticals,
 	categories,
 	channels,
-	videos
+	videos,
+	accountSaving,
+	accountSaved
 })

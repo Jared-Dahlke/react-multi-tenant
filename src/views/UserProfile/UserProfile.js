@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import GridItem from '../../components/Grid/GridItem.js'
 import GridContainer from '../../components/Grid/GridContainer.js'
 import FormikInput from '../../components/CustomInput/FormikInput.js'
-//import Button from '../../components/CustomButtons/Button.js'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
@@ -11,10 +10,6 @@ import Alert from '@material-ui/lab/Alert'
 import { Form, withFormik } from 'formik'
 import Button from 'rsuite/lib/Button'
 import * as Yup from 'yup'
-// Validation
-import * as v from '../../validations'
-import CustomPassword from '../../components/CustomPasswordRequirements/CustomPasswordRequirements.js'
-import CustomPasswordMatchChecker from '../../components/CustomPasswordRequirements/CustomPasswordMatchChecker'
 
 // Redux
 import { userProfileFetchData } from '../../redux/actions/auth.js'
@@ -129,7 +124,7 @@ function UserProfile(props) {
 									<CardFooter>
 										<Button
 											//	color='primary'
-											loading={props.userProfileSaving}
+											//	loading={props.userProfileSaving}
 											disabled={!isValid || !dirty || props.userProfileSaving}
 											type='submit'
 										>

@@ -15,6 +15,7 @@ import { whiteColor } from '../assets/jss/material-dashboard-react.js'
 import CustomInput from '../components/CustomInput/CustomInput'
 import svgLogo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
+import { CircularProgress } from '@material-ui/core'
 
 const mapStateToProps = (state) => {
 	return {
@@ -59,6 +60,7 @@ const useAdminStyles = makeStyles(adminStyle)
 function Login(props) {
 	const classes = useStyles()
 	const adminClasses = useAdminStyles()
+	const [loggingIn, setLoggingIn] = React.useState(false)
 	let referer = props.location.state
 		? props.location.state.referer
 		: '/admin/settings/profile'
@@ -74,6 +76,7 @@ function Login(props) {
 	const [password, setPassword] = useState('')
 
 	const postLogin = () => {
+		setLoggingIn(true)
 		let credentials = {
 			username: userName,
 			password: password
@@ -124,10 +127,10 @@ function Login(props) {
 						<Button
 							color='primary'
 							onClick={postLogin}
-							fullWidth={true}
-							style={{ marginTop: '10px' }}
+							disabled={loggingIn}
+							style={{ marginTop: '10px', width: '100%' }}
 						>
-							Sign In
+							{loggingIn ? 'Signing in ...' : 'Sign In'}
 						</Button>
 
 						<Grid style={{ marginTop: '10px' }} container>

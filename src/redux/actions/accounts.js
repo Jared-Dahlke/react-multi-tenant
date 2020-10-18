@@ -8,7 +8,9 @@ import {
 	ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
 	ACCOUNTS_UPDATE_ACCOUNT,
 	SET_IS_SWITCHING_ACCOUNTS,
-	SET_ACCOUNT_CREATED
+	SET_ACCOUNT_CREATED,
+	SET_ACCOUNT_SAVED,
+	SET_ACCOUNT_SAVING
 } from '../action-types/accounts'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -37,6 +39,7 @@ import {
 } from '../actions/brandProfiles'
 import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
+import { accountSaving } from '../reducers/accounts'
 
 const apiBase = config.apiGateway.URL
 
@@ -82,6 +85,20 @@ export function setCurrentAccount(accountId) {
 	}
 }
 
+export function setAccountSaved(accountSaved) {
+	return {
+		type: SET_ACCOUNT_SAVED,
+		accountSaved
+	}
+}
+
+export function setAccountSaving(accountSaving) {
+	return {
+		type: SET_ACCOUNT_SAVING,
+		accountSaving
+	}
+}
+
 export function isSwitchingAccounts(bool) {
 	return {
 		type: SET_IS_SWITCHING_ACCOUNTS,
@@ -100,10 +117,13 @@ export function updateAccount(account) {
 	let accountId = account.accountId
 	let url = apiBase + `/account/${accountId}`
 	return async (dispatch) => {
+		dispatch(setAccountSaving(true))
 		dispatch(accountsUpdateAccount(account))
 		try {
 			const result = await axios.patch(url, account)
 			if (result.status === 200) {
+				dispatch(setAccountSaving(false))
+				dispatch(setAccountSaved(true))
 			}
 		} catch (error) {
 			alert(error)
@@ -115,6 +135,7 @@ export const deleteAccount = (accountId) => {
 	let url = apiBase + `/account/${accountId}`
 	return (dispatch) => {
 		dispatch(isSwitchingAccounts(true))
+		dispatch(clearSiteData())
 		axios
 			.delete(url)
 			.then((response) => {
@@ -122,9 +143,9 @@ export const deleteAccount = (accountId) => {
 			})
 			.catch((error) => {
 				//dispatch(userDeletedError(true));
-				setTimeout(() => {
-					// dispatch(userDeletedError(false));
-				}, 2000)
+				//setTimeout(() => {
+				// dispatch(userDeletedError(false));
+				//}, 2000)
 			})
 	}
 }
