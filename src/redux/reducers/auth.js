@@ -22,7 +22,7 @@ let newUser = {
 
 userObjValidation.validate(newUser).catch(function(err) {
 	console.log(err.name, err.errors)
-	alert('Could not validate new user')
+	alert('Could not validate new stubbed user')
 })
 
 const initialState = {

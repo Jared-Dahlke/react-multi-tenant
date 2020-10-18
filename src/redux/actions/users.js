@@ -8,13 +8,15 @@ import {
 	USER_ADDED,
 	USERS_IS_LOADING,
 	USERS_SET_USER_ACCOUNTS,
-	EDIT_USER_USER_ACCOUNTS_LOADING
+	EDIT_USER_USER_ACCOUNTS_LOADING,
+	USER_PROFILE_SAVED,
+	USER_PROFILE_SAVING
 } from '../action-types/users'
 import { SET_ALERT } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
 import { accountsObjValidation, userObjValidation } from '../../schemas'
-import { useReducer } from 'react'
+import { setUser } from './auth'
 
 const apiBase = config.apiGateway.URL
 
@@ -55,6 +57,19 @@ export function usersIsLoading(bool) {
 	return {
 		type: USERS_IS_LOADING,
 		usersIsLoading: bool
+	}
+}
+
+export function userProfileSaving(bool) {
+	return {
+		type: USER_PROFILE_SAVING,
+		userProfileSaving: bool
+	}
+}
+export function userProfileSaved(bool) {
+	return {
+		type: USER_PROFILE_SAVED,
+		userProfileSaved: bool
 	}
 }
 
@@ -147,6 +162,7 @@ export function updateUserData(user) {
 	let userId = user.userId
 	let url = apiBase + `/user/${userId}`
 	return async (dispatch) => {
+		dispatch(userProfileSaving(true))
 		try {
 			let myUser = {
 				userId: user.userId,
@@ -163,14 +179,13 @@ export function updateUserData(user) {
 				console.log(err.name, err.errors)
 				alert('Could not validate new user')
 			})
-
 			delete myUser.accounts
 			delete myUser.roles
+			dispatch(setUser(myUser))
 			const result = await axios.patch(url, myUser)
 			if (result.status === 200) {
-				// console.log('updating user through update user data')
-				// console.log(result.data.user)
-				// dispatch(setUser(result.data.user));
+				dispatch(userProfileSaving(false))
+				dispatch(userProfileSaved(true))
 			}
 		} catch (error) {
 			alert(error)

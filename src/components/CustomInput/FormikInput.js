@@ -42,7 +42,6 @@ export default function CustomInput(props) {
 	const marginTop = classNames({
 		[classes.marginTop]: labelText === undefined
 	})
-	console.log(formControlProps)
 
 	return (
 		<Field name={props.name} validate={props.validate}>
