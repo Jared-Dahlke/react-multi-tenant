@@ -20,9 +20,7 @@ const appStyle = (theme) => ({
 		backgroundColor: neutralColor
 	},
 	mainPanel: {
-		[theme.breakpoints.up('md')]: {
-			// width: `calc(100% - ${drawerWidth}px)`
-		},
+		[theme.breakpoints.up('md')]: {},
 		overflow: 'auto',
 		position: 'relative',
 		float: 'right',
@@ -33,8 +31,8 @@ const appStyle = (theme) => ({
 	},
 	content: {
 		marginTop: '30px',
-		padding: '15px 15px'
-		//minHeight: "calc(100vh - 123px)"
+		padding: '15px 15px',
+		minHeight: 'calc(100vh - 155px)'
 	},
 	container,
 	map: {

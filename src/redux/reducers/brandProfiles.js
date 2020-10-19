@@ -5,7 +5,11 @@ import {
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
 	SCENARIO_PROPERTIES_FETCH,
-	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS
+	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+	BRAND_PROFILE_SAVED,
+	BRAND_PROFILE_SAVING,
+	BRAND_PROFILE_DELETED,
+	BRAND_PROFILE_DELETING
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -37,6 +41,42 @@ export function brandProfilesIsLoading(state = true, action) {
 	switch (action.type) {
 		case BRAND_PROFILES_IS_LOADING:
 			return action.brandProfilesIsLoading
+		default:
+			return state
+	}
+}
+
+export function brandProfileSaved(state = false, action) {
+	switch (action.type) {
+		case BRAND_PROFILE_SAVED:
+			return action.brandProfileSaved
+		default:
+			return state
+	}
+}
+
+export function brandProfileSaving(state = false, action) {
+	switch (action.type) {
+		case BRAND_PROFILE_SAVING:
+			return action.brandProfileSaving
+		default:
+			return state
+	}
+}
+
+export function brandProfileDeleted(state = false, action) {
+	switch (action.type) {
+		case BRAND_PROFILE_DELETED:
+			return action.brandProfileDeleted
+		default:
+			return state
+	}
+}
+
+export function brandProfileDeleting(state = false, action) {
+	switch (action.type) {
+		case BRAND_PROFILE_DELETING:
+			return action.brandProfileDeleting
 		default:
 			return state
 	}

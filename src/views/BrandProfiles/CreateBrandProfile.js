@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Card from '../../components/Card/Card.js'
 import CardFooter from '../../components/Card/CardFooter'
 import CardBody from '../../components/Card/CardBody.js'
@@ -24,11 +24,16 @@ import Scenarios from './components/Scenarios'
 import {
 	createBrandProfile,
 	fetchBrandScenariosProperties,
-	fetchBrandIndustryVerticals
+	fetchBrandIndustryVerticals,
+	setBrandProfileSaved
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { Debug } from '../Debug'
 import { neutralColor } from '../../assets/jss/colorContants.js'
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
+import { Link } from 'react-router-dom'
+import Message from 'rsuite/lib/Message'
 //import Joyride from 'react-joyride'
 //import {getTours} from '../../Tour'
 /** <Joyride
@@ -75,7 +80,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(createBrandProfile(brandProfile)),
 		fetchBrandScenariosProperties: () =>
 			dispatch(fetchBrandScenariosProperties()),
-		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals())
+		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
+		setBrandProfileSaved: (bool) => dispatch(setBrandProfileSaved(bool))
 	}
 }
 
@@ -83,7 +89,9 @@ const mapStateToProps = (state) => {
 	return {
 		currentAccountId: state.currentAccountId,
 		scenarioProperties: state.scenarioProperties,
-		industryVerticals: state.industryVerticals
+		industryVerticals: state.industryVerticals,
+		brandProfileSaved: state.brandProfileSaved,
+		brandProfileSaving: state.brandProfileSaving
 	}
 }
 
@@ -332,20 +340,48 @@ function CreateBrandProfiles(props) {
 												/>
 											</div>
 										) : (
-											<div></div>
+											<div style={{ color: 'white' }}>
+												<div
+													style={{
+														display: 'flex',
+														justifyContent: 'center',
+														alignItems: 'center',
+														backgroundColor: neutralColor,
+														height: '100%',
+														color: 'white'
+													}}
+												>
+													{props.brandProfileSaving ? (
+														'Saving...'
+													) : (
+														<Message
+															showIcon
+															type='success'
+															title='Success'
+															description={
+																<p>
+																	{
+																		'Your brand profile was succesfully created. Now you can '
+																	}
+																	<Link to='/admin/engage/listBuilder'>
+																		{'go to the list builder '}
+																	</Link>
+																	or
+																	<Link to='/admin/settings/brandProfiles'>
+																		{' view your brand profiles'}
+																	</Link>
+																</p>
+															}
+														/>
+													)}
+												</div>
+											</div>
 										)}
 									</GridList>
 								</CardBody>
 								<CardFooter>
 									<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
-										{activeStep === steps.length ? (
-											<div>
-												<Typography
-													className={classes.instructions}
-												></Typography>
-												<Button onClick={handleReset}>Reset</Button>
-											</div>
-										) : (
+										{activeStep === steps.length ? null : (
 											<div>
 												<div>
 													<Button
@@ -356,13 +392,12 @@ function CreateBrandProfiles(props) {
 														Back
 													</Button>
 													<Button
-														variant='contained'
-														color='primary'
 														onClick={() => handleNext(values)}
 														disabled={
 															!stepValidated(activeStep, errors, values) ||
 															!dirty
 														}
+														loading={props.brandProfileSaving}
 													>
 														{activeStep === steps.length - 1 ? 'Save' : 'Next'}
 													</Button>
