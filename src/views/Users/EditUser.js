@@ -2,17 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import GridItem from '../../components/Grid/GridItem.js'
 import GridContainer from '../../components/Grid/GridContainer.js'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
-import Snackbar from '../../components/Snackbar/Snackbar'
-import AddAlert from '@material-ui/icons/AddAlert'
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
 import {
 	updateUserData,
 	updateUserRole,
 	updateUserAccounts,
-	fetchUserAccounts
+	fetchUserAccounts,
+	setUserEditSaved
 } from '../../redux/actions/users'
 import { FormLoader } from '../../components/SkeletonLoader'
 import { Formik } from 'formik'
@@ -49,7 +50,9 @@ const mapStateToProps = (state) => {
 		roles: state.roles.data,
 		accounts: state.accounts,
 		users: state.users,
-		editUserUserAccountsLoading: state.editUserUserAccountsLoading
+		editUserUserAccountsLoading: state.editUserUserAccountsLoading,
+		userEditSaving: state.userEditSaving,
+		userEditSaved: state.userEditSaved
 	}
 }
 
@@ -59,7 +62,8 @@ const mapDispatchToProps = (dispatch) => {
 		fetchUserAccounts: (userId) => dispatch(fetchUserAccounts(userId)),
 		updateUserRole: (user, roleId) => dispatch(updateUserRole(user, roleId)),
 		updateUserAccounts: (user, accounts) =>
-			dispatch(updateUserAccounts(user, accounts))
+			dispatch(updateUserAccounts(user, accounts)),
+		setUserEditSaved: (bool) => dispatch(setUserEditSaved(bool))
 	}
 }
 
@@ -197,9 +201,6 @@ function EditUser(props) {
 														name='company'
 														labelText='Company'
 														id='company'
-														formControlProps={{
-															fullWidth: true
-														}}
 														inputProps={{
 															disabled: true
 														}}
@@ -211,10 +212,6 @@ function EditUser(props) {
 														name='email'
 														labelText='Email'
 														id='email'
-														formControlProps={{
-															fullWidth: true
-														}}
-														inputProps={{}}
 													/>
 												</GridItem>
 
@@ -223,10 +220,6 @@ function EditUser(props) {
 														name='firstName'
 														labelText='First Name'
 														id='firstName'
-														formControlProps={{
-															fullWidth: true
-														}}
-														inputProps={{}}
 													/>
 												</GridItem>
 
@@ -235,10 +228,6 @@ function EditUser(props) {
 														name='lastName'
 														labelText='Last Name'
 														id='lastName'
-														formControlProps={{
-															fullWidth: true
-														}}
-														inputProps={{}}
 													/>
 												</GridItem>
 
@@ -284,7 +273,7 @@ function EditUser(props) {
 											<Button
 												disabled={!isValid}
 												onClick={() => handleSaveClick(values, resetForm)}
-												color='primary'
+												loading={props.userEditSaving}
 											>
 												Save
 											</Button>
@@ -296,14 +285,18 @@ function EditUser(props) {
 					</GridContainer>
 
 					<Snackbar
+						autoHideDuration={2000}
 						place='bc'
-						color='success'
-						icon={AddAlert}
-						message='User info is saved'
-						//  open={showAlertMessage}
-						// closeNotification={() => setShowAlertMessage(false)}
-						close
-					/>
+						open={props.userEditSaved}
+						onClose={() => props.setUserEditSaved(false)}
+					>
+						<Alert
+							onClose={() => props.setUserEditSaved(false)}
+							severity='success'
+						>
+							User info saved
+						</Alert>
+					</Snackbar>
 				</div>
 			)}
 		/>

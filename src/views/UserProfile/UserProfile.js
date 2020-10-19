@@ -77,10 +77,6 @@ function UserProfile(props) {
 													name='company'
 													labelText='Company'
 													id='company'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
 												/>
 											</GridItem>
 											<GridItem xs={12} sm={12} md={4}>
@@ -88,10 +84,6 @@ function UserProfile(props) {
 													name='email'
 													labelText='Email'
 													id='email'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
 												/>
 											</GridItem>
 										</GridContainer>
@@ -101,10 +93,6 @@ function UserProfile(props) {
 													name='firstName'
 													labelText='First Name'
 													id='firstName'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
 												/>
 											</GridItem>
 											<GridItem xs={12} sm={12} md={6}>
@@ -112,10 +100,6 @@ function UserProfile(props) {
 													name='lastName'
 													labelText='Last Name'
 													id='lastName'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
 												/>
 											</GridItem>
 										</GridContainer>

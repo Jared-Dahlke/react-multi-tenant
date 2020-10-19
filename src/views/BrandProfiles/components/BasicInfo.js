@@ -29,25 +29,13 @@ export default function BasicInfo(props) {
 		<div>
 			<GridContainer>
 				<GridItem xs={12} sm={8} md={4}>
-					<FormikInput
-						name='basicInfoProfileName'
-						labelText='Profile Name'
-						formControlProps={{
-							fullWidth: true
-						}}
-					/>
+					<FormikInput name='basicInfoProfileName' labelText='Profile Name' />
 				</GridItem>
 			</GridContainer>
 
 			<GridContainer>
 				<GridItem xs={12} sm={8} md={4}>
-					<FormikInput
-						name='basicInfoWebsiteUrl'
-						labelText='Website'
-						formControlProps={{
-							fullWidth: true
-						}}
-					/>
+					<FormikInput name='basicInfoWebsiteUrl' labelText='Website' />
 				</GridItem>
 			</GridContainer>
 			<GridContainer>
@@ -55,9 +43,6 @@ export default function BasicInfo(props) {
 					<FormikInput
 						name='basicInfoTwitterProfile'
 						labelText='Twitter Profile'
-						formControlProps={{
-							fullWidth: true
-						}}
 						inputProps={{
 							startAdornment: (
 								<InputAdornment position='start'>
