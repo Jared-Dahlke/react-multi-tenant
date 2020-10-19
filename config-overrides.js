@@ -42,7 +42,7 @@ module.exports = override(
 
 				//	'@btn-default-hover-bg': 'yellow',
 				'@btn-default-active-bg': 'purple',
-				'@btn-default-focus-bg': 'pink',
+
 				'@nav-subtle-hover-bg': 'red',
 				//	'@nav-bar-subtle-hover-bg': 'green',
 				'@btn-subtle-hover-bg': neutralColor,
@@ -55,6 +55,7 @@ module.exports = override(
 				'@btn-default-bg': accentColor,
 				'@btn-default-disabled-bg': neutralLightColor,
 				'@btn-default-hover-bg': accentColor,
+				'@btn-default-focus-bg': accentColor,
 
 				//messages
 				'@message-success-bg': neutralExtraLightColor, //'#58b15b',

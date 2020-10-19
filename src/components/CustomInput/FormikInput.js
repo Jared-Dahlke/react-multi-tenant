@@ -46,10 +46,7 @@ export default function CustomInput(props) {
 	return (
 		<Field name={props.name} validate={props.validate}>
 			{({ field, form }) => (
-				<FormControl
-					{...formControlProps}
-					className={formControlProps.className + ' ' + classes.formControl}
-				>
+				<FormControl fullWidth={true} className={classes.formControl}>
 					{labelText !== undefined ? (
 						<InputLabel
 							className={classes.labelRoot + labelClasses}

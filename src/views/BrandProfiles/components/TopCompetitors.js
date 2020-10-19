@@ -160,9 +160,6 @@ export default function TopCompetitors(props) {
 														labelProps={{ shrink: true }}
 														labelText='Competitor Name'
 														validate={v.isBrandProfileNameError}
-														formControlProps={{
-															fullWidth: true
-														}}
 													/>
 												</TableCell>
 												<TableCell className={tableCellClasses}>
@@ -180,9 +177,6 @@ export default function TopCompetitors(props) {
 														}}
 														labelText='Competitor Twitter'
 														validate={v.isTwitterProfileError}
-														formControlProps={{
-															fullWidth: true
-														}}
 													/>
 												</TableCell>
 
@@ -192,9 +186,6 @@ export default function TopCompetitors(props) {
 														name='newWebsite'
 														labelText='Competitor Website'
 														validate={v.isWebsiteUrlError}
-														formControlProps={{
-															fullWidth: true
-														}}
 													/>
 												</TableCell>
 

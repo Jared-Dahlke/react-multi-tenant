@@ -179,47 +179,25 @@ function Account(props) {
 											name='accountName'
 											labelText='Account Name'
 											id='accountName'
-											formControlProps={{
-												fullWidth: true
-											}}
-											inputProps={{}}
 										/>
 
 										<FormikInput
 											name='parentAccountName'
 											labelText='Parent Account'
-											formControlProps={{
-												fullWidth: true
-											}}
 											inputProps={{
 												disabled: true
 											}}
 										/>
 
-										<FormikInput
-											name='contactName'
-											labelText='Contact Name'
-											formControlProps={{
-												fullWidth: true
-											}}
-											inputProps={{}}
-										/>
+										<FormikInput name='contactName' labelText='Contact Name' />
 
 										<FormikInput
 											name='contactEmail'
 											labelText='Contact Email'
-											formControlProps={{
-												fullWidth: true
-											}}
-											inputProps={{}}
 										/>
 										<FormikInput
 											name='accountMargin'
 											labelText='Account Margin'
-											formControlProps={{
-												fullWidth: true
-											}}
-											inputProps={{}}
 										/>
 
 										<FormikSelect

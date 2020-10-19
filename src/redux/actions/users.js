@@ -10,7 +10,10 @@ import {
 	USERS_SET_USER_ACCOUNTS,
 	EDIT_USER_USER_ACCOUNTS_LOADING,
 	USER_PROFILE_SAVED,
-	USER_PROFILE_SAVING
+	USER_PROFILE_SAVING,
+	USER_ADDING,
+	USER_EDIT_SAVED,
+	USER_EDIT_SAVING
 } from '../action-types/users'
 import { SET_ALERT } from '../action-types/auth'
 import axios from '../../axiosConfig'
@@ -33,7 +36,7 @@ export function userDeleted(bool) {
 		userDeleted: bool
 	}
 }
-export function userAdded(bool) {
+export function setUserAdded(bool) {
 	return {
 		type: USER_ADDED,
 		userAdded: bool
@@ -66,10 +69,32 @@ export function userProfileSaving(bool) {
 		userProfileSaving: bool
 	}
 }
+
 export function userProfileSaved(bool) {
 	return {
 		type: USER_PROFILE_SAVED,
 		userProfileSaved: bool
+	}
+}
+
+export function setUserAdding(bool) {
+	return {
+		type: USER_ADDING,
+		userAdding: bool
+	}
+}
+
+export function setUserEditSaving(bool) {
+	return {
+		type: USER_EDIT_SAVING,
+		userEditSaving: bool
+	}
+}
+
+export function setUserEditSaved(bool) {
+	return {
+		type: USER_EDIT_SAVED,
+		userEditSaved: bool
 	}
 }
 
@@ -163,6 +188,7 @@ export function updateUserData(user) {
 	let url = apiBase + `/user/${userId}`
 	return async (dispatch) => {
 		dispatch(userProfileSaving(true))
+		dispatch(setUserEditSaving(true))
 		try {
 			let myUser = {
 				userId: user.userId,
@@ -186,6 +212,8 @@ export function updateUserData(user) {
 			if (result.status === 200) {
 				dispatch(userProfileSaving(false))
 				dispatch(userProfileSaved(true))
+				dispatch(setUserEditSaving(false))
+				dispatch(setUserEditSaved(true))
 			}
 		} catch (error) {
 			alert(error)
@@ -292,14 +320,13 @@ export const createUser = (user) => {
 
 	let url = apiBase + `/user/invite`
 	return (dispatch) => {
+		dispatch(setUserAdding(true))
 		dispatch(usersAddUser(userCopy))
 		axios
 			.post(url, user)
 			.then((response) => {
-				dispatch(userAdded(true))
-				setTimeout(() => {
-					dispatch(userAdded(false))
-				}, 2000)
+				dispatch(setUserAdding(false))
+				dispatch(setUserAdded(true))
 			})
 			.catch((error) => {
 				console.log('invite user error')

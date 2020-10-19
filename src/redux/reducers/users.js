@@ -10,7 +10,10 @@ import {
 	USERS_SET_USER_ACCOUNTS,
 	EDIT_USER_USER_ACCOUNTS_LOADING,
 	USER_PROFILE_SAVED,
-	USER_PROFILE_SAVING
+	USER_PROFILE_SAVING,
+	USER_ADDING,
+	USER_EDIT_SAVING,
+	USER_EDIT_SAVED
 } from '../action-types/users'
 
 export function usersHasErrored(state = false, action) {
@@ -70,6 +73,32 @@ export function userAdded(state = false, action) {
 	switch (action.type) {
 		case USER_ADDED:
 			return action.userAdded
+		default:
+			return state
+	}
+}
+
+export function userAdding(state = false, action) {
+	switch (action.type) {
+		case USER_ADDING:
+			return action.userAdding
+		default:
+			return state
+	}
+}
+
+export function userEditSaving(state = false, action) {
+	switch (action.type) {
+		case USER_EDIT_SAVING:
+			return action.userEditSaving
+		default:
+			return state
+	}
+}
+export function userEditSaved(state = false, action) {
+	switch (action.type) {
+		case USER_EDIT_SAVED:
+			return action.userEditSaved
 		default:
 			return state
 	}
