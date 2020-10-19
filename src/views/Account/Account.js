@@ -38,7 +38,8 @@ const mapStateToProps = (state) => {
 		isSwitchingAccounts: state.isSwitchingAccounts,
 		accountCreated: state.accountCreated,
 		accountSaved: state.accountSaved,
-		accountSaving: state.accountSaving
+		accountSaving: state.accountSaving,
+		rolesIsLoading: state.rolesIsLoading
 	}
 }
 
@@ -146,6 +147,7 @@ function Account(props) {
 		validateForm,
 		isSubmitting,
 		isValid,
+		isValidating,
 		dirty
 	} = props
 
@@ -156,7 +158,9 @@ function Account(props) {
 			<GridItem xs={12} sm={12} md={6}>
 				<AccountDropdown />
 				<Card>
-					{values.accountTypeName.length < 1 || props.isSwitchingAccounts ? (
+					{props.rolesIsLoading ||
+					props.isSwitchingAccounts ||
+					values.accountTypeName.length < 1 ? (
 						<FormLoader />
 					) : (
 						<Form>

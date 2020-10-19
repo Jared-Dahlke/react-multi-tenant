@@ -54,7 +54,11 @@ module.exports = override(
 				//button
 				'@btn-default-bg': accentColor,
 				'@btn-default-disabled-bg': neutralLightColor,
-				'@btn-default-hover-bg': accentColor
+				'@btn-default-hover-bg': accentColor,
+
+				//messages
+				'@message-success-bg': neutralExtraLightColor, //'#58b15b',
+				'@message-header-color': '#FFF'
 			}
 		}
 	})

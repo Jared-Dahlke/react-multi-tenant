@@ -5,7 +5,11 @@ import {
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
 	SCENARIO_PROPERTIES_FETCH,
-	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS
+	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+	BRAND_PROFILE_SAVED,
+	BRAND_PROFILE_DELETED,
+	BRAND_PROFILE_DELETING,
+	BRAND_PROFILE_SAVING
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -23,11 +27,13 @@ export function brandProfilesFetchDataSuccess(brandProfiles) {
 export const createBrandProfile = (brandProfile) => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
 		dispatch(addBrandProfile(brandProfile))
 		axios
 			.post(url, brandProfile)
 			.then((response) => {
-				// dispatch(fetchSiteData(response.data.accountId))
+				dispatch(setBrandProfileSaving(false))
+				dispatch(setBrandProfileSaved(true))
 			})
 			.catch((error) => {
 				//error
@@ -52,14 +58,16 @@ export function removeBrandProfile(brandProfileId) {
 export const deleteBrandProfile = (brandProfileId) => {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return (dispatch) => {
+		dispatch(setBrandProfileDeleting(true))
 		dispatch(removeBrandProfile(brandProfileId))
 		axios
 			.delete(url)
 			.then((response) => {
-				//dispatch(userDeleted(true));
+				dispatch(setBrandProfileDeleting(false))
+				dispatch(setBrandProfileDeleted(true))
 			})
 			.catch((error) => {
-				//dispatch(userDeletedError(true));
+				console.error(error)
 			})
 	}
 }
@@ -94,6 +102,31 @@ export function brandProfilesIsLoading(bool) {
 	return {
 		type: BRAND_PROFILES_IS_LOADING,
 		brandProfilesIsLoading: bool
+	}
+}
+
+export function setBrandProfileSaved(bool) {
+	return {
+		type: BRAND_PROFILE_SAVED,
+		brandProfileSaved: bool
+	}
+}
+export function setBrandProfileSaving(bool) {
+	return {
+		type: BRAND_PROFILE_SAVING,
+		brandProfileSaving: bool
+	}
+}
+export function setBrandProfileDeleted(bool) {
+	return {
+		type: BRAND_PROFILE_DELETED,
+		brandProfileDeleted: bool
+	}
+}
+export function setBrandProfileDeleting(bool) {
+	return {
+		type: BRAND_PROFILE_DELETING,
+		brandProfileDeleting: bool
 	}
 }
 
