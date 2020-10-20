@@ -19,11 +19,11 @@ import * as Yup from 'yup'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
-import Scenarios from './components/Scenarios'
+import Scenarios from './components/Scenarios/Scenarios'
 import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
-	fetchBrandScenariosProperties,
+	fetchBrandScenarios,
 	fetchBrandIndustryVerticals,
 	fetchBrandTopics,
 	fetchBrandCategories,
@@ -71,8 +71,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		createBrandProfile: (brandProfile) =>
 			dispatch(createBrandProfile(brandProfile)),
-		fetchBrandScenariosProperties: () =>
-			dispatch(fetchBrandScenariosProperties()),
+		fetchBrandScenarios: () => dispatch(fetchBrandScenarios()),
 		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
 		fetchBrandTopics: () => dispatch(fetchBrandTopics()),
 		fetchBrandCategories: () => dispatch(fetchBrandCategories()),
@@ -83,29 +82,13 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
 	return {
 		currentAccountId: state.currentAccountId,
-		scenarioProperties: state.scenarioProperties,
+		scenarios: state.scenarios,
 		industryVerticals: state.industryVerticals,
 		brandProfileSaved: state.brandProfileSaved,
 		brandProfileSaving: state.brandProfileSaving,
 		topics: state.topics,
 		categories: state.brandCategories
 	}
-}
-
-const formatScenario = (scenarioProps) => {
-	if (!scenarioProps || !scenarioProps.scenario) return []
-
-	let formattedScenarios = []
-
-	scenarioProps.scenario.forEach((scen, index) => {
-		formattedScenarios.push({
-			scenName: `scenario${index + 1}`,
-			scenLabel: scen.scenarioName,
-			scenId: scen.scenarioId
-		})
-	})
-
-	return formattedScenarios
 }
 
 const schemaValidation = Yup.object().shape({
@@ -140,10 +123,18 @@ const schemaValidation = Yup.object().shape({
 		),
 	topics: Yup.array()
 		.typeError('Wrong type')
-		.min(1, 'You have to pick at least one topic')
-		.test('test-name', 'You must include at least one topic', (topics) => {
+		.test('topicsTest', 'You must include at least one topic', (topics) => {
 			return topicsHasResponse(topics)
-		})
+		}),
+	scenarios: Yup.array()
+		.typeError('Wrong type')
+		.test(
+			'scenariosTest',
+			'Please select a response for each scenario',
+			(scenarios) => {
+				return scenariosAllHaveAResponse(scenarios)
+			}
+		)
 })
 
 function topicsHasResponse(topics) {
@@ -155,6 +146,14 @@ function topicsHasResponse(topics) {
 		}
 	}
 	return false
+}
+
+function scenariosAllHaveAResponse(scenarios) {
+	if (scenarios.length < 1) return false
+	for (const scenario of scenarios) {
+		if (!scenario.responseId || scenario.responseId.length < 1) return false
+	}
+	return true
 }
 
 function getSteps() {
@@ -173,26 +172,21 @@ function getTopicValues(topics) {
 }
 
 function CreateBrandProfiles(props) {
-	let fetchBrandScenariosProperties = props.fetchBrandScenariosProperties
+	let fetchBrandScenarios = props.fetchBrandScenarios
 	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
 	let fetchBrandTopics = props.fetchBrandTopics
 	let fetchBrandCategories = props.fetchBrandCategories
 	React.useEffect(() => {
-		fetchBrandScenariosProperties()
+		fetchBrandScenarios()
 		fetchBrandIndustryVerticals()
 		fetchBrandTopics()
 		fetchBrandCategories()
 	}, [
-		fetchBrandScenariosProperties,
+		fetchBrandScenarios,
 		fetchBrandIndustryVerticals,
 		fetchBrandTopics,
 		fetchBrandCategories
 	])
-
-	const scenarios = React.useMemo(
-		() => formatScenario(props.scenarioProperties),
-		[props.scenarioProperties]
-	)
 
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
@@ -218,18 +212,6 @@ function CreateBrandProfiles(props) {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
 
-	const isScenarioValid = (values) => {
-		for (var key in values.scenarios) {
-			if (values.scenarios.hasOwnProperty(key)) {
-				var value = values.scenarios[key]
-				if (value.length < 1) {
-					return false
-				}
-			}
-		}
-		return true
-	}
-
 	const isValid = (errors, formName) => {
 		for (var prop in errors) {
 			if (Object.prototype.hasOwnProperty.call(errors, prop)) {
@@ -248,7 +230,7 @@ function CreateBrandProfiles(props) {
 			return isValid(errors, 'basicInfo')
 		}
 		if (index === 1) {
-			return isScenarioValid(values)
+			return isValid(errors, 'scenarios')
 		}
 
 		if (index === 2) {
@@ -279,28 +261,13 @@ function CreateBrandProfiles(props) {
 	] = React.useState('')
 	const [topCompetitorsInitial, setTopCompetitorsInitial] = React.useState([])
 	const [topicsInitial, setTopicsInitial] = React.useState([])
+	const [scenariosInitial, setScenariosInitial] = React.useState([])
 
 	//React useEffect to update initial value states
-
-	const getInitialValues = () => {
-		const initialValues = {
-			basicInfoProfileName: basicInfoProfileNameInitial,
-			basicInfoWebsiteUrl: basicInfoWebsiteUrlInitial,
-			basicInfoTwitterProfile: basicInfoTwitterProfileInitial,
-			basicInfoIndustryVerticalId: basicInfoIndustryVerticalIdInitial,
-			topCompetitors: topCompetitorsInitial,
-			topics: topicsInitial
-		}
-
-		let scenariosWithValue = {}
-		scenarios.forEach((field) => {
-			scenariosWithValue[field.scenName] = ''
-		})
-
-		initialValues.scenarios = scenariosWithValue
-
-		return initialValues
-	}
+	React.useEffect(() => {
+		setTopicsInitial(props.topics)
+		setScenariosInitial(props.scenarios)
+	}, [props.topics, props.scenarios])
 
 	const allTopicValues = React.useMemo(() => {
 		return getTopicValues(props.topics)
@@ -314,19 +281,24 @@ function CreateBrandProfiles(props) {
 	return (
 		<Formik
 			//	enableReinitialize
-			//validate
 			validateOnMount={true}
 			validateOnChange={true}
 			validationSchema={() => schemaValidation}
-			initialValues={getInitialValues()}
+			initialValues={{
+				basicInfoProfileName: basicInfoProfileNameInitial,
+				basicInfoWebsiteUrl: basicInfoWebsiteUrlInitial,
+				basicInfoTwitterProfile: basicInfoTwitterProfileInitial,
+				basicInfoIndustryVerticalId: basicInfoIndustryVerticalIdInitial,
+				topCompetitors: topCompetitorsInitial,
+				topics: topicsInitial,
+				scenarios: scenariosInitial
+			}}
 			render={({
 				values,
 				errors,
 				touched,
 				setFieldValue,
 				setFieldTouched,
-				validateField,
-				arrayHelpers,
 				dirty
 			}) => (
 				<div>
@@ -379,13 +351,9 @@ function CreateBrandProfiles(props) {
 										) : activeStep === 1 ? (
 											<div>
 												<Scenarios
-													scenarios={scenarios}
-													validateField={validateField}
+													scenarios={props.scenarios}
 													setFieldValue={setFieldValue}
 													errors={errors}
-													arrayHelpers={arrayHelpers}
-													values={values}
-													touched={touched}
 												/>
 											</div>
 										) : activeStep === 2 ? (
@@ -473,7 +441,6 @@ function CreateBrandProfiles(props) {
 										)}
 									</div>
 								</CardFooter>
-								<Debug />
 							</Card>
 						</GridItem>
 					</GridContainer>

@@ -67,6 +67,7 @@ function Topics(props) {
 	}
 
 	React.useEffect(() => {
+		console.log('inside topics use effect')
 		props.setFieldValue('topics', props.topics)
 	}, [props.topics])
 

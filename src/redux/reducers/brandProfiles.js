@@ -4,7 +4,7 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SCENARIO_PROPERTIES_FETCH,
+	SCENARIOS_FETCH,
 	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
 	BRAND_TOPICS_FETCH_DATA_SUCCESS,
 	BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
@@ -12,7 +12,8 @@ import {
 	BRAND_PROFILE_SAVING,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
-	BRAND_TOPICS_ACTION_SELECT
+	BRAND_TOPICS_ACTION_SELECT,
+	BRAND_SCENARIOS_ACTION_SELECT
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -93,10 +94,32 @@ export function hasBrandProfiles(state = true, action) {
 	}
 }
 
-export function scenarioProperties(state = [], action) {
+function setScenarioAction(data, scenarios) {
+	const scenarioId = data.data.scenarioId
+	const value = Number(data.data.responseId)
+
+	for (const scenario of scenarios) {
+		if (scenario.scenarioId === scenarioId) {
+			scenario.responseId = value
+		}
+	}
+}
+
+function addDefaultResponseIdToScenarios(scenarios) {
+	for (const scenario of scenarios) {
+		scenario.responseId = ''
+	}
+}
+
+export function scenarios(state = [], action) {
 	switch (action.type) {
-		case SCENARIO_PROPERTIES_FETCH:
-			return action.scenarioProperties
+		case SCENARIOS_FETCH:
+			addDefaultResponseIdToScenarios(action.scenarios)
+			return action.scenarios
+		case BRAND_SCENARIOS_ACTION_SELECT:
+			let newScenarios = JSON.parse(JSON.stringify(state))
+			setScenarioAction(action, newScenarios)
+			return newScenarios
 		default:
 			return state
 	}
