@@ -82,6 +82,10 @@ function Login(props) {
 			password: password
 		}
 		props.login(credentials)
+		setTimeout(() => {
+			//TODO: set this up to this API in case loggin in fails, instead of using setTimeout
+			setLoggingIn(false)
+		}, 6000)
 	}
 
 	if (props.isLoggedIn) {
