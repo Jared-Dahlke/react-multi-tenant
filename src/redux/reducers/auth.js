@@ -50,15 +50,6 @@ export function userProfileIsLoading(state = true, action) {
 	}
 }
 
-// export function successPasswordChanged(state = false, action) {
-//   switch (action.type) {
-//   case SUCCESS_PASSWORD_CHANGED:
-//     return action.successPasswordChanged;
-//   default:
-//     return state;
-//   }
-// }
-
 export function user(state = initialState, action) {
 	switch (action.type) {
 		case SET_USER:

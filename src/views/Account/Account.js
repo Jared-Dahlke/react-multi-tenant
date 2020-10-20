@@ -7,7 +7,6 @@ import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
-import AddAlert from '@material-ui/icons/AddAlert'
 import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
 import AccountDropdown from '../../components/AccountDropdown'
@@ -28,7 +27,6 @@ import {
 	accountCreated,
 	setAccountSaved
 } from '../../redux/actions/accounts'
-import { Debug } from '../Debug'
 
 const mapStateToProps = (state) => {
 	return {

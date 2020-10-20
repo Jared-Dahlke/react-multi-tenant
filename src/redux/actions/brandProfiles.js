@@ -9,7 +9,9 @@ import {
 	BRAND_PROFILE_SAVED,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
-	BRAND_PROFILE_SAVING
+	BRAND_PROFILE_SAVING,
+	BRAND_TOPICS_FETCH_DATA_SUCCESS,
+	BRAND_TOPICS_ACTION_SELECT
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -93,7 +95,6 @@ export function fetchBrandProfiles(accountId) {
 			}
 		} catch (error) {
 			alert(error)
-			//dispatch(usersHasErrored(true))
 		}
 	}
 }
@@ -149,7 +150,6 @@ export function fetchBrandScenariosProperties() {
 	return async (dispatch) => {
 		try {
 			const result = await axios.get(url)
-			console.log('RESULT', result)
 			if (result.status === 200) {
 				let scenarioProperties = result.data
 				dispatch(scenarioPropertiesFetch(scenarioProperties))
@@ -165,7 +165,6 @@ export function fetchBrandIndustryVerticals() {
 	return async (dispatch) => {
 		try {
 			const result = await axios.get(url)
-			console.log('RESULT', result)
 			if (result.status === 200) {
 				dispatch(brandIndustryVerticalsFetchDataSuccess(result.data))
 			}
@@ -179,5 +178,33 @@ export function brandIndustryVerticalsFetchDataSuccess(industryVerticals) {
 	return {
 		type: BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
 		industryVerticals
+	}
+}
+
+export function fetchBrandTopics() {
+	let url = apiBase + `/brand-profile/topic`
+	return async (dispatch) => {
+		try {
+			const result = await axios.get(url)
+			if (result.status === 200) {
+				dispatch(brandTopicsFetchDataSuccess(result.data))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function brandTopicsFetchDataSuccess(topics) {
+	return {
+		type: BRAND_TOPICS_FETCH_DATA_SUCCESS,
+		topics
+	}
+}
+
+export function brandTopicsActionSelect(data) {
+	return {
+		type: BRAND_TOPICS_ACTION_SELECT,
+		data
 	}
 }

@@ -25,27 +25,18 @@ import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import { Facebook } from 'react-content-loader'
 import Save from '@material-ui/icons/Save'
 import { default as UUID } from 'node-uuid'
 import FormHelperText from '@material-ui/core/FormHelperText'
-
-const MyFacebookLoader = () => <Facebook />
 
 const useTableStyles = makeStyles(tableStyles)
 
 const useStyles = makeStyles(styles)
 
-var dummyTopCompetitors = [
-	/* {competitorId: 1, competitorName: 'My COmpetitor', competitorTwitterProfile: 'www.twitter.com/competitor',competitorYouTubeChannel: 'youtube.com/competitorchannel', competitorWebsite: 'www.mycompetitor.com'},
-  {competitorId: 2, competitorName: 'Test competitor', competitorTwitterProfile: 'www.twitter.com/someHandle',competitorYouTubeChannel: 'youtube.com/someChannel', competitorWebsite: 'www.someWebsite.com'},
-  {competitorId: 3, competitorName: 'Some Company', competitorTwitterProfile: 'www.twitter.com/handleTest',competitorYouTubeChannel: 'youtube.com/channelTest', competitorWebsite: 'www.myTestWebsite.com'}, */
-]
-
 const competitorHeaders = ['Name', 'Twitter Profile', 'Website', '']
 
 export default function TopCompetitors(props) {
-	const [competitors, setCompetitors] = React.useState(dummyTopCompetitors)
+	const [competitors, setCompetitors] = React.useState([])
 
 	const [addingNew, setAddingNew] = React.useState(false)
 

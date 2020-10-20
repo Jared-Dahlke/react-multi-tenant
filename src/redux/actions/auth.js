@@ -5,7 +5,6 @@ import {
 	SET_USER_ID,
 	SET_ALERT,
 	USER_PROFILE_IS_LOADING
-	// SUCCESS_PASSWORD_CHANGED
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
@@ -20,13 +19,6 @@ export function setAuthToken(payload) {
 export function setAlert(payload) {
 	return { type: SET_ALERT, payload }
 }
-
-// export function successPasswordChanged(bool) {
-//   return {
-//     type: SUCCESS_PASSWORD_CHANGED,
-//     successPasswordChanged: bool,
-//   };
-// }
 
 export function userProfileIsLoading(bool) {
 	return {

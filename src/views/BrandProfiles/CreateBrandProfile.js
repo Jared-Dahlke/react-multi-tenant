@@ -7,7 +7,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
-import Typography from '@material-ui/core/Typography'
 import {
 	primaryColor,
 	whiteColor,
@@ -21,26 +20,18 @@ import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
 import Scenarios from './components/Scenarios'
+import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
 	fetchBrandScenariosProperties,
 	fetchBrandIndustryVerticals,
+	fetchBrandTopics,
 	setBrandProfileSaved
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
-import { Debug } from '../Debug'
 import { neutralColor } from '../../assets/jss/colorContants.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
 import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
-//import Joyride from 'react-joyride'
-//import {getTours} from '../../Tour'
-/** <Joyride
-          steps={getTours('takeToDiscover')}
-          run={showTour}
-        />
- */
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -81,6 +72,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchBrandScenariosProperties: () =>
 			dispatch(fetchBrandScenariosProperties()),
 		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
+		fetchBrandTopics: () => dispatch(fetchBrandTopics()),
 		setBrandProfileSaved: (bool) => dispatch(setBrandProfileSaved(bool))
 	}
 }
@@ -91,7 +83,8 @@ const mapStateToProps = (state) => {
 		scenarioProperties: state.scenarioProperties,
 		industryVerticals: state.industryVerticals,
 		brandProfileSaved: state.brandProfileSaved,
-		brandProfileSaving: state.brandProfileSaving
+		brandProfileSaving: state.brandProfileSaving,
+		topics: state.topics
 	}
 }
 
@@ -112,7 +105,6 @@ const formatScenario = (scenarioProps) => {
 }
 
 const schemaValidation = Yup.object().shape({
-	// scenarios: Yup.object()
 	basicInfoIndustryVerticalId: Yup.number()
 		.typeError('Required')
 		.required('Required'),
@@ -145,16 +137,33 @@ const schemaValidation = Yup.object().shape({
 })
 
 function getSteps() {
-	return ['Basic Info', 'Top Competitors', 'Scenarios']
+	return ['Basic Info', 'Scenarios', 'Competitors', 'Topics']
+}
+
+function getTopicValues(topics) {
+	let tab = []
+	for (const topic of topics) {
+		tab.push(topic.topicId)
+		if (topic.children && topic.children.length > 0) {
+			tab = tab.concat(getTopicValues(topic.children))
+		}
+	}
+	return tab
 }
 
 function CreateBrandProfiles(props) {
 	let fetchBrandScenariosProperties = props.fetchBrandScenariosProperties
 	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
+	let fetchBrandTopics = props.fetchBrandTopics
 	React.useEffect(() => {
 		fetchBrandScenariosProperties()
 		fetchBrandIndustryVerticals()
-	}, [fetchBrandScenariosProperties, fetchBrandIndustryVerticals])
+		fetchBrandTopics()
+	}, [
+		fetchBrandScenariosProperties,
+		fetchBrandIndustryVerticals,
+		fetchBrandTopics
+	])
 
 	const scenarios = React.useMemo(
 		() => formatScenario(props.scenarioProperties),
@@ -162,7 +171,7 @@ function CreateBrandProfiles(props) {
 	)
 
 	const classes = useStyles()
-	const [activeStep, setActiveStep] = React.useState(0)
+	const [activeStep, setActiveStep] = React.useState(3)
 
 	const steps = getSteps()
 
@@ -182,10 +191,6 @@ function CreateBrandProfiles(props) {
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
-	}
-
-	const handleReset = () => {
-		setActiveStep(0)
 	}
 
 	const isScenarioValid = (values) => {
@@ -214,24 +219,21 @@ function CreateBrandProfiles(props) {
 
 	const stepValidated = (index, errors, values) => {
 		if (!errors || errors.length < 1) {
-			//return false
 		}
 		if (index === 0) {
 			return isValid(errors, 'basicInfo')
 		}
 		if (index === 1) {
-			return isValid(errors, 'topCompetitors')
+			return isScenarioValid(values)
 		}
 
 		if (index === 2) {
-			return isScenarioValid(values)
+			return isValid(errors, 'topCompetitors')
 		}
 		return true
 	}
 
 	const getInitialValues = () => {
-		//	let inputs = getScenarioPair(scenarios)
-
 		const initialValues = {
 			basicInfoProfileName: '',
 			basicInfoWebsiteUrl: '',
@@ -250,10 +252,21 @@ function CreateBrandProfiles(props) {
 		return initialValues
 	}
 
+	const allTopicValues = React.useMemo(() => {
+		return getTopicValues(props.topics)
+	}, [props.topics])
+
+	console.log('all topic values')
+	//console.log(allTopicValues)
+
+	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
+	const updateEpandedTopicKeys = (expandedKeys) => {
+		setExpandedTopicKeys(expandedKeys)
+	}
+
 	return (
 		<Formik
 			enableReinitialize
-			//validateOnMount={true}
 			validateOnChange={true}
 			validationSchema={() => schemaValidation}
 			initialValues={getInitialValues()}
@@ -264,9 +277,6 @@ function CreateBrandProfiles(props) {
 				setFieldValue,
 				setFieldTouched,
 				validateField,
-				validateForm,
-				isSubmitting,
-				isValid,
 				arrayHelpers,
 				dirty
 			}) => (
@@ -278,9 +288,6 @@ function CreateBrandProfiles(props) {
 					>
 						{steps.map((label, index) => {
 							let labelColor = whiteColor
-							if (stepValidated(index, errors, values)) {
-								// labelColor = 'green'
-							}
 
 							return (
 								<Step key={label}>
@@ -322,13 +329,6 @@ function CreateBrandProfiles(props) {
 											</div>
 										) : activeStep === 1 ? (
 											<div>
-												<TopCompetitors
-													setFieldValue={setFieldValue}
-													errors={errors}
-												/>
-											</div>
-										) : activeStep === 2 ? (
-											<div>
 												<Scenarios
 													scenarios={scenarios}
 													validateField={validateField}
@@ -337,6 +337,22 @@ function CreateBrandProfiles(props) {
 													arrayHelpers={arrayHelpers}
 													values={values}
 													touched={touched}
+												/>
+											</div>
+										) : activeStep === 2 ? (
+											<div>
+												<TopCompetitors
+													setFieldValue={setFieldValue}
+													errors={errors}
+												/>
+											</div>
+										) : activeStep === 3 ? (
+											<div>
+												<Topics
+													topics={props.topics}
+													allValues={allTopicValues}
+													updateExpandedKeys={updateEpandedTopicKeys}
+													expandedTopicKeys={expandedTopicKeys}
 												/>
 											</div>
 										) : (

@@ -23,6 +23,7 @@
 		"customize-cra": "1.0.0",
 		"email-validator": "2.0.4",
 		"formik": "2.1.4",
+		"just-debounce-it": "1.1.0",
 		"less": "3.12.2",
 		"less-loader": "7.0.2",
 		"material-ui-search-bar": "1.0.0",

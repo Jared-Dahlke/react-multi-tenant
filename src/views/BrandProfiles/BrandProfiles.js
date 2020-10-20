@@ -1,10 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../components/Grid/GridItem.js'
-import GridContainer from '../../components/Grid/GridContainer.js'
 import Button from '../../components/CustomButtons/Button.js'
-import Card from '../../components/Card/Card.js'
-import CardBody from '../../components/Card/CardBody.js'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
@@ -18,16 +15,12 @@ import IconButton from '@material-ui/core/IconButton'
 import {
 	fetchBrandProfiles,
 	deleteBrandProfile,
-	setBrandProfileDeleted,
-	setBrandProfileDeleting
+	setBrandProfileDeleted
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import CustomAlert from '../../components/CustomAlert.js'
 import Snackbar from '@material-ui/core/Snackbar'
-import Success from '@material-ui/icons/Check'
-import Error from '@material-ui/icons/Error'
 import Alert from '@material-ui/lab/Alert'
 import { Link } from 'react-router-dom'
 import { FormLoader } from '../../components/SkeletonLoader'
@@ -57,8 +50,6 @@ const mapDispatchToProps = (dispatch) => {
 function BrandProfiles(props) {
 	const classes = useStyles()
 	const tableClasses = useTableStyles()
-	//const [deleteUserAlertIsOpen, setDeleteUserAlertIsOpen] = React.useState(false)
-	//const [userToDelete, setUserToDelete] = React.useState({})
 
 	const { fetchBrandProfiles } = props
 

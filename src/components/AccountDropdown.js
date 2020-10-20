@@ -76,7 +76,7 @@ function SimplePopover(props) {
 						value={currentAccount.accountId}
 						onChange={(e, v) => handleSelect(e, v)}
 						cleanable={false}
-					></TreePicker>
+					/>
 				</FormGroup>
 			</Form>
 		</div>

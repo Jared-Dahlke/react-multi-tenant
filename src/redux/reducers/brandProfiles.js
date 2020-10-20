@@ -6,10 +6,12 @@ import {
 	HAS_BRAND_PROFILES,
 	SCENARIO_PROPERTIES_FETCH,
 	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+	BRAND_TOPICS_FETCH_DATA_SUCCESS,
 	BRAND_PROFILE_SAVED,
 	BRAND_PROFILE_SAVING,
 	BRAND_PROFILE_DELETED,
-	BRAND_PROFILE_DELETING
+	BRAND_PROFILE_DELETING,
+	BRAND_TOPICS_ACTION_SELECT
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -22,7 +24,6 @@ export function brandProfiles(state = [], action) {
 					({ brandProfileId }) => brandProfileId !== action.brandProfileId
 				)
 			]
-			//let brandProfiles = {data: newState}
 			return newState
 		case ADD_BRAND_PROFILE:
 			let stateData = []
@@ -108,3 +109,51 @@ export function industryVerticals(state = [], action) {
 			return state
 	}
 }
+
+//brand topics functions:
+function markAllChildren(topic, value) {
+	for (const child of topic.children) {
+		child.responseId = value
+		if (child.children && child.children.length > 0) {
+			markAllChildren(child, value)
+		}
+	}
+}
+
+function markSelected(topicId, value, topic) {
+	if (topic.topicId === topicId) {
+		topic.responseId = value
+		if (topic.children && topic.children.length > 0)
+			markAllChildren(topic, value)
+	} else {
+		if (topic.children && topic.children.length > 0) {
+			for (const child of topic.children) {
+				markSelected(topicId, value, child)
+			}
+		}
+	}
+}
+
+function setTopicAction(data, topics) {
+	const topicId = data.data.topicId
+	const value = data.data.value
+
+	for (const topic of topics) {
+		markSelected(topicId, value, topic)
+	}
+}
+
+export function topics(state = [], action) {
+	switch (action.type) {
+		case BRAND_TOPICS_FETCH_DATA_SUCCESS:
+			return action.topics
+		case BRAND_TOPICS_ACTION_SELECT:
+			let newTopics = JSON.parse(JSON.stringify(state))
+			setTopicAction(action, newTopics)
+			return newTopics
+		default:
+			return state
+	}
+}
+
+//end brand topics functions
