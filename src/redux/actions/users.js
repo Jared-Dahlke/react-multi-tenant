@@ -203,21 +203,6 @@ export function updateUserData(user) {
 	}
 }
 
-export function updateUserRole(user, roleId) {
-	let userId = user.userId
-	let url = apiBase + `/user/${userId}/roles`
-	return async (dispatch) => {
-		try {
-			const result = await axios.patch(url, roles)
-			if (result.status === 200) {
-				// dispatch(setUser(result.data.user));
-			}
-		} catch (error) {
-			alert(error)
-		}
-	}
-}
-
 export function updateUserAccounts(user, accounts) {
 	if (accounts.length < 1) {
 		alert(
