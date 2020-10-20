@@ -88,7 +88,15 @@ export function invalidPasswordObject(text) {
 		if (prop.message === 'uppercase') {
 			hasUpper = true
 		}
-		if (prop.message === 'symbol') {
+		if (
+			prop.message === 'symbol' ||
+			text.contains('-') ||
+			text.contains(')') ||
+			text.contains('(') ||
+			text.contains('_') ||
+			text.contains('/') ||
+			text.contains('\\')
+		) {
 			hasSpecial = true
 		}
 		if (prop.message === 'number') {

@@ -15,13 +15,13 @@ import { whiteColor } from '../assets/jss/material-dashboard-react.js'
 import CustomInput from '../components/CustomInput/CustomInput'
 import svgLogo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
-import { CircularProgress } from '@material-ui/core'
 
 const mapStateToProps = (state) => {
 	return {
 		authToken: state.authToken,
 		isLoggedIn: state.isLoggedIn,
-		alert: state.alert
+		alert: state.alert,
+		loggingIn: state.loggingIn
 	}
 }
 
@@ -60,7 +60,6 @@ const useAdminStyles = makeStyles(adminStyle)
 function Login(props) {
 	const classes = useStyles()
 	const adminClasses = useAdminStyles()
-	const [loggingIn, setLoggingIn] = React.useState(false)
 	let referer = props.location.state
 		? props.location.state.referer
 		: '/admin/settings/profile'
@@ -76,16 +75,11 @@ function Login(props) {
 	const [password, setPassword] = useState('')
 
 	const postLogin = () => {
-		setLoggingIn(true)
 		let credentials = {
 			username: userName,
 			password: password
 		}
 		props.login(credentials)
-		setTimeout(() => {
-			//TODO: set this up to this API in case loggin in fails, instead of using setTimeout
-			setLoggingIn(false)
-		}, 6000)
 	}
 
 	if (props.isLoggedIn) {
@@ -131,10 +125,10 @@ function Login(props) {
 						<Button
 							color='primary'
 							onClick={postLogin}
-							disabled={loggingIn}
+							disabled={props.loggingIn}
 							style={{ marginTop: '10px', width: '100%' }}
 						>
-							{loggingIn ? 'Signing in ...' : 'Sign In'}
+							{props.loggingIn ? 'Signing in ...' : 'Sign In'}
 						</Button>
 
 						<Grid style={{ marginTop: '10px' }} container>
