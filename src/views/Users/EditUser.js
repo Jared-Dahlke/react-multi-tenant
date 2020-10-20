@@ -21,7 +21,6 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
-import { Debug } from '../Debug'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()

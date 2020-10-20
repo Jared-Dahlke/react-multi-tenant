@@ -1,30 +1,12 @@
 import React from 'react'
 import GridItem from '../../../components/Grid/GridItem.js'
 import GridContainer from '../../../components/Grid/GridContainer.js'
-import CustomInput from '../../../components/CustomInput/CustomInput.js'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import * as v from '../../../validations'
-import {
-	whiteColor,
-	grayColor
-} from '../../../assets/jss/material-dashboard-react.js'
-import { Field, Formik } from 'formik'
+import { grayColor } from '../../../assets/jss/material-dashboard-react.js'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 
 export default function BasicInfo(props) {
-	const [checkedKeys, setCheckedKeys] = React.useState([])
-
-	const onCheck = (checkedKeys) => {
-		setCheckedKeys(checkedKeys)
-
-		let checked = []
-		for (const item of checkedKeys) {
-			checked.push({ item })
-		}
-		props.setFieldValue('basicInfoIndustry', checked)
-	}
-
 	return (
 		<div>
 			<GridContainer>

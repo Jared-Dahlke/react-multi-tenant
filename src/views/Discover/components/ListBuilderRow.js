@@ -15,8 +15,6 @@ var numeral = require('numeral')
 export default function ListBuilderRow(props) {
 	const useStyles = makeStyles((theme) => ({
 		root: {
-			// backgroundColor: 'blue', //theme.palette.background.paper,
-
 			backgroundColor: 'yellow',
 			'&.MuiToggleButton-root > .Mui-selected': {
 				backgroundColor: 'blue'
