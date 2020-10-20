@@ -10,7 +10,6 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import {
 	updateUserData,
-	updateUserRole,
 	updateUserAccounts,
 	fetchUserAccounts,
 	setUserEditSaved
@@ -59,7 +58,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		updateUserData: (userData) => dispatch(updateUserData(userData)),
 		fetchUserAccounts: (userId) => dispatch(fetchUserAccounts(userId)),
-		updateUserRole: (user, roleId) => dispatch(updateUserRole(user, roleId)),
 		updateUserAccounts: (user, accounts) =>
 			dispatch(updateUserAccounts(user, accounts)),
 		setUserEditSaved: (bool) => dispatch(setUserEditSaved(bool))
@@ -144,8 +142,6 @@ function EditUser(props) {
 		values.userId = user.userId
 
 		props.updateUserData(values)
-
-		//	props.updateUserRole(user, values.roleId)
 		let accounts = []
 		for (const account of values.accounts) {
 			accounts.push({ accountId: account })

@@ -261,14 +261,35 @@ function CreateBrandProfiles(props) {
 		return true
 	}
 
+	const [
+		basicInfoProfileNameInitial,
+		setBasicInfoProfileNameInitial
+	] = React.useState('')
+	const [
+		basicInfoWebsiteUrlInitial,
+		setBasicInfoWebsiteUrlInitial
+	] = React.useState('')
+	const [
+		basicInfoTwitterProfileInitial,
+		setBasicInfoTwitterProfileInitial
+	] = React.useState('')
+	const [
+		basicInfoIndustryVerticalIdInitial,
+		setBasicInfoIndustryVerticalIdInitial
+	] = React.useState('')
+	const [topCompetitorsInitial, setTopCompetitorsInitial] = React.useState([])
+	const [topicsInitial, setTopicsInitial] = React.useState([])
+
+	//React useEffect to update initial value states
+
 	const getInitialValues = () => {
 		const initialValues = {
-			basicInfoProfileName: 'testname',
-			basicInfoWebsiteUrl: 'test.com',
-			basicInfoTwitterProfile: 'testTwitter',
-			basicInfoIndustryVerticalId: 2,
-			topCompetitors: [],
-			topics: []
+			basicInfoProfileName: basicInfoProfileNameInitial,
+			basicInfoWebsiteUrl: basicInfoWebsiteUrlInitial,
+			basicInfoTwitterProfile: basicInfoTwitterProfileInitial,
+			basicInfoIndustryVerticalId: basicInfoIndustryVerticalIdInitial,
+			topCompetitors: topCompetitorsInitial,
+			topics: topicsInitial
 		}
 
 		let scenariosWithValue = {}
@@ -292,7 +313,9 @@ function CreateBrandProfiles(props) {
 
 	return (
 		<Formik
-			enableReinitialize
+			//	enableReinitialize
+			//validate
+			validateOnMount={true}
 			validateOnChange={true}
 			validationSchema={() => schemaValidation}
 			initialValues={getInitialValues()}
@@ -450,6 +473,7 @@ function CreateBrandProfiles(props) {
 										)}
 									</div>
 								</CardFooter>
+								<Debug />
 							</Card>
 						</GridItem>
 					</GridContainer>
