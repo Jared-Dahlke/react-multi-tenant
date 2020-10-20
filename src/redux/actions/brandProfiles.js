@@ -4,7 +4,7 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SCENARIO_PROPERTIES_FETCH,
+	SCENARIOS_FETCH,
 	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
 	BRAND_PROFILE_SAVED,
 	BRAND_PROFILE_DELETED,
@@ -12,6 +12,7 @@ import {
 	BRAND_PROFILE_SAVING,
 	BRAND_TOPICS_FETCH_DATA_SUCCESS,
 	BRAND_TOPICS_ACTION_SELECT,
+	BRAND_SCENARIOS_ACTION_SELECT,
 	BRAND_CATEGORIES_FETCH_DATA_SUCCESS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
@@ -139,21 +140,23 @@ export function hasBrandProfiles(bool) {
 	}
 }
 
-export function scenarioPropertiesFetch(scenarioProperties) {
+export function scenariosFetch(scenarios) {
 	return {
-		type: SCENARIO_PROPERTIES_FETCH,
-		scenarioProperties
+		type: SCENARIOS_FETCH,
+		scenarios
 	}
 }
 
-export function fetchBrandScenariosProperties() {
+export function fetchBrandScenarios() {
 	let url = apiBase + `/brand-profile/scenarios/properties`
 	return async (dispatch) => {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				let scenarioProperties = result.data
-				dispatch(scenarioPropertiesFetch(scenarioProperties))
+				console.log('result from fetch')
+				console.log(result)
+				let scenarios = result.data.scenario
+				dispatch(scenariosFetch(scenarios))
 			}
 		} catch (error) {
 			alert(error)
@@ -227,6 +230,13 @@ export function brandCategoriesFetchDataSuccess(brandCategories) {
 export function brandTopicsActionSelect(data) {
 	return {
 		type: BRAND_TOPICS_ACTION_SELECT,
+		data
+	}
+}
+
+export function brandScenariosActionSelect(data) {
+	return {
+		type: BRAND_SCENARIOS_ACTION_SELECT,
 		data
 	}
 }
