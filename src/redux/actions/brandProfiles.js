@@ -11,7 +11,8 @@ import {
 	BRAND_PROFILE_DELETING,
 	BRAND_PROFILE_SAVING,
 	BRAND_TOPICS_FETCH_DATA_SUCCESS,
-	BRAND_TOPICS_ACTION_SELECT
+	BRAND_TOPICS_ACTION_SELECT,
+	BRAND_CATEGORIES_FETCH_DATA_SUCCESS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -75,7 +76,7 @@ export const deleteBrandProfile = (brandProfileId) => {
 }
 
 export function fetchBrandProfiles(accountId) {
-	let url = apiBase + `/account/${accountId}/brand-profiles?competitors=true`
+	let url = apiBase + `/account/${accountId}/brand-profiles`
 	return async (dispatch) => {
 		dispatch(brandProfilesIsLoading(true))
 		try {
@@ -199,6 +200,27 @@ export function brandTopicsFetchDataSuccess(topics) {
 	return {
 		type: BRAND_TOPICS_FETCH_DATA_SUCCESS,
 		topics
+	}
+}
+
+export function fetchBrandCategories() {
+	let url = apiBase + `/brand-profile/categories`
+	return async (dispatch) => {
+		try {
+			const result = await axios.get(url)
+			if (result.status === 200) {
+				dispatch(brandCategoriesFetchDataSuccess(result.data))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function brandCategoriesFetchDataSuccess(brandCategories) {
+	return {
+		type: BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
+		brandCategories
 	}
 }
 

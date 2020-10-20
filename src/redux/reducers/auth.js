@@ -4,7 +4,8 @@ import {
 	SET_ALERT,
 	SET_USER,
 	SET_USER_ID,
-	USER_PROFILE_IS_LOADING
+	USER_PROFILE_IS_LOADING,
+	SET_LOGGING_IN
 } from '../action-types/auth'
 
 import { userObjValidation } from '../../schemas'
@@ -66,6 +67,15 @@ export function user(state = initialState, action) {
 export function isLoggedIn(state = false, action) {
 	switch (action.type) {
 		case SET_LOGGED_IN:
+			return action.payload
+		default:
+			return state
+	}
+}
+
+export function loggingIn(state = false, action) {
+	switch (action.type) {
+		case SET_LOGGING_IN:
 			return action.payload
 		default:
 			return state

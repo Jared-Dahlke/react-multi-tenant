@@ -12,7 +12,8 @@ import {
 	isLoggedIn,
 	alert,
 	user,
-	userProfileIsLoading
+	userProfileIsLoading,
+	loggingIn
 } from './auth'
 import {
 	users,
@@ -49,7 +50,8 @@ import {
 	brandProfileSaved,
 	brandProfileSaving,
 	brandProfileDeleted,
-	brandProfileDeleting
+	brandProfileDeleting,
+	brandCategories
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
@@ -62,6 +64,7 @@ export default combineReducers({
 	rolesIsLoading,
 	rolesPermissionsIsLoading,
 	isLoggedIn,
+	loggingIn,
 	alert,
 	users,
 	usersHasErrored,
@@ -94,6 +97,7 @@ export default combineReducers({
 	scenarioProperties,
 	industryVerticals,
 	topics,
+	brandCategories,
 	categories,
 	channels,
 	videos,

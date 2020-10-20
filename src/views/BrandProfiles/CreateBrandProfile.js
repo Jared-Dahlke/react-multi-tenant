@@ -26,12 +26,14 @@ import {
 	fetchBrandScenariosProperties,
 	fetchBrandIndustryVerticals,
 	fetchBrandTopics,
+	fetchBrandCategories,
 	setBrandProfileSaved
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { neutralColor } from '../../assets/jss/colorContants.js'
 import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
+import { Debug } from '../Debug'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -73,6 +75,7 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(fetchBrandScenariosProperties()),
 		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
 		fetchBrandTopics: () => dispatch(fetchBrandTopics()),
+		fetchBrandCategories: () => dispatch(fetchBrandCategories()),
 		setBrandProfileSaved: (bool) => dispatch(setBrandProfileSaved(bool))
 	}
 }
@@ -84,7 +87,8 @@ const mapStateToProps = (state) => {
 		industryVerticals: state.industryVerticals,
 		brandProfileSaved: state.brandProfileSaved,
 		brandProfileSaving: state.brandProfileSaving,
-		topics: state.topics
+		topics: state.topics,
+		categories: state.brandCategories
 	}
 }
 
@@ -133,8 +137,25 @@ const schemaValidation = Yup.object().shape({
 					value: Yup.string()
 				})
 				.transform((v) => (v === '' ? null : v))
-		)
+		),
+	topics: Yup.array()
+		.typeError('Wrong type')
+		.min(1, 'You have to pick at least one topic')
+		.test('test-name', 'You must include at least one topic', (topics) => {
+			return topicsHasResponse(topics)
+		})
 })
+
+function topicsHasResponse(topics) {
+	for (const topic of topics) {
+		if (topic.topicResponseId == 1) return true
+		if (topic.children && topic.children.length > 0) {
+			const childHasResponse = topicsHasResponse(topic.children)
+			if (childHasResponse) return childHasResponse
+		}
+	}
+	return false
+}
 
 function getSteps() {
 	return ['Basic Info', 'Scenarios', 'Competitors', 'Topics']
@@ -155,14 +176,17 @@ function CreateBrandProfiles(props) {
 	let fetchBrandScenariosProperties = props.fetchBrandScenariosProperties
 	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
 	let fetchBrandTopics = props.fetchBrandTopics
+	let fetchBrandCategories = props.fetchBrandCategories
 	React.useEffect(() => {
 		fetchBrandScenariosProperties()
 		fetchBrandIndustryVerticals()
 		fetchBrandTopics()
+		fetchBrandCategories()
 	}, [
 		fetchBrandScenariosProperties,
 		fetchBrandIndustryVerticals,
-		fetchBrandTopics
+		fetchBrandTopics,
+		fetchBrandCategories
 	])
 
 	const scenarios = React.useMemo(
@@ -183,7 +207,8 @@ function CreateBrandProfiles(props) {
 				accountId: props.currentAccountId,
 				brandName: values.basicInfoProfileName,
 				websiteUrl: values.basicInfoWebsiteUrl,
-				twitterProfileUrl: values.basicInfoTwitterProfile
+				twitterProfileUrl: values.basicInfoTwitterProfile,
+				topics: values.topics
 			}
 			props.createBrandProfile(brandProfile)
 		}
@@ -195,7 +220,6 @@ function CreateBrandProfiles(props) {
 
 	const isScenarioValid = (values) => {
 		for (var key in values.scenarios) {
-			// check also if property is not inherited from prototype
 			if (values.scenarios.hasOwnProperty(key)) {
 				var value = values.scenarios[key]
 				if (value.length < 1) {
@@ -230,16 +254,21 @@ function CreateBrandProfiles(props) {
 		if (index === 2) {
 			return isValid(errors, 'topCompetitors')
 		}
+
+		if (index === 3) {
+			return isValid(errors, 'topics')
+		}
 		return true
 	}
 
 	const getInitialValues = () => {
 		const initialValues = {
-			basicInfoProfileName: '',
-			basicInfoWebsiteUrl: '',
-			basicInfoTwitterProfile: '',
-			basicInfoIndustryVerticalId: '',
-			topCompetitors: []
+			basicInfoProfileName: 'testname',
+			basicInfoWebsiteUrl: 'test.com',
+			basicInfoTwitterProfile: 'testTwitter',
+			basicInfoIndustryVerticalId: 2,
+			topCompetitors: [],
+			topics: []
 		}
 
 		let scenariosWithValue = {}
@@ -255,9 +284,6 @@ function CreateBrandProfiles(props) {
 	const allTopicValues = React.useMemo(() => {
 		return getTopicValues(props.topics)
 	}, [props.topics])
-
-	console.log('all topic values')
-	//console.log(allTopicValues)
 
 	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
 	const updateEpandedTopicKeys = (expandedKeys) => {
@@ -309,12 +335,12 @@ function CreateBrandProfiles(props) {
 
 					<GridContainer justify='center'>
 						<GridItem xs={12} sm={12} md={11}>
-							<Card style={{ backgroundColor: neutralColor }}>
+							<Card style={{ backgroundColor: neutralColor, display: 'flex' }}>
 								<CardBody>
 									<GridList
 										cols={1}
 										cellHeight={400}
-										style={{ overflowX: 'hidden' }}
+										style={{ overflowX: 'hidden', flex: 1 }}
 									>
 										{activeStep === 0 ? (
 											<div>
@@ -347,12 +373,14 @@ function CreateBrandProfiles(props) {
 												/>
 											</div>
 										) : activeStep === 3 ? (
-											<div>
+											<div style={{ flex: 1 }}>
 												<Topics
 													topics={props.topics}
 													allValues={allTopicValues}
 													updateExpandedKeys={updateEpandedTopicKeys}
 													expandedTopicKeys={expandedTopicKeys}
+													setFieldValue={setFieldValue}
+													errors={errors}
 												/>
 											</div>
 										) : (

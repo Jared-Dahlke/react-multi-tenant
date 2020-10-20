@@ -7,6 +7,7 @@ import {
 	SCENARIO_PROPERTIES_FETCH,
 	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
 	BRAND_TOPICS_FETCH_DATA_SUCCESS,
+	BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
 	BRAND_PROFILE_SAVED,
 	BRAND_PROFILE_SAVING,
 	BRAND_PROFILE_DELETED,
@@ -110,10 +111,19 @@ export function industryVerticals(state = [], action) {
 	}
 }
 
+export function brandCategories(state = [], action) {
+	switch (action.type) {
+		case BRAND_CATEGORIES_FETCH_DATA_SUCCESS:
+			return action.brandCategories
+		default:
+			return state
+	}
+}
+
 //brand topics functions:
 function markAllChildren(topic, value) {
 	for (const child of topic.children) {
-		child.responseId = value
+		child.topicResponseId = value
 		if (child.children && child.children.length > 0) {
 			markAllChildren(child, value)
 		}
@@ -122,7 +132,7 @@ function markAllChildren(topic, value) {
 
 function markSelected(topicId, value, topic) {
 	if (topic.topicId === topicId) {
-		topic.responseId = value
+		topic.topicResponseId = value
 		if (topic.children && topic.children.length > 0)
 			markAllChildren(topic, value)
 	} else {

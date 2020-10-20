@@ -4,6 +4,8 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import { brandTopicsActionSelect } from '../../../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -16,7 +18,7 @@ const Node = (props) => {
 
 	const handleClick = (e, val) => {
 		e.preventDefault()
-		props.handleActionSelect(_props.topicId, val, _props.topicName)
+		props.handleActionSelect(_props.topicId, val)
 	}
 
 	return (
@@ -27,16 +29,16 @@ const Node = (props) => {
 					<Button
 						key='0'
 						id='0'
-						onClick={(e) => handleClick(e, 'Include')}
-						color={_props.responseId == 'Include' ? 'green' : 'blue'}
+						onClick={(e) => handleClick(e, 1)}
+						color={_props.topicResponseId == 1 ? 'green' : 'blue'}
 					>
 						Include
 					</Button>
 					<Button
 						id='test'
 						key='1'
-						onClick={(e) => handleClick(e, 'Exclude')}
-						color={_props.responseId == 'Exclude' ? 'red' : 'blue'}
+						onClick={(e) => handleClick(e, 2)}
+						color={_props.topicResponseId == 2 ? 'red' : 'blue'}
 					>
 						Exclude
 					</Button>
@@ -44,8 +46,8 @@ const Node = (props) => {
 					<Button
 						id='asdf'
 						key='2'
-						onClick={(e) => handleClick(e, 'NoAction')}
-						color={_props.responseId == 'NoAction' ? 'yellow' : 'blue'}
+						onClick={(e) => handleClick(e, 3)}
+						color={_props.topicResponseId == 3 ? 'yellow' : 'blue'}
 					>
 						No Action
 					</Button>
@@ -54,48 +56,57 @@ const Node = (props) => {
 		</div>
 	)
 }
-const Value = (selectedNames) => {
-	//	return JSON.stringify(selectedNames)
-	if (selectedNames && selectedNames.length > 0) {
-		let res = ''
-		for (const name of selectedNames) {
-			res = res + name
-		}
-		return res
-	} else {
-		return ''
-	}
-}
 
 function Topics(props) {
 	const [searching, setSearching] = React.useState(false)
 	const [searchWord, setSearchWord] = React.useState('')
-	const [selectedNames, setSelectedNames] = React.useState([])
 
-	const handleActionSelect = (topicId, value, topicName) => {
+	const handleActionSelect = (topicId, value) => {
 		let data = { topicId: topicId, value: value }
 		props.brandTopicsActionSelect(data)
-		let oldNames = JSON.parse(JSON.stringify(selectedNames))
-		oldNames.push(data.topicName)
-		setSelectedNames(oldNames)
 	}
 
+	React.useEffect(() => {
+		props.setFieldValue('topics', props.topics)
+	}, [props.topics])
+
 	return (
-		<div>
+		<div
+			style={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center'
+			}}
+		>
 			{props.topics && props.topics.length > 0 ? (
-				<div>
+				<div style={{ display: 'flex' }}>
+					{props.errors.topics ? (
+						<FormHelperText
+							id='component-helper-text'
+							style={{
+								color: dangerColor[0],
+								fontSize: '16px',
+								position: 'absolute',
+								bottom: -20
+							}}
+						>
+							{props.errors.topics}
+						</FormHelperText>
+					) : null}
 					<CheckTreePicker
 						data={props.topics}
-						style={{ width: 1000 }}
+						style={{
+							minWidth: 800,
+							maxWidth: 1000,
+							flex: 1,
+							visibility: 'hidden'
+						}}
 						name='topics'
 						labelKey='topicName'
 						valueKey='topicId'
 						placeholder={'Select one or more Topics'}
-						//	value={'test'}
-						//onChange={(e, v) => handleSelect(e, v)}
 						cleanable={true}
-						//	disabled
-
+						menuStyle={{ marginTop: -20 }}
 						virtualized={searchWord.length < 2}
 						open={true}
 						disabledItemValues={props.allValues}
@@ -115,144 +126,11 @@ function Topics(props) {
 							)
 						}}
 						uncheckableItemValues={props.allValues}
-						//renderValue={() => {
-						//	return <Value selectedNames={selectedNames} />
-						//	}}
-						//		uncheckableItemValues={props.allValues}
-						//	value={['3']}
-						// renderTreeIcon={(props) => {
-						//	return <div></div>
-						//}}
 					/>
 				</div>
 			) : null}
-			}
 		</div>
 	)
 }
 
 export default connect(null, mapDispatchToProps)(Topics)
-
-/**<TreePicker
-					data={props.topics}
-					style={{ width: 1000 }}
-					name='topics'
-					labelKey='topicName'
-					valueKey='topicId'
-					//value={currentAccount.accountId}
-					//onChange={(e, v) => handleSelect(e, v)}
-					cleanable={false}
-					virtualized={true}
-					open={true}
-					disabledItemValues={props.allValues}
-					expandItemValues={searching ? props.allValues : []}
-					onSearch={(val, event) => {
-						event.preventDefault()
-						if (!searching) setSearching(true)
-					}}
-					renderTreeNode={(props) => {
-						return <Node props={props} />
-					}}
-        />
-        
-        
-       <div>
-					<CustomInputGroup
-						searchWordHolder={searchWordHolder}
-						executeSearch={executeSearch}
-					/>
-					<Tree
-						data={props.topics}
-						style={{ width: 1000 }}
-						name='topics'
-						labelKey='topicName'
-						valueKey='topicId'
-						virtualized={true}
-						disabledItemValues={props.allValues}
-						searchKeyword={searchWord}
-						expandItemValues={searching ? props.allValues : null}
-						//	expandAll={searching}
-						renderTreeNode={(props) => {
-							return <Node props={props} />
-						}}
-					/>
-        </div>
-        
-        
-        
-        
-        
-        <CheckTreePicker
-					data={props.topics}
-					style={{ width: '50%' }}
-					name='topics'
-					labelKey='topicName'
-					valueKey='topicId'
-					//value={currentAccount.accountId}
-					//onChange={(e, v) => handleSelect(e, v)}
-					//cleanable={false}
-					virtualized={true}
-					//open={true}
-					//disabledItemValues={props.allValues}
-					//	expandItemValues={searching ? props.allValues : []}
-					onSearch={(val, event) => {
-						//	event.preventDefault()
-						if (!searching) setSearching(true)
-					}}
-					renderTreeNode={(props) => {
-						return <Node props={props} />
-					}}
-					renderTreeIcon={(props) => {
-						return <div></div>
-					}}
-					cascade={false}
-        />
-        
-        
-        
-        
-        <CheckTreePicker
-						data={props.topics}
-						style={{ width: 1000 }}
-						name='topics'
-						labelKey='topicName'
-						valueKey='topicId'
-						placeholder={'Select one or more Topics'}
-						//value={'test'}
-						//onChange={(e, v) => handleSelect(e, v)}
-						cleanable={true}
-						virtualized={searchWord.length < 2}
-						//	open={true}
-						disabledItemValues={props.allValues}
-						expandItemValues={
-							searching ? props.allValues : props.expandedTopicKeys
-						}
-						onExpand={(expandedKeys) => {
-							console.log('expand')
-							console.log(expandedKeys)
-							props.updateExpandedKeys(expandedKeys)
-						}}
-						onSearch={(val, event) => {
-							event.preventDefault()
-							if (!searching) setSearching(true)
-						}}
-						renderTreeNode={(props) => {
-							return <Node props={props} />
-						}}
-						//		uncheckableItemValues={props.allValues}
-						value={[3, 4]}
-          />
-
-
-          	<TagGroup>
-							<Tag>Text</Tag>
-							<Tag closable>Closable</Tag>
-							<Tag>
-								<a target='_blank' href='http://www.hypers.com'>
-									Link
-								</a>
-							</Tag>
-						</TagGroup>
-          
-          
-          */

@@ -4,7 +4,8 @@ import {
 	SET_USER,
 	SET_USER_ID,
 	SET_ALERT,
-	USER_PROFILE_IS_LOADING
+	USER_PROFILE_IS_LOADING,
+	SET_LOGGING_IN
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
@@ -35,6 +36,10 @@ export function setLoggedIn(payload) {
 	return { type: SET_LOGGED_IN, payload }
 }
 
+export function setLoggingIn(payload) {
+	return { type: SET_LOGGING_IN, payload }
+}
+
 export function setUserId(payload) {
 	return {
 		type: SET_USER_ID,
@@ -45,6 +50,7 @@ export function setUserId(payload) {
 export function login(credentials) {
 	let url = apiBase + '/authenticate'
 	return async (dispatch) => {
+		dispatch(setLoggingIn(true))
 		try {
 			const result = await axios.post(url, {
 				username: credentials.username,
@@ -52,6 +58,7 @@ export function login(credentials) {
 			})
 
 			if (!result.data.jwt) {
+				dispatch(setLoggingIn(false))
 				dispatch(
 					setAlert({
 						show: true,
@@ -72,6 +79,7 @@ export function login(credentials) {
 					console.log(err.name, err.errors)
 					alert('Could not validate user data')
 				})
+				dispatch(setLoggingIn(false))
 				dispatch(setAuthToken(token))
 				dispatch(setUser(user))
 				dispatch(setUserId(user.userId))
@@ -90,6 +98,7 @@ export function login(credentials) {
 				dispatch(setLoggedIn(true))
 			}
 		} catch (error) {
+			dispatch(setLoggingIn(false))
 			alert(error)
 		}
 	}
