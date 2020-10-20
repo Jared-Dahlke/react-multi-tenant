@@ -113,16 +113,10 @@ export function usersFetchData(accountId) {
 	let url = apiBase + `/account/${accountId}/users`
 	return async (dispatch) => {
 		try {
-			let params = {
-				roles: true
-			}
-
 			let result = []
 
 			try {
-				result = await axios.get(url, {
-					params
-				})
+				result = await axios.get(url)
 			} catch (error) {
 				console.log(error)
 			}
@@ -132,10 +126,6 @@ export function usersFetchData(accountId) {
 			if (result.status === 200) {
 				let users = { data: [] }
 				for (const user of result.data) {
-					// this can be deleted once single role is implemented in API
-					addressUserRoles(user)
-					// this can be deleted once single role is implemented in API
-
 					users.data.push(user)
 				}
 
@@ -147,13 +137,6 @@ export function usersFetchData(accountId) {
 			)
 		}
 	}
-}
-
-function addressUserRoles(user) {
-	let rolesCopy = JSON.parse(JSON.stringify(user.roles))
-	let roleId = rolesCopy[0].roleId
-	delete user.roles
-	user.roleId = roleId
 }
 
 export function fetchUserAccounts(userId) {
@@ -197,7 +180,7 @@ export function updateUserData(user) {
 				company: user.company,
 				email: user.email,
 				userType: user.userType,
-				roles: [],
+				roleId: user.roleId,
 				accounts: []
 			}
 
@@ -206,7 +189,6 @@ export function updateUserData(user) {
 				alert('Could not validate new user')
 			})
 			delete myUser.accounts
-			delete myUser.roles
 			dispatch(setUser(myUser))
 			const result = await axios.patch(url, myUser)
 			if (result.status === 200) {
@@ -222,9 +204,6 @@ export function updateUserData(user) {
 }
 
 export function updateUserRole(user, roleId) {
-	//TODO: THIs can be deleted when API implements single role
-	let roles = [{ roleId: roleId }]
-	//TODO: THIs can be deleted when API implements single role
 	let userId = user.userId
 	let url = apiBase + `/user/${userId}/roles`
 	return async (dispatch) => {
@@ -310,13 +289,8 @@ export const createUser = (user) => {
 	user.userName = 'placeholder'
 	user.phoneNumber = '123123123'
 
-	//TODO: this can be deleted once API implements single role
-	user.roles = [{ roleId: userCopy.roleId }]
-	//TODO: this can be deleted once API implements single role
-
 	delete user.userId
 	delete user.internal
-	delete user.roleId
 
 	let url = apiBase + `/user/invite`
 	return (dispatch) => {

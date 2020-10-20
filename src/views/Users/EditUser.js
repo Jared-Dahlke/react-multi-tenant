@@ -103,12 +103,14 @@ const getGrantedAccounts = (users, userId) => {
 }
 
 const getUser = (users, userId) => {
+	console.log('users from get user')
+	console.log(users)
 	if (!users || users.length < 1)
 		return {
 			firstName: '',
 			lastName: '',
 			email: '',
-			roles: [],
+			roleId: '',
 			accounts: [],
 			company: ''
 		}
@@ -143,7 +145,7 @@ function EditUser(props) {
 
 		props.updateUserData(values)
 
-		props.updateUserRole(user, values.roleId)
+		//	props.updateUserRole(user, values.roleId)
 		let accounts = []
 		for (const account of values.accounts) {
 			accounts.push({ accountId: account })
@@ -158,6 +160,10 @@ function EditUser(props) {
 			fetchUserAccounts(parsedUserId)
 		}
 	}, [props.users, parsedUserId, user.accounts, fetchUserAccounts])
+
+	console.log('edit user props')
+	console.log(user)
+	console.log(props)
 
 	return (
 		<Formik
