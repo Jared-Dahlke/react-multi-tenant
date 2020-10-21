@@ -18,7 +18,10 @@ import {
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
-import { brandProfilesObjValidation } from '../../schemas'
+import {
+	brandProfilesObjValidation,
+	brandProfileObjValidation
+} from '../../schemas'
 
 const apiBase = config.apiGateway.URL
 
@@ -74,6 +77,33 @@ export const deleteBrandProfile = (brandProfileId) => {
 			.catch((error) => {
 				console.error(error)
 			})
+	}
+}
+
+export function fetchBrandProfile(brandProfileId) {
+	let url = apiBase + `/brand-profile/${brandProfileId}`
+	return async (dispatch) => {
+		//dispatch(brandProfilesIsLoading(true))
+		try {
+			const result = await axios.get(url)
+
+			if (result.status === 200) {
+				console.log('result from fetch Brand Profile')
+				console.log(result)
+				//let brandProfiles = result.data
+				//if (brandProfiles.length < 1) {
+				//	dispatch(hasBrandProfiles(false))
+				//}
+				brandProfileObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert('Could not validate brand profile data')
+				})
+				//dispatch(brandProfilesFetchDataSuccess(brandProfiles))
+				//dispatch(brandProfilesIsLoading(false))
+			}
+		} catch (error) {
+			alert(error)
+		}
 	}
 }
 

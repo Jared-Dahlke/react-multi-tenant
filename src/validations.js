@@ -90,12 +90,12 @@ export function invalidPasswordObject(text) {
 		}
 		if (
 			prop.message === 'symbol' ||
-			text.contains('-') ||
-			text.contains(')') ||
-			text.contains('(') ||
-			text.contains('_') ||
-			text.contains('/') ||
-			text.contains('\\')
+			text.includes('-') ||
+			text.includes(')') ||
+			text.includes('(') ||
+			text.includes('_') ||
+			text.includes('/') ||
+			text.includes('\\')
 		) {
 			hasSpecial = true
 		}
