@@ -51,7 +51,8 @@ import {
 	brandProfileSaving,
 	brandProfileDeleted,
 	brandProfileDeleting,
-	brandCategories
+	brandCategories,
+	brandProfileBasicInfo
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
@@ -98,6 +99,7 @@ export default combineReducers({
 	industryVerticals,
 	topics,
 	brandCategories,
+	brandProfileBasicInfo,
 	categories,
 	channels,
 	videos,

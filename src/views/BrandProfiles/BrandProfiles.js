@@ -16,7 +16,11 @@ import {
 	fetchBrandProfiles,
 	fetchBrandProfile,
 	deleteBrandProfile,
-	setBrandProfileDeleted
+	setBrandProfileDeleted,
+	fetchBrandScenarios,
+	fetchBrandIndustryVerticals,
+	fetchBrandTopics,
+	fetchBrandCategories
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
@@ -36,7 +40,8 @@ const mapStateToProps = (state) => {
 		brandProfiles: state.brandProfiles,
 		currentAccountId: state.currentAccountId,
 		brandProfilesIsLoading: state.brandProfilesIsLoading,
-		brandProfileDeleted: state.brandProfileDeleted
+		brandProfileDeleted: state.brandProfileDeleted,
+		scenarios: state.scenarios
 	}
 }
 
@@ -47,11 +52,32 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(deleteBrandProfile(brandProfileId)),
 		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
 		fetchBrandProfile: (brandProfileId) =>
-			dispatch(fetchBrandProfile(brandProfileId))
+			dispatch(fetchBrandProfile(brandProfileId)),
+		fetchBrandScenarios: () => dispatch(fetchBrandScenarios()),
+		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
+		fetchBrandTopics: () => dispatch(fetchBrandTopics()),
+		fetchBrandCategories: () => dispatch(fetchBrandCategories())
 	}
 }
 
 function BrandProfiles(props) {
+	console.log('brand profiles props')
+	console.log(props)
+	let fetchBrandScenarios = props.fetchBrandScenarios
+	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
+	let fetchBrandTopics = props.fetchBrandTopics
+	let fetchBrandCategories = props.fetchBrandCategories
+	React.useEffect(() => {
+		fetchBrandScenarios()
+		fetchBrandIndustryVerticals()
+		fetchBrandTopics()
+		fetchBrandCategories()
+	}, [
+		fetchBrandScenarios,
+		fetchBrandIndustryVerticals,
+		fetchBrandTopics,
+		fetchBrandCategories
+	])
 	const classes = useStyles()
 	const tableClasses = useTableStyles()
 
@@ -212,6 +238,9 @@ function BrandProfiles(props) {
 						</Link>
 					</div>
 				)}
+				<pre style={{ color: 'white' }}>
+					scen: {JSON.stringify(props.scenarios)}
+				</pre>
 			</GridItem>
 		</Grid>
 	)

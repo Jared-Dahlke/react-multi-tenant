@@ -23,10 +23,6 @@ import ContentSettings from './components/ContentSettings/ContentSettings'
 import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
-	fetchBrandScenarios,
-	fetchBrandIndustryVerticals,
-	fetchBrandTopics,
-	fetchBrandCategories,
 	setBrandProfileSaved
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
@@ -71,10 +67,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		createBrandProfile: (brandProfile) =>
 			dispatch(createBrandProfile(brandProfile)),
-		fetchBrandScenarios: () => dispatch(fetchBrandScenarios()),
-		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
-		fetchBrandTopics: () => dispatch(fetchBrandTopics()),
-		fetchBrandCategories: () => dispatch(fetchBrandCategories()),
 		setBrandProfileSaved: (bool) => dispatch(setBrandProfileSaved(bool))
 	}
 }
@@ -87,7 +79,8 @@ const mapStateToProps = (state) => {
 		brandProfileSaved: state.brandProfileSaved,
 		brandProfileSaving: state.brandProfileSaving,
 		topics: state.topics,
-		categories: state.brandCategories
+		categories: state.brandCategories,
+		basicInfo: state.brandProfileBasicInfo
 	}
 }
 
@@ -190,22 +183,6 @@ function getTopicValues(topics) {
 }
 
 function CreateBrandProfiles(props) {
-	let fetchBrandScenarios = props.fetchBrandScenarios
-	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
-	let fetchBrandTopics = props.fetchBrandTopics
-	let fetchBrandCategories = props.fetchBrandCategories
-	React.useEffect(() => {
-		fetchBrandScenarios()
-		fetchBrandIndustryVerticals()
-		fetchBrandTopics()
-		fetchBrandCategories()
-	}, [
-		fetchBrandScenarios,
-		fetchBrandIndustryVerticals,
-		fetchBrandTopics,
-		fetchBrandCategories
-	])
-
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
 
@@ -221,6 +198,7 @@ function CreateBrandProfiles(props) {
 				accountId: props.currentAccountId,
 				brandName: values.basicInfoProfileName,
 				websiteUrl: values.basicInfoWebsiteUrl,
+				industryVerticalId: values.basicInfoIndustryVerticalId,
 				twitterProfileUrl: values.basicInfoTwitterProfile,
 				topics: values.topics,
 				competitors: values.topCompetitors,
@@ -304,7 +282,16 @@ function CreateBrandProfiles(props) {
 		setTopicsInitial(props.topics)
 		setScenariosInitial(props.scenarios)
 		setCategoriesInitial(props.categories)
-	}, [props.topics, props.scenarios, props.categories])
+		setBasicInfoProfileNameInitial(props.basicInfo.brandName)
+		setBasicInfoWebsiteUrlInitial(props.basicInfo.websiteUrl)
+		setBasicInfoTwitterProfileInitial(props.basicInfo.twitterProfileUrl)
+		setBasicInfoIndustryVerticalIdInitial(props.basicInfo.industryVerticalId)
+	}, [
+		props.topics,
+		props.scenarios,
+		props.categories,
+		props.basicInfo.brandName
+	])
 
 	const allTopicValues = React.useMemo(() => {
 		return getTopicValues(props.topics)
@@ -315,9 +302,12 @@ function CreateBrandProfiles(props) {
 		setExpandedTopicKeys(expandedKeys)
 	}
 
+	console.log('create brand profile props')
+	console.log(props)
+
 	return (
 		<Formik
-			//	enableReinitialize
+			enableReinitialize
 			validateOnMount={true}
 			validateOnChange={true}
 			validationSchema={() => schemaValidation}
@@ -468,8 +458,7 @@ function CreateBrandProfiles(props) {
 													<Button
 														onClick={() => handleNext(values)}
 														disabled={
-															!stepValidated(activeStep, errors, values) ||
-															!dirty
+															!stepValidated(activeStep, errors, values)
 														}
 														loading={props.brandProfileSaving}
 													>
@@ -482,6 +471,13 @@ function CreateBrandProfiles(props) {
 								</CardFooter>
 							</Card>
 						</GridItem>
+						<pre style={{ color: 'white' }}>
+							values:{' '}
+							{JSON.stringify(values.profileName, values.websiteUrl, 2, null)}
+						</pre>
+						<pre style={{ color: 'white' }}>
+							errors: {JSON.stringify(errors)}
+						</pre>
 					</GridContainer>
 				</div>
 			)}

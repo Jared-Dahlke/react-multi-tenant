@@ -14,7 +14,8 @@ import {
 	BRAND_TOPICS_ACTION_SELECT,
 	BRAND_SCENARIOS_ACTION_SELECT,
 	BRAND_CATEGORIES_ACTION_SELECT,
-	BRAND_CATEGORIES_FETCH_DATA_SUCCESS
+	BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
+	SET_BRAND_PROFILE_BASIC_INFO
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -29,6 +30,13 @@ export function brandProfilesFetchDataSuccess(brandProfiles) {
 	return {
 		type: BRAND_PROFILES_FETCH_DATA_SUCCESS,
 		brandProfiles
+	}
+}
+
+export function setBrandProfileBasicInfo(brandProfileBasicInfo) {
+	return {
+		type: SET_BRAND_PROFILE_BASIC_INFO,
+		brandProfileBasicInfo
 	}
 }
 
@@ -88,18 +96,23 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				console.log('result from fetch Brand Profile')
-				console.log(result)
-				//let brandProfiles = result.data
-				//if (brandProfiles.length < 1) {
-				//	dispatch(hasBrandProfiles(false))
-				//}
+				result.data.industryVerticalId = 47 //TODO: delete this line once API returns industryVerticalId
 				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
-				//dispatch(brandProfilesFetchDataSuccess(brandProfiles))
-				//dispatch(brandProfilesIsLoading(false))
+
+				dispatch(
+					setBrandProfileBasicInfo({
+						twitterProfileUrl: result.data.twitterProfileUrl,
+						websiteUrl: result.data.websiteUrl,
+						brandName: result.data.brandName,
+						industryVerticalId: result.data.industryVerticalId
+					})
+				)
+				dispatch(scenariosFetch(result.data.scenarios))
+				dispatch(brandCategoriesFetchDataSuccess(result.data.categories))
+				dispatch(brandTopicsFetchDataSuccess(result.data.topics))
 			}
 		} catch (error) {
 			alert(error)
@@ -178,6 +191,12 @@ export function scenariosFetch(scenarios) {
 	}
 }
 
+function addDefaultResponseIdToScenarios(scenarios) {
+	for (const scenario of scenarios) {
+		scenario.scenarioResponseId = ''
+	}
+}
+
 export function fetchBrandScenarios() {
 	let url = apiBase + `/brand-profile/scenarios/properties`
 	return async (dispatch) => {
@@ -185,8 +204,10 @@ export function fetchBrandScenarios() {
 			const result = await axios.get(url)
 			if (result.status === 200) {
 				console.log('result from fetch')
-				console.log(result)
+				console.log(result.data)
+
 				let scenarios = result.data.scenario
+				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
 				dispatch(scenariosFetch(scenarios))
 			}
 		} catch (error) {

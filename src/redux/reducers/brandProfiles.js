@@ -14,7 +14,8 @@ import {
 	BRAND_PROFILE_DELETING,
 	BRAND_TOPICS_ACTION_SELECT,
 	BRAND_SCENARIOS_ACTION_SELECT,
-	BRAND_CATEGORIES_ACTION_SELECT
+	BRAND_CATEGORIES_ACTION_SELECT,
+	SET_BRAND_PROFILE_BASIC_INFO
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -106,16 +107,9 @@ function setScenarioAction(data, scenarios) {
 	}
 }
 
-function addDefaultResponseIdToScenarios(scenarios) {
-	for (const scenario of scenarios) {
-		scenario.scenarioResponseId = ''
-	}
-}
-
 export function scenarios(state = [], action) {
 	switch (action.type) {
 		case SCENARIOS_FETCH:
-			addDefaultResponseIdToScenarios(action.scenarios)
 			return action.scenarios
 		case BRAND_SCENARIOS_ACTION_SELECT:
 			let newScenarios = JSON.parse(JSON.stringify(state))
@@ -130,6 +124,23 @@ export function industryVerticals(state = [], action) {
 	switch (action.type) {
 		case BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS:
 			return action.industryVerticals
+		default:
+			return state
+	}
+}
+
+export function brandProfileBasicInfo(
+	state = {
+		twitterProfileUrl: '',
+		websiteUrl: '',
+		brandName: '',
+		industryVerticalId: ''
+	},
+	action
+) {
+	switch (action.type) {
+		case SET_BRAND_PROFILE_BASIC_INFO:
+			return action.brandProfileBasicInfo
 		default:
 			return state
 	}
