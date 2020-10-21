@@ -13,7 +13,8 @@ import {
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	BRAND_TOPICS_ACTION_SELECT,
-	BRAND_SCENARIOS_ACTION_SELECT
+	BRAND_SCENARIOS_ACTION_SELECT,
+	BRAND_CATEGORIES_ACTION_SELECT
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -96,18 +97,18 @@ export function hasBrandProfiles(state = true, action) {
 
 function setScenarioAction(data, scenarios) {
 	const scenarioId = data.data.scenarioId
-	const value = Number(data.data.responseId)
+	const value = Number(data.data.scenarioResponseId)
 
 	for (const scenario of scenarios) {
 		if (scenario.scenarioId === scenarioId) {
-			scenario.responseId = value
+			scenario.scenarioResponseId = value
 		}
 	}
 }
 
 function addDefaultResponseIdToScenarios(scenarios) {
 	for (const scenario of scenarios) {
-		scenario.responseId = ''
+		scenario.scenarioResponseId = ''
 	}
 }
 
@@ -138,8 +139,23 @@ export function brandCategories(state = [], action) {
 	switch (action.type) {
 		case BRAND_CATEGORIES_FETCH_DATA_SUCCESS:
 			return action.brandCategories
+		case BRAND_CATEGORIES_ACTION_SELECT:
+			let newCategories = JSON.parse(JSON.stringify(state))
+			setCategoryAction(action, newCategories)
+			return newCategories
 		default:
 			return state
+	}
+}
+
+function setCategoryAction(data, categories) {
+	const contentCategoryId = data.data.contentCategoryId
+	const value = Number(data.data.contentCategoryResponseId)
+
+	for (const category of categories) {
+		if (category.contentCategoryId === contentCategoryId) {
+			category.contentCategoryResponseId = value
+		}
 	}
 }
 

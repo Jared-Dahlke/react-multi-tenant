@@ -51,14 +51,22 @@ export default function TopCompetitors(props) {
 		setAddingNew(false)
 		let newCompetitor = {
 			competitorId: UUID.v4(),
-			competitorName: values.newName,
-			competitorTwitterProfile: values.newTwitterProfile,
-			competitorWebsite: values.newWebsite
+			competitorName: values.competitorName,
+			twitterProfileUrl: values.twitterProfileUrl,
+			websiteUrl: values.websiteUrl
 		}
 		let oldCompetitors = JSON.parse(JSON.stringify(competitors))
 		oldCompetitors.push(newCompetitor)
 		setCompetitors(oldCompetitors)
-		props.setFieldValue('topCompetitors', oldCompetitors)
+		let copyCompetitors = JSON.parse(JSON.stringify(oldCompetitors))
+		cleanCompetitorsForApi(copyCompetitors)
+		props.setFieldValue('topCompetitors', copyCompetitors)
+	}
+
+	const cleanCompetitorsForApi = (competitors) => {
+		for (const competitor of competitors) {
+			delete competitor.competitorId
+		}
 	}
 
 	const handleDeleteCompetitor = (competitorId) => {
@@ -125,9 +133,9 @@ export default function TopCompetitors(props) {
 									<Formik
 										validateOnMount={true}
 										initialValues={{
-											newName: '',
-											newTwitterProfile: '',
-											newWebsite: ''
+											competitorName: '',
+											twitterProfileUrl: '',
+											websiteUrl: ''
 										}}
 										validate={(values, props) => {
 											const errors = {}
@@ -147,7 +155,7 @@ export default function TopCompetitors(props) {
 											>
 												<TableCell className={tableCellClasses}>
 													<FormikInput
-														name='newName'
+														name='competitorName'
 														labelProps={{ shrink: true }}
 														labelText='Competitor Name'
 														validate={v.isBrandProfileNameError}
@@ -155,7 +163,7 @@ export default function TopCompetitors(props) {
 												</TableCell>
 												<TableCell className={tableCellClasses}>
 													<FormikInput
-														name='newTwitterProfile'
+														name='twitterProfileUrl'
 														labelProps={{ shrink: true }}
 														inputProps={{
 															startAdornment: (
@@ -174,7 +182,7 @@ export default function TopCompetitors(props) {
 												<TableCell className={tableCellClasses}>
 													<FormikInput
 														labelProps={{ shrink: true }}
-														name='newWebsite'
+														name='websiteUrl'
 														labelText='Competitor Website'
 														validate={v.isWebsiteUrlError}
 													/>
@@ -239,11 +247,11 @@ export default function TopCompetitors(props) {
 												{competitor.competitorName}
 											</TableCell>
 											<TableCell className={tableCellClasses}>
-												{competitor.competitorTwitterProfile}
+												{competitor.twitterProfileUrl}
 											</TableCell>
 
 											<TableCell className={tableCellClasses}>
-												{competitor.competitorWebsite}
+												{competitor.websiteUrl}
 											</TableCell>
 
 											<TableCell className={classes.tableActions}>

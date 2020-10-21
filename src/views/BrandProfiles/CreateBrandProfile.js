@@ -19,7 +19,7 @@ import * as Yup from 'yup'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
-import Scenarios from './components/Scenarios/Scenarios'
+import ContentSettings from './components/ContentSettings/ContentSettings'
 import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
@@ -134,8 +134,25 @@ const schemaValidation = Yup.object().shape({
 			(scenarios) => {
 				return scenariosAllHaveAResponse(scenarios)
 			}
+		),
+	categories: Yup.array()
+		.typeError('Wrong type')
+		.test(
+			'categoriesTest',
+			'Please take action on at least one category',
+			(categories) => {
+				return categoriesHasResponse(categories)
+			}
 		)
 })
+
+function categoriesHasResponse(categories) {
+	if (categories.length < 1) return false
+	for (const category of categories) {
+		if (category.contentCategoryResponseId !== 3) return true
+	}
+	return false
+}
 
 function topicsHasResponse(topics) {
 	for (const topic of topics) {
@@ -151,13 +168,14 @@ function topicsHasResponse(topics) {
 function scenariosAllHaveAResponse(scenarios) {
 	if (scenarios.length < 1) return false
 	for (const scenario of scenarios) {
-		if (!scenario.responseId || scenario.responseId.length < 1) return false
+		if (!scenario.scenarioResponseId || scenario.scenarioResponseId.length < 1)
+			return false
 	}
 	return true
 }
 
 function getSteps() {
-	return ['Basic Info', 'Scenarios', 'Competitors', 'Topics']
+	return ['Basic Info', 'Content Settings', 'Competitors', 'Topics']
 }
 
 function getTopicValues(topics) {
@@ -197,14 +215,31 @@ function CreateBrandProfiles(props) {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
 
 		if (activeStep === steps.length - 1) {
+			cleanScenariosForApi(values.scenarios)
+			cleanCategoriesForApi(values.categories)
 			let brandProfile = {
 				accountId: props.currentAccountId,
 				brandName: values.basicInfoProfileName,
 				websiteUrl: values.basicInfoWebsiteUrl,
 				twitterProfileUrl: values.basicInfoTwitterProfile,
-				topics: values.topics
+				topics: values.topics,
+				competitors: values.topCompetitors,
+				scenarios: values.scenarios,
+				categories: values.categories
 			}
 			props.createBrandProfile(brandProfile)
+		}
+	}
+
+	const cleanScenariosForApi = (scenarios) => {
+		for (const scenario of scenarios) {
+			delete scenario.scenarioName
+		}
+	}
+
+	const cleanCategoriesForApi = (categories) => {
+		for (const category of categories) {
+			delete category.contentCategoryName
 		}
 	}
 
@@ -230,7 +265,7 @@ function CreateBrandProfiles(props) {
 			return isValid(errors, 'basicInfo')
 		}
 		if (index === 1) {
-			return isValid(errors, 'scenarios')
+			return isValid(errors, 'scenarios') && isValid(errors, 'categories')
 		}
 
 		if (index === 2) {
@@ -262,12 +297,14 @@ function CreateBrandProfiles(props) {
 	const [topCompetitorsInitial, setTopCompetitorsInitial] = React.useState([])
 	const [topicsInitial, setTopicsInitial] = React.useState([])
 	const [scenariosInitial, setScenariosInitial] = React.useState([])
+	const [categoriesInitial, setCategoriesInitial] = React.useState([])
 
 	//React useEffect to update initial value states
 	React.useEffect(() => {
 		setTopicsInitial(props.topics)
 		setScenariosInitial(props.scenarios)
-	}, [props.topics, props.scenarios])
+		setCategoriesInitial(props.categories)
+	}, [props.topics, props.scenarios, props.categories])
 
 	const allTopicValues = React.useMemo(() => {
 		return getTopicValues(props.topics)
@@ -291,7 +328,8 @@ function CreateBrandProfiles(props) {
 				basicInfoIndustryVerticalId: basicInfoIndustryVerticalIdInitial,
 				topCompetitors: topCompetitorsInitial,
 				topics: topicsInitial,
-				scenarios: scenariosInitial
+				scenarios: scenariosInitial,
+				categories: categoriesInitial
 			}}
 			render={({
 				values,
@@ -350,8 +388,9 @@ function CreateBrandProfiles(props) {
 											</div>
 										) : activeStep === 1 ? (
 											<div>
-												<Scenarios
+												<ContentSettings
 													scenarios={props.scenarios}
+													categories={props.categories}
 													setFieldValue={setFieldValue}
 													errors={errors}
 												/>

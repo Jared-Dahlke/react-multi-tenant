@@ -54,7 +54,7 @@ export default function CustomRadio(props) {
 					aria-label='position'
 					defaultValue='top'
 					row
-					value={props.scenario.responseId}
+					value={props.scenario.scenarioResponseId}
 				>
 					<FormControlLabel
 						value={1}

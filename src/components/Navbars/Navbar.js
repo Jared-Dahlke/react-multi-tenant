@@ -12,10 +12,7 @@ import logo from '../../assets/img/sightly-logo.svg'
 import sidebarStyles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
 import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
-import {
-	whiteColor,
-	warningBoxShadow
-} from '../../assets/jss/material-dashboard-react.js'
+import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
 
 const useStyles = makeStyles(styles)
@@ -36,7 +33,6 @@ function Header(props) {
 		const crumbSize = 20
 
 		let url = window.location.pathname
-		console.log(url)
 		if (url === '/admin/discover/channelResearch') {
 			return (
 				<Breadcrumbs
@@ -187,13 +183,6 @@ function Header(props) {
 	const NavLink = (props) => (
 		<Dropdown.Item componentClass={MyLink} {...props} />
 	)
-
-	const handleClickBrand = () => {
-		console.log('clicked')
-		var win = window.open('www.sightly.com', '_blank')
-		win.focus()
-		//	window.location.href =
-	}
 
 	let permissions = localStorage.getItem('permissions')
 	const onlyMentality = permissions == 1 ? true : false
