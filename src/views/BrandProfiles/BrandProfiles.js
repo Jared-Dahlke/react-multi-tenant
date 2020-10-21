@@ -14,6 +14,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import {
 	fetchBrandProfiles,
+	fetchBrandProfile,
 	deleteBrandProfile,
 	setBrandProfileDeleted
 } from '../../redux/actions/brandProfiles.js'
@@ -24,6 +25,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { Link } from 'react-router-dom'
 import { FormLoader } from '../../components/SkeletonLoader'
+import Edit from '@material-ui/icons/Edit'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -43,7 +45,9 @@ const mapDispatchToProps = (dispatch) => {
 		fetchBrandProfiles: (accountId) => dispatch(fetchBrandProfiles(accountId)),
 		deleteBrandProfile: (brandProfileId) =>
 			dispatch(deleteBrandProfile(brandProfileId)),
-		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool))
+		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
+		fetchBrandProfile: (brandProfileId) =>
+			dispatch(fetchBrandProfile(brandProfileId))
 	}
 }
 
@@ -67,6 +71,12 @@ function BrandProfiles(props) {
 
 	const handleDeleteBrandProfileClick = (brandProfileId) => {
 		props.deleteBrandProfile(brandProfileId)
+	}
+
+	const handleEditBrandProfileClick = (profile) => {
+		console.log(profile)
+		let brandProfileId = profile.brandProfileId
+		props.fetchBrandProfile(brandProfileId)
 	}
 
 	return (
@@ -130,25 +140,26 @@ function BrandProfiles(props) {
 											</TableCell>
 
 											<TableCell className={classes.tableActions}>
-												{/**<Tooltip
-                          id="tooltip-top"
-                          title="(Edit Brand Profile"
-                          placement="top"
-                          classes={{ tooltip: classes.tooltip }}
-                        >
-                          <IconButton
-                            aria-label="Edit"
-                            className={classes.tableActionButton}
-                            disabled
-                            //onClick={()=>handleEditUserClick(user)}
-                          >
-                            <Edit
-                              className={
-                                classes.tableActionButtonIcon + " " + classes.edit
-                              }
-                            />
-                          </IconButton>
-                        </Tooltip> */}
+												<Tooltip
+													id='tooltip-top'
+													title='Edit Brand Profile'
+													placement='top'
+													classes={{ tooltip: classes.tooltip }}
+												>
+													<IconButton
+														aria-label='Edit'
+														className={classes.tableActionButton}
+														onClick={() => handleEditBrandProfileClick(profile)}
+													>
+														<Edit
+															className={
+																classes.tableActionButtonIcon +
+																' ' +
+																classes.edit
+															}
+														/>
+													</IconButton>
+												</Tooltip>
 
 												<Tooltip
 													id='tooltip-top-start'
