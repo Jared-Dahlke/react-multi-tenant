@@ -40,8 +40,8 @@ module.exports = override(
 				'@nav-item-default-hover-bg': neutralExtraLightColor,
 				'@dropdown-link-hover-bg': neutralLightColor,
 
-				//	'@btn-default-hover-bg': 'yellow',
-				'@btn-default-active-bg': 'purple',
+				//'@btn-default-hover-bg': 'yellow',
+				'@btn-default-active-bg': accentColor,
 
 				'@nav-subtle-hover-bg': 'red',
 				//	'@nav-bar-subtle-hover-bg': 'green',

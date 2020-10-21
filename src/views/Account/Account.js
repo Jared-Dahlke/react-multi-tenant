@@ -149,8 +149,6 @@ function Account(props) {
 		dirty
 	} = props
 
-	console.log(values)
-
 	return (
 		<GridContainer>
 			<GridItem xs={12} sm={12} md={6}>

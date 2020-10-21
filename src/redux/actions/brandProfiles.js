@@ -13,6 +13,7 @@ import {
 	BRAND_TOPICS_FETCH_DATA_SUCCESS,
 	BRAND_TOPICS_ACTION_SELECT,
 	BRAND_SCENARIOS_ACTION_SELECT,
+	BRAND_CATEGORIES_ACTION_SELECT,
 	BRAND_CATEGORIES_FETCH_DATA_SUCCESS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
@@ -230,6 +231,13 @@ export function brandCategoriesFetchDataSuccess(brandCategories) {
 export function brandTopicsActionSelect(data) {
 	return {
 		type: BRAND_TOPICS_ACTION_SELECT,
+		data
+	}
+}
+
+export function brandCategoriesActionSelect(data) {
+	return {
+		type: BRAND_CATEGORIES_ACTION_SELECT,
 		data
 	}
 }
