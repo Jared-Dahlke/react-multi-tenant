@@ -15,7 +15,10 @@ import {
 	BRAND_SCENARIOS_ACTION_SELECT,
 	BRAND_CATEGORIES_ACTION_SELECT,
 	BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
-	SET_BRAND_PROFILE_BASIC_INFO
+	SET_BRAND_PROFILE_BASIC_INFO,
+	SET_BRAND_PROFILE_COMPETITORS,
+	DELETE_BRAND_PROFILE_COMPETITOR,
+	ADD_BRAND_PROFILE_COMPETITOR
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -37,6 +40,13 @@ export function setBrandProfileBasicInfo(brandProfileBasicInfo) {
 	return {
 		type: SET_BRAND_PROFILE_BASIC_INFO,
 		brandProfileBasicInfo
+	}
+}
+
+export function setBrandProfileCompetitors(brandProfileCompetitors) {
+	return {
+		type: SET_BRAND_PROFILE_COMPETITORS,
+		brandProfileCompetitors
 	}
 }
 
@@ -68,6 +78,20 @@ export function removeBrandProfile(brandProfileId) {
 	return {
 		type: REMOVE_BRAND_PROFILE,
 		brandProfileId
+	}
+}
+
+export function deleteBrandProfileCompetitor(competitorId) {
+	return {
+		type: DELETE_BRAND_PROFILE_COMPETITOR,
+		competitorId
+	}
+}
+
+export function addBrandProfileCompetitor(competitor) {
+	return {
+		type: ADD_BRAND_PROFILE_COMPETITOR,
+		competitor
 	}
 }
 
@@ -110,6 +134,7 @@ export function fetchBrandProfile(brandProfileId) {
 						industryVerticalId: result.data.industryVerticalId
 					})
 				)
+				dispatch(setBrandProfileCompetitors(result.data.competitors))
 				dispatch(scenariosFetch(result.data.scenarios))
 				dispatch(brandCategoriesFetchDataSuccess(result.data.categories))
 				dispatch(brandTopicsFetchDataSuccess(result.data.topics))

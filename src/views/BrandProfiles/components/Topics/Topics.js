@@ -2,35 +2,58 @@ import React from 'react'
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
-import { brandTopicsActionSelect } from '../../../../redux/actions/brandProfiles'
-import { connect } from 'react-redux'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		brandTopicsActionSelect: (data) => dispatch(brandTopicsActionSelect(data))
+function setTopicAction(topicId, value, topics) {
+	for (const topic of topics) {
+		markSelected(topicId, value, topic)
+	}
+}
+
+function markAllChildren(topic, value) {
+	for (const child of topic.children) {
+		child.topicResponseId = value
+		if (child.children && child.children.length > 0) {
+			markAllChildren(child, value)
+		}
+	}
+}
+
+function markSelected(topicId, value, topic) {
+	if (topic.topicId === topicId) {
+		topic.topicResponseId = value
+		if (topic.children && topic.children.length > 0)
+			markAllChildren(topic, value)
+	} else {
+		if (topic.children && topic.children.length > 0) {
+			for (const child of topic.children) {
+				markSelected(topicId, value, child)
+			}
+		}
 	}
 }
 
 const Node = (props) => {
-	const _props = props.props
+	const nodeProps = props.nodeProps
 
 	const handleClick = (e, val) => {
 		e.preventDefault()
-		props.handleActionSelect(_props.topicId, val)
+		let newTopics = JSON.parse(JSON.stringify(props.formikValues.topics))
+		setTopicAction(nodeProps.topicId, val, newTopics)
+		props.setFieldValue('topics', newTopics)
 	}
 
 	return (
 		<div style={{ display: 'flex', width: '700px' }}>
-			<div style={{ flex: 1 }}>{_props.topicName}</div>
+			<div style={{ flex: 1 }}>{nodeProps.topicName}</div>
 			<div style={{ flex: 1 }}>
 				<ButtonGroup size='xs'>
 					<Button
 						key='0'
 						id='0'
 						onClick={(e) => handleClick(e, 1)}
-						color={_props.topicResponseId == 1 ? 'green' : 'blue'}
+						color={nodeProps.topicResponseId == 1 ? 'green' : 'blue'}
 					>
 						Include
 					</Button>
@@ -38,7 +61,7 @@ const Node = (props) => {
 						id='test'
 						key='1'
 						onClick={(e) => handleClick(e, 2)}
-						color={_props.topicResponseId == 2 ? 'red' : 'blue'}
+						color={nodeProps.topicResponseId == 2 ? 'red' : 'blue'}
 					>
 						Exclude
 					</Button>
@@ -47,7 +70,7 @@ const Node = (props) => {
 						id='asdf'
 						key='2'
 						onClick={(e) => handleClick(e, 3)}
-						color={_props.topicResponseId == 3 ? 'yellow' : 'blue'}
+						color={nodeProps.topicResponseId == 3 ? 'yellow' : 'blue'}
 					>
 						No Action
 					</Button>
@@ -57,18 +80,9 @@ const Node = (props) => {
 	)
 }
 
-function Topics(props) {
+export default function Topics(props) {
 	const [searching, setSearching] = React.useState(false)
 	const [searchWord, setSearchWord] = React.useState('')
-
-	const handleActionSelect = (topicId, value) => {
-		let data = { topicId: topicId, value: value }
-		props.brandTopicsActionSelect(data)
-	}
-
-	React.useEffect(() => {
-		props.setFieldValue('topics', props.topics)
-	}, [props.topics])
 
 	return (
 		<div
@@ -78,7 +92,7 @@ function Topics(props) {
 				alignItems: 'center'
 			}}
 		>
-			{props.topics && props.topics.length > 0 ? (
+			{props.formikValues.topics && props.formikValues.topics.length > 0 ? (
 				<div style={{ display: 'flex' }}>
 					{props.errors.topics ? (
 						<FormHelperText
@@ -94,7 +108,7 @@ function Topics(props) {
 						</FormHelperText>
 					) : null}
 					<CheckTreePicker
-						data={props.topics}
+						data={props.formikValues.topics}
 						style={{
 							minWidth: 800,
 							maxWidth: 1000,
@@ -120,9 +134,13 @@ function Topics(props) {
 							event.preventDefault()
 							if (!searching) setSearching(true)
 						}}
-						renderTreeNode={(props) => {
+						renderTreeNode={(nodeProps) => {
 							return (
-								<Node props={props} handleActionSelect={handleActionSelect} />
+								<Node
+									nodeProps={nodeProps}
+									formikValues={props.formikValues}
+									setFieldValue={props.setFieldValue}
+								/>
 							)
 						}}
 						uncheckableItemValues={props.allValues}
@@ -132,5 +150,3 @@ function Topics(props) {
 		</div>
 	)
 }
-
-export default connect(null, mapDispatchToProps)(Topics)

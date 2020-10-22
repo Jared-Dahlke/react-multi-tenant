@@ -36,8 +36,6 @@ const useStyles = makeStyles(styles)
 const competitorHeaders = ['Name', 'Twitter Profile', 'Website', '']
 
 export default function TopCompetitors(props) {
-	const [competitors, setCompetitors] = React.useState([])
-
 	const [addingNew, setAddingNew] = React.useState(false)
 
 	const classes = useStyles()
@@ -55,12 +53,9 @@ export default function TopCompetitors(props) {
 			twitterProfileUrl: values.twitterProfileUrl,
 			websiteUrl: values.websiteUrl
 		}
-		let oldCompetitors = JSON.parse(JSON.stringify(competitors))
-		oldCompetitors.push(newCompetitor)
-		setCompetitors(oldCompetitors)
-		let copyCompetitors = JSON.parse(JSON.stringify(oldCompetitors))
-		cleanCompetitorsForApi(copyCompetitors)
-		props.setFieldValue('topCompetitors', copyCompetitors)
+		let newComps = JSON.parse(JSON.stringify(props.values.topCompetitors))
+		newComps.push(newCompetitor)
+		props.setFieldValue('topCompetitors', newComps)
 	}
 
 	const cleanCompetitorsForApi = (competitors) => {
@@ -69,13 +64,12 @@ export default function TopCompetitors(props) {
 		}
 	}
 
-	const handleDeleteCompetitor = (competitorId) => {
-		let comps = JSON.parse(JSON.stringify(competitors))
-		let newComps = []
-		for (const competitor of comps) {
-			if (competitor.competitorId !== competitorId) newComps.push(competitor)
-		}
-		setCompetitors(newComps)
+	const handleDeleteCompetitor = (competitorIdToDelete) => {
+		let newComps = [
+			...props.competitors.filter(
+				({ competitorId }) => competitorId !== competitorIdToDelete
+			)
+		]
 		props.setFieldValue('topCompetitors', newComps)
 	}
 
@@ -136,15 +130,6 @@ export default function TopCompetitors(props) {
 											competitorName: '',
 											twitterProfileUrl: '',
 											websiteUrl: ''
-										}}
-										validate={(values, props) => {
-											const errors = {}
-											if (errors.length > 0) {
-												// setNewValid(false)
-											} else {
-												// setNewValid(true)
-											}
-											return errors
 										}}
 									>
 										{(newCompetitorFormik) => (
@@ -236,9 +221,9 @@ export default function TopCompetitors(props) {
 									</Formik>
 								) : null}
 
-								{competitors &&
-									competitors.length > 0 &&
-									competitors.map((competitor) => (
+								{props.competitors &&
+									props.competitors.length > 0 &&
+									props.competitors.map((competitor) => (
 										<TableRow
 											key={competitor.competitorId}
 											className={classes.tableRow}

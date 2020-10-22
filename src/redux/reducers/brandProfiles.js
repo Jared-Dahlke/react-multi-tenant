@@ -15,7 +15,10 @@ import {
 	BRAND_TOPICS_ACTION_SELECT,
 	BRAND_SCENARIOS_ACTION_SELECT,
 	BRAND_CATEGORIES_ACTION_SELECT,
-	SET_BRAND_PROFILE_BASIC_INFO
+	SET_BRAND_PROFILE_BASIC_INFO,
+	SET_BRAND_PROFILE_COMPETITORS,
+	ADD_BRAND_PROFILE_COMPETITOR,
+	DELETE_BRAND_PROFILE_COMPETITOR
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -96,25 +99,10 @@ export function hasBrandProfiles(state = true, action) {
 	}
 }
 
-function setScenarioAction(data, scenarios) {
-	const scenarioId = data.data.scenarioId
-	const value = Number(data.data.scenarioResponseId)
-
-	for (const scenario of scenarios) {
-		if (scenario.scenarioId === scenarioId) {
-			scenario.scenarioResponseId = value
-		}
-	}
-}
-
 export function scenarios(state = [], action) {
 	switch (action.type) {
 		case SCENARIOS_FETCH:
 			return action.scenarios
-		case BRAND_SCENARIOS_ACTION_SELECT:
-			let newScenarios = JSON.parse(JSON.stringify(state))
-			setScenarioAction(action, newScenarios)
-			return newScenarios
 		default:
 			return state
 	}
@@ -140,7 +128,18 @@ export function brandProfileBasicInfo(
 ) {
 	switch (action.type) {
 		case SET_BRAND_PROFILE_BASIC_INFO:
+			console.log('inside bp reducer')
+			console.log(action)
 			return action.brandProfileBasicInfo
+		default:
+			return state
+	}
+}
+
+export function brandProfileCompetitors(state = [], action) {
+	switch (action.type) {
+		case SET_BRAND_PROFILE_COMPETITORS:
+			return action.brandProfileCompetitors
 		default:
 			return state
 	}
@@ -150,56 +149,8 @@ export function brandCategories(state = [], action) {
 	switch (action.type) {
 		case BRAND_CATEGORIES_FETCH_DATA_SUCCESS:
 			return action.brandCategories
-		case BRAND_CATEGORIES_ACTION_SELECT:
-			let newCategories = JSON.parse(JSON.stringify(state))
-			setCategoryAction(action, newCategories)
-			return newCategories
 		default:
 			return state
-	}
-}
-
-function setCategoryAction(data, categories) {
-	const contentCategoryId = data.data.contentCategoryId
-	const value = Number(data.data.contentCategoryResponseId)
-
-	for (const category of categories) {
-		if (category.contentCategoryId === contentCategoryId) {
-			category.contentCategoryResponseId = value
-		}
-	}
-}
-
-//brand topics functions:
-function markAllChildren(topic, value) {
-	for (const child of topic.children) {
-		child.topicResponseId = value
-		if (child.children && child.children.length > 0) {
-			markAllChildren(child, value)
-		}
-	}
-}
-
-function markSelected(topicId, value, topic) {
-	if (topic.topicId === topicId) {
-		topic.topicResponseId = value
-		if (topic.children && topic.children.length > 0)
-			markAllChildren(topic, value)
-	} else {
-		if (topic.children && topic.children.length > 0) {
-			for (const child of topic.children) {
-				markSelected(topicId, value, child)
-			}
-		}
-	}
-}
-
-function setTopicAction(data, topics) {
-	const topicId = data.data.topicId
-	const value = data.data.value
-
-	for (const topic of topics) {
-		markSelected(topicId, value, topic)
 	}
 }
 
@@ -207,10 +158,6 @@ export function topics(state = [], action) {
 	switch (action.type) {
 		case BRAND_TOPICS_FETCH_DATA_SUCCESS:
 			return action.topics
-		case BRAND_TOPICS_ACTION_SELECT:
-			let newTopics = JSON.parse(JSON.stringify(state))
-			setTopicAction(action, newTopics)
-			return newTopics
 		default:
 			return state
 	}

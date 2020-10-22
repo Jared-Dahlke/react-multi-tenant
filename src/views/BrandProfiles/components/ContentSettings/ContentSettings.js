@@ -1,31 +1,40 @@
 import React from 'react'
 import CustomRadio from './CustomRadio'
-import { connect } from 'react-redux'
-import {
-	brandScenariosActionSelect,
-	brandCategoriesActionSelect
-} from '../../../../redux/actions/brandProfiles'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
 import Divider from 'rsuite/lib/Divider'
 import CategoryButtonGroup from './CategoryButtonGroup'
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		brandScenariosActionSelect: (data) =>
-			dispatch(brandScenariosActionSelect(data)),
-		brandCategoriesActionSelect: (data) =>
-			dispatch(brandCategoriesActionSelect(data))
+function setCategoryAction(data, categories) {
+	const contentCategoryId = data.contentCategoryId
+	const value = Number(data.contentCategoryResponseId)
+	for (const category of categories) {
+		if (category.contentCategoryId === contentCategoryId) {
+			category.contentCategoryResponseId = value
+		}
 	}
 }
 
-function ContentSettings(props) {
+function setScenarioAction(data, scenarios) {
+	const scenarioId = data.scenarioId
+	const value = Number(data.scenarioResponseId)
+
+	for (const scenario of scenarios) {
+		if (scenario.scenarioId === scenarioId) {
+			scenario.scenarioResponseId = value
+		}
+	}
+}
+
+export default function ContentSettings(props) {
 	const handleScenarioSelect = (scenarioId, scenarioResponseId) => {
 		let data = {
 			scenarioId: scenarioId,
 			scenarioResponseId: scenarioResponseId
 		}
-		props.brandScenariosActionSelect(data)
+		let newScenarios = JSON.parse(JSON.stringify(props.values.scenarios))
+		setScenarioAction(data, newScenarios)
+		props.setFieldValue('scenarios', newScenarios)
 	}
 
 	const handleCategorySelect = (
@@ -36,7 +45,9 @@ function ContentSettings(props) {
 			contentCategoryId: contentCategoryId,
 			contentCategoryResponseId: contentCategoryResponseId
 		}
-		props.brandCategoriesActionSelect(data)
+		let newCategories = JSON.parse(JSON.stringify(props.values.categories))
+		setCategoryAction(data, newCategories)
+		props.setFieldValue('categories', newCategories)
 	}
 
 	React.useEffect(() => {
@@ -110,5 +121,3 @@ function ContentSettings(props) {
 		</div>
 	)
 }
-
-export default connect(null, mapDispatchToProps)(ContentSettings)

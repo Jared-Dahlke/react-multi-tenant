@@ -20,7 +20,9 @@ import {
 	fetchBrandScenarios,
 	fetchBrandIndustryVerticals,
 	fetchBrandTopics,
-	fetchBrandCategories
+	fetchBrandCategories,
+	setBrandProfileBasicInfo,
+	setBrandProfileCompetitors
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
@@ -56,7 +58,10 @@ const mapDispatchToProps = (dispatch) => {
 		fetchBrandScenarios: () => dispatch(fetchBrandScenarios()),
 		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
 		fetchBrandTopics: () => dispatch(fetchBrandTopics()),
-		fetchBrandCategories: () => dispatch(fetchBrandCategories())
+		fetchBrandCategories: () => dispatch(fetchBrandCategories()),
+		setBrandProfileCompetitors: (arr) =>
+			dispatch(setBrandProfileCompetitors(arr)),
+		setBrandProfileBasicInfo: (obj) => dispatch(setBrandProfileBasicInfo(obj))
 	}
 }
 
@@ -67,11 +72,21 @@ function BrandProfiles(props) {
 	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
 	let fetchBrandTopics = props.fetchBrandTopics
 	let fetchBrandCategories = props.fetchBrandCategories
+	let setBrandProfileBasicInfo = props.setBrandProfileBasicInfo
+	let setBrandProfileCompetitors = props.setBrandProfileCompetitors
 	React.useEffect(() => {
+		console.log('inside brand profile useEffect')
 		fetchBrandScenarios()
 		fetchBrandIndustryVerticals()
 		fetchBrandTopics()
 		fetchBrandCategories()
+		setBrandProfileBasicInfo({
+			twitterProfileUrl: '',
+			websiteUrl: '',
+			brandName: '',
+			industryVerticalId: ''
+		})
+		setBrandProfileCompetitors([])
 	}, [
 		fetchBrandScenarios,
 		fetchBrandIndustryVerticals,
