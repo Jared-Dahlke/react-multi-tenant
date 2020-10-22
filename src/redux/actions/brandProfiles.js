@@ -11,14 +11,9 @@ import {
 	BRAND_PROFILE_DELETING,
 	BRAND_PROFILE_SAVING,
 	BRAND_TOPICS_FETCH_DATA_SUCCESS,
-	BRAND_TOPICS_ACTION_SELECT,
-	BRAND_SCENARIOS_ACTION_SELECT,
-	BRAND_CATEGORIES_ACTION_SELECT,
 	BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
 	SET_BRAND_PROFILE_BASIC_INFO,
-	SET_BRAND_PROFILE_COMPETITORS,
-	DELETE_BRAND_PROFILE_COMPETITOR,
-	ADD_BRAND_PROFILE_COMPETITOR
+	SET_BRAND_PROFILE_COMPETITORS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -78,20 +73,6 @@ export function removeBrandProfile(brandProfileId) {
 	return {
 		type: REMOVE_BRAND_PROFILE,
 		brandProfileId
-	}
-}
-
-export function deleteBrandProfileCompetitor(competitorId) {
-	return {
-		type: DELETE_BRAND_PROFILE_COMPETITOR,
-		competitorId
-	}
-}
-
-export function addBrandProfileCompetitor(competitor) {
-	return {
-		type: ADD_BRAND_PROFILE_COMPETITOR,
-		competitor
 	}
 }
 
@@ -228,9 +209,6 @@ export function fetchBrandScenarios() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				console.log('result from fetch')
-				console.log(result.data)
-
 				let scenarios = result.data.scenario
 				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
 				dispatch(scenariosFetch(scenarios))
@@ -301,26 +279,5 @@ export function brandCategoriesFetchDataSuccess(brandCategories) {
 	return {
 		type: BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
 		brandCategories
-	}
-}
-
-export function brandTopicsActionSelect(data) {
-	return {
-		type: BRAND_TOPICS_ACTION_SELECT,
-		data
-	}
-}
-
-export function brandCategoriesActionSelect(data) {
-	return {
-		type: BRAND_CATEGORIES_ACTION_SELECT,
-		data
-	}
-}
-
-export function brandScenariosActionSelect(data) {
-	return {
-		type: BRAND_SCENARIOS_ACTION_SELECT,
-		data
 	}
 }

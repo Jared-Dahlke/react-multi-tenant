@@ -12,13 +12,8 @@ import {
 	BRAND_PROFILE_SAVING,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
-	BRAND_TOPICS_ACTION_SELECT,
-	BRAND_SCENARIOS_ACTION_SELECT,
-	BRAND_CATEGORIES_ACTION_SELECT,
 	SET_BRAND_PROFILE_BASIC_INFO,
-	SET_BRAND_PROFILE_COMPETITORS,
-	ADD_BRAND_PROFILE_COMPETITOR,
-	DELETE_BRAND_PROFILE_COMPETITOR
+	SET_BRAND_PROFILE_COMPETITORS
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -128,8 +123,6 @@ export function brandProfileBasicInfo(
 ) {
 	switch (action.type) {
 		case SET_BRAND_PROFILE_BASIC_INFO:
-			console.log('inside bp reducer')
-			console.log(action)
 			return action.brandProfileBasicInfo
 		default:
 			return state
