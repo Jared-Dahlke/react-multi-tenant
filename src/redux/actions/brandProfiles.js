@@ -1,20 +1,19 @@
 import {
-	BRAND_PROFILES_FETCH_DATA_SUCCESS,
+	SET_BRAND_PROFILES,
 	REMOVE_BRAND_PROFILE,
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SCENARIOS_FETCH,
-	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+	SET_SCENARIOS,
+	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_SAVED,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	BRAND_PROFILE_SAVING,
-	BRAND_TOPICS_FETCH_DATA_SUCCESS,
-	BRAND_TOPICS_ACTION_SELECT,
-	BRAND_SCENARIOS_ACTION_SELECT,
-	BRAND_CATEGORIES_ACTION_SELECT,
-	BRAND_CATEGORIES_FETCH_DATA_SUCCESS
+	SET_BRAND_TOPICS,
+	SET_BRAND_CATEGORIES,
+	SET_BRAND_PROFILE_BASIC_INFO,
+	SET_BRAND_PROFILE_COMPETITORS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -25,10 +24,24 @@ import {
 
 const apiBase = config.apiGateway.URL
 
-export function brandProfilesFetchDataSuccess(brandProfiles) {
+export function setBrandProfiles(brandProfiles) {
 	return {
-		type: BRAND_PROFILES_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_PROFILES,
 		brandProfiles
+	}
+}
+
+export function setBrandProfileBasicInfo(brandProfileBasicInfo) {
+	return {
+		type: SET_BRAND_PROFILE_BASIC_INFO,
+		brandProfileBasicInfo
+	}
+}
+
+export function setBrandProfileCompetitors(brandProfileCompetitors) {
+	return {
+		type: SET_BRAND_PROFILE_COMPETITORS,
+		brandProfileCompetitors
 	}
 }
 
@@ -88,18 +101,24 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				console.log('result from fetch Brand Profile')
-				console.log(result)
-				//let brandProfiles = result.data
-				//if (brandProfiles.length < 1) {
-				//	dispatch(hasBrandProfiles(false))
-				//}
+				result.data.industryVerticalId = 47 //TODO: delete this line once API returns industryVerticalId
 				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
-				//dispatch(brandProfilesFetchDataSuccess(brandProfiles))
-				//dispatch(brandProfilesIsLoading(false))
+
+				dispatch(
+					setBrandProfileBasicInfo({
+						twitterProfileUrl: result.data.twitterProfileUrl,
+						websiteUrl: result.data.websiteUrl,
+						brandName: result.data.brandName,
+						industryVerticalId: result.data.industryVerticalId
+					})
+				)
+				dispatch(setBrandProfileCompetitors(result.data.competitors))
+				dispatch(setScenarios(result.data.scenarios))
+				dispatch(setBrandCategories(result.data.categories))
+				dispatch(setBrandTopics(result.data.topics))
 			}
 		} catch (error) {
 			alert(error)
@@ -123,7 +142,7 @@ export function fetchBrandProfiles(accountId) {
 					console.log(err.name, err.errors)
 					alert("Could not validate account's brand profiles data")
 				})
-				dispatch(brandProfilesFetchDataSuccess(brandProfiles))
+				dispatch(setBrandProfiles(brandProfiles))
 				dispatch(brandProfilesIsLoading(false))
 			}
 		} catch (error) {
@@ -171,10 +190,16 @@ export function hasBrandProfiles(bool) {
 	}
 }
 
-export function scenariosFetch(scenarios) {
+export function setScenarios(scenarios) {
 	return {
-		type: SCENARIOS_FETCH,
+		type: SET_SCENARIOS,
 		scenarios
+	}
+}
+
+function addDefaultResponseIdToScenarios(scenarios) {
+	for (const scenario of scenarios) {
+		scenario.scenarioResponseId = ''
 	}
 }
 
@@ -184,10 +209,9 @@ export function fetchBrandScenarios() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				console.log('result from fetch')
-				console.log(result)
 				let scenarios = result.data.scenario
-				dispatch(scenariosFetch(scenarios))
+				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
+				dispatch(setScenarios(scenarios))
 			}
 		} catch (error) {
 			alert(error)
@@ -201,7 +225,7 @@ export function fetchBrandIndustryVerticals() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				dispatch(brandIndustryVerticalsFetchDataSuccess(result.data))
+				dispatch(setBrandIndustryVerticals(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -209,9 +233,9 @@ export function fetchBrandIndustryVerticals() {
 	}
 }
 
-export function brandIndustryVerticalsFetchDataSuccess(industryVerticals) {
+export function setBrandIndustryVerticals(industryVerticals) {
 	return {
-		type: BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_INDUSTRY_VERTICALS,
 		industryVerticals
 	}
 }
@@ -222,7 +246,7 @@ export function fetchBrandTopics() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				dispatch(brandTopicsFetchDataSuccess(result.data))
+				dispatch(setBrandTopics(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -230,9 +254,9 @@ export function fetchBrandTopics() {
 	}
 }
 
-export function brandTopicsFetchDataSuccess(topics) {
+export function setBrandTopics(topics) {
 	return {
-		type: BRAND_TOPICS_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_TOPICS,
 		topics
 	}
 }
@@ -243,7 +267,7 @@ export function fetchBrandCategories() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				dispatch(brandCategoriesFetchDataSuccess(result.data))
+				dispatch(setBrandCategories(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -251,30 +275,9 @@ export function fetchBrandCategories() {
 	}
 }
 
-export function brandCategoriesFetchDataSuccess(brandCategories) {
+export function setBrandCategories(brandCategories) {
 	return {
-		type: BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_CATEGORIES,
 		brandCategories
-	}
-}
-
-export function brandTopicsActionSelect(data) {
-	return {
-		type: BRAND_TOPICS_ACTION_SELECT,
-		data
-	}
-}
-
-export function brandCategoriesActionSelect(data) {
-	return {
-		type: BRAND_CATEGORIES_ACTION_SELECT,
-		data
-	}
-}
-
-export function brandScenariosActionSelect(data) {
-	return {
-		type: BRAND_SCENARIOS_ACTION_SELECT,
-		data
 	}
 }

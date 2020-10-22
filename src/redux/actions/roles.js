@@ -4,8 +4,8 @@ import {
 	ROLES_PERMISSIONS_HAS_ERRORED,
 	ROLES_IS_LOADING,
 	ROLES_PERMISSIONS_IS_LOADING,
-	ROLES_FETCH_DATA_SUCCESS,
-	ROLES_PERMISSIONS_FETCH_DATA_SUCCESS
+	SET_ROLES,
+	SET_ROLES_PERMISSIONS
 } from '../action-types/roles'
 import axios from '../../axiosConfig'
 import config from '../../config'
@@ -39,16 +39,16 @@ export function rolesPermissionsIsLoading(bool) {
 		isLoading: bool
 	}
 }
-export function rolesFetchDataSuccess(roles) {
+export function setRoles(roles) {
 	return {
-		type: ROLES_FETCH_DATA_SUCCESS,
+		type: SET_ROLES,
 		roles
 	}
 }
 
-export function rolesPermissionsFetchDataSuccess(rolesPermissions) {
+export function setRolesPermissions(rolesPermissions) {
 	return {
-		type: ROLES_PERMISSIONS_FETCH_DATA_SUCCESS,
+		type: SET_ROLES_PERMISSIONS,
 		rolesPermissions
 	}
 }
@@ -76,7 +76,7 @@ export function rolesFetchData(accountId) {
 						console.log(err.name, err.errors)
 						alert('Could not validate roles data')
 					})
-				dispatch(rolesFetchDataSuccess(result))
+				dispatch(setRoles(result))
 			}
 		} catch (error) {
 			alert(error)
@@ -108,7 +108,7 @@ export function rolesPermissionsFetchData(accountId) {
 						console.log(err.name, err.errors)
 						alert('Could not validate roles Permissions data')
 					})
-				dispatch(rolesPermissionsFetchDataSuccess(result))
+				dispatch(setRolesPermissions(result))
 				dispatch(rolesPermissionsIsLoading(false))
 			}
 		} catch (error) {

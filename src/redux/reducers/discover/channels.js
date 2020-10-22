@@ -1,12 +1,12 @@
 import {
-	CATEGORIES_FETCH_DATA_SUCCESS,
-	CHANNELS_FETCH_DATA_SUCCESS,
-	VIDEOS_FETCH_DATA_SUCCESS
+	SET_CATEGORIES,
+	SET_CHANNELS,
+	SET_VIDEOS
 } from '../../action-types/discover/channels'
 
 export function categories(state = [], action) {
 	switch (action.type) {
-		case CATEGORIES_FETCH_DATA_SUCCESS:
+		case SET_CATEGORIES:
 			return action.categories
 		default:
 			return state
@@ -26,7 +26,7 @@ function filterCountries(filters, items) {
 
 export function channels(state = [], action) {
 	switch (action.type) {
-		case CHANNELS_FETCH_DATA_SUCCESS:
+		case SET_CHANNELS:
 			//TODO: the getchannels api should accept categories as an input, for now i will filter by categories here
 			//filter out filters action.filters
 			let filters = action.payload.filters
@@ -43,7 +43,7 @@ export function channels(state = [], action) {
 
 export function videos(state = [], action) {
 	switch (action.type) {
-		case VIDEOS_FETCH_DATA_SUCCESS:
+		case SET_VIDEOS:
 			//TODO: the getchannels api should accept categories as an input, for now i will filter by categories here
 			//filter out filters
 

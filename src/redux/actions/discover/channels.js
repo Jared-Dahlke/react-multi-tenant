@@ -4,9 +4,9 @@
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import {
-	CATEGORIES_FETCH_DATA_SUCCESS,
-	CHANNELS_FETCH_DATA_SUCCESS,
-	VIDEOS_FETCH_DATA_SUCCESS
+	SET_CATEGORIES,
+	SET_CHANNELS,
+	SET_VIDEOS
 } from '../../action-types/discover/channels'
 
 const apiBase = config.apiGateway.URL
@@ -19,7 +19,7 @@ export function fetchCategories() {
 
 			if (result.status === 200) {
 				//let brandProfiles = result.data
-				dispatch(categoriesFetchDataSuccess(result.data))
+				dispatch(setCategories(result.data))
 				//dispatch(brandProfilesIsLoading(false))
 			}
 			// dispatch(categoriesIsLoading(false))
@@ -30,9 +30,9 @@ export function fetchCategories() {
 	}
 }
 
-export function categoriesFetchDataSuccess(categories) {
+export function setCategories(categories) {
 	return {
-		type: CATEGORIES_FETCH_DATA_SUCCESS,
+		type: SET_CATEGORIES,
 		categories
 	}
 }
@@ -73,7 +73,7 @@ export function fetchChannels(categories, filters) {
 				}
 
 				let payload = { channels: filteredChannels, filters: filters }
-				dispatch(channelsFetchDataSuccess(payload))
+				dispatch(setChannels(payload))
 				dispatch(fetchVideos(filteredChannels, categories))
 			}
 		} catch (error) {
@@ -83,9 +83,9 @@ export function fetchChannels(categories, filters) {
 	}
 }
 
-export function channelsFetchDataSuccess(payload) {
+export function setChannels(payload) {
 	return {
-		type: CHANNELS_FETCH_DATA_SUCCESS,
+		type: SET_CHANNELS,
 		payload
 	}
 }
@@ -138,7 +138,7 @@ export function fetchVideos(channels, categories) {
 					}
 				}
 
-				dispatch(videosFetchDataSuccess(filteredVideos))
+				dispatch(setVideos(filteredVideos))
 			}
 		} catch (error) {
 			alert(error)
@@ -147,9 +147,9 @@ export function fetchVideos(channels, categories) {
 	}
 }
 
-export function videosFetchDataSuccess(videos) {
+export function setVideos(videos) {
 	return {
-		type: VIDEOS_FETCH_DATA_SUCCESS,
+		type: SET_VIDEOS,
 		videos
 	}
 }

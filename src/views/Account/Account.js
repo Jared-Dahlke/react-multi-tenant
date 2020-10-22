@@ -218,7 +218,6 @@ function Account(props) {
 
 							<CardFooter>
 								{current.accountName === 'Sightly' ||
-								true || // TODO: when API makes delete account return a  result the delete button can be unhidden
 								(current.children && current.children.length > 0) ? null : (
 									<Button
 										color='red'

@@ -103,6 +103,7 @@ export const brandProfileObjValidation = Yup.object().shape({
 	brandName: Yup.string().required(),
 	brandProfileId: Yup.number().required(),
 	twitterProfileUrl: Yup.string().required(),
+	industryVerticalId: Yup.number().required(),
 	websiteUrl: Yup.string().required(),
 	categories: Yup.array()
 		.min(1, 'each brand profile should have at least one category object')
@@ -141,12 +142,16 @@ export const brandProfileObjValidation = Yup.object().shape({
 		.min(1, 'each brand profile should have at least one topics object')
 		.of(
 			Yup.object().shape({
-				brandProfileId: Yup.number().required(),
-				//children: Yup.array().of(Yup.object().shape({
-				//
-				//	})),
-				parentIds: Yup.number(),
-				topicId: Yup.string().required(),
+				children: Yup.array().of(
+					Yup.object().shape({
+						parentIds: Yup.array().required(),
+						topicId: Yup.number().required(),
+						topicName: Yup.string().required(),
+						topicResponseId: Yup.number().required()
+					})
+				),
+				parentIds: Yup.array().required(),
+				topicId: Yup.number().required(),
 				topicName: Yup.string().required(),
 				topicResponseId: Yup.number().required()
 			})

@@ -1,6 +1,6 @@
 import {
 	USERS_HAS_ERRORED,
-	USERS_FETCH_DATA_SUCCESS,
+	SET_USERS,
 	USER_DELETED,
 	USER_DELETED_ERROR,
 	USERS_REMOVE_USER,
@@ -117,7 +117,7 @@ export function users(state = [], action) {
 	let users = {}
 	let newState = []
 	switch (action.type) {
-		case USERS_FETCH_DATA_SUCCESS:
+		case SET_USERS:
 			return action.users
 		case USERS_REMOVE_USER:
 			newState = [
