@@ -1,17 +1,17 @@
 import {
-	BRAND_PROFILES_FETCH_DATA_SUCCESS,
+	SET_BRAND_PROFILES,
 	REMOVE_BRAND_PROFILE,
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SCENARIOS_FETCH,
-	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+	SET_SCENARIOS,
+	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_SAVED,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	BRAND_PROFILE_SAVING,
-	BRAND_TOPICS_FETCH_DATA_SUCCESS,
-	BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
+	SET_BRAND_TOPICS,
+	SET_BRAND_CATEGORIES,
 	SET_BRAND_PROFILE_BASIC_INFO,
 	SET_BRAND_PROFILE_COMPETITORS
 } from '../action-types/brandProfiles'
@@ -24,9 +24,9 @@ import {
 
 const apiBase = config.apiGateway.URL
 
-export function brandProfilesFetchDataSuccess(brandProfiles) {
+export function setBrandProfiles(brandProfiles) {
 	return {
-		type: BRAND_PROFILES_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_PROFILES,
 		brandProfiles
 	}
 }
@@ -116,9 +116,9 @@ export function fetchBrandProfile(brandProfileId) {
 					})
 				)
 				dispatch(setBrandProfileCompetitors(result.data.competitors))
-				dispatch(scenariosFetch(result.data.scenarios))
-				dispatch(brandCategoriesFetchDataSuccess(result.data.categories))
-				dispatch(brandTopicsFetchDataSuccess(result.data.topics))
+				dispatch(setScenarios(result.data.scenarios))
+				dispatch(setBrandCategories(result.data.categories))
+				dispatch(setBrandTopics(result.data.topics))
 			}
 		} catch (error) {
 			alert(error)
@@ -142,7 +142,7 @@ export function fetchBrandProfiles(accountId) {
 					console.log(err.name, err.errors)
 					alert("Could not validate account's brand profiles data")
 				})
-				dispatch(brandProfilesFetchDataSuccess(brandProfiles))
+				dispatch(setBrandProfiles(brandProfiles))
 				dispatch(brandProfilesIsLoading(false))
 			}
 		} catch (error) {
@@ -190,9 +190,9 @@ export function hasBrandProfiles(bool) {
 	}
 }
 
-export function scenariosFetch(scenarios) {
+export function setScenarios(scenarios) {
 	return {
-		type: SCENARIOS_FETCH,
+		type: SET_SCENARIOS,
 		scenarios
 	}
 }
@@ -211,7 +211,7 @@ export function fetchBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data.scenario
 				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
-				dispatch(scenariosFetch(scenarios))
+				dispatch(setScenarios(scenarios))
 			}
 		} catch (error) {
 			alert(error)
@@ -225,7 +225,7 @@ export function fetchBrandIndustryVerticals() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				dispatch(brandIndustryVerticalsFetchDataSuccess(result.data))
+				dispatch(setBrandIndustryVerticals(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -233,9 +233,9 @@ export function fetchBrandIndustryVerticals() {
 	}
 }
 
-export function brandIndustryVerticalsFetchDataSuccess(industryVerticals) {
+export function setBrandIndustryVerticals(industryVerticals) {
 	return {
-		type: BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_INDUSTRY_VERTICALS,
 		industryVerticals
 	}
 }
@@ -246,7 +246,7 @@ export function fetchBrandTopics() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				dispatch(brandTopicsFetchDataSuccess(result.data))
+				dispatch(setBrandTopics(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -254,9 +254,9 @@ export function fetchBrandTopics() {
 	}
 }
 
-export function brandTopicsFetchDataSuccess(topics) {
+export function setBrandTopics(topics) {
 	return {
-		type: BRAND_TOPICS_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_TOPICS,
 		topics
 	}
 }
@@ -267,7 +267,7 @@ export function fetchBrandCategories() {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				dispatch(brandCategoriesFetchDataSuccess(result.data))
+				dispatch(setBrandCategories(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -275,9 +275,9 @@ export function fetchBrandCategories() {
 	}
 }
 
-export function brandCategoriesFetchDataSuccess(brandCategories) {
+export function setBrandCategories(brandCategories) {
 	return {
-		type: BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
+		type: SET_BRAND_CATEGORIES,
 		brandCategories
 	}
 }

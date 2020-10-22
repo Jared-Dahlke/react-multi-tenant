@@ -8,10 +8,10 @@ import FilterList from '@material-ui/icons/FilterList'
 import ListItemText from '@material-ui/core/ListItemText'
 import {
 	fetchChannels,
-	categoriesFetchDataSuccess,
-	channelsFetchDataSuccess,
+	setCategories,
+	setChannels,
 	fetchVideos,
-	videosFetchDataSuccess
+	setVideos
 } from '../../redux/actions/discover/channels'
 import countryList from 'react-select-country-list'
 import numeral from 'numeral'
@@ -53,12 +53,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchChannels: (categories, filters) =>
 			dispatch(fetchChannels(categories, filters)),
-		categoriesFetchDataSuccess: (categories) =>
-			dispatch(categoriesFetchDataSuccess(categories)),
-		channelsFetchDataSuccess: (payload) =>
-			dispatch(channelsFetchDataSuccess(payload)),
-		videosFetchDataSuccess: (videos) =>
-			dispatch(videosFetchDataSuccess(videos)),
+		setCategories: (categories) => dispatch(setCategories(categories)),
+		setChannels: (payload) => dispatch(setChannels(payload)),
+		setVideos: (videos) => dispatch(setVideos(videos)),
 		fetchVideos: (channels, categories) =>
 			dispatch(fetchVideos(channels, categories))
 	}
@@ -122,7 +119,7 @@ function ListBuilder(props) {
 					category.toggleValue = value
 				}
 			}
-			props.categoriesFetchDataSuccess(categoriesCopy)
+			props.setCategories(categoriesCopy)
 			props.fetchChannels(categoriesCopy, filters)
 		}
 
@@ -136,7 +133,7 @@ function ListBuilder(props) {
 
 			let payload = { channels: channelsCopy, filters: filters }
 
-			props.channelsFetchDataSuccess(payload)
+			props.setChannels(payload)
 			props.fetchVideos(channelsCopy, props.categories)
 		}
 
@@ -147,7 +144,7 @@ function ListBuilder(props) {
 					video.toggleValue = value
 				}
 			}
-			props.videosFetchDataSuccess(videosCopy)
+			props.setVideos(videosCopy)
 		}
 	}
 

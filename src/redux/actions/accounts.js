@@ -1,11 +1,11 @@
 import {
-	ACCOUNTS_FETCH_DATA_SUCCESS,
+	SET_ACCOUNTS,
 	SET_CURRENT_ACCOUNT_ID,
 	SET_CURRENT_ACCOUNT,
 	TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
 	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
 	ACCOUNTS_SET_ACCOUNT_USERS,
-	ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
+	SET_ACCOUNT_TYPES,
 	ACCOUNTS_UPDATE_ACCOUNT,
 	SET_IS_SWITCHING_ACCOUNTS,
 	SET_ACCOUNT_CREATED,
@@ -21,19 +21,19 @@ import {
 import { userProfileFetchData } from '../actions/auth'
 import {
 	usersFetchData,
-	usersFetchDataSuccess,
+	setUsers,
 	usersIsLoading,
 	editUserUserAccountsLoading
 } from '../actions/users'
 import {
 	rolesFetchData,
-	rolesFetchDataSuccess,
+	setRoles,
 	rolesPermissionsFetchData,
-	rolesPermissionsFetchDataSuccess,
+	setRolesPermissions,
 	rolesPermissionsIsLoading
 } from '../actions/roles'
 import {
-	brandProfilesFetchDataSuccess,
+	setBrandProfiles,
 	fetchBrandProfiles,
 	brandProfilesIsLoading
 } from '../actions/brandProfiles'
@@ -43,16 +43,16 @@ import { accountSaving } from '../reducers/accounts'
 
 const apiBase = config.apiGateway.URL
 
-export function accountsFetchDataSuccess(accounts) {
+export function setAccounts(accounts) {
 	return {
-		type: ACCOUNTS_FETCH_DATA_SUCCESS,
+		type: SET_ACCOUNTS,
 		accounts
 	}
 }
 
-export function accountTypesFetchDataSuccess(accountTypes) {
+export function setAccountTypes(accountTypes) {
 	return {
-		type: ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
+		type: SET_ACCOUNT_TYPES,
 		accountTypes
 	}
 }
@@ -142,10 +142,7 @@ export const deleteAccount = (accountId) => {
 				dispatch(fetchSiteData())
 			})
 			.catch((error) => {
-				//dispatch(userDeletedError(true));
-				//setTimeout(() => {
-				// dispatch(userDeletedError(false));
-				//}, 2000)
+				console.error('delete account error', error)
 			})
 	}
 }
@@ -161,7 +158,7 @@ export const createAccount = (account) => {
 				dispatch(fetchSiteData(response.data.accountId))
 			})
 			.catch((error) => {
-				//error
+				console.error('create account error', error)
 			})
 	}
 }
@@ -172,13 +169,13 @@ export function clearSiteData() {
 		dispatch(usersIsLoading(true))
 		dispatch(brandProfilesIsLoading(true))
 		dispatch(editUserUserAccountsLoading(true))
-		dispatch(accountsFetchDataSuccess([]))
+		dispatch(setAccounts([]))
 		dispatch(setCurrentAccountId(null))
-		dispatch(usersFetchDataSuccess([]))
-		dispatch(rolesFetchDataSuccess([]))
-		dispatch(rolesPermissionsFetchDataSuccess([]))
-		dispatch(brandProfilesFetchDataSuccess([]))
-		dispatch(accountTypesFetchDataSuccess([]))
+		dispatch(setUsers([]))
+		dispatch(setRoles([]))
+		dispatch(setRolesPermissions([]))
+		dispatch(setBrandProfiles([]))
+		dispatch(setAccountTypes([]))
 	}
 }
 
@@ -205,11 +202,9 @@ export function fetchSiteData(accountId) {
 	return async (dispatch) => {
 		try {
 			let userId = localStorage.getItem('userId')
-
 			let accountsUrl = apiBase + `/user/${userId}/accounts`
-
 			let result = await axios.get(accountsUrl)
-			//run this result against account schema
+			//TODO: run this result against account schema
 			let accounts = { data: result.data }
 			if (!result.data[0]) {
 				alert(
@@ -220,7 +215,7 @@ export function fetchSiteData(accountId) {
 				return
 			}
 
-			dispatch(accountsFetchDataSuccess(accounts))
+			dispatch(setAccounts(accounts))
 
 			let accountsCopy = JSON.parse(JSON.stringify(accounts))
 			let convertedAccounts = convertToTree(accountsCopy)
@@ -326,7 +321,7 @@ export function fetchAccountTypes() {
 					console.log(err.name, err.errors)
 					alert('Could not validate account types data')
 				})
-				dispatch(accountTypesFetchDataSuccess(result.data))
+				dispatch(setAccountTypes(result.data))
 			}
 		} catch (error) {
 			alert('Error on fetch account types: ' + JSON.stringify(error, null, 2))

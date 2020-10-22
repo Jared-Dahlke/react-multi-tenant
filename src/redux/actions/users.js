@@ -1,6 +1,6 @@
 import {
 	USERS_HAS_ERRORED,
-	USERS_FETCH_DATA_SUCCESS,
+	SET_USERS,
 	USER_DELETED,
 	USER_DELETED_ERROR,
 	USERS_REMOVE_USER,
@@ -49,9 +49,9 @@ export function userDeletedError(bool) {
 	}
 }
 
-export function usersFetchDataSuccess(users) {
+export function setUsers(users) {
 	return {
-		type: USERS_FETCH_DATA_SUCCESS,
+		type: SET_USERS,
 		users
 	}
 }
@@ -129,7 +129,7 @@ export function usersFetchData(accountId) {
 					users.data.push(user)
 				}
 
-				dispatch(usersFetchDataSuccess(users))
+				dispatch(setUsers(users))
 			}
 		} catch (error) {
 			alert(

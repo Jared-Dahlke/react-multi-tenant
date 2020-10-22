@@ -1,24 +1,24 @@
 import {
-	BRAND_PROFILES_FETCH_DATA_SUCCESS,
 	REMOVE_BRAND_PROFILE,
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SCENARIOS_FETCH,
-	BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS,
-	BRAND_TOPICS_FETCH_DATA_SUCCESS,
-	BRAND_CATEGORIES_FETCH_DATA_SUCCESS,
+	SET_SCENARIOS,
+	SET_BRAND_INDUSTRY_VERTICALS,
+	SET_BRAND_TOPICS,
+	SET_BRAND_CATEGORIES,
 	BRAND_PROFILE_SAVED,
 	BRAND_PROFILE_SAVING,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	SET_BRAND_PROFILE_BASIC_INFO,
-	SET_BRAND_PROFILE_COMPETITORS
+	SET_BRAND_PROFILE_COMPETITORS,
+	SET_BRAND_PROFILES
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
 	switch (action.type) {
-		case BRAND_PROFILES_FETCH_DATA_SUCCESS:
+		case SET_BRAND_PROFILES:
 			return action.brandProfiles
 		case REMOVE_BRAND_PROFILE:
 			let newState = [
@@ -96,7 +96,7 @@ export function hasBrandProfiles(state = true, action) {
 
 export function scenarios(state = [], action) {
 	switch (action.type) {
-		case SCENARIOS_FETCH:
+		case SET_SCENARIOS:
 			return action.scenarios
 		default:
 			return state
@@ -105,7 +105,7 @@ export function scenarios(state = [], action) {
 
 export function industryVerticals(state = [], action) {
 	switch (action.type) {
-		case BRAND_INDUSTRY_VERTICALS_FETCH_DATA_SUCCESS:
+		case SET_BRAND_INDUSTRY_VERTICALS:
 			return action.industryVerticals
 		default:
 			return state
@@ -140,7 +140,7 @@ export function brandProfileCompetitors(state = [], action) {
 
 export function brandCategories(state = [], action) {
 	switch (action.type) {
-		case BRAND_CATEGORIES_FETCH_DATA_SUCCESS:
+		case SET_BRAND_CATEGORIES:
 			return action.brandCategories
 		default:
 			return state
@@ -149,11 +149,9 @@ export function brandCategories(state = [], action) {
 
 export function topics(state = [], action) {
 	switch (action.type) {
-		case BRAND_TOPICS_FETCH_DATA_SUCCESS:
+		case SET_BRAND_TOPICS:
 			return action.topics
 		default:
 			return state
 	}
 }
-
-//end brand topics functions

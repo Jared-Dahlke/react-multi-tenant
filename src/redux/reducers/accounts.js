@@ -1,8 +1,8 @@
 import {
 	SET_ACCOUNT_CREATED,
 	ACCOUNTS_UPDATE_ACCOUNT,
-	ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
-	ACCOUNTS_FETCH_DATA_SUCCESS,
+	SET_ACCOUNT_TYPES,
+	SET_ACCOUNTS,
 	ACCOUNTS_SET_ACCOUNT_USERS,
 	SET_CURRENT_ACCOUNT_ID,
 	SET_IS_SWITCHING_ACCOUNTS,
@@ -19,7 +19,7 @@ import {
 
 export function accounts(state = [], action) {
 	switch (action.type) {
-		case ACCOUNTS_FETCH_DATA_SUCCESS:
+		case SET_ACCOUNTS:
 			return action.accounts
 		case SET_CURRENT_ACCOUNT:
 			let newAccounts = JSON.parse(JSON.stringify(state.data))
@@ -68,7 +68,7 @@ export function accounts(state = [], action) {
 
 export function accountTypes(state = [], action) {
 	switch (action.type) {
-		case ACCOUNT_TYPES_FETCH_DATA_SUCCESS:
+		case SET_ACCOUNT_TYPES:
 			return action.accountTypes
 		default:
 			return state
