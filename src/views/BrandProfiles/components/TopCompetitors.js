@@ -48,7 +48,7 @@ export default function TopCompetitors(props) {
 	const handleSaveNew = (values) => {
 		setAddingNew(false)
 		let newCompetitor = {
-			competitorId: UUID.v4(),
+			competitorId: (Math.random() * 10000000000) | 0,
 			competitorName: values.competitorName,
 			twitterProfileUrl: values.twitterProfileUrl,
 			websiteUrl: values.websiteUrl
