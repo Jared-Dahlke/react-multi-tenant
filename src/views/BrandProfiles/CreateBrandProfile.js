@@ -10,11 +10,12 @@ import StepLabel from '@material-ui/core/StepLabel'
 import {
 	primaryColor,
 	whiteColor,
-	grayColor
+	grayColor,
+	successColor
 } from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
-import { withFormik } from 'formik'
+import { useFormikContext, withFormik } from 'formik'
 import * as Yup from 'yup'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
@@ -23,13 +24,15 @@ import ContentSettings from './components/ContentSettings/ContentSettings'
 import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
-	setBrandProfileSaved
+	setBrandProfileCreated,
+	saveBrandProfile
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { neutralColor } from '../../assets/jss/colorContants.js'
 import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { Debug } from '../Debug'
+import debounce from 'just-debounce-it'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -67,7 +70,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		createBrandProfile: (brandProfile) =>
 			dispatch(createBrandProfile(brandProfile)),
-		setBrandProfileSaved: (bool) => dispatch(setBrandProfileSaved(bool))
+		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool)),
+		saveBrandProfile: (brandProfile) => dispatch(saveBrandProfile(brandProfile))
 	}
 }
 
@@ -76,12 +80,15 @@ const mapStateToProps = (state) => {
 		currentAccountId: state.currentAccountId,
 		scenarios: state.scenarios,
 		industryVerticals: state.industryVerticals,
-		brandProfileSaved: state.brandProfileSaved,
-		brandProfileSaving: state.brandProfileSaving,
+		brandProfileCreated: state.brandProfileCreated,
+		brandProfileCreating: state.brandProfileCreating,
 		topics: state.topics,
 		categories: state.brandCategories,
 		basicInfo: state.brandProfileBasicInfo,
-		competitors: state.brandProfileCompetitors
+		competitors: state.brandProfileCompetitors,
+		brandProfileLoading: state.brandProfileLoading,
+		brandProfileSaving: state.brandProfileSaving,
+		brandProfileSaved: state.brandProfileSaved
 	}
 }
 
@@ -183,9 +190,29 @@ function getTopicValues(topics) {
 	return tab
 }
 
-function CreateBrandProfiles(props) {
+const AutoSave = ({ debounceMs }) => {
+	const formik = useFormikContext()
+	const debouncedSubmit = React.useCallback(
+		debounce(
+			() => formik.submitForm().then(() => console.log('saved')),
+			debounceMs
+		),
+		[debounceMs, formik.submitForm]
+	)
+
+	React.useEffect(() => {
+		if (formik.values !== formik.initialValues && formik.dirty)
+			debouncedSubmit()
+	}, [debouncedSubmit, formik.values])
+
+	return null
+}
+
+function CreateBrandProfile(props) {
+	let isCreating = window.location.pathname.includes('/create')
+
 	const classes = useStyles()
-	const [activeStep, setActiveStep] = React.useState(3)
+	const [activeStep, setActiveStep] = React.useState(0)
 
 	const steps = getSteps()
 
@@ -196,7 +223,8 @@ function CreateBrandProfiles(props) {
 			cleanScenariosForApi(values.scenarios)
 			cleanCategoriesForApi(values.categories)
 			let brandProfile = {
-				accountId: props.currentAccountId,
+				brandProfileId: values.brandProfileId,
+				accountId: values.accountId,
 				brandName: values.basicInfoProfileName,
 				websiteUrl: values.basicInfoWebsiteUrl,
 				industryVerticalId: values.basicInfoIndustryVerticalId,
@@ -206,7 +234,14 @@ function CreateBrandProfiles(props) {
 				scenarios: values.scenarios,
 				categories: values.categories
 			}
-			props.createBrandProfile(brandProfile)
+
+			if (isCreating) {
+				console.log('is creating')
+				props.createBrandProfile(brandProfile)
+			} else {
+				console.log('is editing')
+				// leave and go to brand profiles page
+			}
 		}
 	}
 
@@ -266,8 +301,29 @@ function CreateBrandProfiles(props) {
 		setExpandedTopicKeys(expandedKeys)
 	}
 
-	console.log('create brand profile props')
-	console.log(props)
+	const nextButtonLabel = React.useMemo(() => {
+		let label = ''
+		let onLastStep = activeStep === steps.length - 1
+
+		if (isCreating) {
+			//creating
+			if (onLastStep) {
+				label = 'Save'
+			} else {
+				label = 'Next'
+			}
+		}
+		if (!isCreating) {
+			//editing
+			if (onLastStep) {
+				label = 'Done'
+			} else {
+				label = 'Next'
+			}
+		}
+
+		return label
+	}, [activeStep])
 
 	const {
 		values,
@@ -275,182 +331,207 @@ function CreateBrandProfiles(props) {
 		touched,
 		setFieldValue,
 		setFieldTouched,
-		validateField,
-		validateForm,
-		isSubmitting,
 		//	isValid,
 		isValidating,
 		dirty
 	} = props
 
-	return (
-		<div>
-			<Stepper
-				classes={{ root: classes.stepper }}
-				activeStep={activeStep}
-				alternativeLabel
-			>
-				{steps.map((label, index) => {
-					let labelColor = whiteColor
+	if (props.brandProfileLoading) {
+		return (
+			<div>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						height: 'calc(100vh - 200px)',
+						color: 'white'
+					}}
+				>
+					Loading...
+				</div>
+			</div>
+		)
+	} else {
+		return (
+			<div>
+				{isCreating ? null : (
+					<AutoSave debounceMs={600} isCreating={isCreating} />
+				)}
 
-					return (
-						<Step key={label}>
-							<StepLabel
-								StepIconProps={{
-									classes: {
-										root: classes.step,
-										completed: classes.completed,
-										active: classes.active
-									}
-								}}
-							>
-								<div style={{ color: labelColor }}>{label}</div>
-							</StepLabel>
-						</Step>
-					)
-				})}
-			</Stepper>
+				<Stepper
+					classes={{ root: classes.stepper }}
+					activeStep={activeStep}
+					alternativeLabel
+				>
+					{steps.map((label, index) => {
+						let labelColor = whiteColor
 
-			<GridContainer justify='center'>
-				<GridItem xs={12} sm={12} md={11}>
-					<Card style={{ backgroundColor: neutralColor, display: 'flex' }}>
-						<CardBody>
-							<GridList
-								cols={1}
-								cellHeight={400}
-								style={{ overflowX: 'hidden', flex: 1 }}
-							>
-								{activeStep === 0 ? (
-									<div>
-										<BasicInfo
-											setFieldValue={setFieldValue}
-											values={values}
-											touched={touched}
-											industryVerticals={props.industryVerticals}
-											errors={errors}
-											setFieldTouched={setFieldTouched}
-										/>
-									</div>
-								) : activeStep === 1 ? (
-									<div>
-										<ContentSettings
-											scenarios={values.scenarios}
-											categories={values.categories}
-											setFieldValue={setFieldValue}
-											errors={errors}
-											values={values}
-										/>
-									</div>
-								) : activeStep === 2 ? (
-									<div>
-										<TopCompetitors
-											setFieldValue={setFieldValue}
-											errors={errors}
-											competitors={values.topCompetitors}
-											values={values}
-										/>
-									</div>
-								) : activeStep === 3 ? (
-									<div style={{ flex: 1 }}>
-										<Topics
-											formikValues={values}
-											allValues={allTopicValues}
-											updateExpandedKeys={updateEpandedTopicKeys}
-											expandedTopicKeys={expandedTopicKeys}
-											setFieldValue={setFieldValue}
-											errors={errors}
-										/>
-									</div>
-								) : (
-									<div style={{ color: 'white' }}>
-										<div
-											style={{
-												display: 'flex',
-												justifyContent: 'center',
-												alignItems: 'center',
-												backgroundColor: neutralColor,
-												height: '100%',
-												color: 'white'
-											}}
-										>
-											{props.brandProfileSaving ? (
-												'Saving...'
-											) : (
-												<Message
-													showIcon
-													type='success'
-													title='Success'
-													description={
-														<p>
-															{
-																'Your brand profile was succesfully created. Now you can '
-															}
-															<Link to='/admin/engage/listBuilder'>
-																{'go to the list builder '}
-															</Link>
-															or
-															<Link to='/admin/settings/brandProfiles'>
-																{' view your brand profiles'}
-															</Link>
-														</p>
-													}
-												/>
-											)}
-										</div>
-									</div>
-								)}
-							</GridList>
-						</CardBody>
-						<CardFooter>
-							<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
-								{activeStep === steps.length ? null : (
-									<div>
+						return (
+							<Step key={label}>
+								<StepLabel
+									StepIconProps={{
+										classes: {
+											root: classes.step,
+											completed: classes.completed,
+											active: classes.active
+										}
+									}}
+								>
+									<div style={{ color: labelColor }}>{label}</div>
+								</StepLabel>
+							</Step>
+						)
+					})}
+				</Stepper>
+
+				<GridContainer justify='center'>
+					<GridItem xs={12} sm={12} md={11} style={{ position: 'relative' }}>
+						<div
+							style={{
+								position: 'absolute',
+								left: 0,
+								top: 0,
+								paddingLeft: 15,
+								color: successColor[0],
+								fontSize: '16px'
+							}}
+						>
+							{props.brandProfileSaving
+								? 'Saving ...'
+								: props.brandProfileSaved
+								? 'Saved'
+								: ''}
+						</div>
+						<Card style={{ backgroundColor: neutralColor, display: 'flex' }}>
+							<CardBody>
+								<GridList
+									cols={1}
+									cellHeight={400}
+									style={{ overflowX: 'hidden', flex: 1 }}
+								>
+									{activeStep === 0 ? (
 										<div>
-											<Button
-												disabled={activeStep === 0}
-												onClick={handleBack}
-												className={classes.backButton}
-											>
-												Back
-											</Button>
-											<Button
-												onClick={() => handleNext(values)}
-												disabled={!stepValidated(activeStep, errors, values)}
-												loading={props.brandProfileSaving}
-											>
-												{activeStep === steps.length - 1 ? 'Save' : 'Next'}
-											</Button>
+											<BasicInfo
+												setFieldValue={setFieldValue}
+												values={values}
+												touched={touched}
+												industryVerticals={props.industryVerticals}
+												errors={errors}
+												setFieldTouched={setFieldTouched}
+											/>
 										</div>
-									</div>
-								)}
-							</div>
-						</CardFooter>
-
-						<pre style={{ color: 'white' }}>
-							values: {JSON.stringify(values.basicInfoProfileName)}
-						</pre>
-						<pre style={{ color: 'white' }}>
-							errors: {JSON.stringify(errors)}
-						</pre>
-					</Card>
-				</GridItem>
-			</GridContainer>
-		</div>
-	)
+									) : activeStep === 1 ? (
+										<div>
+											<ContentSettings
+												scenarios={values.scenarios}
+												categories={values.categories}
+												setFieldValue={setFieldValue}
+												errors={errors}
+												values={values}
+											/>
+										</div>
+									) : activeStep === 2 ? (
+										<div>
+											<TopCompetitors
+												setFieldValue={setFieldValue}
+												errors={errors}
+												competitors={values.topCompetitors}
+												values={values}
+											/>
+										</div>
+									) : activeStep === 3 ? (
+										<div style={{ flex: 1 }}>
+											<Topics
+												formikValues={values}
+												allValues={allTopicValues}
+												updateExpandedKeys={updateEpandedTopicKeys}
+												expandedTopicKeys={expandedTopicKeys}
+												setFieldValue={setFieldValue}
+												errors={errors}
+											/>
+										</div>
+									) : (
+										<div style={{ color: 'white' }}>
+											<div
+												style={{
+													display: 'flex',
+													justifyContent: 'center',
+													alignItems: 'center',
+													backgroundColor: neutralColor,
+													height: '100%',
+													color: 'white'
+												}}
+											>
+												{props.brandProfileCreating ? (
+													'Saving...'
+												) : (
+													<Message
+														showIcon
+														type='success'
+														title='Success'
+														description={
+															<p>
+																{isCreating
+																	? 'Your brand profile was succesfully created. Now you can '
+																	: 'Your brand profile was saved. Now you can '}
+																<Link to='/admin/engage/listBuilder'>
+																	{'go to the list builder '}
+																</Link>
+																or
+																<Link to='/admin/settings/brandProfiles'>
+																	{' view your brand profiles'}
+																</Link>
+															</p>
+														}
+													/>
+												)}
+											</div>
+										</div>
+									)}
+								</GridList>
+							</CardBody>
+							<CardFooter>
+								<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
+									{activeStep === steps.length ? null : (
+										<div>
+											<div>
+												<Button
+													disabled={activeStep === 0}
+													onClick={handleBack}
+													className={classes.backButton}
+												>
+													Back
+												</Button>
+												<Button
+													onClick={() => handleNext(values)}
+													disabled={!stepValidated(activeStep, errors, values)}
+													loading={props.brandProfileCreating}
+												>
+													{nextButtonLabel}
+												</Button>
+											</div>
+										</div>
+									)}
+								</div>
+							</CardFooter>
+						</Card>
+					</GridItem>
+				</GridContainer>
+			</div>
+		)
+	}
 }
 
-//TODO: update basic info in global state on user change. this should fix all of my problems
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
-		console.log('props from withFormik')
-		console.log(props)
 		let profileName = ''
 		let websiteUrl = ''
 		let twitterProfileUrl = ''
 		let industryVerticalId = ''
 		let competitors = []
 		if (props.basicInfo.brandName.length > 0) {
-			profileName = props.basicInfo.brandName.length
+			profileName = props.basicInfo.brandName
 		}
 		if (props.basicInfo.websiteUrl.length > 0) {
 			websiteUrl = props.basicInfo.websiteUrl
@@ -466,6 +547,8 @@ const FormikForm = withFormik({
 		}
 
 		return {
+			brandProfileId: props.basicInfo.brandProfileId,
+			accountId: props.currentAccountId,
 			basicInfoProfileName: profileName,
 			basicInfoWebsiteUrl: websiteUrl,
 			basicInfoTwitterProfile: twitterProfileUrl,
@@ -476,8 +559,25 @@ const FormikForm = withFormik({
 			categories: props.categories
 		}
 	},
+	handleSubmit: (values, { props, setSubmitting }) => {
+		let brandProfile = {
+			brandProfileId: values.brandProfileId,
+			accountId: values.accountId,
+			brandName: values.basicInfoProfileName,
+			websiteUrl: values.basicInfoWebsiteUrl,
+			industryVerticalId: values.basicInfoIndustryVerticalId,
+			twitterProfileUrl: values.basicInfoTwitterProfile,
+			topics: values.topics,
+			competitors: values.topCompetitors,
+			scenarios: values.scenarios,
+			categories: values.categories
+		}
+
+		props.saveBrandProfile(brandProfile)
+	},
 	enableReinitialize: true,
+	validateOnMount: true,
 	validationSchema: schemaValidation
-})(CreateBrandProfiles)
+})(CreateBrandProfile)
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)

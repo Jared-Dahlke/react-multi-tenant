@@ -47,13 +47,16 @@ import {
 	scenarios,
 	industryVerticals,
 	topics,
-	brandProfileSaved,
-	brandProfileSaving,
+	brandProfileCreated,
+	brandProfileCreating,
 	brandProfileDeleted,
 	brandProfileDeleting,
 	brandCategories,
 	brandProfileBasicInfo,
-	brandProfileCompetitors
+	brandProfileCompetitors,
+	brandProfileLoading,
+	brandProfileSaving,
+	brandProfileSaved
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
@@ -75,8 +78,8 @@ export default combineReducers({
 	userDeletedError,
 	usersIsLoading,
 	brandProfiles,
-	brandProfileSaved,
-	brandProfileSaving,
+	brandProfileCreated,
+	brandProfileCreating,
 	brandProfileDeleted,
 	brandProfileDeleting,
 	userAdded,
@@ -94,6 +97,7 @@ export default combineReducers({
 	editAccountAccountUsersLoading,
 	accountTypes,
 	brandProfilesIsLoading,
+	brandProfileLoading,
 	accountCreated,
 	hasBrandProfiles,
 	scenarios,
@@ -106,5 +110,7 @@ export default combineReducers({
 	channels,
 	videos,
 	accountSaving,
-	accountSaved
+	accountSaved,
+	brandProfileSaving,
+	brandProfileSaved
 })

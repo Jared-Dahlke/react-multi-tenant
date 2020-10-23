@@ -134,6 +134,26 @@ function Header(props) {
 			)
 		}
 
+		if (url === '/admin/settings/brandProfiles/edit') {
+			return (
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to='/admin/settings/brandProfiles'
+						style={{ fontSize: crumbSize }}
+					>
+						Brand Profiles
+					</Link>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Edit
+					</div>
+				</Breadcrumbs>
+			)
+		}
+
 		if (url === '/admin/settings/brandMentality') {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
@@ -223,10 +243,7 @@ function Header(props) {
 						) : null}
 
 						{!onlyMentality ? (
-							<Dropdown
-								title='Account Configuration'
-								icon={<Icon icon='sliders' />}
-							>
+							<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
 								<NavLink href='/admin/settings/account' label='Account' />
 								<NavLink href='/admin/settings/users' label='Users' />
 								<NavLink

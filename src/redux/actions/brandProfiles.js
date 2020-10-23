@@ -6,14 +6,17 @@ import {
 	HAS_BRAND_PROFILES,
 	SET_SCENARIOS,
 	SET_BRAND_INDUSTRY_VERTICALS,
-	BRAND_PROFILE_SAVED,
+	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
-	BRAND_PROFILE_SAVING,
+	BRAND_PROFILE_CREATING,
 	SET_BRAND_TOPICS,
 	SET_BRAND_CATEGORIES,
 	SET_BRAND_PROFILE_BASIC_INFO,
-	SET_BRAND_PROFILE_COMPETITORS
+	SET_BRAND_PROFILE_COMPETITORS,
+	SET_BRAND_PROFILE_LOADING,
+	SET_BRAND_PROFILE_SAVING,
+	SET_BRAND_PROFILE_SAVED
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -48,17 +51,39 @@ export function setBrandProfileCompetitors(brandProfileCompetitors) {
 export const createBrandProfile = (brandProfile) => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch) => {
-		dispatch(setBrandProfileSaving(true))
+		dispatch(setBrandProfileCreating(true))
 		dispatch(addBrandProfile(brandProfile))
 		axios
 			.post(url, brandProfile)
 			.then((response) => {
-				dispatch(setBrandProfileSaving(false))
-				dispatch(setBrandProfileSaved(true))
+				dispatch(setBrandProfileCreating(false))
+				dispatch(setBrandProfileCreated(true))
 			})
 			.catch((error) => {
 				//error
 			})
+	}
+}
+
+export const saveBrandProfile = (brandProfile) => {
+	let brandProfileId = brandProfile.brandProfileId
+	let url = apiBase + `/brand-profile/${brandProfileId}`
+	return async (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
+		try {
+			const result = await axios.patch(url, brandProfile)
+			if (result.status === 200) {
+				dispatch(setBrandProfileSaving(false))
+				dispatch(setBrandProfileSaved(true))
+				setTimeout(() => {
+					dispatch(setBrandProfileSaved(false))
+				}, 3000)
+				console.log('saved brand profile')
+				console.log(result)
+			}
+		} catch (error) {
+			alert(error)
+		}
 	}
 }
 
@@ -96,12 +121,11 @@ export const deleteBrandProfile = (brandProfileId) => {
 export function fetchBrandProfile(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return async (dispatch) => {
-		//dispatch(brandProfilesIsLoading(true))
+		dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				result.data.industryVerticalId = 47 //TODO: delete this line once API returns industryVerticalId
 				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
@@ -109,6 +133,7 @@ export function fetchBrandProfile(brandProfileId) {
 
 				dispatch(
 					setBrandProfileBasicInfo({
+						brandProfileId: result.data.brandProfileId,
 						twitterProfileUrl: result.data.twitterProfileUrl,
 						websiteUrl: result.data.websiteUrl,
 						brandName: result.data.brandName,
@@ -119,6 +144,7 @@ export function fetchBrandProfile(brandProfileId) {
 				dispatch(setScenarios(result.data.scenarios))
 				dispatch(setBrandCategories(result.data.categories))
 				dispatch(setBrandTopics(result.data.topics))
+				dispatch(setBrandProfileLoading(false))
 			}
 		} catch (error) {
 			alert(error)
@@ -151,6 +177,13 @@ export function fetchBrandProfiles(accountId) {
 	}
 }
 
+export function setBrandProfileLoading(bool) {
+	return {
+		type: SET_BRAND_PROFILE_LOADING,
+		brandProfileLoading: bool
+	}
+}
+
 export function brandProfilesIsLoading(bool) {
 	return {
 		type: BRAND_PROFILES_IS_LOADING,
@@ -158,16 +191,29 @@ export function brandProfilesIsLoading(bool) {
 	}
 }
 
+export function setBrandProfileSaving(bool) {
+	return {
+		type: SET_BRAND_PROFILE_SAVING,
+		brandProfileSaving: bool
+	}
+}
 export function setBrandProfileSaved(bool) {
 	return {
-		type: BRAND_PROFILE_SAVED,
+		type: SET_BRAND_PROFILE_SAVED,
 		brandProfileSaved: bool
 	}
 }
-export function setBrandProfileSaving(bool) {
+
+export function setBrandProfileCreated(bool) {
 	return {
-		type: BRAND_PROFILE_SAVING,
-		brandProfileSaving: bool
+		type: BRAND_PROFILE_CREATED,
+		brandProfileCreated: bool
+	}
+}
+export function setBrandProfileCreating(bool) {
+	return {
+		type: BRAND_PROFILE_CREATING,
+		brandProfileCreating: bool
 	}
 }
 export function setBrandProfileDeleted(bool) {
@@ -204,12 +250,12 @@ function addDefaultResponseIdToScenarios(scenarios) {
 }
 
 export function fetchBrandScenarios() {
-	let url = apiBase + `/brand-profile/scenarios/properties`
+	let url = apiBase + `/brand-profile/scenario`
 	return async (dispatch) => {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
-				let scenarios = result.data.scenario
+				let scenarios = result.data
 				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
 				dispatch(setScenarios(scenarios))
 			}

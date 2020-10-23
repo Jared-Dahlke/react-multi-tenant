@@ -12,6 +12,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
+import { useHistory } from 'react-router-dom'
 import {
 	fetchBrandProfiles,
 	fetchBrandProfile,
@@ -66,8 +67,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function BrandProfiles(props) {
-	console.log('brand profiles props')
-	console.log(props)
+	let history = useHistory()
 	let fetchBrandScenarios = props.fetchBrandScenarios
 	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
 	let fetchBrandTopics = props.fetchBrandTopics
@@ -75,7 +75,6 @@ function BrandProfiles(props) {
 	let setBrandProfileBasicInfo = props.setBrandProfileBasicInfo
 	let setBrandProfileCompetitors = props.setBrandProfileCompetitors
 	React.useEffect(() => {
-		console.log('inside brand profile useEffect')
 		fetchBrandScenarios()
 		fetchBrandIndustryVerticals()
 		fetchBrandTopics()
@@ -115,9 +114,10 @@ function BrandProfiles(props) {
 	}
 
 	const handleEditBrandProfileClick = (profile) => {
-		console.log(profile)
 		let brandProfileId = profile.brandProfileId
 		props.fetchBrandProfile(brandProfileId)
+		let url = `/admin/settings/brandProfiles/edit`
+		history.push(url)
 	}
 
 	return (
@@ -253,9 +253,6 @@ function BrandProfiles(props) {
 						</Link>
 					</div>
 				)}
-				<pre style={{ color: 'white' }}>
-					scen: {JSON.stringify(props.scenarios)}
-				</pre>
 			</GridItem>
 		</Grid>
 	)

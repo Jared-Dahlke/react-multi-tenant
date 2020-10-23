@@ -7,13 +7,16 @@ import {
 	SET_BRAND_INDUSTRY_VERTICALS,
 	SET_BRAND_TOPICS,
 	SET_BRAND_CATEGORIES,
-	BRAND_PROFILE_SAVED,
-	BRAND_PROFILE_SAVING,
+	BRAND_PROFILE_CREATED,
+	BRAND_PROFILE_CREATING,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	SET_BRAND_PROFILE_BASIC_INFO,
 	SET_BRAND_PROFILE_COMPETITORS,
-	SET_BRAND_PROFILES
+	SET_BRAND_PROFILES,
+	SET_BRAND_PROFILE_LOADING,
+	SET_BRAND_PROFILE_SAVING,
+	SET_BRAND_PROFILE_SAVED
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -48,20 +51,45 @@ export function brandProfilesIsLoading(state = true, action) {
 			return state
 	}
 }
-
+export function brandProfileSaving(state = false, action) {
+	switch (action.type) {
+		case SET_BRAND_PROFILE_SAVING:
+			return action.brandProfileSaving
+		default:
+			return state
+	}
+}
 export function brandProfileSaved(state = false, action) {
 	switch (action.type) {
-		case BRAND_PROFILE_SAVED:
+		case SET_BRAND_PROFILE_SAVED:
 			return action.brandProfileSaved
 		default:
 			return state
 	}
 }
 
-export function brandProfileSaving(state = false, action) {
+export function brandProfileCreated(state = false, action) {
 	switch (action.type) {
-		case BRAND_PROFILE_SAVING:
-			return action.brandProfileSaving
+		case BRAND_PROFILE_CREATED:
+			return action.brandProfileCreated
+		default:
+			return state
+	}
+}
+
+export function brandProfileCreating(state = false, action) {
+	switch (action.type) {
+		case BRAND_PROFILE_CREATING:
+			return action.brandProfileCreating
+		default:
+			return state
+	}
+}
+
+export function brandProfileLoading(state = false, action) {
+	switch (action.type) {
+		case SET_BRAND_PROFILE_LOADING:
+			return action.brandProfileLoading
 		default:
 			return state
 	}
