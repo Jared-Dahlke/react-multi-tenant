@@ -2,6 +2,10 @@
 	"name": "content-intelligence",
 	"version": "0.1.0",
 	"private": true,
+	"engines": {
+		"node": "12.13.1",
+		"npm": "6.12.1"
+	},
 	"dependencies": {
 		"@material-ui/core": "4.11.0",
 		"@material-ui/icons": "4.9.1",
@@ -53,7 +57,7 @@
 	"scripts": {
 		"analyze": "source-map-explorer 'build/static/js/*.js'",
 		"build-demo": "cross-env REACT_APP_STAGE=demo react-app-rewired build",
-		"build-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired build --force",
+		"build-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired build",
 		"build-production": "cross-env REACT_APP_STAGE=production react-app-rewired build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
