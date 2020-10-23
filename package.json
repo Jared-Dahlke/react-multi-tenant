@@ -53,7 +53,7 @@
 	"scripts": {
 		"analyze": "source-map-explorer 'build/static/js/*.js'",
 		"build-demo": "cross-env REACT_APP_STAGE=demo react-app-rewired build",
-		"build-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired build",
+		"build-staging": "cross-env REACT_APP_STAGE=staging react-app-rewired build --force",
 		"build-production": "cross-env REACT_APP_STAGE=production react-app-rewired build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
@@ -99,6 +99,6 @@
 		]
 	},
 	"devDependencies": {
-		"cross-env": "^7.0.2"
+		"cross-env": "7.0.2"
 	}
 }
