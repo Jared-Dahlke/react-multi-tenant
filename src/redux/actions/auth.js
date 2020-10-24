@@ -5,7 +5,8 @@ import {
 	SET_USER_ID,
 	SET_ALERT,
 	USER_PROFILE_IS_LOADING,
-	SET_LOGGING_IN
+	SET_LOGGING_IN,
+	SET_UPDATING_PASSWORD
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
@@ -183,14 +184,22 @@ export function resetPassword(email) {
 	}
 }
 
+export function setUpdatingPassword(bool) {
+	return {
+		type: SET_UPDATING_PASSWORD,
+		updatingPassword: bool
+	}
+}
+
 export function changePassword(password, userId, token) {
 	let url = `${apiBase}/update-password/${userId}/${token}`
 	return async (dispatch) => {
+		dispatch(setUpdatingPassword(true))
 		try {
 			const result = await axios.post(url, {
 				password: password
 			})
-
+			dispatch(setUpdatingPassword(false))
 			if (result.status === 200) {
 				dispatch(
 					setAlert({
@@ -203,7 +212,7 @@ export function changePassword(password, userId, token) {
 				setTimeout(() => {
 					dispatch(setAlert({ show: false }))
 					window.location.href = '/login'
-				}, 5000)
+				}, 2000)
 			} else {
 				dispatch(
 					setAlert({
@@ -214,10 +223,12 @@ export function changePassword(password, userId, token) {
 				)
 			}
 		} catch (error) {
+			dispatch(setUpdatingPassword(false))
 			dispatch(
 				setAlert({
 					show: true,
-					message: error.response.data.message,
+					message:
+						'An error ocurred while updating your password. Please try again later.',
 					severity: 'error'
 				})
 			)

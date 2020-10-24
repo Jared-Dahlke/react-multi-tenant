@@ -7,7 +7,11 @@ import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import { connect } from 'react-redux'
-import { createUser, setUserAdded } from '../../redux/actions/users'
+import {
+	createUser,
+	setUserAdded,
+	setUserAddError
+} from '../../redux/actions/users'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
@@ -47,14 +51,16 @@ const mapStateToProps = (state) => {
 		accounts: state.accounts,
 		currentAccountId: state.currentAccountId,
 		userAdded: state.userAdded,
-		userAdding: state.userAdding
+		userAdding: state.userAdding,
+		userAddError: state.userAddError
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addNewUser: (user) => dispatch(createUser(user)),
-		setUserAdded: (bool) => dispatch(setUserAdded(bool))
+		setUserAdded: (bool) => dispatch(setUserAdded(bool)),
+		setUserAddError: (bool) => dispatch(setUserAddError(bool))
 	}
 }
 
@@ -193,6 +199,21 @@ function CreateUser(props) {
 						<Alert onClose={() => props.setUserAdded(false)} severity='success'>
 							User invite sent
 						</Alert>
+					</Snackbar>
+
+					<Snackbar
+						autoHideDuration={2000}
+						place='bc'
+						open={props.userAddError}
+						onClose={() => props.setUserAddError(false)}
+					>
+						<Alert
+							onClose={() => props.setUserAddError(false)}
+							severity='error'
+						>
+							Error inviting user.
+						</Alert>
+						{/**TODO: this message can be more descriptive once api returns a better error response: https://sightly.atlassian.net/browse/EN-4452 */}
 					</Snackbar>
 				</div>
 			)}

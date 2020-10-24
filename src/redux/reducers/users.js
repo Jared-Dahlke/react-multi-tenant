@@ -13,7 +13,8 @@ import {
 	USER_PROFILE_SAVING,
 	USER_ADDING,
 	USER_EDIT_SAVING,
-	USER_EDIT_SAVED
+	USER_EDIT_SAVED,
+	SET_USER_ADD_ERROR
 } from '../action-types/users'
 
 export function usersHasErrored(state = false, action) {
@@ -73,6 +74,15 @@ export function userAdded(state = false, action) {
 	switch (action.type) {
 		case USER_ADDED:
 			return action.userAdded
+		default:
+			return state
+	}
+}
+
+export function userAddError(state = false, action) {
+	switch (action.type) {
+		case SET_USER_ADD_ERROR:
+			return action.userAddError
 		default:
 			return state
 	}

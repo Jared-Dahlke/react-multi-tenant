@@ -13,7 +13,8 @@ import {
 	alert,
 	user,
 	userProfileIsLoading,
-	loggingIn
+	loggingIn,
+	updatingPassword
 } from './auth'
 import {
 	users,
@@ -27,7 +28,8 @@ import {
 	userProfileSaving,
 	userProfileSaved,
 	userEditSaving,
-	userEditSaved
+	userEditSaved,
+	userAddError
 } from './users'
 import {
 	accounts,
@@ -112,5 +114,7 @@ export default combineReducers({
 	accountSaving,
 	accountSaved,
 	brandProfileSaving,
-	brandProfileSaved
+	brandProfileSaved,
+	userAddError,
+	updatingPassword
 })
