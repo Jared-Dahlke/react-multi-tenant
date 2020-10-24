@@ -24,7 +24,8 @@ import CustomPasswordMatchChecker from '../components/CustomPasswordRequirements
 const mapStateToProps = (state) => {
 	return {
 		isLoggedIn: state.isLoggedIn,
-		alert: state.alert
+		alert: state.alert,
+		updatingPassword: state.updatingPassword
 	}
 }
 
@@ -152,12 +153,12 @@ function PasswordChange(props) {
 
 						<Button
 							color='primary'
-							disabled={!passwordIsValid()}
+							disabled={!passwordIsValid() || props.updatingPassword}
 							onClick={postChangePassword}
 							fullWidth={true}
 							style={{ marginTop: '10px' }}
 						>
-							Change Password
+							{props.updatingPassword ? 'Updating...' : 'Change Password'}
 						</Button>
 
 						<Snackbar

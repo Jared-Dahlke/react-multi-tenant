@@ -13,7 +13,8 @@ import {
 	USER_PROFILE_SAVING,
 	USER_ADDING,
 	USER_EDIT_SAVED,
-	USER_EDIT_SAVING
+	USER_EDIT_SAVING,
+	SET_USER_ADD_ERROR
 } from '../action-types/users'
 import { SET_ALERT } from '../action-types/auth'
 import axios from '../../axiosConfig'
@@ -81,6 +82,13 @@ export function setUserAdding(bool) {
 	return {
 		type: USER_ADDING,
 		userAdding: bool
+	}
+}
+
+export function setUserAddError(bool) {
+	return {
+		type: SET_USER_ADD_ERROR,
+		userAddError: bool
 	}
 }
 
@@ -278,19 +286,26 @@ export const createUser = (user) => {
 	delete user.internal
 
 	let url = apiBase + `/user/invite`
-	return (dispatch) => {
+	return async (dispatch) => {
 		dispatch(setUserAdding(true))
 		dispatch(usersAddUser(userCopy))
-		axios
-			.post(url, user)
-			.then((response) => {
-				dispatch(setUserAdding(false))
-				dispatch(setUserAdded(true))
-			})
-			.catch((error) => {
-				console.log('invite user error')
-				console.log(error)
-			})
+		let response = ''
+		try {
+			response = await axios.post(url, user)
+		} catch (error) {
+			console.log('inside catch')
+			console.log(error)
+		}
+		console.log(response)
+
+		if (response.status === 200) {
+			dispatch(setUserAdded(true))
+		} else {
+			console.log('invite user status not 200')
+			console.log(JSON.stringify(response))
+			dispatch(setUserAddError(true))
+		}
+		dispatch(setUserAdding(false))
 	}
 }
 
@@ -304,43 +319,5 @@ export const linkRoleToUser = (userId, roleId) => {
 				console.log('link role to user error')
 				console.log(error)
 			})
-	}
-}
-
-export function updatePassword(userId, oldPassword, password) {
-	let url = `${apiBase}/user/${userId}/update-password`
-	return async (dispatch) => {
-		try {
-			const result = await axios.post(url, {
-				password: password,
-				oldPassword: oldPassword
-			})
-
-			if (result.status === 200) {
-				dispatch(
-					setAlert({
-						show: true,
-						message: 'Password has been updated.',
-						severity: 'success'
-					})
-				)
-			} else {
-				dispatch(
-					setAlert({
-						show: true,
-						message: result.response.data.Error,
-						severity: 'error'
-					})
-				)
-			}
-		} catch (error) {
-			dispatch(
-				setAlert({
-					show: true,
-					message: error.response.data.message,
-					severity: 'error'
-				})
-			)
-		}
 	}
 }

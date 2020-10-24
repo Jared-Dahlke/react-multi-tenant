@@ -14,11 +14,7 @@ import * as Yup from 'yup'
 // Redux
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
-import {
-	updateUserData,
-	updatePassword,
-	userProfileSaved
-} from '../../redux/actions/users.js'
+import { updateUserData, userProfileSaved } from '../../redux/actions/users.js'
 import { FormLoader } from '../../components/SkeletonLoader'
 
 const mapStateToProps = (state) => {
@@ -35,8 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchUserProfile: () => dispatch(userProfileFetchData()),
 		updateUserData: (userData) => dispatch(updateUserData(userData)),
-		updatePassword: (userId, oldPassword, newPassword) =>
-			dispatch(updatePassword(userId, oldPassword, newPassword)),
+
 		setUserProfileSaved: (bool) => dispatch(userProfileSaved(bool))
 	}
 }
