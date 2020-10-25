@@ -84,15 +84,6 @@ export function editAccountAccountUsersLoading(state = true, action) {
 	}
 }
 
-export function treeAccounts(state = [], action) {
-	switch (action.type) {
-		case TREE_ACCOUNTS_CONVERT_DATA_SUCCESS:
-			return action.treeAccounts
-		default:
-			return state
-	}
-}
-
 export function currentAccountId(state = '', action) {
 	switch (action.type) {
 		case SET_CURRENT_ACCOUNT_ID:
