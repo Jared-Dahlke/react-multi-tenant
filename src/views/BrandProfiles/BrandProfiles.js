@@ -114,8 +114,8 @@ function BrandProfiles(props) {
 	}
 
 	const handleEditBrandProfileClick = (profile) => {
-		let brandProfileId = profile.brandProfileId
-		props.fetchBrandProfile(brandProfileId)
+		//let brandProfileId = profile.brandProfileId
+
 		let url = `/admin/settings/brandProfiles/edit`
 		history.push(url)
 	}
@@ -191,6 +191,9 @@ function BrandProfiles(props) {
 														aria-label='Edit'
 														className={classes.tableActionButton}
 														onClick={() => handleEditBrandProfileClick(profile)}
+														onMouseEnter={() =>
+															props.fetchBrandProfile(profile.brandProfileId)
+														}
 													>
 														<Edit
 															className={

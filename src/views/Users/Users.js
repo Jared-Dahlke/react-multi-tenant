@@ -196,6 +196,9 @@ function Users(props) {
 														title='Edit User'
 														placement='top'
 														classes={{ tooltip: classes.tooltip }}
+														onMouseEnter={() =>
+															props.fetchUserAccounts(user.userId)
+														}
 													>
 														<IconButton
 															aria-label='Edit'
