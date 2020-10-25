@@ -70,6 +70,19 @@ export const saveBrandProfile = (brandProfile) => {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
+		dispatch(setBrandCategories(brandProfile.categories))
+		dispatch(setBrandTopics(brandProfile.topics))
+		dispatch(setScenarios(brandProfile.scenarios))
+		dispatch(
+			setBrandProfileBasicInfo({
+				brandProfileId: brandProfile.brandProfileId,
+				twitterProfileUrl: brandProfile.twitterProfileUrl,
+				websiteUrl: brandProfile.websiteUrl,
+				brandName: brandProfile.brandName,
+				industryVerticalId: brandProfile.industryVerticalId
+			})
+		)
+		dispatch(setBrandProfileCompetitors(brandProfile.competitors))
 		try {
 			const result = await axios.patch(url, brandProfile)
 			if (result.status === 200) {
@@ -78,8 +91,6 @@ export const saveBrandProfile = (brandProfile) => {
 				setTimeout(() => {
 					dispatch(setBrandProfileSaved(false))
 				}, 3000)
-				console.log('saved brand profile')
-				console.log(result)
 			}
 		} catch (error) {
 			alert(error)

@@ -4,6 +4,8 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
+import List from 'rsuite/lib/List'
+import Grid from '@material-ui/core/Grid'
 
 function setTopicAction(topicId, value, topics) {
 	for (const topic of topics) {
@@ -21,7 +23,7 @@ function markAllChildren(topic, value) {
 }
 
 function markSelected(topicId, value, topic) {
-	if (topic.topicId === topicId) {
+	if (topic.topicId == topicId) {
 		topic.topicResponseId = value
 		if (topic.children && topic.children.length > 0)
 			markAllChildren(topic, value)
@@ -46,7 +48,9 @@ const Node = (props) => {
 
 	return (
 		<div style={{ display: 'flex', width: '700px' }}>
-			<div style={{ flex: 1 }}>{nodeProps.topicName}</div>
+			<div style={{ flex: 1 }}>
+				{nodeProps.topicName} {' ' + nodeProps.topicResponseId}
+			</div>
 			<div style={{ flex: 1 }}>
 				<ButtonGroup size='xs'>
 					<Button
@@ -107,6 +111,7 @@ export default function Topics(props) {
 							{props.errors.topics}
 						</FormHelperText>
 					) : null}
+
 					<CheckTreePicker
 						data={props.formikValues.topics}
 						style={{
