@@ -15,7 +15,7 @@ import {
 } from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
-import { useFormikContext, withFormik } from 'formik'
+import { Form, withFormik } from 'formik'
 import * as Yup from 'yup'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
@@ -33,6 +33,7 @@ import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { Debug } from '../Debug'
 import debounce from 'just-debounce-it'
+const { isEqual } = require('lodash')
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -181,8 +182,10 @@ function getSteps() {
 
 function getTopicValues(topics) {
 	let tab = []
+
 	for (const topic of topics) {
 		tab.push(topic.topicId)
+
 		if (topic.children && topic.children.length > 0) {
 			tab = tab.concat(getTopicValues(topic.children))
 		}
@@ -190,23 +193,20 @@ function getTopicValues(topics) {
 	return tab
 }
 
-const AutoSave = ({ debounceMs }) => {
-	const formik = useFormikContext()
-	const debouncedSubmit = React.useCallback(
-		debounce(
-			() => formik.submitForm().then(() => console.log('saved')),
-			debounceMs
-		),
-		[debounceMs, formik.submitForm]
-	)
+/*function getSelectedTopics(topics) {
+	let tab = []
 
-	React.useEffect(() => {
-		if (formik.values !== formik.initialValues && formik.dirty)
-			debouncedSubmit()
-	}, [debouncedSubmit, formik.values])
+	for (const topic of topics) {
+		if (topic.topicResponseId != 3) {
+			tab.push(topic)
+		}
 
-	return null
-}
+		if (topic.children && topic.children.length > 0) {
+			tab = tab.concat(getSelectedTopics(topic.children))
+		}
+	}
+	return tab
+} */
 
 function CreateBrandProfile(props) {
 	let isCreating = window.location.pathname.includes('/create')
@@ -261,7 +261,7 @@ function CreateBrandProfile(props) {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
 
-	const isValid = (errors, formName) => {
+	const customIsValid = (errors, formName) => {
 		for (var prop in errors) {
 			if (Object.prototype.hasOwnProperty.call(errors, prop)) {
 				if (prop.includes(formName)) {
@@ -274,20 +274,24 @@ function CreateBrandProfile(props) {
 
 	const stepValidated = (index, errors, values) => {
 		if (!errors || errors.length < 1) {
+			return true
 		}
 		if (index === 0) {
-			return isValid(errors, 'basicInfo')
+			return customIsValid(errors, 'basicInfo')
 		}
 		if (index === 1) {
-			return isValid(errors, 'scenarios') && isValid(errors, 'categories')
+			return (
+				customIsValid(errors, 'scenarios') &&
+				customIsValid(errors, 'categories')
+			)
 		}
 
 		if (index === 2) {
-			return isValid(errors, 'topCompetitors')
+			return customIsValid(errors, 'topCompetitors')
 		}
 
 		if (index === 3) {
-			return isValid(errors, 'topics')
+			return customIsValid(errors, 'topics')
 		}
 		return true
 	}
@@ -295,6 +299,11 @@ function CreateBrandProfile(props) {
 	const allTopicValues = React.useMemo(() => {
 		return getTopicValues(props.topics)
 	}, [props.topics])
+
+	//const selectedTopics = React.useMemo(() => {
+	//	console.log('selected')
+	//	return getSelectedTopics(props.values.topics)
+	//}, [props.values.topics])
 
 	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
 	const updateEpandedTopicKeys = (expandedKeys) => {
@@ -331,8 +340,7 @@ function CreateBrandProfile(props) {
 		touched,
 		setFieldValue,
 		setFieldTouched,
-		//	isValid,
-		isValidating,
+		isValid,
 		dirty
 	} = props
 
@@ -354,11 +362,7 @@ function CreateBrandProfile(props) {
 		)
 	} else {
 		return (
-			<div>
-				{isCreating ? null : (
-					<AutoSave debounceMs={600} isCreating={isCreating} />
-				)}
-
+			<Form>
 				<Stepper
 					classes={{ root: classes.stepper }}
 					activeStep={activeStep}
@@ -387,22 +391,6 @@ function CreateBrandProfile(props) {
 
 				<GridContainer justify='center'>
 					<GridItem xs={12} sm={12} md={11} style={{ position: 'relative' }}>
-						<div
-							style={{
-								position: 'absolute',
-								left: 0,
-								top: 0,
-								paddingLeft: 15,
-								color: successColor[0],
-								fontSize: '16px'
-							}}
-						>
-							{props.brandProfileSaving
-								? 'Saving ...'
-								: props.brandProfileSaved
-								? 'Saved'
-								: ''}
-						</div>
 						<Card style={{ backgroundColor: neutralColor, display: 'flex' }}>
 							<CardBody>
 								<GridList
@@ -445,6 +433,7 @@ function CreateBrandProfile(props) {
 											<Topics
 												formikValues={values}
 												allValues={allTopicValues}
+												//selectedTopics={selectedTopics}
 												updateExpandedKeys={updateEpandedTopicKeys}
 												expandedTopicKeys={expandedTopicKeys}
 												setFieldValue={setFieldValue}
@@ -492,6 +481,17 @@ function CreateBrandProfile(props) {
 								</GridList>
 							</CardBody>
 							<CardFooter>
+								{!isCreating && (
+									<div style={{ position: 'fixed', bottom: 30, left: 70 }}>
+										<Button
+											loading={props.brandProfileSaving}
+											type='submit'
+											disabled={!dirty || !isValid}
+										>
+											Save
+										</Button>
+									</div>
+								)}
 								<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
 									{activeStep === steps.length ? null : (
 										<div>
@@ -518,7 +518,7 @@ function CreateBrandProfile(props) {
 						</Card>
 					</GridItem>
 				</GridContainer>
-			</div>
+			</Form>
 		)
 	}
 }
@@ -559,7 +559,7 @@ const FormikForm = withFormik({
 			categories: props.categories
 		}
 	},
-	handleSubmit: (values, { props, setSubmitting }) => {
+	handleSubmit: (values, { props, setSubmitting, resetForm }) => {
 		let brandProfile = {
 			brandProfileId: values.brandProfileId,
 			accountId: values.accountId,
@@ -574,8 +574,10 @@ const FormikForm = withFormik({
 		}
 
 		props.saveBrandProfile(brandProfile)
+		resetForm(values)
 	},
 	enableReinitialize: true,
+	validateOnChange: true,
 	validateOnMount: true,
 	validationSchema: schemaValidation
 })(CreateBrandProfile)

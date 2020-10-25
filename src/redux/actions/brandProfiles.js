@@ -70,6 +70,19 @@ export const saveBrandProfile = (brandProfile) => {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
+		dispatch(setBrandCategories(brandProfile.categories))
+		dispatch(setBrandTopics(brandProfile.topics))
+		dispatch(setScenarios(brandProfile.scenarios))
+		dispatch(
+			setBrandProfileBasicInfo({
+				brandProfileId: brandProfile.brandProfileId,
+				twitterProfileUrl: brandProfile.twitterProfileUrl,
+				websiteUrl: brandProfile.websiteUrl,
+				brandName: brandProfile.brandName,
+				industryVerticalId: brandProfile.industryVerticalId
+			})
+		)
+		dispatch(setBrandProfileCompetitors(brandProfile.competitors))
 		try {
 			const result = await axios.patch(url, brandProfile)
 			if (result.status === 200) {
@@ -78,8 +91,6 @@ export const saveBrandProfile = (brandProfile) => {
 				setTimeout(() => {
 					dispatch(setBrandProfileSaved(false))
 				}, 3000)
-				console.log('saved brand profile')
-				console.log(result)
 			}
 		} catch (error) {
 			alert(error)
@@ -117,6 +128,24 @@ export const deleteBrandProfile = (brandProfileId) => {
 			})
 	}
 }
+
+/*export function fetchBrandProfilesInformation() { // use this to 'prefetch' all users brand profiles info
+	return async (dispatch, getState) => {
+		let brandProfilesCopy = JSON.parse(JSON.stringify(getState().brandProfiles))
+		for (const [index, brandProfile] of brandProfilesCopy.entries()) {
+			let url = apiBase + `/brand-profile/${brandProfile.brandProfileId}`
+			try {
+				const result = await axios.get(url)
+				if (result.status === 200) {
+					brandProfilesCopy[index] = result.data
+					dispatch(setBrandProfiles(brandProfilesCopy))
+				}
+			} catch (error) {
+				alert(error)
+			}
+		}
+	}
+}*/
 
 export function fetchBrandProfile(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
@@ -158,7 +187,6 @@ export function fetchBrandProfiles(accountId) {
 		dispatch(brandProfilesIsLoading(true))
 		try {
 			const result = await axios.get(url)
-
 			if (result.status === 200) {
 				let brandProfiles = result.data
 				if (brandProfiles.length < 1) {
@@ -169,6 +197,7 @@ export function fetchBrandProfiles(accountId) {
 					alert("Could not validate account's brand profiles data")
 				})
 				dispatch(setBrandProfiles(brandProfiles))
+				//dispatch(fetchBrandProfilesInformation())
 				dispatch(brandProfilesIsLoading(false))
 			}
 		} catch (error) {

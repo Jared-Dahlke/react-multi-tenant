@@ -2,7 +2,6 @@ import {
 	SET_ACCOUNTS,
 	SET_CURRENT_ACCOUNT_ID,
 	SET_CURRENT_ACCOUNT,
-	TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
 	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
 	ACCOUNTS_SET_ACCOUNT_USERS,
 	SET_ACCOUNT_TYPES,
@@ -39,7 +38,6 @@ import {
 } from '../actions/brandProfiles'
 import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
-import { accountSaving } from '../reducers/accounts'
 
 const apiBase = config.apiGateway.URL
 
@@ -61,13 +59,6 @@ export function accountsUpdateAccount(account) {
 	return {
 		type: ACCOUNTS_UPDATE_ACCOUNT,
 		account
-	}
-}
-
-export function treeAccountsConvertDataSuccess(treeAccounts) {
-	return {
-		type: TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
-		treeAccounts
 	}
 }
 
@@ -179,25 +170,6 @@ export function clearSiteData() {
 	}
 }
 
-function convertToTree(accountsdata) {
-	let accounts = accountsdata.data
-	if (accounts.length === 1) return accounts
-
-	let ta = [
-		{
-			accountId: 0,
-			accountName: 'You',
-			accountTypeName: 'You',
-			children: []
-		}
-	]
-	for (const account of accounts) {
-		ta[0].children.push(account)
-	}
-
-	return ta
-}
-
 export function fetchSiteData(accountId) {
 	return async (dispatch) => {
 		try {
@@ -216,10 +188,6 @@ export function fetchSiteData(accountId) {
 			}
 
 			dispatch(setAccounts(accounts))
-
-			let accountsCopy = JSON.parse(JSON.stringify(accounts))
-			let convertedAccounts = convertToTree(accountsCopy)
-			dispatch(treeAccountsConvertDataSuccess(convertedAccounts))
 
 			if (!accountId) {
 				let accountIdFromLocalStorage = localStorage.getItem('currentAccountId')
