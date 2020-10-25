@@ -34,7 +34,6 @@ import {
 import {
 	setBrandProfiles,
 	fetchBrandProfiles,
-	fetchBrandProfilesQueue,
 	brandProfilesIsLoading
 } from '../actions/brandProfiles'
 import { fetchCategories } from '../actions/discover/channels.js'
@@ -221,8 +220,7 @@ export function fetchSiteData(accountId) {
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData(accountId))
 			dispatch(rolesFetchData(accountId))
-			await dispatch(fetchBrandProfiles(accountId))
-			dispatch(fetchBrandProfilesQueue())
+			dispatch(fetchBrandProfiles(accountId))
 			dispatch(isSwitchingAccounts(false))
 
 			dispatch(fetchCategories())

@@ -118,28 +118,23 @@ export const deleteBrandProfile = (brandProfileId) => {
 	}
 }
 
-export function fetchBrandProfilesQueue() {
+/*export function fetchBrandProfilesInformation() { // use this to 'prefetch' all users brand profiles info
 	return async (dispatch, getState) => {
-		console.log('insdie fetch rband profiles quee')
 		let brandProfilesCopy = JSON.parse(JSON.stringify(getState().brandProfiles))
-		for (const brandProfile of brandProfiles) {
+		for (const [index, brandProfile] of brandProfilesCopy.entries()) {
 			let url = apiBase + `/brand-profile/${brandProfile.brandProfileId}`
 			try {
 				const result = await axios.get(url)
 				if (result.status === 200) {
-					
-					dispatch(setBrandProfiles(newBrandProfiles))
-					console.log('result')
-					console.log(result)
-					//let brandProfiles = result.data
+					brandProfilesCopy[index] = result.data
+					dispatch(setBrandProfiles(brandProfilesCopy))
 				}
-				//dispatch(setBrandProfiles(brandProfiles))
 			} catch (error) {
 				alert(error)
 			}
 		}
 	}
-}
+}*/
 
 export function fetchBrandProfile(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
@@ -191,6 +186,7 @@ export function fetchBrandProfiles(accountId) {
 					alert("Could not validate account's brand profiles data")
 				})
 				dispatch(setBrandProfiles(brandProfiles))
+				//dispatch(fetchBrandProfilesInformation())
 				dispatch(brandProfilesIsLoading(false))
 			}
 		} catch (error) {
