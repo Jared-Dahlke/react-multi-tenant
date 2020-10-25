@@ -30,7 +30,6 @@
 		"just-debounce-it": "1.1.0",
 		"less": "3.12.2",
 		"less-loader": "7.0.2",
-		"lodash": "4.17.20",
 		"material-ui-search-bar": "1.0.0",
 		"node-uuid": "1.4.8",
 		"numeral": "2.0.6",
