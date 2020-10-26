@@ -34,7 +34,11 @@ import {
 import {
 	setBrandProfiles,
 	fetchBrandProfiles,
-	brandProfilesIsLoading
+	brandProfilesIsLoading,
+	fetchBrandScenarios,
+	fetchBrandCategories,
+	fetchBrandIndustryVerticals,
+	fetchBrandTopics
 } from '../actions/brandProfiles'
 import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
@@ -221,6 +225,15 @@ export function fetchSiteData(accountId) {
 			dispatch(rolesPermissionsFetchData(accountId))
 			dispatch(rolesFetchData(accountId))
 			dispatch(fetchBrandProfiles(accountId))
+
+			//
+
+			dispatch(fetchBrandScenarios())
+			dispatch(fetchBrandIndustryVerticals())
+			dispatch(fetchBrandTopics())
+			dispatch(fetchBrandCategories())
+
+			//
 			dispatch(isSwitchingAccounts(false))
 
 			dispatch(fetchCategories())

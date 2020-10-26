@@ -56,13 +56,23 @@ export default function CustomRadio(props) {
 					value={props.scenario.scenarioResponseId}
 				>
 					<FormControlLabel
-						value={1}
+						value={3}
 						control={
 							<Radio
 								classes={{ root: classes.radio, checked: classes.checked }}
 							/>
 						}
 						label='Target'
+						style={{ color: whiteColor }}
+					/>
+					<FormControlLabel
+						value={1}
+						control={
+							<Radio
+								classes={{ root: classes.radio, checked: classes.checked }}
+							/>
+						}
+						label='Block'
 						style={{ color: whiteColor }}
 					/>
 					<FormControlLabel
@@ -73,16 +83,6 @@ export default function CustomRadio(props) {
 							/>
 						}
 						label='Monitor'
-						style={{ color: whiteColor }}
-					/>
-					<FormControlLabel
-						value={3}
-						control={
-							<Radio
-								classes={{ root: classes.radio, checked: classes.checked }}
-							/>
-						}
-						label='Block'
 						style={{ color: whiteColor }}
 					/>
 				</RadioGroup>

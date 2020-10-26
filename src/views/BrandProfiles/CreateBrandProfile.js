@@ -82,6 +82,8 @@ const mapStateToProps = (state) => {
 	return {
 		industryVerticals: state.industryVerticals,
 		topics: state.topics,
+		categories: state.brandCategories,
+		scenarios: state.scenarios,
 		currentAccountId: state.currentAccountId,
 		brandProfileCreated: state.brandProfileCreated,
 		brandProfileCreating: state.brandProfileCreating,
@@ -273,7 +275,7 @@ function CreateBrandProfile(props) {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
 
-	const customIsValid = (errors, formName) => {
+	const customIsValid = (errors, touched, formName) => {
 		for (var prop in errors) {
 			if (Object.prototype.hasOwnProperty.call(errors, prop)) {
 				if (prop.includes(formName)) {
@@ -281,11 +283,12 @@ function CreateBrandProfile(props) {
 				}
 			}
 		}
+
 		return true
 	}
 
 	const stepValidated = (index, errors, values) => {
-		if (!errors || errors.length < 1) {
+		if (!errors) {
 			return true
 		}
 		if (index === 0) {
@@ -536,10 +539,33 @@ function CreateBrandProfile(props) {
 
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
+		console.log('map props to values')
 		console.log(props)
-		let currentBrandProfile = getCurrent(props.brandProfiles)
-		console.log('map prps')
-		console.log(currentBrandProfile)
+		let currentBrandProfile = JSON.parse(
+			JSON.stringify(getCurrent(props.brandProfiles))
+		)
+		if (
+			//	!currentBrandProfile ||
+			//	!currentBrandProfile.categories ||
+			!currentBrandProfile.categories
+		) {
+			currentBrandProfile.categories = props.categories
+		}
+		if (
+			//!currentBrandProfile ||
+			//!currentBrandProfile.scenarios ||
+			!currentBrandProfile.scenarios
+		) {
+			currentBrandProfile.scenarios = props.scenarios
+		}
+		if (
+			//!currentBrandProfile ||
+			//!currentBrandProfile.topics ||
+			!currentBrandProfile.topics
+		) {
+			currentBrandProfile.topics = props.topics
+		}
+
 		return {
 			brandProfileId: currentBrandProfile.brandProfileId,
 			accountId: props.currentAccountId,
