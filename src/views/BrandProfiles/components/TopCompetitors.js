@@ -58,12 +58,6 @@ export default function TopCompetitors(props) {
 		props.setFieldValue('topCompetitors', newComps)
 	}
 
-	const cleanCompetitorsForApi = (competitors) => {
-		for (const competitor of competitors) {
-			delete competitor.competitorId
-		}
-	}
-
 	const handleDeleteCompetitor = (competitorIdToDelete) => {
 		let newComps = [
 			...props.competitors.filter(

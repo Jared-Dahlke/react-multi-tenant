@@ -23,7 +23,9 @@ import {
 	fetchBrandTopics,
 	fetchBrandCategories,
 	setBrandProfileBasicInfo,
-	setBrandProfileCompetitors
+	setBrandProfileCompetitors,
+	setCurrentBrandProfile,
+	addBrandProfile
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
@@ -33,6 +35,7 @@ import Alert from '@material-ui/lab/Alert'
 import { Link } from 'react-router-dom'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
+import { brandProfileModel } from './Model'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -44,7 +47,9 @@ const mapStateToProps = (state) => {
 		currentAccountId: state.currentAccountId,
 		brandProfilesIsLoading: state.brandProfilesIsLoading,
 		brandProfileDeleted: state.brandProfileDeleted,
-		scenarios: state.scenarios
+		scenarios: state.scenarios,
+		categories: state.brandCategories,
+		topics: state.topics
 	}
 }
 
@@ -62,7 +67,10 @@ const mapDispatchToProps = (dispatch) => {
 		fetchBrandCategories: () => dispatch(fetchBrandCategories()),
 		setBrandProfileCompetitors: (arr) =>
 			dispatch(setBrandProfileCompetitors(arr)),
-		setBrandProfileBasicInfo: (obj) => dispatch(setBrandProfileBasicInfo(obj))
+		setBrandProfileBasicInfo: (obj) => dispatch(setBrandProfileBasicInfo(obj)),
+		setCurrentBrandProfile: (brandProfileId) =>
+			dispatch(setCurrentBrandProfile(brandProfileId)),
+		addBrandProfile: (brandProfile) => dispatch(addBrandProfile(brandProfile))
 	}
 }
 
@@ -115,8 +123,19 @@ function BrandProfiles(props) {
 
 	const handleEditBrandProfileClick = (profile) => {
 		//let brandProfileId = profile.brandProfileId
-
+		props.setCurrentBrandProfile(profile.brandProfileId)
 		let url = `/admin/settings/brandProfiles/edit`
+		history.push(url)
+	}
+
+	const handleCreateNewProfileClick = () => {
+		// create new brand profile in state and set it as current
+		brandProfileModel.scenarios = props.scenarios
+		brandProfileModel.topics = props.topics
+		brandProfileModel.categories = props.categories
+		props.addBrandProfile(brandProfileModel)
+		props.setCurrentBrandProfile(brandProfileModel.brandProfileId)
+		let url = `/admin/settings/brandProfiles/create`
 		history.push(url)
 	}
 
@@ -140,12 +159,10 @@ function BrandProfiles(props) {
 			<GridItem xs={12} sm={12} md={6}>
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
-						<Link
-							style={{ textDecoration: 'none', alignSelf: 'right' }}
-							to={'/admin/settings/brandProfiles/create'}
-						>
-							<Button color='primary'>Create New Profile</Button>
-						</Link>
+						<Button color='primary' onClick={handleCreateNewProfileClick}>
+							Create New Profile
+						</Button>
+
 						<Table className={classes.table}>
 							<TableHead className={tableClasses['primaryTableHeader']}>
 								<TableRow className={tableClasses.tableHeadRow}>
@@ -194,6 +211,11 @@ function BrandProfiles(props) {
 														onMouseEnter={() =>
 															props.fetchBrandProfile(profile.brandProfileId)
 														}
+														//disabled={
+														//	!profile.topics ||
+														//	!profile.categories ||
+														//	!profile.scenarios
+														//}
 													>
 														<Edit
 															className={
