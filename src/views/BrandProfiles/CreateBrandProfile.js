@@ -33,6 +33,7 @@ import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { Debug } from '../Debug'
 import debounce from 'just-debounce-it'
+import { brandProfileModel } from './Model'
 const { isEqual } = require('lodash')
 
 const useStyles = makeStyles((theme) => ({
@@ -78,18 +79,15 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
 	return {
-		currentAccountId: state.currentAccountId,
-		scenarios: state.scenarios,
 		industryVerticals: state.industryVerticals,
+		topics: state.topics,
+		currentAccountId: state.currentAccountId,
 		brandProfileCreated: state.brandProfileCreated,
 		brandProfileCreating: state.brandProfileCreating,
-		topics: state.topics,
-		categories: state.brandCategories,
-		basicInfo: state.brandProfileBasicInfo,
-		competitors: state.brandProfileCompetitors,
 		brandProfileLoading: state.brandProfileLoading,
 		brandProfileSaving: state.brandProfileSaving,
-		brandProfileSaved: state.brandProfileSaved
+		brandProfileSaved: state.brandProfileSaved,
+		brandProfiles: state.brandProfiles
 	}
 }
 
@@ -193,7 +191,8 @@ function getTopicValues(topics) {
 	return tab
 }
 
-/*function getSelectedTopics(topics) {
+function getSelectedTopics(topics) {
+	if (!topics || topics.length < 1) return []
 	let tab = []
 
 	for (const topic of topics) {
@@ -206,7 +205,7 @@ function getTopicValues(topics) {
 		}
 	}
 	return tab
-} */
+}
 
 function CreateBrandProfile(props) {
 	let isCreating = window.location.pathname.includes('/create')
@@ -300,10 +299,9 @@ function CreateBrandProfile(props) {
 		return getTopicValues(props.topics)
 	}, [props.topics])
 
-	//const selectedTopics = React.useMemo(() => {
-	//	console.log('selected')
-	//	return getSelectedTopics(props.values.topics)
-	//}, [props.values.topics])
+	const selectedTopics = React.useMemo(() => {
+		return getSelectedTopics(props.values.topics)
+	}, [props.values.topics])
 
 	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
 	const updateEpandedTopicKeys = (expandedKeys) => {
@@ -433,7 +431,7 @@ function CreateBrandProfile(props) {
 											<Topics
 												formikValues={values}
 												allValues={allTopicValues}
-												//selectedTopics={selectedTopics}
+												selectedTopics={selectedTopics}
 												updateExpandedKeys={updateEpandedTopicKeys}
 												expandedTopicKeys={expandedTopicKeys}
 												setFieldValue={setFieldValue}
@@ -523,40 +521,30 @@ function CreateBrandProfile(props) {
 	}
 }
 
+const getCurrent = (brandProfiles) => {
+	for (const brandProfile of brandProfiles) {
+		if (brandProfile.current) return brandProfile
+	}
+	return brandProfileModel
+}
+
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
-		let profileName = ''
-		let websiteUrl = ''
-		let twitterProfileUrl = ''
-		let industryVerticalId = ''
-		let competitors = []
-		if (props.basicInfo.brandName.length > 0) {
-			profileName = props.basicInfo.brandName
-		}
-		if (props.basicInfo.websiteUrl.length > 0) {
-			websiteUrl = props.basicInfo.websiteUrl
-		}
-		if (props.basicInfo.twitterProfileUrl.length > 0) {
-			twitterProfileUrl = props.basicInfo.twitterProfileUrl
-		}
-		if (!isNaN(props.basicInfo.industryVerticalId)) {
-			industryVerticalId = props.basicInfo.industryVerticalId
-		}
-		if (props.competitors.length > 0) {
-			competitors = props.competitors
-		}
-
+		console.log(props)
+		let currentBrandProfile = getCurrent(props.brandProfiles)
+		console.log('map prps')
+		console.log(currentBrandProfile)
 		return {
-			brandProfileId: props.basicInfo.brandProfileId,
+			brandProfileId: currentBrandProfile.brandProfileId,
 			accountId: props.currentAccountId,
-			basicInfoProfileName: profileName,
-			basicInfoWebsiteUrl: websiteUrl,
-			basicInfoTwitterProfile: twitterProfileUrl,
-			basicInfoIndustryVerticalId: industryVerticalId,
-			topCompetitors: competitors,
-			topics: props.topics,
-			scenarios: props.scenarios,
-			categories: props.categories
+			basicInfoProfileName: currentBrandProfile.brandName,
+			basicInfoWebsiteUrl: currentBrandProfile.websiteUrl,
+			basicInfoTwitterProfile: currentBrandProfile.twitterProfileUrl,
+			basicInfoIndustryVerticalId: currentBrandProfile.industryVerticalId,
+			topCompetitors: currentBrandProfile.competitors,
+			topics: currentBrandProfile.topics,
+			scenarios: currentBrandProfile.scenarios,
+			categories: currentBrandProfile.categories
 		}
 	},
 	handleSubmit: (values, { props, setSubmitting, resetForm }) => {
@@ -570,7 +558,8 @@ const FormikForm = withFormik({
 			topics: values.topics,
 			competitors: values.topCompetitors,
 			scenarios: values.scenarios,
-			categories: values.categories
+			categories: values.categories,
+			current: true
 		}
 
 		props.saveBrandProfile(brandProfile)

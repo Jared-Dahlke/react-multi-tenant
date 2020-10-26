@@ -16,13 +16,27 @@ import {
 	SET_BRAND_PROFILES,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
-	SET_BRAND_PROFILE_SAVED
+	SET_BRAND_PROFILE_SAVED,
+	SET_CURRENT_BRAND_PROFILE
 } from '../action-types/brandProfiles'
+//import configureStore from '../store/index'
+//const store = configureStore()
 
 export function brandProfiles(state = [], action) {
 	switch (action.type) {
 		case SET_BRAND_PROFILES:
 			return action.brandProfiles
+		case SET_CURRENT_BRAND_PROFILE:
+			let brandProfilesCopy = []
+			if (state && state.length > 0) {
+				brandProfilesCopy = JSON.parse(JSON.stringify(state))
+			}
+			for (const brandProfile of brandProfilesCopy) {
+				if (brandProfile.brandProfileId === action.brandProfileId) {
+					brandProfile.current = true
+				}
+			}
+			return brandProfilesCopy
 		case REMOVE_BRAND_PROFILE:
 			let newState = [
 				...state.filter(

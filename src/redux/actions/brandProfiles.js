@@ -16,7 +16,8 @@ import {
 	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
-	SET_BRAND_PROFILE_SAVED
+	SET_BRAND_PROFILE_SAVED,
+	SET_CURRENT_BRAND_PROFILE
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -49,8 +50,10 @@ export function setBrandProfileCompetitors(brandProfileCompetitors) {
 }
 
 export const createBrandProfile = (brandProfile) => {
+	delete brandProfile.brandProfileId
 	let url = apiBase + `/brand-profile`
 	return (dispatch) => {
+		dispatch(removeBrandProfile('placeholder'))
 		dispatch(setBrandProfileCreating(true))
 		dispatch(addBrandProfile(brandProfile))
 		axios
@@ -68,23 +71,21 @@ export const createBrandProfile = (brandProfile) => {
 export const saveBrandProfile = (brandProfile) => {
 	let brandProfileId = brandProfile.brandProfileId
 	let url = apiBase + `/brand-profile/${brandProfileId}`
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		dispatch(setBrandProfileSaving(true))
-		dispatch(setBrandCategories(brandProfile.categories))
-		dispatch(setBrandTopics(brandProfile.topics))
-		dispatch(setScenarios(brandProfile.scenarios))
-		dispatch(
-			setBrandProfileBasicInfo({
-				brandProfileId: brandProfile.brandProfileId,
-				twitterProfileUrl: brandProfile.twitterProfileUrl,
-				websiteUrl: brandProfile.websiteUrl,
-				brandName: brandProfile.brandName,
-				industryVerticalId: brandProfile.industryVerticalId
-			})
-		)
-		dispatch(setBrandProfileCompetitors(brandProfile.competitors))
+		let profilesCopy = JSON.parse(JSON.stringify(getState().brandProfiles))
+		for (const [index, brandProfileCopy] of profilesCopy.entries()) {
+			if (brandProfile.brandProfileId === brandProfileCopy.brandProfileId) {
+				profilesCopy[index] = brandProfile
+			}
+		}
+		console.log('about to set brand profiles')
+		console.log(profilesCopy)
+		dispatch(setBrandProfiles(profilesCopy))
 		try {
-			const result = await axios.patch(url, brandProfile)
+			let brandProfileCopy = JSON.parse(JSON.stringify(brandProfile))
+			delete brandProfileCopy.current
+			const result = await axios.patch(url, brandProfileCopy)
 			if (result.status === 200) {
 				dispatch(setBrandProfileSaving(false))
 				dispatch(setBrandProfileSaved(true))
@@ -112,6 +113,13 @@ export function removeBrandProfile(brandProfileId) {
 	}
 }
 
+export function setCurrentBrandProfile(brandProfileId) {
+	return {
+		type: SET_CURRENT_BRAND_PROFILE,
+		brandProfileId
+	}
+}
+
 export const deleteBrandProfile = (brandProfileId) => {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return (dispatch) => {
@@ -129,7 +137,8 @@ export const deleteBrandProfile = (brandProfileId) => {
 	}
 }
 
-/*export function fetchBrandProfilesInformation() { // use this to 'prefetch' all users brand profiles info
+export function fetchBrandProfilesInformation() {
+	// use this to 'prefetch' all users brand profiles info
 	return async (dispatch, getState) => {
 		let brandProfilesCopy = JSON.parse(JSON.stringify(getState().brandProfiles))
 		for (const [index, brandProfile] of brandProfilesCopy.entries()) {
@@ -145,11 +154,11 @@ export const deleteBrandProfile = (brandProfileId) => {
 			}
 		}
 	}
-}*/
+}
 
 export function fetchBrandProfile(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
@@ -160,19 +169,19 @@ export function fetchBrandProfile(brandProfileId) {
 					alert('Could not validate brand profile data')
 				})
 
-				dispatch(
-					setBrandProfileBasicInfo({
-						brandProfileId: result.data.brandProfileId,
-						twitterProfileUrl: result.data.twitterProfileUrl,
-						websiteUrl: result.data.websiteUrl,
-						brandName: result.data.brandName,
-						industryVerticalId: result.data.industryVerticalId
-					})
+				let currBrandProfiles = JSON.parse(
+					JSON.stringify(getState().brandProfiles)
 				)
-				dispatch(setBrandProfileCompetitors(result.data.competitors))
-				dispatch(setScenarios(result.data.scenarios))
-				dispatch(setBrandCategories(result.data.categories))
-				dispatch(setBrandTopics(result.data.topics))
+
+				for (const [index, p] of currBrandProfiles.entries()) {
+					if (p.brandProfileId === brandProfileId) {
+						currBrandProfiles[index] = result.data
+						if (p.current) {
+							currBrandProfiles[index].current = true
+						}
+					}
+				}
+				dispatch(setBrandProfiles(currBrandProfiles))
 				dispatch(setBrandProfileLoading(false))
 			}
 		} catch (error) {
