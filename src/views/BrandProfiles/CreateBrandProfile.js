@@ -204,7 +204,7 @@ function getSelectedTopics(topics) {
 	let tab = []
 
 	for (const topic of topics) {
-		if (topic.topicResponseId != 3 && !tab.includes(topic.topicId)) {
+		if (topic.topicResponseId != 3) {
 			tab.push(topic.topicId)
 		}
 
