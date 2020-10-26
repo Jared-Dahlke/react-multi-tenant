@@ -175,6 +175,8 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
+				console.log('ressul from fetch brand profile')
+				console.log(result.data)
 				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')

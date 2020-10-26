@@ -79,21 +79,6 @@ const mapDispatchToProps = (dispatch) => {
 
 function BrandProfiles(props) {
 	let history = useHistory()
-	let fetchBrandScenarios = props.fetchBrandScenarios
-	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
-	let fetchBrandTopics = props.fetchBrandTopics
-	let fetchBrandCategories = props.fetchBrandCategories
-	React.useEffect(() => {
-		fetchBrandScenarios()
-		fetchBrandIndustryVerticals()
-		fetchBrandTopics()
-		fetchBrandCategories()
-	}, [
-		fetchBrandScenarios,
-		fetchBrandIndustryVerticals,
-		fetchBrandTopics,
-		fetchBrandCategories
-	])
 
 	React.useEffect(() => {
 		return function cleanup() {
@@ -125,11 +110,13 @@ function BrandProfiles(props) {
 	}
 
 	const handleCreateNewProfileClick = () => {
+		console.log('create new click')
 		let brandProfile = JSON.parse(JSON.stringify(brandProfileModel))
 		brandProfile.scenarios = props.scenarios
 		brandProfile.topics = props.topics
 		brandProfile.categories = props.categories
-		brandProfile.industryVerticals = props.industryVerticals
+		console.log('adding:')
+		console.log(brandProfile)
 		props.addBrandProfile(brandProfile)
 		props.setCurrentBrandProfile(brandProfile.brandProfileId)
 		let url = `/admin/settings/brandProfiles/create`
@@ -259,12 +246,9 @@ function BrandProfiles(props) {
 							color: 'white'
 						}}
 					>
-						<Link
-							style={{ textDecoration: 'none', alignSelf: 'right' }}
-							to={'/admin/settings/brandProfiles/create'}
-						>
-							<Button color='primary'>Create New Profile</Button>
-						</Link>
+						<Button color='primary' onClick={handleCreateNewProfileClick}>
+							Create New Profile
+						</Button>
 					</div>
 				)}
 			</GridItem>
