@@ -205,14 +205,19 @@ function getSelectedTopics(topics) {
 
 	for (const topic of topics) {
 		if (topic.topicResponseId != 3) {
-			tab.push(topic)
+			tab.push(topic.topicId)
 		}
 
 		if (topic.children && topic.children.length > 0) {
 			tab = tab.concat(getSelectedTopics(topic.children))
 		}
 	}
-	return tab
+
+	return tab.filter(onlyUnique)
+}
+
+function onlyUnique(value, index, self) {
+	return self.indexOf(value) === index
 }
 
 function CreateBrandProfile(props) {
