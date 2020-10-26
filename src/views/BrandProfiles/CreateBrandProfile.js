@@ -34,6 +34,7 @@ import Message from 'rsuite/lib/Message'
 import { Debug } from '../Debug'
 import debounce from 'just-debounce-it'
 import { brandProfileModel } from './Model'
+import { useSelector } from 'react-redux'
 const { isEqual } = require('lodash')
 
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +90,13 @@ const mapStateToProps = (state) => {
 		brandProfileSaved: state.brandProfileSaved,
 		brandProfiles: state.brandProfiles
 	}
+}
+
+const getCurrent = (brandProfiles) => {
+	for (const brandProfile of brandProfiles) {
+		if (brandProfile.current) return brandProfile
+	}
+	return brandProfileModel
 }
 
 const schemaValidation = Yup.object().shape({
@@ -519,13 +527,6 @@ function CreateBrandProfile(props) {
 			</Form>
 		)
 	}
-}
-
-const getCurrent = (brandProfiles) => {
-	for (const brandProfile of brandProfiles) {
-		if (brandProfile.current) return brandProfile
-	}
-	return brandProfileModel
 }
 
 const FormikForm = withFormik({

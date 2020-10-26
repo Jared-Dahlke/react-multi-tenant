@@ -25,7 +25,8 @@ import {
 	setBrandProfileBasicInfo,
 	setBrandProfileCompetitors,
 	setCurrentBrandProfile,
-	addBrandProfile
+	addBrandProfile,
+	removeBrandProfile
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
@@ -58,6 +59,8 @@ const mapDispatchToProps = (dispatch) => {
 		fetchBrandProfiles: (accountId) => dispatch(fetchBrandProfiles(accountId)),
 		deleteBrandProfile: (brandProfileId) =>
 			dispatch(deleteBrandProfile(brandProfileId)),
+		removeBrandProfile: (brandProfileId) =>
+			dispatch(removeBrandProfile(brandProfileId)),
 		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
 		fetchBrandProfile: (brandProfileId) =>
 			dispatch(fetchBrandProfile(brandProfileId)),
@@ -80,36 +83,29 @@ function BrandProfiles(props) {
 	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
 	let fetchBrandTopics = props.fetchBrandTopics
 	let fetchBrandCategories = props.fetchBrandCategories
-	let setBrandProfileBasicInfo = props.setBrandProfileBasicInfo
-	let setBrandProfileCompetitors = props.setBrandProfileCompetitors
 	React.useEffect(() => {
 		fetchBrandScenarios()
 		fetchBrandIndustryVerticals()
 		fetchBrandTopics()
 		fetchBrandCategories()
-		setBrandProfileBasicInfo({
-			twitterProfileUrl: '',
-			websiteUrl: '',
-			brandName: '',
-			industryVerticalId: ''
-		})
-		setBrandProfileCompetitors([])
 	}, [
 		fetchBrandScenarios,
 		fetchBrandIndustryVerticals,
 		fetchBrandTopics,
 		fetchBrandCategories
 	])
-	const classes = useStyles()
-	const tableClasses = useTableStyles()
-
-	const { fetchBrandProfiles } = props
-
-	let currentAccountId = localStorage.getItem('currentAccountId')
 
 	React.useEffect(() => {
-		fetchBrandProfiles(currentAccountId)
-	}, [fetchBrandProfiles])
+		return function cleanup() {
+			for (const brandProfile of props.brandProfiles) {
+				if (brandProfile.brandProfileId === 'placeholder') {
+					props.removeBrandProfile(brandProfile.brandProfileId)
+				}
+			}
+		}
+	})
+	const classes = useStyles()
+	const tableClasses = useTableStyles()
 
 	const tableCellClasses = classnames(classes.tableCell, {
 		[classes.tableCellRTL]: false
@@ -129,12 +125,13 @@ function BrandProfiles(props) {
 	}
 
 	const handleCreateNewProfileClick = () => {
-		// create new brand profile in state and set it as current
-		brandProfileModel.scenarios = props.scenarios
-		brandProfileModel.topics = props.topics
-		brandProfileModel.categories = props.categories
-		props.addBrandProfile(brandProfileModel)
-		props.setCurrentBrandProfile(brandProfileModel.brandProfileId)
+		let brandProfile = JSON.parse(JSON.stringify(brandProfileModel))
+		brandProfile.scenarios = props.scenarios
+		brandProfile.topics = props.topics
+		brandProfile.categories = props.categories
+		brandProfile.industryVerticals = props.industryVerticals
+		props.addBrandProfile(brandProfile)
+		props.setCurrentBrandProfile(brandProfile.brandProfileId)
 		let url = `/admin/settings/brandProfiles/create`
 		history.push(url)
 	}
