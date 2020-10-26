@@ -34,6 +34,8 @@ export function brandProfiles(state = [], action) {
 			for (const brandProfile of brandProfilesCopy) {
 				if (brandProfile.brandProfileId === action.brandProfileId) {
 					brandProfile.current = true
+				} else {
+					brandProfile.current = false
 				}
 			}
 			return brandProfilesCopy

@@ -52,13 +52,25 @@ export function setBrandProfileCompetitors(brandProfileCompetitors) {
 export const createBrandProfile = (brandProfile) => {
 	delete brandProfile.brandProfileId
 	let url = apiBase + `/brand-profile`
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		dispatch(removeBrandProfile('placeholder'))
 		dispatch(setBrandProfileCreating(true))
 		dispatch(addBrandProfile(brandProfile))
 		axios
 			.post(url, brandProfile)
 			.then((response) => {
+				console.log('response from create')
+				console.log(response)
+				let brandProfilesCopy = JSON.parse(
+					JSON.stringify(getState().brandProfiles)
+				)
+				for (const [index, brandProfileCopy] of brandProfilesCopy.entries()) {
+					if (brandProfileCopy.brandProfileId === brandProfile.brandProfileId) {
+						brandProfilesCopy[index].brandProfileId =
+							response.data.brandProfileId
+					}
+				}
+				dispatch(setBrandProfiles(brandProfilesCopy))
 				dispatch(setBrandProfileCreating(false))
 				dispatch(setBrandProfileCreated(true))
 			})
@@ -79,8 +91,7 @@ export const saveBrandProfile = (brandProfile) => {
 				profilesCopy[index] = brandProfile
 			}
 		}
-		console.log('about to set brand profiles')
-		console.log(profilesCopy)
+
 		dispatch(setBrandProfiles(profilesCopy))
 		try {
 			let brandProfileCopy = JSON.parse(JSON.stringify(brandProfile))
@@ -178,6 +189,8 @@ export function fetchBrandProfile(brandProfileId) {
 						currBrandProfiles[index] = result.data
 						if (p.current) {
 							currBrandProfiles[index].current = true
+						} else {
+							currBrandProfiles[index].current = false
 						}
 					}
 				}
