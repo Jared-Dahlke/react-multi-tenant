@@ -32,11 +32,8 @@ import { connect } from 'react-redux'
 import { neutralColor } from '../../assets/jss/colorContants.js'
 import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
-import { Debug } from '../Debug'
-import debounce from 'just-debounce-it'
 import { brandProfileModel } from './Model'
-import { useSelector } from 'react-redux'
-const { isEqual } = require('lodash')
+const urlRegex = require('url-regex')
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -114,9 +111,14 @@ const schemaValidation = Yup.object().shape({
 		.max(50, 'Must be less than 50 characters')
 		.required('Required'),
 	basicInfoWebsiteUrl: Yup.string()
-		.matches(
-			/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-			'Valid URL required, (e.g. google.com)'
+		.test(
+			'urlTest',
+			'Valid URL required (e.g. google.com)',
+			(basicInfoWebsiteUrl) => {
+				return urlRegex({ exact: true, strict: false }).test(
+					basicInfoWebsiteUrl
+				)
+			}
 		)
 		.required('Required'),
 

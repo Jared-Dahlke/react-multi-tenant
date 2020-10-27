@@ -54,6 +54,7 @@
 		"rsuite": "4.8.2",
 		"source-map-explorer": "2.5.0",
 		"typescript": "3.7.5",
+		"url-regex": "5.0.0",
 		"yup": "0.29.3"
 	},
 	"scripts": {
