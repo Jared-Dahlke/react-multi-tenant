@@ -3,7 +3,7 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SET_SCENARIOS,
+	SET_BRAND_SCENARIOS,
 	SET_BRAND_INDUSTRY_VERTICALS,
 	SET_BRAND_TOPICS,
 	SET_BRAND_CATEGORIES,
@@ -126,7 +126,7 @@ export function hasBrandProfiles(state = true, action) {
 
 export function scenarios(state = [], action) {
 	switch (action.type) {
-		case SET_SCENARIOS:
+		case SET_BRAND_SCENARIOS:
 			return action.scenarios
 		default:
 			return state

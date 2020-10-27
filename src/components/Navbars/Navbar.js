@@ -134,7 +134,7 @@ function Header(props) {
 			)
 		}
 
-		if (url === '/admin/settings/brandProfiles/edit') {
+		if (url.includes('/admin/settings/brandProfiles/edit')) {
 			return (
 				<Breadcrumbs
 					aria-label='breadcrumb'
