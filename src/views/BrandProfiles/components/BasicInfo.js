@@ -11,7 +11,10 @@ export default function BasicInfo(props) {
 		<div>
 			<GridContainer>
 				<GridItem xs={12} sm={8} md={4}>
-					<FormikInput name='basicInfoProfileName' labelText='Profile Name' />
+					<FormikInput
+						name='basicInfoProfileName'
+						labelText='Brand Profile Name'
+					/>
 				</GridItem>
 			</GridContainer>
 
@@ -20,23 +23,7 @@ export default function BasicInfo(props) {
 					<FormikInput name='basicInfoWebsiteUrl' labelText='Website' />
 				</GridItem>
 			</GridContainer>
-			<GridContainer>
-				<GridItem xs={12} sm={8} md={4}>
-					<FormikInput
-						name='basicInfoTwitterProfile'
-						labelText='Twitter Profile'
-						inputProps={{
-							startAdornment: (
-								<InputAdornment position='start'>
-									<div style={{ color: grayColor[3] }}>
-										https://twitter.com/
-									</div>
-								</InputAdornment>
-							)
-						}}
-					/>
-				</GridItem>
-			</GridContainer>
+
 			<GridContainer>
 				<GridItem xs={10} sm={10} md={4}>
 					<FormikSelect
@@ -54,6 +41,17 @@ export default function BasicInfo(props) {
 						validateForm={props.validateForm}
 						touched={props.touched.basicInfoIndustryVerticalId}
 						error={props.errors.basicInfoIndustryVerticalId}
+					/>
+				</GridItem>
+			</GridContainer>
+
+			<GridContainer>
+				<GridItem xs={12} sm={8} md={4}>
+					<FormikInput
+						name='basicInfoTwitterProfile'
+						labelText='Twitter Profile'
+						startAdornmentText={'https://twitter.com/'}
+						inputProps={{}}
 					/>
 				</GridItem>
 			</GridContainer>

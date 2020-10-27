@@ -2,6 +2,7 @@
 	"name": "content-intelligence",
 	"version": "0.1.0",
 	"private": true,
+	"author": "Jared Dahlke",
 	"engines": {
 		"node": "12.13.1",
 		"npm": "6.12.1"

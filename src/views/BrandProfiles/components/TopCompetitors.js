@@ -144,15 +144,8 @@ export default function TopCompetitors(props) {
 													<FormikInput
 														name='twitterProfileUrl'
 														labelProps={{ shrink: true }}
-														inputProps={{
-															startAdornment: (
-																<InputAdornment position='start'>
-																	<div style={{ color: grayColor[3] }}>
-																		https://twitter.com/
-																	</div>
-																</InputAdornment>
-															)
-														}}
+														inputProps={{}}
+														startAdornmentText={'https://twitter.com/'}
 														labelText='Competitor Twitter'
 														validate={v.isTwitterProfileError}
 													/>
