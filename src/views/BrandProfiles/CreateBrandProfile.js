@@ -25,7 +25,8 @@ import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
 	setBrandProfileCreated,
-	saveBrandProfile
+	saveBrandProfile,
+	removeBrandProfile
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { neutralColor } from '../../assets/jss/colorContants.js'
@@ -74,7 +75,10 @@ const mapDispatchToProps = (dispatch) => {
 		createBrandProfile: (brandProfile) =>
 			dispatch(createBrandProfile(brandProfile)),
 		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool)),
-		saveBrandProfile: (brandProfile) => dispatch(saveBrandProfile(brandProfile))
+		saveBrandProfile: (brandProfile) =>
+			dispatch(saveBrandProfile(brandProfile)),
+		removeBrandProfile: (brandProfileId) =>
+			dispatch(removeBrandProfile(brandProfileId))
 	}
 }
 
@@ -225,6 +229,16 @@ function onlyUnique(value, index, self) {
 function CreateBrandProfile(props) {
 	let isCreating = window.location.pathname.includes('/create')
 
+	React.useEffect(() => {
+		return function cleanup() {
+			for (const brandProfile of props.brandProfiles) {
+				if (brandProfile.brandProfileId === 'placeholder') {
+					props.removeBrandProfile(brandProfile.brandProfileId)
+				}
+			}
+		}
+	})
+
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
 
@@ -275,7 +289,7 @@ function CreateBrandProfile(props) {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
 
-	const customIsValid = (errors, touched, formName) => {
+	const customIsValid = (errors, formName) => {
 		for (var prop in errors) {
 			if (Object.prototype.hasOwnProperty.call(errors, prop)) {
 				if (prop.includes(formName)) {
@@ -288,7 +302,10 @@ function CreateBrandProfile(props) {
 	}
 
 	const stepValidated = (index, errors, values) => {
-		if (!errors) {
+		console.log('step validated')
+		console.log(index)
+		console.log(errors)
+		if (!errors || Object.keys(errors).length < 1) {
 			return true
 		}
 		if (index === 0) {
@@ -519,7 +536,12 @@ function CreateBrandProfile(props) {
 												</Button>
 												<Button
 													onClick={() => handleNext(values)}
-													disabled={!stepValidated(activeStep, errors, values)}
+													disabled={
+														isCreating
+															? !stepValidated(activeStep, errors, values) ||
+															  !dirty
+															: !stepValidated(activeStep, errors, values)
+													}
 													loading={props.brandProfileCreating}
 												>
 													{nextButtonLabel}
@@ -544,25 +566,13 @@ const FormikForm = withFormik({
 		let currentBrandProfile = JSON.parse(
 			JSON.stringify(getCurrent(props.brandProfiles))
 		)
-		if (
-			//	!currentBrandProfile ||
-			//	!currentBrandProfile.categories ||
-			!currentBrandProfile.categories
-		) {
+		if (!currentBrandProfile.categories) {
 			currentBrandProfile.categories = props.categories
 		}
-		if (
-			//!currentBrandProfile ||
-			//!currentBrandProfile.scenarios ||
-			!currentBrandProfile.scenarios
-		) {
+		if (!currentBrandProfile.scenarios) {
 			currentBrandProfile.scenarios = props.scenarios
 		}
-		if (
-			//!currentBrandProfile ||
-			//!currentBrandProfile.topics ||
-			!currentBrandProfile.topics
-		) {
+		if (!currentBrandProfile.topics) {
 			currentBrandProfile.topics = props.topics
 		}
 
