@@ -4,7 +4,7 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SET_SCENARIOS,
+	SET_BRAND_SCENARIOS,
 	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_DELETED,
@@ -12,8 +12,6 @@ import {
 	BRAND_PROFILE_CREATING,
 	SET_BRAND_TOPICS,
 	SET_BRAND_CATEGORIES,
-	SET_BRAND_PROFILE_BASIC_INFO,
-	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED
@@ -31,20 +29,6 @@ export function setBrandProfiles(brandProfiles) {
 	return {
 		type: SET_BRAND_PROFILES,
 		brandProfiles
-	}
-}
-
-export function setBrandProfileBasicInfo(brandProfileBasicInfo) {
-	return {
-		type: SET_BRAND_PROFILE_BASIC_INFO,
-		brandProfileBasicInfo
-	}
-}
-
-export function setBrandProfileCompetitors(brandProfileCompetitors) {
-	return {
-		type: SET_BRAND_PROFILE_COMPETITORS,
-		brandProfileCompetitors
 	}
 }
 
@@ -271,9 +255,9 @@ export function hasBrandProfiles(bool) {
 	}
 }
 
-export function setScenarios(scenarios) {
+export function setBrandScenarios(scenarios) {
 	return {
-		type: SET_SCENARIOS,
+		type: SET_BRAND_SCENARIOS,
 		scenarios
 	}
 }
@@ -292,7 +276,7 @@ export function fetchBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
-				dispatch(setScenarios(scenarios))
+				dispatch(setBrandScenarios(scenarios))
 			}
 		} catch (error) {
 			alert(error)
