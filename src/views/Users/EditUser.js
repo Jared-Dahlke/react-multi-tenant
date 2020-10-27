@@ -116,7 +116,7 @@ const getUser = (users, userId) => {
 	}
 }
 
-function EditUser(props) {
+export function EditUser(props) {
 	let parsedUserId = JSON.parse(props.match.params.user)
 
 	let treeAccounts = React.useMemo(
@@ -157,6 +157,7 @@ function EditUser(props) {
 
 	return (
 		<Formik
+			data-qa="editUserForm"
 			enableReinitialize
 			validateOnMount={false}
 			validationSchema={() => schemaValidation}
@@ -232,6 +233,7 @@ function EditUser(props) {
 													!props.editUserUserAccountsLoading ? (
 														<SuiteTree
 															name='accounts'
+															data-qa='accounts'
 															data={treeAccounts}
 															labelKey='accountName'
 															valueKey='accountId'
@@ -248,6 +250,7 @@ function EditUser(props) {
 													<FormikSelect
 														id='role'
 														name='roleId'
+														data-qa='roleId'
 														label='Role'
 														placeholder='Role'
 														optionLabel='roleName'
