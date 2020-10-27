@@ -80,15 +80,6 @@ const mapDispatchToProps = (dispatch) => {
 function BrandProfiles(props) {
 	let history = useHistory()
 
-	React.useEffect(() => {
-		return function cleanup() {
-			for (const brandProfile of props.brandProfiles) {
-				if (brandProfile.brandProfileId === 'placeholder') {
-					props.removeBrandProfile(brandProfile.brandProfileId)
-				}
-			}
-		}
-	})
 	const classes = useStyles()
 	const tableClasses = useTableStyles()
 
