@@ -163,7 +163,6 @@ function BrandProfiles(props) {
 														/>
 													</IconButton>
 												</Tooltip>
-
 												<Tooltip
 													id='tooltip-top-start'
 													title='Remove'

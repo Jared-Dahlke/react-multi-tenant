@@ -109,7 +109,7 @@ function Account(props) {
 			accountTypeId: props.accountTypes[0].accountTypeId,
 			accountLevelId: levelId,
 			accountMargin: 0,
-			contactName: ' ',
+			contactName: 'placeholder',
 			contactEmail: 'placeholder@placeholder.com',
 			parentAccountId: current.accountId
 		}
@@ -149,16 +149,24 @@ function Account(props) {
 		dirty
 	} = props
 
-	return (
-		<GridContainer>
-			<GridItem xs={12} sm={12} md={6}>
-				<AccountDropdown />
-				<Card>
-					{props.rolesIsLoading ||
-					props.isSwitchingAccounts ||
-					values.accountTypeName.length < 1 ? (
-						<FormLoader />
-					) : (
+	if (
+		props.rolesIsLoading ||
+		props.isSwitchingAccounts ||
+		values.accountTypeName.length < 1
+	) {
+		return (
+			<GridContainer>
+				<GridItem xs={12} sm={12} md={6}>
+					<FormLoader />
+				</GridItem>
+			</GridContainer>
+		)
+	} else {
+		return (
+			<GridContainer>
+				<GridItem xs={12} sm={12} md={6}>
+					<AccountDropdown />
+					<Card>
 						<Form>
 							<CardBody>
 								<GridContainer>
@@ -180,9 +188,7 @@ function Account(props) {
 										<FormikInput
 											name='parentAccountName'
 											labelText='Parent Account'
-											inputProps={{
-												disabled: true
-											}}
+											disabled
 										/>
 
 										<FormikInput name='contactName' labelText='Contact Name' />
@@ -263,11 +269,12 @@ function Account(props) {
 								</Snackbar>
 							</CardFooter>
 						</Form>
-					)}
-				</Card>
-			</GridItem>
-		</GridContainer>
-	)
+						)}
+					</Card>
+				</GridItem>
+			</GridContainer>
+		)
+	}
 }
 
 const FormikForm = withFormik({
@@ -298,6 +305,7 @@ const FormikForm = withFormik({
 		}
 	},
 	enableReinitialize: true,
+	validateOnMount: true,
 	validationSchema: schemaValidation,
 	handleSubmit: (values, { props }) => {
 		let account = {
