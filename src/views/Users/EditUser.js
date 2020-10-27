@@ -157,9 +157,9 @@ export function EditUser(props) {
 
 	return (
 		<Formik
-			data-qa="editUserForm"
-			enableReinitialize
-			validateOnMount={false}
+			data-qa='editUserForm'
+			enableReinitialize={true}
+			validateOnMount={true}
 			validationSchema={() => schemaValidation}
 			initialValues={{
 				company: user.company,
@@ -269,7 +269,7 @@ export function EditUser(props) {
 										</CardBody>
 										<CardFooter>
 											<Button
-												disabled={!isValid}
+												disabled={!isValid || !dirty}
 												onClick={() => handleSaveClick(values, resetForm)}
 												loading={props.userEditSaving}
 											>

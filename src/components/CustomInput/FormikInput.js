@@ -36,6 +36,7 @@ export default function CustomInput(props) {
 							id={id}
 							value={field.value}
 							onChange={(e) => form.setFieldValue(props.name, e)}
+							disabled={props.disabled}
 							style={{
 								borderColor: 'white',
 								color: props.inputColor ? props.inputColor : whiteColor
@@ -43,7 +44,7 @@ export default function CustomInput(props) {
 						/>
 
 						<InputGroup.Addon>
-							{!form.errors[field.name] && field.value.length > 0 && (
+							{!form.errors[field.name] && (
 								<Icon icon='check' style={{ color: successColor[0] }} />
 							)}
 						</InputGroup.Addon>
