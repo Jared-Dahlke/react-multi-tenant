@@ -16,6 +16,7 @@ import {
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
 import { Form, withFormik } from 'formik'
+import { schemaValidation } from './brandProfileValidation'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
@@ -24,14 +25,15 @@ import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
 	setBrandProfileCreated,
-	removeBrandProfile
+	saveBrandProfile,
+	removeBrandProfile,
+	fetchBrandProfile
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { neutralColor } from '../../assets/jss/colorContants.js'
 import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
-import { schemaValidation } from './brandProfileValidation'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -70,8 +72,12 @@ const mapDispatchToProps = (dispatch) => {
 		createBrandProfile: (brandProfile) =>
 			dispatch(createBrandProfile(brandProfile)),
 		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool)),
+		saveBrandProfile: (brandProfile) =>
+			dispatch(saveBrandProfile(brandProfile)),
 		removeBrandProfile: (brandProfileId) =>
-			dispatch(removeBrandProfile(brandProfileId))
+			dispatch(removeBrandProfile(brandProfileId)),
+		fetchBrandProfile: (brandProfileId) =>
+			dispatch(fetchBrandProfile(brandProfileId))
 	}
 }
 
@@ -89,6 +95,15 @@ const mapStateToProps = (state) => {
 		brandProfileSaved: state.brandProfileSaved,
 		brandProfiles: state.brandProfiles
 	}
+}
+
+const getCurrent = (brandProfiles, brandProfileIdEditing) => {
+	for (const brandProfile of brandProfiles) {
+		if (brandProfile.brandProfileId == brandProfileIdEditing) {
+			return brandProfile
+		}
+	}
+	return brandProfileModel
 }
 
 function getSteps() {
@@ -129,29 +144,33 @@ function onlyUnique(value, index, self) {
 	return self.indexOf(value) === index
 }
 
-function CreateBrandProfile(props) {
+function EditBrandProfile(props) {
+	if (
+		!props.match.params.brandProfileId ||
+		isNaN(props.match.params.brandProfileId)
+	) {
+		window.location.href = '/admin/settings/brandProfiles'
+	}
+	let { fetchBrandProfile } = props
+	React.useEffect(() => {
+		let current = getCurrent(
+			props.brandProfiles,
+			Number(props.match.params.brandProfileId)
+		)
+		if (!current.scenarios) {
+			fetchBrandProfile(Number(props.match.params.brandProfileId))
+		}
+	}, [props.brandProfiles])
+
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
 	const steps = getSteps()
 	const handleNext = (values) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
+
 		if (activeStep === steps.length - 1) {
 			cleanScenariosForApi(values.scenarios)
 			cleanCategoriesForApi(values.categories)
-			let brandProfile = {
-				brandProfileId: values.brandProfileId,
-				accountId: values.accountId,
-				brandName: values.basicInfoProfileName,
-				websiteUrl: values.basicInfoWebsiteUrl,
-				industryVerticalId: values.basicInfoIndustryVerticalId,
-				twitterProfileUrl: values.basicInfoTwitterProfile,
-				topics: values.topics,
-				competitors: values.topCompetitors,
-				scenarios: values.scenarios,
-				categories: values.categories
-			}
-
-			props.createBrandProfile(brandProfile)
 		}
 	}
 
@@ -225,7 +244,7 @@ function CreateBrandProfile(props) {
 		let onLastStep = activeStep === steps.length - 1
 
 		if (onLastStep) {
-			label = 'Save'
+			label = 'Done'
 		} else {
 			label = 'Next'
 		}
@@ -360,9 +379,7 @@ function CreateBrandProfile(props) {
 														title='Success'
 														description={
 															<p>
-																{
-																	'Your brand profile was succesfully created. Now you can '
-																}
+																{'Your brand profile was saved. Now you can '}
 																<Link to='/admin/engage/listBuilder'>
 																	{'go to the list builder '}
 																</Link>
@@ -380,6 +397,16 @@ function CreateBrandProfile(props) {
 								</GridList>
 							</CardBody>
 							<CardFooter>
+								<div style={{ position: 'fixed', bottom: 30, left: 70 }}>
+									<Button
+										loading={props.brandProfileSaving}
+										type='submit'
+										disabled={!dirty || !isValid}
+									>
+										Save
+									</Button>
+								</div>
+
 								<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
 									{activeStep === steps.length ? null : (
 										<div>
@@ -393,9 +420,7 @@ function CreateBrandProfile(props) {
 												</Button>
 												<Button
 													onClick={() => handleNext(values)}
-													disabled={
-														!stepValidated(activeStep, errors, values) || !dirty
-													}
+													disabled={!stepValidated(activeStep, errors, values)}
 													loading={props.brandProfileCreating}
 												>
 													{nextButtonLabel}
@@ -415,10 +440,14 @@ function CreateBrandProfile(props) {
 
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
-		let currentBrandProfile = JSON.parse(JSON.stringify(brandProfileModel))
-		currentBrandProfile.categories = props.categories
-		currentBrandProfile.scenarios = props.scenarios
-		currentBrandProfile.topics = props.topics
+		console.log('map props to values')
+		console.log(props)
+		let currentBrandProfile = JSON.parse(
+			JSON.stringify(
+				getCurrent(props.brandProfiles, props.match.params.brandProfileId)
+			)
+		)
+
 		return {
 			brandProfileId: currentBrandProfile.brandProfileId,
 			accountId: props.currentAccountId,
@@ -432,10 +461,27 @@ const FormikForm = withFormik({
 			categories: currentBrandProfile.categories
 		}
 	},
+	handleSubmit: (values, { props, setSubmitting, resetForm }) => {
+		let brandProfile = {
+			brandProfileId: values.brandProfileId,
+			accountId: values.accountId,
+			brandName: values.basicInfoProfileName,
+			websiteUrl: values.basicInfoWebsiteUrl,
+			industryVerticalId: values.basicInfoIndustryVerticalId,
+			twitterProfileUrl: values.basicInfoTwitterProfile,
+			topics: values.topics,
+			competitors: values.topCompetitors,
+			scenarios: values.scenarios,
+			categories: values.categories
+		}
+
+		props.saveBrandProfile(brandProfile)
+		resetForm(values)
+	},
 	enableReinitialize: true,
 	validateOnChange: true,
 	validateOnMount: true,
 	validationSchema: schemaValidation
-})(CreateBrandProfile)
+})(EditBrandProfile)
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)

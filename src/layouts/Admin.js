@@ -1,7 +1,5 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import PerfectScrollbar from 'perfect-scrollbar'
-import 'perfect-scrollbar/css/perfect-scrollbar.css'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Navbar from '../components/Navbars/Navbar.js'
 import { SettingsRoutes } from '../routes.js'
@@ -19,10 +17,9 @@ import ListBuilder from '../views/Discover/ListBuilder.js'
 import Users from '../views/Users/Users'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
+import EditBrandProfile from '../views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from '../views/UserProfile/UserProfile.js'
 import Account from '../views/Account/Account'
-
-let ps
 
 const switchRoutes = (
 	<Switch>
@@ -60,7 +57,10 @@ const switchRoutes = (
 				<>
 					<Route path={`${url}/`} component={BrandProfiles} exact />
 					<Route path={`${url}/create`} component={CreateBrandProfile} />
-					<Route path={`${url}/edit`} component={CreateBrandProfile} />
+					<Route
+						path={`${url}/edit/:brandProfileId`}
+						component={EditBrandProfile}
+					/>
 				</>
 			)}
 		/>
@@ -92,24 +92,6 @@ function Admin({ ...rest }) {
 			setMobileOpen(false)
 		}
 	}
-	// initialize and destroy the PerfectScrollbar plugin
-	React.useEffect(() => {
-		if (navigator.platform.indexOf('Win') > -1) {
-			ps = new PerfectScrollbar(mainPanel.current, {
-				suppressScrollX: true,
-				suppressScrollY: false
-			})
-			document.body.style.overflow = 'hidden'
-		}
-		window.addEventListener('resize', resizeFunction)
-		// Specify how to clean up after this effect:
-		return function cleanup() {
-			if (navigator.platform.indexOf('Win') > -1) {
-				ps.destroy()
-			}
-			window.removeEventListener('resize', resizeFunction)
-		}
-	}, [mainPanel])
 
 	var userId = rest.userId
 	if (!userId) {
