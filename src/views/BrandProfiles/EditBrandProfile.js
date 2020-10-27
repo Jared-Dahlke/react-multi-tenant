@@ -370,7 +370,7 @@ function EditBrandProfile(props) {
 													color: 'white'
 												}}
 											>
-												{props.brandProfileCreating ? (
+												{props.brandProfileSaving ? (
 													'Saving...'
 												) : (
 													<Message
