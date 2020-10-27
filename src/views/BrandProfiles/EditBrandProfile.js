@@ -421,7 +421,6 @@ function EditBrandProfile(props) {
 												<Button
 													onClick={() => handleNext(values)}
 													disabled={!stepValidated(activeStep, errors, values)}
-													loading={props.brandProfileCreating}
 												>
 													{nextButtonLabel}
 												</Button>

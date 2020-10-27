@@ -16,8 +16,11 @@ module.exports = override(
 
 				'@dropdown-bg': neutralLightColor,
 
+				//input
 				'@input-bg': neutralColor,
 				'@input-color': '#FFF',
+				'@input-group-addon-bg': neutralColor,
+
 				'@picker-select-menu-item-selected-bg': neutralLightColor,
 
 				//'@picker-tree-node-active-color': 'purple',
