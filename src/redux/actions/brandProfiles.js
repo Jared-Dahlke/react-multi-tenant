@@ -16,8 +16,7 @@ import {
 	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
-	SET_BRAND_PROFILE_SAVED,
-	SET_CURRENT_BRAND_PROFILE
+	SET_BRAND_PROFILE_SAVED
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -59,8 +58,6 @@ export const createBrandProfile = (brandProfile) => {
 		axios
 			.post(url, brandProfile)
 			.then((response) => {
-				console.log('response from create')
-				console.log(response)
 				let brandProfilesCopy = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
@@ -124,13 +121,6 @@ export function removeBrandProfile(brandProfileId) {
 	}
 }
 
-export function setCurrentBrandProfile(brandProfileId) {
-	return {
-		type: SET_CURRENT_BRAND_PROFILE,
-		brandProfileId
-	}
-}
-
 export const deleteBrandProfile = (brandProfileId) => {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return (dispatch) => {
@@ -149,7 +139,6 @@ export const deleteBrandProfile = (brandProfileId) => {
 }
 
 export function fetchBrandProfilesInformation() {
-	// use this to 'prefetch' all users brand profiles info
 	return async (dispatch, getState) => {
 		let brandProfilesCopy = JSON.parse(JSON.stringify(getState().brandProfiles))
 		for (const [index, brandProfile] of brandProfilesCopy.entries()) {
@@ -175,8 +164,6 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				console.log('ressul from fetch brand profile')
-				console.log(result.data)
 				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
@@ -189,11 +176,6 @@ export function fetchBrandProfile(brandProfileId) {
 				for (const [index, p] of currBrandProfiles.entries()) {
 					if (p.brandProfileId === brandProfileId) {
 						currBrandProfiles[index] = result.data
-						if (p.current) {
-							currBrandProfiles[index].current = true
-						} else {
-							currBrandProfiles[index].current = false
-						}
 					}
 				}
 				dispatch(setBrandProfiles(currBrandProfiles))

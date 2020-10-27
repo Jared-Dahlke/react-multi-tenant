@@ -18,14 +18,6 @@ import {
 	fetchBrandProfile,
 	deleteBrandProfile,
 	setBrandProfileDeleted,
-	fetchBrandScenarios,
-	fetchBrandIndustryVerticals,
-	fetchBrandTopics,
-	fetchBrandCategories,
-	setBrandProfileBasicInfo,
-	setBrandProfileCompetitors,
-	setCurrentBrandProfile,
-	addBrandProfile,
 	removeBrandProfile
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
@@ -33,10 +25,8 @@ import styles from '../../assets/jss/material-dashboard-react/components/tasksSt
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
-import { Link } from 'react-router-dom'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
-import { brandProfileModel } from './Model'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -63,17 +53,7 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(removeBrandProfile(brandProfileId)),
 		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
 		fetchBrandProfile: (brandProfileId) =>
-			dispatch(fetchBrandProfile(brandProfileId)),
-		fetchBrandScenarios: () => dispatch(fetchBrandScenarios()),
-		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals()),
-		fetchBrandTopics: () => dispatch(fetchBrandTopics()),
-		fetchBrandCategories: () => dispatch(fetchBrandCategories()),
-		setBrandProfileCompetitors: (arr) =>
-			dispatch(setBrandProfileCompetitors(arr)),
-		setBrandProfileBasicInfo: (obj) => dispatch(setBrandProfileBasicInfo(obj)),
-		setCurrentBrandProfile: (brandProfileId) =>
-			dispatch(setCurrentBrandProfile(brandProfileId)),
-		addBrandProfile: (brandProfile) => dispatch(addBrandProfile(brandProfile))
+			dispatch(fetchBrandProfile(brandProfileId))
 	}
 }
 
@@ -94,22 +74,12 @@ function BrandProfiles(props) {
 	}
 
 	const handleEditBrandProfileClick = (profile) => {
-		props.setCurrentBrandProfile(profile.brandProfileId)
 		props.fetchBrandProfile(profile.brandProfileId)
-		let url = `/admin/settings/brandProfiles/edit`
+		let url = `/admin/settings/brandProfiles/edit/${profile.brandProfileId}`
 		history.push(url)
 	}
 
 	const handleCreateNewProfileClick = () => {
-		console.log('create new click')
-		let brandProfile = JSON.parse(JSON.stringify(brandProfileModel))
-		brandProfile.scenarios = props.scenarios
-		brandProfile.topics = props.topics
-		brandProfile.categories = props.categories
-		console.log('adding:')
-		console.log(brandProfile)
-		props.addBrandProfile(brandProfile)
-		props.setCurrentBrandProfile(brandProfile.brandProfileId)
 		let url = `/admin/settings/brandProfiles/create`
 		history.push(url)
 	}
