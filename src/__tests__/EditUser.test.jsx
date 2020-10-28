@@ -6,7 +6,7 @@ import { props } from "./assets/EDIT_USER"
 
 //Helper Function 
 const simulateFormikInputOnChange = (wrapper, inputName, newValue) => {
-    let node = wrapper.findWhere(n => n.type() === 'input' && n.props().name === inputName)
+    let node = wrapper.findWhere(n => n.type() === 'input' && n.props().id === inputName)
     node.simulate('change', {
         persist: () => { },
         target: {
@@ -14,7 +14,7 @@ const simulateFormikInputOnChange = (wrapper, inputName, newValue) => {
             value: newValue,
         },
     })
-    return wrapper.findWhere(n => n.type() === 'input' && n.props().name === inputName)
+    return wrapper.findWhere(n => n.type() === 'input' && n.props().id === inputName)
 }
 
 describe('Edit User', () => {
@@ -32,7 +32,6 @@ describe('Edit User', () => {
     it('updates 4 input fields', () => {
         const userWrapper = mount(<EditUser {...props} />)
         const company = simulateFormikInputOnChange(userWrapper, 'company', 'Google')
-
         expect(company.props().value).toEqual('Google')
 
         const email = simulateFormikInputOnChange(userWrapper, 'email', 'test@google.com')
