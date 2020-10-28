@@ -88,7 +88,7 @@ export function brandProfileCreating(state = false, action) {
 	}
 }
 
-export function brandProfileLoading(state = false, action) {
+export function brandProfileLoading(state = true, action) {
 	switch (action.type) {
 		case SET_BRAND_PROFILE_LOADING:
 			return action.brandProfileLoading
