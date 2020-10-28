@@ -1,15 +1,9 @@
 import React from 'react'
 import Button from 'rsuite/lib/Button'
-import Card from '../../components/Card/Card.js'
-import CardFooter from '../../components/Card/CardFooter'
-import CardBody from '../../components/Card/CardBody.js'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
+import Steps from 'rsuite/lib/Steps'
 import {
 	primaryColor,
-	whiteColor,
 	grayColor
 } from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo/BasicInfo'
@@ -207,143 +201,120 @@ function CreateBrandProfile(props) {
 
 	return (
 		<Form>
-			<Stepper
-				classes={{ root: classes.stepper }}
-				activeStep={activeStep}
-				alternativeLabel
-			>
-				{steps.map((label, index) => {
-					let labelColor = whiteColor
+			<Steps current={activeStep}>
+				<Steps.Item title='Brand' />
+				<Steps.Item title='Content Settings' />
+				<Steps.Item title='Topics' />
+			</Steps>
 
-					return (
-						<Step key={label}>
-							<StepLabel
-								StepIconProps={{
-									classes: {
-										root: classes.step,
-										completed: classes.completed,
-										active: classes.active
-									}
-								}}
-							>
-								<div style={{ color: labelColor }}>{label}</div>
-							</StepLabel>
-						</Step>
-					)
-				})}
-			</Stepper>
-
-			<GridContainer justify='center'>
+			<GridContainer justify='center' style={{ paddingTop: 20 }}>
 				<GridItem xs={12} sm={12} md={11} style={{ position: 'relative' }}>
-					<Card style={{ backgroundColor: neutralColor, display: 'flex' }}>
-						<CardBody>
-							<GridList
-								cols={1}
-								cellHeight={400}
-								style={{ overflowX: 'hidden', flex: 1 }}
-							>
-								{activeStep === 0 ? (
-									<div>
-										<BasicInfo
+					<div style={{ padding: 10 }}>
+						<GridList
+							cols={1}
+							cellHeight={550}
+							style={{ overflowX: 'hidden', flex: 1 }}
+						>
+							{activeStep === 0 ? (
+								<div>
+									<BasicInfo
+										setFieldValue={setFieldValue}
+										values={values}
+										touched={touched}
+										industryVerticals={props.industryVerticals}
+										errors={errors}
+										setFieldTouched={setFieldTouched}
+									/>
+								</div>
+							) : activeStep === 1 ? (
+								<div>
+									<ContentSettings
+										scenarios={values.scenarios}
+										categories={values.categories}
+										setFieldValue={setFieldValue}
+										errors={errors}
+										values={values}
+									/>
+								</div>
+							) : activeStep === 2 ? (
+								<div>
+									<div style={{ flex: 1 }}>
+										<Topics
+											formikValues={values}
+											allValues={allTopicValues}
+											selectedTopics={selectedTopics}
+											updateExpandedKeys={updateEpandedTopicKeys}
+											expandedTopicKeys={expandedTopicKeys}
 											setFieldValue={setFieldValue}
-											values={values}
-											touched={touched}
-											industryVerticals={props.industryVerticals}
 											errors={errors}
-											setFieldTouched={setFieldTouched}
 										/>
 									</div>
-								) : activeStep === 1 ? (
-									<div>
-										<ContentSettings
-											scenarios={values.scenarios}
-											categories={values.categories}
-											setFieldValue={setFieldValue}
-											errors={errors}
-											values={values}
-										/>
-									</div>
-								) : activeStep === 2 ? (
-									<div>
-										<div style={{ flex: 1 }}>
-											<Topics
-												formikValues={values}
-												allValues={allTopicValues}
-												selectedTopics={selectedTopics}
-												updateExpandedKeys={updateEpandedTopicKeys}
-												expandedTopicKeys={expandedTopicKeys}
-												setFieldValue={setFieldValue}
-												errors={errors}
-											/>
-										</div>
-									</div>
-								) : (
-									<div style={{ color: 'white' }}>
-										<div
-											style={{
-												display: 'flex',
-												justifyContent: 'center',
-												alignItems: 'center',
-												backgroundColor: neutralColor,
-												height: '100%',
-												color: 'white'
-											}}
-										>
-											{props.brandProfileCreating ? (
-												'Saving...'
-											) : (
-												<Message
-													showIcon
-													type='success'
-													title='Success'
-													description={
-														<p>
-															{
-																'Your brand profile was succesfully created. Now you can '
-															}
-															<Link to='/admin/engage/listBuilder'>
-																{'go to the list builder '}
-															</Link>
-															or
-															<Link to='/admin/settings/brandProfiles'>
-																{' view your brand profiles'}
-															</Link>
-														</p>
-													}
-												/>
-											)}
-										</div>
-									</div>
-								)}
-							</GridList>
-						</CardBody>
-						<CardFooter>
-							<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
-								{activeStep === steps.length ? null : (
-									<div>
-										<div>
-											<Button
-												disabled={activeStep === 0}
-												onClick={handleBack}
-												className={classes.backButton}
-											>
-												Back
-											</Button>
-											<Button
-												onClick={() => handleNext(values)}
-												disabled={
-													!stepValidated(activeStep, errors, values) || !dirty
+								</div>
+							) : (
+								<div style={{ color: 'white' }}>
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											backgroundColor: neutralColor,
+											height: '100%',
+											color: 'white'
+										}}
+									>
+										{props.brandProfileCreating ? (
+											'Saving...'
+										) : (
+											<Message
+												showIcon
+												type='success'
+												title='Success'
+												description={
+													<p>
+														{
+															'Your brand profile was succesfully created. Now you can '
+														}
+														<Link to='/admin/engage/listBuilder'>
+															{'go to the list builder '}
+														</Link>
+														or
+														<Link to='/admin/settings/brandProfiles'>
+															{' view your brand profiles'}
+														</Link>
+													</p>
 												}
-												loading={props.brandProfileCreating}
-											>
-												{nextButtonLabel}
-											</Button>
-										</div>
+											/>
+										)}
 									</div>
-								)}
+								</div>
+							)}
+						</GridList>
+					</div>
+
+					<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
+						{activeStep === steps.length ? null : (
+							<div>
+								<div>
+									<Button
+										disabled={activeStep === 0}
+										onClick={handleBack}
+										className={classes.backButton}
+									>
+										Back
+									</Button>
+									<Button
+										onClick={() => handleNext(values)}
+										disabled={
+											!stepValidated(activeStep, errors, values) || !dirty
+										}
+										loading={props.brandProfileCreating}
+									>
+										{nextButtonLabel}
+									</Button>
+								</div>
 							</div>
-						</CardFooter>
-					</Card>
+						)}
+					</div>
 				</GridItem>
 			</GridContainer>
 		</Form>

@@ -70,7 +70,15 @@ module.exports = override(
 
 				//table
 				'@table-body-background': neutralColor,
-				'@table-body-hover-background': neutralExtraLightColor
+				'@table-body-hover-background': neutralExtraLightColor,
+
+				//steps
+				//	'@steps-default-color': '#FFF',
+				'@steps-tail-default-color': '#FFF',
+				'@steps-content-process-color': '#FFF',
+
+				//divider:
+				'@divider-border-color': neutralExtraLightColor
 			}
 		}
 	})
