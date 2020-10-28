@@ -439,8 +439,6 @@ function EditBrandProfile(props) {
 
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
-		console.log('map props to values')
-		console.log(props)
 		let currentBrandProfile = JSON.parse(
 			JSON.stringify(
 				getCurrent(props.brandProfiles, props.match.params.brandProfileId)

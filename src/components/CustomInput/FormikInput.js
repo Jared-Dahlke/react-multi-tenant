@@ -44,7 +44,7 @@ export default function CustomInput(props) {
 						/>
 
 						<InputGroup.Addon>
-							{!form.errors[field.name] && (
+							{!form.errors[field.name] && field.value.length > 0 && (
 								<Icon icon='check' style={{ color: successColor[0] }} />
 							)}
 						</InputGroup.Addon>
