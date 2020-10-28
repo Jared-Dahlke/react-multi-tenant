@@ -19,6 +19,8 @@ import styles from '../../../../assets/jss/material-dashboard-react/components/t
 import tableStyles from '../../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import Save from '@material-ui/icons/Save'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import { accentColor } from '../../../../assets/jss/colorContants'
+import Label from '../../../../components/CustomInputLabel/CustomInputLabel'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -107,14 +109,14 @@ export default function TopCompetitors(props) {
 								<TableRow
 									key={'newlyAdded'}
 									className={classes.tableRow}
-									style={{ height: '160px' }}
+									style={{ height: '140px' }}
 								>
 									<TableCell className={tableCellClasses}>
 										<FormikInput
 											name='competitorName'
 											labelProps={{ shrink: true }}
-											labelText='Competitor Name'
 											validate={v.isBrandProfileNameError}
+											simple
 										/>
 									</TableCell>
 									<TableCell className={tableCellClasses}>
@@ -123,8 +125,8 @@ export default function TopCompetitors(props) {
 											labelProps={{ shrink: true }}
 											inputProps={{}}
 											startAdornmentText={'https://twitter.com/'}
-											labelText='Competitor Twitter'
 											validate={v.isTwitterProfileError}
+											simple
 										/>
 									</TableCell>
 
@@ -132,32 +134,24 @@ export default function TopCompetitors(props) {
 										<FormikInput
 											labelProps={{ shrink: true }}
 											name='websiteUrl'
-											labelText='Competitor Website'
 											validate={v.isWebsiteUrlError}
+											simple
 										/>
 									</TableCell>
 
-									<TableCell className={tableCellClasses}>
-										<Tooltip
-											id='tooltip-top-start'
-											title='Remove'
-											placement='top'
-											classes={{ tooltip: classes.tooltip }}
+									<TableCell>
+										<IconButton
+											aria-label='Close'
+											className={classes.tableActionButton}
+											onClick={() => {
+												setAddingNew(false)
+											}}
+											style={{ marginLeft: 10 }}
 										>
-											<IconButton
-												aria-label='Close'
-												className={classes.tableActionButton}
-												onClick={() => {
-													setAddingNew(false)
-												}}
-											>
-												<Close
-													className={
-														classes.tableActionButtonIcon + ' ' + classes.close
-													}
-												/>
-											</IconButton>
-										</Tooltip>
+											<Label label='Remove  ' color={accentColor} />
+										</IconButton>
+									</TableCell>
+									<TableCell>
 										{Object.keys(newCompetitorFormik.errors).length === 0 &&
 										newCompetitorFormik.errors.constructor === Object ? (
 											<IconButton
@@ -167,11 +161,7 @@ export default function TopCompetitors(props) {
 													handleSaveNew(newCompetitorFormik.values)
 												}}
 											>
-												<Save
-													className={
-														classes.tableActionButtonIcon + ' ' + classes.save
-													}
-												/>
+												<Label label='Save  ' color={accentColor} />
 											</IconButton>
 										) : null}
 									</TableCell>
@@ -212,11 +202,7 @@ export default function TopCompetitors(props) {
 												handleDeleteCompetitor(competitor.competitorId)
 											}}
 										>
-											<Close
-												className={
-													classes.tableActionButtonIcon + ' ' + classes.close
-												}
-											/>
+											<Label label='Remove  ' color={accentColor} />
 										</IconButton>
 									</Tooltip>
 								</TableCell>

@@ -25,6 +25,9 @@ function markAllChildren(topic, value) {
 
 function markSelected(topicId, value, topic) {
 	if (topic.topicId == topicId) {
+		if (topic.topicResponseId === value) {
+			value = 3
+		}
 		topic.topicResponseId = value
 		if (topic.children && topic.children.length > 0)
 			markAllChildren(topic, value)
@@ -67,15 +70,6 @@ const Node = (props) => {
 						color={nodeProps.topicResponseId == 2 ? 'red' : 'blue'}
 					>
 						Exclude
-					</Button>
-
-					<Button
-						id='asdf'
-						key='2'
-						onClick={(e) => handleClick(e, 3)}
-						color={nodeProps.topicResponseId == 3 ? 'yellow' : 'blue'}
-					>
-						No Action
 					</Button>
 				</ButtonGroup>
 			</div>

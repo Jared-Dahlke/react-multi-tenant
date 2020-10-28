@@ -5,7 +5,7 @@ export default function CustomInputLabel(props) {
 		<div
 			className='input-label'
 			style={{
-				color: '#AAAAAA',
+				color: props.color ? props.color : '#AAAAAA',
 				fontSize: '14px',
 				fontWeight: 400,
 				lineHeight: 1.42857

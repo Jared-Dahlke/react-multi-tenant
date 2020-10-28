@@ -7,9 +7,12 @@ import CategoryButtonGroup from './CategoryButtonGroup'
 
 function setCategoryAction(data, categories) {
 	const contentCategoryId = data.contentCategoryId
-	const value = Number(data.contentCategoryResponseId)
+	let value = Number(data.contentCategoryResponseId)
 	for (const category of categories) {
 		if (category.contentCategoryId === contentCategoryId) {
+			if (category.contentCategoryResponseId === value) {
+				value = 3
+			}
 			category.contentCategoryResponseId = value
 		}
 	}
