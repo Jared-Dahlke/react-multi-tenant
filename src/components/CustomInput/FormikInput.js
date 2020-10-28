@@ -23,7 +23,12 @@ export default function CustomInput(props) {
 	return (
 		<Field name={props.name} validate={props.validate}>
 			{({ field, form }) => (
-				<FormControl fullWidth={true} className={classes.formControl}>
+				<FormControl
+					fullWidth={true}
+					className={
+						props.simple ? classes.formControlSlim : classes.formControl
+					}
+				>
 					{labelText && <Label label={labelText} />}
 					<InputGroup>
 						{props.startAdornmentText && (
@@ -43,11 +48,13 @@ export default function CustomInput(props) {
 							}}
 						/>
 
-						<InputGroup.Addon>
-							{!form.errors[field.name] && field.value.length > 0 && (
-								<Icon icon='check' style={{ color: successColor[0] }} />
-							)}
-						</InputGroup.Addon>
+						{!props.simple && (
+							<InputGroup.Addon>
+								{!form.errors[field.name] && field.value.length > 0 && (
+									<Icon icon='check' style={{ color: successColor[0] }} />
+								)}
+							</InputGroup.Addon>
+						)}
 					</InputGroup>
 
 					{form.errors[field.name] && (

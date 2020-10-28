@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import { setUserId } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
-import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
+import BrandMentality from '../views/BrandMentality/BrandMentality'
 import ChannelResearchTemp from '../views/Discover/ChannelResearchTemp'
 import ListBuilder from '../views/Discover/ListBuilder.js'
 import Users from '../views/Users/Users'
@@ -23,7 +23,7 @@ import Account from '../views/Account/Account'
 
 const switchRoutes = (
 	<Switch>
-		<Route path='/admin/settings/brandMentality' component={TestBrandProfile} />
+		<Route path='/admin/settings/brandMentality' component={BrandMentality} />
 
 		<Route
 			path='/admin/discover/channelResearch'
@@ -81,16 +81,10 @@ const mapDispatchToProps = (dispatch) => {
 function Admin({ ...rest }) {
 	const classes = useStyles()
 	const mainPanel = React.createRef()
-	const [color] = React.useState('blue')
 	const [mobileOpen, setMobileOpen] = React.useState(false)
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen)
-	}
-	const resizeFunction = () => {
-		if (window.innerWidth >= 960) {
-			setMobileOpen(false)
-		}
 	}
 
 	var userId = rest.userId

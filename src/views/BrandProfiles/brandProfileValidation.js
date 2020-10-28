@@ -27,7 +27,7 @@ export const schemaValidation = Yup.object().shape({
 		.required('Required'),
 	topCompetitors: Yup.array()
 		.typeError('Wrong type')
-		.min(1, 'You have to create at least one competitor')
+		.min(1, 'At least one competitor is required')
 		.of(
 			Yup.object()
 				.shape({
@@ -86,5 +86,39 @@ function scenariosAllHaveAResponse(scenarios) {
 		if (!scenario.scenarioResponseId || scenario.scenarioResponseId.length < 1)
 			return false
 	}
+	return true
+}
+
+export const stepValidated = (index, errors, values) => {
+	if (!errors || Object.keys(errors).length < 1) {
+		return true
+	}
+	if (index === 0) {
+		return (
+			customIsValid(errors, 'basicInfo') &&
+			customIsValid(errors, 'topCompetitors')
+		)
+	}
+	if (index === 1) {
+		return (
+			customIsValid(errors, 'scenarios') && customIsValid(errors, 'categories')
+		)
+	}
+
+	if (index === 2) {
+		return customIsValid(errors, 'topics')
+	}
+	return true
+}
+
+const customIsValid = (errors, formName) => {
+	for (var prop in errors) {
+		if (Object.prototype.hasOwnProperty.call(errors, prop)) {
+			if (prop.includes(formName)) {
+				return false
+			}
+		}
+	}
+
 	return true
 }

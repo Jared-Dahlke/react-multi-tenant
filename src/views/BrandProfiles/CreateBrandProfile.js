@@ -10,11 +10,9 @@ import StepLabel from '@material-ui/core/StepLabel'
 import {
 	primaryColor,
 	whiteColor,
-	grayColor,
-	successColor
+	grayColor
 } from '../../assets/jss/material-dashboard-react'
-import BasicInfo from './components/BasicInfo'
-import TopCompetitors from './components/TopCompetitors'
+import BasicInfo from './components/BasicInfo/BasicInfo'
 import { Form, withFormik } from 'formik'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
@@ -31,7 +29,7 @@ import { neutralColor } from '../../assets/jss/colorContants.js'
 import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
-import { schemaValidation } from './brandProfileValidation'
+import { schemaValidation, stepValidated } from './brandProfileValidation'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -92,7 +90,7 @@ const mapStateToProps = (state) => {
 }
 
 function getSteps() {
-	return ['Basic Info', 'Content Settings', 'Competitors', 'Topics']
+	return ['Basic Info', 'Content Settings', 'Topics']
 }
 
 function getTopicValues(topics) {
@@ -169,42 +167,6 @@ function CreateBrandProfile(props) {
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
-	}
-
-	const customIsValid = (errors, formName) => {
-		for (var prop in errors) {
-			if (Object.prototype.hasOwnProperty.call(errors, prop)) {
-				if (prop.includes(formName)) {
-					return false
-				}
-			}
-		}
-
-		return true
-	}
-
-	const stepValidated = (index, errors, values) => {
-		if (!errors || Object.keys(errors).length < 1) {
-			return true
-		}
-		if (index === 0) {
-			return customIsValid(errors, 'basicInfo')
-		}
-		if (index === 1) {
-			return (
-				customIsValid(errors, 'scenarios') &&
-				customIsValid(errors, 'categories')
-			)
-		}
-
-		if (index === 2) {
-			return customIsValid(errors, 'topCompetitors')
-		}
-
-		if (index === 3) {
-			return customIsValid(errors, 'topics')
-		}
-		return true
 	}
 
 	const allTopicValues = React.useMemo(() => {
@@ -303,24 +265,17 @@ function CreateBrandProfile(props) {
 									</div>
 								) : activeStep === 2 ? (
 									<div>
-										<TopCompetitors
-											setFieldValue={setFieldValue}
-											errors={errors}
-											competitors={values.topCompetitors}
-											values={values}
-										/>
-									</div>
-								) : activeStep === 3 ? (
-									<div style={{ flex: 1 }}>
-										<Topics
-											formikValues={values}
-											allValues={allTopicValues}
-											selectedTopics={selectedTopics}
-											updateExpandedKeys={updateEpandedTopicKeys}
-											expandedTopicKeys={expandedTopicKeys}
-											setFieldValue={setFieldValue}
-											errors={errors}
-										/>
+										<div style={{ flex: 1 }}>
+											<Topics
+												formikValues={values}
+												allValues={allTopicValues}
+												selectedTopics={selectedTopics}
+												updateExpandedKeys={updateEpandedTopicKeys}
+												expandedTopicKeys={expandedTopicKeys}
+												setFieldValue={setFieldValue}
+												errors={errors}
+											/>
+										</div>
 									</div>
 								) : (
 									<div style={{ color: 'white' }}>

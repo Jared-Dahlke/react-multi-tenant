@@ -62,7 +62,15 @@ module.exports = override(
 
 				//messages
 				'@message-success-bg': neutralExtraLightColor, //'#58b15b',
-				'@message-header-color': '#FFF'
+				'@message-header-color': '#FFF',
+
+				//panel
+				'@panel-heading-color': '#FFF',
+				'@panel-border': '1px solid' + neutralExtraLightColor,
+
+				//table
+				'@table-body-background': neutralColor,
+				'@table-body-hover-background': neutralExtraLightColor
 			}
 		}
 	})
