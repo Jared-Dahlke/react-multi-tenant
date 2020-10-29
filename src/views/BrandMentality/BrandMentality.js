@@ -6,7 +6,7 @@ import styles from '../../assets/jss/material-dashboard-react/views/iconsStyle.j
 
 const useStyles = makeStyles(styles)
 
-function BrandProfiles(props) {
+export default function BrandMentality(props) {
 	const classes = useStyles()
 
 	return (
@@ -23,5 +23,3 @@ function BrandProfiles(props) {
 		</CardBody>
 	)
 }
-
-export default BrandProfiles

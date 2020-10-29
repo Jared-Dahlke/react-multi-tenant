@@ -6,7 +6,8 @@ import {
 	SET_ALERT,
 	USER_PROFILE_IS_LOADING,
 	SET_LOGGING_IN,
-	SET_UPDATING_PASSWORD
+	SET_UPDATING_PASSWORD,
+	SET_LOGGED_IN_USER_PERMISSIONS
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
@@ -45,6 +46,13 @@ export function setUserId(payload) {
 	return {
 		type: SET_USER_ID,
 		payload
+	}
+}
+
+export function setLoggedInUserPermissions(loggedInUserPermissions) {
+	return {
+		type: SET_LOGGED_IN_USER_PERMISSIONS,
+		loggedInUserPermissions
 	}
 }
 
@@ -89,11 +97,11 @@ export function login(credentials) {
 
 				localStorage.removeItem('permissions')
 				if (user.permissions && user.permissions.length > 0) {
-					let permissionArray = []
-					for (const permission of user.permissions) {
-						permissionArray.push(permission.permissionId)
+					let permNames = []
+					for (const p of user.permissions) {
+						permNames.push(p.permissionName)
 					}
-					localStorage.setItem('permissions', permissionArray)
+					localStorage.setItem('permissions', JSON.stringify(permNames))
 				}
 
 				dispatch(setLoggedIn(true))

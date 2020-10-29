@@ -50,16 +50,6 @@ export default function CategoryButtonGroup(props) {
 					>
 						Block
 					</Button>
-
-					<Button
-						key='2'
-						onClick={(e) => handleClick(3)}
-						color={
-							props.category.contentCategoryResponseId == 3 ? 'yellow' : 'blue'
-						}
-					>
-						No Action
-					</Button>
 				</ButtonGroup>
 				<div style={{ color: neutralColor, height: 15 }} />
 			</GridItem>

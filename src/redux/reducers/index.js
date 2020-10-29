@@ -14,7 +14,8 @@ import {
 	user,
 	userProfileIsLoading,
 	loggingIn,
-	updatingPassword
+	updatingPassword,
+	loggedInUserPermissions
 } from './auth'
 import {
 	users,
@@ -114,5 +115,6 @@ export default combineReducers({
 	brandProfileSaving,
 	brandProfileSaved,
 	userAddError,
-	updatingPassword
+	updatingPassword,
+	loggedInUserPermissions
 })

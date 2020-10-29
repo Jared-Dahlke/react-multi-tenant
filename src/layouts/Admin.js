@@ -8,10 +8,10 @@ import CreateUser from '../views/Users/CreateUser.js'
 
 // Redux
 import { connect } from 'react-redux'
-import { setUserId } from '../redux/actions/auth.js'
+import { setUserId, setLoggedInUserPermissions } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
 import EditUser from '../views/Users/EditUser'
-import TestBrandProfile from '../views/BrandProfiles/TestBrandProfile'
+import BrandMentality from '../views/BrandMentality/BrandMentality'
 import ChannelResearchTemp from '../views/Discover/ChannelResearchTemp'
 import ListBuilder from '../views/Discover/ListBuilder.js'
 import Users from '../views/Users/Users'
@@ -23,7 +23,7 @@ import Account from '../views/Account/Account'
 
 const switchRoutes = (
 	<Switch>
-		<Route path='/admin/settings/brandMentality' component={TestBrandProfile} />
+		<Route path='/admin/settings/brandMentality' component={BrandMentality} />
 
 		<Route
 			path='/admin/discover/channelResearch'
@@ -74,23 +74,19 @@ const useStyles = makeStyles(styles)
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setUserId: (userId) => dispatch(setUserId(userId)),
-		fetchSiteData: () => dispatch(fetchSiteData())
+		fetchSiteData: () => dispatch(fetchSiteData()),
+		setLoggedInUserPermissions: (permissions) =>
+			dispatch(setLoggedInUserPermissions(permissions))
 	}
 }
 
 function Admin({ ...rest }) {
 	const classes = useStyles()
 	const mainPanel = React.createRef()
-	const [color] = React.useState('blue')
 	const [mobileOpen, setMobileOpen] = React.useState(false)
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen)
-	}
-	const resizeFunction = () => {
-		if (window.innerWidth >= 960) {
-			setMobileOpen(false)
-		}
 	}
 
 	var userId = rest.userId
@@ -99,6 +95,12 @@ function Admin({ ...rest }) {
 		if (userId) {
 			rest.setUserId(userId)
 		}
+	}
+
+	let permissions = localStorage.getItem('permissions')
+	if (permissions) {
+		let parsedPerms = JSON.parse(permissions)
+		rest.setLoggedInUserPermissions(parsedPerms)
 	}
 
 	//preload critical data into the application
