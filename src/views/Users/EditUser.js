@@ -8,7 +8,7 @@ import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
-import {
+import { 
 	updateUserData,
 	updateUserAccounts,
 	fetchUserAccounts,
@@ -20,6 +20,8 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
+import {Icon, IconButton, Modal, Tooltip, Whisper} from 'rsuite/lib'
+import RolesInfo from './RolesInfo.js'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -50,7 +52,9 @@ const mapStateToProps = (state) => {
 		users: state.users,
 		editUserUserAccountsLoading: state.editUserUserAccountsLoading,
 		userEditSaving: state.userEditSaving,
-		userEditSaved: state.userEditSaved
+		userEditSaved: state.userEditSaved,
+		rolesPermissions:state.rolesPermissions,
+		userProfile: state.user.userProfile
 	}
 }
 
@@ -117,6 +121,8 @@ const getUser = (users, userId) => {
 }
 
 export function EditUser(props) {
+	const [ openDialog, setOpenDialog  ] = React.useState(false)
+	
 	let parsedUserId = JSON.parse(props.match.params.user)
 
 	let treeAccounts = React.useMemo(
@@ -147,6 +153,15 @@ export function EditUser(props) {
 		props.updateUserAccounts(user, accounts)
 	}
 
+	const handleDialog = (value) =>{
+		setOpenDialog(value)
+	}
+
+	const filteredRolesPermissions = (userType) => {
+		if(userType === 'External') return Array.from(props.rolesPermissions.data).filter(role => role.userType === 'External')
+		return props.rolesPermissions && props.rolesPermissions.data && Array.from(props.rolesPermissions.data)
+	}
+
 	let fetchUserAccounts = props.fetchUserAccounts
 
 	React.useEffect(() => {
@@ -156,6 +171,7 @@ export function EditUser(props) {
 	}, [props.users, parsedUserId, user.accounts, fetchUserAccounts])
 
 	return (
+		<>
 		<Formik
 			data-qa='editUserForm'
 			enableReinitialize={true}
@@ -192,7 +208,7 @@ export function EditUser(props) {
 									<div>
 										<CardBody>
 											<GridContainer>
-												<GridItem xs={12} sm={12} md={5}>
+												<GridItem xs={12} sm={12} md={6}>
 													<FormikInput
 														name='company'
 														labelText='Company'
@@ -211,7 +227,7 @@ export function EditUser(props) {
 													/>
 												</GridItem>
 
-												<GridItem xs={12} sm={12} md={4}>
+												<GridItem xs={12} sm={12} md={6}>
 													<FormikInput
 														name='firstName'
 														labelText='First Name'
@@ -219,7 +235,7 @@ export function EditUser(props) {
 													/>
 												</GridItem>
 
-												<GridItem xs={12} sm={12} md={8}>
+												<GridItem xs={12} sm={12} md={6}>
 													<FormikInput
 														name='lastName'
 														labelText='Last Name'
@@ -227,7 +243,7 @@ export function EditUser(props) {
 													/>
 												</GridItem>
 
-												<GridItem xs={12} sm={12} md={5}>
+												<GridItem xs={12} sm={12} md={6}>
 													{props.accounts.data &&
 													props.accounts.data.length > 0 &&
 													!props.editUserUserAccountsLoading ? (
@@ -244,9 +260,14 @@ export function EditUser(props) {
 														/>
 													) : null}
 												</GridItem>
-												<GridItem xs={12} sm={12} md={7}></GridItem>
+												<GridItem xs={12} sm={12} md={6}></GridItem>
 
-												<GridItem xs={10} sm={10} md={5}>
+												<GridItem xs={10} sm={10} md={6}>
+													<div 
+													style={{
+														display:'flex',
+														alignItems:'flex-end'
+													}}>
 													<FormikSelect
 														id='role'
 														name='roleId'
@@ -264,6 +285,16 @@ export function EditUser(props) {
 														touched={touched.roleId}
 														error={errors.roleId}
 													/>
+													<Whisper placement="right" trigger="hover" speaker={<Tooltip>More about Roles/Permissions</Tooltip>}> 
+													 <IconButton 
+														 icon={<Icon icon="info" />} 
+														 circle 
+														 size='md' 
+														 appearance='ghost' 
+														 onClick={()=>{handleDialog(true)}} 
+														 style={{margin:'10px'}}/>
+													 </Whisper>
+													 </div>
 												</GridItem>
 											</GridContainer>
 										</CardBody>
@@ -298,6 +329,14 @@ export function EditUser(props) {
 				</div>
 			)}
 		/>
+		{/* Info Modal for Roles help */}
+		{openDialog && <RolesInfo 
+						show={openDialog} 
+						title='Roles and Permissions'
+						handleDialog = {(value)=> {handleDialog(value)}}
+						data = {filteredRolesPermissions(props.userProfile && props.userProfile.userType)}
+						userType={props.userProfile && props.userProfile.userType}/>}
+		</>
 	)
 }
 
