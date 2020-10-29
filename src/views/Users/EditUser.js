@@ -243,7 +243,7 @@ export function EditUser(props) {
 															onChange={setFieldValue}
 															cascade={true}
 															error={errors.accounts}
-															disabled={!userCan(perms.USER_UPDATE)}
+															disabled={!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)}
 														/>
 													) : null}
 												</GridItem>

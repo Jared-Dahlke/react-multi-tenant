@@ -186,11 +186,19 @@ function Header(props) {
 
 	const MyLink = React.forwardRef((props, ref) => {
 		const { href, as, label, ...rest } = props
-		return (
-			<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
-				{label}
-			</Link>
-		)
+
+		if (
+			label.includes('Brand Mentality') &&
+			!userCan(perms.BRAND_MENTALITY_READ)
+		) {
+			return null
+		} else {
+			return (
+				<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
+					{label}
+				</Link>
+			)
+		}
 	})
 
 	const handleLogOut = (props) => {
@@ -241,12 +249,11 @@ function Header(props) {
 								href='/admin/settings/brandProfiles'
 								label='Brand Profiles'
 							/>
-							<UserCan i={perms.BRAND_MENTALITY_READ}>
-								<NavLink
-									href='/admin/settings/brandMentality'
-									label='Brand Mentality'
-								/>
-							</UserCan>
+
+							<NavLink
+								href='/admin/settings/brandMentality'
+								label='Brand Mentality'
+							/>
 						</Dropdown>
 					</Nav>
 					<Nav pullRight style={{ marginRight: 30 }}>
