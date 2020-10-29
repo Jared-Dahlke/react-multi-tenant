@@ -20,6 +20,7 @@ export default function SuiteTree(props) {
 				onChange={handleChange}
 				cascade={props.cascade}
 				style={{ width: '100%' }}
+				disabled={props.disabled}
 			/>
 			<FormHelperText
 				id='component-helper-text'

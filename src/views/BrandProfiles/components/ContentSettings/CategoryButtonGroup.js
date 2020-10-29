@@ -4,6 +4,7 @@ import GridContainer from '../../../../components/Grid/GridContainer'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import { neutralColor } from '../../../../assets/jss/colorContants'
+import { perms, userCan } from '../../../../Can'
 
 export default function CategoryButtonGroup(props) {
 	const handleClick = (val) => {
@@ -32,6 +33,7 @@ export default function CategoryButtonGroup(props) {
 			<GridItem xs={6} sm={6} md={6}>
 				<ButtonGroup size='xs'>
 					<Button
+						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						key='0'
 						id='0'
 						onClick={(e) => handleClick(1)}
@@ -42,6 +44,7 @@ export default function CategoryButtonGroup(props) {
 						Target
 					</Button>
 					<Button
+						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						key='1'
 						onClick={(e) => handleClick(2)}
 						color={

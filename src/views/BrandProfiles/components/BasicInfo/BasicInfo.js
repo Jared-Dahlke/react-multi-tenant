@@ -6,6 +6,8 @@ import FormikSelect from '../../../../components/CustomSelect/FormikSelect'
 import TopCompetitors from './TopCompetitors'
 import Grid from '@material-ui/core/Grid'
 
+import { UserCan, perms, userCan } from '../../../../Can'
+
 export default function BasicInfo(props) {
 	return (
 		<div>
@@ -40,6 +42,7 @@ export default function BasicInfo(props) {
 									validateForm={props.validateForm}
 									touched={props.touched.basicInfoIndustryVerticalId}
 									error={props.errors.basicInfoIndustryVerticalId}
+									isDisabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 								/>
 							</GridItem>
 
@@ -48,6 +51,7 @@ export default function BasicInfo(props) {
 									name='basicInfoTwitterProfile'
 									labelText='Twitter Profile'
 									startAdornmentText={'https://twitter.com/'}
+									disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 								/>
 							</GridItem>
 						</Grid>

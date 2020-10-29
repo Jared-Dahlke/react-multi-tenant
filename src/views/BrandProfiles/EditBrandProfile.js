@@ -7,7 +7,6 @@ import {
 	grayColor
 } from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo/BasicInfo'
-import TopCompetitors from './components/BasicInfo/TopCompetitors'
 import { Form, withFormik } from 'formik'
 import { schemaValidation, stepValidated } from './brandProfileValidation'
 import GridContainer from '../../components/Grid/GridContainer'
@@ -27,6 +26,7 @@ import { neutralColor } from '../../assets/jss/colorContants.js'
 import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
+import { UserCan, perms, userCan } from '../../Can'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -303,10 +303,14 @@ function EditBrandProfile(props) {
 												<Message
 													showIcon
 													type='success'
-													title='Success'
+													title={
+														userCan(perms.BRAND_PROFILE_UPDATE) ? 'Success' : ''
+													}
 													description={
 														<p>
-															{'Your brand profile was saved. Now you can '}
+															{userCan(perms.BRAND_PROFILE_UPDATE)
+																? 'Your brand profile was saved. Now you can '
+																: ' Complete.'}
 															<Link to='/admin/engage/listBuilder'>
 																{'go to the list builder '}
 															</Link>
@@ -325,13 +329,15 @@ function EditBrandProfile(props) {
 						</div>
 
 						<div style={{ position: 'fixed', bottom: 30, left: 70 }}>
-							<Button
-								loading={props.brandProfileSaving}
-								type='submit'
-								disabled={!dirty || !isValid}
-							>
-								Save
-							</Button>
+							<UserCan i={perms.BRAND_PROFILE_UPDATE}>
+								<Button
+									loading={props.brandProfileSaving}
+									type='submit'
+									disabled={!dirty || !isValid}
+								>
+									Save
+								</Button>
+							</UserCan>
 						</div>
 
 						<div style={{ position: 'fixed', bottom: 30, right: 70 }}>

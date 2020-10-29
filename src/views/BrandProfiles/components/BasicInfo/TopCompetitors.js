@@ -25,8 +25,8 @@ import tableStyles from '../../../../assets/jss/material-dashboard-react/compone
 import FormHelperText from '@material-ui/core/FormHelperText'
 import debounce from 'just-debounce-it'
 import Label from '../../../../components/CustomInputLabel/CustomInputLabel'
-import IconButton from 'rsuite/lib/IconButton'
-import Icon from 'rsuite/lib/Icon'
+
+import { UserCan, perms, userCan } from '../../../../Can'
 
 import { neutralColor } from '../../../../assets/jss/colorContants'
 import * as Yup from 'yup'
@@ -61,9 +61,7 @@ export default function TopCompetitors(props) {
 	}
 
 	const handleAddNew = (values, setFieldValue) => {
-		console.log(values)
 		let old = JSON.parse(JSON.stringify(values.competitors))
-		console.log(old)
 		old.push({
 			competitorName: '',
 			websiteUrl: '',
@@ -129,6 +127,7 @@ export default function TopCompetitors(props) {
 					position: 'relative'
 				}}
 				name={props.name}
+				disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 			/>
 			<ErrorMessage
 				component='div'
@@ -183,17 +182,19 @@ export default function TopCompetitors(props) {
 					<Grid container justify='center'>
 						<Grid item>
 							<Grid container justify='flex-end'>
-								<Button
-									size={'sm'}
-									onClick={
-										() => {
-											handleAddNew(formik.values, formik.setFieldValue)
-										}
-										//	arrayHelpers
-									} // insert an empty string at a position
-								>
-									Add
-								</Button>
+								<UserCan i={perms.BRAND_PROFILE_UPDATE}>
+									<Button
+										size={'sm'}
+										onClick={
+											() => {
+												handleAddNew(formik.values, formik.setFieldValue)
+											}
+											//	arrayHelpers
+										} // insert an empty string at a position
+									>
+										Add
+									</Button>
+								</UserCan>
 							</Grid>
 							{props.errors.topCompetitors ? (
 								<FormHelperText
@@ -263,20 +264,22 @@ export default function TopCompetitors(props) {
 																	style={{ padding: 4, margin: 4 }}
 																	className={tableCellClasses}
 																>
-																	<Button
-																		size={'sm'}
-																		color='red'
-																		appearance='link'
-																		onClick={() =>
-																			handleDeleteCompetitor(
-																				competitor.competitorId,
-																				arrayHelpers,
-																				index
-																			)
-																		}
-																	>
-																		Remove
-																	</Button>
+																	<UserCan i={perms.BRAND_PROFILE_UPDATE}>
+																		<Button
+																			size={'sm'}
+																			color='red'
+																			appearance='link'
+																			onClick={() =>
+																				handleDeleteCompetitor(
+																					competitor.competitorId,
+																					arrayHelpers,
+																					index
+																				)
+																			}
+																		>
+																			Remove
+																		</Button>
+																	</UserCan>
 																</TableCell>
 															</TableRow>
 													  ))
@@ -295,60 +298,3 @@ export default function TopCompetitors(props) {
 		</Formik>
 	)
 }
-
-/**<TableRow
-									key={'newlyAdded'}
-									className={classes.tableRow}
-									style={{ height: '140px' }}
-								>
-									<TableCell className={tableCellClasses}>
-										<FormikInput
-											name='competitorName'
-											validate={v.isBrandProfileNameError}
-											simple
-										/>
-									</TableCell>
-									<TableCell className={tableCellClasses}>
-										<FormikInput
-											name='twitterProfileUrl'
-											startAdornmentText={'https://twitter.com/'}
-											validate={v.isTwitterProfileError}
-											simple
-										/>
-									</TableCell>
-
-									<TableCell className={tableCellClasses}>
-										<FormikInput
-											name='websiteUrl'
-											validate={v.isWebsiteUrlError}
-											simple
-										/>
-									</TableCell>
-
-									<TableCell>
-										<IconButton
-											aria-label='Close'
-											className={classes.tableActionButton}
-											onClick={() => {
-												setAddingNew(false)
-											}}
-											style={{ marginLeft: 10 }}
-										>
-											<Label label='Remove  ' color={accentColor} />
-										</IconButton>
-									</TableCell>
-									<TableCell>
-										{Object.keys(newCompetitorFormik.errors).length === 0 &&
-										newCompetitorFormik.errors.constructor === Object ? (
-											<IconButton
-												aria-label='Save'
-												className={classes.tableActionButton}
-												onClick={() => {
-													handleSaveNew(newCompetitorFormik.values)
-												}}
-											>
-												<Label label='Save  ' color={accentColor} />
-											</IconButton>
-										) : null}
-									</TableCell>
-								</TableRow> */

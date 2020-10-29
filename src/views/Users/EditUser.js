@@ -20,6 +20,7 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
+import { UserCan, perms, userCan } from '../../Can'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -197,9 +198,7 @@ export function EditUser(props) {
 														name='company'
 														labelText='Company'
 														id='company'
-														inputProps={{
-															disabled: true
-														}}
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -208,6 +207,7 @@ export function EditUser(props) {
 														name='email'
 														labelText='Email'
 														id='email'
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -216,6 +216,7 @@ export function EditUser(props) {
 														name='firstName'
 														labelText='First Name'
 														id='firstName'
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -224,6 +225,7 @@ export function EditUser(props) {
 														name='lastName'
 														labelText='Last Name'
 														id='lastName'
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -241,6 +243,7 @@ export function EditUser(props) {
 															onChange={setFieldValue}
 															cascade={true}
 															error={errors.accounts}
+															disabled={!userCan(perms.USER_UPDATE)}
 														/>
 													) : null}
 												</GridItem>
@@ -263,18 +266,21 @@ export function EditUser(props) {
 														validateForm={validateForm}
 														touched={touched.roleId}
 														error={errors.roleId}
+														isDisabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 											</GridContainer>
 										</CardBody>
 										<CardFooter>
-											<Button
-												disabled={!isValid || !dirty}
-												onClick={() => handleSaveClick(values, resetForm)}
-												loading={props.userEditSaving}
-											>
-												Save
-											</Button>
+											<UserCan i={perms.USER_UPDATE}>
+												<Button
+													disabled={!isValid || !dirty}
+													onClick={() => handleSaveClick(values, resetForm)}
+													loading={props.userEditSaving}
+												>
+													Save
+												</Button>
+											</UserCan>
 										</CardFooter>
 									</div>
 								)}

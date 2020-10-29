@@ -11,6 +11,7 @@ import {
 } from '../../../../assets/jss/material-dashboard-react.js'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { neutralColor } from '../../../../assets/jss/colorContants'
+import { perms, userCan } from '../../../../Can'
 
 const styles = (theme) => ({
 	radio: {
@@ -60,6 +61,7 @@ export default function CustomRadio(props) {
 						control={
 							<Radio
 								classes={{ root: classes.radio, checked: classes.checked }}
+								disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 							/>
 						}
 						label='Target'
@@ -70,6 +72,7 @@ export default function CustomRadio(props) {
 						control={
 							<Radio
 								classes={{ root: classes.radio, checked: classes.checked }}
+								disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 							/>
 						}
 						label='Block'
@@ -80,6 +83,7 @@ export default function CustomRadio(props) {
 						control={
 							<Radio
 								classes={{ root: classes.radio, checked: classes.checked }}
+								disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 							/>
 						}
 						label='Monitor'
