@@ -1,42 +1,13 @@
-import React from 'react'
+export const userCan = (event) => {
+	const myperms = localStorage.getItem('permissions')
+	return myperms.includes(event)
+}
 
-const ShowForPermissionComponent = (props) => {
-	const permissions = localStorage.getItem('permissions')
-	let myperms = React.useMemo(() => {
-		return getPermsSimple(JSON.parse(permissions))
-	}, [permissions])
-
+export const UserCan = (props) => {
+	const myperms = localStorage.getItem('permissions')
 	const couldShow = myperms.includes(props.i)
 	return couldShow ? props.children : null
 }
-
-export const ShowForPermissionComponentTest = (props) => {
-	const permissions = localStorage.getItem('permissions')
-	let myperms = React.useMemo(() => {
-		return getPermsSimple(JSON.parse(permissions))
-	}, [permissions])
-
-	const couldShow = myperms.includes(props.i)
-	return couldShow ? true : false
-}
-
-const getPermsSimple = (permissions) => {
-	console.log('running get perms simple')
-	console.log(permissions)
-	if (!permissions || permissions.length < 1) return []
-	let permsFin = []
-	for (const perm of permissions) {
-		permsFin.push(perm.permissionName)
-	}
-	console.log('returning from get perms simple')
-	console.log(permsFin)
-	return permsFin
-}
-
-export const Can = ShowForPermissionComponent
-
-const myperms = localStorage.getItem('permissions')
-export const userPerms = getPermsSimple(JSON.parse(myperms))
 
 export const perms = {
 	ASSIGNED_ACCOUNT_UPDATE: 'ASSIGNED_ACCOUNT_UPDATE',

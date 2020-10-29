@@ -6,7 +6,8 @@ import {
 	SET_USER_ID,
 	USER_PROFILE_IS_LOADING,
 	SET_LOGGING_IN,
-	SET_UPDATING_PASSWORD
+	SET_UPDATING_PASSWORD,
+	SET_LOGGED_IN_USER_PERMISSIONS
 } from '../action-types/auth'
 
 import { userObjValidation } from '../../schemas'
@@ -69,6 +70,15 @@ export function isLoggedIn(state = false, action) {
 	switch (action.type) {
 		case SET_LOGGED_IN:
 			return action.payload
+		default:
+			return state
+	}
+}
+
+export function loggedInUserPermissions(state = [], action) {
+	switch (action.type) {
+		case SET_LOGGED_IN_USER_PERMISSIONS:
+			return action.loggedInUserPermissions
 		default:
 			return state
 	}
