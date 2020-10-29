@@ -14,6 +14,7 @@ import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
 import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
+import { Can } from '../../Can'
 
 const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)
@@ -245,6 +246,7 @@ function Header(props) {
 						{!onlyMentality ? (
 							<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
 								<NavLink href='/admin/settings/account' label='Account' />
+
 								<NavLink href='/admin/settings/users' label='Users' />
 								<NavLink
 									href='/admin/settings/brandProfiles'

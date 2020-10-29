@@ -89,11 +89,7 @@ export function login(credentials) {
 
 				localStorage.removeItem('permissions')
 				if (user.permissions && user.permissions.length > 0) {
-					let permissionArray = []
-					for (const permission of user.permissions) {
-						permissionArray.push(permission.permissionId)
-					}
-					localStorage.setItem('permissions', permissionArray)
+					localStorage.setItem('permissions', JSON.stringify(user.permissions))
 				}
 
 				dispatch(setLoggedIn(true))

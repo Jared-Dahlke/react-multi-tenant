@@ -218,9 +218,10 @@ export function fetchSiteData(accountId) {
 
 			localStorage.setItem('currentAccountId', accountId)
 			dispatch(fetchAccountTypes())
+			dispatch(userProfileFetchData())
 			dispatch(setCurrentAccount(accountId))
 			dispatch(setCurrentAccountId(accountId))
-			dispatch(userProfileFetchData())
+
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData(accountId))
 			dispatch(rolesFetchData(accountId))
