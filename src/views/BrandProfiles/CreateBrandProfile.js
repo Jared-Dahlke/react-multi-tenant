@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
 import { schemaValidation, stepValidated } from './brandProfileValidation'
+import { Debug } from '../Debug'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {

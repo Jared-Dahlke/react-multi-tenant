@@ -274,15 +274,6 @@ function EditBrandProfile(props) {
 										/>
 									</div>
 								) : activeStep === 2 ? (
-									<div>
-										<TopCompetitors
-											setFieldValue={setFieldValue}
-											errors={errors}
-											competitors={values.topCompetitors}
-											values={values}
-										/>
-									</div>
-								) : activeStep === 3 ? (
 									<div style={{ flex: 1 }}>
 										<Topics
 											formikValues={values}

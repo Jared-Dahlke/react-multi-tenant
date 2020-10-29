@@ -27,15 +27,7 @@ export const schemaValidation = Yup.object().shape({
 		.required('Required'),
 	topCompetitors: Yup.array()
 		.typeError('Wrong type')
-		.min(1, 'At least one competitor is required')
-		.of(
-			Yup.object()
-				.shape({
-					label: Yup.string(),
-					value: Yup.string()
-				})
-				.transform((v) => (v === '' ? null : v))
-		),
+		.min(1, 'At least one competitor is required'),
 	topics: Yup.array()
 		.typeError('Wrong type')
 		.test('topicsTest', 'You must include at least one topic', (topics) => {
