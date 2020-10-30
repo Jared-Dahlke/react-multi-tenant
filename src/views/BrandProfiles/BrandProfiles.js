@@ -105,11 +105,13 @@ function BrandProfiles(props) {
 			<GridItem xs={12} sm={12} md={6}>
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
-						<UserCan i={perms.BRAND_PROFILE_CREATE}>
-							<Button color='primary' onClick={handleCreateNewProfileClick}>
-								Create New Profile
-							</Button>
-						</UserCan>
+						<Grid container justify='flex-end'>
+							<UserCan i={perms.BRAND_PROFILE_CREATE}>
+								<Button color='primary' onClick={handleCreateNewProfileClick}>
+									Create New Profile
+								</Button>
+							</UserCan>
+						</Grid>
 
 						<Table className={classes.table}>
 							<TableHead className={tableClasses['primaryTableHeader']}>
