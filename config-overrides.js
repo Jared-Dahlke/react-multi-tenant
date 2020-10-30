@@ -64,13 +64,14 @@ module.exports = override(
 				'@message-success-bg': neutralExtraLightColor, //'#58b15b',
 				'@message-header-color': '#FFF',
 
+				//tables
+				'@table-body-background': neutralColor,
+				'@table-head-background': neutralColor,
+				'@table-body-hover-background': neutralExtraLightColor,
+				'@table-head-font-color': '#FFF',
 				//panel
 				'@panel-heading-color': '#FFF',
 				'@panel-border': '1px solid' + neutralExtraLightColor,
-
-				//table
-				'@table-body-background': neutralColor,
-				'@table-body-hover-background': neutralExtraLightColor,
 
 				//steps
 				//	'@steps-default-color': '#FFF',
