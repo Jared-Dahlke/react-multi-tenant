@@ -16,11 +16,6 @@ export default function SelectField(props) {
 		onChange(name, value)
 	}
 
-	function handleBlur() {
-		const { onBlur, name } = props
-		onBlur(name, true)
-	}
-
 	const {
 		id,
 		name,
@@ -45,7 +40,6 @@ export default function SelectField(props) {
 				data={options}
 				value={value}
 				onChange={handleChange}
-				onBlur={handleBlur}
 				disabled={isDisabled}
 				cleanable={false}
 				style={{ width: '100%' }}

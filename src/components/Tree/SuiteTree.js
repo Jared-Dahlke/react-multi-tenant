@@ -22,6 +22,7 @@ export default function SuiteTree(props) {
 				style={{ width: '100%' }}
 				disabled={props.disabled}
 			/>
+
 			<FormHelperText
 				id='component-helper-text'
 				style={{

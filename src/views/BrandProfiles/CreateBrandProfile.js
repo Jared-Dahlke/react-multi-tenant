@@ -77,9 +77,6 @@ const mapStateToProps = (state) => {
 		currentAccountId: state.currentAccountId,
 		brandProfileCreated: state.brandProfileCreated,
 		brandProfileCreating: state.brandProfileCreating,
-		brandProfileLoading: state.brandProfileLoading,
-		brandProfileSaving: state.brandProfileSaving,
-		brandProfileSaved: state.brandProfileSaved,
 		brandProfiles: state.brandProfiles
 	}
 }
@@ -199,6 +196,9 @@ function CreateBrandProfile(props) {
 		isValid,
 		dirty
 	} = props
+
+	console.log('create brand profile props')
+	console.log(props)
 
 	return (
 		<Form>

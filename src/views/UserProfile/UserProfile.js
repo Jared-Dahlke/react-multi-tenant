@@ -38,20 +38,20 @@ const mapDispatchToProps = (dispatch) => {
 
 const schemaValidation = Yup.object().shape({
 	firstName: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	lastName: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	company: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	email: Yup.string()
-		.email('Invalid email')
 		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	lastName: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	company: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	email: Yup.string()
+		.required('Required')
+		.email('Invalid email')
 })
 
 function UserProfile(props) {

@@ -6,10 +6,11 @@ export const schemaValidation = Yup.object().shape({
 		.typeError('Required')
 		.required('Required'),
 	basicInfoProfileName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	basicInfoWebsiteUrl: Yup.string()
+		.required('Required')
 		.test(
 			'urlTest',
 			'Valid URL required (e.g. google.com)',
@@ -18,13 +19,12 @@ export const schemaValidation = Yup.object().shape({
 					basicInfoWebsiteUrl
 				)
 			}
-		)
-		.required('Required'),
-
+		),
 	basicInfoTwitterProfile: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 30 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 30 characters'),
+
 	topCompetitors: Yup.array()
 		.typeError('Wrong type')
 		.min(1, 'At least one competitor is required'),

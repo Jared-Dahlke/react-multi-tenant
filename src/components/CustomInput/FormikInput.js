@@ -37,6 +37,7 @@ export default function CustomInput(props) {
 					}
 				>
 					{labelText && <Label label={labelText} />}
+
 					<InputGroup>
 						{props.startAdornmentText && (
 							<InputGroup.Addon style={{ color: '#AAAAAA' }}>

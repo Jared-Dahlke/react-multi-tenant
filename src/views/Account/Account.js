@@ -67,21 +67,21 @@ const schemaValidation = Yup.object().shape({
 				.transform((v) => (v === '' ? null : v))
 		),
 	accountName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	contactName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	contactEmail: Yup.string()
-		.email('Invalid email')
-		.required('Required'),
+		.required('Required')
+		.email('Invalid email'),
 	accountMargin: Yup.number()
 		.typeError('Account margin must be a number')
+		.required('Required')
 		.min(0, 'Margin must be a positive number')
-		.max(3000, 'Margin cannot be greater than 3000')
-		.required('Required'),
+		.max(3000, 'Margin cannot be greater than 3000'),
 	accountType: Yup.object()
 		.shape({
 			label: Yup.string(),
