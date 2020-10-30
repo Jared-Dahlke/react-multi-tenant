@@ -9,8 +9,6 @@ import Grid from '@material-ui/core/Grid'
 import { UserCan, perms, userCan } from '../../../../Can'
 
 export default function BasicInfo(props) {
-	console.log('basic info props')
-	console.log(props)
 	return (
 		<div>
 			<Grid container spacing={3} justify='center'>

@@ -296,13 +296,10 @@ export const createUser = (user) => {
 			console.log('inside catch')
 			console.log(error)
 		}
-		console.log(response)
 
 		if (response.status === 200) {
 			dispatch(setUserAdded(true))
 		} else {
-			console.log('invite user status not 200')
-			console.log(JSON.stringify(response))
 			dispatch(setUserAddError(true))
 		}
 		dispatch(setUserAdding(false))

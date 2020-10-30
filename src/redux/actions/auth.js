@@ -96,8 +96,6 @@ export function login(credentials) {
 				localStorage.setItem('userId', user.userId)
 
 				localStorage.removeItem('permissions')
-				console.log('just removed permissions from storage')
-				console.log(user.permissions)
 				if (user.permissions && user.permissions.length > 0) {
 					let permNames = []
 					for (const p of user.permissions) {

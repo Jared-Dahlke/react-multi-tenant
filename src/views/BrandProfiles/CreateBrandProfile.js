@@ -197,9 +197,6 @@ function CreateBrandProfile(props) {
 		dirty
 	} = props
 
-	console.log('create brand profile props')
-	console.log(props)
-
 	return (
 		<Form>
 			<Steps current={activeStep}>
