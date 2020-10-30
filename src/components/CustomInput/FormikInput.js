@@ -19,9 +19,16 @@ const useStyles = makeStyles(styles)
 export default function CustomInput(props) {
 	const classes = useStyles()
 	const { labelText, id } = props
+	const [myVal, setMyVal] = React.useState(props.formikValue)
+
+	const handleBlur = async (e, form) => {
+		e.preventDefault()
+		await form.setFieldValue(props.name, e.target.value)
+		form.validateField(props.name)
+	}
 
 	return (
-		<Field name={props.name} validate={props.validate}>
+		<Field name={props.name}>
 			{({ field, form }) => (
 				<FormControl
 					fullWidth={true}
@@ -39,8 +46,9 @@ export default function CustomInput(props) {
 
 						<Input
 							id={id}
-							value={field.value}
-							onChange={(e) => form.setFieldValue(props.name, e)}
+							value={myVal}
+							onChange={(e) => setMyVal(e)}
+							onBlur={(e) => handleBlur(e, form)}
 							disabled={props.disabled}
 							style={{
 								borderColor: 'white',

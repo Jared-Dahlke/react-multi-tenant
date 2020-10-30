@@ -90,8 +90,10 @@ function CreateUser(props) {
 
 	return (
 		<Formik
-			enableReinitialize
+			enableReinitialize={true}
 			validateOnMount={false}
+			validateOnChange={true}
+			validateOnBlur={true}
 			validationSchema={() => schemaValidation}
 			initialValues={{
 				company: '',
@@ -122,16 +124,23 @@ function CreateUser(props) {
 										<GridItem xs={12} sm={12} md={5}>
 											<FormikInput
 												name='company'
+												formikValue={values.company}
 												labelText='Company'
 												id='company'
 											/>
 										</GridItem>
 										<GridItem xs={12} sm={12} md={7}>
-											<FormikInput name='email' labelText='Email' id='email' />
+											<FormikInput
+												name='email'
+												formikValue={values.email}
+												labelText='Email'
+												id='email'
+											/>
 										</GridItem>
 										<GridItem xs={12} sm={12} md={5}>
 											<FormikInput
 												name='firstName'
+												formikValue={values.firstName}
 												labelText='First Name'
 												id='firstName'
 											/>
@@ -139,6 +148,7 @@ function CreateUser(props) {
 										<GridItem xs={12} sm={12} md={7}>
 											<FormikInput
 												name='lastName'
+												formikValue={values.lastName}
 												labelText='Last Name'
 												id='lastName'
 											/>

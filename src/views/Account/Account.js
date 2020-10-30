@@ -185,6 +185,7 @@ function Account(props) {
 									<GridItem xs={12} sm={12} md={12}>
 										<FormikInput
 											name='accountName'
+											formikValue={values.accountName}
 											labelText='Account Name'
 											id='accountName'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
@@ -192,23 +193,27 @@ function Account(props) {
 
 										<FormikInput
 											name='parentAccountName'
+											formikValue={values.parentAccountName}
 											labelText='Parent Account'
 											disabled
 										/>
 
 										<FormikInput
 											name='contactName'
+											formikValue={values.contactName}
 											labelText='Contact Name'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
 										/>
 
 										<FormikInput
 											name='contactEmail'
+											formikValue={values.contactEmail}
 											labelText='Contact Email'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
 										/>
 										<FormikInput
 											name='accountMargin'
+											formikValue={values.accountMargin}
 											labelText='Account Margin'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
 										/>
@@ -322,6 +327,8 @@ const FormikForm = withFormik({
 	},
 	enableReinitialize: true,
 	validateOnMount: true,
+	validateOnChange: true,
+	validateOnBlur: true,
 	validationSchema: schemaValidation,
 	handleSubmit: (values, { props }) => {
 		let account = {

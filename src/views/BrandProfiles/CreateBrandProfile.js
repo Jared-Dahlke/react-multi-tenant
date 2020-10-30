@@ -343,7 +343,8 @@ const FormikForm = withFormik({
 	},
 	enableReinitialize: true,
 	validateOnChange: true,
-	validateOnMount: true,
+	validateOnBlur: true,
+	validateOnMount: false,
 	validationSchema: schemaValidation
 })(CreateBrandProfile)
 

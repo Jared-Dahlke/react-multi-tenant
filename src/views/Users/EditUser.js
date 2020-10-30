@@ -161,6 +161,8 @@ export function EditUser(props) {
 			data-qa='editUserForm'
 			enableReinitialize={true}
 			validateOnMount={true}
+			validateOnChange={true}
+			validateOnBlur={true}
 			validationSchema={() => schemaValidation}
 			initialValues={{
 				company: user.company,
@@ -196,6 +198,7 @@ export function EditUser(props) {
 												<GridItem xs={12} sm={12} md={5}>
 													<FormikInput
 														name='company'
+														formikValue={values.company}
 														labelText='Company'
 														id='company'
 														disabled={!userCan(perms.USER_UPDATE)}
@@ -205,6 +208,7 @@ export function EditUser(props) {
 												<GridItem xs={12} sm={12} md={6}>
 													<FormikInput
 														name='email'
+														formikValue={values.email}
 														labelText='Email'
 														id='email'
 														disabled={!userCan(perms.USER_UPDATE)}
@@ -214,6 +218,7 @@ export function EditUser(props) {
 												<GridItem xs={12} sm={12} md={4}>
 													<FormikInput
 														name='firstName'
+														formikValue={values.firstName}
 														labelText='First Name'
 														id='firstName'
 														disabled={!userCan(perms.USER_UPDATE)}
@@ -223,6 +228,7 @@ export function EditUser(props) {
 												<GridItem xs={12} sm={12} md={8}>
 													<FormikInput
 														name='lastName'
+														formikValue={values.lastName}
 														labelText='Last Name'
 														id='lastName'
 														disabled={!userCan(perms.USER_UPDATE)}

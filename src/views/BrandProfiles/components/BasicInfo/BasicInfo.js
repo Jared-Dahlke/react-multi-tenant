@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid'
 import { UserCan, perms, userCan } from '../../../../Can'
 
 export default function BasicInfo(props) {
+	console.log('basic info props')
+	console.log(props)
 	return (
 		<div>
 			<Grid container spacing={3} justify='center'>
@@ -19,11 +21,16 @@ export default function BasicInfo(props) {
 								<FormikInput
 									name='basicInfoProfileName'
 									labelText='Brand Profile Name'
+									formikValue={props.values.basicInfoProfileName}
 								/>
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={6}>
-								<FormikInput name='basicInfoWebsiteUrl' labelText='Website' />
+								<FormikInput
+									name='basicInfoWebsiteUrl'
+									labelText='Website'
+									formikValue={props.values.basicInfoWebsiteUrl}
+								/>
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={6}>
@@ -50,6 +57,7 @@ export default function BasicInfo(props) {
 								<FormikInput
 									name='basicInfoTwitterProfile'
 									labelText='Twitter Profile'
+									formikValue={props.values.basicInfoTwitterProfile}
 									startAdornmentText={'https://twitter.com/'}
 									disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 								/>

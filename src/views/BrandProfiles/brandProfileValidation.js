@@ -62,6 +62,7 @@ function categoriesHasResponse(categories) {
 }
 
 function topicsHasResponse(topics) {
+	console.log('running topics has repsonse')
 	for (const topic of topics) {
 		if (topic.topicResponseId == 1) return true
 		if (topic.children && topic.children.length > 0) {
@@ -82,6 +83,7 @@ function scenariosAllHaveAResponse(scenarios) {
 }
 
 export const stepValidated = (index, errors, values) => {
+	console.log('running stepv validated')
 	if (!errors || Object.keys(errors).length < 1) {
 		return true
 	}
