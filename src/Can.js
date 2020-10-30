@@ -1,10 +1,12 @@
 export const userCan = (event) => {
 	const myperms = localStorage.getItem('permissions')
+	if (!myperms) return false
 	return myperms.includes(event)
 }
 
 export const UserCan = (props) => {
 	const myperms = localStorage.getItem('permissions')
+	if (!myperms) return null
 	const couldShow = myperms.includes(props.i)
 	return couldShow ? props.children : null
 }
