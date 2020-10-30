@@ -20,6 +20,12 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import { default as UUID } from 'node-uuid'
+import Icon from 'rsuite/lib/Icon'
+import IconButton from 'rsuite/lib/IconButton'
+import Tooltip from 'rsuite/lib/Tooltip'
+import Whisper from 'rsuite/lib/Whisper'
+import RolesInfo from './RolesInfo.js'
+
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -52,7 +58,9 @@ const mapStateToProps = (state) => {
 		currentAccountId: state.currentAccountId,
 		userAdded: state.userAdded,
 		userAdding: state.userAdding,
-		userAddError: state.userAddError
+		userAddError: state.userAddError,
+		rolesPermissions:state.rolesPermissions,
+		userProfile: state.user.userProfile
 	}
 }
 
@@ -65,6 +73,16 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function CreateUser(props) {
+	const [ openDialog, setOpenDialog  ] = React.useState(false)
+	const handleDialog = (value) =>{
+		setOpenDialog(value)
+	}
+
+	const filteredRolesPermissions = (userType) => {
+		if(userType === 'External') return Array.from(props.rolesPermissions.data).filter(role => role.userType === 'External')
+		return props.rolesPermissions && props.rolesPermissions.data && Array.from(props.rolesPermissions.data)
+	}
+
 	const handleInviteUserClick = (values) => {
 		let accountsToLink = []
 		for (const account of values.accounts) {
@@ -89,6 +107,7 @@ function CreateUser(props) {
 	}
 
 	return (
+		<>
 		<Formik
 			enableReinitialize={true}
 			validateOnMount={false}
@@ -169,6 +188,11 @@ function CreateUser(props) {
 										</GridItem>
 
 										<GridItem xs={10} sm={10} md={12}>
+											<div 
+												style={{
+														display:'flex',
+														alignItems:'flex-end'
+													}}>
 											<FormikSelect
 												id='role'
 												name='roleId'
@@ -185,6 +209,16 @@ function CreateUser(props) {
 												touched={touched.roleId}
 												error={errors.roleId}
 											/>
+											<Whisper placement="right" trigger="hover" speaker={<Tooltip>More about Roles/Permissions</Tooltip>}> 
+												<IconButton 
+													icon={<Icon icon="info" />} 
+													circle 
+													size='md' 
+													appearance='ghost' 
+													onClick={()=>{handleDialog(true)}} 
+													style={{margin:'10px'}}/>
+											</Whisper>
+											</div>
 										</GridItem>
 									</GridContainer>
 								</CardBody>
@@ -229,6 +263,14 @@ function CreateUser(props) {
 				</div>
 			)}
 		/>
+		{/* Info Modal for Roles help */}
+		{openDialog && <RolesInfo 
+						show={openDialog} 
+						title='Roles and Permissions'
+						handleDialog = {(value)=> {handleDialog(value)}}
+						data = {filteredRolesPermissions(props.userProfile && props.userProfile.userType)}
+						userType={props.userProfile && props.userProfile.userType}/>}
+		</>
 	)
 }
 
