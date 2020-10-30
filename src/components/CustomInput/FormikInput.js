@@ -59,14 +59,16 @@ export default function CustomInput(props) {
 
 						{!props.simple && (
 							<InputGroup.Addon>
-								{!form.errors[field.name] && field.value.length > 0 && (
+								{!form.errors[field.name] &&
+								field.value.length > 0 &&
+								!props.specialError ? (
 									<Icon icon='check' style={{ color: successColor[0] }} />
-								)}
+								) : null}
 							</InputGroup.Addon>
 						)}
 					</InputGroup>
 
-					{form.errors[field.name] && (
+					{(form.errors[field.name] || props.specialError) && (
 						<div>
 							<FormHelperText
 								id='component-helper-text'
@@ -76,7 +78,9 @@ export default function CustomInput(props) {
 									bottom: '-1'
 								}}
 							>
-								{form.errors[field.name]}
+								{form.errors[field.name]
+									? form.errors[field.name]
+									: props.specialError}
 							</FormHelperText>
 						</div>
 					)}

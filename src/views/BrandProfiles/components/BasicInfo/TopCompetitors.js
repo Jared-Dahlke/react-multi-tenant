@@ -25,6 +25,8 @@ import tableStyles from '../../../../assets/jss/material-dashboard-react/compone
 import FormHelperText from '@material-ui/core/FormHelperText'
 import debounce from 'just-debounce-it'
 import Label from '../../../../components/CustomInputLabel/CustomInputLabel'
+import FormikInput from '../../../../components/CustomInput/FormikInput'
+import RsuiteInput from 'rsuite/lib/Input'
 
 import { UserCan, perms, userCan } from '../../../../Can'
 
@@ -116,31 +118,20 @@ export default function TopCompetitors(props) {
 			)
 	})
 
-	const CustomField = (props) => (
-		<div style={{ position: 'relative' }}>
-			<Field
-				style={{
-					color: 'white',
-					backgroundColor: neutralColor,
-					borderRadius: 5,
-					border: '1px solid grey',
-					position: 'relative'
-				}}
-				name={props.name}
-				disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
-			/>
-			<ErrorMessage
-				component='div'
-				name={props.name}
-				style={{
-					color: dangerColor[0],
-					position: 'absolute',
-					top: 24,
-					font: defaultFont
-				}}
-			/>
-		</div>
-	)
+	const CustomField = (props) => {
+		console.log('custom field props')
+		console.log(props)
+		return (
+			<div style={{ position: 'relative' }}>
+				<FormikInput
+					name={props.name}
+					disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
+					formikValue={props.formikValue}
+					specialError={props.error}
+				/>
+			</div>
+		)
+	}
 
 	const AutoSave = ({ debounceMs }) => {
 		const formik = useFormikContext()
@@ -239,6 +230,14 @@ export default function TopCompetitors(props) {
 																>
 																	<CustomField
 																		name={`competitors.${index}.competitorName`}
+																		formikValue={competitor.competitorName}
+																		error={
+																			formik.errors &&
+																			formik.errors.competitors &&
+																			formik.errors.competitors[index] &&
+																			formik.errors.competitors[index]
+																				.competitorName
+																		}
 																	/>
 																</TableCell>
 
@@ -248,6 +247,15 @@ export default function TopCompetitors(props) {
 																>
 																	<CustomField
 																		name={`competitors.${index}.twitterProfileUrl`}
+																		formikValue={competitor.twitterProfileUrl}
+																		error={
+																			formik.errors &&
+																			formik.errors.competitors &&
+																			formik.errors.competitors[index] &&
+																			formik.errors.competitors[index]
+																				.twitterProfileUrl
+																		}
+																		//	error={competitor}
 																	/>
 																</TableCell>
 
@@ -257,6 +265,14 @@ export default function TopCompetitors(props) {
 																>
 																	<CustomField
 																		name={`competitors.${index}.websiteUrl`}
+																		formikValue={competitor.websiteUrl}
+																		error={
+																			formik.errors &&
+																			formik.errors.competitors &&
+																			formik.errors.competitors[index] &&
+																			formik.errors.competitors[index]
+																				.websiteUrl
+																		}
 																	/>
 																</TableCell>
 
