@@ -8,7 +8,7 @@ import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
-import { 
+import {
 	updateUserData,
 	updateUserAccounts,
 	fetchUserAccounts,
@@ -57,7 +57,7 @@ const mapStateToProps = (state) => {
 		editUserUserAccountsLoading: state.editUserUserAccountsLoading,
 		userEditSaving: state.userEditSaving,
 		userEditSaved: state.userEditSaved,
-		rolesPermissions:state.rolesPermissions,
+		rolesPermissions: state.rolesPermissions,
 		userProfile: state.user.userProfile
 	}
 }
@@ -125,8 +125,8 @@ const getUser = (users, userId) => {
 }
 
 export function EditUser(props) {
-	const [ openDialog, setOpenDialog  ] = React.useState(false)
-	
+	const [openDialog, setOpenDialog] = React.useState(false)
+
 	let parsedUserId = JSON.parse(props.match.params.user)
 
 	let treeAccounts = React.useMemo(
@@ -157,13 +157,20 @@ export function EditUser(props) {
 		props.updateUserAccounts(user, accounts)
 	}
 
-	const handleDialog = (value) =>{
+	const handleDialog = (value) => {
 		setOpenDialog(value)
 	}
 
 	const filteredRolesPermissions = (userType) => {
-		if(userType === 'External') return Array.from(props.rolesPermissions.data).filter(role => role.userType === 'External')
-		return props.rolesPermissions && props.rolesPermissions.data && Array.from(props.rolesPermissions.data)
+		if (userType === 'External')
+			return Array.from(props.rolesPermissions.data).filter(
+				(role) => role.userType === 'External'
+			)
+		return (
+			props.rolesPermissions &&
+			props.rolesPermissions.data &&
+			Array.from(props.rolesPermissions.data)
+		)
 	}
 
 	let fetchUserAccounts = props.fetchUserAccounts
@@ -176,181 +183,203 @@ export function EditUser(props) {
 
 	return (
 		<>
-		<Formik
-			data-qa='editUserForm'
-			enableReinitialize={true}
-			validateOnMount={true}
-			validateOnChange={true}
-			validateOnBlur={true}
-			validationSchema={() => schemaValidation}
-			initialValues={{
-				company: user.company,
-				firstName: user.firstName,
-				lastName: user.lastName,
-				email: user.email,
-				roleId: user.roleId,
-				accounts: grantedAccounts
-			}}
-			render={({
-				values,
-				errors,
-				touched,
-				setFieldValue,
-				setFieldTouched,
-				validateField,
-				validateForm,
-				isSubmitting,
-				isValid,
-				dirty,
-				resetForm
-			}) => (
-				<div>
-					<GridContainer>
-						<GridItem xs={12} sm={12} md={8}>
-							<Card>
-								{props.editUserUserAccountsLoading ? (
-									<FormLoader />
-								) : (
-									<div>
-										<CardBody>
-											<GridContainer>
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='company'
-														formikValue={values.company}
-														labelText='Company'
-														id='company'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
-
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='email'
-														formikValue={values.email}
-														labelText='Email'
-														id='email'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
-
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='firstName'
-														formikValue={values.firstName}
-														labelText='First Name'
-														id='firstName'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
-
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='lastName'
-														formikValue={values.lastName}
-														labelText='Last Name'
-														id='lastName'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
-
-												<GridItem xs={12} sm={12} md={6}>
-													{props.accounts.data &&
-													props.accounts.data.length > 0 &&
-													!props.editUserUserAccountsLoading ? (
-														<SuiteTree
-															name='accounts'
-															data-qa='accounts'
-															data={treeAccounts}
-															labelKey='accountName'
-															valueKey='accountId'
-															value={values.accounts}
-															onChange={setFieldValue}
-															cascade={true}
-															error={errors.accounts}
-															disabled={!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)}
+			<Formik
+				data-qa='editUserForm'
+				enableReinitialize={true}
+				validateOnMount={true}
+				validateOnChange={true}
+				validateOnBlur={true}
+				validationSchema={() => schemaValidation}
+				initialValues={{
+					company: user.company,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email,
+					roleId: user.roleId,
+					accounts: grantedAccounts
+				}}
+				render={({
+					values,
+					errors,
+					touched,
+					setFieldValue,
+					setFieldTouched,
+					validateField,
+					validateForm,
+					isSubmitting,
+					isValid,
+					dirty,
+					resetForm
+				}) => (
+					<div>
+						<GridContainer>
+							<GridItem xs={12} sm={12} md={8}>
+								<Card>
+									{props.editUserUserAccountsLoading ? (
+										<FormLoader />
+									) : (
+										<div>
+											<CardBody>
+												<GridContainer>
+													<GridItem xs={12} sm={12} md={6}>
+														<FormikInput
+															name='company'
+															formikValue={values.company}
+															labelText='Company'
+															id='company'
+															disabled={!userCan(perms.USER_UPDATE)}
 														/>
-													) : null}
-												</GridItem>
-												<GridItem xs={12} sm={12} md={6}></GridItem>
+													</GridItem>
 
-												<GridItem xs={10} sm={10} md={6}>
-													<div 
-													style={{
-														display:'flex',
-														alignItems:'flex-end'
-													}}>
-													<FormikSelect
-														id='role'
-														name='roleId'
-														data-qa='roleId'
-														label='Role'
-														placeholder='Role'
-														optionLabel='roleName'
-														optionValue='roleId'
-														options={props.roles}
-														value={values.roleId}
-														onChange={setFieldValue}
-														onBlur={setFieldTouched}
-														validateField={validateField}
-														validateForm={validateForm}
-														touched={touched.roleId}
-														error={errors.roleId}
-														isDisabled={!userCan(perms.USER_UPDATE)}
-													/>
-													<Whisper placement="right" trigger="hover" speaker={<Tooltip>More about Roles/Permissions</Tooltip>}> 
-													 <IconButton 
-														 icon={<Icon icon="info" />} 
-														 circle 
-														 size='md' 
-														 appearance='ghost' 
-														 onClick={()=>{handleDialog(true)}} 
-														 style={{margin:'10px'}}/>
-													 </Whisper>
-													 </div>
-												</GridItem>
-											</GridContainer>
-										</CardBody>
-										<CardFooter>
-											<UserCan i={perms.USER_UPDATE}>
-												<Button
-													disabled={!isValid || !dirty}
-													onClick={() => handleSaveClick(values, resetForm)}
-													loading={props.userEditSaving}
-												>
-													Save
-												</Button>
-											</UserCan>
-										</CardFooter>
-									</div>
-								)}
-							</Card>
-						</GridItem>
-					</GridContainer>
+													<GridItem xs={12} sm={12} md={6}>
+														<FormikInput
+															name='email'
+															formikValue={values.email}
+															labelText='Email'
+															id='email'
+															disabled={!userCan(perms.USER_UPDATE)}
+														/>
+													</GridItem>
 
-					<Snackbar
-						autoHideDuration={2000}
-						place='bc'
-						open={props.userEditSaved}
-						onClose={() => props.setUserEditSaved(false)}
-					>
-						<Alert
+													<GridItem xs={12} sm={12} md={6}>
+														<FormikInput
+															name='firstName'
+															formikValue={values.firstName}
+															labelText='First Name'
+															id='firstName'
+															disabled={!userCan(perms.USER_UPDATE)}
+														/>
+													</GridItem>
+
+													<GridItem xs={12} sm={12} md={6}>
+														<FormikInput
+															name='lastName'
+															formikValue={values.lastName}
+															labelText='Last Name'
+															id='lastName'
+															disabled={!userCan(perms.USER_UPDATE)}
+														/>
+													</GridItem>
+
+													<GridItem xs={12} sm={12} md={6}>
+														{props.accounts.data &&
+														props.accounts.data.length > 0 &&
+														!props.editUserUserAccountsLoading ? (
+															<SuiteTree
+																label='Account Access'
+																name='accounts'
+																data-qa='accounts'
+																data={treeAccounts}
+																labelKey='accountName'
+																valueKey='accountId'
+																value={values.accounts}
+																onChange={setFieldValue}
+																cascade={true}
+																error={errors.accounts}
+																disabled={
+																	!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)
+																}
+															/>
+														) : null}
+													</GridItem>
+													<GridItem xs={12} sm={12} md={6}></GridItem>
+
+													<GridItem xs={10} sm={10} md={6}>
+														<div
+															style={{
+																display: 'flex',
+																alignItems: 'flex-end'
+															}}
+														>
+															<FormikSelect
+																id='role'
+																name='roleId'
+																data-qa='roleId'
+																label='Role'
+																placeholder='Role'
+																optionLabel='roleName'
+																optionValue='roleId'
+																options={props.roles}
+																value={values.roleId}
+																onChange={setFieldValue}
+																onBlur={setFieldTouched}
+																validateField={validateField}
+																validateForm={validateForm}
+																touched={touched.roleId}
+																error={errors.roleId}
+																isDisabled={!userCan(perms.USER_UPDATE)}
+															/>
+															<Whisper
+																placement='right'
+																trigger='hover'
+																speaker={
+																	<Tooltip>
+																		More about Roles/Permissions
+																	</Tooltip>
+																}
+															>
+																<IconButton
+																	icon={<Icon icon='info' />}
+																	circle
+																	size='md'
+																	appearance='ghost'
+																	onClick={() => {
+																		handleDialog(true)
+																	}}
+																	style={{ margin: '10px' }}
+																/>
+															</Whisper>
+														</div>
+													</GridItem>
+												</GridContainer>
+											</CardBody>
+											<CardFooter>
+												<UserCan i={perms.USER_UPDATE}>
+													<Button
+														disabled={!isValid || !dirty}
+														onClick={() => handleSaveClick(values, resetForm)}
+														loading={props.userEditSaving}
+													>
+														Save
+													</Button>
+												</UserCan>
+											</CardFooter>
+										</div>
+									)}
+								</Card>
+							</GridItem>
+						</GridContainer>
+
+						<Snackbar
+							autoHideDuration={2000}
+							place='bc'
+							open={props.userEditSaved}
 							onClose={() => props.setUserEditSaved(false)}
-							severity='success'
 						>
-							User info saved
-						</Alert>
-					</Snackbar>
-				</div>
+							<Alert
+								onClose={() => props.setUserEditSaved(false)}
+								severity='success'
+							>
+								User info saved
+							</Alert>
+						</Snackbar>
+					</div>
+				)}
+			/>
+			{/* Info Modal for Roles help */}
+			{openDialog && (
+				<RolesInfo
+					show={openDialog}
+					title='Roles and Permissions'
+					handleDialog={(value) => {
+						handleDialog(value)
+					}}
+					data={filteredRolesPermissions(
+						props.userProfile && props.userProfile.userType
+					)}
+					userType={props.userProfile && props.userProfile.userType}
+				/>
 			)}
-		/>
-		{/* Info Modal for Roles help */}
-		{openDialog && <RolesInfo 
-						show={openDialog} 
-						title='Roles and Permissions'
-						handleDialog = {(value)=> {handleDialog(value)}}
-						data = {filteredRolesPermissions(props.userProfile && props.userProfile.userType)}
-						userType={props.userProfile && props.userProfile.userType}/>}
 		</>
 	)
 }
