@@ -1,6 +1,6 @@
 import {
 	USERS_HAS_ERRORED,
-	USERS_FETCH_DATA_SUCCESS,
+	SET_USERS,
 	USER_DELETED,
 	USER_DELETED_ERROR,
 	USERS_REMOVE_USER,
@@ -8,13 +8,19 @@ import {
 	USER_ADDED,
 	USERS_IS_LOADING,
 	USERS_SET_USER_ACCOUNTS,
-	EDIT_USER_USER_ACCOUNTS_LOADING
+	EDIT_USER_USER_ACCOUNTS_LOADING,
+	USER_PROFILE_SAVED,
+	USER_PROFILE_SAVING,
+	USER_ADDING,
+	USER_EDIT_SAVED,
+	USER_EDIT_SAVING,
+	SET_USER_ADD_ERROR
 } from '../action-types/users'
 import { SET_ALERT } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
 import { accountsObjValidation, userObjValidation } from '../../schemas'
-import { useReducer } from 'react'
+import { setUser } from './auth'
 
 const apiBase = config.apiGateway.URL
 
@@ -31,7 +37,7 @@ export function userDeleted(bool) {
 		userDeleted: bool
 	}
 }
-export function userAdded(bool) {
+export function setUserAdded(bool) {
 	return {
 		type: USER_ADDED,
 		userAdded: bool
@@ -44,9 +50,9 @@ export function userDeletedError(bool) {
 	}
 }
 
-export function usersFetchDataSuccess(users) {
+export function setUsers(users) {
 	return {
-		type: USERS_FETCH_DATA_SUCCESS,
+		type: SET_USERS,
 		users
 	}
 }
@@ -55,6 +61,48 @@ export function usersIsLoading(bool) {
 	return {
 		type: USERS_IS_LOADING,
 		usersIsLoading: bool
+	}
+}
+
+export function userProfileSaving(bool) {
+	return {
+		type: USER_PROFILE_SAVING,
+		userProfileSaving: bool
+	}
+}
+
+export function userProfileSaved(bool) {
+	return {
+		type: USER_PROFILE_SAVED,
+		userProfileSaved: bool
+	}
+}
+
+export function setUserAdding(bool) {
+	return {
+		type: USER_ADDING,
+		userAdding: bool
+	}
+}
+
+export function setUserAddError(bool) {
+	return {
+		type: SET_USER_ADD_ERROR,
+		userAddError: bool
+	}
+}
+
+export function setUserEditSaving(bool) {
+	return {
+		type: USER_EDIT_SAVING,
+		userEditSaving: bool
+	}
+}
+
+export function setUserEditSaved(bool) {
+	return {
+		type: USER_EDIT_SAVED,
+		userEditSaved: bool
 	}
 }
 
@@ -73,16 +121,10 @@ export function usersFetchData(accountId) {
 	let url = apiBase + `/account/${accountId}/users`
 	return async (dispatch) => {
 		try {
-			let params = {
-				roles: true
-			}
-
 			let result = []
 
 			try {
-				result = await axios.get(url, {
-					params
-				})
+				result = await axios.get(url)
 			} catch (error) {
 				console.log(error)
 			}
@@ -92,14 +134,10 @@ export function usersFetchData(accountId) {
 			if (result.status === 200) {
 				let users = { data: [] }
 				for (const user of result.data) {
-					// this can be deleted once single role is implemented in API
-					addressUserRoles(user)
-					// this can be deleted once single role is implemented in API
-
 					users.data.push(user)
 				}
 
-				dispatch(usersFetchDataSuccess(users))
+				dispatch(setUsers(users))
 			}
 		} catch (error) {
 			alert(
@@ -107,13 +145,6 @@ export function usersFetchData(accountId) {
 			)
 		}
 	}
-}
-
-function addressUserRoles(user) {
-	let rolesCopy = JSON.parse(JSON.stringify(user.roles))
-	let roleId = rolesCopy[0].roleId
-	delete user.roles
-	user.roleId = roleId
 }
 
 export function fetchUserAccounts(userId) {
@@ -147,6 +178,8 @@ export function updateUserData(user) {
 	let userId = user.userId
 	let url = apiBase + `/user/${userId}`
 	return async (dispatch) => {
+		dispatch(userProfileSaving(true))
+		dispatch(setUserEditSaving(true))
 		try {
 			let myUser = {
 				userId: user.userId,
@@ -155,7 +188,7 @@ export function updateUserData(user) {
 				company: user.company,
 				email: user.email,
 				userType: user.userType,
-				roles: [],
+				roleId: user.roleId,
 				accounts: []
 			}
 
@@ -163,32 +196,14 @@ export function updateUserData(user) {
 				console.log(err.name, err.errors)
 				alert('Could not validate new user')
 			})
-
 			delete myUser.accounts
-			delete myUser.roles
+			dispatch(setUser(myUser))
 			const result = await axios.patch(url, myUser)
 			if (result.status === 200) {
-				// console.log('updating user through update user data')
-				// console.log(result.data.user)
-				// dispatch(setUser(result.data.user));
-			}
-		} catch (error) {
-			alert(error)
-		}
-	}
-}
-
-export function updateUserRole(user, roleId) {
-	//TODO: THIs can be deleted when API implements single role
-	let roles = [{ roleId: roleId }]
-	//TODO: THIs can be deleted when API implements single role
-	let userId = user.userId
-	let url = apiBase + `/user/${userId}/roles`
-	return async (dispatch) => {
-		try {
-			const result = await axios.patch(url, roles)
-			if (result.status === 200) {
-				// dispatch(setUser(result.data.user));
+				dispatch(userProfileSaving(false))
+				dispatch(userProfileSaved(true))
+				dispatch(setUserEditSaving(false))
+				dispatch(setUserEditSaved(true))
 			}
 		} catch (error) {
 			alert(error)
@@ -267,29 +282,30 @@ export const createUser = (user) => {
 	user.userName = 'placeholder'
 	user.phoneNumber = '123123123'
 
-	//TODO: this can be deleted once API implements single role
-	user.roles = [{ roleId: userCopy.roleId }]
-	//TODO: this can be deleted once API implements single role
-
 	delete user.userId
 	delete user.internal
-	delete user.roleId
 
 	let url = apiBase + `/user/invite`
-	return (dispatch) => {
+	return async (dispatch) => {
+		dispatch(setUserAdding(true))
 		dispatch(usersAddUser(userCopy))
-		axios
-			.post(url, user)
-			.then((response) => {
-				dispatch(userAdded(true))
-				setTimeout(() => {
-					dispatch(userAdded(false))
-				}, 2000)
-			})
-			.catch((error) => {
-				console.log('invite user error')
-				console.log(error)
-			})
+		let response = ''
+		try {
+			response = await axios.post(url, user)
+		} catch (error) {
+			console.log('inside catch')
+			console.log(error)
+		}
+		console.log(response)
+
+		if (response.status === 200) {
+			dispatch(setUserAdded(true))
+		} else {
+			console.log('invite user status not 200')
+			console.log(JSON.stringify(response))
+			dispatch(setUserAddError(true))
+		}
+		dispatch(setUserAdding(false))
 	}
 }
 
@@ -303,43 +319,5 @@ export const linkRoleToUser = (userId, roleId) => {
 				console.log('link role to user error')
 				console.log(error)
 			})
-	}
-}
-
-export function updatePassword(userId, oldPassword, password) {
-	let url = `${apiBase}/user/${userId}/update-password`
-	return async (dispatch) => {
-		try {
-			const result = await axios.post(url, {
-				password: password,
-				oldPassword: oldPassword
-			})
-
-			if (result.status === 200) {
-				dispatch(
-					setAlert({
-						show: true,
-						message: 'Password has been updated.',
-						severity: 'success'
-					})
-				)
-			} else {
-				dispatch(
-					setAlert({
-						show: true,
-						message: result.response.data.Error,
-						severity: 'error'
-					})
-				)
-			}
-		} catch (error) {
-			dispatch(
-				setAlert({
-					show: true,
-					message: error.response.data.message,
-					severity: 'error'
-				})
-			)
-		}
 	}
 }

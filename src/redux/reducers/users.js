@@ -1,6 +1,6 @@
 import {
 	USERS_HAS_ERRORED,
-	USERS_FETCH_DATA_SUCCESS,
+	SET_USERS,
 	USER_DELETED,
 	USER_DELETED_ERROR,
 	USERS_REMOVE_USER,
@@ -8,7 +8,13 @@ import {
 	USER_ADDED,
 	USERS_IS_LOADING,
 	USERS_SET_USER_ACCOUNTS,
-	EDIT_USER_USER_ACCOUNTS_LOADING
+	EDIT_USER_USER_ACCOUNTS_LOADING,
+	USER_PROFILE_SAVED,
+	USER_PROFILE_SAVING,
+	USER_ADDING,
+	USER_EDIT_SAVING,
+	USER_EDIT_SAVED,
+	SET_USER_ADD_ERROR
 } from '../action-types/users'
 
 export function usersHasErrored(state = false, action) {
@@ -24,6 +30,23 @@ export function usersIsLoading(state = true, action) {
 	switch (action.type) {
 		case USERS_IS_LOADING:
 			return action.usersIsLoading
+		default:
+			return state
+	}
+}
+
+export function userProfileSaving(state = false, action) {
+	switch (action.type) {
+		case USER_PROFILE_SAVING:
+			return action.userProfileSaving
+		default:
+			return state
+	}
+}
+export function userProfileSaved(state = false, action) {
+	switch (action.type) {
+		case USER_PROFILE_SAVED:
+			return action.userProfileSaved
 		default:
 			return state
 	}
@@ -56,6 +79,41 @@ export function userAdded(state = false, action) {
 	}
 }
 
+export function userAddError(state = false, action) {
+	switch (action.type) {
+		case SET_USER_ADD_ERROR:
+			return action.userAddError
+		default:
+			return state
+	}
+}
+
+export function userAdding(state = false, action) {
+	switch (action.type) {
+		case USER_ADDING:
+			return action.userAdding
+		default:
+			return state
+	}
+}
+
+export function userEditSaving(state = false, action) {
+	switch (action.type) {
+		case USER_EDIT_SAVING:
+			return action.userEditSaving
+		default:
+			return state
+	}
+}
+export function userEditSaved(state = false, action) {
+	switch (action.type) {
+		case USER_EDIT_SAVED:
+			return action.userEditSaved
+		default:
+			return state
+	}
+}
+
 export function userDeletedError(state = false, action) {
 	switch (action.type) {
 		case USER_DELETED_ERROR:
@@ -69,7 +127,7 @@ export function users(state = [], action) {
 	let users = {}
 	let newState = []
 	switch (action.type) {
-		case USERS_FETCH_DATA_SUCCESS:
+		case SET_USERS:
 			return action.users
 		case USERS_REMOVE_USER:
 			newState = [

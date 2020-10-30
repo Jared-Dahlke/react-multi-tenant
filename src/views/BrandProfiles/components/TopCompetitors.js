@@ -4,62 +4,38 @@ import GridContainer from '../../../components/Grid/GridContainer.js'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import * as v from '../../../validations'
 import {
-	whiteColor,
 	grayColor,
 	dangerColor
 } from '../../../assets/jss/material-dashboard-react.js'
-import { Field, Formik } from 'formik'
+import { Formik } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import Grid from '@material-ui/core/Grid'
 import Button from '../../../components/CustomButtons/Button.js'
 import Card from '../../../components/Card/Card.js'
 import CardBody from '../../../components/Card/CardBody.js'
-import {
-	Table,
-	TableCell,
-	TableBody,
-	TableRow,
-	TableHead
-} from '@material-ui/core'
-import Edit from '@material-ui/icons/Edit'
+import Table from '@material-ui/core/Table'
+import TableCell from '@material-ui/core/TableCell'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableHead from '@material-ui/core/TableHead'
 import Close from '@material-ui/icons/Close'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
-import { fetchBrandProfiles } from '../../../redux/actions/brandProfiles.js'
-import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-//import { useHistory } from "react-router-dom";
-import { Facebook } from 'react-content-loader'
-import CustomAlert from '../../../components/CustomAlert.js'
-import Snackbar from '../../../components/Snackbar/Snackbar'
-import Success from '@material-ui/icons/Check'
-import Error from '@material-ui/icons/Error'
-import { Link } from 'react-router-dom'
-import { Debug } from '../../Debug'
 import Save from '@material-ui/icons/Save'
 import { default as UUID } from 'node-uuid'
 import FormHelperText from '@material-ui/core/FormHelperText'
-
-const MyFacebookLoader = () => <Facebook />
 
 const useTableStyles = makeStyles(tableStyles)
 
 const useStyles = makeStyles(styles)
 
-var dummyTopCompetitors = [
-	/* {competitorId: 1, competitorName: 'My COmpetitor', competitorTwitterProfile: 'www.twitter.com/competitor',competitorYouTubeChannel: 'youtube.com/competitorchannel', competitorWebsite: 'www.mycompetitor.com'},
-  {competitorId: 2, competitorName: 'Test competitor', competitorTwitterProfile: 'www.twitter.com/someHandle',competitorYouTubeChannel: 'youtube.com/someChannel', competitorWebsite: 'www.someWebsite.com'},
-  {competitorId: 3, competitorName: 'Some Company', competitorTwitterProfile: 'www.twitter.com/handleTest',competitorYouTubeChannel: 'youtube.com/channelTest', competitorWebsite: 'www.myTestWebsite.com'}, */
-]
-
 const competitorHeaders = ['Name', 'Twitter Profile', 'Website', '']
 
 export default function TopCompetitors(props) {
-	const [competitors, setCompetitors] = React.useState(dummyTopCompetitors)
-
 	const [addingNew, setAddingNew] = React.useState(false)
 
 	const classes = useStyles()
@@ -72,24 +48,22 @@ export default function TopCompetitors(props) {
 	const handleSaveNew = (values) => {
 		setAddingNew(false)
 		let newCompetitor = {
-			competitorId: UUID.v4(),
-			competitorName: values.newName,
-			competitorTwitterProfile: values.newTwitterProfile,
-			competitorWebsite: values.newWebsite
+			competitorId: (Math.random() * 10000000000) | 0,
+			competitorName: values.competitorName,
+			twitterProfileUrl: values.twitterProfileUrl,
+			websiteUrl: values.websiteUrl
 		}
-		let oldCompetitors = JSON.parse(JSON.stringify(competitors))
-		oldCompetitors.push(newCompetitor)
-		setCompetitors(oldCompetitors)
-		props.setFieldValue('topCompetitors', oldCompetitors)
+		let newComps = JSON.parse(JSON.stringify(props.values.topCompetitors))
+		newComps.push(newCompetitor)
+		props.setFieldValue('topCompetitors', newComps)
 	}
 
-	const handleDeleteCompetitor = (competitorId) => {
-		let comps = JSON.parse(JSON.stringify(competitors))
-		let newComps = []
-		for (const competitor of comps) {
-			if (competitor.competitorId !== competitorId) newComps.push(competitor)
-		}
-		setCompetitors(newComps)
+	const handleDeleteCompetitor = (competitorIdToDelete) => {
+		let newComps = [
+			...props.competitors.filter(
+				({ competitorId }) => competitorId !== competitorIdToDelete
+			)
+		]
 		props.setFieldValue('topCompetitors', newComps)
 	}
 
@@ -147,18 +121,9 @@ export default function TopCompetitors(props) {
 									<Formik
 										validateOnMount={true}
 										initialValues={{
-											newName: '',
-											newTwitterProfile: '',
-											newWebsite: ''
-										}}
-										validate={(values, props) => {
-											const errors = {}
-											if (errors.length > 0) {
-												// setNewValid(false)
-											} else {
-												// setNewValid(true)
-											}
-											return errors
+											competitorName: '',
+											twitterProfileUrl: '',
+											websiteUrl: ''
 										}}
 									>
 										{(newCompetitorFormik) => (
@@ -169,45 +134,29 @@ export default function TopCompetitors(props) {
 											>
 												<TableCell className={tableCellClasses}>
 													<FormikInput
-														name='newName'
+														name='competitorName'
 														labelProps={{ shrink: true }}
 														labelText='Competitor Name'
 														validate={v.isBrandProfileNameError}
-														formControlProps={{
-															fullWidth: true
-														}}
 													/>
 												</TableCell>
 												<TableCell className={tableCellClasses}>
 													<FormikInput
-														name='newTwitterProfile'
+														name='twitterProfileUrl'
 														labelProps={{ shrink: true }}
-														inputProps={{
-															startAdornment: (
-																<InputAdornment position='start'>
-																	<div style={{ color: grayColor[3] }}>
-																		https://twitter.com/
-																	</div>
-																</InputAdornment>
-															)
-														}}
+														inputProps={{}}
+														startAdornmentText={'https://twitter.com/'}
 														labelText='Competitor Twitter'
 														validate={v.isTwitterProfileError}
-														formControlProps={{
-															fullWidth: true
-														}}
 													/>
 												</TableCell>
 
 												<TableCell className={tableCellClasses}>
 													<FormikInput
 														labelProps={{ shrink: true }}
-														name='newWebsite'
+														name='websiteUrl'
 														labelText='Competitor Website'
 														validate={v.isWebsiteUrlError}
-														formControlProps={{
-															fullWidth: true
-														}}
 													/>
 												</TableCell>
 
@@ -259,9 +208,9 @@ export default function TopCompetitors(props) {
 									</Formik>
 								) : null}
 
-								{competitors &&
-									competitors.length > 0 &&
-									competitors.map((competitor) => (
+								{props.competitors &&
+									props.competitors.length > 0 &&
+									props.competitors.map((competitor) => (
 										<TableRow
 											key={competitor.competitorId}
 											className={classes.tableRow}
@@ -270,11 +219,11 @@ export default function TopCompetitors(props) {
 												{competitor.competitorName}
 											</TableCell>
 											<TableCell className={tableCellClasses}>
-												{competitor.competitorTwitterProfile}
+												{competitor.twitterProfileUrl}
 											</TableCell>
 
 											<TableCell className={tableCellClasses}>
-												{competitor.competitorWebsite}
+												{competitor.websiteUrl}
 											</TableCell>
 
 											<TableCell className={classes.tableActions}>

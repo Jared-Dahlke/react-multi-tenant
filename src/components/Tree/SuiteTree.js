@@ -1,13 +1,8 @@
 import React from 'react'
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
-//import 'rsuite/dist/styles/rsuite-default.css';
-//import 'rsuite/dist/styles/rsuite-dark.css';
 import 'rsuite/lib/styles/index.less'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import {
-	dangerColor,
-	blackColor
-} from '../../assets/jss/material-dashboard-react'
+import { dangerColor } from '../../assets/jss/material-dashboard-react'
 
 export default function SuiteTree(props) {
 	const handleChange = (val) => {

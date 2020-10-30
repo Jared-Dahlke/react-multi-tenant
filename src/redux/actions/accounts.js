@@ -1,14 +1,15 @@
 import {
-	ACCOUNTS_FETCH_DATA_SUCCESS,
+	SET_ACCOUNTS,
 	SET_CURRENT_ACCOUNT_ID,
 	SET_CURRENT_ACCOUNT,
-	TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
 	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
 	ACCOUNTS_SET_ACCOUNT_USERS,
-	ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
+	SET_ACCOUNT_TYPES,
 	ACCOUNTS_UPDATE_ACCOUNT,
 	SET_IS_SWITCHING_ACCOUNTS,
-	SET_ACCOUNT_CREATED
+	SET_ACCOUNT_CREATED,
+	SET_ACCOUNT_SAVED,
+	SET_ACCOUNT_SAVING
 } from '../action-types/accounts'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -19,37 +20,41 @@ import {
 import { userProfileFetchData } from '../actions/auth'
 import {
 	usersFetchData,
-	usersFetchDataSuccess,
+	setUsers,
 	usersIsLoading,
 	editUserUserAccountsLoading
 } from '../actions/users'
 import {
 	rolesFetchData,
-	rolesFetchDataSuccess,
+	setRoles,
 	rolesPermissionsFetchData,
-	rolesPermissionsFetchDataSuccess,
+	setRolesPermissions,
 	rolesPermissionsIsLoading
 } from '../actions/roles'
 import {
-	brandProfilesFetchDataSuccess,
+	setBrandProfiles,
 	fetchBrandProfiles,
-	brandProfilesIsLoading
+	brandProfilesIsLoading,
+	fetchBrandScenarios,
+	fetchBrandCategories,
+	fetchBrandIndustryVerticals,
+	fetchBrandTopics
 } from '../actions/brandProfiles'
 import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
 
 const apiBase = config.apiGateway.URL
 
-export function accountsFetchDataSuccess(accounts) {
+export function setAccounts(accounts) {
 	return {
-		type: ACCOUNTS_FETCH_DATA_SUCCESS,
+		type: SET_ACCOUNTS,
 		accounts
 	}
 }
 
-export function accountTypesFetchDataSuccess(accountTypes) {
+export function setAccountTypes(accountTypes) {
 	return {
-		type: ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
+		type: SET_ACCOUNT_TYPES,
 		accountTypes
 	}
 }
@@ -58,13 +63,6 @@ export function accountsUpdateAccount(account) {
 	return {
 		type: ACCOUNTS_UPDATE_ACCOUNT,
 		account
-	}
-}
-
-export function treeAccountsConvertDataSuccess(treeAccounts) {
-	return {
-		type: TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
-		treeAccounts
 	}
 }
 
@@ -79,6 +77,20 @@ export function setCurrentAccount(accountId) {
 	return {
 		type: SET_CURRENT_ACCOUNT,
 		accountId
+	}
+}
+
+export function setAccountSaved(accountSaved) {
+	return {
+		type: SET_ACCOUNT_SAVED,
+		accountSaved
+	}
+}
+
+export function setAccountSaving(accountSaving) {
+	return {
+		type: SET_ACCOUNT_SAVING,
+		accountSaving
 	}
 }
 
@@ -100,10 +112,13 @@ export function updateAccount(account) {
 	let accountId = account.accountId
 	let url = apiBase + `/account/${accountId}`
 	return async (dispatch) => {
+		dispatch(setAccountSaving(true))
 		dispatch(accountsUpdateAccount(account))
 		try {
 			const result = await axios.patch(url, account)
 			if (result.status === 200) {
+				dispatch(setAccountSaving(false))
+				dispatch(setAccountSaved(true))
 			}
 		} catch (error) {
 			alert(error)
@@ -115,16 +130,14 @@ export const deleteAccount = (accountId) => {
 	let url = apiBase + `/account/${accountId}`
 	return (dispatch) => {
 		dispatch(isSwitchingAccounts(true))
+		dispatch(clearSiteData())
 		axios
 			.delete(url)
 			.then((response) => {
 				dispatch(fetchSiteData())
 			})
 			.catch((error) => {
-				//dispatch(userDeletedError(true));
-				setTimeout(() => {
-					// dispatch(userDeletedError(false));
-				}, 2000)
+				console.error('delete account error', error)
 			})
 	}
 }
@@ -140,7 +153,7 @@ export const createAccount = (account) => {
 				dispatch(fetchSiteData(response.data.accountId))
 			})
 			.catch((error) => {
-				//error
+				console.error('create account error', error)
 			})
 	}
 }
@@ -151,44 +164,23 @@ export function clearSiteData() {
 		dispatch(usersIsLoading(true))
 		dispatch(brandProfilesIsLoading(true))
 		dispatch(editUserUserAccountsLoading(true))
-		dispatch(accountsFetchDataSuccess([]))
+		dispatch(setAccounts([]))
 		dispatch(setCurrentAccountId(null))
-		dispatch(usersFetchDataSuccess([]))
-		dispatch(rolesFetchDataSuccess([]))
-		dispatch(rolesPermissionsFetchDataSuccess([]))
-		dispatch(brandProfilesFetchDataSuccess([]))
-		dispatch(accountTypesFetchDataSuccess([]))
+		dispatch(setUsers([]))
+		dispatch(setRoles([]))
+		dispatch(setRolesPermissions([]))
+		dispatch(setBrandProfiles([]))
+		dispatch(setAccountTypes([]))
 	}
-}
-
-function convertToTree(accountsdata) {
-	let accounts = accountsdata.data
-	if (accounts.length === 1) return accounts
-
-	let ta = [
-		{
-			accountId: 0,
-			accountName: 'You',
-			accountTypeName: 'You',
-			children: []
-		}
-	]
-	for (const account of accounts) {
-		ta[0].children.push(account)
-	}
-
-	return ta
 }
 
 export function fetchSiteData(accountId) {
 	return async (dispatch) => {
 		try {
 			let userId = localStorage.getItem('userId')
-
 			let accountsUrl = apiBase + `/user/${userId}/accounts`
-
 			let result = await axios.get(accountsUrl)
-			//run this result against account schema
+			//TODO: run this result against account schema
 			let accounts = { data: result.data }
 			if (!result.data[0]) {
 				alert(
@@ -199,11 +191,7 @@ export function fetchSiteData(accountId) {
 				return
 			}
 
-			dispatch(accountsFetchDataSuccess(accounts))
-
-			let accountsCopy = JSON.parse(JSON.stringify(accounts))
-			let convertedAccounts = convertToTree(accountsCopy)
-			dispatch(treeAccountsConvertDataSuccess(convertedAccounts))
+			dispatch(setAccounts(accounts))
 
 			if (!accountId) {
 				let accountIdFromLocalStorage = localStorage.getItem('currentAccountId')
@@ -237,6 +225,15 @@ export function fetchSiteData(accountId) {
 			dispatch(rolesPermissionsFetchData(accountId))
 			dispatch(rolesFetchData(accountId))
 			dispatch(fetchBrandProfiles(accountId))
+
+			//
+
+			dispatch(fetchBrandScenarios())
+			dispatch(fetchBrandIndustryVerticals())
+			dispatch(fetchBrandTopics())
+			dispatch(fetchBrandCategories())
+
+			//
 			dispatch(isSwitchingAccounts(false))
 
 			dispatch(fetchCategories())
@@ -305,7 +302,7 @@ export function fetchAccountTypes() {
 					console.log(err.name, err.errors)
 					alert('Could not validate account types data')
 				})
-				dispatch(accountTypesFetchDataSuccess(result.data))
+				dispatch(setAccountTypes(result.data))
 			}
 		} catch (error) {
 			alert('Error on fetch account types: ' + JSON.stringify(error, null, 2))

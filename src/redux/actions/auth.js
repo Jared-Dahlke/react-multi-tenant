@@ -4,8 +4,9 @@ import {
 	SET_USER,
 	SET_USER_ID,
 	SET_ALERT,
-	USER_PROFILE_IS_LOADING
-	// SUCCESS_PASSWORD_CHANGED
+	USER_PROFILE_IS_LOADING,
+	SET_LOGGING_IN,
+	SET_UPDATING_PASSWORD
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
@@ -20,13 +21,6 @@ export function setAuthToken(payload) {
 export function setAlert(payload) {
 	return { type: SET_ALERT, payload }
 }
-
-// export function successPasswordChanged(bool) {
-//   return {
-//     type: SUCCESS_PASSWORD_CHANGED,
-//     successPasswordChanged: bool,
-//   };
-// }
 
 export function userProfileIsLoading(bool) {
 	return {
@@ -43,6 +37,10 @@ export function setLoggedIn(payload) {
 	return { type: SET_LOGGED_IN, payload }
 }
 
+export function setLoggingIn(payload) {
+	return { type: SET_LOGGING_IN, payload }
+}
+
 export function setUserId(payload) {
 	return {
 		type: SET_USER_ID,
@@ -53,6 +51,7 @@ export function setUserId(payload) {
 export function login(credentials) {
 	let url = apiBase + '/authenticate'
 	return async (dispatch) => {
+		dispatch(setLoggingIn(true))
 		try {
 			const result = await axios.post(url, {
 				username: credentials.username,
@@ -60,6 +59,7 @@ export function login(credentials) {
 			})
 
 			if (!result.data.jwt) {
+				dispatch(setLoggingIn(false))
 				dispatch(
 					setAlert({
 						show: true,
@@ -80,14 +80,26 @@ export function login(credentials) {
 					console.log(err.name, err.errors)
 					alert('Could not validate user data')
 				})
+				dispatch(setLoggingIn(false))
 				dispatch(setAuthToken(token))
 				dispatch(setUser(user))
 				dispatch(setUserId(user.userId))
 				localStorage.setItem('token', token)
 				localStorage.setItem('userId', user.userId)
+
+				localStorage.removeItem('permissions')
+				if (user.permissions && user.permissions.length > 0) {
+					let permissionArray = []
+					for (const permission of user.permissions) {
+						permissionArray.push(permission.permissionId)
+					}
+					localStorage.setItem('permissions', permissionArray)
+				}
+
 				dispatch(setLoggedIn(true))
 			}
 		} catch (error) {
+			dispatch(setLoggingIn(false))
 			alert(error)
 		}
 	}
@@ -172,14 +184,22 @@ export function resetPassword(email) {
 	}
 }
 
+export function setUpdatingPassword(bool) {
+	return {
+		type: SET_UPDATING_PASSWORD,
+		updatingPassword: bool
+	}
+}
+
 export function changePassword(password, userId, token) {
 	let url = `${apiBase}/update-password/${userId}/${token}`
 	return async (dispatch) => {
+		dispatch(setUpdatingPassword(true))
 		try {
 			const result = await axios.post(url, {
 				password: password
 			})
-
+			dispatch(setUpdatingPassword(false))
 			if (result.status === 200) {
 				dispatch(
 					setAlert({
@@ -192,7 +212,7 @@ export function changePassword(password, userId, token) {
 				setTimeout(() => {
 					dispatch(setAlert({ show: false }))
 					window.location.href = '/login'
-				}, 5000)
+				}, 2000)
 			} else {
 				dispatch(
 					setAlert({
@@ -203,10 +223,12 @@ export function changePassword(password, userId, token) {
 				)
 			}
 		} catch (error) {
+			dispatch(setUpdatingPassword(false))
 			dispatch(
 				setAlert({
 					show: true,
-					message: error.response.data.message,
+					message:
+						'An error ocurred while updating your password. Please try again later.',
 					severity: 'error'
 				})
 			)

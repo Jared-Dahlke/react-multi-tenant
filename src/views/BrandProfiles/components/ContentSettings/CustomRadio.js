@@ -1,15 +1,16 @@
 import React from 'react'
-import GridItem from '../Grid/GridItem'
-import GridContainer from '../Grid/GridContainer'
-
-import { FormControlLabel, RadioGroup, Radio } from '@material-ui/core'
+import GridItem from '../../../../components/Grid/GridItem'
+import GridContainer from '../../../../components/Grid/GridContainer'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import Radio from '@material-ui/core/Radio'
 import {
 	whiteColor,
 	primaryColor,
-	blackColor,
 	grayColor
-} from '../../assets/jss/material-dashboard-react.js'
-import { makeStyles } from '@material-ui/core/styles'
+} from '../../../../assets/jss/material-dashboard-react.js'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import { neutralColor } from '../../../../assets/jss/colorContants'
 
 const styles = (theme) => ({
 	radio: {
@@ -24,9 +25,9 @@ const styles = (theme) => ({
 const useStyles = makeStyles(styles)
 
 export default function CustomRadio(props) {
-	const handleChange = (name, e) => {
+	const handleChange = (e) => {
 		e.persist()
-		props.setFieldValue(name, e.target.value)
+		props.handleScenarioSelect(props.scenario.scenarioId, e.target.value)
 	}
 
 	const classes = useStyles()
@@ -42,21 +43,20 @@ export default function CustomRadio(props) {
 						float: 'right'
 					}}
 				>
-					{props.labelText}
+					{props.scenario.scenarioName}
 				</div>
 			</GridItem>
 
 			<GridItem xs={6} sm={6} md={6}>
 				<RadioGroup
-					onChange={(e) => handleChange(props.fieldName, e)}
+					onChange={(e) => handleChange(e)}
 					aria-label='position'
 					defaultValue='top'
 					row
-					value={props.values.fieldName}
+					value={props.scenario.scenarioResponseId}
 				>
 					<FormControlLabel
-						name={props.fieldName}
-						value='target'
+						value={3}
 						control={
 							<Radio
 								classes={{ root: classes.radio, checked: classes.checked }}
@@ -66,8 +66,17 @@ export default function CustomRadio(props) {
 						style={{ color: whiteColor }}
 					/>
 					<FormControlLabel
-						name={props.fieldName}
-						value='monitor'
+						value={1}
+						control={
+							<Radio
+								classes={{ root: classes.radio, checked: classes.checked }}
+							/>
+						}
+						label='Block'
+						style={{ color: whiteColor }}
+					/>
+					<FormControlLabel
+						value={2}
 						control={
 							<Radio
 								classes={{ root: classes.radio, checked: classes.checked }}
@@ -76,19 +85,8 @@ export default function CustomRadio(props) {
 						label='Monitor'
 						style={{ color: whiteColor }}
 					/>
-					<FormControlLabel
-						value='block'
-						control={
-							<Radio
-								classes={{ root: classes.radio, checked: classes.checked }}
-							/>
-						}
-						label='Block'
-						style={{ color: whiteColor }}
-						name={props.fieldName}
-					/>
 				</RadioGroup>
-				<div style={{ color: blackColor, height: 15 }} />
+				<div style={{ color: neutralColor, height: 15 }} />
 			</GridItem>
 		</GridContainer>
 	)

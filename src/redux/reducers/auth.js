@@ -4,7 +4,9 @@ import {
 	SET_ALERT,
 	SET_USER,
 	SET_USER_ID,
-	USER_PROFILE_IS_LOADING
+	USER_PROFILE_IS_LOADING,
+	SET_LOGGING_IN,
+	SET_UPDATING_PASSWORD
 } from '../action-types/auth'
 
 import { userObjValidation } from '../../schemas'
@@ -16,13 +18,13 @@ let newUser = {
 	company: ' ',
 	email: ' ',
 	userType: ' ',
-	roles: [],
+	roleId: '',
 	accounts: []
 }
 
 userObjValidation.validate(newUser).catch(function(err) {
 	console.log(err.name, err.errors)
-	alert('Could not validate new user')
+	alert('Could not validate new stubbed user')
 })
 
 const initialState = {
@@ -50,15 +52,6 @@ export function userProfileIsLoading(state = true, action) {
 	}
 }
 
-// export function successPasswordChanged(state = false, action) {
-//   switch (action.type) {
-//   case SUCCESS_PASSWORD_CHANGED:
-//     return action.successPasswordChanged;
-//   default:
-//     return state;
-//   }
-// }
-
 export function user(state = initialState, action) {
 	switch (action.type) {
 		case SET_USER:
@@ -76,6 +69,24 @@ export function isLoggedIn(state = false, action) {
 	switch (action.type) {
 		case SET_LOGGED_IN:
 			return action.payload
+		default:
+			return state
+	}
+}
+
+export function loggingIn(state = false, action) {
+	switch (action.type) {
+		case SET_LOGGING_IN:
+			return action.payload
+		default:
+			return state
+	}
+}
+
+export function updatingPassword(state = false, action) {
+	switch (action.type) {
+		case SET_UPDATING_PASSWORD:
+			return action.updatingPassword
 		default:
 			return state
 	}

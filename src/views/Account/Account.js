@@ -1,23 +1,21 @@
 /*eslint-disable no-restricted-globals*/
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import GridItem from '../../components/Grid/GridItem.js'
 import GridContainer from '../../components/Grid/GridContainer.js'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
-import AddAlert from '@material-ui/icons/AddAlert'
 import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
+import AccountDropdown from '../../components/AccountDropdown'
 
-// Redux
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../redux/actions/users.js'
 import { FormLoader } from '../../components/SkeletonLoader'
-import { Formik } from 'formik'
+import { withFormik, Form } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
@@ -26,36 +24,9 @@ import {
 	updateAccount,
 	deleteAccount,
 	createAccount,
-	accountCreated
+	accountCreated,
+	setAccountSaved
 } from '../../redux/actions/accounts'
-import { Debug } from '../Debug'
-
-const styles = {
-	cardCategoryWhite: {
-		color: 'rgba(255,255,255,.62)',
-		margin: '0',
-		fontSize: '14px',
-		marginTop: '0',
-		marginBottom: '0'
-	},
-	cardTitleWhite: {
-		color: '#FFFFFF',
-		marginTop: '0px',
-		minHeight: 'auto',
-		fontWeight: '300',
-		fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-		marginBottom: '3px',
-		textDecoration: 'none'
-	},
-	minWidth: {
-		minWidth: '30px'
-	},
-	green: {
-		color: 'green'
-	}
-}
-
-const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return {
@@ -63,7 +34,10 @@ const mapStateToProps = (state) => {
 		accounts: state.accounts,
 		accountTypes: state.accountTypes,
 		isSwitchingAccounts: state.isSwitchingAccounts,
-		accountCreated: state.accountCreated
+		accountCreated: state.accountCreated,
+		accountSaved: state.accountSaved,
+		accountSaving: state.accountSaving,
+		rolesIsLoading: state.rolesIsLoading
 	}
 }
 
@@ -74,7 +48,8 @@ const mapDispatchToProps = (dispatch) => {
 		updateAccount: (account) => dispatch(updateAccount(account)),
 		deleteAccount: (accountId) => dispatch(deleteAccount(accountId)),
 		createAccount: (account) => dispatch(createAccount(account)),
-		setAccountCreated: (val) => dispatch(accountCreated(val))
+		setAccountCreated: (val) => dispatch(accountCreated(val)),
+		setAccountSaved: (bool) => dispatch(setAccountSaved(bool))
 	}
 }
 
@@ -114,19 +89,17 @@ const schemaValidation = Yup.object().shape({
 		.required('Account Type is required')
 })
 
-function Account(props) {
-	const getAccountTypeNameById = (accountTypeId) => {
-		let accountTypesCopy = JSON.parse(JSON.stringify(props.accountTypes))
-		for (const accountType of accountTypesCopy) {
-			if (accountTypeId === accountType.accountTypeId)
-				return accountType.accountTypeName
-		}
-		throw new error('Cannot find accountTypeId in the accountTypes object')
+const getAccountTypeNameById = (accountTypeId, accountTypes) => {
+	let accountTypesCopy = JSON.parse(JSON.stringify(accountTypes))
+	for (const accountType of accountTypesCopy) {
+		if (accountTypeId === accountType.accountTypeId)
+			return accountType.accountTypeName
 	}
+	throw new error('Cannot find accountTypeId in the accountTypes object')
+}
 
-	const [current, setCurrent] = React.useState({})
-
-	const handleCreateChild = () => {
+function Account(props) {
+	const handleCreateChild = (current) => {
 		let levelId = current.accountLevelId + 1
 		if (levelId > 3) {
 			levelId = 3
@@ -136,14 +109,14 @@ function Account(props) {
 			accountTypeId: props.accountTypes[0].accountTypeId,
 			accountLevelId: levelId,
 			accountMargin: 0,
-			contactName: ' ',
+			contactName: 'placeholder',
 			contactEmail: 'placeholder@placeholder.com',
 			parentAccountId: current.accountId
 		}
 		props.createAccount(childAccount)
 	}
 
-	const handleDeleteAccount = () => {
+	const handleDeleteAccount = (current) => {
 		if (current.accountName === 'Sightly') {
 			alert('You cannot delete the top level Sightly account')
 			return
@@ -154,7 +127,187 @@ function Account(props) {
 		}
 	}
 
-	const handleMySubmit = (values) => {
+	let current = React.useMemo(() => getCurrentAccount(props.accounts.data), [
+		props.accounts
+	])
+
+	if (!current) {
+		current = {}
+	}
+
+	const {
+		values,
+		errors,
+		touched,
+		setFieldValue,
+		setFieldTouched,
+		validateField,
+		validateForm,
+		isSubmitting,
+		isValid,
+		isValidating,
+		dirty
+	} = props
+
+	if (
+		props.rolesIsLoading ||
+		props.isSwitchingAccounts ||
+		values.accountTypeName.length < 1
+	) {
+		return (
+			<GridContainer>
+				<GridItem xs={12} sm={12} md={6}>
+					<FormLoader />
+				</GridItem>
+			</GridContainer>
+		)
+	} else {
+		return (
+			<GridContainer>
+				<GridItem xs={12} sm={12} md={6}>
+					<AccountDropdown />
+					<Card>
+						<Form>
+							<CardBody>
+								<GridContainer>
+									<Grid container justify='flex-end'>
+										<GridItem>
+											<Button onClick={() => handleCreateChild(current)}>
+												Create Child Account
+											</Button>
+										</GridItem>
+									</Grid>
+
+									<GridItem xs={12} sm={12} md={12}>
+										<FormikInput
+											name='accountName'
+											labelText='Account Name'
+											id='accountName'
+										/>
+
+										<FormikInput
+											name='parentAccountName'
+											labelText='Parent Account'
+											disabled
+										/>
+
+										<FormikInput name='contactName' labelText='Contact Name' />
+
+										<FormikInput
+											name='contactEmail'
+											labelText='Contact Email'
+										/>
+										<FormikInput
+											name='accountMargin'
+											labelText='Account Margin'
+										/>
+
+										<FormikSelect
+											id='accountType'
+											name='accountTypeId'
+											label='Account Type'
+											placeholder='Select an Account Type'
+											optionLabel='accountTypeName'
+											optionValue='accountTypeId'
+											options={props.accountTypes}
+											value={values.accountTypeId}
+											onChange={setFieldValue}
+											onBlur={setFieldTouched}
+											validateField={validateField}
+											validateForm={validateForm}
+											touched={touched.accountTypeId}
+											error={errors.accountTypeId}
+										/>
+									</GridItem>
+								</GridContainer>
+							</CardBody>
+
+							<CardFooter>
+								{current.accountName === 'Sightly' ||
+								(current.children && current.children.length > 0) ? null : (
+									<Button
+										color='red'
+										onClick={() => handleDeleteAccount(current)}
+									>
+										Delete
+									</Button>
+								)}
+
+								<Button
+									loading={props.accountSaving}
+									disabled={!isValid || !dirty || props.accountSaving}
+									type='submit'
+								>
+									Save
+								</Button>
+								<Snackbar
+									autoHideDuration={2000}
+									place='bc'
+									open={props.accountCreated}
+									onClose={() => props.setAccountCreated(false)}
+								>
+									<Alert
+										onClose={() => props.setAccountCreated(false)}
+										severity='success'
+									>
+										Account created
+									</Alert>
+								</Snackbar>
+
+								<Snackbar
+									autoHideDuration={2000}
+									place='bc'
+									open={props.accountSaved}
+									onClose={() => props.setAccountSaved(false)}
+								>
+									<Alert
+										onClose={() => props.setAccountSaved(false)}
+										severity='success'
+									>
+										Account saved
+									</Alert>
+								</Snackbar>
+							</CardFooter>
+						</Form>
+						)}
+					</Card>
+				</GridItem>
+			</GridContainer>
+		)
+	}
+}
+
+const FormikForm = withFormik({
+	mapPropsToValues: (props) => {
+		let currentAccount = getCurrentAccount(props.accounts.data)
+		if (!currentAccount) {
+			currentAccount = {
+				accountId: 'placeholder',
+				accountName: '',
+				accountTypeName: '',
+				accountTypeId: '',
+				contactName: '',
+				contactEmail: '',
+				accountMargin: '',
+				parentAccountName: ''
+			}
+		}
+
+		return {
+			accountName: currentAccount.accountName,
+			contactName: currentAccount.contactName,
+			contactEmail: currentAccount.contactEmail,
+			accountMargin: currentAccount.accountMargin,
+			accountTypeId: currentAccount.accountTypeId,
+			accountTypeName: currentAccount.accountTypeName,
+			parentAccountName: currentAccount.parentAccountName,
+			accountId: currentAccount.accountId
+		}
+	},
+	enableReinitialize: true,
+	validateOnMount: true,
+	validationSchema: schemaValidation,
+	handleSubmit: (values, { props }) => {
 		let account = {
 			accountId: values.accountId,
 			accountName: values.accountName,
@@ -162,180 +315,13 @@ function Account(props) {
 			contactEmail: values.contactEmail,
 			contactName: values.contactName,
 			accountTypeId: values.accountTypeId,
-			accountTypeName: getAccountTypeNameById(values.accountTypeId)
+			accountTypeName: getAccountTypeNameById(
+				values.accountTypeId,
+				props.accountTypes
+			)
 		}
 		props.updateAccount(account)
 	}
+})(Account)
 
-	let currentAccount = React.useMemo(() => {
-		let current = getCurrentAccount(props.accounts.data)
-		setCurrent(current)
-		return current
-	}, [props.accounts.data])
-
-	let accountLoading = false
-
-	if (!currentAccount) {
-		accountLoading = true
-		currentAccount = {
-			accountId: 'placeholder',
-			accountName: '',
-			accountTypeName: '',
-			accountTypeId: '',
-			contactName: '',
-			contactEmail: '',
-			accountMargin: '',
-			parentAccountName: ''
-		}
-	}
-
-	return (
-		<Formik
-			enableReinitialize
-			validateOnMount={false}
-			// validateOnChange={true}
-			validationSchema={() => schemaValidation}
-			initialValues={{
-				accountName: currentAccount.accountName,
-				contactName: currentAccount.contactName,
-				contactEmail: currentAccount.contactEmail,
-				accountMargin: currentAccount.accountMargin,
-
-				accountTypeId: currentAccount.accountTypeId,
-
-				parentAccountName: currentAccount.parentAccountName,
-				accountId: currentAccount.accountId
-			}}
-			render={({
-				values,
-				errors,
-				touched,
-				setFieldValue,
-				setFieldTouched,
-				validateField,
-				validateForm,
-				isSubmitting,
-				isValid,
-				dirty
-			}) => (
-				<GridContainer>
-					<GridItem xs={12} sm={12} md={6}>
-						<Card>
-							{accountLoading || props.isSwitchingAccounts ? (
-								<FormLoader />
-							) : (
-								<div>
-									<CardBody>
-										<GridContainer>
-											<Grid container justify='flex-end'>
-												<GridItem>
-													<Button color='primary' onClick={handleCreateChild}>
-														Create Child Account
-													</Button>
-												</GridItem>
-											</Grid>
-
-											<GridItem xs={12} sm={12} md={12}>
-												<FormikInput
-													name='accountName'
-													labelText='Account Name'
-													id='accountName'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
-												/>
-
-												<FormikInput
-													name='parentAccountName'
-													labelText='Parent Account'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{
-														disabled: true
-													}}
-												/>
-
-												<FormikInput
-													name='contactName'
-													labelText='Contact Name'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
-												/>
-
-												<FormikInput
-													name='contactEmail'
-													labelText='Contact Email'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
-												/>
-												<FormikInput
-													name='accountMargin'
-													labelText='Account Margin'
-													formControlProps={{
-														fullWidth: true
-													}}
-													inputProps={{}}
-												/>
-
-												<FormikSelect
-													id='accountType'
-													name='accountTypeId'
-													label='Account Type'
-													placeholder='Select an Account Type'
-													optionLabel='accountTypeName'
-													optionValue='accountTypeId'
-													options={props.accountTypes}
-													value={values.accountTypeId}
-													onChange={setFieldValue}
-													onBlur={setFieldTouched}
-													validateField={validateField}
-													validateForm={validateForm}
-													touched={touched.accountTypeId}
-													error={errors.accountTypeId}
-												/>
-											</GridItem>
-										</GridContainer>
-									</CardBody>
-
-									<CardFooter>
-										{current.accountName === 'Sightly' ||
-										(current.children && current.children.length > 0) ? null : (
-											<Button color='danger' onClick={handleDeleteAccount}>
-												Delete
-											</Button>
-										)}
-
-										<Button
-											disabled={!isValid}
-											color='primary'
-											onClick={() => handleMySubmit(values)}
-										>
-											Save
-										</Button>
-										<Snackbar
-											autoHideDuration={2000}
-											place='bc'
-											icon={AddAlert}
-											open={props.accountCreated}
-											onClose={() => props.setAccountCreated(false)}
-										>
-											<Alert severity='success'>Account created!</Alert>
-										</Snackbar>
-									</CardFooter>
-								</div>
-							)}
-						</Card>
-					</GridItem>
-				</GridContainer>
-			)}
-		/>
-	)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Account)
+export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)

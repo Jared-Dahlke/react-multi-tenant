@@ -1,21 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import {
-	blackColor,
-	whiteColor
-} from '../../assets/jss/material-dashboard-react.js'
+import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import Tabs from './components/Tabs'
 import InputPicker from 'rsuite/lib/InputPicker'
 import FilterList from '@material-ui/icons/FilterList'
-import { ListItemText } from '@material-ui/core'
+import ListItemText from '@material-ui/core/ListItemText'
 import {
 	fetchChannels,
-	categoriesFetchDataSuccess,
-	channelsFetchDataSuccess,
+	setCategories,
+	setChannels,
 	fetchVideos,
-	videosFetchDataSuccess
+	setVideos
 } from '../../redux/actions/discover/channels'
 import countryList from 'react-select-country-list'
 import numeral from 'numeral'
@@ -25,6 +21,7 @@ import Button from '../../components/CustomButtons/Button'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Input from 'rsuite/lib/Input'
 import Icon from 'rsuite/lib/Icon'
+import { neutralColor } from '../../assets/jss/colorContants.js'
 
 const bodyHeight = 600
 const borderRad = 2
@@ -32,7 +29,7 @@ const blockHeight = 48
 
 const styles = {
 	summaryBody: {
-		backgroundColor: blackColor,
+		backgroundColor: neutralColor,
 		borderRadius: borderRad,
 		color: whiteColor
 	},
@@ -42,8 +39,6 @@ const styles = {
 		borderRadius: borderRad
 	}
 }
-
-const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return {
@@ -58,12 +53,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchChannels: (categories, filters) =>
 			dispatch(fetchChannels(categories, filters)),
-		categoriesFetchDataSuccess: (categories) =>
-			dispatch(categoriesFetchDataSuccess(categories)),
-		channelsFetchDataSuccess: (payload) =>
-			dispatch(channelsFetchDataSuccess(payload)),
-		videosFetchDataSuccess: (videos) =>
-			dispatch(videosFetchDataSuccess(videos)),
+		setCategories: (categories) => dispatch(setCategories(categories)),
+		setChannels: (payload) => dispatch(setChannels(payload)),
+		setVideos: (videos) => dispatch(setVideos(videos)),
 		fetchVideos: (channels, categories) =>
 			dispatch(fetchVideos(channels, categories))
 	}
@@ -77,6 +69,7 @@ const downloadClick = () => {
 function ListBuilder(props) {
 	const [tabIndex, setTabIndex] = React.useState(0)
 	const [filters, setFilters] = React.useState({})
+	const [currentBrandProfileId, setCurrentBrandProfileId] = React.useState('')
 
 	const countries = countryList().getData()
 	const languages = [
@@ -126,7 +119,7 @@ function ListBuilder(props) {
 					category.toggleValue = value
 				}
 			}
-			props.categoriesFetchDataSuccess(categoriesCopy)
+			props.setCategories(categoriesCopy)
 			props.fetchChannels(categoriesCopy, filters)
 		}
 
@@ -140,7 +133,7 @@ function ListBuilder(props) {
 
 			let payload = { channels: channelsCopy, filters: filters }
 
-			props.channelsFetchDataSuccess(payload)
+			props.setChannels(payload)
 			props.fetchVideos(channelsCopy, props.categories)
 		}
 
@@ -151,7 +144,7 @@ function ListBuilder(props) {
 					video.toggleValue = value
 				}
 			}
-			props.videosFetchDataSuccess(videosCopy)
+			props.setVideos(videosCopy)
 		}
 	}
 
@@ -243,13 +236,17 @@ function ListBuilder(props) {
 
 	const disableFilters = true //tabIndex > 0 ? false : true
 
-	const classes = useStyles()
+	React.useEffect(() => {
+		if (props.brandProfiles && props.brandProfiles.length > 0) {
+			setCurrentBrandProfileId(props.brandProfiles[0].brandProfileId)
+		}
+	}, [props.brandProfiles])
 
 	const CustomInputGroup = ({ placeholder, ...props }) => (
 		<InputGroup {...props}>
 			<Input placeholder={placeholder} />
-			<InputGroup.Addon style={{ backgroundColor: blackColor }}>
-				<Icon icon='search' style={{ backgroundColor: blackColor }} />
+			<InputGroup.Addon style={{ backgroundColor: neutralColor }}>
+				<Icon icon='search' style={{ backgroundColor: neutralColor }} />
 			</InputGroup.Addon>
 		</InputGroup>
 	)
@@ -260,10 +257,10 @@ function ListBuilder(props) {
 				<InputPicker
 					id={'brandProfileSelect'}
 					placeholder={'Brand Profile'}
-					options={props.brandProfiles}
+					data={props.brandProfiles}
 					labelKey={'brandName'}
 					valueKey={'brandProfileId'}
-					value={props.brandProfiles[0]}
+					value={currentBrandProfileId}
 					style={{ width: '100%' }}
 					size='lg'
 				/>
@@ -297,7 +294,7 @@ function ListBuilder(props) {
 							onChange={(e) => {
 								handleFilterChange(e, 'Country')
 							}}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
@@ -305,14 +302,14 @@ function ListBuilder(props) {
 							style={{ width: '100%' }}
 							placeholder={'Video Language'}
 							options={languages}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Category'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
@@ -320,7 +317,7 @@ function ListBuilder(props) {
 							style={{ width: '100%' }}
 							placeholder={'Kids Content'}
 							options={boolOptions}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
@@ -328,35 +325,35 @@ function ListBuilder(props) {
 							style={{ width: '100%' }}
 							placeholder={'Disabled Comments'}
 							options={boolOptions}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Channel Filter'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Creator Type'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Alignment Score'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={12} md={12}>
 						<InputPicker
 							style={{ width: '100%' }}
 							placeholder={'Clean Rating Score'}
-							isDisabled={disableFilters}
+							disabled={disableFilters}
 						/>
 					</Grid>
 				</Grid>
@@ -379,7 +376,7 @@ function ListBuilder(props) {
 								secondary={
 									'CPM: ' + avgCpm + ', CPC: ' + avgCpc + ', CPV: ' + avgCpv
 								}
-								secondaryTypographyProps={{ color: whiteColor }}
+								secondaryTypographyProps={{ color: 'initial' }}
 							/>
 						</Grid>
 
@@ -394,7 +391,7 @@ function ListBuilder(props) {
 									', Block: ' +
 									channelsCount.block.items
 								}
-								secondaryTypographyProps={{ color: whiteColor }}
+								secondaryTypographyProps={{ color: 'initial' }}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={12} md={3}>
@@ -408,7 +405,7 @@ function ListBuilder(props) {
 									', Block: ' +
 									videosCount.block.items
 								}
-								secondaryTypographyProps={{ color: whiteColor }}
+								secondaryTypographyProps={{ color: 'initial' }}
 							/>
 						</Grid>
 

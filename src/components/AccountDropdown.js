@@ -1,9 +1,16 @@
 import React from 'react'
+import classNames from 'classnames'
 import { connect } from 'react-redux'
 import TreePicker from 'rsuite/lib/TreePicker'
 import { fetchSiteData, clearSiteData } from '../redux/actions/accounts'
 import { getCurrentAccount } from '../utils'
-import styles from '../assets/jss/material-dashboard-react/components/sidebarStyle'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import ControlLabel from 'rsuite/lib/ControlLabel'
+import FormGroup from 'rsuite/lib/FormGroup'
+import Form from 'rsuite/lib/Form'
+
+import styles from '../assets/jss/material-dashboard-react/components/customInputStyle.js' //"assets/jss/material-dashboard-react/components/customInputStyle.js";
+const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return { accounts: state.accounts, currentAccountId: state.currentAccountId }
@@ -17,6 +24,12 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function SimplePopover(props) {
+	const classes = useStyles()
+
+	const marginTop = classNames({
+		[classes.marginTop]: true
+	})
+
 	const [selectedAccount, setSelectedAccount] = React.useState({
 		accountId: '',
 		accountName: ''
@@ -48,17 +61,24 @@ function SimplePopover(props) {
 
 	return (
 		<div style={{ marginTop: '30px', marginBottom: '15px' }}>
-			<TreePicker
-				defaultExpandAll
-				data={props.accounts.data}
-				style={{ width: '100%' }}
-				name='accounts'
-				labelKey='accountName'
-				valueKey='accountId'
-				value={currentAccount.accountId}
-				onChange={(e, v) => handleSelect(e, v)}
-				cleanable={false}
-			></TreePicker>
+			<Form>
+				<FormGroup>
+					<ControlLabel>Active Account</ControlLabel>
+
+					<TreePicker
+						classes={{ root: marginTop }}
+						defaultExpandAll
+						data={props.accounts.data}
+						style={{ width: '100%' }}
+						name='accounts'
+						labelKey='accountName'
+						valueKey='accountId'
+						value={currentAccount.accountId}
+						onChange={(e, v) => handleSelect(e, v)}
+						cleanable={false}
+					/>
+				</FormGroup>
+			</Form>
 		</div>
 	)
 }

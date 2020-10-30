@@ -2,14 +2,18 @@
 import React from 'react'
 import GridItem from '../../components/Grid/GridItem.js'
 import GridContainer from '../../components/Grid/GridContainer.js'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import { connect } from 'react-redux'
-import { createUser } from '../../redux/actions/users'
-import Snackbar from '../../components/Snackbar/Snackbar'
-import AddAlert from '@material-ui/icons/AddAlert'
+import {
+	createUser,
+	setUserAdded,
+	setUserAddError
+} from '../../redux/actions/users'
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
 import { Formik } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
@@ -45,13 +49,18 @@ const mapStateToProps = (state) => {
 		hasErrored: state.rolesHasErrored,
 		isLoading: state.rolesIsLoading,
 		accounts: state.accounts,
-		currentAccountId: state.currentAccountId
+		currentAccountId: state.currentAccountId,
+		userAdded: state.userAdded,
+		userAdding: state.userAdding,
+		userAddError: state.userAddError
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addNewUser: (user) => dispatch(createUser(user))
+		addNewUser: (user) => dispatch(createUser(user)),
+		setUserAdded: (bool) => dispatch(setUserAdded(bool)),
+		setUserAddError: (bool) => dispatch(setUserAddError(bool))
 	}
 }
 
@@ -85,10 +94,10 @@ function CreateUser(props) {
 			validateOnMount={false}
 			validationSchema={() => schemaValidation}
 			initialValues={{
-				company: 'test',
-				firstName: 'testfirst',
-				lastName: 'testLast',
-				email: 'test@test.com',
+				company: '',
+				firstName: '',
+				lastName: '',
+				email: '',
 				roleId: '',
 				accounts: []
 			}}
@@ -115,32 +124,16 @@ function CreateUser(props) {
 												name='company'
 												labelText='Company'
 												id='company'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{}}
 											/>
 										</GridItem>
 										<GridItem xs={12} sm={12} md={7}>
-											<FormikInput
-												name='email'
-												labelText='Email'
-												id='email'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{}}
-											/>
+											<FormikInput name='email' labelText='Email' id='email' />
 										</GridItem>
 										<GridItem xs={12} sm={12} md={5}>
 											<FormikInput
 												name='firstName'
 												labelText='First Name'
 												id='firstName'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{}}
 											/>
 										</GridItem>
 										<GridItem xs={12} sm={12} md={7}>
@@ -148,10 +141,6 @@ function CreateUser(props) {
 												name='lastName'
 												labelText='Last Name'
 												id='lastName'
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{}}
 											/>
 										</GridItem>
 
@@ -163,7 +152,7 @@ function CreateUser(props) {
 												valueKey='accountId'
 												value={values.accounts}
 												onChange={setFieldValue}
-												cascade={false}
+												cascade={true}
 												error={errors.accounts}
 											/>
 										</GridItem>
@@ -192,7 +181,7 @@ function CreateUser(props) {
 									<Button
 										disabled={!isValid || !dirty}
 										onClick={() => handleInviteUserClick(values)}
-										color='primary'
+										loading={props.userAdding}
 									>
 										Invite User
 									</Button>
@@ -202,14 +191,30 @@ function CreateUser(props) {
 					</GridContainer>
 
 					<Snackbar
+						autoHideDuration={2000}
 						place='bc'
-						color='success'
-						icon={AddAlert}
-						message='User created and Signup invitation is sent'
-						//	open={showAlertMessage}
-						// closeNotification={() => setShowAlertMessage(false)}
-						close
-					/>
+						open={props.userAdded}
+						onClose={() => props.setUserAdded(false)}
+					>
+						<Alert onClose={() => props.setUserAdded(false)} severity='success'>
+							User invite sent
+						</Alert>
+					</Snackbar>
+
+					<Snackbar
+						autoHideDuration={2000}
+						place='bc'
+						open={props.userAddError}
+						onClose={() => props.setUserAddError(false)}
+					>
+						<Alert
+							onClose={() => props.setUserAddError(false)}
+							severity='error'
+						>
+							Error inviting user.
+						</Alert>
+						{/**TODO: this message can be more descriptive once api returns a better error response: https://sightly.atlassian.net/browse/EN-4452 */}
+					</Snackbar>
 				</div>
 			)}
 		/>

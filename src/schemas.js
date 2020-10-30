@@ -94,16 +94,67 @@ export const brandProfilesObjValidation = Yup.array().of(
 		brandName: Yup.string().required(),
 		brandProfileId: Yup.number().required(),
 		twitterProfileUrl: Yup.string().required(),
-		websiteUrl: Yup.string().required(),
-		competitors: Yup.array().of(
-			Yup.object()
-			// .shape({
-			//   brandProfileId: Yup.number().required(),
-			//   competitorId: Yup.number().required(),
-			//   competitorName: Yup.string().required(),
-			//   websiteUrl: Yup.string().required(),
-			//   twitterProfileUrl: Yup.string().required()
-			// })
-		)
+		websiteUrl: Yup.string().required()
 	})
 )
+
+export const brandProfileObjValidation = Yup.object().shape({
+	accountId: Yup.number().required(),
+	brandName: Yup.string().required(),
+	brandProfileId: Yup.number().required(),
+	twitterProfileUrl: Yup.string().required(),
+	industryVerticalId: Yup.number().required(),
+	websiteUrl: Yup.string().required(),
+	categories: Yup.array()
+		.min(1, 'each brand profile should have at least one category object')
+		.of(
+			Yup.object().shape({
+				contentCategoryId: Yup.number().required(),
+				contentCategoryName: Yup.string().required(),
+				contentCategoryResponseId: Yup.number().required(),
+				contentCategoryResponseName: Yup.string().required()
+			})
+		)
+		.required(),
+	competitors: Yup.array()
+		.min(1, 'each brand profile should have at least one competitor object')
+		.of(
+			Yup.object().shape({
+				competitorId: Yup.number().required(),
+				competitorName: Yup.string().required(),
+				twitterProfileUrl: Yup.string().required(),
+				websiteUrl: Yup.string().required()
+			})
+		)
+		.required(),
+	scenarios: Yup.array()
+		.min(1, 'each brand profile should have at least one scenarios object')
+		.of(
+			Yup.object().shape({
+				scenarioId: Yup.number().required(),
+				scenarioName: Yup.string().required(),
+				scenarioResponseId: Yup.number().required(),
+				scenarioResponseName: Yup.string().required()
+			})
+		)
+		.required(),
+	topics: Yup.array()
+		.min(1, 'each brand profile should have at least one topics object')
+		.of(
+			Yup.object().shape({
+				children: Yup.array().of(
+					Yup.object().shape({
+						parentIds: Yup.array().required(),
+						topicId: Yup.number().required(),
+						topicName: Yup.string().required(),
+						topicResponseId: Yup.number().required()
+					})
+				),
+				parentIds: Yup.array().required(),
+				topicId: Yup.number().required(),
+				topicName: Yup.string().required(),
+				topicResponseId: Yup.number().required()
+			})
+		)
+		.required()
+})

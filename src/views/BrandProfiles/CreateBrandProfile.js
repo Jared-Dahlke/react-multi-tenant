@@ -1,45 +1,41 @@
 import React from 'react'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Card from '../../components/Card/Card.js'
 import CardFooter from '../../components/Card/CardFooter'
 import CardBody from '../../components/Card/CardBody.js'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
-import Typography from '@material-ui/core/Typography'
 import {
 	primaryColor,
-	blackColor,
 	whiteColor,
-	grayColor
+	grayColor,
+	successColor
 } from '../../assets/jss/material-dashboard-react'
 import BasicInfo from './components/BasicInfo'
 import TopCompetitors from './components/TopCompetitors'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
+import { Form, withFormik } from 'formik'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
-import Scenarios from './components/Scenarios'
+import ContentSettings from './components/ContentSettings/ContentSettings'
+import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
-	fetchBrandScenariosProperties,
-	fetchBrandIndustryVerticals
+	setBrandProfileCreated,
+	removeBrandProfile
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
-import { Debug } from '../Debug'
-//import Joyride from 'react-joyride'
-//import {getTours} from '../../Tour'
-/** <Joyride
-          steps={getTours('takeToDiscover')}
-          run={showTour}
-        />
- */
+import { neutralColor } from '../../assets/jss/colorContants.js'
+import { Link } from 'react-router-dom'
+import Message from 'rsuite/lib/Message'
+import { brandProfileModel } from './Model'
+import { schemaValidation } from './brandProfileValidation'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
-		backgroundColor: blackColor
+		backgroundColor: neutralColor
 	},
 	fixBottom: {
 		position: 'fixed',
@@ -73,108 +69,101 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		createBrandProfile: (brandProfile) =>
 			dispatch(createBrandProfile(brandProfile)),
-		fetchBrandScenariosProperties: () =>
-			dispatch(fetchBrandScenariosProperties()),
-		fetchBrandIndustryVerticals: () => dispatch(fetchBrandIndustryVerticals())
+		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool)),
+		removeBrandProfile: (brandProfileId) =>
+			dispatch(removeBrandProfile(brandProfileId))
 	}
 }
 
 const mapStateToProps = (state) => {
 	return {
+		industryVerticals: state.industryVerticals,
+		topics: state.topics,
+		categories: state.brandCategories,
+		scenarios: state.scenarios,
 		currentAccountId: state.currentAccountId,
-		scenarioProperties: state.scenarioProperties
+		brandProfileCreated: state.brandProfileCreated,
+		brandProfileCreating: state.brandProfileCreating,
+		brandProfileLoading: state.brandProfileLoading,
+		brandProfileSaving: state.brandProfileSaving,
+		brandProfileSaved: state.brandProfileSaved,
+		brandProfiles: state.brandProfiles
 	}
 }
 
-const formatScenario = (scenarioProps) => {
-	if (!scenarioProps || !scenarioProps.scenario) return []
-
-	let formattedScenarios = []
-
-	scenarioProps.scenario.forEach((scen, index) => {
-		formattedScenarios.push({
-			scenName: `scenario${index + 1}`,
-			scenLabel: scen.scenarioName,
-			scenId: scen.scenarioId
-		})
-	})
-
-	return formattedScenarios
-}
-
-const schemaValidation = Yup.object().shape({
-	basicInfoIndustry: Yup.array()
-		.typeError('Wrong type')
-		.min(1, 'Select at least one field')
-		.of(
-			Yup.object()
-				.shape({
-					label: Yup.string(),
-					value: Yup.string()
-				})
-				.transform((v) => (v === '' ? null : v))
-		),
-	basicInfoProfileName: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	basicInfoWebsiteUrl: Yup.string()
-		.matches(
-			/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-			'Enter correct url!'
-		)
-		.required('Required'),
-
-	basicInfoTwitterProfile: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 30 characters')
-		.required('Required'),
-	topCompetitors: Yup.array()
-		.typeError('Wrong type')
-		.min(1, 'You have to create at least one competitor')
-		.of(
-			Yup.object()
-				.shape({
-					label: Yup.string(),
-					value: Yup.string()
-				})
-				.transform((v) => (v === '' ? null : v))
-		)
-})
-
 function getSteps() {
-	return ['Basic Info', 'Top Competitors', 'Scenarios']
+	return ['Basic Info', 'Content Settings', 'Competitors', 'Topics']
 }
 
-function CreateBrandProfiles(props) {
-	let fetchBrandScenariosProperties = props.fetchBrandScenariosProperties
-	let fetchBrandIndustryVerticals = props.fetchBrandIndustryVerticals
-	React.useEffect(() => {
-		fetchBrandScenariosProperties()
-		fetchBrandIndustryVerticals()
-	}, [fetchBrandScenariosProperties, fetchBrandIndustryVerticals])
+function getTopicValues(topics) {
+	let tab = []
 
-	const scenarios = React.useMemo(
-		() => formatScenario(props.scenarioProperties),
-		[props.scenarioProperties]
-	)
+	for (const topic of topics) {
+		tab.push(topic.topicId)
 
+		if (topic.children && topic.children.length > 0) {
+			tab = tab.concat(getTopicValues(topic.children))
+		}
+	}
+	return tab
+}
+
+function getSelectedTopics(topics) {
+	if (!topics || topics.length < 1) return []
+	let tab = []
+
+	for (const topic of topics) {
+		if (topic.topicResponseId != 3) {
+			tab.push(topic.topicId)
+		}
+
+		if (topic.children && topic.children.length > 0) {
+			tab = tab.concat(getSelectedTopics(topic.children))
+		}
+	}
+
+	return tab.filter(onlyUnique)
+}
+
+function onlyUnique(value, index, self) {
+	return self.indexOf(value) === index
+}
+
+function CreateBrandProfile(props) {
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
-
 	const steps = getSteps()
-
 	const handleNext = (values) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
-
 		if (activeStep === steps.length - 1) {
+			cleanScenariosForApi(values.scenarios)
+			cleanCategoriesForApi(values.categories)
 			let brandProfile = {
-				accountId: props.currentAccountId,
+				brandProfileId: values.brandProfileId,
+				accountId: values.accountId,
 				brandName: values.basicInfoProfileName,
 				websiteUrl: values.basicInfoWebsiteUrl,
-				twitterProfileUrl: values.basicInfoTwitterProfile
+				industryVerticalId: values.basicInfoIndustryVerticalId,
+				twitterProfileUrl: values.basicInfoTwitterProfile,
+				topics: values.topics,
+				competitors: values.topCompetitors,
+				scenarios: values.scenarios,
+				categories: values.categories
 			}
+
 			props.createBrandProfile(brandProfile)
+		}
+	}
+
+	const cleanScenariosForApi = (scenarios) => {
+		for (const scenario of scenarios) {
+			delete scenario.scenarioName
+		}
+	}
+
+	const cleanCategoriesForApi = (categories) => {
+		for (const category of categories) {
+			delete category.contentCategoryName
 		}
 	}
 
@@ -182,24 +171,7 @@ function CreateBrandProfiles(props) {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
 
-	const handleReset = () => {
-		setActiveStep(0)
-	}
-
-	const isScenarioValid = (values) => {
-		for (var key in values.scenarios) {
-			// check also if property is not inherited from prototype
-			if (values.scenarios.hasOwnProperty(key)) {
-				var value = values.scenarios[key]
-				if (value.length < 1) {
-					return false
-				}
-			}
-		}
-		return true
-	}
-
-	const isValid = (errors, formName) => {
+	const customIsValid = (errors, formName) => {
 		for (var prop in errors) {
 			if (Object.prototype.hasOwnProperty.call(errors, prop)) {
 				if (prop.includes(formName)) {
@@ -207,177 +179,245 @@ function CreateBrandProfiles(props) {
 				}
 			}
 		}
+
 		return true
 	}
 
 	const stepValidated = (index, errors, values) => {
-		if (!errors || errors.length < 1) {
-			//return false
+		if (!errors || Object.keys(errors).length < 1) {
+			return true
 		}
 		if (index === 0) {
-			return isValid(errors, 'basicInfo')
+			return customIsValid(errors, 'basicInfo')
 		}
 		if (index === 1) {
-			return isValid(errors, 'topCompetitors')
+			return (
+				customIsValid(errors, 'scenarios') &&
+				customIsValid(errors, 'categories')
+			)
 		}
 
 		if (index === 2) {
-			return isScenarioValid(values)
+			return customIsValid(errors, 'topCompetitors')
+		}
+
+		if (index === 3) {
+			return customIsValid(errors, 'topics')
 		}
 		return true
 	}
 
-	const getInitialValues = () => {
-		//	let inputs = getScenarioPair(scenarios)
+	const allTopicValues = React.useMemo(() => {
+		return getTopicValues(props.topics)
+	}, [props.topics])
 
-		const initialValues = {
-			basicInfoProfileName: '',
-			basicInfoWebsiteUrl: '',
-			basicInfoTwitterProfile: '',
-			//basicInfoIndustry: [],
-			topCompetitors: []
-		}
+	const selectedTopics = React.useMemo(() => {
+		return getSelectedTopics(props.values.topics)
+	}, [props.values.topics])
 
-		let scenariosWithValue = {}
-		scenarios.forEach((field) => {
-			scenariosWithValue[field.scenName] = ''
-		})
-
-		initialValues.scenarios = scenariosWithValue
-
-		return initialValues
+	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
+	const updateEpandedTopicKeys = (expandedKeys) => {
+		setExpandedTopicKeys(expandedKeys)
 	}
 
+	const nextButtonLabel = React.useMemo(() => {
+		let label = ''
+		let onLastStep = activeStep === steps.length - 1
+
+		if (onLastStep) {
+			label = 'Save'
+		} else {
+			label = 'Next'
+		}
+
+		return label
+	}, [activeStep])
+
+	const {
+		values,
+		errors,
+		touched,
+		setFieldValue,
+		setFieldTouched,
+		isValid,
+		dirty
+	} = props
+
 	return (
-		<Formik
-			//	enableReinitialize
-			validateOnMount={true}
-			// validateOnChange={true}
-			validationSchema={() => schemaValidation}
-			initialValues={getInitialValues()}
-			render={({
-				values,
-				errors,
-				touched,
-				setFieldValue,
-				setFieldTouched,
-				validateField,
-				validateForm,
-				isSubmitting,
-				isValid,
-				arrayHelpers
-			}) => (
-				<div>
-					<Stepper
-						classes={{ root: classes.stepper }}
-						activeStep={activeStep}
-						alternativeLabel
-					>
-						{steps.map((label, index) => {
-							let labelColor = whiteColor
-							if (stepValidated(index, errors, values)) {
-								// labelColor = 'green'
-							}
+		<Form>
+			<Stepper
+				classes={{ root: classes.stepper }}
+				activeStep={activeStep}
+				alternativeLabel
+			>
+				{steps.map((label, index) => {
+					let labelColor = whiteColor
 
-							return (
-								<Step key={label}>
-									<StepLabel
-										StepIconProps={{
-											classes: {
-												root: classes.step,
-												completed: classes.completed,
-												active: classes.active
-											}
-										}}
-									>
-										<div style={{ color: labelColor }}>{label}</div>
-									</StepLabel>
-								</Step>
-							)
-						})}
-					</Stepper>
+					return (
+						<Step key={label}>
+							<StepLabel
+								StepIconProps={{
+									classes: {
+										root: classes.step,
+										completed: classes.completed,
+										active: classes.active
+									}
+								}}
+							>
+								<div style={{ color: labelColor }}>{label}</div>
+							</StepLabel>
+						</Step>
+					)
+				})}
+			</Stepper>
 
-					<GridContainer justify='center'>
-						<GridItem xs={12} sm={12} md={11}>
-							<Card style={{ backgroundColor: blackColor }}>
-								<CardBody>
-									<GridList
-										cols={1}
-										cellHeight={400}
-										style={{ overflowX: 'hidden' }}
-									>
-										{activeStep === 0 ? (
-											<div>
-												<BasicInfo
-													setFieldValue={setFieldValue}
-													errors={errors}
-												/>
-											</div>
-										) : activeStep === 1 ? (
-											<div>
-												<TopCompetitors
-													setFieldValue={setFieldValue}
-													errors={errors}
-												/>
-											</div>
-										) : activeStep === 2 ? (
-											<div>
-												<Scenarios
-													scenarios={scenarios}
-													validateField={validateField}
-													setFieldValue={setFieldValue}
-													errors={errors}
-													arrayHelpers={arrayHelpers}
-													values={values}
-													touched={touched}
-												/>
-											</div>
-										) : (
-											<div></div>
-										)}
-									</GridList>
-								</CardBody>
-								<CardFooter>
-									<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
-										{activeStep === steps.length ? (
-											<div>
-												<Typography
-													className={classes.instructions}
-												></Typography>
-												<Button onClick={handleReset}>Reset</Button>
-											</div>
-										) : (
-											<div>
-												<div>
-													<Button
-														disabled={activeStep === 0}
-														onClick={handleBack}
-														className={classes.backButton}
-													>
-														Back
-													</Button>
-													<Button
-														variant='contained'
-														color='primary'
-														onClick={() => handleNext(values)}
-														disabled={
-															!stepValidated(activeStep, errors, values)
-														}
-													>
-														{activeStep === steps.length - 1 ? 'Save' : 'Next'}
-													</Button>
-												</div>
-											</div>
-										)}
+			<GridContainer justify='center'>
+				<GridItem xs={12} sm={12} md={11} style={{ position: 'relative' }}>
+					<Card style={{ backgroundColor: neutralColor, display: 'flex' }}>
+						<CardBody>
+							<GridList
+								cols={1}
+								cellHeight={400}
+								style={{ overflowX: 'hidden', flex: 1 }}
+							>
+								{activeStep === 0 ? (
+									<div>
+										<BasicInfo
+											setFieldValue={setFieldValue}
+											values={values}
+											touched={touched}
+											industryVerticals={props.industryVerticals}
+											errors={errors}
+											setFieldTouched={setFieldTouched}
+										/>
 									</div>
-								</CardFooter>
-							</Card>
-						</GridItem>
-					</GridContainer>
-				</div>
-			)}
-		/>
+								) : activeStep === 1 ? (
+									<div>
+										<ContentSettings
+											scenarios={values.scenarios}
+											categories={values.categories}
+											setFieldValue={setFieldValue}
+											errors={errors}
+											values={values}
+										/>
+									</div>
+								) : activeStep === 2 ? (
+									<div>
+										<TopCompetitors
+											setFieldValue={setFieldValue}
+											errors={errors}
+											competitors={values.topCompetitors}
+											values={values}
+										/>
+									</div>
+								) : activeStep === 3 ? (
+									<div style={{ flex: 1 }}>
+										<Topics
+											formikValues={values}
+											allValues={allTopicValues}
+											selectedTopics={selectedTopics}
+											updateExpandedKeys={updateEpandedTopicKeys}
+											expandedTopicKeys={expandedTopicKeys}
+											setFieldValue={setFieldValue}
+											errors={errors}
+										/>
+									</div>
+								) : (
+									<div style={{ color: 'white' }}>
+										<div
+											style={{
+												display: 'flex',
+												justifyContent: 'center',
+												alignItems: 'center',
+												backgroundColor: neutralColor,
+												height: '100%',
+												color: 'white'
+											}}
+										>
+											{props.brandProfileCreating ? (
+												'Saving...'
+											) : (
+												<Message
+													showIcon
+													type='success'
+													title='Success'
+													description={
+														<p>
+															{
+																'Your brand profile was succesfully created. Now you can '
+															}
+															<Link to='/admin/engage/listBuilder'>
+																{'go to the list builder '}
+															</Link>
+															or
+															<Link to='/admin/settings/brandProfiles'>
+																{' view your brand profiles'}
+															</Link>
+														</p>
+													}
+												/>
+											)}
+										</div>
+									</div>
+								)}
+							</GridList>
+						</CardBody>
+						<CardFooter>
+							<div style={{ position: 'fixed', bottom: 30, right: 70 }}>
+								{activeStep === steps.length ? null : (
+									<div>
+										<div>
+											<Button
+												disabled={activeStep === 0}
+												onClick={handleBack}
+												className={classes.backButton}
+											>
+												Back
+											</Button>
+											<Button
+												onClick={() => handleNext(values)}
+												disabled={
+													!stepValidated(activeStep, errors, values) || !dirty
+												}
+												loading={props.brandProfileCreating}
+											>
+												{nextButtonLabel}
+											</Button>
+										</div>
+									</div>
+								)}
+							</div>
+						</CardFooter>
+					</Card>
+				</GridItem>
+			</GridContainer>
+		</Form>
 	)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateBrandProfiles)
+const FormikForm = withFormik({
+	mapPropsToValues: (props) => {
+		let currentBrandProfile = JSON.parse(JSON.stringify(brandProfileModel))
+		currentBrandProfile.categories = props.categories
+		currentBrandProfile.scenarios = props.scenarios
+		currentBrandProfile.topics = props.topics
+		return {
+			brandProfileId: currentBrandProfile.brandProfileId,
+			accountId: props.currentAccountId,
+			basicInfoProfileName: currentBrandProfile.brandName,
+			basicInfoWebsiteUrl: currentBrandProfile.websiteUrl,
+			basicInfoTwitterProfile: currentBrandProfile.twitterProfileUrl,
+			basicInfoIndustryVerticalId: currentBrandProfile.industryVerticalId,
+			topCompetitors: currentBrandProfile.competitors,
+			topics: currentBrandProfile.topics,
+			scenarios: currentBrandProfile.scenarios,
+			categories: currentBrandProfile.categories
+		}
+	},
+	enableReinitialize: true,
+	validateOnChange: true,
+	validateOnMount: true,
+	validationSchema: schemaValidation
+})(CreateBrandProfile)
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)

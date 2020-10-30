@@ -1,14 +1,15 @@
 import {
 	SET_ACCOUNT_CREATED,
 	ACCOUNTS_UPDATE_ACCOUNT,
-	ACCOUNT_TYPES_FETCH_DATA_SUCCESS,
-	ACCOUNTS_FETCH_DATA_SUCCESS,
+	SET_ACCOUNT_TYPES,
+	SET_ACCOUNTS,
 	ACCOUNTS_SET_ACCOUNT_USERS,
 	SET_CURRENT_ACCOUNT_ID,
 	SET_IS_SWITCHING_ACCOUNTS,
 	SET_CURRENT_ACCOUNT,
-	TREE_ACCOUNTS_CONVERT_DATA_SUCCESS,
-	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING
+	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
+	SET_ACCOUNT_SAVING,
+	SET_ACCOUNT_SAVED
 } from '../action-types/accounts'
 import {
 	findAccountNodeByAccountId,
@@ -17,7 +18,7 @@ import {
 
 export function accounts(state = [], action) {
 	switch (action.type) {
-		case ACCOUNTS_FETCH_DATA_SUCCESS:
+		case SET_ACCOUNTS:
 			return action.accounts
 		case SET_CURRENT_ACCOUNT:
 			let newAccounts = JSON.parse(JSON.stringify(state.data))
@@ -66,7 +67,7 @@ export function accounts(state = [], action) {
 
 export function accountTypes(state = [], action) {
 	switch (action.type) {
-		case ACCOUNT_TYPES_FETCH_DATA_SUCCESS:
+		case SET_ACCOUNT_TYPES:
 			return action.accountTypes
 		default:
 			return state
@@ -77,15 +78,6 @@ export function editAccountAccountUsersLoading(state = true, action) {
 	switch (action.type) {
 		case EDIT_ACCOUNT_ACCOUNT_USERS_LOADING:
 			return action.editAccountAccountUsersLoading
-		default:
-			return state
-	}
-}
-
-export function treeAccounts(state = [], action) {
-	switch (action.type) {
-		case TREE_ACCOUNTS_CONVERT_DATA_SUCCESS:
-			return action.treeAccounts
 		default:
 			return state
 	}
@@ -104,6 +96,24 @@ export function isSwitchingAccounts(state = false, action) {
 	switch (action.type) {
 		case SET_IS_SWITCHING_ACCOUNTS:
 			return action.isSwitchingAccounts
+		default:
+			return state
+	}
+}
+
+export function accountSaving(state = false, action) {
+	switch (action.type) {
+		case SET_ACCOUNT_SAVING:
+			return action.accountSaving
+		default:
+			return state
+	}
+}
+
+export function accountSaved(state = false, action) {
+	switch (action.type) {
+		case SET_ACCOUNT_SAVED:
+			return action.accountSaved
 		default:
 			return state
 	}

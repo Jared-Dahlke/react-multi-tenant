@@ -12,7 +12,9 @@ import {
 	isLoggedIn,
 	alert,
 	user,
-	userProfileIsLoading
+	userProfileIsLoading,
+	loggingIn,
+	updatingPassword
 } from './auth'
 import {
 	users,
@@ -20,24 +22,42 @@ import {
 	userDeleted,
 	userDeletedError,
 	userAdded,
+	userAdding,
 	usersIsLoading,
-	editUserUserAccountsLoading
+	editUserUserAccountsLoading,
+	userProfileSaving,
+	userProfileSaved,
+	userEditSaving,
+	userEditSaved,
+	userAddError
 } from './users'
 import {
 	accounts,
 	currentAccountId,
 	isSwitchingAccounts,
-	treeAccounts,
 	editAccountAccountUsersLoading,
 	accountTypes,
-	accountCreated
+	accountCreated,
+	accountSaving,
+	accountSaved
 } from './accounts'
 import {
 	brandProfiles,
 	brandProfilesIsLoading,
 	hasBrandProfiles,
-	scenarioProperties,
-	industryVerticals
+	scenarios,
+	industryVerticals,
+	topics,
+	brandProfileCreated,
+	brandProfileCreating,
+	brandProfileDeleted,
+	brandProfileDeleting,
+	brandCategories,
+	brandProfileBasicInfo,
+	brandProfileCompetitors,
+	brandProfileLoading,
+	brandProfileSaving,
+	brandProfileSaved
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
@@ -50,6 +70,7 @@ export default combineReducers({
 	rolesIsLoading,
 	rolesPermissionsIsLoading,
 	isLoggedIn,
+	loggingIn,
 	alert,
 	users,
 	usersHasErrored,
@@ -58,21 +79,40 @@ export default combineReducers({
 	userDeletedError,
 	usersIsLoading,
 	brandProfiles,
+	brandProfileCreated,
+	brandProfileCreating,
+	brandProfileDeleted,
+	brandProfileDeleting,
 	userAdded,
+	userAdding,
+	userEditSaving,
+	userEditSaved,
 	accounts,
 	currentAccountId,
 	isSwitchingAccounts,
 	userProfileIsLoading,
-	treeAccounts,
+	userProfileSaving,
+	userProfileSaved,
 	editUserUserAccountsLoading,
 	editAccountAccountUsersLoading,
 	accountTypes,
 	brandProfilesIsLoading,
+	brandProfileLoading,
 	accountCreated,
 	hasBrandProfiles,
-	scenarioProperties,
+	scenarios,
 	industryVerticals,
+	topics,
+	brandCategories,
+	brandProfileBasicInfo,
+	brandProfileCompetitors,
 	categories,
 	channels,
-	videos
+	videos,
+	accountSaving,
+	accountSaved,
+	brandProfileSaving,
+	brandProfileSaved,
+	userAddError,
+	updatingPassword
 })
