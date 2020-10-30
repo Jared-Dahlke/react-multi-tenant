@@ -27,6 +27,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
+import { UserCan, perms } from '../../Can'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -104,9 +105,11 @@ function BrandProfiles(props) {
 			<GridItem xs={12} sm={12} md={6}>
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
-						<Button color='primary' onClick={handleCreateNewProfileClick}>
-							Create New Profile
-						</Button>
+						<UserCan i={perms.BRAND_PROFILE_CREATE}>
+							<Button color='primary' onClick={handleCreateNewProfileClick}>
+								Create New Profile
+							</Button>
+						</UserCan>
 
 						<Table className={classes.table}>
 							<TableHead className={tableClasses['primaryTableHeader']}>
@@ -163,30 +166,32 @@ function BrandProfiles(props) {
 														/>
 													</IconButton>
 												</Tooltip>
-												<Tooltip
-													id='tooltip-top-start'
-													title='Remove'
-													placement='top'
-													classes={{ tooltip: classes.tooltip }}
-												>
-													<IconButton
-														aria-label='Close'
-														className={classes.tableActionButton}
-														onClick={() => {
-															handleDeleteBrandProfileClick(
-																profile.brandProfileId
-															)
-														}}
+												<UserCan i={perms.BRAND_PROFILE_DELETE}>
+													<Tooltip
+														id='tooltip-top-start'
+														title='Remove'
+														placement='top'
+														classes={{ tooltip: classes.tooltip }}
 													>
-														<Close
-															className={
-																classes.tableActionButtonIcon +
-																' ' +
-																classes.close
-															}
-														/>
-													</IconButton>
-												</Tooltip>
+														<IconButton
+															aria-label='Close'
+															className={classes.tableActionButton}
+															onClick={() => {
+																handleDeleteBrandProfileClick(
+																	profile.brandProfileId
+																)
+															}}
+														>
+															<Close
+																className={
+																	classes.tableActionButtonIcon +
+																	' ' +
+																	classes.close
+																}
+															/>
+														</IconButton>
+													</Tooltip>
+												</UserCan>
 											</TableCell>
 										</TableRow>
 									))}

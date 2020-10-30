@@ -22,6 +22,7 @@ import * as Yup from 'yup'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
 import {Icon, IconButton, Modal, Tooltip, Whisper} from 'rsuite/lib'
 import RolesInfo from './RolesInfo.js'
+import { UserCan, perms, userCan } from '../../Can'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -213,9 +214,7 @@ export function EditUser(props) {
 														name='company'
 														labelText='Company'
 														id='company'
-														inputProps={{
-															disabled: true
-														}}
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -224,6 +223,7 @@ export function EditUser(props) {
 														name='email'
 														labelText='Email'
 														id='email'
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -232,6 +232,7 @@ export function EditUser(props) {
 														name='firstName'
 														labelText='First Name'
 														id='firstName'
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -240,6 +241,7 @@ export function EditUser(props) {
 														name='lastName'
 														labelText='Last Name'
 														id='lastName'
+														disabled={!userCan(perms.USER_UPDATE)}
 													/>
 												</GridItem>
 
@@ -257,6 +259,7 @@ export function EditUser(props) {
 															onChange={setFieldValue}
 															cascade={true}
 															error={errors.accounts}
+															disabled={!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)}
 														/>
 													) : null}
 												</GridItem>
@@ -284,6 +287,7 @@ export function EditUser(props) {
 														validateForm={validateForm}
 														touched={touched.roleId}
 														error={errors.roleId}
+														isDisabled={!userCan(perms.USER_UPDATE)}
 													/>
 													<Whisper placement="right" trigger="hover" speaker={<Tooltip>More about Roles/Permissions</Tooltip>}> 
 													 <IconButton 
@@ -299,13 +303,15 @@ export function EditUser(props) {
 											</GridContainer>
 										</CardBody>
 										<CardFooter>
-											<Button
-												disabled={!isValid || !dirty}
-												onClick={() => handleSaveClick(values, resetForm)}
-												loading={props.userEditSaving}
-											>
-												Save
-											</Button>
+											<UserCan i={perms.USER_UPDATE}>
+												<Button
+													disabled={!isValid || !dirty}
+													onClick={() => handleSaveClick(values, resetForm)}
+													loading={props.userEditSaving}
+												>
+													Save
+												</Button>
+											</UserCan>
 										</CardFooter>
 									</div>
 								)}

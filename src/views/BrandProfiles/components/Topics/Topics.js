@@ -7,6 +7,7 @@ import {
 	dangerColor,
 	whiteColor
 } from '../../../../assets/jss/material-dashboard-react'
+import { perms, userCan } from '../../../../Can'
 
 function setTopicAction(topicId, value, topics) {
 	for (const topic of topics) {
@@ -56,6 +57,7 @@ const Node = (props) => {
 			<div style={{ flex: 1 }}>
 				<ButtonGroup size='xs'>
 					<Button
+						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						key='0'
 						id='0'
 						onClick={(e) => handleClick(e, 1)}
@@ -64,6 +66,7 @@ const Node = (props) => {
 						Include
 					</Button>
 					<Button
+						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						id='test'
 						key='1'
 						onClick={(e) => handleClick(e, 2)}

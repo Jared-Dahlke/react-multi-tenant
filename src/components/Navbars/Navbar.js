@@ -14,7 +14,7 @@ import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
 import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
-import { Can } from '../../Can'
+import { UserCan, perms, userCan } from '../../Can'
 
 const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)
@@ -186,11 +186,19 @@ function Header(props) {
 
 	const MyLink = React.forwardRef((props, ref) => {
 		const { href, as, label, ...rest } = props
-		return (
-			<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
-				{label}
-			</Link>
-		)
+
+		if (
+			label.includes('Brand Mentality') &&
+			!userCan(perms.BRAND_MENTALITY_READ)
+		) {
+			return null
+		} else {
+			return (
+				<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
+					{label}
+				</Link>
+			)
+		}
 	})
 
 	const handleLogOut = (props) => {
@@ -205,9 +213,6 @@ function Header(props) {
 		<Dropdown.Item componentClass={MyLink} {...props} />
 	)
 
-	let permissions = localStorage.getItem('permissions')
-	const onlyMentality = permissions == 1 ? true : false
-
 	return (
 		<div>
 			<Navbar style={{ borderBottom: '1px solid white' }}>
@@ -215,56 +220,45 @@ function Header(props) {
 					<Nav>
 						<Nav.Item>{brand}</Nav.Item>
 
-						{!onlyMentality ? (
-							<Dropdown
-								title='Discover'
-								icon={<Icon icon='pie-chart' />}
-								style={{ marginRight: 15 }}
-								id='Channel_Research_Nav_Tab'
-							>
-								<NavLink
-									href='/admin/discover/channelResearch'
-									label='Channel Research'
-								/>
-							</Dropdown>
-						) : null}
+						<Dropdown
+							title='Discover'
+							icon={<Icon icon='pie-chart' />}
+							style={{ marginRight: 15 }}
+							id='Channel_Research_Nav_Tab'
+						>
+							<NavLink
+								href='/admin/discover/channelResearch'
+								label='Channel Research'
+							/>
+						</Dropdown>
 
-						{!onlyMentality ? (
-							<Dropdown
-								title='Engage'
-								icon={<Icon icon='bolt' />}
-								style={{ marginRight: 15 }}
-								id='Engage_Nav_Tab'
-							>
-								<NavLink
-									href='/admin/engage/listBuilder'
-									label='List Builder'
-								/>
-							</Dropdown>
-						) : null}
+						<Dropdown
+							title='Engage'
+							icon={<Icon icon='bolt' />}
+							style={{ marginRight: 15 }}
+							id='Engage_Nav_Tab'
+						>
+							<NavLink href='/admin/engage/listBuilder' label='List Builder' />
+						</Dropdown>
 
-						{!onlyMentality ? (
-							<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
-								<NavLink href='/admin/settings/account' label='Account' />
+						<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
+							<NavLink href='/admin/settings/account' label='Account' />
 
-								<NavLink href='/admin/settings/users' label='Users' />
-								<NavLink
-									href='/admin/settings/brandProfiles'
-									label='Brand Profiles'
-								/>
+							<NavLink href='/admin/settings/users' label='Users' />
+							<NavLink
+								href='/admin/settings/brandProfiles'
+								label='Brand Profiles'
+							/>
 
-								<NavLink
-									href='/admin/settings/brandMentality'
-									label='Brand Mentality'
-								/>
-							</Dropdown>
-						) : null}
+							<NavLink
+								href='/admin/settings/brandMentality'
+								label='Brand Mentality'
+							/>
+						</Dropdown>
 					</Nav>
 					<Nav pullRight style={{ marginRight: 30 }}>
 						<Dropdown title='' icon={<Icon icon='avatar' />}>
-							{!onlyMentality ? (
-								<NavLink href='/admin/settings/profile' label='Profile' />
-							) : null}
+							<NavLink href='/admin/settings/profile' label='Profile' />
 
 							<Dropdown.Item onSelect={() => handleLogOut(props)}>
 								Logout

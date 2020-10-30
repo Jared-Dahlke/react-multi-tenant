@@ -20,10 +20,13 @@ import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import EditBrandProfile from '../views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from '../views/UserProfile/UserProfile.js'
 import Account from '../views/Account/Account'
+import { userCan, UserCan, perms } from '../Can'
 
 const switchRoutes = (
 	<Switch>
-		<Route path='/admin/settings/brandMentality' component={BrandMentality} />
+		{userCan(perms.BRAND_MENTALITY_READ) && (
+			<Route path='/admin/settings/brandMentality' component={BrandMentality} />
+		)}
 
 		<Route
 			path='/admin/discover/channelResearch'
@@ -36,7 +39,9 @@ const switchRoutes = (
 				<>
 					<Route path={`${url}/`} component={Users} exact />
 
-					<Route path={`${url}/create`} component={CreateUser} />
+					{userCan(perms.USER_CREATE) && (
+						<Route path={`${url}/create`} component={CreateUser} />
+					)}
 					<Route
 						path={`${url}/edit/:user`}
 						render={(props) => <EditUser {...props} foo='bar' />}
@@ -56,7 +61,9 @@ const switchRoutes = (
 			render={({ match: { url } }) => (
 				<>
 					<Route path={`${url}/`} component={BrandProfiles} exact />
-					<Route path={`${url}/create`} component={CreateBrandProfile} />
+					{userCan(perms.BRAND_PROFILE_CREATE) && (
+						<Route path={`${url}/create`} component={CreateBrandProfile} />
+					)}
 					<Route
 						path={`${url}/edit/:brandProfileId`}
 						component={EditBrandProfile}
