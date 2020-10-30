@@ -59,7 +59,6 @@ const mapStateToProps = (state) => {
 		userAdded: state.userAdded,
 		userAdding: state.userAdding,
 		userAddError: state.userAddError,
-		rolesPermissions:state.rolesPermissions,
 		userProfile: state.user.userProfile
 	}
 }
@@ -79,8 +78,8 @@ function CreateUser(props) {
 	}
 
 	const filteredRolesPermissions = (userType) => {
-		if(userType === 'External') return Array.from(props.rolesPermissions.data).filter(role => role.userType === 'External')
-		return props.rolesPermissions && props.rolesPermissions.data && Array.from(props.rolesPermissions.data)
+		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
+		return Array.from(props.roles)
 	}
 
 	const handleInviteUserClick = (values) => {

@@ -57,7 +57,6 @@ const mapStateToProps = (state) => {
 		editUserUserAccountsLoading: state.editUserUserAccountsLoading,
 		userEditSaving: state.userEditSaving,
 		userEditSaved: state.userEditSaved,
-		rolesPermissions:state.rolesPermissions,
 		userProfile: state.user.userProfile
 	}
 }
@@ -127,6 +126,7 @@ const getUser = (users, userId) => {
 export function EditUser(props) {
 	const [ openDialog, setOpenDialog  ] = React.useState(false)
 	
+	console.log('props.roles',props.roles)
 	let parsedUserId = JSON.parse(props.match.params.user)
 
 	let treeAccounts = React.useMemo(
@@ -162,9 +162,11 @@ export function EditUser(props) {
 	}
 
 	const filteredRolesPermissions = (userType) => {
-		if(userType === 'External') return Array.from(props.rolesPermissions.data).filter(role => role.userType === 'External')
-		return props.rolesPermissions && props.rolesPermissions.data && Array.from(props.rolesPermissions.data)
+		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
+		if(!(user.email.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
+		return Array.from(props.roles)
 	}
+	
 
 	let fetchUserAccounts = props.fetchUserAccounts
 
