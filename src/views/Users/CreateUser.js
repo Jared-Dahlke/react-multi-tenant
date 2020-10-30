@@ -20,7 +20,10 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import { default as UUID } from 'node-uuid'
-import {Icon, IconButton, Modal, Tooltip, Whisper} from 'rsuite/lib'
+import Icon from 'rsuite/lib/Icon'
+import IconButton from 'rsuite/lib/IconButton'
+import Tooltip from 'rsuite/lib/Tooltip'
+import Whisper from 'rsuite/lib/Whisper'
 import RolesInfo from './RolesInfo.js'
 
 

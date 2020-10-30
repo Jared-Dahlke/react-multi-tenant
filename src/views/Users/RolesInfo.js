@@ -1,27 +1,22 @@
-import React from "react";
-import { Modal, Table } from "rsuite";
+import React from "react"
+import "./RolesInfo.css"
+import Modal from "rsuite/lib/Modal"
+import Table from "rsuite/lib/Table"
 const { Column, HeaderCell, Cell,  } = Table;
 const { Title,Body, Header} = Modal
 
 const RolesInfo = (props) => {
+  console.log('rendering RolesInfo')
   let { show, handleDialog, title, data: rolesData, userType } = props;
   if(!rolesData) return null
-  rolesData = Array.from(rolesData).sort((a,b) => a.roleId - b.roleId)
-  // console.log('rolesData',rolesData)
-
-  let tableHeight = 0 //sets the table height to avoid hidden overflow
-  rolesData.map(({permissions}) => { 
-    tableHeight+=35*permissions.length
-  })
 
   const body = (
     <Table
       data={rolesData}
-      minHeight={tableHeight}
+      minHeight={600}
       cellBordered
-      autoHeight
-      bordered
       wordWrap
+      autoHeight
       affixHeader
     >
 
@@ -44,7 +39,7 @@ const RolesInfo = (props) => {
       <Column flexGrow={1}>
         <HeaderCell>Permissions</HeaderCell>
 
-        <Cell>
+        <Cell style={{overflow:'auto'}}>
           {({ permissions }) => {
             return (<div style={{minHeight:'40px',maxHeight:20*permissions.length}}> {permissions.map((perm) => (
             perm.permissionId && <div key={perm.permissionId}><strong key={perm.permissionId}>{perm.permissionName} </strong>: {perm.permissionDescription}</div> 
@@ -57,7 +52,6 @@ const RolesInfo = (props) => {
 
   const instance = (
     <Modal
-      overflow
       show={show}
       full
       onHide={() => {
