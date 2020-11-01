@@ -56,7 +56,7 @@ export default function BasicInfo(props) {
 									name='basicInfoTwitterProfile'
 									labelText='Twitter Profile'
 									formikValue={props.values.basicInfoTwitterProfile}
-									startAdornmentText={'https://twitter.com/'}
+									startAdornmentText={'twitter.com/'}
 									disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 								/>
 							</GridItem>

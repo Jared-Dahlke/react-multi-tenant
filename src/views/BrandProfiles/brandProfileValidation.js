@@ -11,15 +11,9 @@ export const schemaValidation = Yup.object().shape({
 		.max(50, 'Must be less than 50 characters'),
 	basicInfoWebsiteUrl: Yup.string()
 		.required('Required')
-		.test(
-			'urlTest',
-			'Valid URL required (e.g. google.com)',
-			(basicInfoWebsiteUrl) => {
-				return urlRegex({ exact: true, strict: false }).test(
-					basicInfoWebsiteUrl
-				)
-			}
-		),
+		.test('urlTest', 'Valid URL required', (basicInfoWebsiteUrl) => {
+			return urlRegex({ exact: true, strict: false }).test(basicInfoWebsiteUrl)
+		}),
 	basicInfoTwitterProfile: Yup.string()
 		.required('Required')
 		.min(2, 'Must be greater than 1 character')
@@ -30,7 +24,7 @@ export const schemaValidation = Yup.object().shape({
 		.min(1, 'At least one competitor is required'),
 	topics: Yup.array()
 		.typeError('Wrong type')
-		.test('topicsTest', 'You must include at least one topic', (topics) => {
+		.test('topicsTest', 'Please include at least one topic', (topics) => {
 			return topicsHasResponse(topics)
 		}),
 	scenarios: Yup.array()
