@@ -121,7 +121,7 @@ function onlyUnique(value, index, self) {
 
 function CreateBrandProfile(props) {
 	const classes = useStyles()
-	const [activeStep, setActiveStep] = React.useState(0)
+	const [activeStep, setActiveStep] = React.useState(2)
 	const steps = getSteps()
 	const handleNext = (values) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -169,10 +169,10 @@ function CreateBrandProfile(props) {
 		return getSelectedTopics(props.values.topics)
 	}, [props.values.topics])
 
-	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
-	const updateEpandedTopicKeys = (expandedKeys) => {
-		setExpandedTopicKeys(expandedKeys)
-	}
+	const [treeTopics, setTreeTopics] = React.useState([])
+	React.useEffect(() => {
+		setTreeTopics(props.values.topics)
+	}, [props.values.topics])
 
 	const nextButtonLabel = React.useMemo(() => {
 		let label = ''
@@ -241,10 +241,10 @@ function CreateBrandProfile(props) {
 											formikValues={values}
 											allValues={allTopicValues}
 											selectedTopics={selectedTopics}
-											updateExpandedKeys={updateEpandedTopicKeys}
-											expandedTopicKeys={expandedTopicKeys}
 											setFieldValue={setFieldValue}
 											errors={errors}
+											treeTopics={treeTopics}
+											updateTopics={(topics) => setTreeTopics(topics)}
 										/>
 									</div>
 								</div>

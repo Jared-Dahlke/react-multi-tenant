@@ -119,8 +119,6 @@ export default function TopCompetitors(props) {
 	})
 
 	const CustomField = (props) => {
-		console.log('custom field props')
-		console.log(props)
 		return (
 			<div style={{ position: 'relative' }}>
 				<FormikInput

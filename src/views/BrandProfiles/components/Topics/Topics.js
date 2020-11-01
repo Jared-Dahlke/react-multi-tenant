@@ -1,5 +1,8 @@
 import React from 'react'
-import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
+import debounce from 'just-debounce-it'
+import Input from 'rsuite/lib/Input'
+import Tree from 'rsuite/lib/Tree'
+import * as _ from 'lodash'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -9,39 +12,9 @@ import {
 } from '../../../../assets/jss/material-dashboard-react'
 import { perms, userCan } from '../../../../Can'
 
-function setTopicAction(topicId, value, topics) {
-	for (const topic of topics) {
-		markSelected(topicId, value, topic)
-	}
-}
-
-function markAllChildren(topic, value) {
-	for (const child of topic.children) {
-		child.topicResponseId = value
-		if (child.children && child.children.length > 0) {
-			markAllChildren(child, value)
-		}
-	}
-}
-
-function markSelected(topicId, value, topic) {
-	if (topic.topicId == topicId) {
-		if (topic.topicResponseId === value) {
-			value = 3
-		}
-		topic.topicResponseId = value
-		if (topic.children && topic.children.length > 0)
-			markAllChildren(topic, value)
-	} else {
-		if (topic.children && topic.children.length > 0) {
-			for (const child of topic.children) {
-				markSelected(topicId, value, child)
-			}
-		}
-	}
-}
-
 const Node = (props) => {
+	console.log('node props')
+	console.log(props)
 	const nodeProps = props.nodeProps
 
 	const handleClick = (e, val) => {
@@ -49,6 +22,38 @@ const Node = (props) => {
 		let newTopics = JSON.parse(JSON.stringify(props.formikValues.topics))
 		setTopicAction(nodeProps.topicId, val, newTopics)
 		props.setFieldValue('topics', newTopics)
+	}
+
+	function setTopicAction(topicId, value, topics) {
+		for (const topic of topics) {
+			markSelected(topicId, value, topic)
+		}
+	}
+
+	function markAllChildren(topic, value) {
+		for (const child of topic.children) {
+			child.topicResponseId = value
+			if (child.children && child.children.length > 0) {
+				markAllChildren(child, value)
+			}
+		}
+	}
+
+	function markSelected(topicId, value, topic) {
+		if (topic.topicId == topicId) {
+			if (topic.topicResponseId === value) {
+				value = 3
+			}
+			topic.topicResponseId = value
+			if (topic.children && topic.children.length > 0)
+				markAllChildren(topic, value)
+		} else {
+			if (topic.children && topic.children.length > 0) {
+				for (const child of topic.children) {
+					markSelected(topicId, value, child)
+				}
+			}
+		}
 	}
 
 	return (
@@ -80,87 +85,106 @@ const Node = (props) => {
 	)
 }
 
-export default function Topics(props) {
-	const [searching, setSearching] = React.useState(false)
-	const [searchWord, setSearchWord] = React.useState('')
+export default class AsynExample extends React.Component {
+	constructor(props) {
+		super(props)
 
-	return (
-		<div
-			style={{
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center'
-			}}
-		>
-			{props.formikValues.topics && props.formikValues.topics.length > 0 ? (
-				<div style={{ display: 'flex' }}>
-					{props.errors.topics ? (
-						<FormHelperText
-							id='component-helper-text'
-							style={{
-								color: dangerColor[0],
-								fontSize: '16px',
-								position: 'absolute',
-								bottom: -20
-							}}
-						>
-							{props.errors.topics}
-						</FormHelperText>
-					) : null}
+		this.state = {
+			data: [],
+			dataCopy: [],
+			values: [],
+			loadingValues: [],
+			count: 0,
+			searched: false,
+			searching: false,
+			searchTerm: '',
+			expandedValues: []
+		}
+	}
 
-					<FormHelperText
-						id='component-helper-text'
-						style={{
-							color: whiteColor,
-							fontSize: '16px',
-							position: 'absolute',
-							top: 0,
-							right: 0
-						}}
-					>
-						Selected topics: {props.selectedTopics.length}
-					</FormHelperText>
+	handleExpand(val) {
+		this.setState({ expandedValues: val })
+	}
 
-					<CheckTreePicker
-						data={props.formikValues.topics}
-						style={{
-							minWidth: 800,
-							maxWidth: 1000,
-							flex: 1,
-							visibility: 'hidden'
-						}}
-						name='topics'
-						labelKey='topicName'
-						valueKey='topicId'
-						placeholder={'Select one or more Topics'}
-						cleanable={true}
-						menuStyle={{ marginTop: -20 }}
-						virtualized={searchWord.length < 2}
-						open={true}
-						disabledItemValues={props.allValues}
-						expandItemValues={
-							searching ? props.allValues : props.expandedTopicKeys
-						}
-						onExpand={(expandedKeys) => {
-							props.updateExpandedKeys(expandedKeys)
-						}}
-						onSearch={(val, event) => {
-							event.preventDefault()
-							if (!searching) setSearching(true)
-						}}
-						renderTreeNode={(nodeProps) => {
-							return (
-								<Node
-									nodeProps={nodeProps}
-									formikValues={props.formikValues}
-									setFieldValue={props.setFieldValue}
-								/>
-							)
-						}}
-						uncheckableItemValues={props.allValues}
-					/>
-				</div>
-			) : null}
-		</div>
-	)
+	filterTree = (filter, list) => {
+		return _.filter(list, (item) => {
+			if (_.includes(_.toLower(item.topicName), _.toLower(filter))) {
+				return true
+			} else if (item.children) {
+				item.children = this.filterTree(filter, item.children)
+				return !_.isEmpty(item.children)
+			}
+		})
+	}
+
+	handleSearch(val) {
+		this.setState({ searchTerm: val }, () => {
+			this.fn1()
+		})
+	}
+
+	getValues(topics) {
+		let tab = []
+
+		for (const topic of topics) {
+			tab.push(topic.topicId)
+
+			if (topic.children && topic.children.length > 0) {
+				tab = tab.concat(this.getValues(topic.children))
+			}
+		}
+		return tab
+	}
+
+	fn1 = debounce(() => {
+		if (this.state.searchTerm.length > 1) {
+			this.setState({ searching: true })
+		} else {
+			this.setState({ searching: false })
+		}
+
+		console.log('inside debounce')
+		let copyTopics2 = JSON.parse(JSON.stringify(this.props.formikValues.topics))
+		let end = this.filterTree(this.state.searchTerm, copyTopics2)
+		if (this.state.searchTerm.length > 0) {
+			let vals = this.getValues(end)
+			this.setState({ expandedValues: vals })
+		} else {
+			this.setState({ expandedValues: [] })
+		}
+
+		this.props.updateTopics(end)
+	}, 800)
+
+	render() {
+		return (
+			<div>
+				<Input
+					value={this.state.searchTerm}
+					onChange={(val) => this.handleSearch(val)}
+				/>
+				<Tree
+					name='topics'
+					labelKey='topicName'
+					valueKey='topicId'
+					placeholder={'Select one or more Topics'}
+					data={this.props.treeTopics}
+					virtualized={true}
+					searchable={false}
+					expandItemValues={this.state.expandedValues}
+					onExpand={(val) => this.handleExpand(val)}
+					disabledItemValues={this.props.allValues}
+					renderTreeNode={(nodeProps) => {
+						return (
+							<Node
+								nodeProps={nodeProps}
+								formikValues={this.props.formikValues}
+								setFieldValue={this.props.setFieldValue}
+							/>
+						)
+					}}
+				/>
+			</div>
+		)
+	}
 }
