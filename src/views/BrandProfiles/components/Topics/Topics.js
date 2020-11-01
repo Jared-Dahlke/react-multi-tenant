@@ -6,8 +6,10 @@ import * as _ from 'lodash'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import { perms, userCan } from '../../../../Can'
-import Label from '../../../../components/CustomInputLabel/CustomInputLabel'
-import { accentColor } from '../../../../assets/jss/colorContants'
+import InputGroup from 'rsuite/lib/InputGroup'
+import Icon from 'rsuite/lib/Icon'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
 
 const Node = (props) => {
 	const nodeProps = props.nodeProps
@@ -17,7 +19,13 @@ const Node = (props) => {
 		let newTopics = JSON.parse(JSON.stringify(props.formikTopics))
 		setTopicAction(nodeProps.topicId, val, newTopics)
 		props.setFieldValue('topics', newTopics)
-		props.setDisplayedTopics(newTopics)
+
+		//get filtered if any then set displayed
+		let copiedTopics = JSON.parse(JSON.stringify(newTopics))
+		if (props.searchTerm && props.searchTerm.length > 0) {
+			copiedTopics = filterTree(props.searchTerm, copiedTopics)
+		}
+		props.setDisplayedTopics(copiedTopics)
 	}
 
 	function setTopicAction(topicId, value, topics) {
@@ -70,6 +78,17 @@ const Node = (props) => {
 	)
 }
 
+const filterTree = (filter, list) => {
+	return _.filter(list, (item) => {
+		if (_.includes(_.toLower(item.topicName), _.toLower(filter))) {
+			return true
+		} else if (item.children) {
+			item.children = filterTree(filter, item.children)
+			return !_.isEmpty(item.children)
+		}
+	})
+}
+
 export default function TopicsTree(props) {
 	const [searchTerm, setSearchTerm] = React.useState('')
 	const [receivedTopics, setReceivedTopics] = React.useState(false)
@@ -81,6 +100,19 @@ export default function TopicsTree(props) {
 	React.useEffect(() => {
 		fn1()
 	}, [searchTerm])
+
+	const fn1 = debounce(() => {
+		let copyTopics2 = JSON.parse(JSON.stringify(props.formikTopics))
+		let end = filterTree(searchTerm, copyTopics2)
+		if (searchTerm.length > 0) {
+			let vals = getValues(end)
+			setExpandedValues(vals)
+		} else {
+			setExpandedValues([])
+		}
+
+		setDisplayedTopics(end)
+	}, 800)
 
 	React.useEffect(() => {
 		if (props.formikTopics.length > 0 && !receivedTopics) {
@@ -105,17 +137,6 @@ export default function TopicsTree(props) {
 
 	const [expandedValues, setExpandedValues] = React.useState([])
 
-	const filterTree = (filter, list) => {
-		return _.filter(list, (item) => {
-			if (_.includes(_.toLower(item.topicName), _.toLower(filter))) {
-				return true
-			} else if (item.children) {
-				item.children = filterTree(filter, item.children)
-				return !_.isEmpty(item.children)
-			}
-		})
-	}
-
 	const getValues = (topics) => {
 		let tab = []
 		for (const topic of topics) {
@@ -128,22 +149,37 @@ export default function TopicsTree(props) {
 		return tab
 	}
 
-	const fn1 = debounce(() => {
-		let copyTopics2 = JSON.parse(JSON.stringify(props.formikTopics))
-		let end = filterTree(searchTerm, copyTopics2)
-		if (searchTerm.length > 0) {
-			let vals = getValues(end)
-			setExpandedValues(vals)
-		} else {
-			setExpandedValues([])
-		}
+	const handleUnselectAll = () => {
+		let newTopics = JSON.parse(JSON.stringify(props.formikTopics))
+		unselectAll(newTopics)
+		props.setFieldValue('topics', newTopics)
 
-		setDisplayedTopics(end)
-	}, 800)
+		//get filtered if any then set displayed
+		let copiedTopics = JSON.parse(JSON.stringify(newTopics))
+		if (props.searchTerm && props.searchTerm.length > 0) {
+			copiedTopics = filterTree(props.searchTerm, copiedTopics)
+		}
+		setDisplayedTopics(copiedTopics)
+	}
+
+	function unselectAll(topics) {
+		for (const topic of topics) {
+			topic.topicResponseId = 3
+			if (topic.children && topic.children.length > 0) {
+				unselectAll(topic.children)
+			}
+		}
+	}
 
 	return (
 		<div>
-			<Input value={searchTerm} onChange={(val) => setSearchTerm(val)} />
+			<InputGroup>
+				<InputGroup.Addon>
+					<Icon icon='search' />
+				</InputGroup.Addon>
+				<Input value={searchTerm} onChange={(val) => setSearchTerm(val)} />
+			</InputGroup>
+
 			<Tree
 				name='topics'
 				labelKey='topicName'
@@ -162,10 +198,21 @@ export default function TopicsTree(props) {
 							formikTopics={props.formikTopics}
 							setFieldValue={props.setFieldValue}
 							setDisplayedTopics={setDisplayedTopics}
+							searchTerm={searchTerm}
 						/>
 					)
 				}}
 			/>
+
+			<FormHelperText
+				id='component-helper-text'
+				style={{
+					color: dangerColor[0]
+				}}
+			>
+				{props.errors.topics ? props.errors.topics : ' '}
+			</FormHelperText>
+
 			<Button
 				size={'sm'}
 				appearance='link'
@@ -173,6 +220,15 @@ export default function TopicsTree(props) {
 				style={{ marginTop: 10 }}
 			>
 				Collapse All
+			</Button>
+
+			<Button
+				size={'sm'}
+				appearance='link'
+				onClick={() => handleUnselectAll()}
+				style={{ marginTop: 10 }}
+			>
+				Unselect All
 			</Button>
 		</div>
 	)

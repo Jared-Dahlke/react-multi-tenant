@@ -98,17 +98,10 @@ export default function TopCompetitors(props) {
 							.max(50, 'Must be less than 50 characters')
 							.required('Required'),
 						websiteUrl: Yup.string()
-							.test(
-								'urlTest',
-								'Valid URL required (e.g. google.com)',
-								(websiteUrl) => {
-									return urlRegex({ exact: true, strict: false }).test(
-										websiteUrl
-									)
-								}
-							)
-							.required('Required'),
-
+							.required('Required')
+							.test('urlTest', 'Valid URL required', (websiteUrl) => {
+								return urlRegex({ exact: true, strict: false }).test(websiteUrl)
+							}),
 						twitterProfileUrl: Yup.string()
 							.min(2, 'Must be greater than 1 character')
 							.max(50, 'Must be less than 30 characters')
@@ -126,6 +119,7 @@ export default function TopCompetitors(props) {
 					disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 					formikValue={props.formikValue}
 					specialError={props.error}
+					startAdornmentText={props.name.includes('twitter') && 'twitter.com/'}
 				/>
 			</div>
 		)

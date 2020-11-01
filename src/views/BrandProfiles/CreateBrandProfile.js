@@ -87,7 +87,7 @@ function getSteps() {
 
 function CreateBrandProfile(props) {
 	const classes = useStyles()
-	const [activeStep, setActiveStep] = React.useState(2)
+	const [activeStep, setActiveStep] = React.useState(0)
 	const steps = getSteps()
 	const handleNext = (values) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -192,7 +192,6 @@ function CreateBrandProfile(props) {
 									<div style={{ flex: 1 }}>
 										<Topics
 											formikTopics={values.topics}
-											//	allValues={allTopicValues}
 											setFieldValue={setFieldValue}
 											errors={errors}
 										/>
