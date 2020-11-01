@@ -5,23 +5,17 @@ import Tree from 'rsuite/lib/Tree'
 import * as _ from 'lodash'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import {
-	dangerColor,
-	whiteColor
-} from '../../../../assets/jss/material-dashboard-react'
 import { perms, userCan } from '../../../../Can'
 
 const Node = (props) => {
-	console.log('node props')
-	console.log(props)
 	const nodeProps = props.nodeProps
 
 	const handleClick = (e, val) => {
 		e.preventDefault()
-		let newTopics = JSON.parse(JSON.stringify(props.formikValues.topics))
+		let newTopics = JSON.parse(JSON.stringify(props.formikTopics))
 		setTopicAction(nodeProps.topicId, val, newTopics)
 		props.setFieldValue('topics', newTopics)
+		props.setDisplayedTopics(newTopics)
 	}
 
 	function setTopicAction(topicId, value, topics) {
@@ -45,8 +39,8 @@ const Node = (props) => {
 				value = 3
 			}
 			topic.topicResponseId = value
-			if (topic.children && topic.children.length > 0)
-				markAllChildren(topic, value)
+			// if (topic.children && topic.children.length > 0)
+			//	markAllChildren(topic, value)
 		} else {
 			if (topic.children && topic.children.length > 0) {
 				for (const child of topic.children) {
@@ -85,106 +79,102 @@ const Node = (props) => {
 	)
 }
 
-export default class AsynExample extends React.Component {
-	constructor(props) {
-		super(props)
+export default function TopicsTree(props) {
+	const [searchTerm, setSearchTerm] = React.useState('')
+	const [receivedTopics, setReceivedTopics] = React.useState(false)
+	const [allTopicIds, setAllTopicIds] = React.useState([])
+	const [displayedTopics, setDisplayedTopics] = React.useState(
+		props.formikTopics
+	)
 
-		this.state = {
-			data: [],
-			dataCopy: [],
-			values: [],
-			loadingValues: [],
-			count: 0,
-			searched: false,
-			searching: false,
-			searchTerm: '',
-			expandedValues: []
+	React.useEffect(() => {
+		fn1()
+	}, [searchTerm])
+
+	React.useEffect(() => {
+		if (props.formikTopics.length > 0 && !receivedTopics) {
+			setDisplayedTopics(props.formikTopics)
+			setReceivedTopics(true)
+			setAllTopicIds(getTopicValues(props.formikTopics))
 		}
-	}
+	}, [props.formikTopics])
 
-	handleExpand(val) {
-		this.setState({ expandedValues: val })
-	}
-
-	filterTree = (filter, list) => {
-		return _.filter(list, (item) => {
-			if (_.includes(_.toLower(item.topicName), _.toLower(filter))) {
-				return true
-			} else if (item.children) {
-				item.children = this.filterTree(filter, item.children)
-				return !_.isEmpty(item.children)
-			}
-		})
-	}
-
-	handleSearch(val) {
-		this.setState({ searchTerm: val }, () => {
-			this.fn1()
-		})
-	}
-
-	getValues(topics) {
+	function getTopicValues(topics) {
 		let tab = []
 
 		for (const topic of topics) {
 			tab.push(topic.topicId)
 
 			if (topic.children && topic.children.length > 0) {
-				tab = tab.concat(this.getValues(topic.children))
+				tab = tab.concat(getTopicValues(topic.children))
 			}
 		}
 		return tab
 	}
 
-	fn1 = debounce(() => {
-		if (this.state.searchTerm.length > 1) {
-			this.setState({ searching: true })
+	const [expandedValues, setExpandedValues] = React.useState([])
+
+	const filterTree = (filter, list) => {
+		return _.filter(list, (item) => {
+			if (_.includes(_.toLower(item.topicName), _.toLower(filter))) {
+				return true
+			} else if (item.children) {
+				item.children = filterTree(filter, item.children)
+				return !_.isEmpty(item.children)
+			}
+		})
+	}
+
+	const getValues = (topics) => {
+		let tab = []
+		for (const topic of topics) {
+			tab.push(topic.topicId)
+
+			if (topic.children && topic.children.length > 0) {
+				tab = tab.concat(getValues(topic.children))
+			}
+		}
+		return tab
+	}
+
+	const fn1 = debounce(() => {
+		let copyTopics2 = JSON.parse(JSON.stringify(props.formikTopics))
+		let end = filterTree(searchTerm, copyTopics2)
+		if (searchTerm.length > 0) {
+			let vals = getValues(end)
+			setExpandedValues(vals)
 		} else {
-			this.setState({ searching: false })
+			setExpandedValues([])
 		}
 
-		console.log('inside debounce')
-		let copyTopics2 = JSON.parse(JSON.stringify(this.props.formikValues.topics))
-		let end = this.filterTree(this.state.searchTerm, copyTopics2)
-		if (this.state.searchTerm.length > 0) {
-			let vals = this.getValues(end)
-			this.setState({ expandedValues: vals })
-		} else {
-			this.setState({ expandedValues: [] })
-		}
-
-		this.props.updateTopics(end)
+		setDisplayedTopics(end)
 	}, 800)
 
-	render() {
-		return (
-			<div>
-				<Input
-					value={this.state.searchTerm}
-					onChange={(val) => this.handleSearch(val)}
-				/>
-				<Tree
-					name='topics'
-					labelKey='topicName'
-					valueKey='topicId'
-					placeholder={'Select one or more Topics'}
-					data={this.props.treeTopics}
-					virtualized={true}
-					searchable={false}
-					expandItemValues={this.state.expandedValues}
-					onExpand={(val) => this.handleExpand(val)}
-					disabledItemValues={this.props.allValues}
-					renderTreeNode={(nodeProps) => {
-						return (
-							<Node
-								nodeProps={nodeProps}
-								formikValues={this.props.formikValues}
-								setFieldValue={this.props.setFieldValue}
-							/>
-						)
-					}}
-				/>
-			</div>
-		)
-	}
+	return (
+		<div>
+			<Input value={searchTerm} onChange={(val) => setSearchTerm(val)} />
+			<Tree
+				name='topics'
+				labelKey='topicName'
+				valueKey='topicId'
+				placeholder={'Select one or more Topics'}
+				data={displayedTopics}
+				virtualized={true}
+				searchable={false}
+				expandItemValues={expandedValues}
+				onExpand={(val) => setExpandedValues(val)}
+				disabledItemValues={allTopicIds}
+				renderTreeNode={(nodeProps) => {
+					return (
+						<Node
+							nodeProps={nodeProps}
+							formikTopics={props.formikTopics}
+							setFieldValue={props.setFieldValue}
+							setDisplayedTopics={setDisplayedTopics}
+						/>
+					)
+				}}
+			/>
+		</div>
+	)
 }
