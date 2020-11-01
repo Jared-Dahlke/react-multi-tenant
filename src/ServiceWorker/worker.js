@@ -1,7 +1,5 @@
 /*eslint-disable no-restricted-globals*/
 
-import arrayTreeFilter from 'array-tree-filter'
-
 export default () => {
 	self.addEventListener('message', (e) => {
 		if (!e) return
