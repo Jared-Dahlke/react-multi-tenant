@@ -276,11 +276,7 @@ function EditBrandProfile(props) {
 								) : activeStep === 2 ? (
 									<div style={{ flex: 1 }}>
 										<Topics
-											formikValues={values}
-											allValues={allTopicValues}
-											selectedTopics={selectedTopics}
-											updateExpandedKeys={updateEpandedTopicKeys}
-											expandedTopicKeys={expandedTopicKeys}
+											formikTopics={values.topics}
 											setFieldValue={setFieldValue}
 											errors={errors}
 										/>

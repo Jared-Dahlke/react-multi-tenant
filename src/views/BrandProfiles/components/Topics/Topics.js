@@ -6,6 +6,8 @@ import * as _ from 'lodash'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import { perms, userCan } from '../../../../Can'
+import Label from '../../../../components/CustomInputLabel/CustomInputLabel'
+import { accentColor } from '../../../../assets/jss/colorContants'
 
 const Node = (props) => {
 	const nodeProps = props.nodeProps
@@ -24,23 +26,12 @@ const Node = (props) => {
 		}
 	}
 
-	function markAllChildren(topic, value) {
-		for (const child of topic.children) {
-			child.topicResponseId = value
-			if (child.children && child.children.length > 0) {
-				markAllChildren(child, value)
-			}
-		}
-	}
-
 	function markSelected(topicId, value, topic) {
 		if (topic.topicId == topicId) {
 			if (topic.topicResponseId === value) {
 				value = 3
 			}
 			topic.topicResponseId = value
-			// if (topic.children && topic.children.length > 0)
-			//	markAllChildren(topic, value)
 		} else {
 			if (topic.children && topic.children.length > 0) {
 				for (const child of topic.children) {
@@ -175,6 +166,14 @@ export default function TopicsTree(props) {
 					)
 				}}
 			/>
+			<Button
+				size={'sm'}
+				appearance='link'
+				onClick={() => setExpandedValues([])}
+				style={{ marginTop: 10 }}
+			>
+				Collapse All
+			</Button>
 		</div>
 	)
 }
