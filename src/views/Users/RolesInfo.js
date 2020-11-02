@@ -13,7 +13,7 @@ const RolesInfo = (props) => {
   const body = (
     <Table
       data={rolesData}
-      minHeight={600}
+      minHeight={400}
       cellBordered
       wordWrap
       autoHeight
