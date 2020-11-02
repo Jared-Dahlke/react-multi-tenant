@@ -26,11 +26,9 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import debounce from 'just-debounce-it'
 import Label from '../../../../components/CustomInputLabel/CustomInputLabel'
 import FormikInput from '../../../../components/CustomInput/FormikInput'
-import RsuiteInput from 'rsuite/lib/Input'
 
 import { UserCan, perms, userCan } from '../../../../Can'
 
-import { neutralColor } from '../../../../assets/jss/colorContants'
 import * as Yup from 'yup'
 const urlRegex = require('url-regex')
 
@@ -113,15 +111,14 @@ export default function TopCompetitors(props) {
 
 	const CustomField = (props) => {
 		return (
-			<div style={{ position: 'relative' }}>
-				<FormikInput
-					name={props.name}
-					disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
-					formikValue={props.formikValue}
-					specialError={props.error}
-					startAdornmentText={props.name.includes('twitter') && 'twitter.com/'}
-				/>
-			</div>
+			<FormikInput
+				name={props.name}
+				disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
+				formikValue={props.formikValue}
+				specialError={props.error}
+				startAdornmentText={props.name.includes('twitter') && 'twitter.com/'}
+				simple
+			/>
 		)
 	}
 
@@ -168,14 +165,15 @@ export default function TopCompetitors(props) {
 								<UserCan i={perms.BRAND_PROFILE_UPDATE}>
 									<Button
 										size={'sm'}
-										onClick={
-											() => {
-												handleAddNew(formik.values, formik.setFieldValue)
-											}
-											//	arrayHelpers
-										} // insert an empty string at a position
+										appearance='link'
+										onClick={() => {
+											handleAddNew(formik.values, formik.setFieldValue)
+										}}
 									>
-										Add
+										{formik.values.competitors.length < 1
+											? 'Add a Competitor'
+											: 'Add another'}
+										Add another
 									</Button>
 								</UserCan>
 							</Grid>
@@ -196,11 +194,7 @@ export default function TopCompetitors(props) {
 									<TableRow>
 										{competitorHeaders.map((prop, key) => {
 											return (
-												<TableCell
-													style={{ padding: 4, margin: 4 }}
-													className={tableCellClasses}
-													key={key}
-												>
+												<TableCell className={tableCellClasses} key={key}>
 													<Label label={prop} />
 												</TableCell>
 											)
@@ -216,10 +210,7 @@ export default function TopCompetitors(props) {
 												{competitors && competitors.length > 0
 													? competitors.map((competitor, index) => (
 															<TableRow key={index} style={{ border: 0 }}>
-																<TableCell
-																	style={{ padding: 4, margin: 4 }}
-																	className={tableCellClasses}
-																>
+																<TableCell className={tableCellClasses}>
 																	<CustomField
 																		name={`competitors.${index}.competitorName`}
 																		formikValue={competitor.competitorName}
@@ -275,7 +266,6 @@ export default function TopCompetitors(props) {
 																	<UserCan i={perms.BRAND_PROFILE_UPDATE}>
 																		<Button
 																			size={'sm'}
-																			color='red'
 																			appearance='link'
 																			onClick={() =>
 																				handleDeleteCompetitor(

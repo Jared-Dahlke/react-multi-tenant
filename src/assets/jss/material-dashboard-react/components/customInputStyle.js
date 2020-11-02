@@ -75,7 +75,7 @@ const customInputStyle = {
 		verticalAlign: 'unset'
 	},
 	formControlSlim: {
-		paddingBottom: '0px',
+		paddingBottom: '6px',
 		margin: '0px 0 0 0',
 		position: 'relative',
 		verticalAlign: 'unset'
