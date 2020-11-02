@@ -76,9 +76,12 @@ function CreateUser(props) {
 		setOpenDialog(value)
 	}
 
-	const filteredRolesPermissions = (userType) => {
+	const filteredRolesPermissions = (userType,userEmail) => {
+		console.log('userEmail',userEmail)
 		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
-		return Array.from(props.roles)
+		if(!userEmail) return Array.from(props.roles)
+		if(!(userEmail.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
+		return Array.from(props.roles).filter(role => role.userType === 'Internal')
 	}
 
 	const handleInviteUserClick = (values) => {
@@ -200,7 +203,7 @@ function CreateUser(props) {
 														placeholder='Role'
 														optionLabel='roleName'
 														optionValue='roleId'
-														options={props.roles}
+														options={filteredRolesPermissions(props.userProfile && props.userProfile.userType, values.email)}
 														value={values.roleId}
 														onChange={setFieldValue}
 														onBlur={setFieldTouched}
