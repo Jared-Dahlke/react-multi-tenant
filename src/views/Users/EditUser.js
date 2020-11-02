@@ -26,6 +26,11 @@ import Tooltip from 'rsuite/lib/Tooltip'
 import Whisper from 'rsuite/lib/Whisper'
 import RolesInfo from './RolesInfo.js'
 import { UserCan, perms, userCan } from '../../Can'
+import {
+	filteredRolesPermissions,
+	filteredRolesPermissionsInfo,
+	canAccessRoleId
+} from './userUtils'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -57,7 +62,6 @@ const mapStateToProps = (state) => {
 		editUserUserAccountsLoading: state.editUserUserAccountsLoading,
 		userEditSaving: state.userEditSaving,
 		userEditSaved: state.userEditSaved,
-		rolesPermissions: state.rolesPermissions,
 		userProfile: state.user.userProfile
 	}
 }
@@ -142,7 +146,12 @@ export function EditUser(props) {
 		parsedUserId
 	])
 
-	const handleSaveClick = (values, resetForm) => {
+	const handleSaveClick = (values, setFieldValue) => {
+		if (!canAccessRoleId(values, props)) {
+			setFieldValue('roleId', '')
+			return
+		}
+
 		values.userType = values.email.toLowerCase().includes('sightly.com')
 			? 'Internal'
 			: 'External'
@@ -159,18 +168,6 @@ export function EditUser(props) {
 
 	const handleDialog = (value) => {
 		setOpenDialog(value)
-	}
-
-	const filteredRolesPermissions = (userType) => {
-		if (userType === 'External')
-			return Array.from(props.rolesPermissions.data).filter(
-				(role) => role.userType === 'External'
-			)
-		return (
-			props.rolesPermissions &&
-			props.rolesPermissions.data &&
-			Array.from(props.rolesPermissions.data)
-		)
 	}
 
 	let fetchUserAccounts = props.fetchUserAccounts
@@ -206,7 +203,6 @@ export function EditUser(props) {
 					setFieldTouched,
 					validateField,
 					validateForm,
-					isSubmitting,
 					isValid,
 					dirty,
 					resetForm
@@ -299,7 +295,12 @@ export function EditUser(props) {
 																placeholder='Role'
 																optionLabel='roleName'
 																optionValue='roleId'
-																options={props.roles}
+																options={filteredRolesPermissions(
+																	props.userProfile &&
+																		props.userProfile.userType,
+																	values.email,
+																	props.roles
+																)}
 																value={values.roleId}
 																onChange={setFieldValue}
 																onBlur={setFieldTouched}
@@ -337,7 +338,9 @@ export function EditUser(props) {
 												<UserCan i={perms.USER_UPDATE}>
 													<Button
 														disabled={!isValid || !dirty}
-														onClick={() => handleSaveClick(values, resetForm)}
+														onClick={() =>
+															handleSaveClick(values, setFieldValue)
+														}
 														loading={props.userEditSaving}
 													>
 														Save
@@ -374,8 +377,9 @@ export function EditUser(props) {
 					handleDialog={(value) => {
 						handleDialog(value)
 					}}
-					data={filteredRolesPermissions(
-						props.userProfile && props.userProfile.userType
+					data={filteredRolesPermissionsInfo(
+						props.userProfile && props.userProfile.userType,
+						props.roles
 					)}
 					userType={props.userProfile && props.userProfile.userType}
 				/>
