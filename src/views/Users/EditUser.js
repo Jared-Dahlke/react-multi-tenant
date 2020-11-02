@@ -152,6 +152,14 @@ export function EditUser(props) {
 			return
 		}
 
+		if (!values.email.toLowerCase().includes('sightly.com')) {
+			alert(
+				'Currently we are unable to add external users to the Sightly account. Please select another account and try again.'
+			)
+			setFieldValue('accounts', [])
+			return
+		}
+
 		values.userType = values.email.toLowerCase().includes('sightly.com')
 			? 'Internal'
 			: 'External'
