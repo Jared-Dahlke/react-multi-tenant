@@ -77,7 +77,6 @@ function CreateUser(props) {
 	}
 
 	const filteredRolesPermissions = (userType,userEmail) => {
-		console.log('userEmail',userEmail)
 		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
 		if(!userEmail) return Array.from(props.roles)
 		if(!(userEmail.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
