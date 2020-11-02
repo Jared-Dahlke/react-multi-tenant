@@ -67,21 +67,21 @@ const schemaValidation = Yup.object().shape({
 				.transform((v) => (v === '' ? null : v))
 		),
 	accountName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	contactName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	contactEmail: Yup.string()
-		.email('Invalid email')
-		.required('Required'),
+		.required('Required')
+		.email('Invalid email'),
 	accountMargin: Yup.number()
 		.typeError('Account margin must be a number')
+		.required('Required')
 		.min(0, 'Margin must be a positive number')
-		.max(3000, 'Margin cannot be greater than 3000')
-		.required('Required'),
+		.max(3000, 'Margin cannot be greater than 3000'),
 	accountType: Yup.object()
 		.shape({
 			label: Yup.string(),
@@ -145,9 +145,7 @@ function Account(props) {
 		setFieldTouched,
 		validateField,
 		validateForm,
-		isSubmitting,
 		isValid,
-		isValidating,
 		dirty
 	} = props
 
@@ -185,6 +183,7 @@ function Account(props) {
 									<GridItem xs={12} sm={12} md={12}>
 										<FormikInput
 											name='accountName'
+											formikValue={values.accountName}
 											labelText='Account Name'
 											id='accountName'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
@@ -192,23 +191,27 @@ function Account(props) {
 
 										<FormikInput
 											name='parentAccountName'
+											formikValue={values.parentAccountName}
 											labelText='Parent Account'
 											disabled
 										/>
 
 										<FormikInput
 											name='contactName'
+											formikValue={values.contactName}
 											labelText='Contact Name'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
 										/>
 
 										<FormikInput
 											name='contactEmail'
+											formikValue={values.contactEmail}
 											labelText='Contact Email'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
 										/>
 										<FormikInput
 											name='accountMargin'
+											formikValue={values.accountMargin}
 											labelText='Account Margin'
 											disabled={!userCan(perms.ACCOUNT_UPDATE)}
 										/>
@@ -322,6 +325,8 @@ const FormikForm = withFormik({
 	},
 	enableReinitialize: true,
 	validateOnMount: true,
+	validateOnChange: true,
+	validateOnBlur: true,
 	validationSchema: schemaValidation,
 	handleSubmit: (values, { props }) => {
 		let account = {

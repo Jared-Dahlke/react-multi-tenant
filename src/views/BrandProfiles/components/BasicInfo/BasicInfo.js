@@ -19,11 +19,16 @@ export default function BasicInfo(props) {
 								<FormikInput
 									name='basicInfoProfileName'
 									labelText='Brand Profile Name'
+									formikValue={props.values.basicInfoProfileName}
 								/>
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={6}>
-								<FormikInput name='basicInfoWebsiteUrl' labelText='Website' />
+								<FormikInput
+									name='basicInfoWebsiteUrl'
+									labelText='Website'
+									formikValue={props.values.basicInfoWebsiteUrl}
+								/>
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={6}>
@@ -50,7 +55,8 @@ export default function BasicInfo(props) {
 								<FormikInput
 									name='basicInfoTwitterProfile'
 									labelText='Twitter Profile'
-									startAdornmentText={'https://twitter.com/'}
+									formikValue={props.values.basicInfoTwitterProfile}
+									startAdornmentText={'twitter.com/'}
 									disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 								/>
 							</GridItem>

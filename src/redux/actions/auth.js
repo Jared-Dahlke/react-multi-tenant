@@ -12,7 +12,9 @@ import {
 import axios from '../../axiosConfig'
 import config from '../../config'
 import { userObjValidation } from '../../schemas'
-
+var encryptor = require('simple-encryptor')(
+	process.env.REACT_APP_LOCAL_STORAGE_KEY
+)
 const apiBase = config.apiGateway.URL
 
 export function setAuthToken(payload) {
@@ -96,14 +98,13 @@ export function login(credentials) {
 				localStorage.setItem('userId', user.userId)
 
 				localStorage.removeItem('permissions')
-				console.log('just removed permissions from storage')
-				console.log(user.permissions)
 				if (user.permissions && user.permissions.length > 0) {
 					let permNames = []
 					for (const p of user.permissions) {
 						permNames.push(p.permissionName)
 					}
-					localStorage.setItem('permissions', JSON.stringify(permNames))
+					var encrypted = encryptor.encrypt(JSON.stringify(permNames))
+					localStorage.setItem('permissions', encrypted)
 				}
 
 				dispatch(setLoggedIn(true))

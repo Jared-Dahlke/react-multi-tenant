@@ -38,24 +38,24 @@ const mapDispatchToProps = (dispatch) => {
 
 const schemaValidation = Yup.object().shape({
 	firstName: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	lastName: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	company: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	email: Yup.string()
-		.email('Invalid email')
 		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	lastName: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	company: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	email: Yup.string()
+		.required('Required')
+		.email('Invalid email')
 })
 
 function UserProfile(props) {
-	const { isValid, dirty } = props
+	const { isValid, dirty, values } = props
 
 	return (
 		<div>
@@ -70,6 +70,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={5}>
 												<FormikInput
 													name='company'
+													formikValue={values.company}
 													labelText='Company'
 													id='company'
 												/>
@@ -77,6 +78,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={4}>
 												<FormikInput
 													name='email'
+													formikValue={values.email}
 													labelText='Email'
 													id='email'
 												/>
@@ -86,6 +88,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={6}>
 												<FormikInput
 													name='firstName'
+													formikValue={values.firstName}
 													labelText='First Name'
 													id='firstName'
 												/>
@@ -93,6 +96,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={6}>
 												<FormikInput
 													name='lastName'
+													formikValue={values.lastName}
 													labelText='Last Name'
 													id='lastName'
 												/>
@@ -152,6 +156,8 @@ const MyEnhancedForm = withFormik({
 		}
 	},
 	enableReinitialize: true,
+	validateOnChange: true,
+	validateOnBlur: true,
 	validationSchema: schemaValidation,
 	handleSubmit: (values, { props }) => {
 		props.updateUserData(values)

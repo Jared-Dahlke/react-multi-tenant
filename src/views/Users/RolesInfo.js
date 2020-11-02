@@ -39,7 +39,7 @@ const RolesInfo = (props) => {
       <Column flexGrow={1}>
         <HeaderCell>Permissions</HeaderCell>
 
-        <Cell style={{overflow:'auto'}}>
+        <Cell>
           {({ permissions }) => {
             return (<div style={{minHeight:'40px',maxHeight:20*permissions.length}}> {permissions.map((perm) => (
             perm.permissionId && <div key={perm.permissionId}><strong key={perm.permissionId}>{perm.permissionName} </strong>: {perm.permissionDescription}</div> 

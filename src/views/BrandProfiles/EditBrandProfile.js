@@ -103,40 +103,6 @@ function getSteps() {
 	return ['Basic Info', 'Content Settings', 'Topics']
 }
 
-function getTopicValues(topics) {
-	let tab = []
-
-	for (const topic of topics) {
-		tab.push(topic.topicId)
-
-		if (topic.children && topic.children.length > 0) {
-			tab = tab.concat(getTopicValues(topic.children))
-		}
-	}
-	return tab
-}
-
-function getSelectedTopics(topics) {
-	if (!topics || topics.length < 1) return []
-	let tab = []
-
-	for (const topic of topics) {
-		if (topic.topicResponseId != 3) {
-			tab.push(topic.topicId)
-		}
-
-		if (topic.children && topic.children.length > 0) {
-			tab = tab.concat(getSelectedTopics(topic.children))
-		}
-	}
-
-	return tab.filter(onlyUnique)
-}
-
-function onlyUnique(value, index, self) {
-	return self.indexOf(value) === index
-}
-
 function EditBrandProfile(props) {
 	if (
 		!props.match.params.brandProfileId ||
@@ -181,19 +147,6 @@ function EditBrandProfile(props) {
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
-	}
-
-	const allTopicValues = React.useMemo(() => {
-		return getTopicValues(props.topics)
-	}, [props.topics])
-
-	const selectedTopics = React.useMemo(() => {
-		return getSelectedTopics(props.values.topics)
-	}, [props.values.topics])
-
-	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
-	const updateEpandedTopicKeys = (expandedKeys) => {
-		setExpandedTopicKeys(expandedKeys)
 	}
 
 	const nextButtonLabel = React.useMemo(() => {
@@ -276,11 +229,7 @@ function EditBrandProfile(props) {
 								) : activeStep === 2 ? (
 									<div style={{ flex: 1 }}>
 										<Topics
-											formikValues={values}
-											allValues={allTopicValues}
-											selectedTopics={selectedTopics}
-											updateExpandedKeys={updateEpandedTopicKeys}
-											expandedTopicKeys={expandedTopicKeys}
+											formikTopics={values.topics}
 											setFieldValue={setFieldValue}
 											errors={errors}
 										/>

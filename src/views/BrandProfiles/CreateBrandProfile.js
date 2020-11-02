@@ -24,7 +24,6 @@ import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
 import { schemaValidation, stepValidated } from './brandProfileValidation'
-import { Debug } from '../Debug'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -77,49 +76,12 @@ const mapStateToProps = (state) => {
 		currentAccountId: state.currentAccountId,
 		brandProfileCreated: state.brandProfileCreated,
 		brandProfileCreating: state.brandProfileCreating,
-		brandProfileLoading: state.brandProfileLoading,
-		brandProfileSaving: state.brandProfileSaving,
-		brandProfileSaved: state.brandProfileSaved,
 		brandProfiles: state.brandProfiles
 	}
 }
 
 function getSteps() {
 	return ['Basic Info', 'Content Settings', 'Topics']
-}
-
-function getTopicValues(topics) {
-	let tab = []
-
-	for (const topic of topics) {
-		tab.push(topic.topicId)
-
-		if (topic.children && topic.children.length > 0) {
-			tab = tab.concat(getTopicValues(topic.children))
-		}
-	}
-	return tab
-}
-
-function getSelectedTopics(topics) {
-	if (!topics || topics.length < 1) return []
-	let tab = []
-
-	for (const topic of topics) {
-		if (topic.topicResponseId != 3) {
-			tab.push(topic.topicId)
-		}
-
-		if (topic.children && topic.children.length > 0) {
-			tab = tab.concat(getSelectedTopics(topic.children))
-		}
-	}
-
-	return tab.filter(onlyUnique)
-}
-
-function onlyUnique(value, index, self) {
-	return self.indexOf(value) === index
 }
 
 function CreateBrandProfile(props) {
@@ -164,19 +126,6 @@ function CreateBrandProfile(props) {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
 
-	const allTopicValues = React.useMemo(() => {
-		return getTopicValues(props.topics)
-	}, [props.topics])
-
-	const selectedTopics = React.useMemo(() => {
-		return getSelectedTopics(props.values.topics)
-	}, [props.values.topics])
-
-	const [expandedTopicKeys, setExpandedTopicKeys] = React.useState([])
-	const updateEpandedTopicKeys = (expandedKeys) => {
-		setExpandedTopicKeys(expandedKeys)
-	}
-
 	const nextButtonLabel = React.useMemo(() => {
 		let label = ''
 		let onLastStep = activeStep === steps.length - 1
@@ -188,7 +137,7 @@ function CreateBrandProfile(props) {
 		}
 
 		return label
-	}, [activeStep])
+	}, [activeStep, steps.length])
 
 	const {
 		values,
@@ -196,7 +145,6 @@ function CreateBrandProfile(props) {
 		touched,
 		setFieldValue,
 		setFieldTouched,
-		isValid,
 		dirty
 	} = props
 
@@ -241,11 +189,7 @@ function CreateBrandProfile(props) {
 								<div>
 									<div style={{ flex: 1 }}>
 										<Topics
-											formikValues={values}
-											allValues={allTopicValues}
-											selectedTopics={selectedTopics}
-											updateExpandedKeys={updateEpandedTopicKeys}
-											expandedTopicKeys={expandedTopicKeys}
+											formikTopics={values.topics}
 											setFieldValue={setFieldValue}
 											errors={errors}
 										/>
@@ -343,7 +287,8 @@ const FormikForm = withFormik({
 	},
 	enableReinitialize: true,
 	validateOnChange: true,
-	validateOnMount: true,
+	validateOnBlur: true,
+	validateOnMount: false,
 	validationSchema: schemaValidation
 })(CreateBrandProfile)
 

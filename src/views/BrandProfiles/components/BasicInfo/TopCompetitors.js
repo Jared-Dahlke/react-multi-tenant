@@ -25,10 +25,10 @@ import tableStyles from '../../../../assets/jss/material-dashboard-react/compone
 import FormHelperText from '@material-ui/core/FormHelperText'
 import debounce from 'just-debounce-it'
 import Label from '../../../../components/CustomInputLabel/CustomInputLabel'
+import FormikInput from '../../../../components/CustomInput/FormikInput'
 
 import { UserCan, perms, userCan } from '../../../../Can'
 
-import { neutralColor } from '../../../../assets/jss/colorContants'
 import * as Yup from 'yup'
 const urlRegex = require('url-regex')
 
@@ -96,17 +96,10 @@ export default function TopCompetitors(props) {
 							.max(50, 'Must be less than 50 characters')
 							.required('Required'),
 						websiteUrl: Yup.string()
-							.test(
-								'urlTest',
-								'Valid URL required (e.g. google.com)',
-								(websiteUrl) => {
-									return urlRegex({ exact: true, strict: false }).test(
-										websiteUrl
-									)
-								}
-							)
-							.required('Required'),
-
+							.required('Required')
+							.test('urlTest', 'Valid URL required', (websiteUrl) => {
+								return urlRegex({ exact: true, strict: false }).test(websiteUrl)
+							}),
 						twitterProfileUrl: Yup.string()
 							.min(2, 'Must be greater than 1 character')
 							.max(50, 'Must be less than 30 characters')
@@ -116,31 +109,18 @@ export default function TopCompetitors(props) {
 			)
 	})
 
-	const CustomField = (props) => (
-		<div style={{ position: 'relative' }}>
-			<Field
-				style={{
-					color: 'white',
-					backgroundColor: neutralColor,
-					borderRadius: 5,
-					border: '1px solid grey',
-					position: 'relative'
-				}}
+	const CustomField = (props) => {
+		return (
+			<FormikInput
 				name={props.name}
 				disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
+				formikValue={props.formikValue}
+				specialError={props.error}
+				startAdornmentText={props.name.includes('twitter') && 'twitter.com/'}
+				simple
 			/>
-			<ErrorMessage
-				component='div'
-				name={props.name}
-				style={{
-					color: dangerColor[0],
-					position: 'absolute',
-					top: 24,
-					font: defaultFont
-				}}
-			/>
-		</div>
-	)
+		)
+	}
 
 	const AutoSave = ({ debounceMs }) => {
 		const formik = useFormikContext()
@@ -185,14 +165,15 @@ export default function TopCompetitors(props) {
 								<UserCan i={perms.BRAND_PROFILE_UPDATE}>
 									<Button
 										size={'sm'}
-										onClick={
-											() => {
-												handleAddNew(formik.values, formik.setFieldValue)
-											}
-											//	arrayHelpers
-										} // insert an empty string at a position
+										appearance='link'
+										onClick={() => {
+											handleAddNew(formik.values, formik.setFieldValue)
+										}}
 									>
-										Add
+										{formik.values.competitors.length < 1
+											? 'Add a Competitor'
+											: 'Add another'}
+										Add another
 									</Button>
 								</UserCan>
 							</Grid>
@@ -213,11 +194,7 @@ export default function TopCompetitors(props) {
 									<TableRow>
 										{competitorHeaders.map((prop, key) => {
 											return (
-												<TableCell
-													style={{ padding: 4, margin: 4 }}
-													className={tableCellClasses}
-													key={key}
-												>
+												<TableCell className={tableCellClasses} key={key}>
 													<Label label={prop} />
 												</TableCell>
 											)
@@ -233,12 +210,17 @@ export default function TopCompetitors(props) {
 												{competitors && competitors.length > 0
 													? competitors.map((competitor, index) => (
 															<TableRow key={index} style={{ border: 0 }}>
-																<TableCell
-																	style={{ padding: 4, margin: 4 }}
-																	className={tableCellClasses}
-																>
+																<TableCell className={tableCellClasses}>
 																	<CustomField
 																		name={`competitors.${index}.competitorName`}
+																		formikValue={competitor.competitorName}
+																		error={
+																			formik.errors &&
+																			formik.errors.competitors &&
+																			formik.errors.competitors[index] &&
+																			formik.errors.competitors[index]
+																				.competitorName
+																		}
 																	/>
 																</TableCell>
 
@@ -248,6 +230,15 @@ export default function TopCompetitors(props) {
 																>
 																	<CustomField
 																		name={`competitors.${index}.twitterProfileUrl`}
+																		formikValue={competitor.twitterProfileUrl}
+																		error={
+																			formik.errors &&
+																			formik.errors.competitors &&
+																			formik.errors.competitors[index] &&
+																			formik.errors.competitors[index]
+																				.twitterProfileUrl
+																		}
+																		//	error={competitor}
 																	/>
 																</TableCell>
 
@@ -257,6 +248,14 @@ export default function TopCompetitors(props) {
 																>
 																	<CustomField
 																		name={`competitors.${index}.websiteUrl`}
+																		formikValue={competitor.websiteUrl}
+																		error={
+																			formik.errors &&
+																			formik.errors.competitors &&
+																			formik.errors.competitors[index] &&
+																			formik.errors.competitors[index]
+																				.websiteUrl
+																		}
 																	/>
 																</TableCell>
 
@@ -267,7 +266,6 @@ export default function TopCompetitors(props) {
 																	<UserCan i={perms.BRAND_PROFILE_UPDATE}>
 																		<Button
 																			size={'sm'}
-																			color='red'
 																			appearance='link'
 																			onClick={() =>
 																				handleDeleteCompetitor(
