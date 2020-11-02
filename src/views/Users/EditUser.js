@@ -125,8 +125,7 @@ const getUser = (users, userId) => {
 
 export function EditUser(props) {
 	const [ openDialog, setOpenDialog  ] = React.useState(false)
-	
-	console.log('props.roles',props.roles)
+
 	let parsedUserId = JSON.parse(props.match.params.user)
 
 	let treeAccounts = React.useMemo(
@@ -161,10 +160,12 @@ export function EditUser(props) {
 		setOpenDialog(value)
 	}
 
-	const filteredRolesPermissions = (userType) => {
+	const filteredRolesPermissions = (userType,userEmail) => {
+		console.log('userEmail',userEmail)
 		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
-		if(!(user.email.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
-		return Array.from(props.roles)
+		if(!userEmail) return Array.from(props.roles)
+		if(!(userEmail.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
+		return Array.from(props.roles).filter(role => role.userType === 'Internal')
 	}
 	
 
@@ -294,7 +295,7 @@ export function EditUser(props) {
 																placeholder='Role'
 																optionLabel='roleName'
 																optionValue='roleId'
-																options={props.roles}
+																options={filteredRolesPermissions(props.userProfile && props.userProfile.userType, values.email)}
 																value={values.roleId}
 																onChange={setFieldValue}
 																onBlur={setFieldTouched}
