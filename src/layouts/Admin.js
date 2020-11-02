@@ -5,8 +5,6 @@ import Navbar from '../components/Navbars/Navbar.js'
 import { SettingsRoutes } from '../routes.js'
 import styles from '../assets/jss/material-dashboard-react/layouts/adminStyle.js'
 import CreateUser from '../views/Users/CreateUser.js'
-
-// Redux
 import { connect } from 'react-redux'
 import { setUserId, setLoggedInUserPermissions } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
@@ -20,7 +18,10 @@ import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import EditBrandProfile from '../views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from '../views/UserProfile/UserProfile.js'
 import Account from '../views/Account/Account'
-import { userCan, UserCan, perms } from '../Can'
+import { userCan, perms } from '../Can'
+var encryptor = require('simple-encryptor')(
+	process.env.REACT_APP_LOCAL_STORAGE_KEY
+)
 
 const switchRoutes = (
 	<Switch>
@@ -104,7 +105,7 @@ function Admin({ ...rest }) {
 		}
 	}
 
-	let permissions = localStorage.getItem('permissions')
+	let permissions = encryptor.decrypt(localStorage.getItem('permissions'))
 	if (permissions) {
 		let parsedPerms = JSON.parse(permissions)
 		rest.setLoggedInUserPermissions(parsedPerms)

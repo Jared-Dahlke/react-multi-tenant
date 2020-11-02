@@ -48,7 +48,7 @@ export const schemaValidation = Yup.object().shape({
 })
 
 function categoriesHasResponse(categories) {
-	if (categories.length < 1) return false
+	if (!categories || categories.length < 1) return false
 	for (const category of categories) {
 		if (category.contentCategoryResponseId !== 3) return true
 	}
@@ -56,6 +56,7 @@ function categoriesHasResponse(categories) {
 }
 
 function topicsHasResponse(topics) {
+	if (!topics || topics.length < 1) return false
 	for (const topic of topics) {
 		if (topic.topicResponseId == 1) return true
 		if (topic.children && topic.children.length > 0) {
@@ -67,7 +68,7 @@ function topicsHasResponse(topics) {
 }
 
 function scenariosAllHaveAResponse(scenarios) {
-	if (scenarios.length < 1) return false
+	if (!scenarios || scenarios.length < 1) return false
 	for (const scenario of scenarios) {
 		if (!scenario.scenarioResponseId || scenario.scenarioResponseId.length < 1)
 			return false

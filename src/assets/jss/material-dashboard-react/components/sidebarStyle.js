@@ -10,7 +10,6 @@ import {
 	warningColor,
 	dangerColor,
 	whiteColor,
-	grayColor,
 	hexToRgb
 } from '../../material-dashboard-react.js'
 import { neutralColor } from '../../colorContants.js'

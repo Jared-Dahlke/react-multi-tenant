@@ -64,13 +64,6 @@ function Login(props) {
 		? props.location.state.referer
 		: '/admin/settings/profile'
 
-	const permission = localStorage.getItem('permissions')
-	const mentalityOnly = permission == 1 ? true : false
-
-	if (mentalityOnly) {
-		referer = 'admin/settings/brandMentality'
-	}
-
 	const [userName, setUserName] = useState('')
 	const [password, setPassword] = useState('')
 

@@ -145,9 +145,7 @@ function Account(props) {
 		setFieldTouched,
 		validateField,
 		validateForm,
-		isSubmitting,
 		isValid,
-		isValidating,
 		dirty
 	} = props
 

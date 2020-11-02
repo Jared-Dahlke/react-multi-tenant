@@ -1,11 +1,15 @@
+var encryptor = require('simple-encryptor')(
+	process.env.REACT_APP_LOCAL_STORAGE_KEY
+)
+
 export const userCan = (event) => {
-	const myperms = localStorage.getItem('permissions')
+	const myperms = encryptor.decrypt(localStorage.getItem('permissions'))
 	if (!myperms) return false
 	return myperms.includes(event)
 }
 
 export const UserCan = (props) => {
-	const myperms = localStorage.getItem('permissions')
+	const myperms = encryptor.decrypt(localStorage.getItem('permissions'))
 	if (!myperms) return null
 	const couldShow = myperms.includes(props.i)
 	return couldShow ? props.children : null
