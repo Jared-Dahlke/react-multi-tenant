@@ -8,7 +8,7 @@ import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
-import { 
+import {
 	updateUserData,
 	updateUserAccounts,
 	fetchUserAccounts,
@@ -26,6 +26,11 @@ import Tooltip from 'rsuite/lib/Tooltip'
 import Whisper from 'rsuite/lib/Whisper'
 import RolesInfo from './RolesInfo.js'
 import { UserCan, perms, userCan } from '../../Can'
+import {
+	filteredRolesPermissions,
+	filteredRolesPermissionsInfo,
+	canAccessRoleId
+} from './userUtils'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -124,7 +129,7 @@ const getUser = (users, userId) => {
 }
 
 export function EditUser(props) {
-	const [ openDialog, setOpenDialog  ] = React.useState(false)
+	const [openDialog, setOpenDialog] = React.useState(false)
 
 	let parsedUserId = JSON.parse(props.match.params.user)
 
@@ -141,7 +146,12 @@ export function EditUser(props) {
 		parsedUserId
 	])
 
-	const handleSaveClick = (values, resetForm) => {
+	const handleSaveClick = (values, setFieldValue) => {
+		if (!canAccessRoleId(values, props)) {
+			setFieldValue('roleId', '')
+			return
+		}
+
 		values.userType = values.email.toLowerCase().includes('sightly.com')
 			? 'Internal'
 			: 'External'
@@ -156,26 +166,9 @@ export function EditUser(props) {
 		props.updateUserAccounts(user, accounts)
 	}
 
-	const handleDialog = (value) =>{
+	const handleDialog = (value) => {
 		setOpenDialog(value)
 	}
-
-	const filteredRolesPermissions = (userType,userEmail) => {
-		if(!props.roles) return []
-		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
-		if(!userEmail) return Array.from(props.roles)
-		if(!(userEmail.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
-		return Array.from(props.roles).filter(role => role.userType === 'Internal')
-	}
-
-	const filteredRolesPermissionsInfo = (userType) => {
-		if (userType === 'External')
-			return Array.from(props.roles).filter(
-				(role) => role.userType === 'External'
-			)
-		return Array.from(props.roles)
-	}
-	
 
 	let fetchUserAccounts = props.fetchUserAccounts
 
@@ -210,7 +203,6 @@ export function EditUser(props) {
 					setFieldTouched,
 					validateField,
 					validateForm,
-					isSubmitting,
 					isValid,
 					dirty,
 					resetForm
@@ -303,7 +295,12 @@ export function EditUser(props) {
 																placeholder='Role'
 																optionLabel='roleName'
 																optionValue='roleId'
-																options={filteredRolesPermissions(props.userProfile && props.userProfile.userType, values.email)}
+																options={filteredRolesPermissions(
+																	props.userProfile &&
+																		props.userProfile.userType,
+																	values.email,
+																	props.roles
+																)}
 																value={values.roleId}
 																onChange={setFieldValue}
 																onBlur={setFieldTouched}
@@ -341,7 +338,9 @@ export function EditUser(props) {
 												<UserCan i={perms.USER_UPDATE}>
 													<Button
 														disabled={!isValid || !dirty}
-														onClick={() => handleSaveClick(values, resetForm)}
+														onClick={() =>
+															handleSaveClick(values, setFieldValue)
+														}
 														loading={props.userEditSaving}
 													>
 														Save
@@ -379,7 +378,8 @@ export function EditUser(props) {
 						handleDialog(value)
 					}}
 					data={filteredRolesPermissionsInfo(
-						props.userProfile && props.userProfile.userType
+						props.userProfile && props.userProfile.userType,
+						props.roles
 					)}
 					userType={props.userProfile && props.userProfile.userType}
 				/>

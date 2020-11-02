@@ -15,7 +15,7 @@ import {
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import SuiteTree from '../../components/Tree/SuiteTree.js'
-import { Formik } from 'formik'
+import { Formik, useFormikContext } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
@@ -25,6 +25,11 @@ import IconButton from 'rsuite/lib/IconButton'
 import Tooltip from 'rsuite/lib/Tooltip'
 import Whisper from 'rsuite/lib/Whisper'
 import RolesInfo from './RolesInfo.js'
+import {
+	filteredRolesPermissions,
+	filteredRolesPermissionsInfo,
+	canAccessRoleId
+} from './userUtils'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -71,28 +76,17 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function CreateUser(props) {
-	const [ openDialog, setOpenDialog  ] = React.useState(false)
-	const handleDialog = (value) =>{
+	const [openDialog, setOpenDialog] = React.useState(false)
+	const handleDialog = (value) => {
 		setOpenDialog(value)
 	}
 
-	const filteredRolesPermissions = (userType,userEmail) => {
-		if(!props.roles) return []
-		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
-		if(!userEmail) return Array.from(props.roles)
-		if(!(userEmail.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
-		return Array.from(props.roles).filter(role => role.userType === 'Internal')
-	}
+	const handleInviteUserClick = (values, setFieldValue) => {
+		if (!canAccessRoleId(values, props)) {
+			setFieldValue('roleId', '')
+			return
+		}
 
-	const filteredRolesPermissionsInfo = (userType) => {
-		if (userType === 'External')
-			return Array.from(props.roles).filter(
-				(role) => role.userType === 'External'
-			)
-		return Array.from(props.roles)
-	}
-
-	const handleInviteUserClick = (values) => {
 		let accountsToLink = []
 		for (const account of values.accounts) {
 			accountsToLink.push({ accountId: account })
@@ -133,13 +127,13 @@ function CreateUser(props) {
 				}}
 				render={({
 					values,
+					initialValues,
 					errors,
 					touched,
 					setFieldValue,
 					setFieldTouched,
 					validateField,
 					validateForm,
-					isSubmitting,
 					isValid,
 					dirty
 				}) => (
@@ -211,7 +205,11 @@ function CreateUser(props) {
 														placeholder='Role'
 														optionLabel='roleName'
 														optionValue='roleId'
-														options={filteredRolesPermissions(props.userProfile && props.userProfile.userType, values.email)}
+														options={filteredRolesPermissions(
+															props.userProfile && props.userProfile.userType,
+															values.email,
+															props.roles
+														)}
 														value={values.roleId}
 														onChange={setFieldValue}
 														onBlur={setFieldTouched}
@@ -245,7 +243,9 @@ function CreateUser(props) {
 									<CardFooter>
 										<Button
 											disabled={!isValid || !dirty}
-											onClick={() => handleInviteUserClick(values)}
+											onClick={() =>
+												handleInviteUserClick(values, setFieldValue)
+											}
 											loading={props.userAdding}
 										>
 											Invite User
@@ -295,7 +295,8 @@ function CreateUser(props) {
 						handleDialog(value)
 					}}
 					data={filteredRolesPermissionsInfo(
-						props.userProfile && props.userProfile.userType
+						props.userProfile && props.userProfile.userType,
+						props.roles
 					)}
 					userType={props.userProfile && props.userProfile.userType}
 				/>
