@@ -98,10 +98,10 @@ export default function TopicsTree(props) {
 	)
 
 	React.useEffect(() => {
-		fn1()
+		executeSearch()
 	}, [searchTerm])
 
-	const fn1 = debounce(() => {
+	const executeSearch = debounce(() => {
 		let copyTopics2 = JSON.parse(JSON.stringify(props.formikTopics))
 		let end = filterTree(searchTerm, copyTopics2)
 		if (searchTerm.length > 0) {

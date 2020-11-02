@@ -14,7 +14,7 @@ import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
 import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
-import { UserCan, perms, userCan } from '../../Can'
+import { perms, userCan } from '../../Can'
 
 const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)

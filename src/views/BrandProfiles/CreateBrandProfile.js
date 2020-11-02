@@ -24,7 +24,6 @@ import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
 import { schemaValidation, stepValidated } from './brandProfileValidation'
-import { Debug } from '../Debug'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -138,7 +137,7 @@ function CreateBrandProfile(props) {
 		}
 
 		return label
-	}, [activeStep])
+	}, [activeStep, steps.length])
 
 	const {
 		values,
@@ -146,7 +145,6 @@ function CreateBrandProfile(props) {
 		touched,
 		setFieldValue,
 		setFieldTouched,
-		isValid,
 		dirty
 	} = props
 
