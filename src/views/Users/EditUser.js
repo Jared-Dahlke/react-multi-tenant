@@ -161,10 +161,19 @@ export function EditUser(props) {
 	}
 
 	const filteredRolesPermissions = (userType,userEmail) => {
+		if(!props.roles) return []
 		if(userType === 'External') return Array.from(props.roles).filter(role => role.userType === 'External')
 		if(!userEmail) return Array.from(props.roles)
 		if(!(userEmail.toLowerCase().includes('sightly.com'))) return Array.from(props.roles).filter(role => role.userType === 'External')
 		return Array.from(props.roles).filter(role => role.userType === 'Internal')
+	}
+
+	const filteredRolesPermissionsInfo = (userType) => {
+		if (userType === 'External')
+			return Array.from(props.roles).filter(
+				(role) => role.userType === 'External'
+			)
+		return Array.from(props.roles)
 	}
 	
 
@@ -369,7 +378,7 @@ export function EditUser(props) {
 					handleDialog={(value) => {
 						handleDialog(value)
 					}}
-					data={filteredRolesPermissions(
+					data={filteredRolesPermissionsInfo(
 						props.userProfile && props.userProfile.userType
 					)}
 					userType={props.userProfile && props.userProfile.userType}
