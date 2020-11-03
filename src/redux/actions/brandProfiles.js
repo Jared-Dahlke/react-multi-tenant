@@ -14,7 +14,12 @@ import {
 	SET_BRAND_CATEGORIES,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
-	SET_BRAND_PROFILE_SAVED
+	SET_BRAND_PROFILE_SAVED,
+	SCENARIO_ARCHIVING,
+	SCENARIO_ARCHIVED,
+	SCENARIO_CREATED,
+	SCENARIO_CREATING,
+	ADD_SCENARIO
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -148,7 +153,7 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				brandProfileObjValidation.validate(result.data).catch(function(err) {
+				brandProfileObjValidation.validate(result.data).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
@@ -182,7 +187,7 @@ export function fetchBrandProfiles(accountId) {
 				if (brandProfiles.length < 1) {
 					dispatch(hasBrandProfiles(false))
 				}
-				brandProfilesObjValidation.validate(result.data).catch(function(err) {
+				brandProfilesObjValidation.validate(result.data).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert("Could not validate account's brand profiles data")
 				})
@@ -245,6 +250,41 @@ export function setBrandProfileDeleting(bool) {
 	return {
 		type: BRAND_PROFILE_DELETING,
 		brandProfileDeleting: bool
+	}
+}
+
+export function setScenarioArchiving(bool) {
+	return {
+		type: SCENARIO_ARCHIVING,
+		scenarioArchiving: bool
+	}
+}
+
+export function setScenarioArchived(bool) {
+	return {
+		type: SCENARIO_ARCHIVED,
+		scenarionArchived: bool
+	}
+}
+
+export function setScenarioCreated(bool) {
+	return {
+		type: SCENARIO_CREATED,
+		scenarioCreated: bool
+	}
+}
+
+export function setScenarioCreating(bool) {
+	return {
+		type: SCENARIO_CREATING,
+		scenarioCreating: bool
+	}
+}
+
+export function addScenario(scenario) {
+	return {
+		type: ADD_SCENARIO,
+		scenario
 	}
 }
 
@@ -344,5 +384,40 @@ export function setBrandCategories(brandCategories) {
 	return {
 		type: SET_BRAND_CATEGORIES,
 		brandCategories
+	}
+}
+
+export const archiveScenario = (scenarioId) => {
+	let url = apiBase + `/brand-profile/scenario/${scenarioId}`
+	return (dispatch) => {
+		dispatch(setScenarioArchiving(true))
+		// dispatch(ArchiveScenario(scenarioId))
+		axios
+			.patch(url)
+			.then((response) => {
+				dispatch(setScenarioArchiving(false))
+				dispatch(setScenarioArchived(true))
+			})
+			.catch((error) => {
+				console.error(error)
+			})
+	}
+}
+
+export const createScenario = (scenario) => {
+	let url = apiBase + `/brand-profile/scenario`
+	return (dispatch, getState) => {
+		dispatch(setScenarioCreating(true))
+		dispatch(addScenario(scenario))
+		axios
+			.post(url, scenario)
+			.then((response) => {
+				// dispatch(setBrandProfiles(brandProfilesCopy))
+				dispatch(setScenarioCreating(false))
+				dispatch(setScenarioCreated(true))
+			})
+			.catch((error) => {
+				//error
+			})
 	}
 }

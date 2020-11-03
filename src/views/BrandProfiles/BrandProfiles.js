@@ -85,6 +85,11 @@ function BrandProfiles(props) {
 		history.push(url)
 	}
 
+	const handleScenariosClick = () => {
+		let url = `/admin/settings/scenarios`
+		history.push(url)
+	}
+
 	return (
 		<Grid container justify='center'>
 			<Snackbar
@@ -111,6 +116,9 @@ function BrandProfiles(props) {
 									Create New Profile
 								</Button>
 							</UserCan>
+							<Button color='primary' onClick={handleScenariosClick}>
+								Configure Scenarios
+              </Button>
 						</Grid>
 
 						<Table className={classes.table}>
@@ -203,21 +211,21 @@ function BrandProfiles(props) {
 				) : props.brandProfilesIsLoading ? (
 					<FormLoader />
 				) : (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
 
-							height: 'calc(100vh - 200px)',
-							color: 'white'
-						}}
-					>
-						<Button color='primary' onClick={handleCreateNewProfileClick}>
-							Create New Profile
+									height: 'calc(100vh - 200px)',
+									color: 'white'
+								}}
+							>
+								<Button color='primary' onClick={handleCreateNewProfileClick}>
+									Create New Profile
 						</Button>
-					</div>
-				)}
+							</div>
+						)}
 			</GridItem>
 		</Grid>
 	)
