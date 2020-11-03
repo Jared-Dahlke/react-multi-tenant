@@ -24,13 +24,13 @@ import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
 import Tooltip from 'rsuite/lib/Tooltip'
 import Whisper from 'rsuite/lib/Whisper'
-import RolesInfo from './RolesInfo.js'
 import { UserCan, perms, userCan } from '../../Can'
 import {
 	filteredRolesPermissions,
 	filteredRolesPermissionsInfo,
 	canAccessRoleId
 } from './userUtils'
+import RolesInfoFullScreen from './RolesInfoFullScreen.js'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -384,7 +384,7 @@ export function EditUser(props) {
 			/>
 			{/* Info Modal for Roles help */}
 			{openDialog && (
-				<RolesInfo
+				<RolesInfoFullScreen
 					show={openDialog}
 					title='Roles and Permissions'
 					handleDialog={(value) => {
