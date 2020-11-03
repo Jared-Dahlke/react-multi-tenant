@@ -86,7 +86,10 @@ function CreateUser(props) {
 			setFieldValue('roleId', '')
 			return
 		}
-		if (!values.email.toLowerCase().includes('sightly.com')) {
+		if (
+			!values.email.toLowerCase().includes('sightly.com') &&
+			values.accounts.includes(1)
+		) {
 			alert(
 				'Currently we are unable to add external users to the Sightly account. Please select another account and try again.'
 			)

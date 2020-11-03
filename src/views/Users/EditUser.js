@@ -152,7 +152,10 @@ export function EditUser(props) {
 			return
 		}
 
-		if (!values.email.toLowerCase().includes('sightly.com')) {
+		if (
+			!values.email.toLowerCase().includes('sightly.com') &&
+			values.accounts.includes(1)
+		) {
 			alert(
 				'Currently we are unable to add external users to the Sightly account. Please select another account and try again.'
 			)
@@ -280,9 +283,11 @@ export function EditUser(props) {
 																onChange={setFieldValue}
 																cascade={true}
 																error={errors.accounts}
-																disabled={
-																	!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)
-																}
+																//	disabled={
+
+																//	!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)
+
+																//		}
 															/>
 														) : null}
 													</GridItem>
