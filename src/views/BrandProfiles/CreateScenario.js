@@ -32,16 +32,13 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const schemaValidation = Yup.object().shape({
-  accountName: Yup.string()
+  scenarioName: Yup.string()
     .required('Required')
     .min(2, 'Must be greater than 1 character')
     .max(50, 'Must be less than 50 characters'),
 })
 
 function Scenario(props) {
-  const handleCreateChild = (scenario) => {
-    props.createScenario(scenario)
-  }
 
   const {
     values,
@@ -119,7 +116,7 @@ const FormikForm = withFormik({
     let scenario = {
       scenarioName: values.scenarioName,
     }
-    props.updateScenario(scenario)
+    props.createScenario(scenario)
   }
 })(Scenario)
 

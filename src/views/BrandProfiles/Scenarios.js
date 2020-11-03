@@ -37,7 +37,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    archiveScenario: () => dispatch(archiveScenario()),
+    archiveScenario: (scenarioId) => dispatch(archiveScenario(scenarioId)),
     setScenarioArchived: (bool) => dispatch(setScenarioArchived(bool))
   }
 }
@@ -122,30 +122,32 @@ function Scenarios(props) {
                       </TableCell>
 
                       <TableCell className={classes.tableActions}>
-                        <Tooltip
-                          id='tooltip-top-start'
-                          title='Archive'
-                          placement='top'
-                          classes={{ tooltip: classes.tooltip }}
-                        >
-                          <IconButton
-                            aria-label='Close'
-                            className={classes.tableActionButton}
-                            onClick={() => {
-                              handleArchiveScenarioClick(
-                                scenario.scenarioId
-                              )
-                            }}
+                        {!scenario.archived &&
+                          <Tooltip
+                            id='tooltip-top-start'
+                            title='Archive'
+                            placement='top'
+                            classes={{ tooltip: classes.tooltip }}
                           >
-                            <ArchiveIcon
-                              className={
-                                classes.tableActionButtonIcon +
-                                ' ' +
-                                classes.close
-                              }
-                            />
-                          </IconButton>
-                        </Tooltip>
+                            <IconButton
+                              aria-label='Close'
+                              className={classes.tableActionButton}
+                              onClick={() => {
+                                handleArchiveScenarioClick(
+                                  scenario.scenarioId
+                                )
+                              }}
+                            >
+                              <ArchiveIcon
+                                className={
+                                  classes.tableActionButtonIcon +
+                                  ' ' +
+                                  classes.close
+                                }
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        }
                       </TableCell>
                     </TableRow>
                   ))}
