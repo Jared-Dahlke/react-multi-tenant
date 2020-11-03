@@ -10,6 +10,7 @@ import Alert from '@material-ui/lab/Alert'
 import { Form, withFormik } from 'formik'
 import Button from 'rsuite/lib/Button'
 import * as Yup from 'yup'
+import { useHistory } from 'react-router-dom'
 
 // Redux
 import { userProfileFetchData } from '../../redux/actions/auth.js'
@@ -55,6 +56,13 @@ const schemaValidation = Yup.object().shape({
 })
 
 function UserProfile(props) {
+	let history = useHistory()
+
+	const handleResetPassword = () => {
+		let url = `/resetPassword`
+		history.push(url)
+	}
+
 	const { isValid, dirty, values } = props
 
 	return (
@@ -112,6 +120,14 @@ function UserProfile(props) {
 											type='submit'
 										>
 											Save
+										</Button>
+
+										<Button
+											size={'sm'}
+											appearance='link'
+											onClick={handleResetPassword}
+										>
+											Change my password
 										</Button>
 
 										<Snackbar

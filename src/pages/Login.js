@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import Button from '../components/CustomButtons/Button'
+//import Button from '../components/CustomButtons/Button'
+import Button from 'rsuite/lib/Button'
 import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -116,12 +117,12 @@ function Login(props) {
 						/>
 
 						<Button
-							color='primary'
 							onClick={postLogin}
 							disabled={props.loggingIn}
 							style={{ marginTop: '10px', width: '100%' }}
+							loading={props.loggingIn}
 						>
-							{props.loggingIn ? 'Signing in ...' : 'Sign In'}
+							Sign In
 						</Button>
 
 						<Grid style={{ marginTop: '10px' }} container>

@@ -18,6 +18,7 @@ import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
 import EditBrandProfile from '../views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from '../views/UserProfile/UserProfile.js'
 import Account from '../views/Account/Account'
+import ResetPassword from '../pages/ResetPassword'
 import { userCan, perms } from '../Can'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
@@ -73,7 +74,7 @@ const switchRoutes = (
 			)}
 		/>
 
-		<Redirect from='/admin' to='/admin/settings/profile' />
+		<Redirect from='/admin' to='/admin/settings/account' />
 	</Switch>
 )
 
