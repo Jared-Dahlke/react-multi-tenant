@@ -98,6 +98,23 @@ export const brandProfilesObjValidation = Yup.array().of(
 	})
 )
 
+export const brandScenarioObjValidation = Yup.array().of(
+	Yup.object().shape({
+		archived: Yup.bool().required(),
+		scenarioId: Yup.number().required(),
+		scenarioName: Yup.string().required(),
+		scenarioResponseId: Yup.string()
+			.test(
+				'scenario test',
+				'received unexepected scenarioResponseId from api in one of the scenarios',
+				(scenarioResponseId) => {
+					return !isNaN(scenarioResponseId)
+				}
+			)
+			.required()
+	})
+)
+
 export const brandProfileObjValidation = Yup.object().shape({
 	accountId: Yup.number().required(),
 	brandName: Yup.string().required(),

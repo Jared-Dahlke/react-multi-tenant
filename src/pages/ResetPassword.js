@@ -19,6 +19,7 @@ import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyl
 const mapStateToProps = (state) => {
 	return {
 		isLoggedIn: state.isLoggedIn,
+		resettingPassword: state.resettingPassword,
 		alert: state.alert
 	}
 }
@@ -89,7 +90,8 @@ function PasswordReset(props) {
 						</Grid>
 						<Button
 							style={{ marginTop: '10px' }}
-							//loading={}
+							block
+							loading={props.resettingPassword}
 							disabled={!email || isEmailError(email)}
 							onClick={postResetPassword}
 						>

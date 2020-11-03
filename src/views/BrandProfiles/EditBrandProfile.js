@@ -27,6 +27,7 @@ import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
 import { UserCan, perms, userCan } from '../../Can'
+import Loader from 'rsuite/lib/Loader'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -184,7 +185,7 @@ function EditBrandProfile(props) {
 						color: 'white'
 					}}
 				>
-					Loading...
+					<Loader size='sm' content='Loading...' />
 				</div>
 			</div>
 		)
