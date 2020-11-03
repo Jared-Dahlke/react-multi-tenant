@@ -47,6 +47,15 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
+		if (url === '/admin/engage/lists') {
+			return (
+				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Lists
+					</div>
+				</Breadcrumbs>
+			)
+		}
 		if (url === '/admin/engage/listBuilder') {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
@@ -238,6 +247,7 @@ function Header(props) {
 							style={{ marginRight: 15 }}
 							id='Engage_Nav_Tab'
 						>
+							<NavLink href='/admin/engage/lists' label='Lists' />
 							<NavLink href='/admin/engage/listBuilder' label='List Builder' />
 						</Dropdown>
 

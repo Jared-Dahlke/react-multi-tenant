@@ -12,6 +12,7 @@ import EditUser from '../views/Users/EditUser'
 import BrandMentality from '../views/BrandMentality/BrandMentality'
 import ChannelResearchTemp from '../views/Discover/ChannelResearchTemp'
 import ListBuilder from '../views/Discover/ListBuilder.js'
+import Lists from '../views/Engage/Lists.js'
 import Users from '../views/Users/Users'
 import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
@@ -53,6 +54,7 @@ const switchRoutes = (
 		/>
 
 		<Route path='/admin/engage/listBuilder' component={ListBuilder} />
+		<Route path='/admin/engage/lists' component={Lists} />
 
 		<Route path='/admin/settings/profile' component={UserProfile} />
 
