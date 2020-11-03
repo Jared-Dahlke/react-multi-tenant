@@ -175,6 +175,52 @@ function Header(props) {
 			)
 		}
 
+		if (url === '/admin/settings/brandProfiles/scenarios') {
+			return (
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to='/admin/settings/brandProfiles'
+						style={{ fontSize: crumbSize }}
+					>
+						Brand Profiles
+					</Link>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Scenarios
+					</div>
+				</Breadcrumbs>
+			)
+		}
+
+		if (url === '/admin/settings/brandProfiles/scenarios/create') {
+			return (
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to='/admin/settings/brandProfiles'
+						style={{ fontSize: crumbSize }}
+					>
+						Brand Profiles
+					</Link>
+					<Link
+						to='/admin/settings/brandProfiles/scenarios'
+						style={{ fontSize: crumbSize }}
+					>
+						Scenarios
+					</Link>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Create
+					</div>
+				</Breadcrumbs>
+			)
+		}
+
 		return null
 	}
 

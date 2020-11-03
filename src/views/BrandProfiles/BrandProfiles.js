@@ -86,7 +86,7 @@ function BrandProfiles(props) {
 	}
 
 	const handleScenariosClick = () => {
-		let url = `/admin/settings/scenarios`
+		let url = `/admin/settings/brandProfiles/scenarios`
 		history.push(url)
 	}
 

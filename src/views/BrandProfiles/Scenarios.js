@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableHead from '@material-ui/core/TableHead'
-import Close from '@material-ui/icons/Close'
+import ArchiveIcon from '@material-ui/icons/Archive';
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -59,7 +59,7 @@ function Scenarios(props) {
   }
 
   const handleCreateScenarioClick = () => {
-    let url = `/admin/settings/scenarios/create`
+    let url = `/admin/settings/brandProfiles/scenarios/create`
     history.push(url)
   }
 
@@ -124,7 +124,7 @@ function Scenarios(props) {
                       <TableCell className={classes.tableActions}>
                         <Tooltip
                           id='tooltip-top-start'
-                          title='Remove'
+                          title='Archive'
                           placement='top'
                           classes={{ tooltip: classes.tooltip }}
                         >
@@ -137,7 +137,7 @@ function Scenarios(props) {
                               )
                             }}
                           >
-                            <Close
+                            <ArchiveIcon
                               className={
                                 classes.tableActionButtonIcon +
                                 ' ' +

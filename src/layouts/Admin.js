@@ -72,16 +72,8 @@ const switchRoutes = (
 						path={`${url}/edit/:brandProfileId`}
 						component={EditBrandProfile}
 					/>
-				</>
-			)}
-		/>
-
-		<Route
-			path='/admin/settings/scenarios'
-			render={({ match: { url } }) => (
-				<>
-					<Route path={`${url}/`} component={Scenarios} exact />
-					<Route path={`${url}/create`} component={CreateScenario} />
+					<Route path={`${url}/scenarios`} component={Scenarios} exact />
+					<Route path={`${url}/scenarios/create`} component={CreateScenario} />
 				</>
 			)}
 		/>
