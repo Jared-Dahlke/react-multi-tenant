@@ -86,6 +86,13 @@ function CreateUser(props) {
 			setFieldValue('roleId', '')
 			return
 		}
+		if (!values.email.toLowerCase().includes('sightly.com')) {
+			alert(
+				'Currently we are unable to add external users to the Sightly account. Please select another account and try again.'
+			)
+			setFieldValue('accounts', [])
+			return
+		}
 
 		let accountsToLink = []
 		for (const account of values.accounts) {
