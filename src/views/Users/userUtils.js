@@ -31,6 +31,7 @@ export const filteredRolesPermissions = (userType, userEmail, roles) => {
 }
 
 export const filteredRolesPermissionsInfo = (userType, roles) => {
+	if(!roles) return []
 	if (userType === 'External') {
 		return Array.from(roles).filter((role) => role.userType === 'External')
 	}
