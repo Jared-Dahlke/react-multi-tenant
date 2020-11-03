@@ -11,6 +11,9 @@ export const filteredRolesPermissions = (userType, userEmail, roles) => {
 
 	if (!userEmail) {
 		// if there is no userEmail and user is Internal then return all
+		for (const role of enhancedRoles) {
+			role.roleName = role.roleName + ' (' + role.userType + ')'
+		}
 		return Array.from(enhancedRoles)
 	}
 
