@@ -80,7 +80,12 @@ module.exports = override(
 				'@steps-content-process-color': '#FFF',
 
 				//divider:
-				'@divider-border-color': neutralExtraLightColor
+				'@divider-border-color': neutralExtraLightColor,
+
+				//loader
+				'@loader-spin-ring-color': accentColor,
+				'@loader-spin-ring-active-color': '#FFF',
+				'@loader-content-color': '#FFF'
 			}
 		}
 	})

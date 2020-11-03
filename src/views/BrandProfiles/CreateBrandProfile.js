@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom'
 import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
 import { schemaValidation, stepValidated } from './brandProfileValidation'
+import Loader from 'rsuite/lib/Loader'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -113,6 +114,7 @@ function CreateBrandProfile(props) {
 	const cleanScenariosForApi = (scenarios) => {
 		for (const scenario of scenarios) {
 			delete scenario.scenarioName
+			delete scenario.archived
 		}
 	}
 
@@ -208,7 +210,10 @@ function CreateBrandProfile(props) {
 										}}
 									>
 										{props.brandProfileCreating ? (
-											'Saving...'
+											<Loader
+												size='sm'
+												content='Creating your brand profile...'
+											/>
 										) : (
 											<Message
 												showIcon

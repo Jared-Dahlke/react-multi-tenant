@@ -7,7 +7,8 @@ import {
 	USER_PROFILE_IS_LOADING,
 	SET_LOGGING_IN,
 	SET_UPDATING_PASSWORD,
-	SET_LOGGED_IN_USER_PERMISSIONS
+	SET_LOGGED_IN_USER_PERMISSIONS,
+	SET_RESETTING_PASSWORD
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
@@ -161,10 +162,13 @@ export function userProfileFetchData() {
 export function resetPassword(email) {
 	let url = apiBase + '/reset-password'
 	return async (dispatch) => {
+		dispatch(setResettingPassword(true))
 		try {
 			const result = await axios.post(url, {
 				email: email
 			})
+
+			dispatch(setResettingPassword(false))
 
 			if (result.status === 200) {
 				dispatch(
@@ -184,6 +188,7 @@ export function resetPassword(email) {
 				)
 			}
 		} catch (error) {
+			dispatch(setResettingPassword(false))
 			dispatch(
 				setAlert({
 					show: true,
@@ -199,6 +204,13 @@ export function setUpdatingPassword(bool) {
 	return {
 		type: SET_UPDATING_PASSWORD,
 		updatingPassword: bool
+	}
+}
+
+export function setResettingPassword(bool) {
+	return {
+		type: SET_RESETTING_PASSWORD,
+		resettingPassword: bool
 	}
 }
 
