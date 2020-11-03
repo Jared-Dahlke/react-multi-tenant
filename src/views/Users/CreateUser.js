@@ -25,6 +25,11 @@ import IconButton from 'rsuite/lib/IconButton'
 import Tooltip from 'rsuite/lib/Tooltip'
 import Whisper from 'rsuite/lib/Whisper'
 import RolesInfo from './RolesInfo.js'
+import {
+	filteredRolesPermissions,
+	filteredRolesPermissionsInfo,
+	canAccessRoleId
+} from './userUtils'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -58,7 +63,6 @@ const mapStateToProps = (state) => {
 		userAdded: state.userAdded,
 		userAdding: state.userAdding,
 		userAddError: state.userAddError,
-		rolesPermissions: state.rolesPermissions,
 		userProfile: state.user.userProfile
 	}
 }
@@ -77,19 +81,22 @@ function CreateUser(props) {
 		setOpenDialog(value)
 	}
 
-	const filteredRolesPermissions = (userType) => {
-		if (userType === 'External')
-			return Array.from(props.rolesPermissions.data).filter(
-				(role) => role.userType === 'External'
+	const handleInviteUserClick = (values, setFieldValue) => {
+		if (!canAccessRoleId(values, props)) {
+			setFieldValue('roleId', '')
+			return
+		}
+		if (
+			!values.email.toLowerCase().includes('sightly.com') &&
+			values.accounts.includes(1)
+		) {
+			alert(
+				'Currently we are unable to add external users to the Sightly account. Please select another account and try again.'
 			)
-		return (
-			props.rolesPermissions &&
-			props.rolesPermissions.data &&
-			Array.from(props.rolesPermissions.data)
-		)
-	}
+			setFieldValue('accounts', [])
+			return
+		}
 
-	const handleInviteUserClick = (values) => {
 		let accountsToLink = []
 		for (const account of values.accounts) {
 			accountsToLink.push({ accountId: account })
@@ -130,13 +137,13 @@ function CreateUser(props) {
 				}}
 				render={({
 					values,
+					initialValues,
 					errors,
 					touched,
 					setFieldValue,
 					setFieldTouched,
 					validateField,
 					validateForm,
-					isSubmitting,
 					isValid,
 					dirty
 				}) => (
@@ -208,7 +215,11 @@ function CreateUser(props) {
 														placeholder='Role'
 														optionLabel='roleName'
 														optionValue='roleId'
-														options={props.roles}
+														options={filteredRolesPermissions(
+															props.userProfile && props.userProfile.userType,
+															values.email,
+															props.roles
+														)}
 														value={values.roleId}
 														onChange={setFieldValue}
 														onBlur={setFieldTouched}
@@ -242,7 +253,9 @@ function CreateUser(props) {
 									<CardFooter>
 										<Button
 											disabled={!isValid || !dirty}
-											onClick={() => handleInviteUserClick(values)}
+											onClick={() =>
+												handleInviteUserClick(values, setFieldValue)
+											}
 											loading={props.userAdding}
 										>
 											Invite User
@@ -291,8 +304,9 @@ function CreateUser(props) {
 					handleDialog={(value) => {
 						handleDialog(value)
 					}}
-					data={filteredRolesPermissions(
-						props.userProfile && props.userProfile.userType
+					data={filteredRolesPermissionsInfo(
+						props.userProfile && props.userProfile.userType,
+						props.roles
 					)}
 					userType={props.userProfile && props.userProfile.userType}
 				/>

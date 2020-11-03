@@ -94,7 +94,7 @@ function PasswordChange(props) {
 	}
 
 	if (props.isLoggedIn) {
-		return <Redirect to='./admin/settings/brandMentality' />
+		return <Redirect to='./admin/settings/account' />
 	}
 
 	return (

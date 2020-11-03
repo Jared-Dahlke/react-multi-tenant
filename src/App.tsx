@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import PrivateRoute from './pages/PrivateRoute.js'
 import { Provider } from 'react-redux'
 import configureStore from './redux/store/index.js'

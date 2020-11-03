@@ -20,6 +20,7 @@ import UserProfile from '../views/UserProfile/UserProfile.js'
 import Account from '../views/Account/Account'
 import Scenarios from '../views/BrandProfiles/Scenarios.js'
 import CreateScenario from '../views/BrandProfiles/CreateScenario.js'
+import ResetPassword from '../pages/ResetPassword'
 import { userCan, perms } from '../Can'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
@@ -85,8 +86,8 @@ const switchRoutes = (
 			)}
 		/>
 
-		< Redirect from='/admin' to='/admin/settings/profile' />
-	</Switch >
+		<Redirect from='/admin' to='/admin/settings/account' />
+	</Switch>
 )
 
 const useStyles = makeStyles(styles)

@@ -173,7 +173,6 @@ export default function TopCompetitors(props) {
 										{formik.values.competitors.length < 1
 											? 'Add a Competitor'
 											: 'Add another'}
-										Add another
 									</Button>
 								</UserCan>
 							</Grid>
