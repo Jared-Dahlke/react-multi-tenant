@@ -8,15 +8,11 @@ import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
-import AccountDropdown from '../../components/AccountDropdown'
 
-import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
-import { updateUserData } from '../../redux/actions/users.js'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import * as Yup from 'yup'
-import { getCurrentAccount } from '../../utils'
 import {
   createScenario,
   setScenarioCreated
@@ -24,24 +20,12 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    // currentAccountId: state.currentAccountId,
-    // accounts: state.accounts,
-    // accountTypes: state.accountTypes,
-    // isSwitchingAccounts: state.isSwitchingAccounts,
-    scenarioCreated: state.scenarioCreated,
-    scenarioSaved: state.scenarioSaved,
-    scenarioSaving: state.scenarioSaving,
-    // rolesIsLoading: state.rolesIsLoading,
-    // user: state.user
+    scenarioCreated: state.scenarioCreated
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // fetchUserProfile: () => dispatch(userProfileFetchData()),
-    // updateUserData: (userData) => dispatch(updateUserData(userData)),
-    // updateAccount: (account) => dispatch(updateAccount(account)),
-    // deleteAccount: (accountId) => dispatch(deleteAccount(accountId)),
     createScenario: (scenario) => dispatch(createScenario(scenario)),
     setScenarioCreated: (val) => dispatch(setScenarioCreated(val))
   }
@@ -55,21 +39,8 @@ const schemaValidation = Yup.object().shape({
 })
 
 function Scenario(props) {
-  const handleCreateChild = (current) => {
-    let levelId = current.accountLevelId + 1
-    if (levelId > 3) {
-      levelId = 3
-    }
-    let childAccount = {
-      accountName: 'New Child',
-      accountTypeId: props.accountTypes[0].accountTypeId,
-      accountLevelId: levelId,
-      accountMargin: 0,
-      contactName: 'placeholder',
-      contactEmail: 'placeholder@placeholder.com',
-      parentAccountId: current.accountId
-    }
-    props.createAccount(childAccount)
+  const handleCreateChild = (scenario) => {
+    props.createScenario(scenario)
   }
 
   const {
