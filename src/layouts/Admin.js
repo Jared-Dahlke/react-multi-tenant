@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Navbar from '../components/Navbars/Navbar.js'
 import styles from '../assets/jss/material-dashboard-react/layouts/adminStyle.js'
-import EditUser from '../views/Users/EditUser'
 import { connect } from 'react-redux'
 import { setUserId, setLoggedInUserPermissions } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
@@ -52,12 +51,26 @@ const switchRoutes = (
 		/>
 
 		<Route
-			path={routes.admin.engage.lists.listBuilder.path}
-			component={routes.admin.engage.lists.listBuilder.component}
-		/>
-		<Route
 			path={routes.admin.engage.lists.lists.path}
-			component={routes.admin.engage.lists.lists.component}
+			render={({ match: { url } }) => (
+				<>
+					<Route
+						path={routes.admin.engage.lists.lists.path}
+						component={routes.admin.engage.lists.lists.component}
+						exact
+					/>
+
+					<Route
+						path={routes.admin.engage.lists.uploadList.path}
+						component={routes.admin.engage.lists.uploadList.component}
+					/>
+
+					<Route
+						path={routes.admin.engage.lists.listBuilder.path}
+						component={routes.admin.engage.lists.listBuilder.component}
+					/>
+				</>
+			)}
 		/>
 
 		<Route

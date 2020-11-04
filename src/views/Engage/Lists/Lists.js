@@ -24,6 +24,7 @@ import tableStyles from '../../../assets/jss/material-dashboard-react/components
 import { FormLoader } from '../../../components/SkeletonLoader'
 import { UserCan, perms } from '../../../Can'
 import { useHistory } from 'react-router-dom'
+import { routes } from '../../../routes'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -66,7 +67,7 @@ function Lists(props) {
 	const userHeaders = ['Profile Name', 'Website', '']
 
 	const handleUploadNewList = () => {
-		history.push()
+		history.push(routes.admin.engage.lists.uploadList.path)
 	}
 
 	return (
