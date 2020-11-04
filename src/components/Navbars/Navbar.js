@@ -57,6 +57,27 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
+
+		if (url === routes.admin.engage.lists.uploadList.path) {
+			return (
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to={routes.admin.engage.lists.lists.path}
+						style={{ fontSize: crumbSize }}
+					>
+						Lists
+					</Link>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Upload List
+					</div>
+				</Breadcrumbs>
+			)
+		}
+
 		if (url === routes.admin.engage.lists.listBuilder.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>

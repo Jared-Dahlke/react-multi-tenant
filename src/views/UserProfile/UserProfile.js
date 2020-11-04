@@ -32,7 +32,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchUserProfile: () => dispatch(userProfileFetchData()),
 		updateUserData: (userData) => dispatch(updateUserData(userData)),
-
 		setUserProfileSaved: (bool) => dispatch(userProfileSaved(bool))
 	}
 }
