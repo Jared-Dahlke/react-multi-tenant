@@ -26,7 +26,8 @@ import axios from '../../axiosConfig'
 import config from '../../config.js'
 import {
 	brandProfilesObjValidation,
-	brandProfileObjValidation
+	brandProfileObjValidation,
+	brandScenarioObjValidation
 } from '../../schemas'
 
 const apiBase = config.apiGateway.URL
@@ -323,6 +324,14 @@ export function fetchBrandScenarios() {
 			const result = await axios.get(url)
 			if (result.status === 200) {
 				let scenarios = result.data
+
+				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						'We received different API data than expected, see the console log for more details.'
+					)
+				})
+
 				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
 				dispatch(setBrandScenarios(scenarios))
 			}

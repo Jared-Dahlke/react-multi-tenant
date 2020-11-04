@@ -282,7 +282,7 @@ export default function TopCompetitors(props) {
 													  ))
 													: null}
 
-												<AutoSave debounceMs={1000} />
+												<AutoSave debounceMs={1} />
 											</TableBody>
 										)
 									}}

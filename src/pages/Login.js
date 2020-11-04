@@ -16,6 +16,7 @@ import { whiteColor } from '../assets/jss/material-dashboard-react.js'
 import CustomInput from '../components/CustomInput/CustomInput'
 import svgLogo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
+import { routes } from '../routes'
 
 const mapStateToProps = (state) => {
 	return {
@@ -63,7 +64,7 @@ function Login(props) {
 	const adminClasses = useAdminStyles()
 	let referer = props.location.state
 		? props.location.state.referer
-		: '/admin/settings/profile'
+		: routes.admin.settings.profile.path
 
 	const [userName, setUserName] = useState('')
 	const [password, setPassword] = useState('')

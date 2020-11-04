@@ -2,25 +2,11 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Navbar from '../components/Navbars/Navbar.js'
-import { SettingsRoutes } from '../routes.js'
 import styles from '../assets/jss/material-dashboard-react/layouts/adminStyle.js'
-import CreateUser from '../views/Users/CreateUser.js'
 import { connect } from 'react-redux'
 import { setUserId, setLoggedInUserPermissions } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
-import EditUser from '../views/Users/EditUser'
-import BrandMentality from '../views/BrandMentality/BrandMentality'
-import ChannelResearchTemp from '../views/Discover/ChannelResearchTemp'
-import ListBuilder from '../views/Discover/ListBuilder.js'
-import Users from '../views/Users/Users'
-import BrandProfiles from '../views/BrandProfiles/BrandProfiles.js'
-import CreateBrandProfile from '../views/BrandProfiles/CreateBrandProfile.js'
-import EditBrandProfile from '../views/BrandProfiles/EditBrandProfile.js'
-import UserProfile from '../views/UserProfile/UserProfile.js'
-import Account from '../views/Account/Account'
-import Scenarios from '../views/BrandProfiles/Scenarios.js'
-import CreateScenario from '../views/BrandProfiles/CreateScenario.js'
-import ResetPassword from '../pages/ResetPassword'
+import { routes } from '../routes'
 import { userCan, perms } from '../Can'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
@@ -29,56 +15,93 @@ var encryptor = require('simple-encryptor')(
 const switchRoutes = (
 	<Switch>
 		{userCan(perms.BRAND_MENTALITY_READ) && (
-			<Route path='/admin/settings/brandMentality' component={BrandMentality} />
+			<Route
+				path={routes.admin.settings.brandMentality.path}
+				component={routes.admin.settings.brandMentality.component}
+			/>
 		)}
 
 		<Route
-			path='/admin/discover/channelResearch'
-			component={ChannelResearchTemp}
+			path={routes.admin.discover.channelResearch.path}
+			component={routes.admin.discover.channelResearch.component}
 		/>
 
 		<Route
-			path='/admin/settings/users'
+			path={routes.admin.settings.users.path}
 			render={({ match: { url } }) => (
 				<>
-					<Route path={`${url}/`} component={Users} exact />
+					<Route
+						path={routes.admin.settings.users.path}
+						component={routes.admin.settings.users.component}
+						exact
+					/>
 
 					{userCan(perms.USER_CREATE) && (
-						<Route path={`${url}/create`} component={CreateUser} />
+						<Route
+							path={routes.admin.settings.users.create.path}
+							component={routes.admin.settings.users.create.component}
+						/>
 					)}
 					<Route
-						path={`${url}/edit/:user`}
-						render={(props) => <EditUser {...props} foo='bar' />}
+						path={routes.admin.settings.users.edit.path}
+						component={routes.admin.settings.users.edit.component}
 					/>
 				</>
 			)}
 		/>
-
-		<Route path='/admin/engage/listBuilder' component={ListBuilder} />
-
-		<Route path='/admin/settings/profile' component={UserProfile} />
-
-		<Route path='/admin/settings/account' component={Account} />
 
 		<Route
-			path='/admin/settings/brandProfiles'
+			path={routes.admin.engage.listBuilder.path}
+			component={routes.admin.engage.listBuilder.component}
+		/>
+		<Route
+			path={routes.admin.engage.lists.path}
+			component={routes.admin.engage.lists.component}
+		/>
+
+		<Route
+			path={routes.admin.settings.profile.path}
+			component={routes.admin.settings.profile.component}
+		/>
+
+		<Route
+			path={routes.admin.settings.account.path}
+			component={routes.admin.settings.account.component}
+		/>
+
+		<Route
+			path={routes.admin.settings.brandProfiles.path}
 			render={({ match: { url } }) => (
 				<>
-					<Route path={`${url}/`} component={BrandProfiles} exact />
+					<Route
+						path={routes.admin.settings.brandProfiles.path}
+						component={routes.admin.settings.brandProfiles.component}
+						exact
+					/>
 					{userCan(perms.BRAND_PROFILE_CREATE) && (
-						<Route path={`${url}/create`} component={CreateBrandProfile} />
+						<Route
+							path={routes.admin.settings.brandProfiles.create.path}
+							component={routes.admin.settings.brandProfiles.create.component}
+						/>
 					)}
 					<Route
-						path={`${url}/edit/:brandProfileId`}
-						component={EditBrandProfile}
+						path={routes.admin.settings.brandProfiles.edit.path}
+						component={routes.admin.settings.brandProfiles.edit.component}
 					/>
-					<Route path={`${url}/scenarios`} component={Scenarios} exact />
-					<Route path={`${url}/scenarios/create`} component={CreateScenario} />
+					<Route
+						path={routes.admin.settings.brandProfiles.scenarios.path}
+						component={routes.admin.settings.brandProfiles.scenarios.component}
+						exact
+					/>
+					<Route
+						path={routes.admin.settings.brandProfiles.scenarios.create.path}
+						component={routes.admin.settings.brandProfiles.scenarios.create.component}
+					/>
 				</>
 			)}
 		/>
 
-		<Redirect from='/admin' to='/admin/settings/account' />
+		<Redirect from='/admin' to={routes.admin.settings.account.path} />
 	</Switch>
 )
 
@@ -125,11 +148,7 @@ function Admin({ ...rest }) {
 	return (
 		<div className={classes.wrapper}>
 			<div className={classes.mainPanel} ref={mainPanel}>
-				<Navbar
-					routes={SettingsRoutes}
-					handleDrawerToggle={handleDrawerToggle}
-					{...rest}
-				/>
+				<Navbar handleDrawerToggle={handleDrawerToggle} {...rest} />
 
 				<div className={classes.content}>
 					<div className={classes.container}>{switchRoutes}</div>

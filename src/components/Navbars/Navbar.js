@@ -15,6 +15,7 @@ import styles from '../../assets/jss/material-dashboard-react/components/headerS
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
 import { perms, userCan } from '../../Can'
+import { routes } from '../../routes'
 
 const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)
@@ -34,7 +35,7 @@ function Header(props) {
 		const crumbSize = 20
 
 		let url = window.location.pathname
-		if (url === '/admin/discover/channelResearch') {
+		if (url === routes.admin.discover.channelResearch.path) {
 			return (
 				<Breadcrumbs
 					aria-label='breadcrumb'
@@ -47,7 +48,16 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
-		if (url === '/admin/engage/listBuilder') {
+		if (url === routes.admin.engage.lists.path) {
+			return (
+				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Lists
+					</div>
+				</Breadcrumbs>
+			)
+		}
+		if (url === routes.admin.engage.listBuilder.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -56,7 +66,7 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
-		if (url === '/admin/settings/account') {
+		if (url === routes.admin.settings.account.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -66,7 +76,7 @@ function Header(props) {
 			)
 		}
 
-		if (url === '/admin/settings/users') {
+		if (url === routes.admin.settings.users.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -76,14 +86,17 @@ function Header(props) {
 			)
 		}
 
-		if (url === '/admin/settings/users/create') {
+		if (url === routes.admin.settings.users.create.path) {
 			return (
 				<Breadcrumbs
 					aria-label='breadcrumb'
 					style={{ color: whiteColor }}
 					separator='>'
 				>
-					<Link to='/admin/settings/users' style={{ fontSize: crumbSize }}>
+					<Link
+						to={routes.admin.settings.users.path}
+						style={{ fontSize: crumbSize }}
+					>
 						Users
 					</Link>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -96,7 +109,10 @@ function Header(props) {
 		if (url.includes('/admin/settings/users/edit')) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<Link to='/admin/settings/users' style={{ fontSize: crumbSize }}>
+					<Link
+						to={routes.admin.settings.users.path}
+						style={{ fontSize: crumbSize }}
+					>
 						Users
 					</Link>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -106,7 +122,7 @@ function Header(props) {
 			)
 		}
 
-		if (url === '/admin/settings/brandProfiles') {
+		if (url === routes.admin.settings.brandProfiles.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -115,7 +131,7 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
-		if (url === '/admin/settings/brandProfiles/create') {
+		if (url === routes.admin.settings.brandProfiles.create.path) {
 			return (
 				<Breadcrumbs
 					aria-label='breadcrumb'
@@ -123,7 +139,7 @@ function Header(props) {
 					separator='>'
 				>
 					<Link
-						to='/admin/settings/brandProfiles'
+						to={routes.admin.settings.brandProfiles.path}
 						style={{ fontSize: crumbSize }}
 					>
 						Brand Profiles
@@ -143,7 +159,7 @@ function Header(props) {
 					separator='>'
 				>
 					<Link
-						to='/admin/settings/brandProfiles'
+						to={routes.admin.settings.brandProfiles.path}
 						style={{ fontSize: crumbSize }}
 					>
 						Brand Profiles
@@ -155,7 +171,7 @@ function Header(props) {
 			)
 		}
 
-		if (url === '/admin/settings/brandMentality') {
+		if (url === routes.admin.settings.brandMentality.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -165,7 +181,7 @@ function Header(props) {
 			)
 		}
 
-		if (url === '/admin/settings/profile') {
+		if (url === routes.admin.settings.profile.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -273,7 +289,7 @@ function Header(props) {
 							id='Channel_Research_Nav_Tab'
 						>
 							<NavLink
-								href='/admin/discover/channelResearch'
+								href={routes.admin.discover.channelResearch.path}
 								label='Channel Research'
 							/>
 						</Dropdown>
@@ -284,27 +300,37 @@ function Header(props) {
 							style={{ marginRight: 15 }}
 							id='Engage_Nav_Tab'
 						>
-							<NavLink href='/admin/engage/listBuilder' label='List Builder' />
+							<NavLink href={routes.admin.engage.lists.path} label='Lists' />
+							<NavLink
+								href={routes.admin.engage.listBuilder.path}
+								label='List Builder'
+							/>
 						</Dropdown>
 
 						<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
-							<NavLink href='/admin/settings/account' label='Account' />
-
-							<NavLink href='/admin/settings/users' label='Users' />
 							<NavLink
-								href='/admin/settings/brandProfiles'
+								href={routes.admin.settings.account.path}
+								label='Account'
+							/>
+
+							<NavLink href={routes.admin.settings.users.path} label='Users' />
+							<NavLink
+								href={routes.admin.settings.brandProfiles.path}
 								label='Brand Profiles'
 							/>
 
 							<NavLink
-								href='/admin/settings/brandMentality'
+								href={routes.admin.settings.brandMentality.path}
 								label='Brand Mentality'
 							/>
 						</Dropdown>
 					</Nav>
 					<Nav pullRight style={{ marginRight: 30 }}>
 						<Dropdown title='' icon={<Icon icon='avatar' />}>
-							<NavLink href='/admin/settings/profile' label='Profile' />
+							<NavLink
+								href={routes.admin.settings.profile.path}
+								label='Profile'
+							/>
 
 							<Dropdown.Item onSelect={() => handleLogOut(props)}>
 								Logout
@@ -316,13 +342,6 @@ function Header(props) {
 			<div style={{ paddingLeft: 30, paddingTop: 20 }}>{makeBrand()}</div>
 		</div>
 	)
-}
-
-Header.propTypes = {
-	color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
-	rtlActive: PropTypes.bool,
-	handleDrawerToggle: PropTypes.func,
-	routes: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default connect(null, mapDispatchToProps)(Header)

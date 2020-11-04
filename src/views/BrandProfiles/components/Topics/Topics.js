@@ -2,7 +2,10 @@ import React from 'react'
 import debounce from 'just-debounce-it'
 import Input from 'rsuite/lib/Input'
 import Tree from 'rsuite/lib/Tree'
-import * as _ from 'lodash'
+import lodashFilter from 'lodash/filter'
+import lodashIncludes from 'lodash/includes'
+import lodashToLower from 'lodash/toLower'
+import lodashIsEmpty from 'lodash/isEmpty'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import { perms, userCan } from '../../../../Can'
@@ -79,12 +82,12 @@ const Node = (props) => {
 }
 
 const filterTree = (filter, list) => {
-	return _.filter(list, (item) => {
-		if (_.includes(_.toLower(item.topicName), _.toLower(filter))) {
+	return lodashFilter(list, (item) => {
+		if (lodashIncludes(lodashToLower(item.topicName), lodashToLower(filter))) {
 			return true
 		} else if (item.children) {
 			item.children = filterTree(filter, item.children)
-			return !_.isEmpty(item.children)
+			return !lodashIsEmpty(item.children)
 		}
 	})
 }

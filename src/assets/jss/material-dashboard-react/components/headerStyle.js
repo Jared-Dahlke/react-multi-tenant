@@ -14,7 +14,7 @@ import { neutralExtraLightColor } from '../../colorContants.js'
 const headerStyle = () => ({
 	disabledLink: {
 		cursor: 'not-allowed',
-		color: neutralExtraLightColor,
+		color: 'white',
 		pointerEvents: 'none'
 	},
 	appBar: {
