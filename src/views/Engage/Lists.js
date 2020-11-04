@@ -155,8 +155,8 @@ function Lists(props) {
 					>
 						<Button
 							disabled
-							color='primary'
-							onClick={handleCreateNewProfileClick}
+							//	color='primary'
+							//	onClick={handleCreateNewProfileClick}
 						>
 							Create New List
 						</Button>
