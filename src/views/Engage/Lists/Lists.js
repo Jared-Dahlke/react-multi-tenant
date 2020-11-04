@@ -1,12 +1,11 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import GridItem from '../../components/Grid/GridItem.js'
+import GridItem from '../../../components/Grid/GridItem.js'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableHead from '@material-ui/core/TableHead'
-import Close from '@material-ui/icons/Close'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -18,13 +17,13 @@ import {
 	deleteBrandProfile,
 	setBrandProfileDeleted,
 	removeBrandProfile
-} from '../../redux/actions/brandProfiles.js'
+} from '../../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
-import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
-import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import { FormLoader } from '../../components/SkeletonLoader'
-import Edit from '@material-ui/icons/Edit'
-import { UserCan, perms } from '../../Can'
+import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
+import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import { FormLoader } from '../../../components/SkeletonLoader'
+import { UserCan, perms } from '../../../Can'
+import { useHistory } from 'react-router-dom'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -58,6 +57,7 @@ const mapDispatchToProps = (dispatch) => {
 function Lists(props) {
 	const classes = useStyles()
 	const tableClasses = useTableStyles()
+	const history = useHistory()
 
 	const tableCellClasses = classnames(classes.tableCell, {
 		[classes.tableCellRTL]: false
@@ -65,9 +65,18 @@ function Lists(props) {
 
 	const userHeaders = ['Profile Name', 'Website', '']
 
+	const handleUploadNewList = () => {
+		history.push()
+	}
+
 	return (
 		<Grid container justify='center'>
-			<GridItem xs={12} sm={12} md={6}>
+			<GridItem xs={12} sm={12} md={12}>
+				<Grid item xs={12} sm={12} md={12}>
+					<Grid container justify='flex-end'>
+						<Button onClick={handleUploadNewList}>Upload a new list</Button>
+					</Grid>
+				</Grid>
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
 						<Table className={classes.table}>

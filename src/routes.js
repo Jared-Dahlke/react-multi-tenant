@@ -3,14 +3,15 @@ import EditUser from './views/Users/EditUser'
 import CreateUser from './views/Users/CreateUser'
 import BrandMentality from './views/BrandMentality/BrandMentality'
 import ChannelResearchTemp from './views/Discover/ChannelResearchTemp'
-import ListBuilder from './views/Discover/ListBuilder.js'
-import Lists from './views/Engage/Lists.js'
+import ListBuilder from './views/Engage/Lists/ListBuilder/ListBuilder.js'
+import Lists from './views/Engage/Lists/Lists.js'
 import Users from './views/Users/Users'
 import BrandProfiles from './views/BrandProfiles/BrandProfiles.js'
 import CreateBrandProfile from './views/BrandProfiles/CreateBrandProfile.js'
 import EditBrandProfile from './views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from './views/UserProfile/UserProfile.js'
 import Account from './views/Account/Account'
+import UploadList from './views/Engage/Lists/UploadList'
 
 import ResetPassword from './pages/ResetPassword'
 import ChangePassword from './pages/ChangePassword'
@@ -37,14 +38,21 @@ export const routes = {
 		component: Admin,
 		engage: {
 			lists: {
-				path: '/admin/engage/lists',
-				component: Lists,
-				name: 'Lists'
-			},
-			listBuilder: {
-				path: '/admin/engage/listBuilder',
-				name: 'List Builder',
-				component: ListBuilder
+				lists: {
+					path: '/admin/engage/lists',
+					component: Lists,
+					name: 'Lists'
+				},
+				uploadList: {
+					path: '/admin/engage/lists/uploadList',
+					component: UploadList,
+					name: 'Upload List'
+				},
+				listBuilder: {
+					path: '/admin/engage/lists/listBuilder',
+					name: 'List Builder',
+					component: ListBuilder
+				}
 			}
 		},
 
