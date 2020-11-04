@@ -1,17 +1,14 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../components/Grid/GridItem.js'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableHead from '@material-ui/core/TableHead'
-import ArchiveIcon from '@material-ui/icons/Archive';
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
-import Tooltip from '@material-ui/core/Tooltip'
-import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import {
   archiveScenario,
@@ -83,7 +80,7 @@ function Scenarios(props) {
       <GridItem xs={12} sm={12} md={6}>
         {props.scenarios && props.scenarios.length > 0 ? (
           <div>
-            <Button color='primary' onClick={handleCreateScenarioClick}>
+            <Button appearance='primary' onClick={handleCreateScenarioClick}>
               Create Scenario
             </Button>
 
@@ -123,30 +120,15 @@ function Scenarios(props) {
 
                       <TableCell className={classes.tableActions}>
                         {!scenario.archived &&
-                          <Tooltip
-                            id='tooltip-top-start'
-                            title='Archive'
-                            placement='top'
-                            classes={{ tooltip: classes.tooltip }}
-                          >
-                            <IconButton
-                              aria-label='Close'
-                              className={classes.tableActionButton}
-                              onClick={() => {
-                                handleArchiveScenarioClick(
-                                  scenario.scenarioId
-                                )
-                              }}
-                            >
-                              <ArchiveIcon
-                                className={
-                                  classes.tableActionButtonIcon +
-                                  ' ' +
-                                  classes.close
-                                }
-                              />
-                            </IconButton>
-                          </Tooltip>
+                          <Button
+                            appearance="link"
+                            onClick={() => {
+                              handleArchiveScenarioClick(
+                                scenario.scenarioId
+                              )
+                            }}>
+                            Archive
+                          </Button>
                         }
                       </TableCell>
                     </TableRow>
@@ -167,9 +149,9 @@ function Scenarios(props) {
                   color: 'white'
                 }}
               >
-                <Button color='primary' onClick={handleCreateScenarioClick}>
+                <Button appearance='primary' onClick={handleCreateScenarioClick}>
                   Create New Scenario
-						</Button>
+						    </Button>
               </div>
             )}
       </GridItem>

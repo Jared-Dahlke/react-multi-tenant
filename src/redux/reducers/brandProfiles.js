@@ -16,7 +16,9 @@ import {
 	SET_BRAND_PROFILES,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
-	SET_BRAND_PROFILE_SAVED
+	SET_BRAND_PROFILE_SAVED,
+	SCENARIO_TO_ARCHIVE,
+	ADD_SCENARIO
 } from '../action-types/brandProfiles'
 //import configureStore from '../store/index'
 //const store = configureStore()
@@ -128,6 +130,22 @@ export function scenarios(state = [], action) {
 	switch (action.type) {
 		case SET_BRAND_SCENARIOS:
 			return action.scenarios
+		case SCENARIO_TO_ARCHIVE:
+			let newState = [
+				...state.map(scenario =>
+					(scenario.scenarioId === action.scenarioId) ?
+						{ ...scenario, archived: true } : scenario
+				)
+			]
+			return newState
+		case ADD_SCENARIO:
+			let stateData = []
+			if (state && state.length > 0) {
+				stateData = JSON.parse(JSON.stringify(state))
+			}
+			stateData.push(action.scenario)
+
+			return stateData
 		default:
 			return state
 	}

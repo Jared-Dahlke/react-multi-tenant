@@ -17,6 +17,7 @@ import {
 	SET_BRAND_PROFILE_SAVED,
 	SCENARIO_ARCHIVING,
 	SCENARIO_ARCHIVED,
+	SCENARIO_TO_ARCHIVE,
 	SCENARIO_CREATED,
 	SCENARIO_CREATING,
 	ADD_SCENARIO
@@ -267,6 +268,13 @@ export function setScenarioArchived(bool) {
 	}
 }
 
+export function setScenarioToArchived(scenarioId) {
+	return {
+		type: SCENARIO_TO_ARCHIVE,
+		scenarioId
+	}
+}
+
 export function setScenarioCreated(bool) {
 	return {
 		type: SCENARIO_CREATED,
@@ -391,10 +399,10 @@ export const archiveScenario = (scenarioId) => {
 	let url = apiBase + `/brand-profile/scenario/${scenarioId}`
 	return (dispatch) => {
 		dispatch(setScenarioArchiving(true))
-		// dispatch(ArchiveScenario(scenarioId))
 		axios
 			.patch(url)
 			.then((response) => {
+				dispatch(setScenarioToArchived(scenarioId))
 				dispatch(setScenarioArchiving(false))
 				dispatch(setScenarioArchived(true))
 			})
@@ -408,11 +416,10 @@ export const createScenario = (scenario) => {
 	let url = apiBase + `/brand-profile/scenario`
 	return (dispatch, getState) => {
 		dispatch(setScenarioCreating(true))
-		dispatch(addScenario(scenario))
 		axios
 			.post(url, scenario)
 			.then((response) => {
-				// dispatch(setBrandProfiles(brandProfilesCopy))
+				dispatch(addScenario(scenario))
 				dispatch(setScenarioCreating(false))
 				dispatch(setScenarioCreated(true))
 			})
