@@ -8,8 +8,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import {
 	successColor,
 	dangerColor
-} from '../../../assets/jss/material-dashboard-react'
-import { neutralColor } from '../../../assets/jss/colorContants'
+} from '../../../../../assets/jss/material-dashboard-react'
+import { neutralColor } from '../../../../../assets/jss/colorContants'
 var numeral = require('numeral')
 
 export default function ListBuilderRow(props) {

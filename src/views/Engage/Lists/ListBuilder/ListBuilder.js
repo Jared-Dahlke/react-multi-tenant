@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Grid from '@material-ui/core/Grid'
-import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
+import { whiteColor } from '../../../../assets/jss/material-dashboard-react.js'
 import Tabs from './components/Tabs'
 import InputPicker from 'rsuite/lib/InputPicker'
 import FilterList from '@material-ui/icons/FilterList'
@@ -12,16 +12,16 @@ import {
 	setChannels,
 	fetchVideos,
 	setVideos
-} from '../../redux/actions/discover/channels'
+} from '../../../../redux/actions/discover/channels'
 import countryList from 'react-select-country-list'
 import numeral from 'numeral'
 import SaveAlt from '@material-ui/icons/SaveAlt'
-import Button from '../../components/CustomButtons/Button'
+import Button from '../../../../components/CustomButtons/Button'
 
 import InputGroup from 'rsuite/lib/InputGroup'
 import Input from 'rsuite/lib/Input'
 import Icon from 'rsuite/lib/Icon'
-import { neutralColor } from '../../assets/jss/colorContants.js'
+import { neutralColor } from '../../../../assets/jss/colorContants.js'
 
 const bodyHeight = 600
 const borderRad = 2
