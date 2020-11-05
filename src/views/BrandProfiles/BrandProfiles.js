@@ -27,7 +27,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
-import { UserCan, perms } from '../../Can'
+import { UserCan, perms, userCan } from '../../Can'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -223,9 +223,13 @@ function BrandProfiles(props) {
 							color: 'white'
 						}}
 					>
-						<Button onClick={handleCreateNewProfileClick}>
-							Create New Profile
-						</Button>
+						<UserCan i={perms.BRAND_PROFILE_CREATE}>
+							<Button onClick={handleCreateNewProfileClick}>
+								Create New Profile
+							</Button>
+						</UserCan>
+						{!userCan(perms.BRAND_PROFILE_CREATE) &&
+							'There are currently no brand profiles associated with this account'}
 					</div>
 				)}
 			</GridItem>
