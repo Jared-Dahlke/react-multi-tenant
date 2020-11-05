@@ -1,22 +1,22 @@
 /*eslint-disable no-restricted-globals*/
 import React from 'react'
-import GridItem from '../../components/Grid/GridItem.js'
-import GridContainer from '../../components/Grid/GridContainer.js'
+import GridItem from '../../../components/Grid/GridItem.js'
+import GridContainer from '../../../components/Grid/GridContainer.js'
 import Button from 'rsuite/lib/Button'
-import Card from '../../components/Card/Card.js'
-import CardBody from '../../components/Card/CardBody.js'
-import CardFooter from '../../components/Card/CardFooter.js'
+import Card from '../../../components/Card/Card.js'
+import CardBody from '../../../components/Card/CardBody.js'
+import CardFooter from '../../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 
 import { connect } from 'react-redux'
 import { withFormik, Form } from 'formik'
-import FormikInput from '../../components/CustomInput/FormikInput'
+import FormikInput from '../../../components/CustomInput/FormikInput'
 import * as Yup from 'yup'
 import {
   createScenario,
   setScenarioCreated
-} from '../../redux/actions/brandProfiles'
+} from '../../../redux/actions/brandProfiles'
 
 const mapStateToProps = (state) => {
   return {

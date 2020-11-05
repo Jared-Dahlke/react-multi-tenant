@@ -1,6 +1,6 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import GridItem from '../../components/Grid/GridItem.js'
+import GridItem from '../../../components/Grid/GridItem.js'
 import Button from 'rsuite/lib/Button'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
@@ -13,13 +13,13 @@ import { useHistory } from 'react-router-dom'
 import {
   archiveScenario,
   setScenarioArchived
-} from '../../redux/actions/brandProfiles.js'
+} from '../../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
-import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
-import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
+import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
+import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
-import { FormLoader } from '../../components/SkeletonLoader'
+import { FormLoader } from '../../../components/SkeletonLoader'
 
 const useTableStyles = makeStyles(tableStyles)
 

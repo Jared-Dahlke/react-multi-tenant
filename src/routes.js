@@ -17,8 +17,8 @@ import ResetPassword from './pages/ResetPassword'
 import ChangePassword from './pages/ChangePassword'
 import Login from './pages/Login'
 
-import Scenarios from './views/BrandProfiles/Scenarios.js'
-import CreateScenario from './views/BrandProfiles/CreateScenario.js'
+import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
+import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
 
 export const routes = {
 	login: {
