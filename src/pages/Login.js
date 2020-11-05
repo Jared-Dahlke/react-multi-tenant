@@ -64,7 +64,7 @@ function Login(props) {
 	const adminClasses = useAdminStyles()
 	let referer = props.location.state
 		? props.location.state.referer
-		: routes.admin.settings.profile.path
+		: routes.app.settings.profile.path
 
 	const [userName, setUserName] = useState('')
 	const [password, setPassword] = useState('')

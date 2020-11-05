@@ -1,7 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../components/Grid/GridItem.js'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
@@ -76,17 +76,17 @@ function BrandProfiles(props) {
 
 	const handleEditBrandProfileClick = (profile) => {
 		props.fetchBrandProfile(profile.brandProfileId)
-		let url = `/admin/settings/brandProfiles/edit/${profile.brandProfileId}`
+		let url = `/app/settings/brandProfiles/edit/${profile.brandProfileId}`
 		history.push(url)
 	}
 
 	const handleCreateNewProfileClick = () => {
-		let url = `/admin/settings/brandProfiles/create`
+		let url = `/app/settings/brandProfiles/create`
 		history.push(url)
 	}
 
-	const handleScenariosClick = () => {
-		let url = `/admin/settings/brandProfiles/scenarios`
+	const handleAdminClick = () => {
+		let url = `/app/settings/brandProfiles/admin`
 		history.push(url)
 	}
 
@@ -107,18 +107,20 @@ function BrandProfiles(props) {
 				</Alert>
 			</Snackbar>
 
-			<GridItem xs={12} sm={12} md={6}>
+			<GridItem xs={12} sm={12} md={8}>
+				<Grid container justify='flex-end'>
+					<Button appearance='link' onClick={handleAdminClick}>
+						Admin
+					</Button>
+				</Grid>
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
 						<Grid container justify='flex-end'>
 							<UserCan i={perms.BRAND_PROFILE_CREATE}>
-								<Button color='primary' onClick={handleCreateNewProfileClick}>
+								<Button onClick={handleCreateNewProfileClick}>
 									Create New Profile
 								</Button>
 							</UserCan>
-							<Button color='primary' onClick={handleScenariosClick}>
-								Configure Scenarios
-              </Button>
 						</Grid>
 
 						<Table className={classes.table}>
@@ -211,21 +213,21 @@ function BrandProfiles(props) {
 				) : props.brandProfilesIsLoading ? (
 					<FormLoader />
 				) : (
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
 
-									height: 'calc(100vh - 200px)',
-									color: 'white'
-								}}
-							>
-								<Button color='primary' onClick={handleCreateNewProfileClick}>
-									Create New Profile
+							height: 'calc(100vh - 200px)',
+							color: 'white'
+						}}
+					>
+						<Button onClick={handleCreateNewProfileClick}>
+							Create New Profile
 						</Button>
-							</div>
-						)}
+					</div>
+				)}
 			</GridItem>
 		</Grid>
 	)

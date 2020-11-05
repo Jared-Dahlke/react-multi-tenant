@@ -224,11 +224,11 @@ function CreateBrandProfile(props) {
 														{
 															'Your brand profile was succesfully created. Now you can '
 														}
-														<Link to='/admin/engage/listBuilder'>
+														<Link to='/app/engage/listBuilder'>
 															{'go to the list builder '}
 														</Link>
 														or
-														<Link to='/admin/settings/brandProfiles'>
+														<Link to='/app/settings/brandProfiles'>
 															{' view your brand profiles'}
 														</Link>
 													</p>

@@ -16,106 +16,138 @@ const switchRoutes = (
 	<Switch>
 		{userCan(perms.BRAND_MENTALITY_READ) && (
 			<Route
-				path={routes.admin.settings.brandMentality.path}
-				component={routes.admin.settings.brandMentality.component}
+				path={routes.app.settings.brandMentality.path}
+				component={routes.app.settings.brandMentality.component}
 			/>
 		)}
 
 		<Route
-			path={routes.admin.discover.channelResearch.path}
-			component={routes.admin.discover.channelResearch.component}
+			path={routes.app.discover.channelResearch.path}
+			component={routes.app.discover.channelResearch.component}
 		/>
 
 		<Route
-			path={routes.admin.settings.users.path}
+			path={routes.app.settings.users.path}
 			render={({ match: { url } }) => (
 				<>
 					<Route
-						path={routes.admin.settings.users.path}
-						component={routes.admin.settings.users.component}
+						path={routes.app.settings.users.path}
+						component={routes.app.settings.users.component}
 						exact
 					/>
 
 					{userCan(perms.USER_CREATE) && (
 						<Route
-							path={routes.admin.settings.users.create.path}
-							component={routes.admin.settings.users.create.component}
+							path={routes.app.settings.users.create.path}
+							component={routes.app.settings.users.create.component}
 						/>
 					)}
 					<Route
-						path={routes.admin.settings.users.edit.path}
-						component={routes.admin.settings.users.edit.component}
+						path={routes.app.settings.users.edit.path}
+						component={routes.app.settings.users.edit.component}
 					/>
 				</>
 			)}
 		/>
 
 		<Route
-			path={routes.admin.engage.lists.lists.path}
+			path={routes.app.engage.lists.lists.path}
 			render={({ match: { url } }) => (
 				<>
 					<Route
-						path={routes.admin.engage.lists.lists.path}
-						component={routes.admin.engage.lists.lists.component}
+						path={routes.app.engage.lists.lists.path}
+						component={routes.app.engage.lists.lists.component}
 						exact
 					/>
 
 					<Route
-						path={routes.admin.engage.lists.uploadList.path}
-						component={routes.admin.engage.lists.uploadList.component}
+						path={routes.app.engage.lists.uploadList.path}
+						component={routes.app.engage.lists.uploadList.component}
 					/>
 
 					<Route
-						path={routes.admin.engage.lists.listBuilder.path}
-						component={routes.admin.engage.lists.listBuilder.component}
+						path={routes.app.engage.lists.listBuilder.path}
+						component={routes.app.engage.lists.listBuilder.component}
 					/>
 				</>
 			)}
 		/>
 
 		<Route
-			path={routes.admin.settings.profile.path}
-			component={routes.admin.settings.profile.component}
+			path={routes.app.settings.profile.path}
+			component={routes.app.settings.profile.component}
 		/>
 
 		<Route
-			path={routes.admin.settings.account.path}
-			component={routes.admin.settings.account.component}
+			path={routes.app.settings.account.path}
+			component={routes.app.settings.account.component}
 		/>
 
 		<Route
-			path={routes.admin.settings.brandProfiles.path}
+			path={routes.app.settings.brandProfiles.path}
 			render={({ match: { url } }) => (
 				<>
 					<Route
-						path={routes.admin.settings.brandProfiles.path}
-						component={routes.admin.settings.brandProfiles.component}
+						path={routes.app.settings.brandProfiles.path}
+						component={routes.app.settings.brandProfiles.component}
 						exact
 					/>
 					{userCan(perms.BRAND_PROFILE_CREATE) && (
 						<Route
-							path={routes.admin.settings.brandProfiles.create.path}
-							component={routes.admin.settings.brandProfiles.create.component}
+							path={routes.app.settings.brandProfiles.create.path}
+							component={routes.app.settings.brandProfiles.create.component}
 						/>
 					)}
 					<Route
-						path={routes.admin.settings.brandProfiles.edit.path}
-						component={routes.admin.settings.brandProfiles.edit.component}
+						path={routes.app.settings.brandProfiles.edit.path}
+						component={routes.app.settings.brandProfiles.edit.component}
 					/>
+
 					<Route
-						path={routes.admin.settings.brandProfiles.scenarios.path}
-						component={routes.admin.settings.brandProfiles.scenarios.component}
-						exact
-					/>
-					<Route
-						path={routes.admin.settings.brandProfiles.scenarios.create.path}
-						component={routes.admin.settings.brandProfiles.scenarios.create.component}
+						path={routes.app.settings.brandProfiles.admin.path}
+						render={({ match: { url } }) => (
+							<>
+								<Route
+									path={routes.app.settings.brandProfiles.admin.path}
+									component={routes.app.settings.brandProfiles.admin.component}
+									exact
+								/>
+
+								<Route
+									path={routes.app.settings.brandProfiles.admin.scenarios.path}
+									render={({ match: { url } }) => (
+										<>
+											<Route
+												path={
+													routes.app.settings.brandProfiles.admin.scenarios.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.scenarios
+														.component
+												}
+												exact
+											/>
+											<Route
+												path={
+													routes.app.settings.brandProfiles.admin.scenarios
+														.create.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.scenarios
+														.create.component
+												}
+											/>
+										</>
+									)}
+								/>
+							</>
+						)}
 					/>
 				</>
 			)}
 		/>
 
-		<Redirect from='/admin' to={routes.admin.settings.account.path} />
+		<Redirect from='/app' to={routes.app.settings.account.path} />
 	</Switch>
 )
 

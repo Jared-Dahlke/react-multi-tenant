@@ -109,7 +109,7 @@ function EditBrandProfile(props) {
 		!props.match.params.brandProfileId ||
 		isNaN(props.match.params.brandProfileId)
 	) {
-		window.location.href = '/admin/settings/brandProfiles'
+		window.location.href = '/app/settings/brandProfiles'
 	}
 	let { fetchBrandProfile } = props
 	React.useEffect(() => {
@@ -261,11 +261,11 @@ function EditBrandProfile(props) {
 															{userCan(perms.BRAND_PROFILE_UPDATE)
 																? 'Your brand profile was saved. Now you can '
 																: ' Complete.'}
-															<Link to='/admin/engage/listBuilder'>
+															<Link to='/app/engage/listBuilder'>
 																{'go to the list builder '}
 															</Link>
 															or
-															<Link to='/admin/settings/brandProfiles'>
+															<Link to='/app/settings/brandProfiles'>
 																{' view your brand profiles'}
 															</Link>
 														</p>
