@@ -25,10 +25,101 @@ import { FormLoader } from '../../../components/SkeletonLoader'
 import { UserCan, perms } from '../../../Can'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../routes'
+import Panel from 'rsuite/lib/Panel'
+import Row from 'rsuite/lib/Row'
+import Col from 'rsuite/lib/Col'
+import Checkbox from 'rsuite/lib/Checkbox'
 
 const useTableStyles = makeStyles(tableStyles)
 
 const useStyles = makeStyles(styles)
+
+const lists = [
+	{
+		listId: 1,
+		listName: 'TestList',
+		createdBy: 'Jared D',
+		createdDate: '202010010830',
+		archived: false,
+		subscriberCount: 234,
+		videoCount: 456,
+		channelCount: 4,
+		objectiveId: 1,
+		objectiveName: 'Reach',
+		versions: [
+			{
+				listId: 1,
+				listName: 'TestList',
+				versionId: 45,
+				versionName: 'Test Version list name',
+				createdBy: 'Eric D',
+				createdDate: '202010010930',
+				archived: false,
+				subscriberCount: 234,
+				videoCount: 456,
+				channelCount: 1,
+				objectiveId: 1,
+				objectiveName: 'Reach'
+			},
+			{
+				listId: 1,
+				listName: 'TestList',
+				versionId: 56,
+				versionName: 'Test Version list name 2',
+				createdBy: 'Rob C',
+				createdDate: '202010011030',
+				archived: false,
+				subscriberCount: 56,
+				videoCount: 5675,
+				channelCount: 3,
+				objectiveId: 2,
+				objectiveName: 'Awareness'
+			}
+		]
+	},
+	{
+		listId: 2,
+		listName: 'TestList2',
+		createdBy: 'Rob C',
+		createdDate: '202010011030',
+		archived: false,
+		subscriberCount: 4567,
+		videoCount: 45674,
+		channelCount: 56,
+		objectiveId: 1,
+		objectiveName: 'Reach',
+		versions: [
+			{
+				listId: 2,
+				listName: 'TestList2',
+				versionId: 3456,
+				versionName: 'Test 35463563 list name',
+				createdBy: 'Rob C',
+				createdDate: '202010011030',
+				archived: true,
+				subscriberCount: 34563,
+				videoCount: 34563,
+				channelCount: 356,
+				objectiveId: 1,
+				objectiveName: 'Reach'
+			},
+			{
+				listId: 2,
+				listName: 'TestList2',
+				versionId: 3456,
+				versionName: 'Test 34563 list name 2',
+				createdBy: 'Suzan F',
+				createdDate: '202010011030',
+				archived: false,
+				subscriberCount: 56,
+				videoCount: 34563,
+				channelCount: 5,
+				objectiveId: 1,
+				objectiveName: 'Reach'
+			}
+		]
+	}
+]
 
 const mapStateToProps = (state) => {
 	return {
@@ -74,82 +165,48 @@ function Lists(props) {
 		<Grid container justify='center'>
 			<GridItem xs={12} sm={12} md={12}>
 				<Grid item xs={12} sm={12} md={12}>
-					<Grid container justify='flex-end'>
+					<Checkbox>Show archived</Checkbox>
+					<Grid container justify='flex-end' style={{ marginBottom: 30 }}>
 						<Button onClick={handleUploadNewList}>Upload a new list</Button>
 					</Grid>
 				</Grid>
-				{props.brandProfiles && props.brandProfiles.length > 0 ? (
-					<div>
-						<Table className={classes.table}>
-							<TableHead className={tableClasses['primaryTableHeader']}>
-								<TableRow className={tableClasses.tableHeadRow}>
-									{userHeaders.map((prop, key) => {
-										return (
-											<TableCell
-												className={
-													tableClasses.tableCell +
-													' ' +
-													tableClasses.tableHeadCell
-												}
-												key={key}
-											>
-												{prop}
-											</TableCell>
-										)
-									})}
-								</TableRow>
-							</TableHead>
-
-							<TableBody>
-								{props.brandProfiles &&
-									props.brandProfiles.map((profile) => (
-										<TableRow
-											key={profile.brandProfileId || 'placeholder'}
-											className={classes.tableRow}
-										>
-											<TableCell className={tableCellClasses}>
-												{profile.brandName}
-											</TableCell>
-											<TableCell className={tableCellClasses}>
-												{profile.websiteUrl}
-											</TableCell>
-
-											<TableCell className={classes.tableActions}>
-												<Tooltip
-													id='tooltip-top'
-													title='Edit Brand Profile'
-													placement='top'
-													classes={{ tooltip: classes.tooltip }}
-												>
-													<Button appearance='link'>Edit</Button>
-												</Tooltip>
-												<div
-													style={{
-														display: 'flex',
-														justifyContent: 'center',
-														alignItems: 'center'
-													}}
-												>
-													<Divider vertical />
-												</div>
-												<UserCan i={perms.BRAND_PROFILE_DELETE}>
-													<Tooltip
-														id='tooltip-top-start'
-														title='Remove'
-														placement='top'
-														classes={{ tooltip: classes.tooltip }}
-													>
-														<Button color='yellow' appearance='link'>
-															Remove
-														</Button>
-													</Tooltip>
-												</UserCan>
-											</TableCell>
-										</TableRow>
-									))}
-							</TableBody>
-						</Table>
-					</div>
+				{lists && lists.length > 0 ? (
+					<Grid container spacing={2} col>
+						{lists &&
+							lists.map((list) => (
+								<Grid item xs={12}>
+									<Panel
+										header={
+											<div>
+												<Grid container>
+													<Grid item xs={3}>
+														{list.listName}{' '}
+														<Button apearance='link'>Archive</Button>
+													</Grid>
+												</Grid>
+											</div>
+										}
+										bordered
+										collapsible
+										//	header={list.listName}
+									>
+										versions: <br />
+										Monday, November 3rd 2020 - Subscribers: 2342, Videos: 345,
+										CHannels: 34 <Button apearance='link'>Download</Button>
+										<Button apearance='link'>Archive</Button>
+										<br />
+										Monday, November 2rd 2020 - Subscribers: 345, Videos: 45,
+										CHannels: 4<Button apearance='link'>Download</Button>
+										<Button apearance='link'>Archive</Button>
+										<br />
+										Monday, November 1rd 2020 - Subscribers: 4563, Videos: 45,
+										CHannels: 5 <Button apearance='link'>Download</Button>
+										<Button apearance='link'>Archive</Button>
+										<br />
+									</Panel>
+								</Grid>
+							))}
+					</Grid>
 				) : props.brandProfilesIsLoading ? (
 					<FormLoader />
 				) : (
