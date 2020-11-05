@@ -20,7 +20,8 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    scenarioCreated: state.scenarioCreated
+    scenarioCreated: state.scenarioCreated,
+    scenarioSaving: state.scenarioSaving
   }
 }
 
@@ -42,12 +43,6 @@ function Scenario(props) {
 
   const {
     values,
-    errors,
-    touched,
-    setFieldValue,
-    setFieldTouched,
-    validateField,
-    validateForm,
     isValid,
     dirty
   } = props

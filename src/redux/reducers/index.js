@@ -59,7 +59,12 @@ import {
 	brandProfileCompetitors,
 	brandProfileLoading,
 	brandProfileSaving,
-	brandProfileSaved
+	brandProfileSaved,
+	scenariosIsLoading,
+	scenarioSaving,
+	scenarioCreated,
+	scenarioArchiving,
+	scenarioArchived
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
@@ -118,5 +123,10 @@ export default combineReducers({
 	userAddError,
 	updatingPassword,
 	loggedInUserPermissions,
-	resettingPassword
+	resettingPassword,
+	scenariosIsLoading,
+	scenarioSaving,
+	scenarioCreated,
+	scenarioArchiving,
+	scenarioArchived
 })

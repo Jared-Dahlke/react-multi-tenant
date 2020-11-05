@@ -27,7 +27,9 @@ const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
   return {
+    scenariosIsLoading: state.scenariosIsLoading,
     scenarioArchived: state.scenarioArchived,
+    scenarioArchiving: state.scenarioArchiving,
     scenarios: state.scenarios
   }
 }
@@ -122,6 +124,7 @@ function Scenarios(props) {
                         {!scenario.archived &&
                           <Button
                             appearance="link"
+                            loading={props.scenarioArchiving === scenario.scenarioId}
                             onClick={() => {
                               handleArchiveScenarioClick(
                                 scenario.scenarioId
@@ -136,7 +139,7 @@ function Scenarios(props) {
               </TableBody>
             </Table>
           </div>
-        ) : props.brandProfilesIsLoading ? (
+        ) : props.scenariosIsLoading ? (
           <FormLoader />
         ) : (
               <div
@@ -150,7 +153,7 @@ function Scenarios(props) {
                 }}
               >
                 <Button appearance='primary' onClick={handleCreateScenarioClick}>
-                  Create New Scenario
+                  Create Scenario
 						    </Button>
               </div>
             )}

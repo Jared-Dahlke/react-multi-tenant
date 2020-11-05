@@ -15,11 +15,12 @@ import {
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
+	SCENARIOS_IS_LOADING,
 	SCENARIO_ARCHIVING,
 	SCENARIO_ARCHIVED,
 	SCENARIO_TO_ARCHIVE,
 	SCENARIO_CREATED,
-	SCENARIO_CREATING,
+	SCENARIO_SAVING,
 	ADD_SCENARIO
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
@@ -255,17 +256,24 @@ export function setBrandProfileDeleting(bool) {
 	}
 }
 
-export function setScenarioArchiving(bool) {
+export function setScenariosIsLoading(bool) {
+	return {
+		type: SCENARIOS_IS_LOADING,
+		scenariosIsLoading: bool
+	}
+}
+
+export function setScenarioArchiving(scenarioId) {
 	return {
 		type: SCENARIO_ARCHIVING,
-		scenarioArchiving: bool
+		scenarioArchiving: scenarioId
 	}
 }
 
 export function setScenarioArchived(bool) {
 	return {
 		type: SCENARIO_ARCHIVED,
-		scenarionArchived: bool
+		scenarioArchived: bool
 	}
 }
 
@@ -283,10 +291,10 @@ export function setScenarioCreated(bool) {
 	}
 }
 
-export function setScenarioCreating(bool) {
+export function setScenarioSaving(bool) {
 	return {
-		type: SCENARIO_CREATING,
-		scenarioCreating: bool
+		type: SCENARIO_SAVING,
+		scenarioSaving: bool
 	}
 }
 
@@ -320,12 +328,13 @@ function addDefaultResponseIdToScenarios(scenarios) {
 export function fetchBrandScenarios() {
 	let url = apiBase + `/brand-profile/scenario`
 	return async (dispatch) => {
+		dispatch(setScenariosIsLoading(true))
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'
@@ -334,6 +343,7 @@ export function fetchBrandScenarios() {
 
 				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
 				dispatch(setBrandScenarios(scenarios))
+				dispatch(setScenariosIsLoading(false))
 			}
 		} catch (error) {
 			alert(error)
@@ -407,12 +417,12 @@ export function setBrandCategories(brandCategories) {
 export const archiveScenario = (scenarioId) => {
 	let url = apiBase + `/brand-profile/scenario/${scenarioId}`
 	return (dispatch) => {
-		dispatch(setScenarioArchiving(true))
+		dispatch(setScenarioArchiving(scenarioId))
 		axios
 			.patch(url)
 			.then((response) => {
 				dispatch(setScenarioToArchived(scenarioId))
-				dispatch(setScenarioArchiving(false))
+				dispatch(setScenarioArchiving(''))
 				dispatch(setScenarioArchived(true))
 			})
 			.catch((error) => {
@@ -424,12 +434,12 @@ export const archiveScenario = (scenarioId) => {
 export const createScenario = (scenario) => {
 	let url = apiBase + `/brand-profile/scenario`
 	return (dispatch, getState) => {
-		dispatch(setScenarioCreating(true))
+		dispatch(setScenarioSaving(true))
 		axios
 			.post(url, scenario)
 			.then((response) => {
 				dispatch(addScenario(scenario))
-				dispatch(setScenarioCreating(false))
+				dispatch(setScenarioSaving(false))
 				dispatch(setScenarioCreated(true))
 			})
 			.catch((error) => {

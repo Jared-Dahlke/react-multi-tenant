@@ -17,8 +17,13 @@ import {
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
+	SCENARIOS_IS_LOADING,
 	SCENARIO_TO_ARCHIVE,
-	ADD_SCENARIO
+	ADD_SCENARIO,
+	SCENARIO_SAVING,
+	SCENARIO_CREATED,
+	SCENARIO_ARCHIVING,
+	SCENARIO_ARCHIVED,
 } from '../action-types/brandProfiles'
 //import configureStore from '../store/index'
 //const store = configureStore()
@@ -146,6 +151,51 @@ export function scenarios(state = [], action) {
 			stateData.push(action.scenario)
 
 			return stateData
+		default:
+			return state
+	}
+}
+
+export function scenariosIsLoading(state = true, action) {
+	switch (action.type) {
+		case SCENARIOS_IS_LOADING:
+			return action.scenariosIsLoading
+		default:
+			return state
+	}
+}
+
+export function scenarioSaving(state = false, action) {
+	switch (action.type) {
+		case SCENARIO_SAVING:
+			return action.scenarioSaving
+		default:
+			return state
+	}
+}
+
+export function scenarioCreated(state = false, action) {
+	switch (action.type) {
+		case SCENARIO_CREATED:
+			return action.scenarioCreated
+		default:
+			return state
+	}
+}
+
+export function scenarioArchiving(state = '', action) {
+	switch (action.type) {
+		case SCENARIO_ARCHIVING:
+			return action.scenarioArchiving
+		default:
+			return state
+	}
+}
+
+export function scenarioArchived(state = false, action) {
+	switch (action.type) {
+		case SCENARIO_ARCHIVED:
+			return action.scenarioArchived
 		default:
 			return state
 	}
