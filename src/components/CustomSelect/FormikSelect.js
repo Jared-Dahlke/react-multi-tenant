@@ -34,6 +34,7 @@ export default function SelectField(props) {
 				cleanable={false}
 				style={{ width: '100%' }}
 				preventOverflow={true}
+				searchable={!props.hideSearch}
 			/>
 			<div>
 				<FormHelperText

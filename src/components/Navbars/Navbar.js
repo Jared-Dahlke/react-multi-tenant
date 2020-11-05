@@ -48,7 +48,7 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
-		if (url === routes.admin.engage.lists.path) {
+		if (url === routes.admin.engage.lists.lists.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -57,7 +57,28 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
-		if (url === routes.admin.engage.listBuilder.path) {
+
+		if (url === routes.admin.engage.lists.uploadList.path) {
+			return (
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to={routes.admin.engage.lists.lists.path}
+						style={{ fontSize: crumbSize }}
+					>
+						Lists
+					</Link>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Upload List
+					</div>
+				</Breadcrumbs>
+			)
+		}
+
+		if (url === routes.admin.engage.lists.listBuilder.path) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
@@ -300,9 +321,12 @@ function Header(props) {
 							style={{ marginRight: 15 }}
 							id='Engage_Nav_Tab'
 						>
-							<NavLink href={routes.admin.engage.lists.path} label='Lists' />
 							<NavLink
-								href={routes.admin.engage.listBuilder.path}
+								href={routes.admin.engage.lists.lists.path}
+								label='Lists'
+							/>
+							<NavLink
+								href={routes.admin.engage.lists.listBuilder.path}
 								label='List Builder'
 							/>
 						</Dropdown>

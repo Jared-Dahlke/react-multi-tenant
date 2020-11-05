@@ -51,12 +51,26 @@ const switchRoutes = (
 		/>
 
 		<Route
-			path={routes.admin.engage.listBuilder.path}
-			component={routes.admin.engage.listBuilder.component}
-		/>
-		<Route
-			path={routes.admin.engage.lists.path}
-			component={routes.admin.engage.lists.component}
+			path={routes.admin.engage.lists.lists.path}
+			render={({ match: { url } }) => (
+				<>
+					<Route
+						path={routes.admin.engage.lists.lists.path}
+						component={routes.admin.engage.lists.lists.component}
+						exact
+					/>
+
+					<Route
+						path={routes.admin.engage.lists.uploadList.path}
+						component={routes.admin.engage.lists.uploadList.component}
+					/>
+
+					<Route
+						path={routes.admin.engage.lists.listBuilder.path}
+						component={routes.admin.engage.lists.listBuilder.component}
+					/>
+				</>
+			)}
 		/>
 
 		<Route

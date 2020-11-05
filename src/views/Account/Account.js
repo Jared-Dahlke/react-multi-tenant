@@ -232,6 +232,7 @@ function Account(props) {
 											touched={touched.accountTypeId}
 											error={errors.accountTypeId}
 											isDisabled={!userCan(perms.ACCOUNT_UPDATE)}
+											hideSearch
 										/>
 									</GridItem>
 								</GridContainer>
