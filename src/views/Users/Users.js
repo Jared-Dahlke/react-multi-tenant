@@ -140,7 +140,7 @@ function Users(props) {
 
 			<Grid container justify='flex-end'>
 				<GridItem>
-					<UserCan i={perms.USER_CREATE}>
+					<UserCan do={perms.USER_CREATE}>
 						<Link
 							style={{ textDecoration: 'none' }}
 							to={'/app/settings/users/create'}
@@ -217,7 +217,7 @@ function Users(props) {
 															/>
 														</IconButton>
 													</Tooltip>
-													<UserCan i={perms.USER_DELETE}>
+													<UserCan do={perms.USER_DELETE}>
 														<Tooltip
 															id='tooltip-top-start'
 															title='Remove'

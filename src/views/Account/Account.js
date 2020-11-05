@@ -172,7 +172,7 @@ function Account(props) {
 								<GridContainer>
 									<Grid container justify='flex-end'>
 										<GridItem>
-											<UserCan i={perms.ACCOUNT_CREATE}>
+											<UserCan do={perms.ACCOUNT_CREATE}>
 												<Button onClick={() => handleCreateChild(current)}>
 													Create Child Account
 												</Button>
@@ -241,7 +241,7 @@ function Account(props) {
 							<CardFooter>
 								{current.accountName === 'Sightly' ||
 								(current.children && current.children.length > 0) ? null : (
-									<UserCan i={perms.ACCOUNT_DELETE}>
+									<UserCan do={perms.ACCOUNT_DELETE}>
 										<Button
 											color='red'
 											onClick={() => handleDeleteAccount(current)}
@@ -251,7 +251,7 @@ function Account(props) {
 									</UserCan>
 								)}
 
-								<UserCan i={perms.ACCOUNT_UPDATE}>
+								<UserCan do={perms.ACCOUNT_UPDATE}>
 									<Button
 										loading={props.accountSaving}
 										disabled={!isValid || !dirty || props.accountSaving}

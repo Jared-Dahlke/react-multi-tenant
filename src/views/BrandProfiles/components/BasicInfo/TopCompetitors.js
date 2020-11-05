@@ -162,7 +162,7 @@ export default function TopCompetitors(props) {
 					<Grid container justify='center'>
 						<Grid item>
 							<Grid container justify='flex-end'>
-								<UserCan i={perms.BRAND_PROFILE_UPDATE}>
+								<UserCan do={perms.BRAND_PROFILE_UPDATE}>
 									<Button
 										size={'sm'}
 										appearance='link'
@@ -262,7 +262,7 @@ export default function TopCompetitors(props) {
 																	style={{ padding: 4, margin: 4 }}
 																	className={tableCellClasses}
 																>
-																	<UserCan i={perms.BRAND_PROFILE_UPDATE}>
+																	<UserCan do={perms.BRAND_PROFILE_UPDATE}>
 																		<Button
 																			size={'sm'}
 																			appearance='link'

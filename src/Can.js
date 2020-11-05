@@ -11,7 +11,7 @@ export const userCan = (event) => {
 export const UserCan = (props) => {
 	const myperms = encryptor.decrypt(localStorage.getItem('permissions'))
 	if (!myperms) return null
-	const couldShow = myperms.includes(props.i)
+	const couldShow = myperms.includes(props.do)
 	return couldShow ? props.children : null
 }
 
