@@ -87,7 +87,7 @@ function getSteps() {
 
 function CreateBrandProfile(props) {
 	const classes = useStyles()
-	const [activeStep, setActiveStep] = React.useState(0)
+	const [activeStep, setActiveStep] = React.useState(1)
 	const steps = getSteps()
 	const handleNext = (values) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -271,11 +271,16 @@ function CreateBrandProfile(props) {
 	)
 }
 
+const getUnarchivedScenarios = (scenarios) => {
+	let scenariosCopy = JSON.parse(JSON.stringify(scenarios))
+	return scenariosCopy.filter((scenario) => !scenario.archived)
+}
+
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
 		let currentBrandProfile = JSON.parse(JSON.stringify(brandProfileModel))
 		currentBrandProfile.categories = props.categories
-		currentBrandProfile.scenarios = props.scenarios
+		currentBrandProfile.scenarios = getUnarchivedScenarios(props.scenarios)
 		currentBrandProfile.topics = props.topics
 		return {
 			brandProfileId: currentBrandProfile.brandProfileId,
