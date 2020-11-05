@@ -348,7 +348,7 @@ export function EditUser(props) {
 												</GridContainer>
 											</CardBody>
 											<CardFooter>
-												<UserCan i={perms.USER_UPDATE}>
+												<UserCan do={perms.USER_UPDATE}>
 													<Button
 														disabled={!isValid || !dirty}
 														onClick={() =>

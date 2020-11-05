@@ -116,7 +116,7 @@ function BrandProfiles(props) {
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
 						<Grid container justify='flex-end'>
-							<UserCan i={perms.BRAND_PROFILE_CREATE}>
+							<UserCan do={perms.BRAND_PROFILE_CREATE}>
 								<Button onClick={handleCreateNewProfileClick}>
 									Create New Profile
 								</Button>
@@ -178,7 +178,7 @@ function BrandProfiles(props) {
 														/>
 													</IconButton>
 												</Tooltip>
-												<UserCan i={perms.BRAND_PROFILE_DELETE}>
+												<UserCan do={perms.BRAND_PROFILE_DELETE}>
 													<Tooltip
 														id='tooltip-top-start'
 														title='Remove'
@@ -223,7 +223,7 @@ function BrandProfiles(props) {
 							color: 'white'
 						}}
 					>
-						<UserCan i={perms.BRAND_PROFILE_CREATE}>
+						<UserCan do={perms.BRAND_PROFILE_CREATE}>
 							<Button onClick={handleCreateNewProfileClick}>
 								Create New Profile
 							</Button>

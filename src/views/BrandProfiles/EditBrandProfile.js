@@ -279,7 +279,7 @@ function EditBrandProfile(props) {
 						</div>
 
 						<div style={{ position: 'fixed', bottom: 30, left: 70 }}>
-							<UserCan i={perms.BRAND_PROFILE_UPDATE}>
+							<UserCan do={perms.BRAND_PROFILE_UPDATE}>
 								<Button
 									loading={props.brandProfileSaving}
 									type='submit'
