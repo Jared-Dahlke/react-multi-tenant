@@ -223,9 +223,11 @@ function BrandProfiles(props) {
 							color: 'white'
 						}}
 					>
-						<Button onClick={handleCreateNewProfileClick}>
-							Create New Profile
-						</Button>
+						<UserCan i={perms.BRAND_PROFILE_CREATE}>
+							<Button onClick={handleCreateNewProfileClick}>
+								Create New Profile
+							</Button>
+						</UserCan>
 					</div>
 				)}
 			</GridItem>
