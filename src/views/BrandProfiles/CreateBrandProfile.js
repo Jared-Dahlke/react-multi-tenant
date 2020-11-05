@@ -271,11 +271,16 @@ function CreateBrandProfile(props) {
 	)
 }
 
+const getUnarchivedScenarios = (scenarios) => {
+	let scenariosCopy = JSON.parse(JSON.stringify(scenarios))
+	return scenariosCopy.filter((scenario) => !scenario.archived)
+}
+
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
 		let currentBrandProfile = JSON.parse(JSON.stringify(brandProfileModel))
 		currentBrandProfile.categories = props.categories
-		currentBrandProfile.scenarios = props.scenarios
+		currentBrandProfile.scenarios = getUnarchivedScenarios(props.scenarios)
 		currentBrandProfile.topics = props.topics
 		return {
 			brandProfileId: currentBrandProfile.brandProfileId,
