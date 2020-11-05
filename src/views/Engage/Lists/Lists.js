@@ -29,6 +29,8 @@ import Panel from 'rsuite/lib/Panel'
 import Row from 'rsuite/lib/Row'
 import Col from 'rsuite/lib/Col'
 import Checkbox from 'rsuite/lib/Checkbox'
+import Label from '../../../components/CustomInputLabel/CustomInputLabel'
+import numeral from 'numeral'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -37,7 +39,7 @@ const useStyles = makeStyles(styles)
 const lists = [
 	{
 		listId: 1,
-		listName: 'TestList',
+		listName: 'My very first list',
 		createdBy: 'Jared D',
 		createdDate: '202010010830',
 		archived: false,
@@ -54,7 +56,7 @@ const lists = [
 				versionName: 'Test Version list name',
 				createdBy: 'Eric D',
 				createdDate: '202010010930',
-				archived: false,
+				archived: true,
 				subscriberCount: 234,
 				videoCount: 456,
 				channelCount: 1,
@@ -79,17 +81,24 @@ const lists = [
 	},
 	{
 		listId: 2,
-		listName: 'TestList2',
-		createdBy: 'Rob C',
-		createdDate: '202010011030',
-		archived: false,
-		subscriberCount: 4567,
-		videoCount: 45674,
-		channelCount: 56,
-		objectiveId: 1,
-		objectiveName: 'Reach',
+		listName: 'A 2nd list',
+		//	createdBy: 'Rob C',
+		//	createdDate: '202010011030',
+		//archived: true,
+		//subscriberCount: 4567,
+		//videoCount: 45674,
+		//channelCount: 56,
+		//	objectiveId: 1,  // if you can only assign objectives at the list level
+		//	objectiveName: 'Reach',
+
+		// 1 can differnt versions of the same list have differnt objectives? (engineering recommends yes if we think the users will always want to keep versions the same objective for sure)
+		// 2 if im asigned to account A and so is John, and John creates a list in account A, should I autmotically be able to see that list?
+		// if not, do we need to give users the ability to assign users to lists (engineering recommends for v0 that all users under an account can view/edit all lists. However in a future version we can let users give users access to specific lists)
+		// 3 can users archive a list and a version? (engineering recommends allowing uses to archive both lists and versions to give user full control. However one version must always be active, if a user wants to archive all versions they should just archive the list instead.)
+
 		versions: [
 			{
+				active: true,
 				listId: 2,
 				listName: 'TestList2',
 				versionId: 3456,
@@ -104,6 +113,7 @@ const lists = [
 				objectiveName: 'Reach'
 			},
 			{
+				active: false,
 				listId: 2,
 				listName: 'TestList2',
 				versionId: 3456,
@@ -158,54 +168,65 @@ function Lists(props) {
 	const userHeaders = ['Profile Name', 'Website', '']
 
 	const handleUploadNewList = () => {
-		history.push(routes.admin.engage.lists.uploadList.path)
+		history.push(routes.app.engage.lists.uploadList.path)
 	}
+
+	const ListVersion = (props) => {
+		return <div>{props.versions.listName}</div>
+	}
+
+	const MyList = (props) => {
+		return (
+			<Grid item xs={12}>
+				<Panel
+					header={
+						<div>
+							<ListVersion version={props.list.versions[0]} />
+						</div>
+					}
+					bordered
+					collapsible
+				>
+					{props.list.versions &&
+						props.list.versions.length > 0 &&
+						props.list.versions.map((version) => {
+							return <ListVersion version={version} />
+						})}
+					<Checkbox>Show archived</Checkbox>
+					<Label label='Other versions' />
+					Monday, November 3rd 2020 - Subscribers: 2342, Videos: 345, CHannels:
+					34 <Button appearance='link'>Download to Excel</Button>
+					<Button appearance='link'>Make this the active version</Button>
+					<Button appearance='link'>Unarchive this version</Button>
+					<br />
+					Monday, November 2rd 2020 - Subscribers: 345, Videos: 45, CHannels: 4{' '}
+					<Button appearance='link'>Download to Excel</Button>
+					<Button appearance='link'>Make this the active version</Button>
+					<Button appearance='link'>Archive/Hide this version</Button>
+					<br />
+					Monday, November 1rd 2020 - Subscribers: 4563, Videos: 45, CHannels: 5{' '}
+					<Button appearance='link'>Download to Excel</Button>
+					<Button appearance='link'>Make this the active version</Button>
+					<Button appearance='link'>Archive/Hide this version</Button>
+					<br />
+				</Panel>
+			</Grid>
+		)
+	}
+
+	//let subscribers = numeral(item.channelSubscribers).format('0.0a')
 
 	return (
 		<Grid container justify='center'>
 			<GridItem xs={12} sm={12} md={12}>
 				<Grid item xs={12} sm={12} md={12}>
-					<Checkbox>Show archived</Checkbox>
 					<Grid container justify='flex-end' style={{ marginBottom: 30 }}>
 						<Button onClick={handleUploadNewList}>Upload a new list</Button>
 					</Grid>
 				</Grid>
 				{lists && lists.length > 0 ? (
 					<Grid container spacing={2} col>
-						{lists &&
-							lists.map((list) => (
-								<Grid item xs={12}>
-									<Panel
-										header={
-											<div>
-												<Grid container>
-													<Grid item xs={3}>
-														{list.listName}{' '}
-														<Button apearance='link'>Archive</Button>
-													</Grid>
-												</Grid>
-											</div>
-										}
-										bordered
-										collapsible
-										//	header={list.listName}
-									>
-										versions: <br />
-										Monday, November 3rd 2020 - Subscribers: 2342, Videos: 345,
-										CHannels: 34 <Button apearance='link'>Download</Button>
-										<Button apearance='link'>Archive</Button>
-										<br />
-										Monday, November 2rd 2020 - Subscribers: 345, Videos: 45,
-										CHannels: 4<Button apearance='link'>Download</Button>
-										<Button apearance='link'>Archive</Button>
-										<br />
-										Monday, November 1rd 2020 - Subscribers: 4563, Videos: 45,
-										CHannels: 5 <Button apearance='link'>Download</Button>
-										<Button apearance='link'>Archive</Button>
-										<br />
-									</Panel>
-								</Grid>
-							))}
+						{lists && lists.map((list) => <MyList list={list} />)}
 					</Grid>
 				) : props.brandProfilesIsLoading ? (
 					<FormLoader />

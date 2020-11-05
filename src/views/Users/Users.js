@@ -82,7 +82,7 @@ function Users(props) {
 	const userHeaders = ['First Name', 'Last Name', 'Company', 'Email', '']
 
 	const handleEditUserClick = (user) => {
-		let url = `/admin/settings/users/edit/${user.userId}`
+		let url = `/app/settings/users/edit/${user.userId}`
 		history.push(url)
 	}
 
@@ -143,7 +143,7 @@ function Users(props) {
 					<UserCan i={perms.USER_CREATE}>
 						<Link
 							style={{ textDecoration: 'none' }}
-							to={'/admin/settings/users/create'}
+							to={'/app/settings/users/create'}
 						>
 							<Button color='primary'>Create New User</Button>
 						</Link>

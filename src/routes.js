@@ -19,6 +19,7 @@ import Login from './pages/Login'
 
 import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
+import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
 export const routes = {
 	login: {
@@ -36,23 +37,23 @@ export const routes = {
 		component: ChangePassword,
 		name: 'Change Password'
 	},
-	admin: {
-		path: '/admin',
+	app: {
+		path: '/app',
 		component: Admin,
 		engage: {
 			lists: {
 				lists: {
-					path: '/admin/engage/lists',
+					path: '/app/engage/lists',
 					component: Lists,
 					name: 'Lists'
 				},
 				uploadList: {
-					path: '/admin/engage/lists/uploadList',
+					path: '/app/engage/lists/uploadList',
 					component: UploadList,
 					name: 'Upload List'
 				},
 				listBuilder: {
-					path: '/admin/engage/lists/listBuilder',
+					path: '/app/engage/lists/listBuilder',
 					name: 'List Builder',
 					component: ListBuilder
 				}
@@ -61,7 +62,7 @@ export const routes = {
 
 		discover: {
 			channelResearch: {
-				path: '/admin/discover/channelResearch',
+				path: '/app/discover/channelResearch',
 				name: 'Channel Research',
 				component: ChannelResearchTemp
 			}
@@ -69,58 +70,63 @@ export const routes = {
 
 		settings: {
 			profile: {
-				path: '/admin/settings/profile',
+				path: '/app/settings/profile',
 				name: 'Profile',
 				component: UserProfile
 			},
 			account: {
-				path: '/admin/settings/account',
+				path: '/app/settings/account',
 				name: 'Account',
 				component: Account
 			},
 			users: {
-				path: '/admin/settings/users',
+				path: '/app/settings/users',
 				component: Users,
 				edit: {
-					path: '/admin/settings/users/edit/:user',
+					path: '/app/settings/users/edit/:user',
 					name: 'Edit',
 					component: EditUser
 				},
 				create: {
-					path: '/admin/settings/users/create',
+					path: '/app/settings/users/create',
 					name: 'Create',
 					component: CreateUser
 				}
 			},
 			brandProfiles: {
-				path: '/admin/settings/brandProfiles',
+				path: '/app/settings/brandProfiles',
 				name: 'Brand Profiles',
 				component: BrandProfiles,
 
 				create: {
-					path: '/admin/settings/brandProfiles/create',
+					path: '/app/settings/brandProfiles/create',
 					name: 'Create',
 					component: CreateBrandProfile
 				},
 				edit: {
-					path: '/admin/settings/brandProfiles/edit/:brandProfileId',
+					path: '/app/settings/brandProfiles/edit/:brandProfileId',
 					name: 'Edit',
 					component: EditBrandProfile
 				},
-				scenarios: {
-					path: '/admin/settings/brandProfiles/scenarios',
-					name: 'Brand Profiles Scenarios',
-					component: Scenarios,
+				admin: {
+					path: '/app/settings/brandProfiles/admin',
+					name: 'Brand Profiles Admin',
+					component: BrandProfilesAdmin,
+					scenarios: {
+						path: '/app/settings/brandProfiles/admin/scenarios',
+						name: 'Brand Profiles Scenarios',
+						component: Scenarios,
 
-					create: {
-						path: '/admin/settings/brandProfiles/scenarios/create',
-						name: 'Create',
-						component: CreateScenario
+						create: {
+							path: '/app/settings/brandProfiles/admin/scenarios/create',
+							name: 'Create',
+							component: CreateScenario
+						}
 					}
 				}
 			},
 			brandMentality: {
-				path: '/admin/settings/brandMentality',
+				path: '/app/settings/brandMentality',
 				name: 'Brand Mentality',
 				component: BrandMentality
 			}

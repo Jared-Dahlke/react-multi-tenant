@@ -27,7 +27,7 @@ function App() {
 						component={routes.changePassword.component}
 					/>
 
-					<PrivateRoute path={routes.admin.path} component={Admin} />
+					<PrivateRoute path={routes.app.path} component={Admin} />
 				</div>
 			</Router>
 		</Provider>
