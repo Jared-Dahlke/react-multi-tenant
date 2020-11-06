@@ -156,7 +156,7 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				brandProfileObjValidation.validate(result.data).catch(function (err) {
+				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
@@ -190,7 +190,7 @@ export function fetchBrandProfiles(accountId) {
 				if (brandProfiles.length < 1) {
 					dispatch(hasBrandProfiles(false))
 				}
-				brandProfilesObjValidation.validate(result.data).catch(function (err) {
+				brandProfilesObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert("Could not validate account's brand profiles data")
 				})
@@ -334,14 +334,14 @@ export function fetchBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'
 					)
 				})
 
-				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
+				addDefaultResponseIdToScenarios(scenarios)
 				dispatch(setBrandScenarios(scenarios))
 				dispatch(setScenariosIsLoading(false))
 			}
