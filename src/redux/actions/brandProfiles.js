@@ -156,7 +156,7 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				brandProfileObjValidation.validate(result.data).catch(function (err) {
+				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
@@ -190,7 +190,7 @@ export function fetchBrandProfiles(accountId) {
 				if (brandProfiles.length < 1) {
 					dispatch(hasBrandProfiles(false))
 				}
-				brandProfilesObjValidation.validate(result.data).catch(function (err) {
+				brandProfilesObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert("Could not validate account's brand profiles data")
 				})
@@ -334,7 +334,7 @@ export function fetchBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'
@@ -411,39 +411,5 @@ export function setBrandCategories(brandCategories) {
 	return {
 		type: SET_BRAND_CATEGORIES,
 		brandCategories
-	}
-}
-
-export const archiveScenario = (scenarioId) => {
-	let url = apiBase + `/brand-profile/scenario/${scenarioId}`
-	return (dispatch) => {
-		dispatch(setScenarioArchiving(scenarioId))
-		axios
-			.patch(url)
-			.then((response) => {
-				dispatch(setScenarioToArchived(scenarioId))
-				dispatch(setScenarioArchiving(''))
-				dispatch(setScenarioArchived(true))
-			})
-			.catch((error) => {
-				console.error(error)
-			})
-	}
-}
-
-export const createScenario = (scenario) => {
-	let url = apiBase + `/brand-profile/scenario`
-	return (dispatch, getState) => {
-		dispatch(setScenarioSaving(true))
-		axios
-			.post(url, scenario)
-			.then((response) => {
-				dispatch(addScenario(scenario))
-				dispatch(setScenarioSaving(false))
-				dispatch(setScenarioCreated(true))
-			})
-			.catch((error) => {
-				//error
-			})
 	}
 }

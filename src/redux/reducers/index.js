@@ -68,6 +68,8 @@ import {
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
+import brandProfilesAdmin from './brandProfilesAdmin/index'
+
 export default combineReducers({
 	authToken,
 	roles,
@@ -128,5 +130,6 @@ export default combineReducers({
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
-	scenarioArchived
+	scenarioArchived,
+	brandProfilesAdmin
 })
