@@ -17,6 +17,7 @@ build-staging:
     - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
 
   only:
+    - schedules
     - /^sprint-.*$/
 
 
@@ -50,7 +51,7 @@ deploy-to-staging-google-cloud-run:
       - gcloud config set project $GCP_PROJECT_ID
       - gcloud builds submit . --config=googlecloudbuild-staging.yaml
   only:
-    - /^sprint-.*$/
+    - schedules
 
 
 #section name
