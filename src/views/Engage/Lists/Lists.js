@@ -17,91 +17,29 @@ import Panel from 'rsuite/lib/Panel'
 import Checkbox from 'rsuite/lib/Checkbox'
 import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
-
-const lists = [
-	{
-		smartListId: 1,
-		smartListName: 'TestList',
-		archived: false,
-		objectiveId: 1,
-		objectiveName: 'Reach',
-		versions: [
-			{
-				versionId: 1,
-				createdBy: 'Eric D',
-				createdDate: '202010010930',
-				subscriberCount: 234,
-				videoCount: 456,
-				channelCount: 1,
-				active: true
-			},
-			{
-				versionId: 1,
-				createdBy: 'Rob C',
-				createdDate: '202010011030',
-				subscriberCount: 56,
-				videoCount: 5675,
-				channelCount: 3,
-				active: false
-			}
-		]
-	},
-	{
-		smartListId: 2,
-		smartListName: 'TestList2',
-		archived: false,
-		objectiveId: 1,
-		objectiveName: 'Reach',
-		versions: [
-			{
-				versionId: 2,
-				createdBy: 'Rob C',
-				createdDate: '202010011030',
-				subscriberCount: 34563,
-				videoCount: 34563,
-				channelCount: 356,
-				active: true
-			},
-			{
-				versionId: 2,
-				createdBy: 'Suzan F',
-				createdDate: '202010011030',
-				subscriberCount: 56,
-				videoCount: 34563,
-				channelCount: 5,
-				active: false
-			}
-		]
-	}
-]
+import Icon from 'rsuite/lib/Icon'
+import IconButton from 'rsuite/lib/IconButton'
+import { fetchLists } from '../../../redux/actions/engage/lists'
 
 const mapStateToProps = (state) => {
 	return {
-		brandProfiles: state.brandProfiles,
-		currentAccountId: state.currentAccountId,
-		brandProfilesIsLoading: state.brandProfilesIsLoading,
-		brandProfileDeleted: state.brandProfileDeleted,
-		scenarios: state.scenarios,
-		categories: state.brandCategories,
-		topics: state.topics
+		lists: state.engage.lists
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetchBrandProfiles: (accountId) => dispatch(fetchBrandProfiles(accountId)),
-		deleteBrandProfile: (brandProfileId) =>
-			dispatch(deleteBrandProfile(brandProfileId)),
-		removeBrandProfile: (brandProfileId) =>
-			dispatch(removeBrandProfile(brandProfileId)),
-		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
-		fetchBrandProfile: (brandProfileId) =>
-			dispatch(fetchBrandProfile(brandProfileId))
+		fetchLists: () => dispatch(fetchLists())
 	}
 }
 
 function Lists(props) {
 	const history = useHistory()
+
+	let fetchLists = props.fetchLists
+	React.useEffect(() => {
+		fetchLists()
+	}, [fetchLists])
 
 	const handleUploadNewList = () => {
 		history.push(routes.app.engage.lists.uploadList.path)
@@ -111,19 +49,153 @@ function Lists(props) {
 		return <div key={Math.random()}>{props.version.createdBy}</div>
 	}
 
+	const panelStyle = {
+		border: '1px solid #565656',
+		borderRadius: '6px',
+		height: 100,
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center'
+	}
+
+	const MyHeader = (props) => {
+		return (
+			<div>
+				<Grid container alignItems='center' spacing={1}>
+					<Grid item xs={4} style={panelStyle}>
+						<Grid container>
+							<Grid item xs={4}>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Label label={'Name'} />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										{props.data.smartListName}
+									</Grid>
+								</Grid>
+							</Grid>
+
+							<Grid item xs={4}>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Label label={'Objective'} />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										{props.data.objectiveName}
+									</Grid>
+								</Grid>
+							</Grid>
+
+							<Grid item xs={4}>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Label label={'Status'} />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										Active
+									</Grid>
+								</Grid>
+							</Grid>
+						</Grid>
+					</Grid>
+					<Grid item xs={5} style={panelStyle}>
+						<Grid container>
+							<Grid item xs={4}>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Icon size='lg' icon='tv' />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Label label={'Channels'} />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										{props.data.channelCount}
+									</Grid>
+								</Grid>
+							</Grid>
+
+							<Grid item xs={4}>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Icon size='lg' icon='youtube-play' />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Label label={'Videos'} />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										{props.data.videoCount}
+									</Grid>
+								</Grid>
+							</Grid>
+
+							<Grid item xs={4}>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Icon size='lg' icon='group' />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										<Label label={'Subscribers'} />
+									</Grid>
+								</Grid>
+								<Grid item xs={12}>
+									<Grid container justify='center'>
+										{props.data.subscriberCount}
+									</Grid>
+								</Grid>
+							</Grid>
+						</Grid>
+					</Grid>
+					<Grid item xs={2} style={panelStyle}>
+						<IconButton
+							appearance='ghost'
+							icon={<Icon icon={'file-download'} size='lg' />}
+							size='lg'
+							onClick={(e) => {
+								e.preventDefault()
+							}}
+						>
+							Download
+						</IconButton>
+					</Grid>
+				</Grid>
+			</div>
+		)
+	}
+
 	const MyList = (props) => {
+		let activeVersion = {}
+		for (const version of props.list.versions) {
+			if (version.active) activeVersion = version
+		}
+		console.log('active version')
+		console.log(activeVersion)
 		return (
 			<Grid item xs={12}>
-				<Panel
-					header={
-						<div>
-							<ListVersion version={props.list.versions[0]} />
-						</div>
-					}
-					bordered
-					collapsible
-				>
-					{props.list.versions &&
+				<Panel shaded header={<MyHeader data={activeVersion} />} bordered>
+					<Button
+						appearance='link'
+						onClick={() => props.handleViewAll(props.list)}
+					>
+						View all versions
+					</Button>
+					{props.list.viewAll &&
+						props.list.versions &&
 						props.list.versions.length > 0 &&
 						props.list.versions.map((version, index) => {
 							return <ListVersion version={version} />
@@ -135,6 +207,8 @@ function Lists(props) {
 
 	//let subscribers = numeral(item.channelSubscribers).format('0.0a')
 
+	const handleViewAll = (list) => {}
+
 	return (
 		<Grid container justify='center'>
 			<GridItem xs={12} sm={12} md={12}>
@@ -143,10 +217,12 @@ function Lists(props) {
 						<Button onClick={handleUploadNewList}>Upload a new list</Button>
 					</Grid>
 				</Grid>
-				{lists && lists.length > 0 ? (
-					<Grid container spacing={2} col>
-						{lists &&
-							lists.map((list, index) => <MyList list={list} key={index} />)}
+				{props.lists && props.lists.length > 0 ? (
+					<Grid container spacing={2}>
+						{props.lists &&
+							props.lists.map((list, index) => (
+								<MyList list={list} key={index} handleViewAll={handleViewAll} />
+							))}
 					</Grid>
 				) : (
 					<FormLoader />

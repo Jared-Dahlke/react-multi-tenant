@@ -68,6 +68,8 @@ import {
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
 
+import engage from './engage/index'
+
 export default combineReducers({
 	authToken,
 	roles,
@@ -128,5 +130,6 @@ export default combineReducers({
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
-	scenarioArchived
+	scenarioArchived,
+	engage
 })

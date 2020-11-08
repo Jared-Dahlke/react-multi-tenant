@@ -186,7 +186,10 @@ function Account(props) {
 											formikValue={values.accountName}
 											labelText='Account Name'
 											id='accountName'
-											disabled={!userCan(perms.ACCOUNT_UPDATE)}
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 										/>
 
 										<FormikInput
@@ -200,20 +203,29 @@ function Account(props) {
 											name='contactName'
 											formikValue={values.contactName}
 											labelText='Contact Name'
-											disabled={!userCan(perms.ACCOUNT_UPDATE)}
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 										/>
 
 										<FormikInput
 											name='contactEmail'
 											formikValue={values.contactEmail}
 											labelText='Contact Email'
-											disabled={!userCan(perms.ACCOUNT_UPDATE)}
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 										/>
 										<FormikInput
 											name='accountMargin'
 											formikValue={values.accountMargin}
 											labelText='Account Margin'
-											disabled={!userCan(perms.ACCOUNT_UPDATE)}
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 										/>
 
 										<FormikSelect
@@ -231,7 +243,10 @@ function Account(props) {
 											validateForm={validateForm}
 											touched={touched.accountTypeId}
 											error={errors.accountTypeId}
-											isDisabled={!userCan(perms.ACCOUNT_UPDATE)}
+											isDisabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 											hideSearch
 										/>
 									</GridItem>
@@ -240,6 +255,7 @@ function Account(props) {
 
 							<CardFooter>
 								{current.accountName === 'Sightly' ||
+								current.accountId === 1 ||
 								(current.children && current.children.length > 0) ? null : (
 									<UserCan do={perms.ACCOUNT_DELETE}>
 										<Button
@@ -254,7 +270,12 @@ function Account(props) {
 								<UserCan do={perms.ACCOUNT_UPDATE}>
 									<Button
 										loading={props.accountSaving}
-										disabled={!isValid || !dirty || props.accountSaving}
+										disabled={
+											!isValid ||
+											!dirty ||
+											props.accountSaving ||
+											current.accountId === 1
+										}
 										type='submit'
 									>
 										Save
