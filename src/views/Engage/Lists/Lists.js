@@ -244,6 +244,7 @@ const MyHeader = (props) => {
 							appearance='ghost'
 							icon={<Icon icon={'file-download'} size='lg' />}
 							size='lg'
+							disabled
 							block
 							onClick={(e) => {
 								e.preventDefault()
@@ -263,6 +264,7 @@ const MyHeader = (props) => {
 									icon={<Icon icon={'file-download'} size='lg' />}
 									size='lg'
 									block
+									disabled
 									onClick={(e) => {
 										e.preventDefault()
 									}}
