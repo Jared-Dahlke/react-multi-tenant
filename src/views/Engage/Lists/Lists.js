@@ -58,12 +58,37 @@ const MyList = (props) => {
 					<MyHeader
 						data={activeVersion}
 						handleArchiveClick={props.handleArchiveClick}
-						smartListArchived={props.list.archived}
 					/>
 				}
 				bordered
 			>
+				{props.viewAll.includes(props.list.smartListId) &&
+					props.list.versions &&
+					props.list.versions.length > 0 &&
+					props.list.versions.map((version, index) => {
+						if (!version.active) {
+							return (
+								<div
+									style={{ paddingBottom: 20 }}
+									key={version.smartListId + version.versionId}
+								>
+									<MyHeader data={version} />
+								</div>
+							)
+						}
+					})}
 				<div style={{ paddingBottom: 20 }}>
+					<div style={{ float: 'left' }}>
+						<Checkbox
+							checked={props.list.archived}
+							onChange={(e, value) => {
+								props.handleArchiveClick(props.data.smartListId, value)
+							}}
+							disabled
+						>
+							Archived
+						</Checkbox>
+					</div>
 					{props.viewAll.includes(props.list.smartListId) && (
 						<Button
 							appearance='link'
@@ -85,20 +110,6 @@ const MyList = (props) => {
 							</Button>
 						)}
 				</div>
-				{props.viewAll.includes(props.list.smartListId) &&
-					props.list.versions &&
-					props.list.versions.length > 0 &&
-					props.list.versions.map((version, index) => {
-						if (!version.active) {
-							return (
-								<MyHeader
-									data={version}
-									key={version.smartListId + version.versionId}
-									smartListArchived={props.list.archived}
-								/>
-							)
-						}
-					})}
 			</Panel>
 		</Grid>
 	)
@@ -116,19 +127,6 @@ const MyHeader = (props) => {
 	let channelCount = numeral(props.data.channelCount).format('0a')
 	return (
 		<div>
-			{props.data.active && (
-				<Checkbox
-					style={{ paddingBottom: 20 }}
-					checked={props.smartListArchived}
-					onChange={(e, value) => {
-						props.handleArchiveClick(props.data.smartListId, value)
-					}}
-					disabled
-				>
-					Archived
-				</Checkbox>
-			)}
-
 			<Grid container alignItems='center' spacing={1}>
 				<Grid item xs={7} style={panelStyle}>
 					<Grid container>

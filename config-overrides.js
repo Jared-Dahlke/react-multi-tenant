@@ -85,7 +85,10 @@ module.exports = override(
 				//loader
 				'@loader-spin-ring-color': accentColor,
 				'@loader-spin-ring-active-color': '#FFF',
-				'@loader-content-color': '#FFF'
+				'@loader-content-color': '#FFF',
+
+				//checkbox
+				'@checkbox-disabled-color': neutralExtraLightColor
 			}
 		}
 	})
