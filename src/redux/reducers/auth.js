@@ -11,7 +11,7 @@ import {
 	SET_RESETTING_PASSWORD
 } from '../action-types/auth'
 
-import { userObjValidation } from '../../schemas'
+import { userObjValidation } from '../../schemas/schemas'
 
 let newUser = {
 	userId: 0,

@@ -9,9 +9,9 @@ import {
 } from '../action-types/roles'
 import axios from '../../axiosConfig'
 import config from '../../config'
-import { rolesAndPermissionsObjValidation } from '../../schemas'
+import { rolesAndPermissionsObjValidation } from '../../schemas/schemas'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function rolesHasErrored(bool) {
 	return {

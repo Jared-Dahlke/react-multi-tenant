@@ -2,13 +2,6 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
 import Button from 'rsuite/lib/Button'
-import {
-	fetchBrandProfiles,
-	fetchBrandProfile,
-	deleteBrandProfile,
-	setBrandProfileDeleted,
-	removeBrandProfile
-} from '../../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import { FormLoader } from '../../../components/SkeletonLoader'
 import { useHistory } from 'react-router-dom'
@@ -19,14 +12,9 @@ import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
-import { fetchLists } from '../../../redux/actions/engage/lists'
+import { fetchLists, archiveList } from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
-import Badge from 'rsuite/lib/Badge'
-import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
-import {
-	neutralExtraLightColor,
-	neutralLightColor
-} from '../../../assets/jss/colorContants.js'
+import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 
 const mapStateToProps = (state) => {
 	return {
@@ -36,7 +24,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetchLists: () => dispatch(fetchLists())
+		fetchLists: () => dispatch(fetchLists()),
+		archiveList: (payload) => dispatch(archiveList(payload))
 	}
 }
 
@@ -65,7 +54,13 @@ const MyList = (props) => {
 			<Panel
 				style={{ backgroundColor: neutralLightColor }}
 				shaded
-				header={<MyHeader data={activeVersion} />}
+				header={
+					<MyHeader
+						data={activeVersion}
+						handleArchiveClick={props.handleArchiveClick}
+						smartListArchived={props.list.archived}
+					/>
+				}
 				bordered
 			>
 				<div style={{ paddingBottom: 20 }}>
@@ -99,6 +94,7 @@ const MyList = (props) => {
 								<MyHeader
 									data={version}
 									key={version.smartListId + version.versionId}
+									smartListArchived={props.list.archived}
 								/>
 							)
 						}
@@ -109,14 +105,32 @@ const MyList = (props) => {
 }
 
 const MyHeader = (props) => {
+	let subscriberCount =
+		props.data.subscriberCount > 999999
+			? numeral(props.data.subscriberCount)
+					.format('0.0a')
+					.toUpperCase()
+			: numeral(props.data.subscriberCount).format('0.0a')
+
+	let videoCount = numeral(props.data.videoCount).format('0a')
+	let channelCount = numeral(props.data.channelCount).format('0a')
 	return (
 		<div>
 			{props.data.active && (
-				<Checkbox style={{ paddingBottom: 20 }}>Archived</Checkbox>
+				<Checkbox
+					style={{ paddingBottom: 20 }}
+					checked={props.smartListArchived}
+					onChange={(e, value) => {
+						props.handleArchiveClick(props.data.smartListId, value)
+					}}
+					disabled
+				>
+					Archived
+				</Checkbox>
 			)}
 
 			<Grid container alignItems='center' spacing={1}>
-				<Grid item xs={5} style={panelStyle}>
+				<Grid item xs={7} style={panelStyle}>
 					<Grid container>
 						<Grid item xs={4}>
 							<Grid item xs={12}>
@@ -160,7 +174,7 @@ const MyHeader = (props) => {
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item xs={5} style={panelStyle}>
+				<Grid item xs={3} style={panelStyle}>
 					<Grid container>
 						<Grid item xs={4}>
 							<Grid item xs={12}>
@@ -175,7 +189,7 @@ const MyHeader = (props) => {
 							</Grid>
 							<Grid item xs={12}>
 								<Grid container justify='center'>
-									{props.data.channelCount}
+									{channelCount}
 								</Grid>
 							</Grid>
 						</Grid>
@@ -193,7 +207,7 @@ const MyHeader = (props) => {
 							</Grid>
 							<Grid item xs={12}>
 								<Grid container justify='center'>
-									{props.data.videoCount}
+									{videoCount}
 								</Grid>
 							</Grid>
 						</Grid>
@@ -211,7 +225,7 @@ const MyHeader = (props) => {
 							</Grid>
 							<Grid item xs={12}>
 								<Grid container justify='center'>
-									{props.data.subscriberCount}
+									{subscriberCount}
 								</Grid>
 							</Grid>
 						</Grid>
@@ -258,6 +272,7 @@ const MyHeader = (props) => {
 									onClick={(e) => {
 										e.preventDefault()
 									}}
+									disabled
 								>
 									Activate
 								</IconButton>
@@ -272,6 +287,7 @@ const MyHeader = (props) => {
 
 function Lists(props) {
 	const history = useHistory()
+	const [viewArchivedLists, setViewArchivedLists] = React.useState(false)
 
 	let fetchLists = props.fetchLists
 	React.useEffect(() => {
@@ -293,31 +309,73 @@ function Lists(props) {
 		setViewingAll(newArr)
 	}
 
+	const handleArchiveClick = (smartListId, archive) => {
+		const payload = {
+			smartListId: smartListId,
+			archive: archive
+		}
+		props.archiveList(payload)
+	}
+
+	const smartLists = props.lists
+
+	/*React.useMemo(() => {
+		if (!props.lists || props.lists.length < 0) return []
+		if (viewArchivedLists) {
+			return props.lists
+		} else {
+			return props.lists.filter((list) => !list.archived)
+		}
+	}, [props.lists, viewArchivedLists]) */
+
+	const archivedCount = React.useMemo(() => {
+		let _archivedCount = 0
+		for (const list of props.lists) {
+			if (list.archived) ++_archivedCount
+		}
+		return _archivedCount
+	}, [props.lists])
+
 	return (
 		<Grid container justify='center'>
 			<GridItem xs={12} sm={12} md={12}>
 				<Grid item xs={12} sm={12} md={12}>
 					<Grid container justify='flex-end' style={{ marginBottom: 30 }}>
 						<Grid item xs={8}></Grid>
-						<Grid item xs={2}>
-							<Checkbox> View archived</Checkbox>
-						</Grid>
+						{archivedCount > 0 && (
+							<Grid item xs={2}>
+								<Checkbox
+									checked={viewArchivedLists}
+									onChange={(e, val) => {
+										setViewArchivedLists(val)
+									}}
+								>
+									View archived
+								</Checkbox>
+							</Grid>
+						)}
 
 						<Button onClick={handleUploadNewList}>Upload a new list</Button>
 					</Grid>
 				</Grid>
-				{props.lists && props.lists.length > 0 ? (
+				{smartLists && smartLists.length > 0 ? (
 					<Grid container spacing={2}>
-						{props.lists &&
-							props.lists.map((list, index) => (
-								<MyList
-									list={list}
-									key={index}
-									handleViewAllClick={handleViewAllClick}
-									handleHideAllClick={handleHideAllClick}
-									viewAll={viewingAll}
-								/>
-							))}
+						{smartLists &&
+							smartLists.map((list, index) => {
+								if (list.archived && !viewArchivedLists) {
+									return null
+								}
+								return (
+									<MyList
+										list={list}
+										key={index}
+										handleViewAllClick={handleViewAllClick}
+										handleHideAllClick={handleHideAllClick}
+										handleArchiveClick={handleArchiveClick}
+										viewAll={viewingAll}
+									/>
+								)
+							})}
 					</Grid>
 				) : (
 					<FormLoader />

@@ -16,7 +16,7 @@ import config from '../../config.js'
 import {
 	accountTypesObjValidation,
 	usersWithRolesObjValidation
-} from '../../schemas'
+} from '../../schemas/schemas'
 import { userProfileFetchData } from '../actions/auth'
 import {
 	usersFetchData,
@@ -43,7 +43,7 @@ import {
 import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function setAccounts(accounts) {
 	return {

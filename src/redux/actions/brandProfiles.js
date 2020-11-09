@@ -29,9 +29,9 @@ import {
 	brandProfilesObjValidation,
 	brandProfileObjValidation,
 	brandScenarioObjValidation
-} from '../../schemas'
+} from '../../schemas/schemas'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function setBrandProfiles(brandProfiles) {
 	return {
