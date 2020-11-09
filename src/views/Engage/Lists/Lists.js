@@ -128,7 +128,7 @@ const MyHeader = (props) => {
 	return (
 		<div>
 			<Grid container alignItems='center' spacing={1}>
-				<Grid item xs={7} style={panelStyle}>
+				<Grid item xs={12} sm={12} md={7} style={panelStyle}>
 					<Grid container>
 						<Grid item xs={4}>
 							<Grid item xs={12}>
@@ -137,7 +137,11 @@ const MyHeader = (props) => {
 								</Grid>
 							</Grid>
 							<Grid item xs={12}>
-								<Grid container justify='center'>
+								<Grid
+									container
+									justify='center'
+									style={{ textAlign: 'center' }}
+								>
 									{props.data.smartListName}
 								</Grid>
 							</Grid>
@@ -150,7 +154,11 @@ const MyHeader = (props) => {
 								</Grid>
 							</Grid>
 							<Grid item xs={12}>
-								<Grid container justify='center'>
+								<Grid
+									container
+									justify='center'
+									style={{ textAlign: 'center' }}
+								>
 									{props.data.objectiveName}
 								</Grid>
 							</Grid>
@@ -172,7 +180,7 @@ const MyHeader = (props) => {
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item xs={3} style={panelStyle}>
+				<Grid item xs={12} sm={12} md={3} style={panelStyle}>
 					<Grid container>
 						<Grid item xs={4}>
 							<Grid item xs={12}>
@@ -231,11 +239,12 @@ const MyHeader = (props) => {
 				</Grid>
 
 				{props.data.active && (
-					<Grid item xs={2} style={panelStyle}>
+					<Grid item xs={12} sm={12} md={2} style={panelStyle}>
 						<IconButton
 							appearance='ghost'
 							icon={<Icon icon={'file-download'} size='lg' />}
 							size='lg'
+							disabled
 							block
 							onClick={(e) => {
 								e.preventDefault()
@@ -255,6 +264,7 @@ const MyHeader = (props) => {
 									icon={<Icon icon={'file-download'} size='lg' />}
 									size='lg'
 									block
+									disabled
 									onClick={(e) => {
 										e.preventDefault()
 									}}

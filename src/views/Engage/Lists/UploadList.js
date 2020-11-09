@@ -22,31 +22,19 @@ import Panel from 'rsuite/lib/Panel'
 import styles from '../../../assets/jss/material-dashboard-react/components/customInputStyle.js'
 import FormControl from '@material-ui/core/FormControl'
 import Label from '../../../components/CustomInputLabel/CustomInputLabel'
+import Radio from 'rsuite/lib/Radio'
+import RadioGroup from 'rsuite/lib/RadioGroup'
+import { fetchLists } from '../../../redux/actions/engage/lists'
 const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return {
-		brandProfiles: state.brandProfiles,
-		currentAccountId: state.currentAccountId,
-		brandProfilesIsLoading: state.brandProfilesIsLoading,
-		brandProfileDeleted: state.brandProfileDeleted,
-		scenarios: state.scenarios,
-		categories: state.brandCategories,
-		topics: state.topics
+		lists: state.engage.lists
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-	return {
-		fetchBrandProfiles: (accountId) => dispatch(fetchBrandProfiles(accountId)),
-		deleteBrandProfile: (brandProfileId) =>
-			dispatch(deleteBrandProfile(brandProfileId)),
-		removeBrandProfile: (brandProfileId) =>
-			dispatch(removeBrandProfile(brandProfileId)),
-		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
-		fetchBrandProfile: (brandProfileId) =>
-			dispatch(fetchBrandProfile(brandProfileId))
-	}
+	return { fetchLists: () => dispatch(fetchLists()) }
 }
 
 const schemaValidation = Yup.object().shape({
@@ -64,7 +52,13 @@ const objectives = [
 ]
 
 function UploadList(props) {
+	let fetchLists = props.fetchLists
+	React.useEffect(() => {
+		fetchLists()
+	}, [fetchLists])
+
 	const classes = useStyles()
+	const [uploadType, setUploadType] = React.useState('new')
 	const {
 		isValid,
 		dirty,
@@ -77,35 +71,76 @@ function UploadList(props) {
 		touched
 	} = props
 
+	const unarchivedLists = React.useMemo(() => {
+		return props.lists.filter((list) => !list.archived)
+	}, [props.lists])
+
 	return (
 		<div>
 			<Grid container spacing={3} justify='center'>
 				<Grid item xs={12} sm={6} md={10}>
 					<Panel header='Upload a list' bordered>
 						<Grid container>
-							<FormikInput
-								name='name'
-								formikValue={values.name}
-								labelText='List Name'
-								id='name'
-							/>
+							<RadioGroup
+								inline
+								name='radioList'
+								value={uploadType}
+								onChange={(value) => {
+									setUploadType(value)
+								}}
+							>
+								<Radio value='new'>Upload a new list</Radio>
+								<Radio value='existing'>
+									Upload a new version of an existing list
+								</Radio>
+							</RadioGroup>
 
-							<FormikSelect
-								id='accountType'
-								name='objectiveId'
-								label='Objective'
-								optionLabel='objectiveName'
-								optionValue='objectiveId'
-								options={objectives}
-								value={values.objectiveId}
-								onChange={setFieldValue}
-								onBlur={setFieldTouched}
-								validateField={validateField}
-								validateForm={validateForm}
-								touched={touched.objectiveId}
-								error={errors.objectiveId}
-								hideSearch
-							/>
+							{uploadType === 'new' && (
+								<FormikInput
+									name='name'
+									formikValue={values.name}
+									labelText='List Name'
+									id='name'
+								/>
+							)}
+
+							{uploadType === 'existing' && (
+								<FormikSelect
+									id='accountType'
+									name='objectiveId'
+									label='Smart List'
+									optionLabel='smartListName'
+									optionValue='smartListId'
+									options={unarchivedLists}
+									value={values.objectiveId}
+									onChange={setFieldValue}
+									onBlur={setFieldTouched}
+									validateField={validateField}
+									validateForm={validateForm}
+									touched={touched.objectiveId}
+									error={errors.objectiveId}
+									hideSearch
+								/>
+							)}
+
+							{uploadType === 'new' && (
+								<FormikSelect
+									id='accountType'
+									name='objectiveId'
+									label='Objective'
+									optionLabel='objectiveName'
+									optionValue='objectiveId'
+									options={objectives}
+									value={values.objectiveId}
+									onChange={setFieldValue}
+									onBlur={setFieldTouched}
+									validateField={validateField}
+									validateForm={validateForm}
+									touched={touched.objectiveId}
+									error={errors.objectiveId}
+									hideSearch
+								/>
+							)}
 
 							<FormControl fullWidth={true} className={classes.formControl}>
 								<Label label={'Pick a file'} />
