@@ -12,11 +12,11 @@ import {
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
-import { userObjValidation } from '../../schemas'
+import { userObjValidation } from '../../schemas/schemas'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
 )
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function setAuthToken(payload) {
 	return { type: SET_AUTH_TOKEN, payload }

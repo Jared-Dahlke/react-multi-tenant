@@ -1,4 +1,8 @@
-import { SET_LISTS } from '../../action-types/engage/lists'
+import { SET_LISTS, SET_LIST_ARCHIVED } from '../../action-types/engage/lists'
+import config from '../../../config.js'
+import axios from '../../../axiosConfig'
+import { listsObjValidation } from '../../../schemas/Engage/Lists/schemas'
+const apiBase = config.api.listBuilderUrl
 
 const mockLists = [
 	{
@@ -74,21 +78,28 @@ const mockLists = [
 ]
 
 export function fetchLists(accountId) {
-	//let url = apiBase + `/account/${accountId}/users`
+	console.log('called fetch lists')
+	let url = apiBase + `/account/1/smart-list`
 	return async (dispatch) => {
 		try {
 			let result = []
 
 			try {
-				//result = await axios.get(url)
+				result = await axios.get(url)
 			} catch (error) {
-				//console.log(error)
+				console.log(error)
 			}
 
-			dispatch(setLists(mockLists))
-
-			//if (result.status === 200) {
-			//}
+			if (result.status === 200) {
+				console.log(result)
+				listsObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						'we received different data from the api than expected, see console log for more details'
+					)
+				})
+				dispatch(setLists(result.data))
+			}
 		} catch (error) {
 			alert('Error on fetch account users: ' + JSON.stringify(error, null, 2))
 		}
@@ -99,5 +110,30 @@ export function setLists(lists) {
 	return {
 		type: SET_LISTS,
 		lists
+	}
+}
+
+export function archiveList(payload) {
+	//	let accountId = account.accountId
+	//	let url = apiBase + `/account/${accountId}`
+	return async (dispatch) => {
+		dispatch(setListArchived(payload))
+		try {
+			//const result = await axios.patch(url, account)
+			//if (result.status === 200) {
+			//	console.log(result)
+			//	dispatch(setAccountSaving(false))
+			//	dispatch(setAccountSaved(true))
+			//}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function setListArchived(payload) {
+	return {
+		type: SET_LIST_ARCHIVED,
+		payload
 	}
 }

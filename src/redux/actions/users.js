@@ -19,10 +19,10 @@ import {
 import { SET_ALERT } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
-import { accountsObjValidation, userObjValidation } from '../../schemas'
+import { accountsObjValidation, userObjValidation } from '../../schemas/schemas'
 import { setUser } from './auth'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function usersHasErrored(bool) {
 	return {

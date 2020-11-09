@@ -9,7 +9,7 @@ import {
 	SET_VIDEOS
 } from '../../action-types/discover/channels'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function fetchCategories() {
 	let url = apiBase + `/discover/categories`
