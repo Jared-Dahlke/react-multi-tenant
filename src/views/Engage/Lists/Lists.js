@@ -123,6 +123,7 @@ const MyHeader = (props) => {
 					onChange={(e, value) => {
 						props.handleArchiveClick(props.data.smartListId, value)
 					}}
+					disabled
 				>
 					Archived
 				</Checkbox>
