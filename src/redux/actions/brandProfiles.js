@@ -160,6 +160,8 @@ export function fetchBrandProfile(brandProfileId) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
+				let brandProfileResultCopy = JSON.parse(JSON.stringify(result.data))
+				addDefaultResponseIdToScenarios(brandProfileResultCopy.scenarios)
 
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
@@ -167,7 +169,7 @@ export function fetchBrandProfile(brandProfileId) {
 
 				for (const [index, p] of currBrandProfiles.entries()) {
 					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index] = result.data
+						currBrandProfiles[index] = brandProfileResultCopy
 					}
 				}
 				dispatch(setBrandProfiles(currBrandProfiles))

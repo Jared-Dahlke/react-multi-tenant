@@ -25,6 +25,9 @@ import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import Radio from 'rsuite/lib/Radio'
 import RadioGroup from 'rsuite/lib/RadioGroup'
 import { fetchLists } from '../../../redux/actions/engage/lists'
+import config from '../../../config'
+const parseExcelUrl = config.api.listBuilderUrl + '/parse-excel'
+const token = localStorage.getItem('token')
 const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
@@ -147,7 +150,8 @@ function UploadList(props) {
 								<Uploader
 									listType='picture-text'
 									accept='.xlsx, .xls, .csv'
-									action='//jsonplaceholder.typicode.com/posts/'
+									action={parseExcelUrl}
+									headers={`Authorization: ${token}`}
 									draggable
 								>
 									<div

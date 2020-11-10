@@ -142,7 +142,7 @@ export const brandProfileObjValidation = Yup.object().shape({
 			Yup.object().shape({
 				scenarioId: Yup.number().required(),
 				scenarioName: Yup.string().required(),
-				scenarioResponseId: Yup.number(), //this isn't required in order to accomodate new unanswered scenarios
+				scenarioResponseId: Yup.number(),
 				scenarioResponseName: Yup.string() //this isn't required in order to accomodate new unanswered scenarios
 			})
 		)
@@ -167,3 +167,9 @@ export const brandProfileObjValidation = Yup.object().shape({
 		)
 		.required()
 })
+function emptyStringToNull(value, originalValue) {
+	if (typeof originalValue === 'string' && originalValue === '') {
+		return null
+	}
+	return value
+}
