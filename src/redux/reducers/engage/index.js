@@ -1,6 +1,18 @@
 import { combineReducers } from 'redux'
-import { lists } from './lists'
+import {
+	lists,
+	uploadedList,
+	isPostingList,
+	postListSuccess,
+	isFetchingLists,
+	fetchListsSuccess
+} from './lists'
 
 export default combineReducers({
-	lists
+	lists,
+	uploadedList,
+	isPostingList,
+	postListSuccess,
+	isFetchingLists,
+	fetchListsSuccess
 })

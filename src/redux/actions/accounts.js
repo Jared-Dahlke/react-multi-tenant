@@ -42,6 +42,7 @@ import {
 } from '../actions/brandProfiles'
 import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
+import { setLists } from './engage/lists'
 
 const apiBase = config.api.userAccountUrl
 
@@ -171,6 +172,7 @@ export function clearSiteData() {
 		dispatch(setRolesPermissions([]))
 		dispatch(setBrandProfiles([]))
 		dispatch(setAccountTypes([]))
+		dispatch(setLists([]))
 	}
 }
 
