@@ -1,5 +1,8 @@
 FROM node:12.13.1
 
+ARG PORT=3000
+ENV PORT=${PORT}
+
 WORKDIR /app
 
 COPY package.json /app
@@ -8,8 +11,11 @@ RUN npm install
 
 COPY . /app
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 RUN npm run build-staging
+
+HEALTHCHECK --interval=5s --timeout=2s --start-period=30s \
+  CMD curl -I localhost:${PORT} || exit 1
 
 CMD [ "npm", "run", "start-staging" ]
