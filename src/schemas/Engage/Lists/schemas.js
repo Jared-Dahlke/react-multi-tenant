@@ -32,3 +32,20 @@ export const listsObjValidation = Yup.array().of(
 			.required()
 	})
 )
+
+export const uploadedListObjValidation = Yup.array().of(
+	Yup.object().shape({
+		action: Yup.string().required(
+			'The first column in your excel must be called "action"'
+		),
+		id: Yup.string()
+			.required('The second column in your excel must be called "id"')
+			.test(
+				'idTest',
+				'Channel ID lengths should be 24 characters, Video ID lengths should be 11 characters. You attempted to upload a file with IDs that are neither 11 or 24 characters long.',
+				(id) => {
+					return id.length === 24 || id.length === 11
+				}
+			)
+	})
+)

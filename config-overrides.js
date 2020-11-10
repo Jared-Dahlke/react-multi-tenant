@@ -88,7 +88,11 @@ module.exports = override(
 				'@loader-content-color': '#FFF',
 
 				//checkbox
-				'@checkbox-disabled-color': neutralExtraLightColor
+				'@checkbox-disabled-color': neutralExtraLightColor,
+
+				//uploader
+				'@uploader-default-font-color': '#FFF',
+				'@uploader-item-hover-background-color': neutralExtraLightColor
 			}
 		}
 	})

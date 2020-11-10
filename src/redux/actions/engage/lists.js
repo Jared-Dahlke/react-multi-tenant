@@ -1,86 +1,24 @@
-import { SET_LISTS, SET_LIST_ARCHIVED } from '../../action-types/engage/lists'
+import {
+	SET_LISTS,
+	SET_LIST_ARCHIVED,
+	SET_UPLOADED_LIST,
+	SET_POST_LIST_SUCCESS,
+	SET_IS_POSTING_LIST,
+	SET_IS_FETCHING_LISTS,
+	SET_FETCH_LISTS_SUCCESS
+} from '../../action-types/engage/lists'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
-import { listsObjValidation } from '../../../schemas/Engage/Lists/schemas'
+import {
+	listsObjValidation,
+	uploadedListObjValidation
+} from '../../../schemas/Engage/Lists/schemas'
 const apiBase = config.api.listBuilderUrl
 
-const mockLists = [
-	{
-		smartListId: 1,
-		smartListName: 'TestList',
-		archived: false,
-		objectiveId: 1,
-		objectiveName: 'Reach',
-		versions: [
-			{
-				objectiveId: 1,
-				objectiveName: 'Reach',
-				smartListId: 1,
-				smartListName: 'TestList',
-				versionId: 1,
-				createdBy: 'Eric D',
-				createdDate: '202010010930',
-				subscriberCount: 234,
-				videoCount: 456,
-				channelCount: 1,
-				active: true
-			},
-			{
-				objectiveId: 1,
-				objectiveName: 'Reach',
-				smartListId: 1,
-				smartListName: 'TestList',
-				versionId: 1,
-				createdBy: 'Rob C',
-				createdDate: '202010011030',
-				subscriberCount: 56,
-				videoCount: 5675,
-				channelCount: 3,
-				active: false
-			}
-		]
-	},
-	{
-		smartListId: 2,
-		smartListName: 'TestList2',
-		archived: false,
-		objectiveId: 1,
-		objectiveName: 'Reach',
-		versions: [
-			{
-				objectiveId: 1,
-				objectiveName: 'Reach',
-				smartListId: 2,
-				smartListName: 'TestList2',
-				versionId: 2,
-				createdBy: 'Rob C',
-				createdDate: '202010011030',
-				subscriberCount: 34563,
-				videoCount: 34563,
-				channelCount: 356,
-				active: true
-			},
-			{
-				objectiveId: 1,
-				objectiveName: 'Reach',
-				smartListId: 2,
-				smartListName: 'TestList2',
-				versionId: 2,
-				createdBy: 'Suzan F',
-				createdDate: '202010011030',
-				subscriberCount: 56,
-				videoCount: 34563,
-				channelCount: 5,
-				active: false
-			}
-		]
-	}
-]
-
 export function fetchLists(accountId) {
-	console.log('called fetch lists')
-	let url = apiBase + `/account/1/smart-list`
+	let url = apiBase + `/account/${accountId}/smart-list`
 	return async (dispatch) => {
+		dispatch(setIsFetchingLists(true))
 		try {
 			let result = []
 
@@ -89,9 +27,9 @@ export function fetchLists(accountId) {
 			} catch (error) {
 				console.log(error)
 			}
-
+			dispatch(setIsFetchingLists(false))
 			if (result.status === 200) {
-				console.log(result)
+				dispatch(setFetchListsSuccess(true))
 				listsObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert(
@@ -106,10 +44,55 @@ export function fetchLists(accountId) {
 	}
 }
 
+export function setIsFetchingLists(isFetchingLists) {
+	return {
+		type: SET_IS_FETCHING_LISTS,
+		isFetchingLists
+	}
+}
+
+export function setFetchListsSuccess(fetchListsSuccess) {
+	return {
+		type: SET_FETCH_LISTS_SUCCESS,
+		fetchListsSuccess
+	}
+}
+
+export const postList = (data) => {
+	const list = data.list
+	const accountId = data.accountId
+	let url = apiBase + `/account/${accountId}/smart-list`
+	return (dispatch) => {
+		dispatch(setIsPostingList(true))
+		axios
+			.post(url, list)
+			.then((response) => {
+				dispatch(setIsPostingList(false))
+				dispatch(setPostListSuccess(true))
+				dispatch(fetchLists(accountId))
+			})
+			.catch((error) => {
+				dispatch(setIsPostingList(false))
+				console.error('create account error', error)
+			})
+	}
+}
+
 export function setLists(lists) {
 	return {
 		type: SET_LISTS,
 		lists
+	}
+}
+
+export function setUploadedList(uploadedList) {
+	uploadedListObjValidation.validate(uploadedList).catch(function(err) {
+		console.log(err.name, err.errors)
+		alert(`Whoops! Your file is in the wrong format. ${err.name}${err.errors}`)
+	})
+	return {
+		type: SET_UPLOADED_LIST,
+		uploadedList
 	}
 }
 
@@ -135,5 +118,19 @@ export function setListArchived(payload) {
 	return {
 		type: SET_LIST_ARCHIVED,
 		payload
+	}
+}
+
+export function setPostListSuccess(postListSuccess) {
+	return {
+		type: SET_POST_LIST_SUCCESS,
+		postListSuccess
+	}
+}
+
+export function setIsPostingList(isPostingList) {
+	return {
+		type: SET_IS_POSTING_LIST,
+		isPostingList
 	}
 }

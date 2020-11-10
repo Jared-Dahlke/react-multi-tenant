@@ -197,7 +197,6 @@ export function fetchBrandProfiles(accountId) {
 					alert("Could not validate account's brand profiles data")
 				})
 				dispatch(setBrandProfiles(brandProfiles))
-				//dispatch(fetchBrandProfilesInformation())
 				dispatch(brandProfilesIsLoading(false))
 			}
 		} catch (error) {

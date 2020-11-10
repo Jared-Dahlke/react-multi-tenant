@@ -15,16 +15,20 @@ import IconButton from 'rsuite/lib/IconButton'
 import { fetchLists, archiveList } from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
+import { getCurrentAccount } from '../../../utils'
 
 const mapStateToProps = (state) => {
 	return {
-		lists: state.engage.lists
+		lists: state.engage.lists,
+		accounts: state.accounts,
+		isFetchingLists: state.engage.isFetchingLists,
+		fetchListsSuccess: state.engage.fetchListsSuccess
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetchLists: () => dispatch(fetchLists()),
+		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 		archiveList: (payload) => dispatch(archiveList(payload))
 	}
 }
@@ -298,9 +302,14 @@ function Lists(props) {
 	const [viewArchivedLists, setViewArchivedLists] = React.useState(false)
 
 	let fetchLists = props.fetchLists
+	let accounts = props.accounts.data
+
 	React.useEffect(() => {
-		fetchLists()
-	}, [fetchLists])
+		let currentAccount = getCurrentAccount(props.accounts.data)
+		if (currentAccount) {
+			fetchLists(currentAccount.accountId)
+		}
+	}, [fetchLists, accounts])
 
 	const handleUploadNewList = () => {
 		history.push(routes.app.engage.lists.uploadList.path)
