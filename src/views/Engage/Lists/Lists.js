@@ -16,6 +16,7 @@ import { fetchLists, archiveList } from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
+import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
 
 const mapStateToProps = (state) => {
 	return {
@@ -375,7 +376,7 @@ function Lists(props) {
 						<Button onClick={handleUploadNewList}>Upload a new list</Button>
 					</Grid>
 				</Grid>
-				{smartLists && smartLists.length > 0 ? (
+				{smartLists && smartLists.length > 0 && !props.isFetchingLists && (
 					<Grid container spacing={2}>
 						{smartLists &&
 							smartLists.map((list, index) => {
@@ -394,9 +395,17 @@ function Lists(props) {
 								)
 							})}
 					</Grid>
-				) : (
-					<FormLoader />
 				)}
+
+				{props.isFetchingLists && <FormLoader />}
+
+				{!props.isFetchingLists &&
+					props.fetchListsSuccess &&
+					props.lists.length < 1 && (
+						<h2 style={{ color: whiteColor }}>
+							This account currently has no lists associated with it.
+						</h2>
+					)}
 			</GridItem>
 		</Grid>
 	)

@@ -148,6 +148,14 @@ export function fetchBrandProfilesInformation() {
 	}
 }
 
+function addDefaultResponseIdToScenariosIfBlank(scenarios) {
+	for (const scenario of scenarios) {
+		if (!scenario.scenarioResponseId) {
+			scenario.scenarioResponseId = ''
+		}
+	}
+}
+
 export function fetchBrandProfile(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return async (dispatch, getState) => {
@@ -161,7 +169,7 @@ export function fetchBrandProfile(brandProfileId) {
 					alert('Could not validate brand profile data')
 				})
 				let brandProfileResultCopy = JSON.parse(JSON.stringify(result.data))
-				addDefaultResponseIdToScenarios(brandProfileResultCopy.scenarios)
+				addDefaultResponseIdToScenariosIfBlank(brandProfileResultCopy.scenarios)
 
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
@@ -442,6 +450,7 @@ export const createScenario = (scenario) => {
 				dispatch(addScenario(scenario))
 				dispatch(setScenarioSaving(false))
 				dispatch(setScenarioCreated(true))
+				dispatch(fetchBrandScenarios())
 			})
 			.catch((error) => {
 				//error
