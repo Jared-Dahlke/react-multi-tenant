@@ -68,8 +68,16 @@ import {
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
-	scenarioArchived
+	scenarioArchived,
 } from './brandProfilesAdmin/scenarios'
+import {
+	adminOpinions,
+	adminOpinionsIsLoading,
+	opinionSaving,
+	opinionCreated,
+	opinionArchiving,
+	opinionArchived
+} from './brandProfilesAdmin/opinions'
 import { categories, channels, videos } from './discover/channels'
 
 // import brandProfilesAdmin from './brandProfilesAdmin/index'
@@ -139,5 +147,11 @@ export default combineReducers({
 	scenarioCreated,
 	scenarioArchiving,
 	scenarioArchived,
+	adminOpinions,
+	adminOpinionsIsLoading,
+	opinionSaving,
+	opinionCreated,
+	opinionArchiving,
+	opinionArchived,
 	engage
 })

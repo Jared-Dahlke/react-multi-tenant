@@ -140,6 +140,34 @@ const switchRoutes = (
 										</>
 									)}
 								/>
+
+								<Route
+									path={routes.app.settings.brandProfiles.admin.opinions.path}
+									render={({ match: { url } }) => (
+										<>
+											<Route
+												path={
+													routes.app.settings.brandProfiles.admin.opinions.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.opinions
+														.component
+												}
+												exact
+											/>
+											<Route
+												path={
+													routes.app.settings.brandProfiles.admin.opinions
+														.create.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.opinions
+														.create.component
+												}
+											/>
+										</>
+									)}
+								/>
 							</>
 						)}
 					/>

@@ -19,6 +19,8 @@ import Login from './pages/Login'
 
 import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
+import Opinions from './views/BrandProfiles/Admin/Opinions.js'
+import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
 export const routes = {
@@ -121,6 +123,17 @@ export const routes = {
 							path: '/app/settings/brandProfiles/admin/scenarios/create',
 							name: 'Create',
 							component: CreateScenario
+						}
+					},
+					opinions: {
+						path: '/app/settings/brandProfiles/admin/opinions',
+						name: 'Brand Profiles Opinions',
+						component: Opinions,
+
+						create: {
+							path: '/app/settings/brandProfiles/admin/opinions/create',
+							name: 'Create',
+							component: CreateOpinion
 						}
 					}
 				}
