@@ -1,3 +1,4 @@
+---
 stages:
   - build
   - deploy-to-google
@@ -10,10 +11,19 @@ build-staging:
     - docker:dind
 
   before_script:
-    - docker login -u recru02 -p dE_wc1eopRsixMPnrumx registry.gitlab.com
-    
+    - >
+      docker login
+      -u recru02
+      -p dE_wc1eopRsixMPnrumx
+      registry.gitlab.com
+
   script:
-    - docker build -f dockerfile.staging -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging .
+    - >
+      docker build
+      -f dockerfile
+      -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
+      --build-arg ENVIRONMENT=staging
+      .
     - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
 
   only:
@@ -30,55 +40,57 @@ build-master:
 
   before_script:
     - docker login -u recru02 -p dE_wc1eopRsixMPnrumx registry.gitlab.com
-    
+
   script:
-    - docker build -f dockerfile.production -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-production .
+    - >
+      docker build
+      -f dockerfile
+      -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-production
+      --build-arg ENVIRONMENT=production
+      .
     - docker push registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-production
 
   only:
     - master
 
 
-#section name
 deploy-to-staging-google-cloud-run:
   stage: deploy-to-google
   image: google/cloud-sdk
   services:
     - docker:dind
   script:
-      - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
-      - gcloud auth activate-service-account --key-file gcloud-service-key.json
-      - gcloud config set project $GCP_PROJECT_ID
-      - gcloud builds submit . --config=googlecloudbuild-staging.yaml
+    - echo $GCP_SERVICE_KEY > gcloud-service-key.json  # Google Cloud service accounts
+    - gcloud auth activate-service-account --key-file gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud builds submit . --config=googlecloudbuild-staging.yaml
   only:
     - schedules
 
 
-#section name
 deploy-to-demo-google-cloud-run:
   stage: deploy-to-google
   image: google/cloud-sdk
   services:
     - docker:dind
   script:
-      - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
-      - gcloud auth activate-service-account --key-file gcloud-service-key.json
-      - gcloud config set project $GCP_PROJECT_ID
-      - gcloud builds submit . --config=googlecloudbuild-demo.yaml
+    - echo $GCP_SERVICE_KEY > gcloud-service-key.json  # Google Cloud service accounts
+    - gcloud auth activate-service-account --key-file gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud builds submit . --config=googlecloudbuild-demo.yaml
   only:
     - /^demo-.*$/
 
 
-#section name
 deploy-to-prod-google-cloud-run:
   stage: deploy-to-google
   image: google/cloud-sdk
   services:
     - docker:dind
   script:
-      - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
-      - gcloud auth activate-service-account --key-file gcloud-service-key.json
-      - gcloud config set project $GCP_PROJECT_ID
-      - gcloud builds submit . --config=googlecloudbuild-prod.yaml
+    - echo $GCP_SERVICE_KEY > gcloud-service-key.json  # Google Cloud service accounts
+    - gcloud auth activate-service-account --key-file gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud builds submit . --config=googlecloudbuild-prod.yaml
   only:
     - master
