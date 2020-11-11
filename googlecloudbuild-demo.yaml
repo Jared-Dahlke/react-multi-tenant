@@ -6,7 +6,7 @@ steps:
     args:
       - "build"
       - "-f"
-      - "dockerfile"
+      - "Dockerfile"
       - "-t"
       - "gcr.io/$PROJECT_ID/front-end-demo"
       - "--build-arg"
