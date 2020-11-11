@@ -1,9 +1,20 @@
 import { combineReducers } from 'redux'
-import { brandProfileAdminScenarios } from './scenarios'
-
-import { brandProfileAdminOpinions } from './opinions'
+import {
+	adminScenarios,
+	adminScenariosIsLoading,
+	scenarioSaving,
+	scenarioCreated,
+	scenarioArchiving,
+	scenarioArchived
+} from './scenarios'
+// import { brandProfileAdminOpinions } from './opinions'
 
 export default combineReducers({
-	brandProfileAdminScenarios,
-	brandProfileAdminOpinions
+	adminScenarios,
+	adminScenariosIsLoading,
+	scenarioSaving,
+	scenarioCreated,
+	scenarioArchiving,
+	scenarioArchived
+	// brandProfileAdminOpinions
 })

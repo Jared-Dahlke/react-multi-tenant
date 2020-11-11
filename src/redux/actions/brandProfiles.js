@@ -4,7 +4,6 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SET_BRAND_SCENARIOS,
 	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_DELETED,
@@ -16,12 +15,7 @@ import {
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
 	SCENARIOS_IS_LOADING,
-	SCENARIO_ARCHIVING,
-	SCENARIO_ARCHIVED,
-	SCENARIO_TO_ARCHIVE,
-	SCENARIO_CREATED,
-	SCENARIO_SAVING,
-	ADD_SCENARIO
+	SET_BRAND_SCENARIOS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -156,7 +150,7 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				brandProfileObjValidation.validate(result.data).catch(function(err) {
+				brandProfileObjValidation.validate(result.data).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
@@ -190,7 +184,7 @@ export function fetchBrandProfiles(accountId) {
 				if (brandProfiles.length < 1) {
 					dispatch(hasBrandProfiles(false))
 				}
-				brandProfilesObjValidation.validate(result.data).catch(function(err) {
+				brandProfilesObjValidation.validate(result.data).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert("Could not validate account's brand profiles data")
 				})
@@ -256,59 +250,17 @@ export function setBrandProfileDeleting(bool) {
 	}
 }
 
-export function setScenariosIsLoading(bool) {
-	return {
-		type: SCENARIOS_IS_LOADING,
-		scenariosIsLoading: bool
-	}
-}
-
-export function setScenarioArchiving(scenarioId) {
-	return {
-		type: SCENARIO_ARCHIVING,
-		scenarioArchiving: scenarioId
-	}
-}
-
-export function setScenarioArchived(bool) {
-	return {
-		type: SCENARIO_ARCHIVED,
-		scenarioArchived: bool
-	}
-}
-
-export function setScenarioToArchived(scenarioId) {
-	return {
-		type: SCENARIO_TO_ARCHIVE,
-		scenarioId
-	}
-}
-
-export function setScenarioCreated(bool) {
-	return {
-		type: SCENARIO_CREATED,
-		scenarioCreated: bool
-	}
-}
-
-export function setScenarioSaving(bool) {
-	return {
-		type: SCENARIO_SAVING,
-		scenarioSaving: bool
-	}
-}
-
-export function addScenario(scenario) {
-	return {
-		type: ADD_SCENARIO,
-		scenario
-	}
-}
-
 export function hasBrandProfiles(bool) {
 	return {
 		type: HAS_BRAND_PROFILES,
 		hasBrandProfiles: bool
+	}
+}
+
+export function setScenariosIsLoading(bool) {
+	return {
+		type: SCENARIOS_IS_LOADING,
+		scenariosIsLoading: bool
 	}
 }
 
@@ -319,11 +271,11 @@ export function setBrandScenarios(scenarios) {
 	}
 }
 
-function addDefaultResponseIdToScenarios(scenarios) {
-	for (const scenario of scenarios) {
-		scenario.scenarioResponseId = ''
-	}
-}
+// function addDefaultResponseIdToScenarios(scenarios) {
+// 	for (const scenario of scenarios) {
+// 		scenario.scenarioResponseId = ''
+// 	}
+// }
 
 export function fetchBrandScenarios() {
 	let url = apiBase + `/brand-profile/scenario`
@@ -334,14 +286,14 @@ export function fetchBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'
 					)
 				})
 
-				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
+				// addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
 				dispatch(setBrandScenarios(scenarios))
 				dispatch(setScenariosIsLoading(false))
 			}

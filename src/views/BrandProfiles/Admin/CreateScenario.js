@@ -16,7 +16,7 @@ import * as Yup from 'yup'
 import {
   createScenario,
   setScenarioCreated
-} from '../../../redux/actions/brandProfiles'
+} from '../../../redux/actions/brandProfilesAdmin/scenarios'
 
 const mapStateToProps = (state) => {
   return {

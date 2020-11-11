@@ -1,5 +1,76 @@
-import axios from '../../axiosConfig'
-import config from '../../config.js'
+import {
+	ADMIN_SCENARIOS_IS_LOADING,
+	SET_ADMIN_BRAND_SCENARIOS,
+	SCENARIO_ARCHIVING,
+	SCENARIO_ARCHIVED,
+	SCENARIO_TO_ARCHIVE,
+	SCENARIO_CREATED,
+	SCENARIO_SAVING,
+	ADD_SCENARIO
+} from '../../action-types/brandProfilesAdmin/scenarios'
+import axios from '../../../axiosConfig'
+import config from '../../../config.js'
+import {
+	brandScenarioObjValidation
+} from '../../../schemas'
+
+const apiBase = config.apiGateway.URL
+
+export function setAdminScenariosIsLoading(bool) {
+	return {
+		type: ADMIN_SCENARIOS_IS_LOADING,
+		adminScenariosIsLoading: bool
+	}
+}
+
+export function setAdminBrandScenarios(scenarios) {
+	return {
+		type: SET_ADMIN_BRAND_SCENARIOS,
+		scenarios
+	}
+}
+
+export function setScenarioArchiving(scenarioId) {
+	return {
+		type: SCENARIO_ARCHIVING,
+		scenarioArchiving: scenarioId
+	}
+}
+
+export function setScenarioArchived(bool) {
+	return {
+		type: SCENARIO_ARCHIVED,
+		scenarioArchived: bool
+	}
+}
+
+export function setScenarioToArchived(scenarioId) {
+	return {
+		type: SCENARIO_TO_ARCHIVE,
+		scenarioId
+	}
+}
+
+export function setScenarioCreated(bool) {
+	return {
+		type: SCENARIO_CREATED,
+		scenarioCreated: bool
+	}
+}
+
+export function setScenarioSaving(bool) {
+	return {
+		type: SCENARIO_SAVING,
+		scenarioSaving: bool
+	}
+}
+
+export function addScenario(scenario) {
+	return {
+		type: ADD_SCENARIO,
+		scenario
+	}
+}
 
 export const archiveScenario = (scenarioId) => {
 	let url = apiBase + `/brand-profile/scenario/${scenarioId}`
@@ -44,14 +115,13 @@ export function fetchAdminBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'
 					)
 				})
 
-				//	addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
 				dispatch(setAdminBrandScenarios(scenarios))
 				dispatch(setAdminScenariosIsLoading(false))
 			}
