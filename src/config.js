@@ -20,7 +20,8 @@ const staging = {
 	api: {
 		userAccountUrl:
 			'https://api-cont-intell-user-account-staging-zu7blp7gxa-uw.a.run.app',
-		listBuilderUrl: 'doesntExistYet'
+		listBuilderUrl:
+			'https://api-cont-intell-list-builder-staging-zu7blp7gxa-uw.a.run.app'
 	}
 }
 
