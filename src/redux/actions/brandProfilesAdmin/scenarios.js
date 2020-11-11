@@ -12,9 +12,9 @@ import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import {
 	brandScenarioObjValidation
-} from '../../../schemas'
+} from '../../../schemas/schemas'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function setAdminScenariosIsLoading(bool) {
 	return {
