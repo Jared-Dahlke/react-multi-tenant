@@ -23,9 +23,9 @@ import {
 	brandProfilesObjValidation,
 	brandProfileObjValidation,
 	brandScenarioObjValidation
-} from '../../schemas'
+} from '../../schemas/schemas'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function setBrandProfiles(brandProfiles) {
 	return {
@@ -154,6 +154,8 @@ export function fetchBrandProfile(brandProfileId) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
+				let brandProfileResultCopy = JSON.parse(JSON.stringify(result.data))
+				addDefaultResponseIdToScenarios(brandProfileResultCopy.scenarios)
 
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
@@ -161,7 +163,7 @@ export function fetchBrandProfile(brandProfileId) {
 
 				for (const [index, p] of currBrandProfiles.entries()) {
 					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index] = result.data
+						currBrandProfiles[index] = brandProfileResultCopy
 					}
 				}
 				dispatch(setBrandProfiles(currBrandProfiles))
@@ -189,7 +191,6 @@ export function fetchBrandProfiles(accountId) {
 					alert("Could not validate account's brand profiles data")
 				})
 				dispatch(setBrandProfiles(brandProfiles))
-				//dispatch(fetchBrandProfilesInformation())
 				dispatch(brandProfilesIsLoading(false))
 			}
 		} catch (error) {
@@ -271,11 +272,11 @@ export function setBrandScenarios(scenarios) {
 	}
 }
 
-// function addDefaultResponseIdToScenarios(scenarios) {
-// 	for (const scenario of scenarios) {
-// 		scenario.scenarioResponseId = ''
-// 	}
-// }
+function addDefaultResponseIdToScenarios(scenarios) {
+	for (const scenario of scenarios) {
+		scenario.scenarioResponseId = ''
+	}
+}
 
 export function fetchBrandScenarios() {
 	let url = apiBase + `/brand-profile/scenario`
@@ -293,7 +294,7 @@ export function fetchBrandScenarios() {
 					)
 				})
 
-				// addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
+				addDefaultResponseIdToScenarios(scenarios)
 				dispatch(setBrandScenarios(scenarios))
 				dispatch(setScenariosIsLoading(false))
 			}

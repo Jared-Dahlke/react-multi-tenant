@@ -16,6 +16,9 @@ import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
 import { perms, userCan } from '../../Can'
 import { routes } from '../../routes'
+import Grid from '@material-ui/core/Grid'
+import SideBar from '../SideBar/SideBar'
+import IconButton from 'rsuite/lib/IconButton'
 
 const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)
@@ -29,6 +32,28 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function Header(props) {
+	const [width, setWidth] = React.useState(window.innerWidth)
+	function handleWindowSizeChange() {
+		setWidth(window.innerWidth)
+	}
+	React.useEffect(() => {
+		window.addEventListener('resize', handleWindowSizeChange)
+		return () => {
+			window.removeEventListener('resize', handleWindowSizeChange)
+		}
+	}, [])
+
+	const [showMobileDrawer, setShowMobileDrawer] = React.useState(false)
+
+	const closeMobileDrawer = () => {
+		setShowMobileDrawer(false)
+	}
+	const openMobileDrawer = () => {
+		console.log('calling open mobile drawer')
+		setShowMobileDrawer(true)
+	}
+
+	let isMobile = width <= 768
 	const classes = useStyles()
 	const sidebarClasses = useSidebarStyles()
 	function makeBrand() {
@@ -327,76 +352,95 @@ function Header(props) {
 		<Dropdown.Item componentClass={MyLink} {...props} />
 	)
 
-	return (
-		<div>
-			<Navbar style={{ borderBottom: '1px solid white' }}>
-				<Navbar.Body>
-					<Nav>
-						<Nav.Item>{brand}</Nav.Item>
+	if (isMobile) {
+		return (
+			<div>
+				<IconButton
+					style={{ marginLeft: 30, marginTop: 30 }}
+					appearance='ghost'
+					icon={<Icon icon='bars' />}
+					onClick={() => openMobileDrawer()}
+				></IconButton>
+				<SideBar
+					closeMobileDrawer={closeMobileDrawer}
+					showMobileDrawer={showMobileDrawer}
+					openMobileDrawer={openMobileDrawer}
+				/>
+				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{makeBrand()}</div>
+			</div>
+		)
+	} else {
+		return (
+			<div>
+				<Navbar style={{ borderBottom: '1px solid white' }}>
+					<Navbar.Body>
+						<Nav>
+							<Nav.Item>{brand}</Nav.Item>
 
-						<Dropdown
-							title='Discover'
-							icon={<Icon icon='pie-chart' />}
-							style={{ marginRight: 15 }}
-							id='Channel_Research_Nav_Tab'
-						>
-							<NavLink
-								href={routes.app.discover.channelResearch.path}
-								label='Channel Research'
-							/>
-						</Dropdown>
+							<Dropdown
+								title='Discover'
+								icon={<Icon icon='pie-chart' />}
+								style={{ marginRight: 15 }}
+								id='Channel_Research_Nav_Tab'
+							>
+								<NavLink
+									href={routes.app.discover.channelResearch.path}
+									label='Channel Research'
+								/>
+							</Dropdown>
 
-						<Dropdown
-							title='Engage'
-							icon={<Icon icon='bolt' />}
-							style={{ marginRight: 15 }}
-							id='Engage_Nav_Tab'
-						>
-							<NavLink
-								href={routes.app.engage.lists.lists.path}
-								label='Lists'
-							/>
-							<NavLink
-								href={routes.app.engage.lists.listBuilder.path}
-								label='List Builder'
-							/>
-						</Dropdown>
+							<Dropdown
+								title='Engage'
+								icon={<Icon icon='bolt' />}
+								style={{ marginRight: 15 }}
+								id='Engage_Nav_Tab'
+							>
+								<NavLink
+									href={routes.app.engage.lists.lists.path}
+									label='Lists'
+								/>
+								<NavLink
+									href={routes.app.engage.lists.listBuilder.path}
+									label='List Builder'
+								/>
+							</Dropdown>
 
-						<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
-							<NavLink
-								href={routes.app.settings.account.path}
-								label='Account'
-							/>
+							<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
+								<NavLink
+									href={routes.app.settings.account.path}
+									label='Account'
+								/>
 
-							<NavLink href={routes.app.settings.users.path} label='Users' />
-							<NavLink
-								href={routes.app.settings.brandProfiles.path}
-								label='Brand Profiles'
-							/>
+								<NavLink href={routes.app.settings.users.path} label='Users' />
+								<NavLink
+									href={routes.app.settings.brandProfiles.path}
+									label='Brand Profiles'
+								/>
 
-							<NavLink
-								href={routes.app.settings.brandMentality.path}
-								label='Brand Mentality'
-							/>
-						</Dropdown>
-					</Nav>
-					<Nav pullRight style={{ marginRight: 30 }}>
-						<Dropdown title='' icon={<Icon icon='avatar' />}>
-							<NavLink
-								href={routes.app.settings.profile.path}
-								label='Profile'
-							/>
+								<NavLink
+									href={routes.app.settings.brandMentality.path}
+									label='Brand Mentality'
+								/>
+							</Dropdown>
+						</Nav>
+						<Nav pullRight style={{ marginRight: 30 }}>
+							<Dropdown title='' icon={<Icon icon='avatar' />}>
+								<NavLink
+									href={routes.app.settings.profile.path}
+									label='Profile'
+								/>
 
-							<Dropdown.Item onSelect={() => handleLogOut(props)}>
-								Logout
-							</Dropdown.Item>
-						</Dropdown>
-					</Nav>
-				</Navbar.Body>
-			</Navbar>
-			<div style={{ paddingLeft: 30, paddingTop: 20 }}>{makeBrand()}</div>
-		</div>
-	)
+								<Dropdown.Item onSelect={() => handleLogOut(props)}>
+									Logout
+								</Dropdown.Item>
+							</Dropdown>
+						</Nav>
+					</Navbar.Body>
+				</Navbar>
+				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{makeBrand()}</div>
+			</div>
+		)
+	}
 }
 
 export default connect(null, mapDispatchToProps)(Header)

@@ -73,6 +73,7 @@ import {
 import { categories, channels, videos } from './discover/channels'
 
 // import brandProfilesAdmin from './brandProfilesAdmin/index'
+import engage from './engage/index'
 
 export default combineReducers({
 	authToken,
@@ -137,5 +138,6 @@ export default combineReducers({
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
-	scenarioArchived
+	scenarioArchived,
+	engage
 })

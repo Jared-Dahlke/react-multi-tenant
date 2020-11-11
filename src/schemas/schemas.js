@@ -104,14 +104,6 @@ export const brandScenarioObjValidation = Yup.array().of(
 		scenarioId: Yup.number().required(),
 		scenarioName: Yup.string().required(),
 		scenarioResponseId: Yup.string()
-			.test(
-				'scenario test',
-				'received unexepected scenarioResponseId from api in one of the scenarios',
-				(scenarioResponseId) => {
-					return !isNaN(scenarioResponseId)
-				}
-			)
-			.required()
 	})
 )
 
@@ -150,8 +142,8 @@ export const brandProfileObjValidation = Yup.object().shape({
 			Yup.object().shape({
 				scenarioId: Yup.number().required(),
 				scenarioName: Yup.string().required(),
-				scenarioResponseId: Yup.number().required(),
-				scenarioResponseName: Yup.string().required()
+				scenarioResponseId: Yup.number(),
+				scenarioResponseName: Yup.string() //this isn't required in order to accomodate new unanswered scenarios
 			})
 		)
 		.required(),
@@ -175,3 +167,9 @@ export const brandProfileObjValidation = Yup.object().shape({
 		)
 		.required()
 })
+function emptyStringToNull(value, originalValue) {
+	if (typeof originalValue === 'string' && originalValue === '') {
+		return null
+	}
+	return value
+}
