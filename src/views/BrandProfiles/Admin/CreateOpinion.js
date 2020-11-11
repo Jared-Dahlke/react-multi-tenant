@@ -12,6 +12,7 @@ import Alert from '@material-ui/lab/Alert'
 import { connect } from 'react-redux'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
+import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import {
   createOpinion,
@@ -33,19 +34,29 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const schemaValidation = Yup.object().shape({
-  opinionName: Yup.string()
+  question: Yup.string()
     .required('Required')
     .min(2, 'Must be greater than 1 character')
     .max(50, 'Must be less than 50 characters'),
+  opinionType: Yup.string()
+    .required('Required')
 })
 
 function Opinion(props) {
 
   const {
-    values,
     isValid,
-    dirty
+    dirty,
+    values,
+    setFieldValue,
+    setFieldTouched,
+    errors,
+    validateField,
+    validateForm,
+    touched
   } = props
+
+  const opinionTypeOptions = [{ id: "Sports", name: "Sports" }, { id: "Music", name: "Music" }]
 
   return (
     <GridContainer>
@@ -57,10 +68,29 @@ function Opinion(props) {
 
                 <GridItem xs={12} sm={12} md={12}>
                   <FormikInput
-                    name='opinionName'
-                    formikValue={values.opinionName}
-                    labelText='Opinion Name'
-                    id='opinionName'
+                    name='question'
+                    formikValue={values.question}
+                    labelText='Question'
+                    id='question'
+                  />
+
+                  <FormikSelect
+                    id='opinionType'
+                    name='opinionType'
+                    data-qa='opinionType'
+                    label='Opinion Type'
+                    placeholder='Opinion Type'
+                    optionLabel='name'
+                    optionValue='id'
+                    options={opinionTypeOptions}
+                    value={values.opinionType}
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                    validateField={validateField}
+                    validateForm={validateForm}
+                    touched={touched.opinionType}
+                    error={errors.opinionType}
+                    hideSearch
                   />
 
                 </GridItem>
@@ -99,7 +129,8 @@ function Opinion(props) {
 const FormikForm = withFormik({
   mapPropsToValues: (props) => {
     return {
-      opinionName: ''
+      question: '',
+      opinionType: ''
     }
   },
   enableReinitialize: true,
@@ -109,7 +140,8 @@ const FormikForm = withFormik({
   validationSchema: schemaValidation,
   handleSubmit: (values, { props }) => {
     let opinion = {
-      opinionName: values.opinionName,
+      question: values.question,
+      opinionType: values.opinionType
     }
     props.createOpinion(opinion)
   }

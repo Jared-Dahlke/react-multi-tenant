@@ -314,6 +314,64 @@ function Header(props) {
 				</Breadcrumbs>
 			)
 		}
+
+		if (url === '/app/settings/brandProfiles/admin/opinions') {
+			return (
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to='/app/settings/brandProfiles'
+						style={{ fontSize: crumbSize }}
+					>
+						Brand Profiles
+					</Link>
+					<Link
+						to='/app/settings/brandProfiles/admin'
+						style={{ fontSize: crumbSize }}
+					>
+						Admin
+					</Link>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Opinions
+					</div>
+				</Breadcrumbs>
+			)
+		}
+
+		if (url === '/app/settings/brandProfiles/admin/opinions/create') {
+			return (
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to='/app/settings/brandProfiles'
+						style={{ fontSize: crumbSize }}
+					>
+						Brand Profiles
+					</Link>
+					<Link
+						to='/app/settings/brandProfiles/admin'
+						style={{ fontSize: crumbSize }}
+					>
+						Admin
+					</Link>
+					<Link
+						to='/app/settings/brandProfiles/admin/opinions'
+						style={{ fontSize: crumbSize }}
+					>
+						Opinions
+					</Link>
+					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
+						Create
+					</div>
+				</Breadcrumbs>
+			)
+		}
 		return null
 	}
 
