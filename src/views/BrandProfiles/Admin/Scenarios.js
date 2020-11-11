@@ -50,9 +50,11 @@ function Scenarios(props) {
 	const classes = useStyles()
 	const tableClasses = useTableStyles()
 
-	const { fetchAdminBrandScenarios } = props
+	const { fetchAdminBrandScenarios, adminScenarios } = props
 	React.useEffect(() => {
-		fetchAdminBrandScenarios();
+		if (adminScenarios.length === 0) {
+			fetchAdminBrandScenarios();
+		}
 	})
 
 	const tableCellClasses = classnames(classes.tableCell, {
@@ -88,7 +90,7 @@ function Scenarios(props) {
 			</Snackbar>
 
 			<GridItem xs={12} sm={12} md={6}>
-				{props.adminScenarios && props.adminScenarios.length > 0 ? (
+				{adminScenarios && adminScenarios.length > 0 ? (
 					<div>
 						<Button appearance='primary' onClick={handleCreateScenarioClick}>
 							Create Scenario
@@ -115,8 +117,8 @@ function Scenarios(props) {
 							</TableHead>
 
 							<TableBody>
-								{props.adminScenarios &&
-									props.adminScenarios.map((scenario) => (
+								{adminScenarios &&
+									adminScenarios.map((scenario) => (
 										<TableRow
 											key={scenario.scenarioId || 'placeholder'}
 											className={classes.tableRow}
