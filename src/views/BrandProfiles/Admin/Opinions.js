@@ -50,9 +50,11 @@ function Opinions(props) {
   const classes = useStyles()
   const tableClasses = useTableStyles()
 
-  const { fetchAdminBrandOpinions } = props
+  const { fetchAdminBrandOpinions, adminOpinions } = props
   React.useEffect(() => {
-    fetchAdminBrandOpinions();
+    if (adminOpinions.length === 0) {
+      fetchAdminBrandOpinions();
+    }
   })
 
   const tableCellClasses = classnames(classes.tableCell, {
@@ -88,7 +90,7 @@ function Opinions(props) {
       </Snackbar>
 
       <GridItem xs={12} sm={12} md={6}>
-        {props.adminOpinions && props.adminOpinions.length > 0 ? (
+        {adminOpinions && adminOpinions.length > 0 ? (
           <div>
             <Button appearance='primary' onClick={handleCreateOpinionClick}>
               Create Opinion
@@ -115,8 +117,8 @@ function Opinions(props) {
               </TableHead>
 
               <TableBody>
-                {props.adminOpinions &&
-                  props.adminOpinions.map((opinion) => (
+                {adminOpinions &&
+                  adminOpinions.map((opinion) => (
                     <TableRow
                       key={opinion.opinionId || 'placeholder'}
                       className={classes.tableRow}
