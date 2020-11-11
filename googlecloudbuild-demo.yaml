@@ -9,7 +9,7 @@ steps:
       - "dockerfile"
       - "-t"
       - "gcr.io/$PROJECT_ID/front-end-demo"
-      - "--build-args"
+      - "--build-arg"
       - "ENVIRONMENT=staging"
       - "."
 
