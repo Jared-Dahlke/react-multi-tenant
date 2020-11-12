@@ -7,19 +7,37 @@ import {
 	SET_IS_FETCHING_LISTS,
 	SET_FETCH_LISTS_SUCCESS,
 	SET_IS_DOWNLOADING_EXCEL,
-	SET_IS_DOWNLOADING_EXCEL_VERSION_ID
+	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
+	SET_LIST_VERSION_ACTIVE
 } from '../../action-types/engage/lists'
 
 export function lists(state = [], action) {
+	let newLists
+	let smartListId
 	switch (action.type) {
 		case SET_LISTS:
 			return action.lists
 		case SET_LIST_ARCHIVED:
-			let newLists = JSON.parse(JSON.stringify(state))
-			let smartListId = action.payload.smartListId
+			newLists = JSON.parse(JSON.stringify(state))
+			smartListId = action.payload.smartListId
 			for (const list of newLists) {
 				if (list.smartListId === smartListId) {
 					list.archived = action.payload.archive
+				}
+			}
+			return newLists
+		case SET_LIST_VERSION_ACTIVE:
+			newLists = JSON.parse(JSON.stringify(state))
+			smartListId = action.payload.smartListId
+			let versionId = action.payload.versionId
+			for (const list of newLists) {
+				if (list.smartListId === smartListId) {
+					for (const version of list.versions) {
+						version.active = false
+						if (version.versionId === versionId) {
+							version.active = true
+						}
+					}
 				}
 			}
 			return newLists

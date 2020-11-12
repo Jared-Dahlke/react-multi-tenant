@@ -7,7 +7,8 @@ import {
 	SET_IS_FETCHING_LISTS,
 	SET_FETCH_LISTS_SUCCESS,
 	SET_IS_DOWNLOADING_EXCEL,
-	SET_IS_DOWNLOADING_EXCEL_VERSION_ID
+	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
+	SET_LIST_VERSION_ACTIVE
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
@@ -150,6 +151,32 @@ export function archiveList(payload) {
 		} catch (error) {
 			alert(error)
 		}
+	}
+}
+
+export function activateListVersion(payload) {
+	let versionId = payload.versionId
+
+	//	let accountId = account.accountId
+	let url = apiBase + `/smart-list/version/${versionId}/active`
+	return async (dispatch) => {
+		dispatch(setListVersionActive(payload))
+		try {
+			const result = await axios.patch(url)
+			if (result.status === 200) {
+				//	dispatch(setAccountSaving(false))
+				//	dispatch(setAccountSaved(true))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function setListVersionActive(payload) {
+	return {
+		type: SET_LIST_VERSION_ACTIVE,
+		payload
 	}
 }
 
