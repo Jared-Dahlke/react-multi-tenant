@@ -416,12 +416,12 @@ function Lists(props) {
 				{visibleLists && visibleLists.length > 0 && !props.isFetchingLists && (
 					<Grid container spacing={2}>
 						{visibleLists &&
-							transitions.map((props) => {
-								let list = props.item
-								let key = props.key
+							transitions.map((animationProps) => {
+								let list = animationProps.item
+								let key = animationProps.key
 								return (
 									<Grid item xs={12} key={key}>
-										<animated.div style={props.props}>
+										<animated.div style={animationProps.props}>
 											<MyList
 												list={list}
 												handleViewAllClick={handleViewAllClick}
