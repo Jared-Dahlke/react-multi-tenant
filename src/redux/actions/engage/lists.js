@@ -5,7 +5,9 @@ import {
 	SET_POST_LIST_SUCCESS,
 	SET_IS_POSTING_LIST,
 	SET_IS_FETCHING_LISTS,
-	SET_FETCH_LISTS_SUCCESS
+	SET_FETCH_LISTS_SUCCESS,
+	SET_IS_DOWNLOADING_EXCEL,
+	SET_IS_DOWNLOADING_EXCEL_VERSION_ID
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
@@ -13,6 +15,7 @@ import {
 	listsObjValidation,
 	uploadedListObjValidation
 } from '../../../schemas/Engage/Lists/schemas'
+var fileDownload = require('js-file-download')
 const apiBase = config.api.listBuilderUrl
 
 export function fetchLists(accountId) {
@@ -73,6 +76,42 @@ export const postList = (data) => {
 			})
 			.catch((error) => {
 				dispatch(setIsPostingList(false))
+				console.error('create account error', error)
+			})
+	}
+}
+
+export function setIsDownloadingExcel(isDownloadingExcel) {
+	return {
+		type: SET_IS_DOWNLOADING_EXCEL,
+		isDownloadingExcel
+	}
+}
+
+export function setIsDownloadingExcelVersionId(isDownloadingExcelVersionId) {
+	return {
+		type: SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
+		isDownloadingExcelVersionId
+	}
+}
+
+export function downloadExcelList(payload) {
+	let versionId = payload.versionId
+	let smartListName = payload.smartListName
+	let url = apiBase + `/smart-list/version/${versionId}/download`
+	return (dispatch) => {
+		dispatch(setIsDownloadingExcel(true))
+		dispatch(setIsDownloadingExcelVersionId(versionId))
+		axios
+			.get(url, { responseType: 'blob' })
+			.then((response) => {
+				fileDownload(response.data, `${smartListName}.xlsx`)
+				dispatch(setIsDownloadingExcel(false))
+				dispatch(setIsDownloadingExcelVersionId(null))
+			})
+			.catch((error) => {
+				dispatch(setIsDownloadingExcel(false))
+				dispatch(setIsDownloadingExcelVersionId(null))
 				console.error('create account error', error)
 			})
 	}
