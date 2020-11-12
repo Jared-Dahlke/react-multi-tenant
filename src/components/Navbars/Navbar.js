@@ -77,7 +77,7 @@ function Header(props) {
 			return (
 				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Lists
+						Smart Lists
 					</div>
 				</Breadcrumbs>
 			)
@@ -94,7 +94,7 @@ function Header(props) {
 						to={routes.app.engage.lists.lists.path}
 						style={{ fontSize: crumbSize }}
 					>
-						Lists
+						Smart Lists
 					</Link>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
 						Upload List
@@ -397,7 +397,7 @@ function Header(props) {
 							>
 								<NavLink
 									href={routes.app.engage.lists.lists.path}
-									label='Lists'
+									label='Smart Lists'
 								/>
 								<NavLink
 									href={routes.app.engage.lists.listBuilder.path}

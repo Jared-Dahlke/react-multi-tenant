@@ -15,13 +15,17 @@ import IconButton from 'rsuite/lib/IconButton'
 import {
 	fetchLists,
 	archiveList,
-	downloadExcelList
+	downloadExcelList,
+	activateListVersion
 } from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
 import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
-import { useTransition, animated } from 'react-spring'
+import { useTransition, animated, useSpring } from 'react-spring'
+var dayjs = require('dayjs')
+var calendar = require('dayjs/plugin/calendar')
+dayjs.extend(calendar)
 
 const mapStateToProps = (state) => {
 	return {
@@ -38,7 +42,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 		archiveList: (payload) => dispatch(archiveList(payload)),
-		downloadExcelList: (payload) => dispatch(downloadExcelList(payload))
+		downloadExcelList: (payload) => dispatch(downloadExcelList(payload)),
+		activateListVersion: (payload) => dispatch(activateListVersion(payload))
 	}
 }
 
@@ -63,7 +68,7 @@ const MyList = (props) => {
 	}
 	return (
 		<Panel
-			style={{ backgroundColor: neutralLightColor }}
+			style={{ backgroundColor: neutralLightColor, marginBottom: 20 }}
 			shaded
 			header={
 				<MyHeader
@@ -89,6 +94,7 @@ const MyList = (props) => {
 								<MyHeader
 									data={version}
 									handleDownloadClick={props.handleDownloadClick}
+									handleActivateClick={props.handleActivateClick}
 									isDownloadingExcel={props.isDownloadingExcel}
 									isDownloadingExcelVersionId={
 										props.isDownloadingExcelVersionId
@@ -144,11 +150,14 @@ const MyHeader = (props) => {
 
 	let videoCount = numeral(props.data.videoCount).format('0a')
 	let channelCount = numeral(props.data.channelCount).format('0a')
+
+	var createdDate = dayjs(props.data.createdDate).calendar()
+
 	return (
 		<div>
 			<Grid container alignItems='center' spacing={1}>
 				<Grid item xs={12} sm={12} md={7} style={panelStyle}>
-					<Grid container>
+					<Grid container style={{ position: 'relative' }}>
 						<Grid item xs={4}>
 							<Grid item xs={12}>
 								<Grid container justify='center'>
@@ -197,8 +206,13 @@ const MyHeader = (props) => {
 								</Grid>
 							</Grid>
 						</Grid>
+
+						<div style={{ position: 'absolute', bottom: -30, left: 5 }}>
+							<Label label={props.data.createdBy.email + ', ' + createdDate} />
+						</div>
 					</Grid>
 				</Grid>
+
 				<Grid item xs={12} sm={12} md={3} style={panelStyle}>
 					<Grid container>
 						<Grid item xs={4}>
@@ -256,7 +270,6 @@ const MyHeader = (props) => {
 						</Grid>
 					</Grid>
 				</Grid>
-
 				{props.data.active && (
 					<Grid item xs={12} sm={12} md={2} style={panelStyle}>
 						<IconButton
@@ -279,7 +292,6 @@ const MyHeader = (props) => {
 						</IconButton>
 					</Grid>
 				)}
-
 				{!props.data.active && (
 					<Grid item xs={2} style={panelActionStyle}>
 						<Grid item xs={12}>
@@ -309,9 +321,11 @@ const MyHeader = (props) => {
 									icon={<Icon icon={'file-download'} size='lg' />}
 									size='lg'
 									onClick={(e) => {
-										e.preventDefault()
+										props.handleActivateClick({
+											versionId: props.data.versionId,
+											smartListId: props.data.smartListId
+										})
 									}}
-									disabled
 								>
 									Activate
 								</IconButton>
@@ -369,6 +383,10 @@ function Lists(props) {
 		props.downloadExcelList(payload)
 	}
 
+	const handleActivateClick = (payload) => {
+		props.activateListVersion(payload)
+	}
+
 	const archivedCount = React.useMemo(() => {
 		let _archivedCount = 0
 		for (const list of props.lists) {
@@ -386,10 +404,18 @@ function Lists(props) {
 	}, [viewArchivedLists, props.lists])
 
 	const transitions = useTransition(visibleLists, (list) => list.smartListId, {
-		from: { opacity: 0 },
-		enter: { opacity: 1 },
-		leave: { opacity: 0 }
+		from: {
+			opacity: 0,
+			maxHeight: `600px`
+		},
+		enter: { opacity: 1, transform: `translateY(0px)` },
+		leave: {
+			opacity: 0,
+			maxHeight: `0px`
+		}
 	})
+
+	//	const tableTransitionProps = useSpring({ opacity: 1, from: { opacity: 0 } })
 
 	return (
 		<Grid container justify='center'>
@@ -413,36 +439,34 @@ function Lists(props) {
 						<Button onClick={handleUploadNewList}>Upload a new list</Button>
 					</Grid>
 				</Grid>
-				{visibleLists && visibleLists.length > 0 && !props.isFetchingLists && (
-					<Grid container spacing={2}>
-						{visibleLists &&
-							transitions.map((animationProps) => {
-								let list = animationProps.item
-								let key = animationProps.key
-								return (
-									<Grid item xs={12} key={key}>
-										<animated.div style={animationProps.props}>
-											<MyList
-												list={list}
-												handleViewAllClick={handleViewAllClick}
-												handleHideAllClick={handleHideAllClick}
-												handleArchiveClick={handleArchiveClick}
-												handleDownloadClick={handleDownloadClick}
-												isDownloadingExcel={props.isDownloadingExcel}
-												isDownloadingExcelVersionId={
-													props.isDownloadingExcelVersionId
-												}
-												viewAll={viewingAll}
-											/>
-										</animated.div>
-									</Grid>
-								)
-							})}
-					</Grid>
-				)}
+				{visibleLists &&
+					visibleLists.length > 0 &&
+					!props.isFetchingLists &&
+					transitions.map((animationProps) => {
+						let list = animationProps.item
+						let key = animationProps.key
+						return (
+							<Grid item xs={12} key={key}>
+								<animated.div style={animationProps.props}>
+									<MyList
+										list={list}
+										handleViewAllClick={handleViewAllClick}
+										handleHideAllClick={handleHideAllClick}
+										handleArchiveClick={handleArchiveClick}
+										handleDownloadClick={handleDownloadClick}
+										handleActivateClick={handleActivateClick}
+										isDownloadingExcel={props.isDownloadingExcel}
+										isDownloadingExcelVersionId={
+											props.isDownloadingExcelVersionId
+										}
+										viewAll={viewingAll}
+									/>
+								</animated.div>
+							</Grid>
+						)
+					})}
 
 				{props.isFetchingLists && <FormLoader />}
-
 				{!props.isFetchingLists &&
 					props.fetchListsSuccess &&
 					props.lists.length < 1 && (
