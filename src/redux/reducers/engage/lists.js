@@ -5,7 +5,9 @@ import {
 	SET_IS_POSTING_LIST,
 	SET_POST_LIST_SUCCESS,
 	SET_IS_FETCHING_LISTS,
-	SET_FETCH_LISTS_SUCCESS
+	SET_FETCH_LISTS_SUCCESS,
+	SET_IS_DOWNLOADING_EXCEL,
+	SET_IS_DOWNLOADING_EXCEL_VERSION_ID
 } from '../../action-types/engage/lists'
 
 export function lists(state = [], action) {
@@ -66,6 +68,24 @@ export function isFetchingLists(state = true, action) {
 	switch (action.type) {
 		case SET_IS_FETCHING_LISTS:
 			return action.isFetchingLists
+		default:
+			return state
+	}
+}
+
+export function isDownloadingExcel(state = false, action) {
+	switch (action.type) {
+		case SET_IS_DOWNLOADING_EXCEL:
+			return action.isDownloadingExcel
+		default:
+			return state
+	}
+}
+
+export function isDownloadingExcelVersionId(state = null, action) {
+	switch (action.type) {
+		case SET_IS_DOWNLOADING_EXCEL_VERSION_ID:
+			return action.isDownloadingExcelVersionId
 		default:
 			return state
 	}

@@ -12,7 +12,11 @@ import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
-import { fetchLists, archiveList } from '../../../redux/actions/engage/lists'
+import {
+	fetchLists,
+	archiveList,
+	downloadExcelList
+} from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
@@ -23,14 +27,17 @@ const mapStateToProps = (state) => {
 		lists: state.engage.lists,
 		accounts: state.accounts,
 		isFetchingLists: state.engage.isFetchingLists,
-		fetchListsSuccess: state.engage.fetchListsSuccess
+		fetchListsSuccess: state.engage.fetchListsSuccess,
+		isDownloadingExcel: state.engage.isDownloadingExcel,
+		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
-		archiveList: (payload) => dispatch(archiveList(payload))
+		archiveList: (payload) => dispatch(archiveList(payload)),
+		downloadExcelList: (payload) => dispatch(downloadExcelList(payload))
 	}
 }
 
@@ -53,7 +60,6 @@ const MyList = (props) => {
 	for (const version of props.list.versions) {
 		if (version.active) activeVersion = version
 	}
-
 	return (
 		<Grid item xs={12}>
 			<Panel
@@ -63,6 +69,9 @@ const MyList = (props) => {
 					<MyHeader
 						data={activeVersion}
 						handleArchiveClick={props.handleArchiveClick}
+						handleDownloadClick={props.handleDownloadClick}
+						isDownloadingExcel={props.isDownloadingExcel}
+						isDownloadingExcelVersionId={props.isDownloadingExcelVersionId}
 					/>
 				}
 				bordered
@@ -77,7 +86,14 @@ const MyList = (props) => {
 									style={{ paddingBottom: 20 }}
 									key={version.smartListId + version.versionId}
 								>
-									<MyHeader data={version} />
+									<MyHeader
+										data={version}
+										handleDownloadClick={props.handleDownloadClick}
+										isDownloadingExcel={props.isDownloadingExcel}
+										isDownloadingExcelVersionId={
+											props.isDownloadingExcelVersionId
+										}
+									/>
 								</div>
 							)
 						}
@@ -249,10 +265,16 @@ const MyHeader = (props) => {
 							appearance='ghost'
 							icon={<Icon icon={'file-download'} size='lg' />}
 							size='lg'
-							disabled
 							block
+							loading={
+								props.isDownloadingExcel &&
+								props.isDownloadingExcelVersionId === props.data.versionId
+							}
 							onClick={(e) => {
-								e.preventDefault()
+								props.handleDownloadClick(
+									props.data.versionId,
+									props.data.smartListName
+								)
 							}}
 						>
 							Download
@@ -269,9 +291,15 @@ const MyHeader = (props) => {
 									icon={<Icon icon={'file-download'} size='lg' />}
 									size='lg'
 									block
-									disabled
+									loading={
+										props.isDownloadingExcel &&
+										props.isDownloadingExcelVersionId === props.data.versionId
+									}
 									onClick={(e) => {
-										e.preventDefault()
+										props.handleDownloadClick(
+											props.data.versionId,
+											props.data.smartListName
+										)
 									}}
 								>
 									Download
@@ -335,16 +363,15 @@ function Lists(props) {
 		props.archiveList(payload)
 	}
 
-	const smartLists = props.lists
-
-	/*React.useMemo(() => {
-		if (!props.lists || props.lists.length < 0) return []
-		if (viewArchivedLists) {
-			return props.lists
-		} else {
-			return props.lists.filter((list) => !list.archived)
+	const handleDownloadClick = (versionId, smartListName) => {
+		let payload = {
+			versionId,
+			smartListName
 		}
-	}, [props.lists, viewArchivedLists]) */
+		props.downloadExcelList(payload)
+	}
+
+	const smartLists = props.lists
 
 	const archivedCount = React.useMemo(() => {
 		let _archivedCount = 0
@@ -390,6 +417,11 @@ function Lists(props) {
 										handleViewAllClick={handleViewAllClick}
 										handleHideAllClick={handleHideAllClick}
 										handleArchiveClick={handleArchiveClick}
+										handleDownloadClick={handleDownloadClick}
+										isDownloadingExcel={props.isDownloadingExcel}
+										isDownloadingExcelVersionId={
+											props.isDownloadingExcelVersionId
+										}
 										viewAll={viewingAll}
 									/>
 								)
