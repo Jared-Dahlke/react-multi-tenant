@@ -137,16 +137,16 @@ export function setUploadedList(uploadedList) {
 
 export function archiveList(payload) {
 	//	let accountId = account.accountId
-	//	let url = apiBase + `/account/${accountId}`
+	let url =
+		apiBase + `/smart-list/${payload.smartListId}?archive=${payload.archive}`
 	return async (dispatch) => {
 		dispatch(setListArchived(payload))
 		try {
-			//const result = await axios.patch(url, account)
-			//if (result.status === 200) {
-			//	console.log(result)
-			//	dispatch(setAccountSaving(false))
-			//	dispatch(setAccountSaved(true))
-			//}
+			const result = await axios.patch(url)
+			if (result.status === 200) {
+				//	dispatch(setAccountSaving(false))
+				//	dispatch(setAccountSaved(true))
+			}
 		} catch (error) {
 			alert(error)
 		}

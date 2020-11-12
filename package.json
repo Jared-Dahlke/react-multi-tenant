@@ -46,6 +46,7 @@
 		"react-router-dom": "5.2.0",
 		"react-scripts": "3.4.0",
 		"react-select-country-list": "2.2.1",
+		"react-spring": "8.0.27",
 		"react-swipeable-views": "0.13.9",
 		"react-window": "1.8.5",
 		"redux": "4.0.5",
