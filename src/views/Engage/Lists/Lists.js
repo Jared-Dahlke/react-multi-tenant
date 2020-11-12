@@ -21,6 +21,7 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
 import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
+import { useTransition, animated } from 'react-spring'
 
 const mapStateToProps = (state) => {
 	return {
@@ -61,78 +62,75 @@ const MyList = (props) => {
 		if (version.active) activeVersion = version
 	}
 	return (
-		<Grid item xs={12}>
-			<Panel
-				style={{ backgroundColor: neutralLightColor }}
-				shaded
-				header={
-					<MyHeader
-						data={activeVersion}
-						handleArchiveClick={props.handleArchiveClick}
-						handleDownloadClick={props.handleDownloadClick}
-						isDownloadingExcel={props.isDownloadingExcel}
-						isDownloadingExcelVersionId={props.isDownloadingExcelVersionId}
-					/>
-				}
-				bordered
-			>
-				{props.viewAll.includes(props.list.smartListId) &&
-					props.list.versions &&
-					props.list.versions.length > 0 &&
-					props.list.versions.map((version, index) => {
-						if (!version.active) {
-							return (
-								<div
-									style={{ paddingBottom: 20 }}
-									key={version.smartListId + version.versionId}
-								>
-									<MyHeader
-										data={version}
-										handleDownloadClick={props.handleDownloadClick}
-										isDownloadingExcel={props.isDownloadingExcel}
-										isDownloadingExcelVersionId={
-											props.isDownloadingExcelVersionId
-										}
-									/>
-								</div>
-							)
-						}
-					})}
-				<div style={{ paddingBottom: 20 }}>
-					<div style={{ float: 'left' }}>
-						<Checkbox
-							checked={props.list.archived}
-							onChange={(e, value) => {
-								props.handleArchiveClick(props.data.smartListId, value)
-							}}
-							disabled
-						>
-							Archived
-						</Checkbox>
-					</div>
-					{props.viewAll.includes(props.list.smartListId) && (
+		<Panel
+			style={{ backgroundColor: neutralLightColor }}
+			shaded
+			header={
+				<MyHeader
+					data={activeVersion}
+					handleArchiveClick={props.handleArchiveClick}
+					handleDownloadClick={props.handleDownloadClick}
+					isDownloadingExcel={props.isDownloadingExcel}
+					isDownloadingExcelVersionId={props.isDownloadingExcelVersionId}
+				/>
+			}
+			bordered
+		>
+			{props.viewAll.includes(props.list.smartListId) &&
+				props.list.versions &&
+				props.list.versions.length > 0 &&
+				props.list.versions.map((version, index) => {
+					if (!version.active) {
+						return (
+							<div
+								style={{ paddingBottom: 20 }}
+								key={version.smartListId + version.versionId}
+							>
+								<MyHeader
+									data={version}
+									handleDownloadClick={props.handleDownloadClick}
+									isDownloadingExcel={props.isDownloadingExcel}
+									isDownloadingExcelVersionId={
+										props.isDownloadingExcelVersionId
+									}
+								/>
+							</div>
+						)
+					}
+				})}
+			<div style={{ paddingBottom: 20 }}>
+				<div style={{ float: 'left' }}>
+					<Checkbox
+						checked={props.list.archived}
+						onChange={(e, value) => {
+							props.handleArchiveClick(props.list.smartListId, value)
+						}}
+					>
+						Archived
+					</Checkbox>
+				</div>
+				{props.viewAll.includes(props.list.smartListId) && (
+					<Button
+						appearance='link'
+						onClick={() => props.handleHideAllClick(props.list.smartListId)}
+						style={{ float: 'right' }}
+					>
+						View less
+					</Button>
+				)}
+
+				{props.list.versions.length > 1 &&
+					!props.viewAll.includes(props.list.smartListId) && (
 						<Button
 							appearance='link'
-							onClick={() => props.handleHideAllClick(props.list.smartListId)}
+							onClick={() => props.handleViewAllClick(props.list.smartListId)}
 							style={{ float: 'right' }}
 						>
-							View less
+							View version history
 						</Button>
 					)}
-
-					{props.list.versions.length > 1 &&
-						!props.viewAll.includes(props.list.smartListId) && (
-							<Button
-								appearance='link'
-								onClick={() => props.handleViewAllClick(props.list.smartListId)}
-								style={{ float: 'right' }}
-							>
-								View version history
-							</Button>
-						)}
-				</div>
-			</Panel>
-		</Grid>
+			</div>
+		</Panel>
 	)
 }
 
@@ -371,8 +369,6 @@ function Lists(props) {
 		props.downloadExcelList(payload)
 	}
 
-	const smartLists = props.lists
-
 	const archivedCount = React.useMemo(() => {
 		let _archivedCount = 0
 		for (const list of props.lists) {
@@ -380,6 +376,20 @@ function Lists(props) {
 		}
 		return _archivedCount
 	}, [props.lists])
+
+	const visibleLists = React.useMemo(() => {
+		if (viewArchivedLists) {
+			return props.lists
+		} else {
+			return props.lists.filter((list) => !list.archived)
+		}
+	}, [viewArchivedLists, props.lists])
+
+	const transitions = useTransition(visibleLists, (list) => list.smartListId, {
+		from: { opacity: 0 },
+		enter: { opacity: 1 },
+		leave: { opacity: 0 }
+	})
 
 	return (
 		<Grid container justify='center'>
@@ -403,27 +413,29 @@ function Lists(props) {
 						<Button onClick={handleUploadNewList}>Upload a new list</Button>
 					</Grid>
 				</Grid>
-				{smartLists && smartLists.length > 0 && !props.isFetchingLists && (
+				{visibleLists && visibleLists.length > 0 && !props.isFetchingLists && (
 					<Grid container spacing={2}>
-						{smartLists &&
-							smartLists.map((list, index) => {
-								if (list.archived && !viewArchivedLists) {
-									return null
-								}
+						{visibleLists &&
+							transitions.map((props) => {
+								let list = props.item
+								let key = props.key
 								return (
-									<MyList
-										list={list}
-										key={index}
-										handleViewAllClick={handleViewAllClick}
-										handleHideAllClick={handleHideAllClick}
-										handleArchiveClick={handleArchiveClick}
-										handleDownloadClick={handleDownloadClick}
-										isDownloadingExcel={props.isDownloadingExcel}
-										isDownloadingExcelVersionId={
-											props.isDownloadingExcelVersionId
-										}
-										viewAll={viewingAll}
-									/>
+									<Grid item xs={12} key={key}>
+										<animated.div style={props.props}>
+											<MyList
+												list={list}
+												handleViewAllClick={handleViewAllClick}
+												handleHideAllClick={handleHideAllClick}
+												handleArchiveClick={handleArchiveClick}
+												handleDownloadClick={handleDownloadClick}
+												isDownloadingExcel={props.isDownloadingExcel}
+												isDownloadingExcelVersionId={
+													props.isDownloadingExcelVersionId
+												}
+												viewAll={viewingAll}
+											/>
+										</animated.div>
+									</Grid>
 								)
 							})}
 					</Grid>
