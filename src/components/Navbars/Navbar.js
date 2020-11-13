@@ -49,7 +49,6 @@ function Header(props) {
 		setShowMobileDrawer(false)
 	}
 	const openMobileDrawer = () => {
-		console.log('calling open mobile drawer')
 		setShowMobileDrawer(true)
 	}
 

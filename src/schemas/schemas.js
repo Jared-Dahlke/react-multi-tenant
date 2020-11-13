@@ -167,9 +167,3 @@ export const brandProfileObjValidation = Yup.object().shape({
 		)
 		.required()
 })
-function emptyStringToNull(value, originalValue) {
-	if (typeof originalValue === 'string' && originalValue === '') {
-		return null
-	}
-	return value
-}
