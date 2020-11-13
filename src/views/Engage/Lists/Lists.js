@@ -33,6 +33,7 @@ const mapStateToProps = (state) => {
 	return {
 		lists: state.engage.lists,
 		accounts: state.accounts,
+		brandProfiles: state.brandProfiles,
 		isFetchingLists: state.engage.isFetchingLists,
 		fetchListsSuccess: state.engage.fetchListsSuccess,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
@@ -73,7 +74,7 @@ const MyList = (props) => {
 			style={{ backgroundColor: neutralLightColor, marginBottom: 20 }}
 			shaded
 			header={
-				<MyHeader
+				<Version
 					data={activeVersion}
 					handleArchiveClick={props.handleArchiveClick}
 					handleDownloadClick={props.handleDownloadClick}
@@ -93,7 +94,7 @@ const MyList = (props) => {
 								style={{ paddingBottom: 20 }}
 								key={version.smartListId + version.versionId}
 							>
-								<MyHeader
+								<Version
 									data={version}
 									handleDownloadClick={props.handleDownloadClick}
 									handleActivateClick={props.handleActivateClick}
@@ -142,7 +143,7 @@ const MyList = (props) => {
 	)
 }
 
-const MyHeader = (props) => {
+const Version = (props) => {
 	let subscriberCount =
 		props.data.subscriberCount > 999999
 			? numeral(props.data.subscriberCount)
@@ -432,26 +433,24 @@ function Lists(props) {
 		<Grid container justify='center'>
 			<Grid item xs={12} sm={12} md={5}>
 				<Grid container justify='flex-start' style={{ marginBottom: 20 }}>
-					<Grid item>
+					<Grid item style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Brand Profile</p>
+						</div>
 						<InputPicker
 							size='lg'
 							id='brandProfileId'
-							name='brandProfileId'
 							label='Brand Profile'
 							placeholder='Select a BrandProfile'
-							labelKey='brandProfileName'
+							labelKey='brandName'
 							valueKey='brandProfileId'
-							options={props.brandProfiles}
-							//	value={values.accountTypeId}
-							onChange={() => console.log('changed')}
-							//	onBlur={setFieldTouched}
-							//		validateField={validateField}
-							//	validateForm={validateForm}
-							//	touched={touched.accountTypeId}
-							//	error={errors.accountTypeId}
-							//	isDisabled={
-							//		!userCan(perms.ACCOUNT_UPDATE) || current.accountId === 1
+							data={props.brandProfiles}
+							//	value={
+
+							//props.brandProfiles && props.brandProfiles[0].brandProfileId
+
 							//	}
+							onChange={() => console.log('changed')}
 						/>
 					</Grid>
 				</Grid>
