@@ -10,7 +10,7 @@ steps:
       - "-t"
       - "gcr.io/$PROJECT_ID/front-end-demo"
       - "--build-arg"
-      - "ENVIRONMENT=staging"
+      - "ENVIRONMENT=demo"
       - "."
 
   # push the container image
