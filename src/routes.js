@@ -192,6 +192,7 @@ export const modifiedRoutes = {
 			settings_users:{
 				path: '/app/settings/users',
 				component: Users,
+				name: 'Users',
 				subRoutes:[
 					 {
 						path: '/app/settings/users/edit/:user',
@@ -225,13 +226,13 @@ export const modifiedRoutes = {
 					},
 					{
 						path: '/app/settings/brandProfiles/admin',
-						name: 'Brand Profiles Admin',
+						name: 'Admin',
 						component: BrandProfilesAdmin,
 						subRoutes:[
 
 							{
 							path: '/app/settings/brandProfiles/admin/scenarios',
-							name: 'Brand Profiles Scenarios',
+							name: 'Scenarios',
 							component: Scenarios,
 							subRoutes: [
 								{

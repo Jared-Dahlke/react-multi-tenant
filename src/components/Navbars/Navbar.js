@@ -15,7 +15,7 @@ import styles from '../../assets/jss/material-dashboard-react/components/headerS
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
 import { perms, userCan } from '../../Can'
-import { routes } from '../../routes'
+import { routes,modifiedRoutes } from '../../routes'
 import Grid from '@material-ui/core/Grid'
 import SideBar from '../SideBar/SideBar'
 import IconButton from 'rsuite/lib/IconButton'
@@ -29,6 +29,69 @@ const mapDispatchToProps = (dispatch) => {
 		setLoggedIn: (loggedIn) => dispatch(setLoggedIn(loggedIn)),
 		clearSiteData: () => dispatch(clearSiteData())
 	}
+}
+
+const generateBreadCrumbs = (routes) => {
+  const crumbSize = 20
+  let url = window.location.pathname
+  const routeHierarchy = []
+
+  const getPathWithoutParams = (path) => {
+    return path.split("/:")[0]
+  }
+
+  const findRoute = (route) => {
+    let subRoutes = Object.values(route.subRoutes)
+    let matchedRoute = subRoutes.find((route) => {
+      if (url === route.path) return true
+      if (
+        route.name.toLowerCase().includes("edit") &&
+        url.includes(getPathWithoutParams(route.path))
+      )
+        return true
+      if (route.subRoutes) return findRoute(route)
+      return false
+    })
+    matchedRoute && routeHierarchy.push(matchedRoute)
+    return matchedRoute
+  }
+
+  const createBreadCrumbs = (routes) => {
+    findRoute(routes)
+    const disabledLinkStyle = {
+      fontSize: crumbSize,
+      cursor: "not-allowed",
+      color: "white",
+      pointerEvents: "none",
+    }
+    return (
+      <Breadcrumbs
+        aria-label="breadcrumb"
+        style={{ color: whiteColor }}
+        separator=">"
+      >
+        {routeHierarchy.reverse().map((curr, index, array) => {
+          if (index === array.length - 1)
+            return (
+              <div key={curr.path} style={disabledLinkStyle}>
+                {curr.name}
+              </div>
+            )
+          return (
+            <Link
+              to={curr.path}
+              style={{ fontSize: crumbSize }}
+              key={curr.path}
+            >
+              {curr.name}
+            </Link>
+          )
+        })}
+      </Breadcrumbs>
+    )
+  }
+
+  return createBreadCrumbs(routes)
 }
 
 function Header(props) {
@@ -55,278 +118,8 @@ function Header(props) {
 	let isMobile = width <= 768
 	const classes = useStyles()
 	const sidebarClasses = useSidebarStyles()
-	function makeBrand() {
-		const crumbSize = 20
 
-		let url = window.location.pathname
-		if (url === routes.app.discover.channelResearch.path) {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Channel Research
-					</div>
-				</Breadcrumbs>
-			)
-		}
-		if (url === routes.app.engage.lists.lists.path) {
-			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Smart Lists
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === routes.app.engage.lists.uploadList.path) {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to={routes.app.engage.lists.lists.path}
-						style={{ fontSize: crumbSize }}
-					>
-						Smart Lists
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Upload List
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === routes.app.engage.lists.listBuilder.path) {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to={routes.app.engage.lists.lists.path}
-						style={{ fontSize: crumbSize }}
-					>
-						Smart Lists
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Builder
-					</div>
-				</Breadcrumbs>
-			)
-		}
-		if (url === routes.app.settings.account.path) {
-			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Account
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === routes.app.settings.users.path) {
-			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Users
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === routes.app.settings.users.create.path) {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to={routes.app.settings.users.path}
-						style={{ fontSize: crumbSize }}
-					>
-						Users
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Create
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url.includes('/app/settings/users/edit')) {
-			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<Link
-						to={routes.app.settings.users.path}
-						style={{ fontSize: crumbSize }}
-					>
-						Users
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Edit
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === routes.app.settings.brandProfiles.path) {
-			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Brand Profiles
-					</div>
-				</Breadcrumbs>
-			)
-		}
-		if (url === routes.app.settings.brandProfiles.create.path) {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to={routes.app.settings.brandProfiles.path}
-						style={{ fontSize: crumbSize }}
-					>
-						Brand Profiles
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Create
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url.includes('/app/settings/brandProfiles/edit')) {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to={routes.app.settings.brandProfiles.path}
-						style={{ fontSize: crumbSize }}
-					>
-						Brand Profiles
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Edit
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === routes.app.settings.brandMentality.path) {
-			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Brand Mentality
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === routes.app.settings.profile.path) {
-			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Profile
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === '/app/settings/brandProfiles/admin') {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to='/app/settings/brandProfiles'
-						style={{ fontSize: crumbSize }}
-					>
-						Brand Profiles
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Admin
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === '/app/settings/brandProfiles/admin/scenarios') {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to='/app/settings/brandProfiles'
-						style={{ fontSize: crumbSize }}
-					>
-						Brand Profiles
-					</Link>
-					<Link
-						to='/app/settings/brandProfiles/admin'
-						style={{ fontSize: crumbSize }}
-					>
-						Admin
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Scenarios
-					</div>
-				</Breadcrumbs>
-			)
-		}
-
-		if (url === '/app/settings/brandProfiles/admin/scenarios/create') {
-			return (
-				<Breadcrumbs
-					aria-label='breadcrumb'
-					style={{ color: whiteColor }}
-					separator='>'
-				>
-					<Link
-						to='/app/settings/brandProfiles'
-						style={{ fontSize: crumbSize }}
-					>
-						Brand Profiles
-					</Link>
-					<Link
-						to='/app/settings/brandProfiles/admin'
-						style={{ fontSize: crumbSize }}
-					>
-						Admin
-					</Link>
-					<Link
-						to='/app/settings/brandProfiles/admin/scenarios'
-						style={{ fontSize: crumbSize }}
-					>
-						Scenarios
-					</Link>
-					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						Create
-					</div>
-				</Breadcrumbs>
-			)
-		}
-		return null
-	}
-
-	var brand = (
+	let brand = (
 		<div className={sidebarClasses.logoImage}>
 			<img src={logo} alt='logo' className={sidebarClasses.img} />
 		</div>
@@ -375,7 +168,7 @@ function Header(props) {
 					showMobileDrawer={showMobileDrawer}
 					openMobileDrawer={openMobileDrawer}
 				/>
-				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{makeBrand()}</div>
+				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{generateBreadCrumbs(modifiedRoutes.app)}</div>
 			</div>
 		)
 	} else {
@@ -442,7 +235,7 @@ function Header(props) {
 						</Nav>
 					</Navbar.Body>
 				</Navbar>
-				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{makeBrand()}</div>
+				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{generateBreadCrumbs(modifiedRoutes.app)}</div>
 			</div>
 		)
 	}
