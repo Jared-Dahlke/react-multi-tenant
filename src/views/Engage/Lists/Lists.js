@@ -22,7 +22,7 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
 import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
-import { useTransition, animated, useSpring } from 'react-spring'
+import { useTransition, animated } from 'react-spring'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -170,7 +170,7 @@ const MyHeader = (props) => {
 									justify='center'
 									style={{ textAlign: 'center' }}
 								>
-									{props.data.smartListName}
+									{props.data.smartListId}
 								</Grid>
 							</Grid>
 						</Grid>
@@ -403,7 +403,7 @@ function Lists(props) {
 		}
 	}, [viewArchivedLists, props.lists])
 
-	const transitions = useTransition(visibleLists, (list) => list.smartListId, {
+	const transition = useTransition(visibleLists, {
 		from: {
 			opacity: 0,
 			maxHeight: `600px`
@@ -412,7 +412,8 @@ function Lists(props) {
 		leave: {
 			opacity: 0,
 			maxHeight: `0px`
-		}
+		},
+		keys: visibleLists.map((item, index) => item.smartListId)
 	})
 
 	//	const tableTransitionProps = useSpring({ opacity: 1, from: { opacity: 0 } })
@@ -442,12 +443,12 @@ function Lists(props) {
 				{visibleLists &&
 					visibleLists.length > 0 &&
 					!props.isFetchingLists &&
-					transitions.map((animationProps) => {
-						let list = animationProps.item
-						let key = animationProps.key
+					transition((values, item) => {
+						let list = item
+						let key = item.smartListId
 						return (
 							<Grid item xs={12} key={key}>
-								<animated.div style={animationProps.props}>
+								<animated.div style={values}>
 									<MyList
 										list={list}
 										handleViewAllClick={handleViewAllClick}

@@ -9,7 +9,6 @@ import {
 	whiteColor,
 	grayColor
 } from '../../material-dashboard-react.js'
-import { neutralExtraLightColor } from '../../colorContants.js'
 
 const headerStyle = () => ({
 	disabledLink: {
