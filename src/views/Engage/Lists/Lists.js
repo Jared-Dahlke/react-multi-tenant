@@ -23,6 +23,8 @@ import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
 import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
 import { useTransition, animated } from 'react-spring'
+import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
+import InputPicker from 'rsuite/lib/InputPicker'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -355,7 +357,11 @@ function Lists(props) {
 	const handleUploadNewList = () => {
 		history.push(routes.app.engage.lists.uploadList.path)
 	}
-
+	const handleCreateNewList = () => {
+		history.push(`${routes.app.engage.lists.listBuilder.path}`, {
+			from: 'lists'
+		})
+	}
 	//let subscribers = numeral(item.channelSubscribers).format('0.0a')
 	const [viewingAll, setViewingAll] = React.useState([])
 	const handleViewAllClick = (smartListId) => {
@@ -418,64 +424,101 @@ function Lists(props) {
 
 	//	const tableTransitionProps = useSpring({ opacity: 1, from: { opacity: 0 } })
 
+	if (props.isFetchingLists) {
+		return <FormLoader />
+	}
+
 	return (
 		<Grid container justify='center'>
-			<GridItem xs={12} sm={12} md={12}>
-				<Grid item xs={12} sm={12} md={12}>
-					<Grid container justify='flex-end' style={{ marginBottom: 30 }}>
-						<Grid item xs={8}></Grid>
-						{archivedCount > 0 && (
-							<Grid item xs={2}>
-								<Checkbox
-									checked={viewArchivedLists}
-									onChange={(e, val) => {
-										setViewArchivedLists(val)
-									}}
-								>
-									View archived
-								</Checkbox>
-							</Grid>
-						)}
-
-						<Button onClick={handleUploadNewList}>Upload a new list</Button>
+			<Grid item xs={12} sm={12} md={5}>
+				<Grid container justify='flex-start' style={{ marginBottom: 20 }}>
+					<Grid item>
+						<InputPicker
+							size='lg'
+							id='brandProfileId'
+							name='brandProfileId'
+							label='Brand Profile'
+							placeholder='Select a BrandProfile'
+							labelKey='brandProfileName'
+							valueKey='brandProfileId'
+							options={props.brandProfiles}
+							//	value={values.accountTypeId}
+							onChange={() => console.log('changed')}
+							//	onBlur={setFieldTouched}
+							//		validateField={validateField}
+							//	validateForm={validateForm}
+							//	touched={touched.accountTypeId}
+							//	error={errors.accountTypeId}
+							//	isDisabled={
+							//		!userCan(perms.ACCOUNT_UPDATE) || current.accountId === 1
+							//	}
+						/>
 					</Grid>
 				</Grid>
-				{visibleLists &&
-					visibleLists.length > 0 &&
-					!props.isFetchingLists &&
-					transition((values, item) => {
-						let list = item
-						let key = item.smartListId
-						return (
-							<Grid item xs={12} key={key}>
-								<animated.div style={values}>
-									<MyList
-										list={list}
-										handleViewAllClick={handleViewAllClick}
-										handleHideAllClick={handleHideAllClick}
-										handleArchiveClick={handleArchiveClick}
-										handleDownloadClick={handleDownloadClick}
-										handleActivateClick={handleActivateClick}
-										isDownloadingExcel={props.isDownloadingExcel}
-										isDownloadingExcelVersionId={
-											props.isDownloadingExcelVersionId
-										}
-										viewAll={viewingAll}
-									/>
-								</animated.div>
-							</Grid>
-						)
-					})}
+			</Grid>
+			<Grid item xs={12} sm={12} md={7}>
+				<Grid
+					container
+					justify='flex-end'
+					spacing={2}
+					style={{ marginBottom: 20 }}
+				>
+					<Grid item>
+						{archivedCount > 0 && (
+							<Checkbox
+								checked={viewArchivedLists}
+								onChange={(e, val) => {
+									setViewArchivedLists(val)
+								}}
+							>
+								View archived
+							</Checkbox>
+						)}
+					</Grid>
+					<Grid item>
+						<ButtonToolbar>
+							<Button onClick={handleCreateNewList} color='green'>
+								Build New SmartList
+							</Button>
+							<Button onClick={handleUploadNewList}>Upload Excel/CSV</Button>
+						</ButtonToolbar>
+					</Grid>
+				</Grid>
+			</Grid>
+			{visibleLists &&
+				visibleLists.length > 0 &&
+				!props.isFetchingLists &&
+				transition((values, item) => {
+					let list = item
+					let key = item.smartListId
+					return (
+						<Grid item xs={12} key={key}>
+							<animated.div style={values}>
+								<MyList
+									list={list}
+									handleViewAllClick={handleViewAllClick}
+									handleHideAllClick={handleHideAllClick}
+									handleArchiveClick={handleArchiveClick}
+									handleDownloadClick={handleDownloadClick}
+									handleActivateClick={handleActivateClick}
+									isDownloadingExcel={props.isDownloadingExcel}
+									isDownloadingExcelVersionId={
+										props.isDownloadingExcelVersionId
+									}
+									viewAll={viewingAll}
+								/>
+							</animated.div>
+						</Grid>
+					)
+				})}
 
-				{props.isFetchingLists && <FormLoader />}
-				{!props.isFetchingLists &&
-					props.fetchListsSuccess &&
-					props.lists.length < 1 && (
-						<h2 style={{ color: whiteColor }}>
-							This account currently has no lists associated with it.
-						</h2>
-					)}
-			</GridItem>
+			{!props.isFetchingLists &&
+				props.fetchListsSuccess &&
+				props.lists.length < 1 && (
+					<h2 style={{ color: whiteColor }}>
+						This account currently has no lists associated with it.
+					</h2>
+				)}
 		</Grid>
 	)
 }
