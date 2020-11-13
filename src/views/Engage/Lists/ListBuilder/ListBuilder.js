@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import Grid from '@material-ui/core/Grid'
 import { whiteColor } from '../../../../assets/jss/material-dashboard-react.js'
 import Tabs from './components/Tabs'
+import { useHistory } from 'react-router-dom'
+import { routes } from '../../../../routes'
 import InputPicker from 'rsuite/lib/InputPicker'
 import FilterList from '@material-ui/icons/FilterList'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -25,7 +27,6 @@ import { neutralColor } from '../../../../assets/jss/colorContants.js'
 
 const bodyHeight = 600
 const borderRad = 2
-const blockHeight = 48
 
 const styles = {
 	summaryBody: {
@@ -67,9 +68,13 @@ const downloadClick = () => {
 }
 
 function ListBuilder(props) {
+	const history = useHistory()
+	if (!props.location.state || props.location.state.from !== 'lists') {
+		console.log(routes.app.engage.lists.lists.path)
+		history.push(routes.app.engage.lists.lists.path)
+	}
 	const [tabIndex, setTabIndex] = React.useState(0)
 	const [filters, setFilters] = React.useState({})
-	const [currentBrandProfileId, setCurrentBrandProfileId] = React.useState('')
 
 	const countries = countryList().getData()
 	const languages = [
@@ -236,12 +241,6 @@ function ListBuilder(props) {
 
 	const disableFilters = true //tabIndex > 0 ? false : true
 
-	React.useEffect(() => {
-		if (props.brandProfiles && props.brandProfiles.length > 0) {
-			setCurrentBrandProfileId(props.brandProfiles[0].brandProfileId)
-		}
-	}, [props.brandProfiles])
-
 	const CustomInputGroup = ({ placeholder, ...props }) => (
 		<InputGroup {...props}>
 			<Input placeholder={placeholder} />
@@ -253,18 +252,7 @@ function ListBuilder(props) {
 
 	return (
 		<Grid container spacing={1}>
-			<Grid item xs={12} sm={12} md={3}>
-				<InputPicker
-					id={'brandProfileSelect'}
-					placeholder={'Brand Profile'}
-					data={props.brandProfiles}
-					labelKey={'brandName'}
-					valueKey={'brandProfileId'}
-					value={currentBrandProfileId}
-					style={{ width: '100%' }}
-					size='lg'
-				/>
-			</Grid>
+			<Grid item xs={12} sm={12} md={3}></Grid>
 			<Grid item xs={12} sm={12} md={9}>
 				<Button
 					color='primary'

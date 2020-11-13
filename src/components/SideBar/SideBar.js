@@ -61,10 +61,6 @@ export default function Sidebar(props) {
 								href={routes.app.engage.lists.lists.path}
 								label='Smart Lists'
 							/>
-							<NavLink
-								href={routes.app.engage.lists.listBuilder.path}
-								label='List Builder'
-							/>
 						</Dropdown>
 						<Dropdown
 							eventKey='5'

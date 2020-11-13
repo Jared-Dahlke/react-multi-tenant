@@ -104,9 +104,19 @@ function Header(props) {
 
 		if (url === routes.app.engage.lists.listBuilder.path) {
 			return (
-				<Breadcrumbs aria-label='breadcrumb' style={{ color: whiteColor }}>
+				<Breadcrumbs
+					aria-label='breadcrumb'
+					style={{ color: whiteColor }}
+					separator='>'
+				>
+					<Link
+						to={routes.app.engage.lists.lists.path}
+						style={{ fontSize: crumbSize }}
+					>
+						Smart Lists
+					</Link>
 					<div className={classes.disabledLink} style={{ fontSize: crumbSize }}>
-						List Builder
+						Builder
 					</div>
 				</Breadcrumbs>
 			)
@@ -397,10 +407,6 @@ function Header(props) {
 								<NavLink
 									href={routes.app.engage.lists.lists.path}
 									label='Smart Lists'
-								/>
-								<NavLink
-									href={routes.app.engage.lists.listBuilder.path}
-									label='List Builder'
 								/>
 							</Dropdown>
 
