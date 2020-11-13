@@ -6,39 +6,25 @@ export const schemaValidation = Yup.object().shape({
 		.typeError('Required')
 		.required('Required'),
 	basicInfoProfileName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	basicInfoWebsiteUrl: Yup.string()
-		.test(
-			'urlTest',
-			'Valid URL required (e.g. google.com)',
-			(basicInfoWebsiteUrl) => {
-				return urlRegex({ exact: true, strict: false }).test(
-					basicInfoWebsiteUrl
-				)
-			}
-		)
-		.required('Required'),
-
+		.required('Required')
+		.test('urlTest', 'Valid URL required', (basicInfoWebsiteUrl) => {
+			return urlRegex({ exact: true, strict: false }).test(basicInfoWebsiteUrl)
+		}),
 	basicInfoTwitterProfile: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 30 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 30 characters'),
+
 	topCompetitors: Yup.array()
 		.typeError('Wrong type')
-		.min(1, 'You have to create at least one competitor')
-		.of(
-			Yup.object()
-				.shape({
-					label: Yup.string(),
-					value: Yup.string()
-				})
-				.transform((v) => (v === '' ? null : v))
-		),
+		.min(1, 'At least one competitor is required'),
 	topics: Yup.array()
 		.typeError('Wrong type')
-		.test('topicsTest', 'You must include at least one topic', (topics) => {
+		.test('topicsTest', 'Please include at least one topic', (topics) => {
 			return topicsHasResponse(topics)
 		}),
 	scenarios: Yup.array()
@@ -62,7 +48,7 @@ export const schemaValidation = Yup.object().shape({
 })
 
 function categoriesHasResponse(categories) {
-	if (categories.length < 1) return false
+	if (!categories || categories.length < 1) return false
 	for (const category of categories) {
 		if (category.contentCategoryResponseId !== 3) return true
 	}
@@ -70,6 +56,7 @@ function categoriesHasResponse(categories) {
 }
 
 function topicsHasResponse(topics) {
+	if (!topics || topics.length < 1) return false
 	for (const topic of topics) {
 		if (topic.topicResponseId == 1) return true
 		if (topic.children && topic.children.length > 0) {
@@ -81,10 +68,44 @@ function topicsHasResponse(topics) {
 }
 
 function scenariosAllHaveAResponse(scenarios) {
-	if (scenarios.length < 1) return false
+	if (!scenarios || scenarios.length < 1) return false
 	for (const scenario of scenarios) {
 		if (!scenario.scenarioResponseId || scenario.scenarioResponseId.length < 1)
 			return false
 	}
+	return true
+}
+
+export const stepValidated = (index, errors, values) => {
+	if (!errors || Object.keys(errors).length < 1) {
+		return true
+	}
+	if (index === 0) {
+		return (
+			customIsValid(errors, 'basicInfo') &&
+			customIsValid(errors, 'topCompetitors')
+		)
+	}
+	if (index === 1) {
+		return (
+			customIsValid(errors, 'scenarios') && customIsValid(errors, 'categories')
+		)
+	}
+
+	if (index === 2) {
+		return customIsValid(errors, 'topics')
+	}
+	return true
+}
+
+const customIsValid = (errors, formName) => {
+	for (var prop in errors) {
+		if (Object.prototype.hasOwnProperty.call(errors, prop)) {
+			if (prop.includes(formName)) {
+				return false
+			}
+		}
+	}
+
 	return true
 }

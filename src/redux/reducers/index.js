@@ -14,7 +14,9 @@ import {
 	user,
 	userProfileIsLoading,
 	loggingIn,
-	updatingPassword
+	updatingPassword,
+	loggedInUserPermissions,
+	resettingPassword
 } from './auth'
 import {
 	users,
@@ -57,9 +59,16 @@ import {
 	brandProfileCompetitors,
 	brandProfileLoading,
 	brandProfileSaving,
-	brandProfileSaved
+	brandProfileSaved,
+	scenariosIsLoading,
+	scenarioSaving,
+	scenarioCreated,
+	scenarioArchiving,
+	scenarioArchived
 } from './brandProfiles'
 import { categories, channels, videos } from './discover/channels'
+
+import engage from './engage/index'
 
 export default combineReducers({
 	authToken,
@@ -114,5 +123,13 @@ export default combineReducers({
 	brandProfileSaving,
 	brandProfileSaved,
 	userAddError,
-	updatingPassword
+	updatingPassword,
+	loggedInUserPermissions,
+	resettingPassword,
+	scenariosIsLoading,
+	scenarioSaving,
+	scenarioCreated,
+	scenarioArchiving,
+	scenarioArchived,
+	engage
 })

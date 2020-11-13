@@ -1,7 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../components/Grid/GridItem.js'
-import Button from '../../components/CustomButtons/Button.js'
+import Button from 'rsuite/lib/Button'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
@@ -27,6 +27,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
+import { UserCan, perms, userCan } from '../../Can'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -75,12 +76,17 @@ function BrandProfiles(props) {
 
 	const handleEditBrandProfileClick = (profile) => {
 		props.fetchBrandProfile(profile.brandProfileId)
-		let url = `/admin/settings/brandProfiles/edit/${profile.brandProfileId}`
+		let url = `/app/settings/brandProfiles/edit/${profile.brandProfileId}`
 		history.push(url)
 	}
 
 	const handleCreateNewProfileClick = () => {
-		let url = `/admin/settings/brandProfiles/create`
+		let url = `/app/settings/brandProfiles/create`
+		history.push(url)
+	}
+
+	const handleAdminClick = () => {
+		let url = `/app/settings/brandProfiles/admin`
 		history.push(url)
 	}
 
@@ -101,12 +107,21 @@ function BrandProfiles(props) {
 				</Alert>
 			</Snackbar>
 
-			<GridItem xs={12} sm={12} md={6}>
+			<GridItem xs={12} sm={12} md={8}>
+				<Grid container justify='flex-end'>
+					<Button appearance='link' onClick={handleAdminClick}>
+						Admin
+					</Button>
+				</Grid>
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
-						<Button color='primary' onClick={handleCreateNewProfileClick}>
-							Create New Profile
-						</Button>
+						<Grid container justify='flex-end'>
+							<UserCan do={perms.BRAND_PROFILE_CREATE}>
+								<Button onClick={handleCreateNewProfileClick}>
+									Create New Profile
+								</Button>
+							</UserCan>
+						</Grid>
 
 						<Table className={classes.table}>
 							<TableHead className={tableClasses['primaryTableHeader']}>
@@ -163,30 +178,32 @@ function BrandProfiles(props) {
 														/>
 													</IconButton>
 												</Tooltip>
-												<Tooltip
-													id='tooltip-top-start'
-													title='Remove'
-													placement='top'
-													classes={{ tooltip: classes.tooltip }}
-												>
-													<IconButton
-														aria-label='Close'
-														className={classes.tableActionButton}
-														onClick={() => {
-															handleDeleteBrandProfileClick(
-																profile.brandProfileId
-															)
-														}}
+												<UserCan do={perms.BRAND_PROFILE_DELETE}>
+													<Tooltip
+														id='tooltip-top-start'
+														title='Remove'
+														placement='top'
+														classes={{ tooltip: classes.tooltip }}
 													>
-														<Close
-															className={
-																classes.tableActionButtonIcon +
-																' ' +
-																classes.close
-															}
-														/>
-													</IconButton>
-												</Tooltip>
+														<IconButton
+															aria-label='Close'
+															className={classes.tableActionButton}
+															onClick={() => {
+																handleDeleteBrandProfileClick(
+																	profile.brandProfileId
+																)
+															}}
+														>
+															<Close
+																className={
+																	classes.tableActionButtonIcon +
+																	' ' +
+																	classes.close
+																}
+															/>
+														</IconButton>
+													</Tooltip>
+												</UserCan>
 											</TableCell>
 										</TableRow>
 									))}
@@ -206,9 +223,13 @@ function BrandProfiles(props) {
 							color: 'white'
 						}}
 					>
-						<Button color='primary' onClick={handleCreateNewProfileClick}>
-							Create New Profile
-						</Button>
+						<UserCan do={perms.BRAND_PROFILE_CREATE}>
+							<Button onClick={handleCreateNewProfileClick}>
+								Create New Profile
+							</Button>
+						</UserCan>
+						{!userCan(perms.BRAND_PROFILE_CREATE) &&
+							'There are currently no brand profiles associated with this account'}
 					</div>
 				)}
 			</GridItem>

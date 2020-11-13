@@ -6,10 +6,12 @@ import {
 	SET_USER_ID,
 	USER_PROFILE_IS_LOADING,
 	SET_LOGGING_IN,
-	SET_UPDATING_PASSWORD
+	SET_UPDATING_PASSWORD,
+	SET_LOGGED_IN_USER_PERMISSIONS,
+	SET_RESETTING_PASSWORD
 } from '../action-types/auth'
 
-import { userObjValidation } from '../../schemas'
+import { userObjValidation } from '../../schemas/schemas'
 
 let newUser = {
 	userId: 0,
@@ -74,6 +76,15 @@ export function isLoggedIn(state = false, action) {
 	}
 }
 
+export function loggedInUserPermissions(state = [], action) {
+	switch (action.type) {
+		case SET_LOGGED_IN_USER_PERMISSIONS:
+			return action.loggedInUserPermissions
+		default:
+			return state
+	}
+}
+
 export function loggingIn(state = false, action) {
 	switch (action.type) {
 		case SET_LOGGING_IN:
@@ -87,6 +98,15 @@ export function updatingPassword(state = false, action) {
 	switch (action.type) {
 		case SET_UPDATING_PASSWORD:
 			return action.updatingPassword
+		default:
+			return state
+	}
+}
+
+export function resettingPassword(state = false, action) {
+	switch (action.type) {
+		case SET_RESETTING_PASSWORD:
+			return action.resettingPassword
 		default:
 			return state
 	}

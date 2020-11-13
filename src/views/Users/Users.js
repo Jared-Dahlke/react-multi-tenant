@@ -32,6 +32,7 @@ import Error from '@material-ui/icons/Error'
 import { Link } from 'react-router-dom'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { FormLoader } from '../../components/SkeletonLoader'
+import { UserCan, perms } from '../../Can'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -81,7 +82,7 @@ function Users(props) {
 	const userHeaders = ['First Name', 'Last Name', 'Company', 'Email', '']
 
 	const handleEditUserClick = (user) => {
-		let url = `/admin/settings/users/edit/${user.userId}`
+		let url = `/app/settings/users/edit/${user.userId}`
 		history.push(url)
 	}
 
@@ -139,12 +140,14 @@ function Users(props) {
 
 			<Grid container justify='flex-end'>
 				<GridItem>
-					<Link
-						style={{ textDecoration: 'none' }}
-						to={'/admin/settings/users/create'}
-					>
-						<Button color='primary'>Create New User</Button>
-					</Link>
+					<UserCan do={perms.USER_CREATE}>
+						<Link
+							style={{ textDecoration: 'none' }}
+							to={'/app/settings/users/create'}
+						>
+							<Button color='primary'>Create New User</Button>
+						</Link>
+					</UserCan>
 				</GridItem>
 			</Grid>
 
@@ -214,28 +217,30 @@ function Users(props) {
 															/>
 														</IconButton>
 													</Tooltip>
-													<Tooltip
-														id='tooltip-top-start'
-														title='Remove'
-														placement='top'
-														classes={{ tooltip: classes.tooltip }}
-													>
-														<IconButton
-															aria-label='Close'
-															className={classes.tableActionButton}
-															onClick={() => {
-																handleDeleteUserClick(user)
-															}}
+													<UserCan do={perms.USER_DELETE}>
+														<Tooltip
+															id='tooltip-top-start'
+															title='Remove'
+															placement='top'
+															classes={{ tooltip: classes.tooltip }}
 														>
-															<Close
-																className={
-																	classes.tableActionButtonIcon +
-																	' ' +
-																	classes.close
-																}
-															/>
-														</IconButton>
-													</Tooltip>
+															<IconButton
+																aria-label='Close'
+																className={classes.tableActionButton}
+																onClick={() => {
+																	handleDeleteUserClick(user)
+																}}
+															>
+																<Close
+																	className={
+																		classes.tableActionButtonIcon +
+																		' ' +
+																		classes.close
+																	}
+																/>
+															</IconButton>
+														</Tooltip>
+													</UserCan>
 												</TableCell>
 											</TableRow>
 										))}

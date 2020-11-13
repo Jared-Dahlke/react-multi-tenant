@@ -10,6 +10,7 @@ import Alert from '@material-ui/lab/Alert'
 import { Form, withFormik } from 'formik'
 import Button from 'rsuite/lib/Button'
 import * as Yup from 'yup'
+import { useHistory } from 'react-router-dom'
 
 // Redux
 import { userProfileFetchData } from '../../redux/actions/auth.js'
@@ -31,31 +32,37 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchUserProfile: () => dispatch(userProfileFetchData()),
 		updateUserData: (userData) => dispatch(updateUserData(userData)),
-
 		setUserProfileSaved: (bool) => dispatch(userProfileSaved(bool))
 	}
 }
 
 const schemaValidation = Yup.object().shape({
 	firstName: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	lastName: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	company: Yup.string()
-		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
-	email: Yup.string()
-		.email('Invalid email')
 		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	lastName: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	company: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	email: Yup.string()
+		.required('Required')
+		.email('Invalid email')
 })
 
 function UserProfile(props) {
-	const { isValid, dirty } = props
+	let history = useHistory()
+
+	const handleResetPassword = () => {
+		let url = `/resetPassword`
+		history.push(url)
+	}
+
+	const { isValid, dirty, values } = props
 
 	return (
 		<div>
@@ -70,6 +77,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={5}>
 												<FormikInput
 													name='company'
+													formikValue={values.company}
 													labelText='Company'
 													id='company'
 												/>
@@ -77,6 +85,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={4}>
 												<FormikInput
 													name='email'
+													formikValue={values.email}
 													labelText='Email'
 													id='email'
 												/>
@@ -86,6 +95,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={6}>
 												<FormikInput
 													name='firstName'
+													formikValue={values.firstName}
 													labelText='First Name'
 													id='firstName'
 												/>
@@ -93,6 +103,7 @@ function UserProfile(props) {
 											<GridItem xs={12} sm={12} md={6}>
 												<FormikInput
 													name='lastName'
+													formikValue={values.lastName}
 													labelText='Last Name'
 													id='lastName'
 												/>
@@ -108,6 +119,14 @@ function UserProfile(props) {
 											type='submit'
 										>
 											Save
+										</Button>
+
+										<Button
+											size={'sm'}
+											appearance='link'
+											onClick={handleResetPassword}
+										>
+											Change my password
 										</Button>
 
 										<Snackbar
@@ -152,6 +171,8 @@ const MyEnhancedForm = withFormik({
 		}
 	},
 	enableReinitialize: true,
+	validateOnChange: true,
+	validateOnBlur: true,
 	validationSchema: schemaValidation,
 	handleSubmit: (values, { props }) => {
 		props.updateUserData(values)

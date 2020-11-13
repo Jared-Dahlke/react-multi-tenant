@@ -19,12 +19,25 @@ const useStyles = makeStyles(styles)
 export default function CustomInput(props) {
 	const classes = useStyles()
 	const { labelText, id } = props
+	const [myVal, setMyVal] = React.useState(props.formikValue)
+
+	const handleBlur = async (e, form) => {
+		e.preventDefault()
+		await form.setFieldValue(props.name, e.target.value)
+		form.validateField(props.name)
+	}
 
 	return (
-		<Field name={props.name} validate={props.validate}>
+		<Field name={props.name}>
 			{({ field, form }) => (
-				<FormControl fullWidth={true} className={classes.formControl}>
+				<FormControl
+					fullWidth={true}
+					className={
+						props.simple ? classes.formControlSlim : classes.formControl
+					}
+				>
 					{labelText && <Label label={labelText} />}
+
 					<InputGroup>
 						{props.startAdornmentText && (
 							<InputGroup.Addon style={{ color: '#AAAAAA' }}>
@@ -34,8 +47,9 @@ export default function CustomInput(props) {
 
 						<Input
 							id={id}
-							value={field.value}
-							onChange={(e) => form.setFieldValue(props.name, e)}
+							value={myVal}
+							onChange={(e) => setMyVal(e)}
+							onBlur={(e) => handleBlur(e, form)}
 							disabled={props.disabled}
 							style={{
 								borderColor: 'white',
@@ -43,14 +57,18 @@ export default function CustomInput(props) {
 							}}
 						/>
 
-						<InputGroup.Addon>
-							{!form.errors[field.name] && field.value.length > 0 && (
-								<Icon icon='check' style={{ color: successColor[0] }} />
-							)}
-						</InputGroup.Addon>
+						{!props.simple && (
+							<InputGroup.Addon>
+								{!form.errors[field.name] &&
+								field.value.length > 0 &&
+								!props.specialError ? (
+									<Icon icon='check' style={{ color: successColor[0] }} />
+								) : null}
+							</InputGroup.Addon>
+						)}
 					</InputGroup>
 
-					{form.errors[field.name] && (
+					{(form.errors[field.name] || props.specialError) && (
 						<div>
 							<FormHelperText
 								id='component-helper-text'
@@ -60,7 +78,9 @@ export default function CustomInput(props) {
 									bottom: '-1'
 								}}
 							>
-								{form.errors[field.name]}
+								{form.errors[field.name]
+									? form.errors[field.name]
+									: props.specialError}
 							</FormHelperText>
 						</div>
 					)}

@@ -8,8 +8,6 @@
 		"npm": "6.12.1"
 	},
 	"dependencies": {
-		"@casl/ability": "4.1.6",
-		"@casl/react": "2.1.1",
 		"@material-ui/core": "4.11.0",
 		"@material-ui/icons": "4.9.1",
 		"@material-ui/lab": "4.0.0-alpha.56",
@@ -29,11 +27,11 @@
 		"classnames": "2.2.6",
 		"customize-cra": "1.0.0",
 		"email-validator": "2.0.4",
-		"formik": "2.1.4",
+		"formik": "2.2.1",
 		"just-debounce-it": "1.1.0",
 		"less": "3.12.2",
 		"less-loader": "7.0.2",
-		"material-ui-search-bar": "1.0.0",
+		"lodash": "4.17.20",
 		"node-uuid": "1.4.8",
 		"numeral": "2.0.6",
 		"prettier-eslint-cli": "5.0.0",
@@ -52,6 +50,7 @@
 		"redux": "4.0.5",
 		"redux-thunk": "2.3.0",
 		"rsuite": "4.8.2",
+		"simple-encryptor": "4.0.0",
 		"source-map-explorer": "2.5.0",
 		"typescript": "3.7.5",
 		"url-regex": "5.0.0",
@@ -88,7 +87,7 @@
 			"react/jsx-max-props-per-line": [
 				1,
 				{
-					"maximum": 1
+					"maximum": 3
 				}
 			]
 		}

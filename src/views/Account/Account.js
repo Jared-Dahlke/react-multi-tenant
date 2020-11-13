@@ -27,6 +27,7 @@ import {
 	accountCreated,
 	setAccountSaved
 } from '../../redux/actions/accounts'
+import { UserCan, perms, userCan } from '../../Can'
 
 const mapStateToProps = (state) => {
 	return {
@@ -37,7 +38,8 @@ const mapStateToProps = (state) => {
 		accountCreated: state.accountCreated,
 		accountSaved: state.accountSaved,
 		accountSaving: state.accountSaving,
-		rolesIsLoading: state.rolesIsLoading
+		rolesIsLoading: state.rolesIsLoading,
+		user: state.user
 	}
 }
 
@@ -65,21 +67,21 @@ const schemaValidation = Yup.object().shape({
 				.transform((v) => (v === '' ? null : v))
 		),
 	accountName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	contactName: Yup.string()
+		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(50, 'Must be less than 50 characters')
-		.required('Required'),
+		.max(50, 'Must be less than 50 characters'),
 	contactEmail: Yup.string()
-		.email('Invalid email')
-		.required('Required'),
+		.required('Required')
+		.email('Invalid email'),
 	accountMargin: Yup.number()
 		.typeError('Account margin must be a number')
+		.required('Required')
 		.min(0, 'Margin must be a positive number')
-		.max(3000, 'Margin cannot be greater than 3000')
-		.required('Required'),
+		.max(3000, 'Margin cannot be greater than 3000'),
 	accountType: Yup.object()
 		.shape({
 			label: Yup.string(),
@@ -143,9 +145,7 @@ function Account(props) {
 		setFieldTouched,
 		validateField,
 		validateForm,
-		isSubmitting,
 		isValid,
-		isValidating,
 		dirty
 	} = props
 
@@ -172,34 +172,60 @@ function Account(props) {
 								<GridContainer>
 									<Grid container justify='flex-end'>
 										<GridItem>
-											<Button onClick={() => handleCreateChild(current)}>
-												Create Child Account
-											</Button>
+											<UserCan do={perms.ACCOUNT_CREATE}>
+												<Button onClick={() => handleCreateChild(current)}>
+													Create Child Account
+												</Button>
+											</UserCan>
 										</GridItem>
 									</Grid>
 
 									<GridItem xs={12} sm={12} md={12}>
 										<FormikInput
 											name='accountName'
+											formikValue={values.accountName}
 											labelText='Account Name'
 											id='accountName'
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 										/>
 
 										<FormikInput
 											name='parentAccountName'
+											formikValue={values.parentAccountName}
 											labelText='Parent Account'
 											disabled
 										/>
 
-										<FormikInput name='contactName' labelText='Contact Name' />
+										<FormikInput
+											name='contactName'
+											formikValue={values.contactName}
+											labelText='Contact Name'
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
+										/>
 
 										<FormikInput
 											name='contactEmail'
+											formikValue={values.contactEmail}
 											labelText='Contact Email'
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 										/>
 										<FormikInput
 											name='accountMargin'
+											formikValue={values.accountMargin}
 											labelText='Account Margin'
+											disabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
 										/>
 
 										<FormikSelect
@@ -217,6 +243,11 @@ function Account(props) {
 											validateForm={validateForm}
 											touched={touched.accountTypeId}
 											error={errors.accountTypeId}
+											isDisabled={
+												!userCan(perms.ACCOUNT_UPDATE) ||
+												current.accountId === 1
+											}
+											hideSearch
 										/>
 									</GridItem>
 								</GridContainer>
@@ -224,22 +255,32 @@ function Account(props) {
 
 							<CardFooter>
 								{current.accountName === 'Sightly' ||
+								current.accountId === 1 ||
 								(current.children && current.children.length > 0) ? null : (
-									<Button
-										color='red'
-										onClick={() => handleDeleteAccount(current)}
-									>
-										Delete
-									</Button>
+									<UserCan do={perms.ACCOUNT_DELETE}>
+										<Button
+											color='red'
+											onClick={() => handleDeleteAccount(current)}
+										>
+											Delete
+										</Button>
+									</UserCan>
 								)}
 
-								<Button
-									loading={props.accountSaving}
-									disabled={!isValid || !dirty || props.accountSaving}
-									type='submit'
-								>
-									Save
-								</Button>
+								<UserCan do={perms.ACCOUNT_UPDATE}>
+									<Button
+										loading={props.accountSaving}
+										disabled={
+											!isValid ||
+											!dirty ||
+											props.accountSaving ||
+											current.accountId === 1
+										}
+										type='submit'
+									>
+										Save
+									</Button>
+								</UserCan>
 								<Snackbar
 									autoHideDuration={2000}
 									place='bc'
@@ -306,6 +347,8 @@ const FormikForm = withFormik({
 	},
 	enableReinitialize: true,
 	validateOnMount: true,
+	validateOnChange: true,
+	validateOnBlur: true,
 	validationSchema: schemaValidation,
 	handleSubmit: (values, { props }) => {
 		let account = {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { dangerColor } from '../../assets/jss/material-dashboard-react'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import SelectPicker from 'rsuite/lib/SelectPicker'
@@ -16,22 +16,7 @@ export default function SelectField(props) {
 		onChange(name, value)
 	}
 
-	function handleBlur() {
-		const { onBlur, name } = props
-		onBlur(name, true)
-	}
-
-	const {
-		id,
-		name,
-		label,
-		placeholder,
-		options,
-		value,
-		isDisabled,
-		touched,
-		error
-	} = props
+	const { id, label, placeholder, options, value, isDisabled, error } = props
 
 	return (
 		<FormControl fullWidth={true} className={classes.formControl}>
@@ -45,11 +30,11 @@ export default function SelectField(props) {
 				data={options}
 				value={value}
 				onChange={handleChange}
-				onBlur={handleBlur}
 				disabled={isDisabled}
 				cleanable={false}
 				style={{ width: '100%' }}
 				preventOverflow={true}
+				searchable={!props.hideSearch}
 			/>
 			<div>
 				<FormHelperText

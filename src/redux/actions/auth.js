@@ -6,13 +6,17 @@ import {
 	SET_ALERT,
 	USER_PROFILE_IS_LOADING,
 	SET_LOGGING_IN,
-	SET_UPDATING_PASSWORD
+	SET_UPDATING_PASSWORD,
+	SET_LOGGED_IN_USER_PERMISSIONS,
+	SET_RESETTING_PASSWORD
 } from '../action-types/auth'
 import axios from '../../axiosConfig'
 import config from '../../config'
-import { userObjValidation } from '../../schemas'
-
-const apiBase = config.apiGateway.URL
+import { userObjValidation } from '../../schemas/schemas'
+var encryptor = require('simple-encryptor')(
+	process.env.REACT_APP_LOCAL_STORAGE_KEY
+)
+const apiBase = config.api.userAccountUrl
 
 export function setAuthToken(payload) {
 	return { type: SET_AUTH_TOKEN, payload }
@@ -45,6 +49,13 @@ export function setUserId(payload) {
 	return {
 		type: SET_USER_ID,
 		payload
+	}
+}
+
+export function setLoggedInUserPermissions(loggedInUserPermissions) {
+	return {
+		type: SET_LOGGED_IN_USER_PERMISSIONS,
+		loggedInUserPermissions
 	}
 }
 
@@ -89,11 +100,12 @@ export function login(credentials) {
 
 				localStorage.removeItem('permissions')
 				if (user.permissions && user.permissions.length > 0) {
-					let permissionArray = []
-					for (const permission of user.permissions) {
-						permissionArray.push(permission.permissionId)
+					let permNames = []
+					for (const p of user.permissions) {
+						permNames.push(p.permissionName)
 					}
-					localStorage.setItem('permissions', permissionArray)
+					var encrypted = encryptor.encrypt(JSON.stringify(permNames))
+					localStorage.setItem('permissions', encrypted)
 				}
 
 				dispatch(setLoggedIn(true))
@@ -150,10 +162,13 @@ export function userProfileFetchData() {
 export function resetPassword(email) {
 	let url = apiBase + '/reset-password'
 	return async (dispatch) => {
+		dispatch(setResettingPassword(true))
 		try {
 			const result = await axios.post(url, {
 				email: email
 			})
+
+			dispatch(setResettingPassword(false))
 
 			if (result.status === 200) {
 				dispatch(
@@ -173,6 +188,7 @@ export function resetPassword(email) {
 				)
 			}
 		} catch (error) {
+			dispatch(setResettingPassword(false))
 			dispatch(
 				setAlert({
 					show: true,
@@ -188,6 +204,13 @@ export function setUpdatingPassword(bool) {
 	return {
 		type: SET_UPDATING_PASSWORD,
 		updatingPassword: bool
+	}
+}
+
+export function setResettingPassword(bool) {
+	return {
+		type: SET_RESETTING_PASSWORD,
+		resettingPassword: bool
 	}
 }
 

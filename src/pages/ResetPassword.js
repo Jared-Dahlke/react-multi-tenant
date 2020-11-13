@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import Button from '../components/CustomButtons/Button'
+import Button from 'rsuite/lib/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -19,6 +19,7 @@ import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyl
 const mapStateToProps = (state) => {
 	return {
 		isLoggedIn: state.isLoggedIn,
+		resettingPassword: state.resettingPassword,
 		alert: state.alert
 	}
 }
@@ -61,10 +62,6 @@ function PasswordReset(props) {
 		props.resetPassword(email)
 	}
 
-	if (props.isLoggedIn) {
-		return <Redirect to='./admin/settings/brandMentality' />
-	}
-
 	return (
 		<div className={adminClasses.authPanel}>
 			<Container component='main' maxWidth='xs'>
@@ -93,8 +90,8 @@ function PasswordReset(props) {
 						</Grid>
 						<Button
 							style={{ marginTop: '10px' }}
-							fullWidth
-							color='primary'
+							block
+							loading={props.resettingPassword}
 							disabled={!email || isEmailError(email)}
 							onClick={postResetPassword}
 						>

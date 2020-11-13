@@ -59,10 +59,40 @@ module.exports = override(
 				'@btn-default-disabled-bg': neutralLightColor,
 				'@btn-default-hover-bg': accentColor,
 				'@btn-default-focus-bg': accentColor,
+				'@btn-link-color': accentColor,
 
 				//messages
 				'@message-success-bg': neutralExtraLightColor, //'#58b15b',
-				'@message-header-color': '#FFF'
+				'@message-header-color': '#FFF',
+
+				//tables
+				'@table-body-background': neutralColor,
+				'@table-head-background': neutralColor,
+				'@table-body-hover-background': neutralExtraLightColor,
+				'@table-head-font-color': '#FFF',
+				//panel
+				'@panel-heading-color': '#FFF',
+				'@panel-border': '1px solid' + neutralExtraLightColor,
+
+				//steps
+				//	'@steps-default-color': '#FFF',
+				'@steps-tail-default-color': '#FFF',
+				'@steps-content-process-color': '#FFF',
+
+				//divider:
+				'@divider-border-color': neutralExtraLightColor,
+
+				//loader
+				'@loader-spin-ring-color': accentColor,
+				'@loader-spin-ring-active-color': '#FFF',
+				'@loader-content-color': '#FFF',
+
+				//checkbox
+				'@checkbox-disabled-color': neutralExtraLightColor,
+
+				//uploader
+				'@uploader-default-font-color': '#FFF',
+				'@uploader-item-hover-background-color': neutralExtraLightColor
 			}
 		}
 	})

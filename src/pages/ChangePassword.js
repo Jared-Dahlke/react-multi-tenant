@@ -15,6 +15,7 @@ import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyl
 import Button from '../components/CustomButtons/Button'
 import logo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
+import { routes } from '../routes'
 
 // Validation
 import * as v from '../validations'
@@ -60,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
 const useAdminStyles = makeStyles(adminStyle)
 
 function PasswordChange(props) {
-	const { userId, token } = props
+	let userId = props.match.params.userId
+	let token = props.match.params.token
 	const classes = useStyles()
 	const adminClasses = useAdminStyles()
 	const [password, setPassword] = useState('')
@@ -94,7 +96,7 @@ function PasswordChange(props) {
 	}
 
 	if (props.isLoggedIn) {
-		return <Redirect to='./admin/settings/brandMentality' />
+		return <Redirect to={routes.app.settings.account.path} />
 	}
 
 	return (

@@ -14,16 +14,24 @@ import {
 	SET_BRAND_CATEGORIES,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
-	SET_BRAND_PROFILE_SAVED
+	SET_BRAND_PROFILE_SAVED,
+	SCENARIOS_IS_LOADING,
+	SCENARIO_ARCHIVING,
+	SCENARIO_ARCHIVED,
+	SCENARIO_TO_ARCHIVE,
+	SCENARIO_CREATED,
+	SCENARIO_SAVING,
+	ADD_SCENARIO
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
 import {
 	brandProfilesObjValidation,
-	brandProfileObjValidation
-} from '../../schemas'
+	brandProfileObjValidation,
+	brandScenarioObjValidation
+} from '../../schemas/schemas'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function setBrandProfiles(brandProfiles) {
 	return {
@@ -140,6 +148,14 @@ export function fetchBrandProfilesInformation() {
 	}
 }
 
+function addDefaultResponseIdToScenariosIfBlank(scenarios) {
+	for (const scenario of scenarios) {
+		if (!scenario.scenarioResponseId) {
+			scenario.scenarioResponseId = ''
+		}
+	}
+}
+
 export function fetchBrandProfile(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}`
 	return async (dispatch, getState) => {
@@ -152,6 +168,8 @@ export function fetchBrandProfile(brandProfileId) {
 					console.log(err.name, err.errors)
 					alert('Could not validate brand profile data')
 				})
+				let brandProfileResultCopy = JSON.parse(JSON.stringify(result.data))
+				addDefaultResponseIdToScenariosIfBlank(brandProfileResultCopy.scenarios)
 
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
@@ -159,7 +177,7 @@ export function fetchBrandProfile(brandProfileId) {
 
 				for (const [index, p] of currBrandProfiles.entries()) {
 					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index] = result.data
+						currBrandProfiles[index] = brandProfileResultCopy
 					}
 				}
 				dispatch(setBrandProfiles(currBrandProfiles))
@@ -187,7 +205,6 @@ export function fetchBrandProfiles(accountId) {
 					alert("Could not validate account's brand profiles data")
 				})
 				dispatch(setBrandProfiles(brandProfiles))
-				//dispatch(fetchBrandProfilesInformation())
 				dispatch(brandProfilesIsLoading(false))
 			}
 		} catch (error) {
@@ -248,6 +265,55 @@ export function setBrandProfileDeleting(bool) {
 	}
 }
 
+export function setScenariosIsLoading(bool) {
+	return {
+		type: SCENARIOS_IS_LOADING,
+		scenariosIsLoading: bool
+	}
+}
+
+export function setScenarioArchiving(scenarioId) {
+	return {
+		type: SCENARIO_ARCHIVING,
+		scenarioArchiving: scenarioId
+	}
+}
+
+export function setScenarioArchived(bool) {
+	return {
+		type: SCENARIO_ARCHIVED,
+		scenarioArchived: bool
+	}
+}
+
+export function setScenarioToArchived(scenarioId) {
+	return {
+		type: SCENARIO_TO_ARCHIVE,
+		scenarioId
+	}
+}
+
+export function setScenarioCreated(bool) {
+	return {
+		type: SCENARIO_CREATED,
+		scenarioCreated: bool
+	}
+}
+
+export function setScenarioSaving(bool) {
+	return {
+		type: SCENARIO_SAVING,
+		scenarioSaving: bool
+	}
+}
+
+export function addScenario(scenario) {
+	return {
+		type: ADD_SCENARIO,
+		scenario
+	}
+}
+
 export function hasBrandProfiles(bool) {
 	return {
 		type: HAS_BRAND_PROFILES,
@@ -271,12 +337,22 @@ function addDefaultResponseIdToScenarios(scenarios) {
 export function fetchBrandScenarios() {
 	let url = apiBase + `/brand-profile/scenario`
 	return async (dispatch) => {
+		dispatch(setScenariosIsLoading(true))
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
 				let scenarios = result.data
-				addDefaultResponseIdToScenarios(scenarios) //TODO: can delete this function once api gives a default response
+
+				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						'We received different API data than expected, see the console log for more details.'
+					)
+				})
+
+				addDefaultResponseIdToScenarios(scenarios)
 				dispatch(setBrandScenarios(scenarios))
+				dispatch(setScenariosIsLoading(false))
 			}
 		} catch (error) {
 			alert(error)
@@ -344,5 +420,40 @@ export function setBrandCategories(brandCategories) {
 	return {
 		type: SET_BRAND_CATEGORIES,
 		brandCategories
+	}
+}
+
+export const archiveScenario = (scenarioId) => {
+	let url = apiBase + `/brand-profile/scenario/${scenarioId}`
+	return (dispatch) => {
+		dispatch(setScenarioArchiving(scenarioId))
+		axios
+			.patch(url)
+			.then((response) => {
+				dispatch(setScenarioToArchived(scenarioId))
+				dispatch(setScenarioArchiving(''))
+				dispatch(setScenarioArchived(true))
+			})
+			.catch((error) => {
+				console.error(error)
+			})
+	}
+}
+
+export const createScenario = (scenario) => {
+	let url = apiBase + `/brand-profile/scenario`
+	return (dispatch, getState) => {
+		dispatch(setScenarioSaving(true))
+		axios
+			.post(url, scenario)
+			.then((response) => {
+				dispatch(addScenario(scenario))
+				dispatch(setScenarioSaving(false))
+				dispatch(setScenarioCreated(true))
+				dispatch(fetchBrandScenarios())
+			})
+			.catch((error) => {
+				//error
+			})
 	}
 }

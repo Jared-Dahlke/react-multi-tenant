@@ -16,7 +16,7 @@ import config from '../../config.js'
 import {
 	accountTypesObjValidation,
 	usersWithRolesObjValidation
-} from '../../schemas'
+} from '../../schemas/schemas'
 import { userProfileFetchData } from '../actions/auth'
 import {
 	usersFetchData,
@@ -42,8 +42,9 @@ import {
 } from '../actions/brandProfiles'
 import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
+import { setLists } from './engage/lists'
 
-const apiBase = config.apiGateway.URL
+const apiBase = config.api.userAccountUrl
 
 export function setAccounts(accounts) {
 	return {
@@ -171,6 +172,7 @@ export function clearSiteData() {
 		dispatch(setRolesPermissions([]))
 		dispatch(setBrandProfiles([]))
 		dispatch(setAccountTypes([]))
+		dispatch(setLists([]))
 	}
 }
 
@@ -218,9 +220,10 @@ export function fetchSiteData(accountId) {
 
 			localStorage.setItem('currentAccountId', accountId)
 			dispatch(fetchAccountTypes())
+			dispatch(userProfileFetchData())
 			dispatch(setCurrentAccount(accountId))
 			dispatch(setCurrentAccountId(accountId))
-			dispatch(userProfileFetchData())
+
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData(accountId))
 			dispatch(rolesFetchData(accountId))

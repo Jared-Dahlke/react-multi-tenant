@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import Button from '../components/CustomButtons/Button'
+//import Button from '../components/CustomButtons/Button'
+import Button from 'rsuite/lib/Button'
 import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -15,6 +16,7 @@ import { whiteColor } from '../assets/jss/material-dashboard-react.js'
 import CustomInput from '../components/CustomInput/CustomInput'
 import svgLogo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
+import { routes } from '../routes'
 
 const mapStateToProps = (state) => {
 	return {
@@ -62,14 +64,7 @@ function Login(props) {
 	const adminClasses = useAdminStyles()
 	let referer = props.location.state
 		? props.location.state.referer
-		: '/admin/settings/profile'
-
-	const permission = localStorage.getItem('permissions')
-	const mentalityOnly = permission == 1 ? true : false
-
-	if (mentalityOnly) {
-		referer = 'admin/settings/brandMentality'
-	}
+		: routes.app.settings.profile.path
 
 	const [userName, setUserName] = useState('')
 	const [password, setPassword] = useState('')
@@ -123,12 +118,12 @@ function Login(props) {
 						/>
 
 						<Button
-							color='primary'
 							onClick={postLogin}
 							disabled={props.loggingIn}
 							style={{ marginTop: '10px', width: '100%' }}
+							loading={props.loggingIn}
 						>
-							{props.loggingIn ? 'Signing in ...' : 'Sign In'}
+							Sign In
 						</Button>
 
 						<Grid style={{ marginTop: '10px' }} container>
