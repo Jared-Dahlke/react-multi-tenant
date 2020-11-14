@@ -11,7 +11,8 @@ const demo = {
 	api: {
 		userAccountUrl:
 			'https://api-cont-intell-user-account-demo-zu7blp7gxa-uw.a.run.app',
-		listBuilderUrl: 'doesntExistYet'
+		listBuilderUrl:
+			'https://api-cont-intell-list-builder-demo-zu7blp7gxa-uw.a.run.app'
 	}
 }
 
@@ -30,7 +31,8 @@ const production = {
 	api: {
 		userAccountUrl:
 			'https://api-cont-intell-user-account-prod-zu7blp7gxa-uw.a.run.app',
-		listBuilderUrl: 'doesntExistYet'
+		listBuilderUrl:
+			'https://api-cont-intell-list-builder-prod-zu7blp7gxa-uw.a.run.app'
 	}
 }
 

@@ -2,33 +2,33 @@
 ---
 steps:
   # build the container image
-  - name: "gcr.io/cloud-builders/docker"
+  - name: 'gcr.io/cloud-builders/docker'
     args:
-      - "build"
-      - "-f"
-      - "Dockerfile"
-      - "-t"
-      - "gcr.io/$PROJECT_ID/front-end-demo"
-      - "--build-arg"
-      - "ENVIRONMENT=staging"
-      - "."
+      - 'build'
+      - '-f'
+      - 'Dockerfile'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/front-end-demo'
+      - '--build-arg'
+      - 'ENVIRONMENT=demo'
+      - '.'
 
   # push the container image
-  - name: "gcr.io/cloud-builders/docker"
+  - name: 'gcr.io/cloud-builders/docker'
     args:
-      - "push"
-      - "gcr.io/$PROJECT_ID/front-end-demo"
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/front-end-demo'
 
   # Deploy container image to Cloud Run
-  - name: "gcr.io/cloud-builders/gcloud"
+  - name: 'gcr.io/cloud-builders/gcloud'
     args:
-      - "run"
-      - "deploy"
-      - "front-end-demo"
-      - "--image"
-      - "gcr.io/$PROJECT_ID/front-end-demo"
-      - "--region"
-      - "us-west1"
-      - "--platform"
-      - "managed"
-      - "--allow-unauthenticated"
+      - 'run'
+      - 'deploy'
+      - 'front-end-demo'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/front-end-demo'
+      - '--region'
+      - 'us-west1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
