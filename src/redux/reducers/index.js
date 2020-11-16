@@ -62,17 +62,9 @@ import {
 	brandProfileSaved,
 	scenariosIsLoading,
 } from './brandProfiles'
-import {
-	adminScenarios,
-	adminScenariosIsLoading,
-	scenarioSaving,
-	scenarioCreated,
-	scenarioArchiving,
-	scenarioArchived
-} from './brandProfilesAdmin/scenarios'
 import { categories, channels, videos } from './discover/channels'
 
-// import brandProfilesAdmin from './brandProfilesAdmin/index'
+import brandProfilesAdmin from './brandProfilesAdmin/index'
 import engage from './engage/index'
 
 export default combineReducers({
@@ -132,12 +124,6 @@ export default combineReducers({
 	loggedInUserPermissions,
 	resettingPassword,
 	scenariosIsLoading,
-	// brandProfilesAdmin
-	adminScenarios,
-	adminScenariosIsLoading,
-	scenarioSaving,
-	scenarioCreated,
-	scenarioArchiving,
-	scenarioArchived,
+	brandProfilesAdmin,
 	engage
 })

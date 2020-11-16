@@ -9,7 +9,7 @@ import {
 	SCENARIO_ARCHIVED,
 } from '../../action-types/brandProfilesAdmin/scenarios'
 
-export function adminScenarios(state = [], action) {
+export function scenarios(state = [], action) {
 	switch (action.type) {
 		case SET_ADMIN_BRAND_SCENARIOS:
 			return action.scenarios
@@ -35,7 +35,7 @@ export function adminScenarios(state = [], action) {
 	}
 }
 
-export function adminScenariosIsLoading(state = true, action) {
+export function scenariosIsLoading(state = true, action) {
 	switch (action.type) {
 		case ADMIN_SCENARIOS_IS_LOADING:
 			return action.adminScenariosIsLoading
