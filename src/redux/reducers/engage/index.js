@@ -5,7 +5,9 @@ import {
 	isPostingList,
 	postListSuccess,
 	isFetchingLists,
-	fetchListsSuccess
+	fetchListsSuccess,
+	isDownloadingExcel,
+	isDownloadingExcelVersionId
 } from './lists'
 
 export default combineReducers({
@@ -14,5 +16,7 @@ export default combineReducers({
 	isPostingList,
 	postListSuccess,
 	isFetchingLists,
-	fetchListsSuccess
+	fetchListsSuccess,
+	isDownloadingExcel,
+	isDownloadingExcelVersionId
 })

@@ -1,18 +1,17 @@
 import React from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect} from 'react-router-dom'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Navbar from '../components/Navbars/Navbar.js'
 import styles from '../assets/jss/material-dashboard-react/layouts/adminStyle.js'
 import { connect } from 'react-redux'
 import { setUserId, setLoggedInUserPermissions } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
-import { routes } from '../routes'
-import { userCan, perms } from '../Can'
+import { modifiedRoutes } from '../routes'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
 )
 
-const switchRoutes = (
+/* const switchRoutes = (
 	<Switch>
 		{userCan(perms.BRAND_MENTALITY_READ) && (
 			<Route
@@ -177,7 +176,86 @@ const switchRoutes = (
 
 		<Redirect from='/app' to={routes.app.settings.account.path} />
 	</Switch>
-)
+) */
+
+export const generateRoutes = (modifiedRoutes) => {
+	let invalidRoutesPath = [] //Holds value of userCan blocked URLs
+
+	//generates Routes Array for render props for Parent Route Components
+	const createSubRoutes = (subRoutes) => {
+		const currentWindowPath = window.location.pathname
+		const subRoutesJSX = subRoutes.map((curr)=>{
+			if(curr.hasOwnProperty('subRoutes')) return parseRoutes(curr)
+			return (<Route path = {curr.path} component={curr.component} key={curr.path}/>)
+		})
+		if(invalidRoutesPath.includes(currentWindowPath)) return [(<Redirect to={modifiedRoutes.app.subRoutes.settings_account.path} key={modifiedRoutes.app.subRoutes.settings_account.path} />)]
+		return subRoutesJSX
+	}
+
+	//callback to filter Routes Array against userCan value
+	const filterRoutesCB = (curr)=>{
+		if(curr.userCan === false) {
+			invalidRoutesPath.push(curr.path)
+			return false
+		}
+		return true
+	}
+
+	//Creates the children Routes Array as children to Switch Component
+	const parseRoutes = (routesParam) => {
+		let routeJSX
+		let routeValues = Object.values(routesParam.subRoutes)
+
+		const filteredRouteValues = routeValues.filter(filterRoutesCB)
+
+		let parentRoute = filteredRouteValues.map((value) => {
+			const { path, component, subRoutes} = value
+			if(subRoutes){
+				const filteredSubRoutes = Array.from(subRoutes).filter(filterRoutesCB)
+				routeJSX =  (<Route path={path} key={path} render={({match: {url}}) => (
+						<>
+							
+							{[...createSubRoutes(filteredSubRoutes),
+								(<Route
+								path = {path}
+								key={path}
+								component = {component}
+								exact />)]}
+						</>
+						)}/>)
+			}
+			else if(path && component) {
+				routeJSX = (<Route 
+								path = {path}
+								key={path}
+								component = {component}/>)
+			}
+			if(routesParam.path && routesParam.component){
+				return (
+					<React.Fragment key={routesParam.path}>
+					<Route
+						path = {routesParam.path}
+						component = {routesParam.component}
+						key={routesParam.path}
+						exact />
+						{routeJSX}
+					</React.Fragment>
+					)
+			}
+			return routeJSX
+
+		})
+		return parentRoute
+	}
+
+	return parseRoutes(modifiedRoutes.app)
+
+}
+
+const modifiedSwitchRoutes = (
+	<Switch>
+		{[...generateRoutes(modifiedRoutes),(<Redirect to={modifiedRoutes.app.subRoutes.settings_account.path} key={modifiedRoutes.app.subRoutes.settings_account.path} />)]}
+	</Switch>)
 
 const useStyles = makeStyles(styles)
 
@@ -190,11 +268,10 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-function Admin({ ...rest }) {
+export function Admin({ ...rest }) {
 	const classes = useStyles()
 	const mainPanel = React.createRef()
 	const [mobileOpen, setMobileOpen] = React.useState(false)
-
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen)
 	}
@@ -223,9 +300,10 @@ function Admin({ ...rest }) {
 		<div className={classes.wrapper}>
 			<div className={classes.mainPanel} ref={mainPanel}>
 				<Navbar handleDrawerToggle={handleDrawerToggle} {...rest} />
-
 				<div className={classes.content}>
-					<div className={classes.container}>{switchRoutes}</div>
+					<div className={classes.container}>
+						{modifiedSwitchRoutes
+						}</div>
 				</div>
 			</div>
 		</div>

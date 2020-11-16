@@ -5,7 +5,10 @@ import {
 	SET_POST_LIST_SUCCESS,
 	SET_IS_POSTING_LIST,
 	SET_IS_FETCHING_LISTS,
-	SET_FETCH_LISTS_SUCCESS
+	SET_FETCH_LISTS_SUCCESS,
+	SET_IS_DOWNLOADING_EXCEL,
+	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
+	SET_LIST_VERSION_ACTIVE
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
@@ -13,6 +16,7 @@ import {
 	listsObjValidation,
 	uploadedListObjValidation
 } from '../../../schemas/Engage/Lists/schemas'
+var fileDownload = require('js-file-download')
 const apiBase = config.api.listBuilderUrl
 
 export function fetchLists(accountId) {
@@ -78,6 +82,42 @@ export const postList = (data) => {
 	}
 }
 
+export function setIsDownloadingExcel(isDownloadingExcel) {
+	return {
+		type: SET_IS_DOWNLOADING_EXCEL,
+		isDownloadingExcel
+	}
+}
+
+export function setIsDownloadingExcelVersionId(isDownloadingExcelVersionId) {
+	return {
+		type: SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
+		isDownloadingExcelVersionId
+	}
+}
+
+export function downloadExcelList(payload) {
+	let versionId = payload.versionId
+	let smartListName = payload.smartListName
+	let url = apiBase + `/smart-list/version/${versionId}/download`
+	return (dispatch) => {
+		dispatch(setIsDownloadingExcel(true))
+		dispatch(setIsDownloadingExcelVersionId(versionId))
+		axios
+			.get(url, { responseType: 'blob' })
+			.then((response) => {
+				fileDownload(response.data, `${smartListName}.xlsx`)
+				dispatch(setIsDownloadingExcel(false))
+				dispatch(setIsDownloadingExcelVersionId(null))
+			})
+			.catch((error) => {
+				dispatch(setIsDownloadingExcel(false))
+				dispatch(setIsDownloadingExcelVersionId(null))
+				console.error('create account error', error)
+			})
+	}
+}
+
 export function setLists(lists) {
 	return {
 		type: SET_LISTS,
@@ -98,19 +138,45 @@ export function setUploadedList(uploadedList) {
 
 export function archiveList(payload) {
 	//	let accountId = account.accountId
-	//	let url = apiBase + `/account/${accountId}`
+	let url =
+		apiBase + `/smart-list/${payload.smartListId}?archive=${payload.archive}`
 	return async (dispatch) => {
 		dispatch(setListArchived(payload))
 		try {
-			//const result = await axios.patch(url, account)
-			//if (result.status === 200) {
-			//	console.log(result)
-			//	dispatch(setAccountSaving(false))
-			//	dispatch(setAccountSaved(true))
-			//}
+			const result = await axios.patch(url)
+			if (result.status === 200) {
+				//	dispatch(setAccountSaving(false))
+				//	dispatch(setAccountSaved(true))
+			}
 		} catch (error) {
 			alert(error)
 		}
+	}
+}
+
+export function activateListVersion(payload) {
+	let versionId = payload.versionId
+
+	//	let accountId = account.accountId
+	let url = apiBase + `/smart-list/version/${versionId}/active`
+	return async (dispatch) => {
+		dispatch(setListVersionActive(payload))
+		try {
+			const result = await axios.patch(url)
+			if (result.status === 200) {
+				//	dispatch(setAccountSaving(false))
+				//	dispatch(setAccountSaved(true))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function setListVersionActive(payload) {
+	return {
+		type: SET_LIST_VERSION_ACTIVE,
+		payload
 	}
 }
 

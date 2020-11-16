@@ -15,7 +15,8 @@ import axios from '../../axiosConfig'
 import config from '../../config.js'
 import {
 	accountTypesObjValidation,
-	usersWithRolesObjValidation
+	usersWithRolesObjValidation,
+	accountsObjValidation
 } from '../../schemas/schemas'
 import { userProfileFetchData } from '../actions/auth'
 import {
@@ -182,7 +183,12 @@ export function fetchSiteData(accountId) {
 			let userId = localStorage.getItem('userId')
 			let accountsUrl = apiBase + `/user/${userId}/accounts`
 			let result = await axios.get(accountsUrl)
-			//TODO: run this result against account schema
+
+			accountsObjValidation.validate(result.data).catch(function(err) {
+				console.log(err.name, err.errors)
+				alert('Could not validate accounts data')
+			})
+
 			let accounts = { data: result.data }
 			if (!result.data[0]) {
 				alert(

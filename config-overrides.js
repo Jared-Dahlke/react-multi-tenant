@@ -60,6 +60,9 @@ module.exports = override(
 				'@btn-default-hover-bg': accentColor,
 				'@btn-default-focus-bg': accentColor,
 				'@btn-link-color': accentColor,
+				'@btn-subtle-color': '#FFF',
+				'@btn-subtle-active-color': accentColor,
+				'@btn-subtle-active-default-color': accentColor,
 
 				//messages
 				'@message-success-bg': neutralExtraLightColor, //'#58b15b',
@@ -92,7 +95,14 @@ module.exports = override(
 
 				//uploader
 				'@uploader-default-font-color': '#FFF',
-				'@uploader-item-hover-background-color': neutralExtraLightColor
+				'@uploader-item-hover-background-color': neutralExtraLightColor,
+
+				//nav item
+				'@nav-item-font-default-color': '#FFF',
+				'@nav-item-click-font-color': '#FFF',
+
+				'@dropdown-link-color': '#FFF',
+				'@dropdown-link-active-color': '#FFF'
 			}
 		}
 	})

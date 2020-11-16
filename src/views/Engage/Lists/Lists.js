@@ -12,24 +12,41 @@ import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
-import { fetchLists, archiveList } from '../../../redux/actions/engage/lists'
+import {
+	fetchLists,
+	archiveList,
+	downloadExcelList,
+	activateListVersion
+} from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
+import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
+import { useTransition, animated } from 'react-spring'
+import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
+import InputPicker from 'rsuite/lib/InputPicker'
+var dayjs = require('dayjs')
+var calendar = require('dayjs/plugin/calendar')
+dayjs.extend(calendar)
 
 const mapStateToProps = (state) => {
 	return {
 		lists: state.engage.lists,
 		accounts: state.accounts,
+		brandProfiles: state.brandProfiles,
 		isFetchingLists: state.engage.isFetchingLists,
-		fetchListsSuccess: state.engage.fetchListsSuccess
+		fetchListsSuccess: state.engage.fetchListsSuccess,
+		isDownloadingExcel: state.engage.isDownloadingExcel,
+		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
-		archiveList: (payload) => dispatch(archiveList(payload))
+		archiveList: (payload) => dispatch(archiveList(payload)),
+		downloadExcelList: (payload) => dispatch(downloadExcelList(payload)),
+		activateListVersion: (payload) => dispatch(activateListVersion(payload))
 	}
 }
 
@@ -52,74 +69,81 @@ const MyList = (props) => {
 	for (const version of props.list.versions) {
 		if (version.active) activeVersion = version
 	}
-
 	return (
-		<Grid item xs={12}>
-			<Panel
-				style={{ backgroundColor: neutralLightColor }}
-				shaded
-				header={
-					<MyHeader
-						data={activeVersion}
-						handleArchiveClick={props.handleArchiveClick}
-					/>
-				}
-				bordered
-			>
-				{props.viewAll.includes(props.list.smartListId) &&
-					props.list.versions &&
-					props.list.versions.length > 0 &&
-					props.list.versions.map((version, index) => {
-						if (!version.active) {
-							return (
-								<div
-									style={{ paddingBottom: 20 }}
-									key={version.smartListId + version.versionId}
-								>
-									<MyHeader data={version} />
-								</div>
-							)
-						}
-					})}
-				<div style={{ paddingBottom: 20 }}>
-					<div style={{ float: 'left' }}>
-						<Checkbox
-							checked={props.list.archived}
-							onChange={(e, value) => {
-								props.handleArchiveClick(props.data.smartListId, value)
-							}}
-							disabled
-						>
-							Archived
-						</Checkbox>
-					</div>
-					{props.viewAll.includes(props.list.smartListId) && (
+		<Panel
+			style={{ backgroundColor: neutralLightColor, marginBottom: 20 }}
+			shaded
+			header={
+				<Version
+					data={activeVersion}
+					handleArchiveClick={props.handleArchiveClick}
+					handleDownloadClick={props.handleDownloadClick}
+					isDownloadingExcel={props.isDownloadingExcel}
+					isDownloadingExcelVersionId={props.isDownloadingExcelVersionId}
+				/>
+			}
+			bordered
+		>
+			{props.viewAll.includes(props.list.smartListId) &&
+				props.list.versions &&
+				props.list.versions.length > 0 &&
+				props.list.versions.map((version, index) => {
+					if (!version.active) {
+						return (
+							<div
+								style={{ paddingBottom: 20 }}
+								key={version.smartListId + version.versionId}
+							>
+								<Version
+									data={version}
+									handleDownloadClick={props.handleDownloadClick}
+									handleActivateClick={props.handleActivateClick}
+									isDownloadingExcel={props.isDownloadingExcel}
+									isDownloadingExcelVersionId={
+										props.isDownloadingExcelVersionId
+									}
+								/>
+							</div>
+						)
+					}
+				})}
+			<div style={{ paddingBottom: 20 }}>
+				<div style={{ float: 'left' }}>
+					<Checkbox
+						checked={props.list.archived}
+						onChange={(e, value) => {
+							props.handleArchiveClick(props.list.smartListId, value)
+						}}
+					>
+						Archived
+					</Checkbox>
+				</div>
+				{props.viewAll.includes(props.list.smartListId) && (
+					<Button
+						appearance='link'
+						onClick={() => props.handleHideAllClick(props.list.smartListId)}
+						style={{ float: 'right' }}
+					>
+						View less
+					</Button>
+				)}
+
+				{props.list.versions.length > 1 &&
+					!props.viewAll.includes(props.list.smartListId) && (
 						<Button
 							appearance='link'
-							onClick={() => props.handleHideAllClick(props.list.smartListId)}
+							onClick={() => props.handleViewAllClick(props.list.smartListId)}
 							style={{ float: 'right' }}
 						>
-							View less
+							View version history
 						</Button>
 					)}
-
-					{props.list.versions.length > 1 &&
-						!props.viewAll.includes(props.list.smartListId) && (
-							<Button
-								appearance='link'
-								onClick={() => props.handleViewAllClick(props.list.smartListId)}
-								style={{ float: 'right' }}
-							>
-								View version history
-							</Button>
-						)}
-				</div>
-			</Panel>
-		</Grid>
+			</div>
+		</Panel>
 	)
 }
 
-const MyHeader = (props) => {
+const Version = (props) => {
 	let subscriberCount =
 		props.data.subscriberCount > 999999
 			? numeral(props.data.subscriberCount)
@@ -129,11 +153,14 @@ const MyHeader = (props) => {
 
 	let videoCount = numeral(props.data.videoCount).format('0a')
 	let channelCount = numeral(props.data.channelCount).format('0a')
+
+	var createdDate = dayjs(props.data.createdDate).calendar()
+
 	return (
 		<div>
 			<Grid container alignItems='center' spacing={1}>
 				<Grid item xs={12} sm={12} md={7} style={panelStyle}>
-					<Grid container>
+					<Grid container style={{ position: 'relative' }}>
 						<Grid item xs={4}>
 							<Grid item xs={12}>
 								<Grid container justify='center'>
@@ -146,7 +173,7 @@ const MyHeader = (props) => {
 									justify='center'
 									style={{ textAlign: 'center' }}
 								>
-									{props.data.smartListName}
+									{props.data.smartListId}
 								</Grid>
 							</Grid>
 						</Grid>
@@ -182,8 +209,13 @@ const MyHeader = (props) => {
 								</Grid>
 							</Grid>
 						</Grid>
+
+						<div style={{ position: 'absolute', bottom: -30, left: 5 }}>
+							<Label label={props.data.createdBy.email + ', ' + createdDate} />
+						</div>
 					</Grid>
 				</Grid>
+
 				<Grid item xs={12} sm={12} md={3} style={panelStyle}>
 					<Grid container>
 						<Grid item xs={4}>
@@ -241,24 +273,28 @@ const MyHeader = (props) => {
 						</Grid>
 					</Grid>
 				</Grid>
-
 				{props.data.active && (
 					<Grid item xs={12} sm={12} md={2} style={panelStyle}>
 						<IconButton
 							appearance='ghost'
 							icon={<Icon icon={'file-download'} size='lg' />}
 							size='lg'
-							disabled
 							block
+							loading={
+								props.isDownloadingExcel &&
+								props.isDownloadingExcelVersionId === props.data.versionId
+							}
 							onClick={(e) => {
-								e.preventDefault()
+								props.handleDownloadClick(
+									props.data.versionId,
+									props.data.smartListName
+								)
 							}}
 						>
 							Download
 						</IconButton>
 					</Grid>
 				)}
-
 				{!props.data.active && (
 					<Grid item xs={2} style={panelActionStyle}>
 						<Grid item xs={12}>
@@ -268,9 +304,15 @@ const MyHeader = (props) => {
 									icon={<Icon icon={'file-download'} size='lg' />}
 									size='lg'
 									block
-									disabled
+									loading={
+										props.isDownloadingExcel &&
+										props.isDownloadingExcelVersionId === props.data.versionId
+									}
 									onClick={(e) => {
-										e.preventDefault()
+										props.handleDownloadClick(
+											props.data.versionId,
+											props.data.smartListName
+										)
 									}}
 								>
 									Download
@@ -282,9 +324,11 @@ const MyHeader = (props) => {
 									icon={<Icon icon={'file-download'} size='lg' />}
 									size='lg'
 									onClick={(e) => {
-										e.preventDefault()
+										props.handleActivateClick({
+											versionId: props.data.versionId,
+											smartListId: props.data.smartListId
+										})
 									}}
-									disabled
 								>
 									Activate
 								</IconButton>
@@ -314,7 +358,11 @@ function Lists(props) {
 	const handleUploadNewList = () => {
 		history.push(routes.app.engage.lists.uploadList.path)
 	}
-
+	const handleCreateNewList = () => {
+		history.push(`${routes.app.engage.lists.listBuilder.path}`, {
+			from: 'lists'
+		})
+	}
 	//let subscribers = numeral(item.channelSubscribers).format('0.0a')
 	const [viewingAll, setViewingAll] = React.useState([])
 	const handleViewAllClick = (smartListId) => {
@@ -334,16 +382,17 @@ function Lists(props) {
 		props.archiveList(payload)
 	}
 
-	const smartLists = props.lists
-
-	/*React.useMemo(() => {
-		if (!props.lists || props.lists.length < 0) return []
-		if (viewArchivedLists) {
-			return props.lists
-		} else {
-			return props.lists.filter((list) => !list.archived)
+	const handleDownloadClick = (versionId, smartListName) => {
+		let payload = {
+			versionId,
+			smartListName
 		}
-	}, [props.lists, viewArchivedLists]) */
+		props.downloadExcelList(payload)
+	}
+
+	const handleActivateClick = (payload) => {
+		props.activateListVersion(payload)
+	}
 
 	const archivedCount = React.useMemo(() => {
 		let _archivedCount = 0
@@ -353,51 +402,122 @@ function Lists(props) {
 		return _archivedCount
 	}, [props.lists])
 
+	const visibleLists = React.useMemo(() => {
+		if (viewArchivedLists) {
+			return props.lists
+		} else {
+			return props.lists.filter((list) => !list.archived)
+		}
+	}, [viewArchivedLists, props.lists])
+
+	const transition = useTransition(visibleLists, {
+		from: {
+			opacity: 0,
+			maxHeight: `600px`
+		},
+		enter: { opacity: 1, transform: `translateY(0px)` },
+		leave: {
+			opacity: 0,
+			maxHeight: `0px`
+		},
+		keys: visibleLists.map((item, index) => item.smartListId)
+	})
+
+	//	const tableTransitionProps = useSpring({ opacity: 1, from: { opacity: 0 } })
+
+	if (props.isFetchingLists) {
+		return <FormLoader />
+	}
+
 	return (
 		<Grid container justify='center'>
-			<GridItem xs={12} sm={12} md={12}>
-				<Grid item xs={12} sm={12} md={12}>
-					<Grid container justify='flex-end' style={{ marginBottom: 30 }}>
-						<Grid item xs={8}></Grid>
-						{archivedCount > 0 && (
-							<Grid item xs={2}>
-								<Checkbox
-									checked={viewArchivedLists}
-									onChange={(e, val) => {
-										setViewArchivedLists(val)
-									}}
-								>
-									View archived
-								</Checkbox>
-							</Grid>
-						)}
+			<Grid item xs={12} sm={12} md={5}>
+				<Grid container justify='flex-start' style={{ marginBottom: 20 }}>
+					<Grid item style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Brand Profile</p>
+						</div>
+						<InputPicker
+							size='lg'
+							id='brandProfileId'
+							label='Brand Profile'
+							placeholder='Select a BrandProfile'
+							labelKey='brandName'
+							valueKey='brandProfileId'
+							data={props.brandProfiles}
+							//	value={
 
-						<Button onClick={handleUploadNewList}>Upload a new list</Button>
+							//props.brandProfiles && props.brandProfiles[0].brandProfileId
+
+							//	}
+							onChange={() => console.log('changed')}
+						/>
 					</Grid>
 				</Grid>
-				{smartLists && smartLists.length > 0 ? (
-					<Grid container spacing={2}>
-						{smartLists &&
-							smartLists.map((list, index) => {
-								if (list.archived && !viewArchivedLists) {
-									return null
-								}
-								return (
-									<MyList
-										list={list}
-										key={index}
-										handleViewAllClick={handleViewAllClick}
-										handleHideAllClick={handleHideAllClick}
-										handleArchiveClick={handleArchiveClick}
-										viewAll={viewingAll}
-									/>
-								)
-							})}
+			</Grid>
+			<Grid item xs={12} sm={12} md={7}>
+				<Grid
+					container
+					justify='flex-end'
+					spacing={2}
+					style={{ marginBottom: 20 }}
+				>
+					<Grid item>
+						{archivedCount > 0 && (
+							<Checkbox
+								checked={viewArchivedLists}
+								onChange={(e, val) => {
+									setViewArchivedLists(val)
+								}}
+							>
+								View archived
+							</Checkbox>
+						)}
 					</Grid>
-				) : (
-					<FormLoader />
+					<Grid item>
+						<ButtonToolbar>
+							<Button onClick={handleCreateNewList} color='green'>
+								Build New SmartList
+							</Button>
+							<Button onClick={handleUploadNewList}>Upload Excel/CSV</Button>
+						</ButtonToolbar>
+					</Grid>
+				</Grid>
+			</Grid>
+			{visibleLists &&
+				visibleLists.length > 0 &&
+				!props.isFetchingLists &&
+				transition((values, item) => {
+					let list = item
+					let key = item.smartListId
+					return (
+						<Grid item xs={12} key={key}>
+							<animated.div style={values}>
+								<MyList
+									list={list}
+									handleViewAllClick={handleViewAllClick}
+									handleHideAllClick={handleHideAllClick}
+									handleArchiveClick={handleArchiveClick}
+									handleDownloadClick={handleDownloadClick}
+									handleActivateClick={handleActivateClick}
+									isDownloadingExcel={props.isDownloadingExcel}
+									isDownloadingExcelVersionId={
+										props.isDownloadingExcelVersionId
+									}
+									viewAll={viewingAll}
+								/>
+							</animated.div>
+						</Grid>
+					)
+				})}
+
+			{!props.isFetchingLists &&
+				props.fetchListsSuccess &&
+				props.lists.length < 1 && (
+					<h2 style={{ color: whiteColor }}>
+						This account currently has no lists associated with it.
+					</h2>
 				)}
-			</GridItem>
 		</Grid>
 	)
 }

@@ -6,10 +6,10 @@ steps:
     args:
       - "build"
       - "-f"
-      - "dockerfile"
+      - "Dockerfile"
       - "-t"
       - "gcr.io/$PROJECT_ID/front-end-prod"
-      - "--build-args"
+      - "--build-arg"
       - "ENVIRONMENT=production"
       - "."
 
