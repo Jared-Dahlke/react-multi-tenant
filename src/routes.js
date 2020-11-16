@@ -21,6 +21,8 @@ import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
+import { userCan, perms } from './Can'
+
 export const routes = {
 	login: {
 		path: '/login',
@@ -129,6 +131,126 @@ export const routes = {
 				path: '/app/settings/brandMentality',
 				name: 'Brand Mentality',
 				component: BrandMentality
+			}
+		}
+	}
+}
+
+export const modifiedRoutes = {
+	login: {
+		path: '/login',
+		component: Login,
+		name: 'Log In'
+	},
+	resetPassword: {
+		path: '/resetPassword',
+		component: ResetPassword,
+		name: 'Reset Password'
+	},
+	changePassword: {
+		path: '/changePassword/:userId/:token',
+		component: ChangePassword,
+		name: 'Change Password'
+	},
+	app: {
+		path: '/app',
+		component: Admin,
+		subRoutes: {
+			engage: {
+						path: '/app/engage/lists',
+						component: Lists,
+						name: 'Lists',
+						subRoutes:[
+							{
+								path: '/app/engage/lists/uploadList',
+								component: UploadList,
+								name: 'Upload List'
+							},
+							{
+								path: '/app/engage/lists/listBuilder',
+								name: 'List Builder',
+								component: ListBuilder
+							}
+
+						]
+			},
+			discover: {
+						path: '/app/discover/channelResearch',
+						name: 'Channel Research',
+						component: ChannelResearchTemp
+			},
+			settings_profile : {
+				path: '/app/settings/profile',
+				name: 'Profile',
+				component: UserProfile
+			},
+			settings_account: {
+				path: '/app/settings/account',
+				name: 'Account',
+				component: Account
+			},
+			settings_users:{
+				path: '/app/settings/users',
+				component: Users,
+				name: 'Users',
+				subRoutes:[
+					 {
+						path: '/app/settings/users/edit/:user',
+						name: 'Edit',
+						component: EditUser
+					},
+					{
+						path: '/app/settings/users/create',
+						name: 'Create',
+						component: CreateUser,
+						userCan : userCan(perms.USER_CREATE)
+					}
+				]
+			},
+			settings_brandProfiles: {
+				path: '/app/settings/brandProfiles',
+				name: 'Brand Profiles',
+				component: BrandProfiles,
+		
+				subRoutes: [
+					{
+						path: '/app/settings/brandProfiles/create',
+						name: 'Create',
+						component: CreateBrandProfile,
+						userCan: userCan(perms.BRAND_PROFILE_CREATE)
+					},
+					{
+						path: '/app/settings/brandProfiles/edit/:brandProfileId',
+						name: 'Edit',
+						component: EditBrandProfile
+					},
+					{
+						path: '/app/settings/brandProfiles/admin',
+						name: 'Admin',
+						component: BrandProfilesAdmin,
+						subRoutes:[
+
+							{
+							path: '/app/settings/brandProfiles/admin/scenarios',
+							name: 'Scenarios',
+							component: Scenarios,
+							subRoutes: [
+								{
+									path: '/app/settings/brandProfiles/admin/scenarios/create',
+									name: 'Create',
+									component: CreateScenario
+								}
+							]
+						}
+						]
+					}
+				]
+			},
+			settings_brandMentality: {
+				path: '/app/settings/brandMentality',
+				name: 'Brand Mentality',
+				component: BrandMentality,
+				userCan: userCan(perms.BRAND_MENTALITY_READ)
 			}
 		}
 	}

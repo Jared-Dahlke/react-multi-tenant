@@ -15,10 +15,37 @@ export const accountsObjValidation = Yup.array()
 			contactName: Yup.string().required(),
 			// parentAccountId: Yup.number(),
 			// parentAccountName: Yup.string().required(),
-			children: Yup.array().nullable()
+			children: Yup.array().of(
+				Yup.object().shape({
+					accountId: Yup.number().required(),
+					accountLevelId: Yup.number().required(),
+					accountLevelName: Yup.string().required(),
+					accountMargin: Yup.number().required(),
+					accountName: Yup.string().required(),
+					accountTypeId: Yup.number().required(),
+					accountTypeName: Yup.string().required(),
+					contactEmail: Yup.string().required(),
+					contactName: Yup.string().required(),
+					// parentAccountId: Yup.number(),
+					// parentAccountName: Yup.string().required(),
+					children: Yup.array().nullable()
+				})
+			)
 		})
 	)
-	.nullable()
+	.test(
+		'idTest',
+		'The api sent accounts that have duplicate accountIds. Please address in api or database as this breaks the UI.',
+		(accounts) => {
+			let seen = new Set()
+			var hasDuplicates = accounts.some(function(currentObject) {
+				return seen.size === seen.add(currentObject.accountId).size
+			})
+
+			return !hasDuplicates
+		}
+	)
+//	.nullable()
 
 export const usersWithRolesObjValidation = Yup.array()
 	.min(1, 'No Users associated with account')
@@ -167,9 +194,3 @@ export const brandProfileObjValidation = Yup.object().shape({
 		)
 		.required()
 })
-function emptyStringToNull(value, originalValue) {
-	if (typeof originalValue === 'string' && originalValue === '') {
-		return null
-	}
-	return value
-}

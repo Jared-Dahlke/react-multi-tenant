@@ -20,7 +20,7 @@ build-staging:
   script:
     - >
       docker build
-      -f dockerfile
+      -f Dockerfile
       -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-staging
       --build-arg ENVIRONMENT=staging
       .
@@ -44,7 +44,7 @@ build-master:
   script:
     - >
       docker build
-      -f dockerfile
+      -f Dockerfile
       -t registry.gitlab.com/sightly-engineering/content-intelligence/front-end/front-end-production
       --build-arg ENVIRONMENT=production
       .
