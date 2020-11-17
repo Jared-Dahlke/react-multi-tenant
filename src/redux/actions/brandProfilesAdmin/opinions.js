@@ -96,7 +96,7 @@ export const createOpinion = (opinion) => {
     axios
       .post(url, opinion)
       .then((response) => {
-        dispatch(addOpinion(opinion))
+        dispatch(addOpinion(response.data[0]))
         dispatch(setOpinionSaving(false))
         dispatch(setOpinionCreated(true))
       })

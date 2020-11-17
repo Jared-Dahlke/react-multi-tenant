@@ -96,7 +96,7 @@ export const createScenario = (scenario) => {
 		axios
 			.post(url, scenario)
 			.then((response) => {
-				dispatch(addScenario(scenario))
+				dispatch(addScenario(response.data[0]))
 				dispatch(setScenarioSaving(false))
 				dispatch(setScenarioCreated(true))
 			})
