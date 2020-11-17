@@ -63,6 +63,7 @@ export default function BasicInfo(props) {
 						</Grid>
 					</Panel>
 				</Grid>
+
 				<Grid item xs={12} sm={8} md={10}>
 					<TopCompetitors
 						setFieldValue={props.setFieldValue}
