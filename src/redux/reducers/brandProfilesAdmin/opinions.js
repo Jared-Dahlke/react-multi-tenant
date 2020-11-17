@@ -9,7 +9,7 @@ import {
   OPINION_ARCHIVED,
 } from '../../action-types/brandProfilesAdmin/opinions'
 
-export function adminOpinions(state = [], action) {
+export function opinions(state = [], action) {
   switch (action.type) {
     case SET_ADMIN_BRAND_OPINIONS:
       return action.opinions
@@ -35,7 +35,7 @@ export function adminOpinions(state = [], action) {
   }
 }
 
-export function adminOpinionsIsLoading(state = true, action) {
+export function opinionsIsLoading(state = true, action) {
   switch (action.type) {
     case ADMIN_OPINIONS_IS_LOADING:
       return action.adminOpinionsIsLoading

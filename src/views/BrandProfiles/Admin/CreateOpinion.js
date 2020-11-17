@@ -21,8 +21,8 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    opinionCreated: state.opinionCreated,
-    opinionSaving: state.opinionSaving
+    opinionCreated: state.brandProfilesAdmin.opinionCreated,
+    opinionSaving: state.brandProfilesAdmin.opinionSaving
   }
 }
 

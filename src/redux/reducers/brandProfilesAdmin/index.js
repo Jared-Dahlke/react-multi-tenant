@@ -6,13 +6,16 @@ import {
 	scenarioCreated,
 	scenarioArchiving,
 	scenarioArchived,
-	adminOpinions,
-	adminOpinionsIsLoading,
+} from './scenarios'
+
+import {
+	opinions,
+	opinionsIsLoading,
 	opinionSaving,
 	opinionCreated,
 	opinionArchiving,
 	opinionArchived
-} from './scenarios'
+} from './opinions'
 // import { brandProfileAdminOpinions } from './opinions'
 
 export default combineReducers({
@@ -22,8 +25,8 @@ export default combineReducers({
 	scenarioCreated,
 	scenarioArchiving,
 	scenarioArchived,
-	adminOpinions,
-	adminOpinionsIsLoading,
+	opinions,
+	opinionsIsLoading,
 	opinionSaving,
 	opinionCreated,
 	opinionArchiving,

@@ -29,10 +29,10 @@ const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
   return {
-    opinionsIsLoading: state.adminOpinionsIsLoading,
-    opinionArchived: state.opinionArchived,
-    opinionArchiving: state.opinionArchiving,
-    adminOpinions: state.adminOpinions
+    opinionsIsLoading: state.brandProfilesAdmin.opinionsIsLoading,
+    opinionArchived: state.brandProfilesAdmin.opinionArchived,
+    opinionArchiving: state.brandProfilesAdmin.opinionArchiving,
+    adminOpinions: state.brandProfilesAdmin.opinions
   }
 }
 
