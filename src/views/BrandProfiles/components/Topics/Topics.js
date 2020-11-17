@@ -13,6 +13,7 @@ import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
+import Divider from 'rsuite/lib/Divider'
 
 const Node = (props) => {
 	const nodeProps = props.nodeProps
@@ -176,6 +177,7 @@ export default function TopicsTree(props) {
 
 	return (
 		<div>
+			<Divider style={{ color: 'white' }}>Topics</Divider>
 			<InputGroup>
 				<InputGroup.Addon>
 					<Icon icon='search' />

@@ -65,7 +65,8 @@ module.exports = override(
 				'@btn-subtle-active-default-color': accentColor,
 
 				//messages
-				'@message-success-bg': neutralExtraLightColor, //'#58b15b',
+				'@message-success-bg': neutralExtraLightColor,
+				'@message-warning-bg': neutralExtraLightColor,
 				'@message-header-color': '#FFF',
 
 				//tables

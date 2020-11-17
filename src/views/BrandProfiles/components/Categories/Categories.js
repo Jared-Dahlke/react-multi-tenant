@@ -1,9 +1,8 @@
 import React from 'react'
-import CustomRadio from '../Scenarios/CustomRadio'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
 import Divider from 'rsuite/lib/Divider'
-import CategoryButtonGroup from '../Categories/CategoryButtonGroup'
+import CategoryButtonGroup from './CategoryButtonGroup'
 
 function setCategoryAction(data, categories) {
 	const contentCategoryId = data.contentCategoryId
@@ -18,28 +17,7 @@ function setCategoryAction(data, categories) {
 	}
 }
 
-function setScenarioAction(data, scenarios) {
-	const scenarioId = data.scenarioId
-	const value = Number(data.scenarioResponseId)
-
-	for (const scenario of scenarios) {
-		if (scenario.scenarioId === scenarioId) {
-			scenario.scenarioResponseId = value
-		}
-	}
-}
-
-export default function ContentSettings(props) {
-	const handleScenarioSelect = (scenarioId, scenarioResponseId) => {
-		let data = {
-			scenarioId: scenarioId,
-			scenarioResponseId: scenarioResponseId
-		}
-		let newScenarios = JSON.parse(JSON.stringify(props.values.scenarios))
-		setScenarioAction(data, newScenarios)
-		props.setFieldValue('scenarios', newScenarios)
-	}
-
+export default function Categories(props) {
 	const handleCategorySelect = (
 		contentCategoryId,
 		contentCategoryResponseId
@@ -54,43 +32,10 @@ export default function ContentSettings(props) {
 	}
 
 	React.useEffect(() => {
-		props.setFieldValue('scenarios', props.scenarios)
-	}, [props.scenarios])
-	React.useEffect(() => {
 		props.setFieldValue('categories', props.categories)
 	}, [props.categories])
 	return (
 		<div>
-			<Divider style={{ color: 'white' }}>Scenarios</Divider>
-			<div>
-				{props.scenarios &&
-					props.scenarios.length > 0 &&
-					props.scenarios.map((scenario, index) => {
-						return (
-							<CustomRadio
-								key={index}
-								handleScenarioSelect={handleScenarioSelect}
-								scenario={scenario}
-							/>
-						)
-					})}
-				<div>
-					{props.errors.scenarios ? (
-						<FormHelperText
-							id='component-helper-text'
-							style={{
-								color: dangerColor[0],
-								fontSize: '16px',
-								position: 'absolute',
-								bottom: -20
-							}}
-						>
-							{props.errors.scenarios}
-						</FormHelperText>
-					) : null}
-				</div>
-			</div>
-
 			<Divider style={{ color: 'white' }}>Categories</Divider>
 
 			<div>
@@ -106,7 +51,7 @@ export default function ContentSettings(props) {
 						)
 					})}
 				<div>
-					{props.errors.categories && !props.errors.scenarios ? (
+					{props.errors.categories ? (
 						<FormHelperText
 							id='component-helper-text'
 							style={{

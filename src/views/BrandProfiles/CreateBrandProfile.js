@@ -11,8 +11,9 @@ import { Form, withFormik } from 'formik'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
-import ContentSettings from './components/ContentSettings/ContentSettings'
 import Topics from './components/Topics/Topics'
+import Categories from './components/Categories/Categories'
+import Scenarios from './components/Scenarios/Scenarios'
 import {
 	createBrandProfile,
 	setBrandProfileCreated,
@@ -25,6 +26,12 @@ import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
 import { schemaValidation, stepValidated } from './brandProfileValidation'
 import Loader from 'rsuite/lib/Loader'
+import { getSteps } from './brandProfileSteps'
+import Summary from './components/Summary/CreateSummary'
+import { useHistory } from 'react-router-dom'
+import { modifiedRoutes } from '../../routes'
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -81,34 +88,35 @@ const mapStateToProps = (state) => {
 	}
 }
 
-function getSteps() {
-	return ['Basic Info', 'Content Settings', 'Topics']
-}
-
 function CreateBrandProfile(props) {
+	let history = useHistory()
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
-	const steps = getSteps()
+	const steps = getSteps
 	const handleNext = (values) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
-		if (activeStep === steps.length - 1) {
-			cleanScenariosForApi(values.scenarios)
-			cleanCategoriesForApi(values.categories)
-			let brandProfile = {
-				brandProfileId: values.brandProfileId,
-				accountId: values.accountId,
-				brandName: values.basicInfoProfileName,
-				websiteUrl: values.basicInfoWebsiteUrl,
-				industryVerticalId: values.basicInfoIndustryVerticalId,
-				twitterProfileUrl: values.basicInfoTwitterProfile,
-				topics: values.topics,
-				competitors: values.topCompetitors,
-				scenarios: values.scenarios,
-				categories: values.categories
-			}
+	}
 
-			props.createBrandProfile(brandProfile)
+	const [createClicked, setCreateClicked] = React.useState(false)
+
+	const handleCreateClick = (values) => {
+		setCreateClicked(true)
+		cleanScenariosForApi(values.scenarios)
+		cleanCategoriesForApi(values.categories)
+		let brandProfile = {
+			brandProfileId: values.brandProfileId,
+			accountId: values.accountId,
+			brandName: values.basicInfoProfileName,
+			websiteUrl: values.basicInfoWebsiteUrl,
+			industryVerticalId: values.basicInfoIndustryVerticalId,
+			twitterProfileUrl: values.basicInfoTwitterProfile,
+			topics: values.topics,
+			competitors: values.topCompetitors,
+			scenarios: values.scenarios,
+			categories: values.categories
 		}
+
+		props.createBrandProfile(brandProfile)
 	}
 
 	const cleanScenariosForApi = (scenarios) => {
@@ -127,6 +135,12 @@ function CreateBrandProfile(props) {
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
+
+	const handleExitClick = () => {
+		history.push(modifiedRoutes.app.subRoutes.settings_brandProfiles.path)
+	}
+
+	const onLastStep = activeStep === steps.length - 1
 
 	const nextButtonLabel = React.useMemo(() => {
 		let label = ''
@@ -147,15 +161,16 @@ function CreateBrandProfile(props) {
 		touched,
 		setFieldValue,
 		setFieldTouched,
-		dirty
+		dirty,
+		isValid
 	} = props
 
 	return (
 		<Form>
 			<Steps current={activeStep}>
-				<Steps.Item title='Brand' />
-				<Steps.Item title='Content Settings' />
-				<Steps.Item title='Topics' />
+				{getSteps.map((step, index) => {
+					return <Steps.Item title={step} key={index} />
+				})}
 			</Steps>
 
 			<GridContainer justify='center' style={{ paddingTop: 20 }}>
@@ -179,64 +194,41 @@ function CreateBrandProfile(props) {
 								</div>
 							) : activeStep === 1 ? (
 								<div>
-									<ContentSettings
-										scenarios={values.scenarios}
+									<Categories
 										categories={values.categories}
 										setFieldValue={setFieldValue}
 										errors={errors}
 										values={values}
 									/>
+									<Topics
+										formikTopics={values.topics}
+										setFieldValue={setFieldValue}
+										errors={errors}
+									/>
 								</div>
 							) : activeStep === 2 ? (
 								<div>
-									<div style={{ flex: 1 }}>
-										<Topics
-											formikTopics={values.topics}
-											setFieldValue={setFieldValue}
-											errors={errors}
-										/>
-									</div>
+									<Scenarios
+										scenarios={values.scenarios}
+										setFieldValue={setFieldValue}
+										errors={errors}
+										values={values}
+									/>
+								</div>
+							) : activeStep === 3 ? (
+								<div style={{ flex: 1 }}>
+									<Summary
+										values={values}
+										dirty={dirty}
+										isValid={isValid}
+										handleCreateClick={handleCreateClick}
+										handleExitClick={handleExitClick}
+										brandProfileCreating={props.brandProfileCreating}
+										createClicked={createClicked}
+									/>
 								</div>
 							) : (
-								<div style={{ color: 'white' }}>
-									<div
-										style={{
-											display: 'flex',
-											justifyContent: 'center',
-											alignItems: 'center',
-											backgroundColor: neutralColor,
-											height: '100%',
-											color: 'white'
-										}}
-									>
-										{props.brandProfileCreating ? (
-											<Loader
-												size='sm'
-												content='Creating your brand profile...'
-											/>
-										) : (
-											<Message
-												showIcon
-												type='success'
-												title='Success'
-												description={
-													<p>
-														{
-															'Your brand profile was succesfully created. Now you can '
-														}
-														<Link to='/app/engage/listBuilder'>
-															{'go to the list builder '}
-														</Link>
-														or
-														<Link to='/app/settings/brandProfiles'>
-															{' view your brand profiles'}
-														</Link>
-													</p>
-												}
-											/>
-										)}
-									</div>
-								</div>
+								<div>test</div>
 							)}
 						</GridList>
 					</div>
@@ -245,27 +237,56 @@ function CreateBrandProfile(props) {
 						{activeStep === steps.length ? null : (
 							<div>
 								<div>
-									<Button
-										disabled={activeStep === 0}
-										onClick={handleBack}
-										className={classes.backButton}
-									>
-										Back
-									</Button>
-									<Button
-										onClick={() => handleNext(values)}
-										disabled={
-											!stepValidated(activeStep, errors, values) || !dirty
-										}
-										loading={props.brandProfileCreating}
-									>
-										{nextButtonLabel}
-									</Button>
+									{!createClicked && (
+										<Button
+											disabled={activeStep === 0}
+											onClick={handleBack}
+											className={classes.backButton}
+										>
+											Back
+										</Button>
+									)}
+
+									{onLastStep && !createClicked && (
+										<Button
+											onClick={() => handleCreateClick(values)}
+											loading={props.brandProfileCreating}
+											disabled={props.brandProfileCreating}
+										>
+											Create
+										</Button>
+									)}
+
+									{!onLastStep && !createClicked && (
+										<Button
+											onClick={() => handleNext(values)}
+											disabled={
+												!stepValidated(activeStep, errors, values) || !dirty
+											}
+											loading={props.brandProfileCreating}
+										>
+											{nextButtonLabel}
+										</Button>
+									)}
 								</div>
 							</div>
 						)}
 					</div>
 				</GridItem>
+
+				<Snackbar
+					autoHideDuration={2000}
+					place='bc'
+					open={props.brandProfileCreated}
+					onClose={() => props.setBrandProfileCreated(false)}
+				>
+					<Alert
+						onClose={() => props.setBrandProfileCreated(false)}
+						severity='success'
+					>
+						Brand Profile created
+					</Alert>
+				</Snackbar>
 			</GridContainer>
 		</Form>
 	)

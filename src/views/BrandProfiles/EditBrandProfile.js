@@ -12,7 +12,6 @@ import { schemaValidation, stepValidated } from './brandProfileValidation'
 import GridContainer from '../../components/Grid/GridContainer'
 import GridItem from '../../components/Grid/GridItem'
 import GridList from '@material-ui/core/GridList'
-import ContentSettings from './components/ContentSettings/ContentSettings'
 import Topics from './components/Topics/Topics'
 import {
 	createBrandProfile,
@@ -23,11 +22,15 @@ import {
 } from '../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { neutralColor } from '../../assets/jss/colorContants.js'
-import { Link } from 'react-router-dom'
-import Message from 'rsuite/lib/Message'
 import { brandProfileModel } from './Model'
-import { UserCan, perms, userCan } from '../../Can'
+import { UserCan, perms } from '../../Can'
 import Loader from 'rsuite/lib/Loader'
+import Scenarios from './components/Scenarios/Scenarios'
+import Categories from './components/Categories/Categories'
+import { getSteps } from './brandProfileSteps'
+import Summary from './components/Summary/EditSummary'
+import { useHistory } from 'react-router-dom'
+import { modifiedRoutes } from '../../routes'
 
 const useStyles = makeStyles((theme) => ({
 	stepper: {
@@ -100,10 +103,6 @@ const getCurrent = (brandProfiles, brandProfileIdEditing) => {
 	return brandProfileModel
 }
 
-function getSteps() {
-	return ['Basic Info', 'Content Settings', 'Topics']
-}
-
 function EditBrandProfile(props) {
 	if (
 		!props.match.params.brandProfileId ||
@@ -111,6 +110,7 @@ function EditBrandProfile(props) {
 	) {
 		window.location.href = '/app/settings/brandProfiles'
 	}
+	let history = useHistory()
 	let { fetchBrandProfile } = props
 	React.useEffect(() => {
 		let current = getCurrent(
@@ -124,7 +124,11 @@ function EditBrandProfile(props) {
 
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
-	const steps = getSteps()
+	const steps = getSteps
+
+	const handleExitClick = () => {
+		history.push(modifiedRoutes.app.subRoutes.settings_brandProfiles.path)
+	}
 	const handleNext = (values) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1)
 
@@ -149,6 +153,8 @@ function EditBrandProfile(props) {
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1)
 	}
+
+	const onLastStep = activeStep === steps.length - 1
 
 	const nextButtonLabel = React.useMemo(() => {
 		let label = ''
@@ -193,9 +199,9 @@ function EditBrandProfile(props) {
 		return (
 			<Form>
 				<Steps current={activeStep}>
-					<Steps.Item title='Brand' />
-					<Steps.Item title='Content Settings' />
-					<Steps.Item title='Topics' />
+					{getSteps.map((step, index) => {
+						return <Steps.Item title={step} key={index} />
+					})}
 				</Steps>
 
 				<GridContainer justify='center' style={{ paddingTop: 20 }}>
@@ -219,61 +225,33 @@ function EditBrandProfile(props) {
 									</div>
 								) : activeStep === 1 ? (
 									<div>
-										<ContentSettings
-											scenarios={values.scenarios}
+										<Categories
 											categories={values.categories}
 											setFieldValue={setFieldValue}
 											errors={errors}
 											values={values}
 										/>
-									</div>
-								) : activeStep === 2 ? (
-									<div style={{ flex: 1 }}>
 										<Topics
 											formikTopics={values.topics}
 											setFieldValue={setFieldValue}
 											errors={errors}
 										/>
 									</div>
-								) : (
-									<div style={{ color: 'white' }}>
-										<div
-											style={{
-												display: 'flex',
-												justifyContent: 'center',
-												alignItems: 'center',
-												backgroundColor: neutralColor,
-												height: '100%',
-												color: 'white'
-											}}
-										>
-											{props.brandProfileSaving ? (
-												'Saving...'
-											) : (
-												<Message
-													showIcon
-													type='success'
-													title={
-														userCan(perms.BRAND_PROFILE_UPDATE) ? 'Success' : ''
-													}
-													description={
-														<p>
-															{userCan(perms.BRAND_PROFILE_UPDATE)
-																? 'Your brand profile was saved. Now you can '
-																: ' Complete.'}
-															<Link to='/app/engage/listBuilder'>
-																{'go to the list builder '}
-															</Link>
-															or
-															<Link to='/app/settings/brandProfiles'>
-																{' view your brand profiles'}
-															</Link>
-														</p>
-													}
-												/>
-											)}
-										</div>
+								) : activeStep === 2 ? (
+									<div style={{ flex: 1 }}>
+										<Scenarios
+											scenarios={values.scenarios}
+											setFieldValue={setFieldValue}
+											errors={errors}
+											values={values}
+										/>
 									</div>
+								) : activeStep === 3 ? (
+									<div style={{ flex: 1 }}>
+										<Summary values={values} dirty={dirty} isValid={isValid} />
+									</div>
+								) : (
+									<div>test</div>
 								)}
 							</GridList>
 						</div>
@@ -301,12 +279,23 @@ function EditBrandProfile(props) {
 										>
 											Back
 										</Button>
-										<Button
-											onClick={() => handleNext(values)}
-											disabled={!stepValidated(activeStep, errors, values)}
-										>
-											{nextButtonLabel}
-										</Button>
+
+										{!onLastStep && (
+											<Button
+												onClick={() => handleNext(values)}
+												disabled={!stepValidated(activeStep, errors, values)}
+											>
+												Next
+											</Button>
+										)}
+										{onLastStep && (
+											<Button
+												onClick={() => handleExitClick()}
+												disabled={!stepValidated(activeStep, errors, values)}
+											>
+												Exit
+											</Button>
+										)}
 									</div>
 								</div>
 							)}
