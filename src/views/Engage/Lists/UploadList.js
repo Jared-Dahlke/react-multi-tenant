@@ -4,13 +4,11 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { connect } from 'react-redux'
 import Uploader from 'rsuite/lib/Uploader'
 import { Form, withFormik } from 'formik'
-import * as Yup from 'yup'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import Panel from 'rsuite/lib/Panel'
 import styles from '../../../assets/jss/material-dashboard-react/components/customInputStyle.js'
 import FormControl from '@material-ui/core/FormControl'
-import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import Radio from 'rsuite/lib/Radio'
 import RadioGroup from 'rsuite/lib/RadioGroup'
 import Button from 'rsuite/lib/Button'
@@ -194,7 +192,7 @@ function UploadList(props) {
 								)}
 
 								<FormControl fullWidth={true} className={classes.formControl}>
-									<Label label={'Pick a file'} />
+									<p>Pick a file</p>
 									<Uploader
 										disabled={uploadedCount > 0}
 										listType='text'

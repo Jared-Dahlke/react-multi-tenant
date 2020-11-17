@@ -16,8 +16,12 @@ export default function SuiteTree(props) {
 	}
 
 	return (
-		<FormControl fullWidth={true} className={classes.formControl}>
-			{props.label && <Label label={props.label} />}
+		<FormControl
+			fullWidth={true}
+			className={classes.formControl}
+			style={{ color: '#FFF' }}
+		>
+			{props.label && <p>{props.label} </p>}
 			<CheckTreePicker
 				defaultExpandAll
 				data={props.data}

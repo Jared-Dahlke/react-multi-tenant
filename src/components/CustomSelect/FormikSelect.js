@@ -19,8 +19,12 @@ export default function SelectField(props) {
 	const { id, label, placeholder, options, value, isDisabled, error } = props
 
 	return (
-		<FormControl fullWidth={true} className={classes.formControl}>
-			{label && <Label label={label} />}
+		<FormControl
+			fullWidth={true}
+			className={classes.formControl}
+			style={{ color: '#FFF' }}
+		>
+			{label && <p>{label}</p>}
 
 			<SelectPicker
 				id={id}

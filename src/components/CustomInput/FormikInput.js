@@ -35,8 +35,9 @@ export default function CustomInput(props) {
 					className={
 						props.simple ? classes.formControlSlim : classes.formControl
 					}
+					style={{ color: '#FFF' }}
 				>
-					{labelText && <Label label={labelText} />}
+					{labelText && <p>{labelText}</p>}
 
 					<InputGroup>
 						{props.startAdornmentText && (
