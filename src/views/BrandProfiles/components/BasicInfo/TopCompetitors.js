@@ -30,6 +30,7 @@ import FormikInput from '../../../../components/CustomInput/FormikInput'
 import { UserCan, perms, userCan } from '../../../../Can'
 
 import * as Yup from 'yup'
+import { neutralColor } from '../../../../assets/jss/colorContants.js'
 const urlRegex = require('url-regex')
 
 const useTableStyles = makeStyles(tableStyles)
@@ -159,135 +160,122 @@ export default function TopCompetitors(props) {
 		>
 			{(formik) => (
 				<Panel header='Competitors' bordered>
-					<Grid container justify='center'>
-						<Grid item>
-							<Grid container justify='flex-end'>
-								<UserCan do={perms.BRAND_PROFILE_UPDATE}>
-									<Button
-										size={'sm'}
-										appearance='link'
-										onClick={() => {
-											handleAddNew(formik.values, formik.setFieldValue)
-										}}
-									>
-										{formik.values.competitors.length < 1
-											? 'Add a Competitor'
-											: 'Add another'}
-									</Button>
-								</UserCan>
-							</Grid>
-							{props.errors.topCompetitors ? (
-								<FormHelperText
-									id='component-helper-text'
-									style={{
-										color: dangerColor[0],
-										fontSize: '16px'
+					<Grid container>
+						{props.errors.topCompetitors ? (
+							<FormHelperText
+								id='component-helper-text'
+								style={{
+									color: dangerColor[0],
+									fontSize: '16px'
+								}}
+							>
+								{props.errors.topCompetitors}
+							</FormHelperText>
+						) : null}
+
+						<FieldArray
+							name='competitors'
+							render={(arrayHelpers) => {
+								const competitors = formik.values.competitors
+								return (
+									<>
+										{competitors && competitors.length > 0
+											? competitors.map((competitor, index) => (
+													<Grid key={index} container spacing={1}>
+														<div style={{ width: 15 }} />
+														<Grid item xs={12} sm={12} md={3}>
+															<p>{index === 0 ? 'Name' : ''}</p>
+															<CustomField
+																name={`competitors.${index}.competitorName`}
+																formikValue={competitor.competitorName}
+																error={
+																	formik.errors &&
+																	formik.errors.competitors &&
+																	formik.errors.competitors[index] &&
+																	formik.errors.competitors[index]
+																		.competitorName
+																}
+															/>
+														</Grid>
+
+														<Grid item xs={12} sm={12} md={3}>
+															<p>{index === 0 ? 'Twitter' : ''}</p>
+															<CustomField
+																name={`competitors.${index}.twitterProfileUrl`}
+																formikValue={competitor.twitterProfileUrl}
+																error={
+																	formik.errors &&
+																	formik.errors.competitors &&
+																	formik.errors.competitors[index] &&
+																	formik.errors.competitors[index]
+																		.twitterProfileUrl
+																}
+																//	error={competitor}
+															/>
+														</Grid>
+														<Grid item xs={12} sm={12} md={3}>
+															<p>{index === 0 ? 'Website' : ''}</p>
+															<CustomField
+																name={`competitors.${index}.websiteUrl`}
+																formikValue={competitor.websiteUrl}
+																error={
+																	formik.errors &&
+																	formik.errors.competitors &&
+																	formik.errors.competitors[index] &&
+																	formik.errors.competitors[index].websiteUrl
+																}
+															/>
+														</Grid>
+														<Grid item xs={12} sm={12} md={2}>
+															<p style={{ color: neutralColor }}>
+																{index === 0 ? 'a' : ' '}
+															</p>
+
+															<UserCan do={perms.BRAND_PROFILE_UPDATE}>
+																<Button
+																	block
+																	style={{
+																		color: '#F44336',
+																		borderColor: '#F44336'
+																	}}
+																	appearance='ghost'
+																	onClick={() =>
+																		handleDeleteCompetitor(
+																			competitor.competitorId,
+																			arrayHelpers,
+																			index
+																		)
+																	}
+																>
+																	Remove
+																</Button>
+															</UserCan>
+														</Grid>
+													</Grid>
+											  ))
+											: null}
+
+										<AutoSave debounceMs={1} />
+									</>
+								)
+							}}
+						/>
+
+						<Grid container style={{ paddingTop: 25, marginLeft: 15 }}>
+							<UserCan do={perms.BRAND_PROFILE_UPDATE}>
+								<Button
+									size={'sm'}
+									appearance='ghost'
+									color='green'
+									onClick={() => {
+										handleAddNew(formik.values, formik.setFieldValue)
 									}}
 								>
-									{props.errors.topCompetitors}
-								</FormHelperText>
-							) : null}
-
-							<Table className={classes.table}>
-								<TableHead className={tableClasses['primaryTableHeader']}>
-									<TableRow>
-										{competitorHeaders.map((prop, key) => {
-											return (
-												<TableCell className={tableCellClasses} key={key}>
-													<Label label={prop} />
-												</TableCell>
-											)
-										})}
-									</TableRow>
-								</TableHead>
-								<FieldArray
-									name='competitors'
-									render={(arrayHelpers) => {
-										const competitors = formik.values.competitors
-										return (
-											<TableBody>
-												{competitors && competitors.length > 0
-													? competitors.map((competitor, index) => (
-															<TableRow key={index} style={{ border: 0 }}>
-																<TableCell className={tableCellClasses}>
-																	<CustomField
-																		name={`competitors.${index}.competitorName`}
-																		formikValue={competitor.competitorName}
-																		error={
-																			formik.errors &&
-																			formik.errors.competitors &&
-																			formik.errors.competitors[index] &&
-																			formik.errors.competitors[index]
-																				.competitorName
-																		}
-																	/>
-																</TableCell>
-
-																<TableCell
-																	style={{ padding: 4, margin: 4 }}
-																	className={tableCellClasses}
-																>
-																	<CustomField
-																		name={`competitors.${index}.twitterProfileUrl`}
-																		formikValue={competitor.twitterProfileUrl}
-																		error={
-																			formik.errors &&
-																			formik.errors.competitors &&
-																			formik.errors.competitors[index] &&
-																			formik.errors.competitors[index]
-																				.twitterProfileUrl
-																		}
-																		//	error={competitor}
-																	/>
-																</TableCell>
-
-																<TableCell
-																	style={{ padding: 4, margin: 4 }}
-																	className={tableCellClasses}
-																>
-																	<CustomField
-																		name={`competitors.${index}.websiteUrl`}
-																		formikValue={competitor.websiteUrl}
-																		error={
-																			formik.errors &&
-																			formik.errors.competitors &&
-																			formik.errors.competitors[index] &&
-																			formik.errors.competitors[index]
-																				.websiteUrl
-																		}
-																	/>
-																</TableCell>
-
-																<TableCell
-																	style={{ padding: 4, margin: 4 }}
-																	className={tableCellClasses}
-																>
-																	<UserCan do={perms.BRAND_PROFILE_UPDATE}>
-																		<Button
-																			size={'sm'}
-																			appearance='link'
-																			onClick={() =>
-																				handleDeleteCompetitor(
-																					competitor.competitorId,
-																					arrayHelpers,
-																					index
-																				)
-																			}
-																		>
-																			Remove
-																		</Button>
-																	</UserCan>
-																</TableCell>
-															</TableRow>
-													  ))
-													: null}
-
-												<AutoSave debounceMs={1} />
-											</TableBody>
-										)
-									}}
-								/>
-							</Table>
+									{formik.values.competitors.length < 1
+										? 'Add a Competitor'
+										: 'Add another'}
+								</Button>
+							</UserCan>
 						</Grid>
 					</Grid>
 				</Panel>
