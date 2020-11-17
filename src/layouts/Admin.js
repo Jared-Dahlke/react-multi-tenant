@@ -207,8 +207,7 @@ export const generateRoutes = (modifiedRoutes) => {
 		let routeValues = Object.values(routesParam.subRoutes)
 
 		const filteredRouteValues = routeValues.filter(filterRoutesCB)
-
-		let parentRoute = filteredRouteValues.map((value) => {
+		let parentRoute = filteredRouteValues.map((value, index) => {
 			const { path, component, subRoutes} = value
 			if(subRoutes){
 				const filteredSubRoutes = Array.from(subRoutes).filter(filterRoutesCB)
@@ -232,7 +231,7 @@ export const generateRoutes = (modifiedRoutes) => {
 			}
 			if(routesParam.path && routesParam.component){
 				return (
-					<React.Fragment key={routesParam.path}>
+					<React.Fragment key={routesParam.path + index}>
 					<Route
 						path = {routesParam.path}
 						component = {routesParam.component}
