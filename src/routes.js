@@ -19,8 +19,6 @@ import Login from './pages/Login'
 
 import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
-import Opinions from './views/BrandProfiles/Admin/Opinions.js'
-import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
 import { userCan, perms } from './Can'
@@ -126,17 +124,6 @@ export const routes = {
 							name: 'Create',
 							component: CreateScenario
 						}
-					},
-					opinions: {
-						path: '/app/settings/brandProfiles/admin/opinions',
-						name: 'Brand Profiles Opinions',
-						component: Opinions,
-
-						create: {
-							path: '/app/settings/brandProfiles/admin/opinions/create',
-							name: 'Create',
-							component: CreateOpinion
-						}
 					}
 				}
 			},
@@ -170,29 +157,29 @@ export const modifiedRoutes = {
 		component: Admin,
 		subRoutes: {
 			engage: {
-				path: '/app/engage/lists',
-				component: Lists,
-				name: 'Lists',
-				subRoutes: [
-					{
-						path: '/app/engage/lists/uploadList',
-						component: UploadList,
-						name: 'Upload List'
-					},
-					{
-						path: '/app/engage/lists/listBuilder',
-						name: 'List Builder',
-						component: ListBuilder
-					}
+						path: '/app/engage/lists',
+						component: Lists,
+						name: 'Lists',
+						subRoutes:[
+							{
+								path: '/app/engage/lists/uploadList',
+								component: UploadList,
+								name: 'Upload List'
+							},
+							{
+								path: '/app/engage/lists/listBuilder',
+								name: 'List Builder',
+								component: ListBuilder
+							}
 
-				]
+						]
 			},
 			discover: {
-				path: '/app/discover/channelResearch',
-				name: 'Channel Research',
-				component: ChannelResearchTemp
+						path: '/app/discover/channelResearch',
+						name: 'Channel Research',
+						component: ChannelResearchTemp
 			},
-			settings_profile: {
+			settings_profile : {
 				path: '/app/settings/profile',
 				name: 'Profile',
 				component: UserProfile
@@ -202,12 +189,12 @@ export const modifiedRoutes = {
 				name: 'Account',
 				component: Account
 			},
-			settings_users: {
+			settings_users:{
 				path: '/app/settings/users',
 				component: Users,
 				name: 'Users',
-				subRoutes: [
-					{
+				subRoutes:[
+					 {
 						path: '/app/settings/users/edit/:user',
 						name: 'Edit',
 						component: EditUser
@@ -216,7 +203,7 @@ export const modifiedRoutes = {
 						path: '/app/settings/users/create',
 						name: 'Create',
 						component: CreateUser,
-						userCan: userCan(perms.USER_CREATE)
+						userCan : userCan(perms.USER_CREATE)
 					}
 				]
 			},
@@ -224,7 +211,7 @@ export const modifiedRoutes = {
 				path: '/app/settings/brandProfiles',
 				name: 'Brand Profiles',
 				component: BrandProfiles,
-
+		
 				subRoutes: [
 					{
 						path: '/app/settings/brandProfiles/create',
@@ -241,32 +228,20 @@ export const modifiedRoutes = {
 						path: '/app/settings/brandProfiles/admin',
 						name: 'Admin',
 						component: BrandProfilesAdmin,
-						subRoutes: [
+						subRoutes:[
 
 							{
-								path: '/app/settings/brandProfiles/admin/scenarios',
-								name: 'Scenarios',
-								component: Scenarios,
-								subRoutes: [
-									{
-										path: '/app/settings/brandProfiles/admin/scenarios/create',
-										name: 'Create',
-										component: CreateScenario
-									}
-								]
-							},
-							{
-								path: '/app/settings/brandProfiles/admin/opinions',
-								name: 'Opinions',
-								component: Opinions,
-								subRoutes: [
-									{
-										path: '/app/settings/brandProfiles/admin/opinions/create',
-										name: 'Create',
-										component: CreateOpinion
-									}
-								]
-							}
+							path: '/app/settings/brandProfiles/admin/scenarios',
+							name: 'Scenarios',
+							component: Scenarios,
+							subRoutes: [
+								{
+									path: '/app/settings/brandProfiles/admin/scenarios/create',
+									name: 'Create',
+									component: CreateScenario
+								}
+							]
+						}
 						]
 					}
 				]

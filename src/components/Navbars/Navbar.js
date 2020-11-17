@@ -15,7 +15,7 @@ import styles from '../../assets/jss/material-dashboard-react/components/headerS
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
 import { perms, userCan } from '../../Can'
-import { routes, modifiedRoutes } from '../../routes'
+import { routes,modifiedRoutes } from '../../routes'
 import Grid from '@material-ui/core/Grid'
 import SideBar from '../SideBar/SideBar'
 import IconButton from 'rsuite/lib/IconButton'
@@ -32,66 +32,66 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const generateBreadCrumbs = (routes) => {
-	const crumbSize = 20
-	let url = window.location.pathname
-	const routeHierarchy = []
+  const crumbSize = 20
+  let url = window.location.pathname
+  const routeHierarchy = []
 
-	const getPathWithoutParams = (path) => {
-		return path.split("/:")[0]
-	}
+  const getPathWithoutParams = (path) => {
+    return path.split("/:")[0]
+  }
 
-	const findRoute = (route) => {
-		let subRoutes = Object.values(route.subRoutes)
-		let matchedRoute = subRoutes.find((route) => {
-			if (url === route.path) return true
-			if (
-				route.name.toLowerCase().includes("edit") &&
-				url.includes(getPathWithoutParams(route.path))
-			)
-				return true
-			if (route.subRoutes) return findRoute(route)
-			return false
-		})
-		matchedRoute && routeHierarchy.push(matchedRoute)
-		return matchedRoute
-	}
+  const findRoute = (route) => {
+    let subRoutes = Object.values(route.subRoutes)
+    let matchedRoute = subRoutes.find((route) => {
+      if (url === route.path) return true
+      if (
+        route.name.toLowerCase().includes("edit") &&
+        url.includes(getPathWithoutParams(route.path))
+      )
+        return true
+      if (route.subRoutes) return findRoute(route)
+      return false
+    })
+    matchedRoute && routeHierarchy.push(matchedRoute)
+    return matchedRoute
+  }
 
-	const createBreadCrumbs = (routes) => {
-		findRoute(routes)
-		const disabledLinkStyle = {
-			fontSize: crumbSize,
-			cursor: "not-allowed",
-			color: "white",
-			pointerEvents: "none",
-		}
-		return (
-			<Breadcrumbs
-				aria-label="breadcrumb"
-				style={{ color: whiteColor }}
-				separator=">"
-			>
-				{routeHierarchy.reverse().map((curr, index, array) => {
-					if (index === array.length - 1)
-						return (
-							<div key={curr.path} style={disabledLinkStyle}>
-								{curr.name}
-							</div>
-						)
-					return (
-						<Link
-							to={curr.path}
-							style={{ fontSize: crumbSize }}
-							key={curr.path}
-						>
-							{curr.name}
-						</Link>
-					)
-				})}
-			</Breadcrumbs>
-		)
-	}
+  const createBreadCrumbs = (routes) => {
+    findRoute(routes)
+    const disabledLinkStyle = {
+      fontSize: crumbSize,
+      cursor: "not-allowed",
+      color: "white",
+      pointerEvents: "none",
+    }
+    return (
+      <Breadcrumbs
+        aria-label="breadcrumb"
+        style={{ color: whiteColor }}
+        separator=">"
+      >
+        {routeHierarchy.reverse().map((curr, index, array) => {
+          if (index === array.length - 1)
+            return (
+              <div key={curr.path} style={disabledLinkStyle}>
+                {curr.name}
+              </div>
+            )
+          return (
+            <Link
+              to={curr.path}
+              style={{ fontSize: crumbSize }}
+              key={curr.path}
+            >
+              {curr.name}
+            </Link>
+          )
+        })}
+      </Breadcrumbs>
+    )
+  }
 
-	return createBreadCrumbs(routes)
+  return createBreadCrumbs(routes)
 }
 
 function Header(props) {
