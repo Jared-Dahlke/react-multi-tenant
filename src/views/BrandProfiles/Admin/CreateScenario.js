@@ -20,8 +20,8 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    scenarioCreated: state.scenarioCreated,
-    scenarioSaving: state.scenarioSaving
+    scenarioCreated: state.brandProfilesAdmin.scenarioCreated,
+    scenarioSaving: state.brandProfilesAdmin.scenarioSaving
   }
 }
 

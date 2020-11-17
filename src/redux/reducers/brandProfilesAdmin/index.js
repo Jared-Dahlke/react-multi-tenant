@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import {
-	adminScenarios,
-	adminScenariosIsLoading,
+	scenarios,
+	scenariosIsLoading,
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
@@ -16,8 +16,8 @@ import {
 // import { brandProfileAdminOpinions } from './opinions'
 
 export default combineReducers({
-	adminScenarios,
-	adminScenariosIsLoading,
+	scenarios,
+	scenariosIsLoading,
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,

@@ -29,10 +29,10 @@ const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return {
-		scenariosIsLoading: state.adminScenariosIsLoading,
-		scenarioArchived: state.scenarioArchived,
-		scenarioArchiving: state.scenarioArchiving,
-		adminScenarios: state.adminScenarios
+		scenariosIsLoading: state.brandProfilesAdmin.scenariosIsLoading,
+		scenarioArchived: state.brandProfilesAdmin.scenarioArchived,
+		scenarioArchiving: state.brandProfilesAdmin.scenarioArchiving,
+		adminScenarios: state.brandProfilesAdmin.scenarios
 	}
 }
 
@@ -56,6 +56,7 @@ function Scenarios(props) {
 			fetchAdminBrandScenarios();
 		}
 	})
+
 
 	const tableCellClasses = classnames(classes.tableCell, {
 		[classes.tableCellRTL]: false

@@ -61,26 +61,11 @@ import {
 	brandProfileSaving,
 	brandProfileSaved,
 	scenariosIsLoading,
+
 } from './brandProfiles'
-import {
-	adminScenarios,
-	adminScenariosIsLoading,
-	scenarioSaving,
-	scenarioCreated,
-	scenarioArchiving,
-	scenarioArchived,
-} from './brandProfilesAdmin/scenarios'
-import {
-	adminOpinions,
-	adminOpinionsIsLoading,
-	opinionSaving,
-	opinionCreated,
-	opinionArchiving,
-	opinionArchived
-} from './brandProfilesAdmin/opinions'
 import { categories, channels, videos } from './discover/channels'
 
-// import brandProfilesAdmin from './brandProfilesAdmin/index'
+import brandProfilesAdmin from './brandProfilesAdmin/index'
 import engage from './engage/index'
 
 export default combineReducers({
@@ -140,18 +125,6 @@ export default combineReducers({
 	loggedInUserPermissions,
 	resettingPassword,
 	scenariosIsLoading,
-	// brandProfilesAdmin
-	adminScenarios,
-	adminScenariosIsLoading,
-	scenarioSaving,
-	scenarioCreated,
-	scenarioArchiving,
-	scenarioArchived,
-	adminOpinions,
-	adminOpinionsIsLoading,
-	opinionSaving,
-	opinionCreated,
-	opinionArchiving,
-	opinionArchived,
+	brandProfilesAdmin,
 	engage
 })

@@ -64,20 +64,23 @@ export function setFetchListsSuccess(fetchListsSuccess) {
 
 export const postList = (data) => {
 	const list = data.list
+	const brandProfileId = data.brandProfileId
 	const accountId = data.accountId
-	let url = apiBase + `/account/${accountId}/smart-list`
+	let url = apiBase + `/brand-profile/${brandProfileId}/smart-list`
 	return (dispatch) => {
 		dispatch(setIsPostingList(true))
 		axios
 			.post(url, list)
 			.then((response) => {
-				dispatch(setIsPostingList(false))
-				dispatch(setPostListSuccess(true))
+				if (response.status === 200) {
+					dispatch(setIsPostingList(false))
+					dispatch(setPostListSuccess(true))
+				}
 				dispatch(fetchLists(accountId))
 			})
 			.catch((error) => {
 				dispatch(setIsPostingList(false))
-				console.error('create account error', error)
+				console.error('create smartlist error', error)
 			})
 	}
 }
@@ -128,7 +131,11 @@ export function setLists(lists) {
 export function setUploadedList(uploadedList) {
 	uploadedListObjValidation.validate(uploadedList).catch(function(err) {
 		console.log(err.name, err.errors)
-		alert(`Whoops! Your file is in the wrong format. ${err.name}${err.errors}`)
+		alert(`Whoops! Your file is in the wrong format.`)
+		return {
+			type: SET_UPLOADED_LIST,
+			uploadedList: []
+		}
 	})
 	return {
 		type: SET_UPLOADED_LIST,

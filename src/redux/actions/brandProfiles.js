@@ -4,6 +4,7 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
+	SET_BRAND_SCENARIOS,
 	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_DELETED,
@@ -15,7 +16,6 @@ import {
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
 	SCENARIOS_IS_LOADING,
-	SET_BRAND_SCENARIOS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -259,17 +259,17 @@ export function setBrandProfileDeleting(bool) {
 	}
 }
 
-export function hasBrandProfiles(bool) {
-	return {
-		type: HAS_BRAND_PROFILES,
-		hasBrandProfiles: bool
-	}
-}
-
 export function setScenariosIsLoading(bool) {
 	return {
 		type: SCENARIOS_IS_LOADING,
 		scenariosIsLoading: bool
+	}
+}
+
+export function hasBrandProfiles(bool) {
+	return {
+		type: HAS_BRAND_PROFILES,
+		hasBrandProfiles: bool
 	}
 }
 
