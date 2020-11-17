@@ -11,9 +11,10 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import { useHistory } from 'react-router-dom'
 import {
+	fetchAdminBrandScenarios,
 	archiveScenario,
 	setScenarioArchived
-} from '../../../redux/actions/brandProfiles.js'
+} from '../../../redux/actions/brandProfilesAdmin/scenarios'
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
@@ -28,15 +29,16 @@ const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return {
-		scenariosIsLoading: state.scenariosIsLoading,
-		scenarioArchived: state.scenarioArchived,
-		scenarioArchiving: state.scenarioArchiving,
-		scenarios: state.scenarios
+		scenariosIsLoading: state.brandProfilesAdmin.scenariosIsLoading,
+		scenarioArchived: state.brandProfilesAdmin.scenarioArchived,
+		scenarioArchiving: state.brandProfilesAdmin.scenarioArchiving,
+		adminScenarios: state.brandProfilesAdmin.scenarios
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		fetchAdminBrandScenarios: () => dispatch(fetchAdminBrandScenarios()),
 		archiveScenario: (scenarioId) => dispatch(archiveScenario(scenarioId)),
 		setScenarioArchived: (bool) => dispatch(setScenarioArchived(bool))
 	}
@@ -47,6 +49,14 @@ function Scenarios(props) {
 
 	const classes = useStyles()
 	const tableClasses = useTableStyles()
+
+	const { fetchAdminBrandScenarios, adminScenarios } = props
+	React.useEffect(() => {
+		if (adminScenarios.length === 0) {
+			fetchAdminBrandScenarios();
+		}
+	})
+
 
 	const tableCellClasses = classnames(classes.tableCell, {
 		[classes.tableCellRTL]: false
@@ -81,7 +91,7 @@ function Scenarios(props) {
 			</Snackbar>
 
 			<GridItem xs={12} sm={12} md={6}>
-				{props.scenarios && props.scenarios.length > 0 ? (
+				{adminScenarios && adminScenarios.length > 0 ? (
 					<div>
 						<Button appearance='primary' onClick={handleCreateScenarioClick}>
 							Create Scenario
@@ -108,8 +118,8 @@ function Scenarios(props) {
 							</TableHead>
 
 							<TableBody>
-								{props.scenarios &&
-									props.scenarios.map((scenario) => (
+								{adminScenarios &&
+									adminScenarios.map((scenario) => (
 										<TableRow
 											key={scenario.scenarioId || 'placeholder'}
 											className={classes.tableRow}
@@ -144,21 +154,21 @@ function Scenarios(props) {
 				) : props.scenariosIsLoading ? (
 					<FormLoader />
 				) : (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
 
-							height: 'calc(100vh - 200px)',
-							color: 'white'
-						}}
-					>
-						<Button appearance='primary' onClick={handleCreateScenarioClick}>
-							Create Scenario
+									height: 'calc(100vh - 200px)',
+									color: 'white'
+								}}
+							>
+								<Button appearance='primary' onClick={handleCreateScenarioClick}>
+									Create Scenario
 						</Button>
-					</div>
-				)}
+							</div>
+						)}
 			</GridItem>
 		</Grid>
 	)
