@@ -134,6 +134,16 @@ export const brandScenarioObjValidation = Yup.array().of(
 	})
 )
 
+export const brandOpinionObjValidation = Yup.array().of(
+	Yup.object().shape({
+		archived: Yup.bool().required(),
+		opinionId: Yup.number().required(),
+		question: Yup.string().required(),
+		opinionType: Yup.string().required(),
+		opinionResponseId: Yup.string()
+	})
+)
+
 export const brandProfileObjValidation = Yup.object().shape({
 	accountId: Yup.number().required(),
 	brandName: Yup.string().required(),

@@ -139,6 +139,34 @@ var encryptor = require('simple-encryptor')(
 										</>
 									)}
 								/>
+
+								<Route
+									path={routes.app.settings.brandProfiles.admin.opinions.path}
+									render={({ match: { url } }) => (
+										<>
+											<Route
+												path={
+													routes.app.settings.brandProfiles.admin.opinions.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.opinions
+														.component
+												}
+												exact
+											/>
+											<Route
+												path={
+													routes.app.settings.brandProfiles.admin.opinions
+														.create.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.opinions
+														.create.component
+												}
+											/>
+										</>
+									)}
+								/>
 							</>
 						)}
 					/>
@@ -179,8 +207,7 @@ export const generateRoutes = (modifiedRoutes) => {
 		let routeValues = Object.values(routesParam.subRoutes)
 
 		const filteredRouteValues = routeValues.filter(filterRoutesCB)
-
-		let parentRoute = filteredRouteValues.map((value) => {
+		let parentRoute = filteredRouteValues.map((value, index) => {
 			const { path, component, subRoutes} = value
 			if(subRoutes){
 				const filteredSubRoutes = Array.from(subRoutes).filter(filterRoutesCB)
@@ -204,7 +231,7 @@ export const generateRoutes = (modifiedRoutes) => {
 			}
 			if(routesParam.path && routesParam.component){
 				return (
-					<React.Fragment key={routesParam.path}>
+					<React.Fragment key={routesParam.path + index}>
 					<Route
 						path = {routesParam.path}
 						component = {routesParam.component}
