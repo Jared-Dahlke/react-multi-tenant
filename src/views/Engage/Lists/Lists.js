@@ -344,6 +344,7 @@ const Version = (props) => {
 function Lists(props) {
 	const history = useHistory()
 	const [viewArchivedLists, setViewArchivedLists] = React.useState(false)
+	const [brandProfileId, setBrandProfileId] = React.useState(null)
 
 	let fetchLists = props.fetchLists
 	let accounts = props.accounts.data
@@ -404,11 +405,23 @@ function Lists(props) {
 
 	const visibleLists = React.useMemo(() => {
 		if (viewArchivedLists) {
-			return props.lists
+			if (brandProfileId) {
+				return props.lists.filter(
+					(list) => list.brandProfileId === brandProfileId
+				)
+			} else {
+				return props.lists
+			}
 		} else {
-			return props.lists.filter((list) => !list.archived)
+			if (brandProfileId) {
+				return props.lists.filter(
+					(list) => !list.archived && list.brandProfileId === brandProfileId
+				)
+			} else {
+				return props.lists.filter((list) => !list.archived)
+			}
 		}
-	}, [viewArchivedLists, props.lists])
+	}, [viewArchivedLists, props.lists, brandProfileId])
 
 	const transition = useTransition(visibleLists, {
 		from: {
@@ -445,12 +458,8 @@ function Lists(props) {
 							labelKey='brandName'
 							valueKey='brandProfileId'
 							data={props.brandProfiles}
-							//	value={
-
-							//props.brandProfiles && props.brandProfiles[0].brandProfileId
-
-							//	}
-							onChange={() => console.log('changed')}
+							value={brandProfileId}
+							onChange={(val) => setBrandProfileId(val)}
 						/>
 					</Grid>
 				</Grid>

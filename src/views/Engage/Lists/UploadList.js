@@ -23,6 +23,7 @@ import {
 	postList,
 	setPostListSuccess
 } from '../../../redux/actions/engage/lists'
+import { uploadedListObjValidation } from '../../../schemas/Engage/Lists/schemas'
 import config from '../../../config'
 const parseExcelUrl = config.api.listBuilderUrl + '/parse-excel'
 const token = localStorage.getItem('token')
@@ -34,7 +35,8 @@ const mapStateToProps = (state) => {
 		uploadedList: state.engage.uploadedList,
 		accounts: state.accounts,
 		isPostingList: state.engage.isPostingList,
-		postListSuccess: state.engage.postListSuccess
+		postListSuccess: state.engage.postListSuccess,
+		brandProfiles: state.brandProfiles
 	}
 }
 
@@ -84,6 +86,11 @@ function UploadList(props) {
 
 	const handleUploadSuccess = (data) => {
 		props.setUploadedList(data)
+	}
+
+	const handleRemoveFile = () => {
+		decrementUploadedCount()
+		setFieldValue('uploadedList', [])
 	}
 
 	const [uploadedCount, setUploadedCount] = React.useState(0)
@@ -164,6 +171,28 @@ function UploadList(props) {
 									/>
 								)}
 
+								{uploadType === 'new' && (
+									<FormikSelect
+										id='brandProfileId'
+										name='brandProfileId'
+										label='Brand Profile'
+										optionLabel='brandName'
+										optionValue='brandProfileId'
+										options={props.brandProfiles}
+										value={values.brandProfileId}
+										onChange={setFieldValue}
+										onBlur={setFieldTouched}
+										validateField={validateField}
+										validateForm={validateForm}
+										touched={touched.brandProfileId}
+										error={errors.brandProfileId}
+										hideSearch
+										isDisabled={
+											props.brandProfiles && props.brandProfiles.length < 1
+										}
+									/>
+								)}
+
 								<FormControl fullWidth={true} className={classes.formControl}>
 									<Label label={'Pick a file'} />
 									<Uploader
@@ -174,12 +203,22 @@ function UploadList(props) {
 										headers={{ Authorization: token }}
 										multiple={false}
 										draggable
+										onError={(err) => console.log('err consolelog:', err)}
 										onSuccess={(val) => {
+											uploadedListObjValidation
+												.isValid(val)
+												.then(function(valid) {
+													if (valid) {
+														setFieldValue('uploadedList', val)
+														handleUploadSuccess(val)
+													} else {
+														alert('invalid file')
+													}
+												})
+
 											incrementUploadedCount()
-											setFieldValue('uploadedList', val)
-											handleUploadSuccess(val)
 										}}
-										onRemove={() => decrementUploadedCount()}
+										onRemove={() => handleRemoveFile()}
 									>
 										<div
 											style={{
@@ -232,6 +271,9 @@ const validateNew = (values, errors) => {
 	if (values.uploadedList.length < 1) {
 		errors.uploadedList = 'Please upload a file'
 	}
+	if (values.brandProfileId.length < 1) {
+		errors.brandProfileId = 'Please select a brand profile'
+	}
 	return errors
 }
 
@@ -254,7 +296,10 @@ const MyEnhancedForm = withFormik({
 			name: '',
 			objectiveId: 1,
 			smartListId: '',
-			uploadedList: []
+			uploadedList: [],
+			brandProfileId: props.brandProfiles[0]
+				? props.brandProfiles[0].brandProfileId
+				: ''
 		}
 	},
 	enableReinitialize: true,
@@ -297,6 +342,7 @@ const MyEnhancedForm = withFormik({
 		}
 		let data = {
 			list,
+			brandProfileId: values.brandProfileId,
 			accountId: currentAccount.accountId
 		}
 		props.postList(data)
