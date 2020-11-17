@@ -1,15 +1,16 @@
-// {
-// 	"editor.formatOnSave": true,
-// 	"files.associations": {
-// 		"*.js": "javascriptreact"
-//   },
-//   "html.format.wrapAttributes": "force-aligned",
-//   "html.format.preserveNewLines": false,
-//   "vetur.format.defaultFormatter.html": "prettier",
-//   "javascript.autoClosingTags": false,
-//   "html.format.endWithNewline": true,
-//   "html.format.indentInnerHtml": true,
-//   "prettier.jsxBracketSameLine": false,
-//   "typescript.autoClosingTags": false,
-//   ""
-// }
+{
+	"editor.formatOnSave": true,
+	"files.associations": {
+		"*.js": "javascriptreact"
+  },
+  "html.format.wrapAttributes": "force-aligned",
+  "html.format.preserveNewLines": false,
+  "vetur.format.defaultFormatter.html": "prettier",
+  "javascript.autoClosingTags": false,
+  "html.format.endWithNewline": true,
+  "html.format.indentInnerHtml": true,
+  "prettier.jsxBracketSameLine": false,
+
+  "typescript.autoClosingTags": false,
+  ""
+}
