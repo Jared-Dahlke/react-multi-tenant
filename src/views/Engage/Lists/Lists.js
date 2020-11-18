@@ -12,6 +12,7 @@ import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
+import CreateNewListModal from './CreateNewListModal'
 import {
 	fetchLists,
 	archiveList,
@@ -275,24 +276,44 @@ const Version = (props) => {
 				</Grid>
 				{props.data.active && (
 					<Grid item xs={12} sm={12} md={2} style={panelStyle}>
-						<IconButton
-							appearance='ghost'
-							icon={<Icon icon={'file-download'} size='lg' />}
-							size='lg'
-							block
-							loading={
-								props.isDownloadingExcel &&
-								props.isDownloadingExcelVersionId === props.data.versionId
-							}
-							onClick={(e) => {
-								props.handleDownloadClick(
-									props.data.versionId,
-									props.data.smartListName
-								)
-							}}
-						>
-							Download
-						</IconButton>
+						<ButtonGroup vertical block style={{ width: '100%' }}>
+							<IconButton
+								appearance='ghost'
+								icon={<Icon icon={'file-download'} size='lg' />}
+								size='sm'
+								block
+								loading={
+									props.isDownloadingExcel &&
+									props.isDownloadingExcelVersionId === props.data.versionId
+								}
+								onClick={(e) => {
+									props.handleDownloadClick(
+										props.data.versionId,
+										props.data.smartListName
+									)
+								}}
+							>
+								Download
+							</IconButton>
+							<IconButton
+								appearance='ghost'
+								icon={<Icon icon={'file-download'} size='lg' />}
+								size='sm'
+								block
+								disabled
+							>
+								Edit
+							</IconButton>
+							<IconButton
+								appearance='ghost'
+								icon={<Icon icon={'file-download'} size='lg' />}
+								size='sm'
+								block
+								disabled
+							>
+								Clone
+							</IconButton>
+						</ButtonGroup>
 					</Grid>
 				)}
 				{!props.data.active && (
@@ -345,6 +366,9 @@ function Lists(props) {
 	const history = useHistory()
 	const [viewArchivedLists, setViewArchivedLists] = React.useState(false)
 	const [brandProfileId, setBrandProfileId] = React.useState(null)
+	const [showCreateNewListModal, setShowCreateNewListModal] = React.useState(
+		true
+	)
 
 	let fetchLists = props.fetchLists
 	let accounts = props.accounts.data
@@ -485,7 +509,10 @@ function Lists(props) {
 					</Grid>
 					<Grid item>
 						<ButtonToolbar>
-							<Button onClick={handleCreateNewList} color='green'>
+							<Button
+								onClick={() => setShowCreateNewListModal(true)}
+								color='green'
+							>
 								Build New SmartList
 							</Button>
 							<Button onClick={handleUploadNewList}>Upload Excel/CSV</Button>
@@ -527,6 +554,11 @@ function Lists(props) {
 						This account currently has no lists associated with it.
 					</h2>
 				)}
+			<CreateNewListModal
+				show={showCreateNewListModal}
+				handleClose={() => setShowCreateNewListModal(false)}
+				brandProfiles={props.brandProfiles}
+			/>
 		</Grid>
 	)
 }
