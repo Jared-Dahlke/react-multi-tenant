@@ -2,6 +2,7 @@
 //GET /discover/channels
 //GET/discover/videos
 import axios from '../../../axiosConfig'
+import defaultAxios from 'axios'
 import config from '../../../config.js'
 import {
 	SET_CATEGORIES,
@@ -90,55 +91,19 @@ export function setChannels(payload) {
 	}
 }
 
-function getChannelToggleValue(channelId, channels) {
-	for (const channel of channels) {
-		if (channel.channelId === channelId) {
-			return channel.toggleValue
-		}
-	}
-}
-
-export function fetchVideos(channels, categories) {
-	let url = apiBase + `/discover/videos` //TODO: eventually the api should filter by channel id, but i will do it here for the demo
+export function fetchVideos(query, pageNumber) {
+	let url = `https://cors-anywhere.herokuapp.com/http://openlibrary.org/search.json` //TODO: eventually the api should filter by channel id, but i will do it here for the demo
 	return async (dispatch) => {
 		try {
-			const result = await axios.get(url)
+			const result = await defaultAxios({
+				method: 'GET',
+				url: url,
+				params: { q: 'zebras', page: pageNumber }
+			})
+			//	const result = await defaultAxios.get(url, {)
 
 			if (result.status === 200) {
-				let channelIdsArray = []
-				for (const channel of channels) {
-					if (
-						!channelIdsArray.includes(channel.channelId) &&
-						channel.toggleValue
-					) {
-						channelIdsArray.push(channel.channelId)
-					}
-				}
-
-				let categoryIdsArray = []
-				for (const category of categories) {
-					if (
-						!categoryIdsArray.includes(category.categoryId) &&
-						category.toggleValue
-					) {
-						categoryIdsArray.push(category.categoryId)
-					}
-				}
-
-				let filteredVideos = []
-				let myCount = 0
-				for (const video of result.data) {
-					if (
-						channelIdsArray.includes(video.channelId) &&
-						categoryIdsArray.includes(video.categoryId)
-					) {
-						video.toggleValue = getChannelToggleValue(video.channelId, channels)
-						filteredVideos.push(video)
-						myCount = myCount + 1
-					}
-				}
-
-				dispatch(setVideos(filteredVideos))
+				dispatch(setVideos(result.data.docs))
 			}
 		} catch (error) {
 			alert(error)

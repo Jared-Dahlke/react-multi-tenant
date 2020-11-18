@@ -46,8 +46,8 @@ export function videos(state = [], action) {
 		case SET_VIDEOS:
 			//TODO: the getchannels api should accept categories as an input, for now i will filter by categories here
 			//filter out filters
-
-			return action.videos
+			let currentVideos = [...state].concat(action.videos)
+			return currentVideos //action.videos
 		default:
 			return state
 	}
