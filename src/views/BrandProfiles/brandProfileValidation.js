@@ -88,12 +88,12 @@ export const stepValidated = (index, errors, values) => {
 	}
 	if (index === 1) {
 		return (
-			customIsValid(errors, 'scenarios') && customIsValid(errors, 'categories')
+			customIsValid(errors, 'topics') && customIsValid(errors, 'categories')
 		)
 	}
 
 	if (index === 2) {
-		return customIsValid(errors, 'topics')
+		return customIsValid(errors, 'scenarios')
 	}
 	return true
 }

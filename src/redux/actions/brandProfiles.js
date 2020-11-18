@@ -15,7 +15,7 @@ import {
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
-	SCENARIOS_IS_LOADING,
+	SCENARIOS_IS_LOADING
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -158,9 +158,11 @@ export function fetchBrandProfile(brandProfileId) {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
-				brandProfileObjValidation.validate(result.data).catch(function (err) {
+				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
-					alert('Could not validate brand profile data')
+					alert(
+						'Error: We received different data from the API than expected for this brand Profile. See console log for more detail'
+					)
 				})
 				let brandProfileResultCopy = JSON.parse(JSON.stringify(result.data))
 				addDefaultResponseIdToScenariosIfBlank(brandProfileResultCopy.scenarios)
@@ -194,7 +196,7 @@ export function fetchBrandProfiles(accountId) {
 				if (brandProfiles.length < 1) {
 					dispatch(hasBrandProfiles(false))
 				}
-				brandProfilesObjValidation.validate(result.data).catch(function (err) {
+				brandProfilesObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert("Could not validate account's brand profiles data")
 				})
@@ -295,7 +297,7 @@ export function fetchBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'

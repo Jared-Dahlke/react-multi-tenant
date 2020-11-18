@@ -75,7 +75,7 @@ function BrandProfiles(props) {
 	}
 
 	const handleEditBrandProfileClick = (profile) => {
-		props.fetchBrandProfile(profile.brandProfileId)
+		//props.fetchBrandProfile(profile.brandProfileId)
 		let url = `/app/settings/brandProfiles/edit/${profile.brandProfileId}`
 		history.push(url)
 	}
