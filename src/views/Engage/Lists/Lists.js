@@ -12,7 +12,6 @@ import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
-import CreateNewListModal from './CreateNewListModal'
 import {
 	fetchLists,
 	archiveList,
@@ -366,9 +365,6 @@ function Lists(props) {
 	const history = useHistory()
 	const [viewArchivedLists, setViewArchivedLists] = React.useState(false)
 	const [brandProfileId, setBrandProfileId] = React.useState(null)
-	const [showCreateNewListModal, setShowCreateNewListModal] = React.useState(
-		true
-	)
 
 	let fetchLists = props.fetchLists
 	let accounts = props.accounts.data
@@ -384,7 +380,7 @@ function Lists(props) {
 		history.push(routes.app.engage.lists.uploadList.path)
 	}
 	const handleCreateNewList = () => {
-		history.push(`${routes.app.engage.lists.listBuilder.path}`, {
+		history.push(`${routes.app.engage.lists.createList.path}`, {
 			from: 'lists'
 		})
 	}
@@ -509,10 +505,7 @@ function Lists(props) {
 					</Grid>
 					<Grid item>
 						<ButtonToolbar>
-							<Button
-								onClick={() => setShowCreateNewListModal(true)}
-								color='green'
-							>
+							<Button onClick={() => handleCreateNewList()} color='green'>
 								Build New SmartList
 							</Button>
 							<Button onClick={handleUploadNewList}>Upload Excel/CSV</Button>
@@ -554,11 +547,6 @@ function Lists(props) {
 						This account currently has no lists associated with it.
 					</h2>
 				)}
-			<CreateNewListModal
-				show={showCreateNewListModal}
-				handleClose={() => setShowCreateNewListModal(false)}
-				brandProfiles={props.brandProfiles}
-			/>
 		</Grid>
 	)
 }

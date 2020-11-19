@@ -83,3 +83,12 @@ export const uploadedListObjValidation = Yup.array()
 			}
 		}
 	)
+
+export const postListObjValidation = Yup.object().shape({
+	objectiveId: Yup.number().required(),
+	brandProfileId: Yup.number().required(),
+	smartListName: Yup.string()
+		.required()
+		.min(2)
+		.max(50)
+})
