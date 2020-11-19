@@ -290,7 +290,7 @@ export const modifiedRoutes = {
 			},
 			homepage: {
 				path: '/app/homepage',
-				name: 'HomePage',
+				name: '',
 				component: HomePage
 				// userCan: userCan(perms.BRAND_MENTALITY_READ)
 			}
