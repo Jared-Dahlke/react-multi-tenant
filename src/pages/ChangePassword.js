@@ -16,6 +16,7 @@ import Button from '../components/CustomButtons/Button'
 import logo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
 import { routes } from '../routes'
+import { userCan, perms } from '../Can'
 
 // Validation
 import * as v from '../validations'
@@ -96,7 +97,7 @@ function PasswordChange(props) {
 	}
 
 	if (props.isLoggedIn) {
-		return <Redirect to={routes.app.settings.account.path} />
+		return <Redirect to={routes.app.settings.brandMentality.path} />
 	}
 
 	return (
