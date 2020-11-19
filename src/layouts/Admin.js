@@ -147,7 +147,7 @@ const switchRoutes = (
 			)}
 		/>
 
-		<Redirect from='/app' to={routes.app.settings.account.path} />
+		<Redirect from='/app' to={routes.app.settings.brandMentality.path} />
 	</Switch>
 )
 
