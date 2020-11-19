@@ -24,8 +24,6 @@ import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
-import { userCan, perms } from './Can'
-
 export const routes = {
 	login: {
 		path: '/login',
@@ -210,14 +208,12 @@ export const modifiedRoutes = {
 			settings_account: {
 				path: '/app/settings/account',
 				name: 'Account',
-				component: Account,
-				userCan: userCan(perms.ACCOUNT_READ)
+				component: Account
 			},
 			settings_users: {
 				path: '/app/settings/users',
 				component: Users,
 				name: 'Users',
-				userCan: userCan(perms.USER_READ),
 				subRoutes: [
 					{
 						path: '/app/settings/users/edit/:user',
@@ -227,8 +223,7 @@ export const modifiedRoutes = {
 					{
 						path: '/app/settings/users/create',
 						name: 'Create',
-						component: CreateUser,
-						userCan: userCan(perms.USER_CREATE)
+						component: CreateUser
 					}
 				]
 			},
@@ -236,13 +231,11 @@ export const modifiedRoutes = {
 				path: '/app/settings/brandProfiles',
 				name: 'Brand Profiles',
 				component: BrandProfiles,
-				userCan: userCan(perms.BRAND_PROFILE_READ),
 				subRoutes: [
 					{
 						path: '/app/settings/brandProfiles/create',
 						name: 'Create',
-						component: CreateBrandProfile,
-						userCan: userCan(perms.BRAND_PROFILE_CREATE)
+						component: CreateBrandProfile
 					},
 					{
 						path: '/app/settings/brandProfiles/edit/:brandProfileId',
@@ -285,8 +278,7 @@ export const modifiedRoutes = {
 			settings_brandMentality: {
 				path: '/app/settings/brandMentality',
 				name: 'Brand Mentality',
-				component: BrandMentality,
-				userCan: userCan(perms.BRAND_MENTALITY_READ)
+				component: BrandMentality
 			}
 		}
 	}
