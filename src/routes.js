@@ -153,6 +153,12 @@ export const routes = {
 				name: 'Brand Mentality',
 				component: BrandMentality
 			}
+		},
+
+		homepage: {
+			path: '/app/homepage',
+			name: '',
+			component: HomePage
 		}
 	}
 }
