@@ -24,6 +24,8 @@ import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
+import HomePage from './views/HomePage'
+
 import { userCan, perms } from './Can'
 
 export const routes = {
@@ -285,6 +287,12 @@ export const modifiedRoutes = {
 				name: 'Brand Mentality',
 				component: BrandMentality,
 				userCan: userCan(perms.BRAND_MENTALITY_READ)
+			},
+			homepage: {
+				path: '/app/homepage',
+				name: 'HomePage',
+				component: HomePage
+				// userCan: userCan(perms.BRAND_MENTALITY_READ)
 			}
 		}
 	}
