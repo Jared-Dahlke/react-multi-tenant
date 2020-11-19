@@ -64,6 +64,15 @@ function UploadList(props) {
 		}
 	}, [fetchLists, accounts])
 
+	let postListSuccess = props.postListSuccess
+
+	React.useEffect(() => {
+		if (postListSuccess) {
+			let currentAccount = getCurrentAccount(props.accounts.data)
+			fetchLists(currentAccount.accountId)
+		}
+	}, [postListSuccess])
+
 	const classes = useStyles()
 	const [uploadType, setUploadType] = React.useState('new')
 	const {

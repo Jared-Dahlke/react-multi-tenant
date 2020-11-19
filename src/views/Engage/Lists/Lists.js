@@ -275,24 +275,44 @@ const Version = (props) => {
 				</Grid>
 				{props.data.active && (
 					<Grid item xs={12} sm={12} md={2} style={panelStyle}>
-						<IconButton
-							appearance='ghost'
-							icon={<Icon icon={'file-download'} size='lg' />}
-							size='lg'
-							block
-							loading={
-								props.isDownloadingExcel &&
-								props.isDownloadingExcelVersionId === props.data.versionId
-							}
-							onClick={(e) => {
-								props.handleDownloadClick(
-									props.data.versionId,
-									props.data.smartListName
-								)
-							}}
-						>
-							Download
-						</IconButton>
+						<ButtonGroup vertical block style={{ width: '100%' }}>
+							<IconButton
+								appearance='ghost'
+								icon={<Icon icon={'file-download'} size='lg' />}
+								size='sm'
+								block
+								loading={
+									props.isDownloadingExcel &&
+									props.isDownloadingExcelVersionId === props.data.versionId
+								}
+								onClick={(e) => {
+									props.handleDownloadClick(
+										props.data.versionId,
+										props.data.smartListName
+									)
+								}}
+							>
+								Download
+							</IconButton>
+							<IconButton
+								appearance='ghost'
+								icon={<Icon icon={'file-download'} size='lg' />}
+								size='sm'
+								block
+								disabled
+							>
+								Edit
+							</IconButton>
+							<IconButton
+								appearance='ghost'
+								icon={<Icon icon={'file-download'} size='lg' />}
+								size='sm'
+								block
+								disabled
+							>
+								Clone
+							</IconButton>
+						</ButtonGroup>
 					</Grid>
 				)}
 				{!props.data.active && (
@@ -360,7 +380,7 @@ function Lists(props) {
 		history.push(routes.app.engage.lists.uploadList.path)
 	}
 	const handleCreateNewList = () => {
-		history.push(`${routes.app.engage.lists.listBuilder.path}`, {
+		history.push(`${routes.app.engage.lists.createList.path}`, {
 			from: 'lists'
 		})
 	}
@@ -485,7 +505,7 @@ function Lists(props) {
 					</Grid>
 					<Grid item>
 						<ButtonToolbar>
-							<Button onClick={handleCreateNewList} color='green'>
+							<Button onClick={() => handleCreateNewList()} color='green'>
 								Build New SmartList
 							</Button>
 							<Button onClick={handleUploadNewList}>Upload Excel/CSV</Button>

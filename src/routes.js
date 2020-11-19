@@ -12,6 +12,7 @@ import EditBrandProfile from './views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from './views/UserProfile/UserProfile.js'
 import Account from './views/Account/Account'
 import UploadList from './views/Engage/Lists/UploadList'
+import CreateList from './views/Engage/Lists/CreateList'
 
 import ResetPassword from './pages/ResetPassword'
 import ChangePassword from './pages/ChangePassword'
@@ -55,6 +56,11 @@ export const routes = {
 					path: '/app/engage/lists/uploadList',
 					component: UploadList,
 					name: 'Upload List'
+				},
+				createList: {
+					path: '/app/engage/lists/createList',
+					component: CreateList,
+					name: 'Create List'
 				},
 				listBuilder: {
 					path: '/app/engage/lists/listBuilder',
@@ -170,29 +176,33 @@ export const modifiedRoutes = {
 		component: Admin,
 		subRoutes: {
 			engage: {
-						path: '/app/engage/lists',
-						component: Lists,
-						name: 'Lists',
-						subRoutes:[
-							{
-								path: '/app/engage/lists/uploadList',
-								component: UploadList,
-								name: 'Upload List'
-							},
-							{
-								path: '/app/engage/lists/listBuilder',
-								name: 'List Builder',
-								component: ListBuilder
-							}
-
-						]
+				path: '/app/engage/lists',
+				component: Lists,
+				name: 'Lists',
+				subRoutes: [
+					{
+						path: '/app/engage/lists/createList',
+						component: CreateList,
+						name: 'Create List'
+					},
+					{
+						path: '/app/engage/lists/uploadList',
+						component: UploadList,
+						name: 'Upload List'
+					},
+					{
+						path: '/app/engage/lists/listBuilder',
+						name: 'List Builder',
+						component: ListBuilder
+					}
+				]
 			},
 			discover: {
-						path: '/app/discover/channelResearch',
-						name: 'Channel Research',
-						component: ChannelResearchTemp
+				path: '/app/discover/channelResearch',
+				name: 'Channel Research',
+				component: ChannelResearchTemp
 			},
-			settings_profile : {
+			settings_profile: {
 				path: '/app/settings/profile',
 				name: 'Profile',
 				component: UserProfile
@@ -202,12 +212,12 @@ export const modifiedRoutes = {
 				name: 'Account',
 				component: Account
 			},
-			settings_users:{
+			settings_users: {
 				path: '/app/settings/users',
 				component: Users,
 				name: 'Users',
-				subRoutes:[
-					 {
+				subRoutes: [
+					{
 						path: '/app/settings/users/edit/:user',
 						name: 'Edit',
 						component: EditUser
@@ -216,7 +226,7 @@ export const modifiedRoutes = {
 						path: '/app/settings/users/create',
 						name: 'Create',
 						component: CreateUser,
-						userCan : userCan(perms.USER_CREATE)
+						userCan: userCan(perms.USER_CREATE)
 					}
 				]
 			},
@@ -224,7 +234,7 @@ export const modifiedRoutes = {
 				path: '/app/settings/brandProfiles',
 				name: 'Brand Profiles',
 				component: BrandProfiles,
-		
+
 				subRoutes: [
 					{
 						path: '/app/settings/brandProfiles/create',
@@ -241,7 +251,7 @@ export const modifiedRoutes = {
 						path: '/app/settings/brandProfiles/admin',
 						name: 'Admin',
 						component: BrandProfilesAdmin,
-						subRoutes:[
+						subRoutes: [
 							{
 								path: '/app/settings/brandProfiles/admin/scenarios',
 								name: 'Scenarios',

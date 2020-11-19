@@ -76,7 +76,6 @@ export const postList = (data) => {
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
-				dispatch(fetchLists(accountId))
 			})
 			.catch((error) => {
 				dispatch(setIsPostingList(false))
