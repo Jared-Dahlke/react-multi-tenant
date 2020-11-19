@@ -326,18 +326,11 @@ function Header(props) {
 	const MyLink = React.forwardRef((props, ref) => {
 		const { href, as, label, ...rest } = props
 
-		if (
-			label.includes('Brand Mentality') &&
-			!userCan(perms.BRAND_MENTALITY_READ)
-		) {
-			return null
-		} else {
-			return (
-				<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
-					{label}
-				</Link>
-			)
-		}
+		return (
+			<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
+				{label}
+			</Link>
+		)
 	})
 
 	const handleLogOut = (props) => {
@@ -380,7 +373,12 @@ function Header(props) {
 							<Dropdown
 								title='Discover'
 								icon={<Icon icon='pie-chart' />}
-								style={{ marginRight: 15 }}
+								style={{
+									marginRight: 15,
+									display: userCan(perms.DISCOVER_READ)
+										? 'inline-block'
+										: 'none'
+								}}
 								id='Channel_Research_Nav_Tab'
 							>
 								<NavLink
@@ -392,7 +390,10 @@ function Header(props) {
 							<Dropdown
 								title='Engage'
 								icon={<Icon icon='bolt' />}
-								style={{ marginRight: 15 }}
+								style={{
+									marginRight: 15,
+									display: userCan(perms.ENGAGE_READ) ? 'inline-block' : 'none'
+								}}
 								id='Engage_Nav_Tab'
 							>
 								<NavLink
@@ -406,21 +407,31 @@ function Header(props) {
 							</Dropdown>
 
 							<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
-								<NavLink
-									href={routes.app.settings.account.path}
-									label='Account'
-								/>
+								{userCan(perms.ACCOUNT_READ) && (
+									<NavLink
+										href={routes.app.settings.account.path}
+										label='Account'
+									/>
+								)}
+								{userCan(perms.USER_READ) && (
+									<NavLink
+										href={routes.app.settings.users.path}
+										label='Users'
+									/>
+								)}
 
-								<NavLink href={routes.app.settings.users.path} label='Users' />
-								<NavLink
-									href={routes.app.settings.brandProfiles.path}
-									label='Brand Profiles'
-								/>
-
-								<NavLink
-									href={routes.app.settings.brandMentality.path}
-									label='Brand Mentality'
-								/>
+								{userCan(perms.BRAND_PROFILE_READ) && (
+									<NavLink
+										href={routes.app.settings.brandProfiles.path}
+										label='Brand Profiles'
+									/>
+								)}
+								{userCan(perms.BRAND_MENTALITY_READ) && (
+									<NavLink
+										href={routes.app.settings.brandMentality.path}
+										label='Brand Mentality'
+									/>
+								)}
 							</Dropdown>
 						</Nav>
 						<Nav pullRight style={{ marginRight: 30 }}>
