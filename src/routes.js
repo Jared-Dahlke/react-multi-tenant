@@ -210,12 +210,14 @@ export const modifiedRoutes = {
 			settings_account: {
 				path: '/app/settings/account',
 				name: 'Account',
-				component: Account
+				component: Account,
+				userCan: userCan(perms.ACCOUNT_READ)
 			},
 			settings_users: {
 				path: '/app/settings/users',
 				component: Users,
 				name: 'Users',
+				userCan: userCan(perms.USER_READ),
 				subRoutes: [
 					{
 						path: '/app/settings/users/edit/:user',
@@ -234,7 +236,7 @@ export const modifiedRoutes = {
 				path: '/app/settings/brandProfiles',
 				name: 'Brand Profiles',
 				component: BrandProfiles,
-
+				userCan: userCan(perms.BRAND_PROFILE_READ),
 				subRoutes: [
 					{
 						path: '/app/settings/brandProfiles/create',
