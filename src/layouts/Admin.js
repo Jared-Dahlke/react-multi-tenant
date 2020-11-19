@@ -1,12 +1,12 @@
 import React from 'react'
-import { Switch, Route, Redirect} from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Navbar from '../components/Navbars/Navbar.js'
 import styles from '../assets/jss/material-dashboard-react/layouts/adminStyle.js'
 import { connect } from 'react-redux'
 import { setUserId, setLoggedInUserPermissions } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
-import { modifiedRoutes } from '../routes'
+import { modifiedRoutes, routes } from '../routes'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
 )
@@ -184,17 +184,25 @@ export const generateRoutes = (modifiedRoutes) => {
 	//generates Routes Array for render props for Parent Route Components
 	const createSubRoutes = (subRoutes) => {
 		const currentWindowPath = window.location.pathname
-		const subRoutesJSX = subRoutes.map((curr)=>{
-			if(curr.hasOwnProperty('subRoutes')) return parseRoutes(curr)
-			return (<Route path = {curr.path} component={curr.component} key={curr.path}/>)
+		const subRoutesJSX = subRoutes.map((curr) => {
+			if (curr.hasOwnProperty('subRoutes')) return parseRoutes(curr)
+			return (
+				<Route path={curr.path} component={curr.component} key={curr.path} />
+			)
 		})
-		if(invalidRoutesPath.includes(currentWindowPath)) return [(<Redirect to={modifiedRoutes.app.subRoutes.settings_account.path} key={modifiedRoutes.app.subRoutes.settings_account.path} />)]
+		if (invalidRoutesPath.includes(currentWindowPath))
+			return [
+				<Redirect
+					to={routes.app.settings.brandMentality.path}
+					key={routes.app.settings.brandMentality.path}
+				/>
+			]
 		return subRoutesJSX
 	}
 
 	//callback to filter Routes Array against userCan value
-	const filterRoutesCB = (curr)=>{
-		if(curr.userCan === false) {
+	const filterRoutesCB = (curr) => {
+		if (curr.userCan === false) {
 			invalidRoutesPath.push(curr.path)
 			return false
 		}
@@ -208,53 +216,58 @@ export const generateRoutes = (modifiedRoutes) => {
 
 		const filteredRouteValues = routeValues.filter(filterRoutesCB)
 		let parentRoute = filteredRouteValues.map((value, index) => {
-			const { path, component, subRoutes} = value
-			if(subRoutes){
+			const { path, component, subRoutes } = value
+			if (subRoutes) {
 				const filteredSubRoutes = Array.from(subRoutes).filter(filterRoutesCB)
-				routeJSX =  (<Route path={path} key={path} render={({match: {url}}) => (
-						<>
-							
-							{[...createSubRoutes(filteredSubRoutes),
-								(<Route
-								path = {path}
-								key={path}
-								component = {component}
-								exact />)]}
-						</>
-						)}/>)
+				routeJSX = (
+					<Route
+						path={path}
+						key={path}
+						render={({ match: { url } }) => (
+							<>
+								{[
+									...createSubRoutes(filteredSubRoutes),
+									<Route path={path} key={path} component={component} exact />
+								]}
+							</>
+						)}
+					/>
+				)
+			} else if (path && component) {
+				routeJSX = <Route path={path} key={path} component={component} />
 			}
-			else if(path && component) {
-				routeJSX = (<Route 
-								path = {path}
-								key={path}
-								component = {component}/>)
-			}
-			if(routesParam.path && routesParam.component){
+			if (routesParam.path && routesParam.component) {
 				return (
 					<React.Fragment key={routesParam.path + index}>
-					<Route
-						path = {routesParam.path}
-						component = {routesParam.component}
-						key={routesParam.path}
-						exact />
+						<Route
+							path={routesParam.path}
+							component={routesParam.component}
+							key={routesParam.path}
+							exact
+						/>
 						{routeJSX}
 					</React.Fragment>
-					)
+				)
 			}
 			return routeJSX
-
 		})
 		return parentRoute
 	}
 
 	return parseRoutes(modifiedRoutes.app)
-
 }
 
 const modifiedSwitchRoutes = (
 	<Switch>
-		{[...generateRoutes(modifiedRoutes),(<Redirect to={modifiedRoutes.app.subRoutes.settings_account.path} key={modifiedRoutes.app.subRoutes.settings_account.path} />)]}
-	</Switch>)
+		{[
+			...generateRoutes(modifiedRoutes),
+			<Redirect
+				to={routes.app.settings.brandMentality.path}
+				key={routes.app.settings.brandMentality.path}
+			/>
+		]}
+	</Switch>
+)
 
 const useStyles = makeStyles(styles)
 
@@ -300,9 +313,7 @@ export function Admin({ ...rest }) {
 			<div className={classes.mainPanel} ref={mainPanel}>
 				<Navbar handleDrawerToggle={handleDrawerToggle} {...rest} />
 				<div className={classes.content}>
-					<div className={classes.container}>
-						{modifiedSwitchRoutes
-						}</div>
+					<div className={classes.container}>{modifiedSwitchRoutes}</div>
 				</div>
 			</div>
 		</div>
