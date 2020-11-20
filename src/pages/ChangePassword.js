@@ -96,7 +96,7 @@ function PasswordChange(props) {
 	}
 
 	if (props.isLoggedIn) {
-		return <Redirect to={routes.app.settings.account.path} />
+		return <Redirect to={routes.app.settings.brandMentality.path} />
 	}
 
 	return (
