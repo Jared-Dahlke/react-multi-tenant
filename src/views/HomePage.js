@@ -20,6 +20,11 @@ function HomePage(props) {
     history.push(url)
   }
 
+  const handleMeasureClick = () => {
+    let url = routes.app.measure.path
+    history.push(url)
+  }
+
   return (
 
     <Grid container justify='center'>
@@ -60,7 +65,7 @@ function HomePage(props) {
           <Button style={{
             width: '250px',
             margin: '10px'
-          }} >View outcome performance</Button>
+          }} onClick={handleMeasureClick}>View outcome performance</Button>
           &nbsp;
           <Button style={{
             width: '250px',

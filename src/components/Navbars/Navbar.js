@@ -220,6 +220,7 @@ function Header(props) {
 									label='Brand Mentality'
 								/>
 							</Dropdown>
+							<Nav.Item href={routes.app.measure.path}>Measure</Nav.Item>
 						</Nav>
 						<Nav pullRight style={{ marginRight: 30 }}>
 							<Dropdown title='' icon={<Icon icon='avatar' />}>

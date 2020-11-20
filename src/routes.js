@@ -25,6 +25,7 @@ import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
 import HomePage from './views/HomePage'
+import MeasurePage from './views/MeasurePage'
 
 import { userCan, perms } from './Can'
 
@@ -159,6 +160,11 @@ export const routes = {
 			path: '/app/homepage',
 			name: '',
 			component: HomePage
+		},
+		measure: {
+			path: '/app/measure',
+			name: 'Measure',
+			component: MeasurePage
 		}
 	}
 }
@@ -299,6 +305,11 @@ export const modifiedRoutes = {
 				name: '',
 				component: HomePage
 				// userCan: userCan(perms.BRAND_MENTALITY_READ)
+			},
+			measure: {
+				path: '/app/measure',
+				name: 'Measure',
+				component: MeasurePage
 			}
 		}
 	}
