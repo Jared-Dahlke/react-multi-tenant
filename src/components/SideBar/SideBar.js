@@ -12,10 +12,22 @@ import { perms, userCan } from '../../Can'
 import { routes } from '../../routes'
 import IconButton from 'rsuite/lib/IconButton'
 import Sidenav from 'rsuite/lib/Sidenav'
+import logo from '../../assets/img/sightly-logo.svg'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import sidebarStyles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 
 export default function Sidebar(props) {
 	const NavLink = (props) => (
 		<Dropdown.Item componentClass={MyLink} {...props} />
+	)
+
+	const useSidebarStyles = makeStyles(sidebarStyles)
+	const sidebarClasses = useSidebarStyles()
+
+	let brand = (
+		<div className={sidebarClasses.logoImage}>
+			<img src={logo} alt='logo' className={sidebarClasses.img} />
+		</div>
 	)
 
 	const MyLink = React.forwardRef((props, ref) => {
@@ -43,7 +55,11 @@ export default function Sidebar(props) {
 			onHide={props.closeMobileDrawer}
 		>
 			<Sidenav defaultOpenKeys={['3', '4']} activeKey='1'>
-				<Sidenav.Header>Sightly</Sidenav.Header>
+				< Sidenav.Header >
+					<Nav>
+						<Nav.Item href={routes.app.homepage.path}>{brand}</Nav.Item>
+					</Nav>
+				</Sidenav.Header >
 				<Sidenav.Body>
 					<Nav>
 						<Dropdown
