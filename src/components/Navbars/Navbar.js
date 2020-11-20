@@ -15,7 +15,7 @@ import styles from '../../assets/jss/material-dashboard-react/components/headerS
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
 import { perms, userCan } from '../../Can'
-import { routes,modifiedRoutes } from '../../routes'
+import { routes, modifiedRoutes } from '../../routes'
 import Grid from '@material-ui/core/Grid'
 import SideBar from '../SideBar/SideBar'
 import IconButton from 'rsuite/lib/IconButton'
@@ -32,66 +32,66 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const generateBreadCrumbs = (routes) => {
-  const crumbSize = 20
-  let url = window.location.pathname
-  const routeHierarchy = []
+	const crumbSize = 20
+	let url = window.location.pathname
+	const routeHierarchy = []
 
-  const getPathWithoutParams = (path) => {
-    return path.split("/:")[0]
-  }
+	const getPathWithoutParams = (path) => {
+		return path.split('/:')[0]
+	}
 
-  const findRoute = (route) => {
-    let subRoutes = Object.values(route.subRoutes)
-    let matchedRoute = subRoutes.find((route) => {
-      if (url === route.path) return true
-      if (
-        route.name.toLowerCase().includes("edit") &&
-        url.includes(getPathWithoutParams(route.path))
-      )
-        return true
-      if (route.subRoutes) return findRoute(route)
-      return false
-    })
-    matchedRoute && routeHierarchy.push(matchedRoute)
-    return matchedRoute
-  }
+	const findRoute = (route) => {
+		let subRoutes = Object.values(route.subRoutes)
+		let matchedRoute = subRoutes.find((route) => {
+			if (url === route.path) return true
+			if (
+				route.name.toLowerCase().includes('edit') &&
+				url.includes(getPathWithoutParams(route.path))
+			)
+				return true
+			if (route.subRoutes) return findRoute(route)
+			return false
+		})
+		matchedRoute && routeHierarchy.push(matchedRoute)
+		return matchedRoute
+	}
 
-  const createBreadCrumbs = (routes) => {
-    findRoute(routes)
-    const disabledLinkStyle = {
-      fontSize: crumbSize,
-      cursor: "not-allowed",
-      color: "white",
-      pointerEvents: "none",
-    }
-    return (
-      <Breadcrumbs
-        aria-label="breadcrumb"
-        style={{ color: whiteColor }}
-        separator=">"
-      >
-        {routeHierarchy.reverse().map((curr, index, array) => {
-          if (index === array.length - 1)
-            return (
-              <div key={curr.path} style={disabledLinkStyle}>
-                {curr.name}
-              </div>
-            )
-          return (
-            <Link
-              to={curr.path}
-              style={{ fontSize: crumbSize }}
-              key={curr.path}
-            >
-              {curr.name}
-            </Link>
-          )
-        })}
-      </Breadcrumbs>
-    )
-  }
+	const createBreadCrumbs = (routes) => {
+		findRoute(routes)
+		const disabledLinkStyle = {
+			fontSize: crumbSize,
+			cursor: 'not-allowed',
+			color: 'white',
+			pointerEvents: 'none'
+		}
+		return (
+			<Breadcrumbs
+				aria-label='breadcrumb'
+				style={{ color: whiteColor }}
+				separator='>'
+			>
+				{routeHierarchy.reverse().map((curr, index, array) => {
+					if (index === array.length - 1)
+						return (
+							<div key={curr.path} style={disabledLinkStyle}>
+								{curr.name}
+							</div>
+						)
+					return (
+						<Link
+							to={curr.path}
+							style={{ fontSize: crumbSize }}
+							key={curr.path}
+						>
+							{curr.name}
+						</Link>
+					)
+				})}
+			</Breadcrumbs>
+		)
+	}
 
-  return createBreadCrumbs(routes)
+	return createBreadCrumbs(routes)
 }
 
 function Header(props) {
@@ -116,7 +116,6 @@ function Header(props) {
 	}
 
 	let isMobile = width <= 768
-	const classes = useStyles()
 	const sidebarClasses = useSidebarStyles()
 
 	let brand = (
@@ -128,18 +127,11 @@ function Header(props) {
 	const MyLink = React.forwardRef((props, ref) => {
 		const { href, as, label, ...rest } = props
 
-		if (
-			label.includes('Brand Mentality') &&
-			!userCan(perms.BRAND_MENTALITY_READ)
-		) {
-			return null
-		} else {
-			return (
-				<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
-					{label}
-				</Link>
-			)
-		}
+		return (
+			<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
+				{label}
+			</Link>
+		)
 	})
 
 	const handleLogOut = (props) => {
@@ -168,7 +160,9 @@ function Header(props) {
 					showMobileDrawer={showMobileDrawer}
 					openMobileDrawer={openMobileDrawer}
 				/>
-				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{generateBreadCrumbs(modifiedRoutes.app)}</div>
+				<div style={{ paddingLeft: 30, paddingTop: 20 }}>
+					{generateBreadCrumbs(modifiedRoutes.app)}
+				</div>
 			</div>
 		)
 	} else {
@@ -182,7 +176,12 @@ function Header(props) {
 							<Dropdown
 								title='Discover'
 								icon={<Icon icon='pie-chart' />}
-								style={{ marginRight: 15 }}
+								style={{
+									marginRight: 15,
+									display: userCan(perms.DISCOVER_READ)
+										? 'inline-block'
+										: 'none'
+								}}
 								id='Channel_Research_Nav_Tab'
 							>
 								<NavLink
@@ -194,7 +193,10 @@ function Header(props) {
 							<Dropdown
 								title='Engage'
 								icon={<Icon icon='bolt' />}
-								style={{ marginRight: 15 }}
+								style={{
+									marginRight: 15,
+									display: userCan(perms.ENGAGE_READ) ? 'inline-block' : 'none'
+								}}
 								id='Engage_Nav_Tab'
 							>
 								<NavLink
@@ -204,21 +206,33 @@ function Header(props) {
 							</Dropdown>
 
 							<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
-								<NavLink
-									href={routes.app.settings.account.path}
-									label='Account'
-								/>
+								{userCan(perms.ACCOUNT_READ) && (
+									<NavLink
+										href={routes.app.settings.account.path}
+										label='Account'
+									/>
+								)}
 
-								<NavLink href={routes.app.settings.users.path} label='Users' />
-								<NavLink
-									href={routes.app.settings.brandProfiles.path}
-									label='Brand Profiles'
-								/>
+								{userCan(perms.USER_READ) && (
+									<NavLink
+										href={routes.app.settings.users.path}
+										label='Users'
+									/>
+								)}
 
-								<NavLink
-									href={routes.app.settings.brandMentality.path}
-									label='Brand Mentality'
-								/>
+								{userCan(perms.BRAND_PROFILE_READ) && (
+									<NavLink
+										href={routes.app.settings.brandProfiles.path}
+										label='Brand Profiles'
+									/>
+								)}
+
+								{userCan(perms.BRAND_MENTALITY_READ) && (
+									<NavLink
+										href={routes.app.settings.brandMentality.path}
+										label='Brand Mentality'
+									/>
+								)}
 							</Dropdown>
 						</Nav>
 						<Nav pullRight style={{ marginRight: 30 }}>
@@ -235,7 +249,9 @@ function Header(props) {
 						</Nav>
 					</Navbar.Body>
 				</Navbar>
-				<div style={{ paddingLeft: 30, paddingTop: 20 }}>{generateBreadCrumbs(modifiedRoutes.app)}</div>
+				<div style={{ paddingLeft: 30, paddingTop: 20 }}>
+					{generateBreadCrumbs(modifiedRoutes.app)}
+				</div>
 			</div>
 		)
 	}
