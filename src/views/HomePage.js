@@ -55,28 +55,36 @@ function HomePage(props) {
         <h5>
           Next Steps:
         </h5>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100px',
-          color: 'white'
-        }}>
-          <Button style={{
-            width: '250px',
-            margin: '10px'
-          }} onClick={handleMeasureClick}>View outcome performance</Button>
-          &nbsp;
-          <Button style={{
-            width: '250px',
-            margin: '10px'
-          }} onClick={handleResearchClick}>View additional trends</Button>
-          &nbsp;
-          <Button style={{
-            width: '250px',
-            margin: '10px'
-          }} onClick={handleBrandProfileClick}>View brand mentality</Button>
-        </div>
+      </GridItem>
+      <GridItem xs={12} sm={12} md={4} style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Button style={{
+          width: '250px',
+          margin: '10px'
+        }} onClick={handleMeasureClick}>View outcome performance</Button>
+      </GridItem>
+      <GridItem xs={12} sm={12} md={4} style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Button style={{
+          width: '250px',
+          margin: '10px'
+        }} onClick={handleResearchClick}>View additional trends</Button>
+      </GridItem>
+      <GridItem xs={12} sm={12} md={4} style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Button style={{
+          width: '250px',
+          margin: '10px'
+        }} onClick={handleBrandProfileClick}>View brand mentality</Button>
       </GridItem>
     </Grid >
   )

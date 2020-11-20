@@ -157,7 +157,7 @@ export const routes = {
 		},
 
 		homepage: {
-			path: '/app/homepage',
+			path: '/app/home',
 			name: '',
 			component: HomePage
 		},
@@ -301,7 +301,7 @@ export const modifiedRoutes = {
 				userCan: userCan(perms.BRAND_MENTALITY_READ)
 			},
 			homepage: {
-				path: '/app/homepage',
+				path: '/app/home',
 				name: '',
 				component: HomePage
 				// userCan: userCan(perms.BRAND_MENTALITY_READ)
