@@ -26,8 +26,6 @@ import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.j
 
 import HomePage from './views/HomePage'
 
-import { userCan, perms } from './Can'
-
 export const routes = {
 	login: {
 		path: '/login',
