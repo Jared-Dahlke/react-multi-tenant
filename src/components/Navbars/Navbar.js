@@ -171,7 +171,7 @@ function Header(props) {
 				<Navbar style={{ borderBottom: '1px solid white' }}>
 					<Navbar.Body>
 						<Nav>
-							<Nav.Item>{brand}</Nav.Item>
+						<Nav.Item href={routes.app.homepage.path}>{brand}</Nav.Item>
 
 							<Dropdown
 								title='Discover'

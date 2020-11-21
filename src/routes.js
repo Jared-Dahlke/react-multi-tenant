@@ -24,6 +24,8 @@ import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
+import HomePage from './views/HomePage'
+
 export const routes = {
 	login: {
 		path: '/login',
@@ -149,6 +151,12 @@ export const routes = {
 				name: 'Brand Mentality',
 				component: BrandMentality
 			}
+		},
+
+		homepage: {
+			path: '/app/home',
+			name: '',
+			component: HomePage
 		}
 	}
 }
@@ -279,6 +287,11 @@ export const modifiedRoutes = {
 				path: '/app/settings/brandMentality',
 				name: 'Brand Mentality',
 				component: BrandMentality
+			},
+			homepage: {
+				path: '/app/home',
+				name: '',
+				component: HomePage
 			}
 		}
 	}
