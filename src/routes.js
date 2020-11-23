@@ -25,6 +25,7 @@ import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
 import HomePage from './views/HomePage'
+import MeasurePage from './views/MeasurePage'
 
 export const routes = {
 	login: {
@@ -157,6 +158,11 @@ export const routes = {
 			path: '/app/home',
 			name: '',
 			component: HomePage
+		},
+		measure: {
+			path: '/app/measure',
+			name: 'Measure',
+			component: MeasurePage
 		}
 	}
 }
@@ -292,6 +298,11 @@ export const modifiedRoutes = {
 				path: '/app/home',
 				name: '',
 				component: HomePage
+			},
+			measure: {
+				path: '/app/measure',
+				name: 'Measure',
+				component: MeasurePage
 			}
 		}
 	}
