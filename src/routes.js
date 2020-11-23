@@ -24,6 +24,7 @@ import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 
+import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
 
@@ -237,7 +238,8 @@ export const modifiedRoutes = {
 					{
 						path: '/app/settings/users/create',
 						name: 'Create',
-						component: CreateUser
+						component: CreateUser,
+						userCan : userCan(perms.USER_CREATE)
 					}
 				]
 			},
@@ -249,7 +251,8 @@ export const modifiedRoutes = {
 					{
 						path: '/app/settings/brandProfiles/create',
 						name: 'Create',
-						component: CreateBrandProfile
+						component: CreateBrandProfile,
+						userCan: userCan(perms.BRAND_PROFILE_CREATE)
 					},
 					{
 						path: '/app/settings/brandProfiles/edit/:brandProfileId',
@@ -292,7 +295,8 @@ export const modifiedRoutes = {
 			settings_brandMentality: {
 				path: '/app/settings/brandMentality',
 				name: 'Brand Mentality',
-				component: BrandMentality
+				component: BrandMentality,
+				userCan: userCan(perms.BRAND_MENTALITY_READ)
 			},
 			homepage: {
 				path: '/app/home',
