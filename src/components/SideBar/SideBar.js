@@ -99,7 +99,7 @@ export default function Sidebar(props) {
 								label='Brand Mentality'
 							/>
 						</Dropdown>
-						<Nav.Item href={routes.app.measure.path}>Measure</Nav.Item>
+						{/* <Nav.Item href={routes.app.measure.path}>Measure</Nav.Item> */}
 					</Nav>
 				</Sidenav.Body>
 			</Sidenav>

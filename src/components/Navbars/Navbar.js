@@ -171,7 +171,7 @@ function Header(props) {
 				<Navbar style={{ borderBottom: '1px solid white' }}>
 					<Navbar.Body>
 						<Nav>
-						<Nav.Item href={routes.app.homepage.path}>{brand}</Nav.Item>
+							<Nav.Item href={routes.app.homepage.path}>{brand}</Nav.Item>
 
 							<Dropdown
 								title='Discover'
@@ -234,7 +234,7 @@ function Header(props) {
 									/>
 								)}
 							</Dropdown>
-							<Nav.Item href={routes.app.measure.path}>Measure</Nav.Item>
+							{/* <Nav.Item href={routes.app.measure.path}>Measure</Nav.Item> */}
 						</Nav>
 						<Nav pullRight style={{ marginRight: 30 }}>
 							<Dropdown title='' icon={<Icon icon='avatar' />}>
