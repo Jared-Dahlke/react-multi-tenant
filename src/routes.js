@@ -27,8 +27,6 @@ import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.j
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
 
-import { userCan, perms } from './Can'
-
 export const routes = {
 	login: {
 		path: '/login',
@@ -239,8 +237,7 @@ export const modifiedRoutes = {
 					{
 						path: '/app/settings/users/create',
 						name: 'Create',
-						component: CreateUser,
-						userCan: userCan(perms.USER_CREATE)
+						component: CreateUser
 					}
 				]
 			},
@@ -248,13 +245,11 @@ export const modifiedRoutes = {
 				path: '/app/settings/brandProfiles',
 				name: 'Brand Profiles',
 				component: BrandProfiles,
-
 				subRoutes: [
 					{
 						path: '/app/settings/brandProfiles/create',
 						name: 'Create',
-						component: CreateBrandProfile,
-						userCan: userCan(perms.BRAND_PROFILE_CREATE)
+						component: CreateBrandProfile
 					},
 					{
 						path: '/app/settings/brandProfiles/edit/:brandProfileId',
@@ -297,14 +292,12 @@ export const modifiedRoutes = {
 			settings_brandMentality: {
 				path: '/app/settings/brandMentality',
 				name: 'Brand Mentality',
-				component: BrandMentality,
-				userCan: userCan(perms.BRAND_MENTALITY_READ)
+				component: BrandMentality
 			},
 			homepage: {
 				path: '/app/home',
 				name: '',
 				component: HomePage
-				// userCan: userCan(perms.BRAND_MENTALITY_READ)
 			},
 			measure: {
 				path: '/app/measure',
