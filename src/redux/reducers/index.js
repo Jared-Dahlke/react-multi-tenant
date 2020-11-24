@@ -60,10 +60,9 @@ import {
 	brandProfileLoading,
 	brandProfileSaving,
 	brandProfileSaved,
-	scenariosIsLoading,
-
+	scenariosIsLoading
 } from './brandProfiles'
-import { categories, channels, videos } from './discover/channels'
+import { channels, videos } from './discover/channels'
 
 import brandProfilesAdmin from './brandProfilesAdmin/index'
 import engage from './engage/index'
@@ -113,7 +112,6 @@ export default combineReducers({
 	brandCategories,
 	brandProfileBasicInfo,
 	brandProfileCompetitors,
-	categories,
 	channels,
 	videos,
 	accountSaving,
