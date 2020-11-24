@@ -1,7 +1,12 @@
 import axios from '../../../axiosConfig'
 import defaultAxios from 'axios'
 import config from '../../../config.js'
-import { SET_CHANNELS, SET_VIDEOS } from '../../action-types/discover/channels'
+import {
+	SET_CHANNELS,
+	SET_VIDEOS,
+	REMOVE_ALL_VIDEOS,
+	REMOVE_ALL_CHANNELS
+} from '../../action-types/discover/channels'
 
 const apiBase = config.api.listBuilderUrl
 
@@ -32,6 +37,20 @@ export function setVideos(videos) {
 	return {
 		type: SET_VIDEOS,
 		videos
+	}
+}
+
+export function removeAllVideos() {
+	return {
+		type: REMOVE_ALL_VIDEOS,
+		videos: []
+	}
+}
+
+export function removeAllChannels() {
+	return {
+		type: REMOVE_ALL_CHANNELS,
+		channels: []
 	}
 }
 

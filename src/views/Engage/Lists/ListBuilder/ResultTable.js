@@ -80,7 +80,6 @@ export default function ResultTable({
 										let params = {
 											action,
 											id: item.id
-											//		item
 										}
 										setActionsTaken((prevState) => prevState + 1)
 										handleAction(params)

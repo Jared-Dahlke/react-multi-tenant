@@ -14,7 +14,7 @@ import { postListObjValidation } from '../../../schemas/Engage/Lists/schemas'
 import { getCurrentAccount } from '../../../utils'
 import {
 	postList,
-	setPostListSucess
+	setPostListSuccess
 } from '../../../redux/actions/engage/lists'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../routes'
@@ -38,8 +38,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function CreateNewListModal(props) {
-	console.log('create new list modal props')
-	console.log(props)
 	let history = useHistory()
 	const { postListSuccess } = props
 	React.useEffect(() => {
@@ -50,6 +48,13 @@ function CreateNewListModal(props) {
 			})
 		}
 	}, [postListSuccess])
+
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			props.setPostListSuccess(false)
+		}
+	}, [])
 
 	let currentAccount = React.useMemo(() => {
 		return getCurrentAccount(props.accounts.data)
