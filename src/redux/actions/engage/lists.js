@@ -8,7 +8,8 @@ import {
 	SET_FETCH_LISTS_SUCCESS,
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
-	SET_LIST_VERSION_ACTIVE
+	SET_LIST_VERSION_ACTIVE,
+	SET_CREATED_LIST_VERSION
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
@@ -73,6 +74,7 @@ export const postList = (data) => {
 			.post(url, list)
 			.then((response) => {
 				if (response.status === 200) {
+					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
@@ -81,6 +83,20 @@ export const postList = (data) => {
 				dispatch(setIsPostingList(false))
 				console.error('create smartlist error', error)
 			})
+	}
+}
+
+export const patchVersionData = (args) => {
+	let url = `${apiBase}/smart-list/version/${args.versionId}/data`
+	return async (dispatch) => {
+		try {
+			let params = args.data
+			const result = await axios.patch(url, params)
+			if (result.status === 200) {
+			}
+		} catch (error) {
+			alert(error)
+		}
 	}
 }
 
@@ -95,6 +111,13 @@ export function setIsDownloadingExcelVersionId(isDownloadingExcelVersionId) {
 	return {
 		type: SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 		isDownloadingExcelVersionId
+	}
+}
+
+export function setCreatedListVersion(createdListVersion) {
+	return {
+		type: SET_CREATED_LIST_VERSION,
+		createdListVersion
 	}
 }
 

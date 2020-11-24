@@ -12,6 +12,8 @@ import {
 	setVideos
 } from '../../../../redux/actions/discover/channels'
 
+import { patchVersionData } from '../../../../redux/actions/engage/lists'
+
 const mapStateToProps = (state) => {
 	return {
 		videos: state.videos,
@@ -23,16 +25,23 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setVideos: (videos) => dispatch(setVideos(videos)),
-		fetchVideos: (query, pageNum) => dispatch(fetchVideos(query, pageNum)),
-		fetchChannels: (query, pageNum) => dispatch(fetchChannels(query, pageNum))
+		fetchVideos: (params) => dispatch(fetchVideos(params)),
+		fetchChannels: (params) => dispatch(fetchChannels(params)),
+		patchVersionData: (params) => dispatch(patchVersionData(params))
 	}
 }
 
 function ListBuilder(props) {
 	const history = useHistory()
+	console.log('list builder props')
+	console.log(props)
 	if (!props.location.state || props.location.state.from !== 'lists') {
 		history.push(routes.app.engage.lists.lists.path)
 	}
+
+	const [createdListVersion, setCreatedListVersion] = React.useState(
+		props.location.state.createdListVersion
+	)
 
 	const [level, setLevel] = React.useState('channels')
 
@@ -45,10 +54,14 @@ function ListBuilder(props) {
 		setHasNextPage(items.length < 1000000)
 		setIsNextPageLoading(false)
 		let pageNum = Math.round(index / 100)
+		let params = {
+			versionId: createdListVersion.versionId,
+			pageNumber: pageNum < 1 ? 1 : pageNum + 1
+		}
 		if (level === 'channels') {
-			props.fetchChannels('', pageNum < 1 ? 1 : pageNum + 1)
+			props.fetchChannels(params)
 		} else {
-			props.fetchVideos('', pageNum < 1 ? 1 : pageNum + 1)
+			props.fetchVideos(params)
 		}
 	}
 
@@ -58,6 +71,14 @@ function ListBuilder(props) {
 		} else {
 			setLevel('channels')
 		}
+	}
+
+	const handleAction = (args) => {
+		console.log(args)
+		//args.item.actionId = args.action
+		args.versionId = createdListVersion.versionId
+		args.data = [{ actionId: args.action, id: args.id }]
+		props.patchVersionData(args)
 	}
 
 	React.useEffect(() => {
@@ -81,6 +102,7 @@ function ListBuilder(props) {
 					isNextPageLoading={isNextPageLoading}
 					items={level === 'videos' ? props.videos : props.channels}
 					loadNextPage={_loadNextPage}
+					handleAction={(args) => handleAction(args)}
 				/>
 			</Grid>
 		</Grid>
