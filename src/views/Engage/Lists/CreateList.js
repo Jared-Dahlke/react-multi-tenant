@@ -24,7 +24,9 @@ const mapStateToProps = (state) => {
 		isPostingList: state.engage.isPostingList,
 		postListSuccess: state.engage.postListSuccess,
 		accounts: state.accounts,
-		brandProfiles: state.brandProfiles
+		brandProfiles: state.brandProfiles,
+		lists: state.engage.lists,
+		createdListVersion: state.engage.createdListVersion
 	}
 }
 
@@ -36,11 +38,16 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function CreateNewListModal(props) {
+	console.log('create new list modal props')
+	console.log(props)
 	let history = useHistory()
 	const { postListSuccess } = props
 	React.useEffect(() => {
 		if (postListSuccess) {
-			history.push(routes.app.engage.lists.listBuilder.path, { from: 'lists' })
+			history.push(routes.app.engage.lists.listBuilder.path, {
+				from: 'lists',
+				createdListVersion: props.createdListVersion
+			})
 		}
 	}, [postListSuccess])
 

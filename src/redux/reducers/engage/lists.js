@@ -8,7 +8,8 @@ import {
 	SET_FETCH_LISTS_SUCCESS,
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
-	SET_LIST_VERSION_ACTIVE
+	SET_LIST_VERSION_ACTIVE,
+	SET_CREATED_LIST_VERSION
 } from '../../action-types/engage/lists'
 
 export function lists(state = [], action) {
@@ -50,6 +51,15 @@ export function uploadedList(state = [], action) {
 	switch (action.type) {
 		case SET_UPLOADED_LIST:
 			return action.uploadedList
+		default:
+			return state
+	}
+}
+
+export function createdListVersion(state = {}, action) {
+	switch (action.type) {
+		case SET_CREATED_LIST_VERSION:
+			return action.createdListVersion
 		default:
 			return state
 	}

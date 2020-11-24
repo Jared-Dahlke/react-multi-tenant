@@ -19,8 +19,29 @@ export default function ResultTable({
 	items,
 
 	// Callback function responsible for loading the next page of items.
-	loadNextPage
+	loadNextPage,
+
+	handleAction
 }) {
+	// We create a reference for the InfiniteLoader
+	const infiniteLoaderRef = React.useRef(null)
+	const hasMountedRef = React.useRef(false)
+
+	const [actionsTaken, setActionsTaken] = React.useState(0)
+
+	// Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
+	React.useEffect(() => {
+		console.log('running use effect loader')
+		// We only need to reset cached items when "sortOrder" changes.
+		// This effect will run on mount too; there's no need to reset in that case.
+		if (hasMountedRef.current) {
+			if (infiniteLoaderRef.current) {
+				infiniteLoaderRef.current.resetloadMoreItemsCache()
+			}
+		}
+		hasMountedRef.current = true
+	}, [actionsTaken])
+
 	// If there are more items to be loaded then add an extra row to hold a loading indicator.
 	const itemCount = hasNextPage ? items.length + 1 : items.length
 
@@ -49,28 +70,25 @@ export default function ResultTable({
 						header={item.name}
 					>
 						<Grid container>
-							<Grid item xs={6}>
-								{/*<img
-									src={imgUrl}
-									alt='Girl in a jacket'
-									//	width='100'
-									//	height='100'
-								/>*/}
-							</Grid>
+							<Grid item xs={6}></Grid>
 							<Grid item xs={6}>
 								<RadioGroup
 									inline
-									value={'target'}
-									onChange={(value) => {
-										console.log('clicked', value)
-										console.log(item.name)
-										//	setUploadType(value)
-										//	setFieldValue('uploadType', value)
+									value={item.actionId}
+									onChange={(action) => {
+										item.actionId = action
+										let params = {
+											action,
+											id: item.id
+											//		item
+										}
+										setActionsTaken((prevState) => prevState + 1)
+										handleAction(params)
 									}}
 								>
-									<Radio value='target'>Target</Radio>
-									<Radio value='watch'>Watch</Radio>
-									<Radio value='block'>Block</Radio>
+									<Radio value={1}>Target</Radio>
+									<Radio value={3}>Watch</Radio>
+									<Radio value={2}>Block</Radio>
 								</RadioGroup>
 							</Grid>
 						</Grid>
@@ -82,6 +100,7 @@ export default function ResultTable({
 
 	return (
 		<InfiniteLoader
+			ref={infiniteLoaderRef}
 			isItemLoaded={isItemLoaded}
 			itemCount={itemCount}
 			loadMoreItems={loadMoreItems}

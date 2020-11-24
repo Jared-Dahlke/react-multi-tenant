@@ -7,7 +7,8 @@ import {
 	isFetchingLists,
 	fetchListsSuccess,
 	isDownloadingExcel,
-	isDownloadingExcelVersionId
+	isDownloadingExcelVersionId,
+	createdListVersion
 } from './lists'
 
 export default combineReducers({
@@ -18,5 +19,6 @@ export default combineReducers({
 	isFetchingLists,
 	fetchListsSuccess,
 	isDownloadingExcel,
-	isDownloadingExcelVersionId
+	isDownloadingExcelVersionId,
+	createdListVersion
 })
