@@ -41,7 +41,6 @@ import {
 	fetchBrandIndustryVerticals,
 	fetchBrandTopics
 } from '../actions/brandProfiles'
-import { fetchCategories } from '../actions/discover/channels.js'
 import { findAccountNodeByAccountId } from '../../utils'
 import { setLists } from './engage/lists'
 
@@ -244,8 +243,6 @@ export function fetchSiteData(accountId) {
 
 			//
 			dispatch(isSwitchingAccounts(false))
-
-			dispatch(fetchCategories())
 		} catch (error) {
 			console.log('caught in account action')
 			console.log(error)
