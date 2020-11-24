@@ -4,6 +4,7 @@ import InfiniteLoader from 'react-window-infinite-loader'
 import Grid from '@material-ui/core/Grid'
 import Radio from 'rsuite/lib/Radio'
 import RadioGroup from 'rsuite/lib/RadioGroup'
+import Panel from 'rsuite/lib/Panel'
 
 export default function ResultTable({
 	// Are there more items to load?
@@ -32,37 +33,51 @@ export default function ResultTable({
 
 	// Render an item or a loading indicator.
 	const Item = ({ index, style }) => {
-		console.log(style)
-		let content
 		if (!isItemLoaded(index)) {
-			content = 'Loading...'
+			return <div style={style}>Loading...</div>
 		} else {
-			content = items[index].name
-		}
-
-		return (
-			<Grid container style={style}>
-				<Grid item xs={6}>
-					{content}
-				</Grid>
-				<Grid item xs={6}>
-					<RadioGroup
-						inline
-						value={'target'}
-						onChange={(value) => {
-							console.log('clicked', value)
-							console.log(content.name)
-							//	setUploadType(value)
-							//	setFieldValue('uploadType', value)
-						}}
+			let item = items[index]
+			let imgUrl =
+				'https://source.unsplash.com/random/100x100/?' +
+				item.name[0] +
+				item.name[1]
+			return (
+				<div style={style}>
+					<Panel
+						bordered
+						style={{ marginBottom: 20, marginRight: 20 }}
+						header={item.name}
 					>
-						<Radio value='target'>Target</Radio>
-						<Radio value='watch'>Watch</Radio>
-						<Radio value='block'>Block</Radio>
-					</RadioGroup>
-				</Grid>
-			</Grid>
-		)
+						<Grid container>
+							<Grid item xs={6}>
+								{/*<img
+									src={imgUrl}
+									alt='Girl in a jacket'
+									//	width='100'
+									//	height='100'
+								/>*/}
+							</Grid>
+							<Grid item xs={6}>
+								<RadioGroup
+									inline
+									value={'target'}
+									onChange={(value) => {
+										console.log('clicked', value)
+										console.log(item.name)
+										//	setUploadType(value)
+										//	setFieldValue('uploadType', value)
+									}}
+								>
+									<Radio value='target'>Target</Radio>
+									<Radio value='watch'>Watch</Radio>
+									<Radio value='block'>Block</Radio>
+								</RadioGroup>
+							</Grid>
+						</Grid>
+					</Panel>
+				</div>
+			)
+		}
 	}
 
 	return (
@@ -76,7 +91,7 @@ export default function ResultTable({
 					className='List'
 					height={500}
 					itemCount={itemCount}
-					itemSize={50}
+					itemSize={140}
 					onItemsRendered={onItemsRendered}
 					ref={ref}
 					width={800}

@@ -93,8 +93,7 @@ export function setChannels(payload) {
 */
 
 export function fetchVideos(query, pageNumber) {
-	//	let url = `https://cors-anywhere.herokuapp.com/http://openlibrary.org/search.json` //TODO: eventually the api should filter by channel id, but i will do it here for the demo
-	let url = apiBase + `/smart-list/channel?size=100000&page=${pageNumber}`
+	let url = apiBase + `/smart-list/video?size=100&page=${pageNumber}`
 	return async (dispatch) => {
 		try {
 			const result = await defaultAxios({
@@ -118,5 +117,33 @@ export function setVideos(videos) {
 	return {
 		type: SET_VIDEOS,
 		videos
+	}
+}
+
+export function fetchChannels(query, pageNumber) {
+	let url = apiBase + `/smart-list/channel?size=100&page=${pageNumber}`
+	return async (dispatch) => {
+		try {
+			const result = await defaultAxios({
+				method: 'POST',
+				url: url
+				//params: { q: 'zebras', page: pageNumber }
+			})
+			//	const result = await defaultAxios.get(url, {)
+
+			if (result.status === 200) {
+				dispatch(setChannels(result.data))
+			}
+		} catch (error) {
+			alert(error)
+			console.log(error)
+		}
+	}
+}
+
+export function setChannels(channels) {
+	return {
+		type: SET_CHANNELS,
+		channels
 	}
 }
