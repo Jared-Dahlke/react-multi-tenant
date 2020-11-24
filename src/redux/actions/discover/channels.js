@@ -10,9 +10,9 @@ import {
 	SET_VIDEOS
 } from '../../action-types/discover/channels'
 
-const apiBase = config.api.userAccountUrl
+const apiBase = config.api.listBuilderUrl
 
-export function fetchCategories() {
+/*export function fetchCategories() {
 	let url = apiBase + `/discover/categories`
 	return async (dispatch) => {
 		try {
@@ -90,20 +90,22 @@ export function setChannels(payload) {
 		payload
 	}
 }
+*/
 
 export function fetchVideos(query, pageNumber) {
-	let url = `https://cors-anywhere.herokuapp.com/http://openlibrary.org/search.json` //TODO: eventually the api should filter by channel id, but i will do it here for the demo
+	//	let url = `https://cors-anywhere.herokuapp.com/http://openlibrary.org/search.json` //TODO: eventually the api should filter by channel id, but i will do it here for the demo
+	let url = apiBase + `/smart-list/channel?size=100000&page=${pageNumber}`
 	return async (dispatch) => {
 		try {
 			const result = await defaultAxios({
-				method: 'GET',
-				url: url,
-				params: { q: 'zebras', page: pageNumber }
+				method: 'POST',
+				url: url
+				//params: { q: 'zebras', page: pageNumber }
 			})
 			//	const result = await defaultAxios.get(url, {)
 
 			if (result.status === 200) {
-				dispatch(setVideos(result.data.docs))
+				dispatch(setVideos(result.data))
 			}
 		} catch (error) {
 			alert(error)

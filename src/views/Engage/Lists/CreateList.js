@@ -16,6 +16,8 @@ import {
 	postList,
 	setPostListSucess
 } from '../../../redux/actions/engage/lists'
+import { useHistory } from 'react-router-dom'
+import { routes } from '../../../routes'
 
 const mapStateToProps = (state) => {
 	return {
@@ -34,11 +36,11 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function CreateNewListModal(props) {
+	let history = useHistory()
 	const { postListSuccess } = props
 	React.useEffect(() => {
 		if (postListSuccess) {
-			// show success
-			// navigate to list builder
+			history.push(routes.app.engage.lists.listBuilder.path, { from: 'lists' })
 		}
 	}, [postListSuccess])
 
@@ -61,7 +63,7 @@ function CreateNewListModal(props) {
 		let list = {
 			smartListName: values.smartListName,
 			objectiveId: values.objectiveId,
-			smartListData: []
+			smartListData: [{ id: 'UCu-sMNXPu_mqjFVbR9YF7JA', action: 'target' }]
 		}
 
 		let data = {
