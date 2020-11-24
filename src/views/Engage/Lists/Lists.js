@@ -303,15 +303,6 @@ const Version = (props) => {
 							>
 								Edit
 							</IconButton>
-							<IconButton
-								appearance='ghost'
-								icon={<Icon icon={'file-download'} size='lg' />}
-								size='sm'
-								block
-								disabled
-							>
-								Clone
-							</IconButton>
 						</ButtonGroup>
 					</Grid>
 				)}

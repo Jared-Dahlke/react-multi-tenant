@@ -5,11 +5,14 @@ import { routes } from '../../../../routes'
 import ResultTable from './ResultTable'
 import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
-
+import WarningModal from './WarningModal'
 import {
 	fetchVideos,
 	fetchChannels,
-	setVideos
+	setVideos,
+	removeAllVideos,
+	removeAllChannels,
+	setChannels
 } from '../../../../redux/actions/discover/channels'
 
 import { patchVersionData } from '../../../../redux/actions/engage/lists'
@@ -27,14 +30,14 @@ const mapDispatchToProps = (dispatch) => {
 		setVideos: (videos) => dispatch(setVideos(videos)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
-		patchVersionData: (params) => dispatch(patchVersionData(params))
+		patchVersionData: (params) => dispatch(patchVersionData(params)),
+		removeAllVideos: () => dispatch(removeAllVideos()),
+		removeAllChannels: () => dispatch(removeAllChannels())
 	}
 }
 
 function ListBuilder(props) {
 	const history = useHistory()
-	console.log('list builder props')
-	console.log(props)
 	if (!props.location.state || props.location.state.from !== 'lists') {
 		history.push(routes.app.engage.lists.lists.path)
 	}
@@ -43,39 +46,40 @@ function ListBuilder(props) {
 		props.location.state.createdListVersion
 	)
 
-	const [level, setLevel] = React.useState('channels')
+	const [isChannels, setIsChannels] = React.useState(true)
 
 	const [hasNextPage, setHasNextPage] = React.useState(true)
 	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
-	const [items, setItems] = React.useState([])
+
+	React.useEffect(() => {
+		props.removeAllChannels()
+	}, [])
 
 	const _loadNextPage = (index) => {
 		setIsNextPageLoading(true)
-		setHasNextPage(items.length < 1000000)
+		setHasNextPage(true) // TODO: make this dynamic
 		setIsNextPageLoading(false)
 		let pageNum = Math.round(index / 100)
 		let params = {
 			versionId: createdListVersion.versionId,
 			pageNumber: pageNum < 1 ? 1 : pageNum + 1
 		}
-		if (level === 'channels') {
+		if (isChannels) {
 			props.fetchChannels(params)
 		} else {
 			props.fetchVideos(params)
 		}
 	}
 
-	const handleToggle = (bool) => {
-		if (bool) {
-			setLevel('videos')
-		} else {
-			setLevel('channels')
-		}
+	const [showWarning, setShowWarning] = React.useState(false)
+
+	const executeToggle = () => {
+		setIsChannels((prevState) => !prevState)
+		setShowWarning(false)
+		props.deleteAllVersionData(createdListVersion)
 	}
 
 	const handleAction = (args) => {
-		console.log(args)
-		//args.item.actionId = args.action
 		args.versionId = createdListVersion.versionId
 		args.data = [{ actionId: args.action, id: args.id }]
 		props.patchVersionData(args)
@@ -93,18 +97,24 @@ function ListBuilder(props) {
 					size='lg'
 					checkedChildren='Videos'
 					unCheckedChildren='Channels'
-					onChange={(bool) => handleToggle(bool)}
+					onChange={(bool) => setShowWarning(true)}
+					checked={!isChannels}
 				/>
 			</Grid>
 			<Grid item xs={12}>
 				<ResultTable
 					hasNextPage={hasNextPage}
 					isNextPageLoading={isNextPageLoading}
-					items={level === 'videos' ? props.videos : props.channels}
+					items={isChannels ? props.channels : props.videos}
 					loadNextPage={_loadNextPage}
 					handleAction={(args) => handleAction(args)}
 				/>
 			</Grid>
+			<WarningModal
+				show={showWarning}
+				handleClose={() => setShowWarning(false)}
+				executeToggle={executeToggle}
+			/>
 		</Grid>
 	)
 }
