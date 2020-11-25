@@ -11,6 +11,8 @@ import {
 	createdListVersion
 } from './lists'
 
+import { filterCountries, filterCategories, filterLanguages } from './filters'
+
 export default combineReducers({
 	lists,
 	uploadedList,
@@ -20,5 +22,8 @@ export default combineReducers({
 	fetchListsSuccess,
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
-	createdListVersion
+	createdListVersion,
+	filterCountries,
+	filterCategories,
+	filterLanguages
 })
