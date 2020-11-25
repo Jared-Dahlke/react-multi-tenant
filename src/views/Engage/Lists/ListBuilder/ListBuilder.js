@@ -15,6 +15,12 @@ import {
 	setChannels
 } from '../../../../redux/actions/discover/channels'
 
+import {
+	fetchFilterCategories,
+	fetchFilterCountries,
+	fetchFilterLanguages
+} from '../../../../redux/actions/engage/filters'
+
 import { patchVersionData } from '../../../../redux/actions/engage/lists'
 
 const mapStateToProps = (state) => {
@@ -32,7 +38,10 @@ const mapDispatchToProps = (dispatch) => {
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
 		removeAllVideos: () => dispatch(removeAllVideos()),
-		removeAllChannels: () => dispatch(removeAllChannels())
+		removeAllChannels: () => dispatch(removeAllChannels()),
+		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
+		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
+		fetchFilterLanguages: () => dispatch(fetchFilterLanguages())
 	}
 }
 
@@ -53,6 +62,10 @@ function ListBuilder(props) {
 
 	React.useEffect(() => {
 		props.removeAllChannels()
+		props.removeAllVideos()
+		props.fetchFilterCategories()
+		props.fetchFilterCountries()
+		props.fetchFilterLanguages()
 	}, [])
 
 	const _loadNextPage = (index) => {
@@ -97,7 +110,7 @@ function ListBuilder(props) {
 					size='lg'
 					checkedChildren='Videos'
 					unCheckedChildren='Channels'
-					onChange={(bool) => setShowWarning(true)}
+					onChange={() => setShowWarning(true)}
 					checked={!isChannels}
 				/>
 			</Grid>
