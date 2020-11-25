@@ -20,7 +20,9 @@ axios.interceptors.response.use(
 		return response
 	},
 	(error) => {
-		if (error.response.status === 401) {
+		if (axios.isCancel(error)) {
+			console.log('cancelled duplicate request, OK')
+		} else if (error.response.status === 401) {
 			const store = configureStore()
 			localStorage.removeItem('token')
 			localStorage.removeItem('userId')

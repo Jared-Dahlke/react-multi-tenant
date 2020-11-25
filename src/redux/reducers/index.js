@@ -62,7 +62,7 @@ import {
 	brandProfileSaved,
 	scenariosIsLoading
 } from './brandProfiles'
-import { channels, videos } from './discover/channels'
+import { channels, videos, hasNextPage } from './discover/channels'
 
 import brandProfilesAdmin from './brandProfilesAdmin/index'
 import engage from './engage/index'
@@ -124,5 +124,6 @@ export default combineReducers({
 	resettingPassword,
 	scenariosIsLoading,
 	brandProfilesAdmin,
-	engage
+	engage,
+	hasNextPage
 })

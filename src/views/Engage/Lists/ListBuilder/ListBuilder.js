@@ -14,7 +14,8 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setChannels
+	setChannels,
+	setHasNextPage
 } from '../../../../redux/actions/discover/channels'
 
 import {
@@ -33,7 +34,8 @@ const mapStateToProps = (state) => {
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
-		filterCategories: state.engage.filterCategories
+		filterCategories: state.engage.filterCategories,
+		hasNextPage: state.hasNextPage
 	}
 }
 
@@ -47,15 +49,19 @@ const mapDispatchToProps = (dispatch) => {
 		removeAllChannels: () => dispatch(removeAllChannels()),
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
-		fetchFilterLanguages: () => dispatch(fetchFilterLanguages())
+		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
+		setHasNextPage: (bool) => dispatch(setHasNextPage(bool))
 	}
 }
 
 function ListBuilder(props) {
+	console.log(props)
 	const history = useHistory()
 	if (!props.location.state || props.location.state.from !== 'lists') {
 		history.push(routes.app.engage.lists.lists.path)
 	}
+
+	const hasMountedRef = React.useRef(false)
 
 	const [createdListVersion, setCreatedListVersion] = React.useState(
 		props.location.state.createdListVersion
@@ -63,10 +69,10 @@ function ListBuilder(props) {
 
 	const [isChannels, setIsChannels] = React.useState(true)
 
-	const [hasNextPage, setHasNextPage] = React.useState(true)
 	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
 
 	React.useEffect(() => {
+		console.log('firing fetch filters effect')
 		props.removeAllChannels()
 		props.removeAllVideos()
 		props.fetchFilterCategories()
@@ -75,8 +81,9 @@ function ListBuilder(props) {
 	}, [])
 
 	const _loadNextPage = (index) => {
+		console.log('loadnextPage')
 		setIsNextPageLoading(true)
-		setHasNextPage(true) // TODO: make this dynamic
+		props.setHasNextPage(true) // TODO: make this dynamic
 		setIsNextPageLoading(false)
 		let pageNum = Math.round(index / 100)
 		let params = {
@@ -118,7 +125,12 @@ function ListBuilder(props) {
 		console.log(value)
 		switch (filter) {
 			case filters.kids:
-				setFilterState({ kids: value })
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						kids: value
+					}
+				})
 				break
 			case filters.countries:
 				let countries = []
@@ -139,8 +151,16 @@ function ListBuilder(props) {
 
 	React.useEffect(() => {
 		console.log('fiting filter change effect')
-		props.removeAllChannels()
-		props.removeAllVideos()
+		if (hasMountedRef.current) {
+			//props.setHasNextPage(true)
+
+			props.removeAllChannels()
+			props.removeAllVideos()
+
+			_loadNextPage(0)
+		}
+
+		hasMountedRef.current = true
 		/* let params = {
 			versionId: createdListVersion.versionId,
 			pageNumber: 1,
@@ -227,7 +247,7 @@ function ListBuilder(props) {
 
 			<Grid item xs={9}>
 				<ResultTable
-					hasNextPage={hasNextPage}
+					hasNextPage={props.hasNextPage}
 					isNextPageLoading={isNextPageLoading}
 					items={isChannels ? props.channels : props.videos}
 					loadNextPage={_loadNextPage}
