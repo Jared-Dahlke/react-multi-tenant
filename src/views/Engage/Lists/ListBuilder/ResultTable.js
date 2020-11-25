@@ -6,6 +6,8 @@ import Radio from 'rsuite/lib/Radio'
 import RadioGroup from 'rsuite/lib/RadioGroup'
 import Panel from 'rsuite/lib/Panel'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
+import ButtonGroup from 'rsuite/lib/ButtonGroup'
+import Button from 'rsuite/lib/Button'
 
 export default function ResultTable({
 	// Are there more items to load?
@@ -22,7 +24,7 @@ export default function ResultTable({
 	// Callback function responsible for loading the next page of items.
 	loadNextPage,
 
-	handleAction
+	handleActionButtonClick
 }) {
 	// We create a reference for the InfiniteLoader
 	const infiniteLoaderRef = React.useRef(null)
@@ -59,10 +61,6 @@ export default function ResultTable({
 			return <div style={style}>Loading...</div>
 		} else {
 			let item = items[index]
-			let imgUrl =
-				'https://source.unsplash.com/random/100x100/?' +
-				item.name[0] +
-				item.name[1]
 			return (
 				<div style={style}>
 					<Panel
@@ -77,23 +75,35 @@ export default function ResultTable({
 						<Grid container>
 							<Grid item xs={6}></Grid>
 							<Grid item xs={6}>
-								<RadioGroup
-									inline
-									value={item.actionId}
-									onChange={(action) => {
-										item.actionId = action
-										let params = {
-											action,
-											id: item.id
-										}
-										setActionsTaken((prevState) => prevState + 1)
-										handleAction(params)
-									}}
-								>
-									<Radio value={1}>Target</Radio>
-									<Radio value={3}>Watch</Radio>
-									<Radio value={2}>Block</Radio>
-								</RadioGroup>
+								<ButtonGroup>
+									<Button
+										active={item.actionId === 1}
+										onClick={() => {
+											handleActionButtonClick(1, item)
+											setActionsTaken((prevState) => prevState + 1)
+										}}
+									>
+										Target
+									</Button>
+									<Button
+										active={item.actionId === 3}
+										onClick={() => {
+											handleActionButtonClick(3, item)
+											setActionsTaken((prevState) => prevState + 1)
+										}}
+									>
+										Watch
+									</Button>
+									<Button
+										active={item.actionId === 2}
+										onClick={() => {
+											handleActionButtonClick(2, item)
+											setActionsTaken((prevState) => prevState + 1)
+										}}
+									>
+										Block
+									</Button>
+								</ButtonGroup>
 							</Grid>
 						</Grid>
 					</Panel>

@@ -26,7 +26,8 @@ import {
 
 import {
 	patchVersionData,
-	deleteAllVersionData
+	deleteAllVersionData,
+	deleteVersionDataItem
 } from '../../../../redux/actions/engage/lists'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
 
@@ -55,7 +56,8 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
 		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
-			dispatch(deleteAllVersionData(versionId))
+			dispatch(deleteAllVersionData(versionId)),
+		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params))
 	}
 }
 
@@ -117,16 +119,29 @@ function ListBuilder(props) {
 		props.deleteAllVersionData(createdListVersion.versionId)
 	}
 
-	const handleAction = (args) => {
-		args.versionId = createdListVersion.versionId
-		args.data = [{ actionId: args.action, id: args.id }]
-		props.patchVersionData(args)
+	const handleActionButtonClick = (actionId, item) => {
+		let unSelecting = item.actionId === actionId
+		let versionId = createdListVersion.versionId
+		if (unSelecting) {
+			delete item.actionId
+			let _args = {
+				versionId: versionId,
+				id: item.id
+			}
+			props.deleteVersionDataItem(_args)
+		} else {
+			item.actionId = actionId
+			let args = {
+				versionId: versionId,
+				data: [{ actionId: actionId, id: item.id }]
+			}
+			props.patchVersionData(args)
+		}
 	}
 
 	const [filterState, setFilterState] = React.useState({ kids: false })
 
 	const handleFilterChange = (filter, value) => {
-		console.log(value)
 		switch (filter) {
 			case filters.kids:
 				setFilterState((prevState) => {
@@ -154,7 +169,6 @@ function ListBuilder(props) {
 	}
 
 	React.useEffect(() => {
-		console.log('fiting filter change effect')
 		if (hasMountedRef.current) {
 			//props.setHasNextPage(true)
 
@@ -243,7 +257,7 @@ function ListBuilder(props) {
 					isNextPageLoading={isNextPageLoading}
 					items={isChannels ? props.channels : props.videos}
 					loadNextPage={_loadNextPage}
-					handleAction={(args) => handleAction(args)}
+					handleActionButtonClick={handleActionButtonClick}
 				/>
 			</Grid>
 			<WarningModal

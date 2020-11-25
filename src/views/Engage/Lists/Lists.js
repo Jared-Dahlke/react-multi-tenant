@@ -301,6 +301,7 @@ const Version = (props) => {
 								icon={<Icon icon={'file-download'} size='lg' />}
 								size='sm'
 								block
+								disabled
 								onClick={() => props.handleEditClick(props.data)}
 							>
 								Edit

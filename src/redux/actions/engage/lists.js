@@ -112,6 +112,20 @@ export const deleteAllVersionData = (versionId) => {
 	}
 }
 
+export const deleteVersionDataItem = (args) => {
+	let versionId = args.versionId
+	let id = args.id
+	let url = `${apiBase}/smart-list/version/${versionId}/data/${id}`
+	return (dispatch) => {
+		axios
+			.delete(url)
+			.then((response) => {})
+			.catch((error) => {
+				console.error('delete version data item error', error)
+			})
+	}
+}
+
 export function setIsDownloadingExcel(isDownloadingExcel) {
 	return {
 		type: SET_IS_DOWNLOADING_EXCEL,

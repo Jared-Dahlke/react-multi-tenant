@@ -74,8 +74,8 @@ function CreateNewListModal(props) {
 	const handleCreateClick = (values) => {
 		let list = {
 			smartListName: values.smartListName,
-			objectiveId: values.objectiveId,
-			smartListData: [{ id: 'UCu-sMNXPu_mqjFVbR9YF7JA', action: 'target' }]
+			objectiveId: values.objectiveId
+			//	smartListData: [{ id: 'UCu-sMNXPu_mqjFVbR9YF7JA', action: 'target' }]
 		}
 
 		let data = {
