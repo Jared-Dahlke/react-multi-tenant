@@ -18,8 +18,8 @@ export function fetchVideos(args) {
 		try {
 			const result = await defaultAxios({
 				method: 'POST',
-				url: url
-				//params: { q: 'zebras', page: pageNumber }
+				url: url,
+				data: args.filters
 			})
 			//	const result = await defaultAxios.get(url, {)
 
@@ -62,7 +62,8 @@ export function fetchChannels(args) {
 		try {
 			const result = await defaultAxios({
 				method: 'POST',
-				url: url
+				url: url,
+				data: args.filters
 				//params: { q: 'zebras', page: pageNumber }
 			})
 			//	const result = await defaultAxios.get(url, {)

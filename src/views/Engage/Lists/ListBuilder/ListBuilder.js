@@ -81,7 +81,8 @@ function ListBuilder(props) {
 		let pageNum = Math.round(index / 100)
 		let params = {
 			versionId: createdListVersion.versionId,
-			pageNumber: pageNum < 1 ? 1 : pageNum + 1
+			pageNumber: pageNum < 1 ? 1 : pageNum + 1,
+			filters: filterState
 		}
 		if (isChannels) {
 			props.fetchChannels(params)
@@ -90,12 +91,19 @@ function ListBuilder(props) {
 		}
 	}
 
+	const filters = {
+		kids: 'kids',
+		categories: 'categories',
+		languages: 'languages',
+		countries: 'countries'
+	}
+
 	const [showWarning, setShowWarning] = React.useState(false)
 
 	const executeToggle = () => {
 		setIsChannels((prevState) => !prevState)
 		setShowWarning(false)
-		props.deleteAllVersionData(createdListVersion)
+		//props.deleteAllVersionData(createdListVersion)
 	}
 
 	const handleAction = (args) => {
@@ -104,10 +112,47 @@ function ListBuilder(props) {
 		props.patchVersionData(args)
 	}
 
-	React.useEffect(() => {
-		if (isNextPageLoading) {
+	const [filterState, setFilterState] = React.useState({ kids: false })
+
+	const handleFilterChange = (filter, value) => {
+		console.log(value)
+		switch (filter) {
+			case filters.kids:
+				setFilterState({ kids: value })
+				break
+			case filters.countries:
+				let countries = []
+				for (const country of value) {
+					countries.push({ countryCode: country })
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						countries
+					}
+				})
+
+			default:
+				break
 		}
-	}, [isNextPageLoading])
+	}
+
+	React.useEffect(() => {
+		console.log('fiting filter change effect')
+		props.removeAllChannels()
+		props.removeAllVideos()
+		/* let params = {
+			versionId: createdListVersion.versionId,
+			pageNumber: 1,
+			filters: filterState
+		}
+
+		if (isChannels) {
+			props.fetchChannels(params)
+		} else {
+			props.fetchVideos(params)
+		} */
+	}, [filterState])
 
 	return (
 		<Grid container spacing={3}>
@@ -128,34 +173,52 @@ function ListBuilder(props) {
 					style={{ backgroundColor: neutralLightColor }}
 				>
 					<Grid container spacing={3}>
+						{isChannels && (
+							<Grid item xs={12}>
+								<TagPicker
+									data={props.filterCountries}
+									labelKey={'countryName'}
+									valueKey={'countryCode'}
+									block
+									virtualized={true}
+									placeholder='Countries'
+									onChange={(val) => {
+										handleFilterChange(filters.countries, val)
+									}}
+								/>
+							</Grid>
+						)}
+
+						{!isChannels && (
+							<>
+								<Grid item xs={12}>
+									<TagPicker
+										data={props.filterLanguages}
+										labelKey={'languageName'}
+										valueKey={'languageCode'}
+										block
+										virtualized={true}
+										placeholder='Languages'
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TagPicker
+										data={props.filterCategories}
+										labelKey={'categoryName'}
+										valueKey={'categoryCode'}
+										block
+										virtualized={true}
+										placeholder='Categories'
+									/>
+								</Grid>
+							</>
+						)}
 						<Grid item xs={12}>
-							<TagPicker
-								data={props.filterCountries}
-								labelKey={'countryName'}
-								valueKey={'countryCode'}
-								block
-								virtualized={true}
-								placeholder='Countries'
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TagPicker
-								data={props.filterLanguages}
-								labelKey={'languageName'}
-								valueKey={'languageCode'}
-								block
-								virtualized={true}
-								placeholder='Languages'
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TagPicker
-								data={props.filterCategories}
-								labelKey={'categoryName'}
-								valueKey={'categoryCode'}
-								block
-								virtualized={true}
-								placeholder='Categories'
+							<Toggle
+								checkedChildren='Only Kids Content'
+								unCheckedChildren='No Kids Content'
+								onChange={(bool) => handleFilterChange(filters.kids, bool)}
+								//	checked={!isChannels}
 							/>
 						</Grid>
 					</Grid>
