@@ -100,6 +100,18 @@ export const patchVersionData = (args) => {
 	}
 }
 
+export const deleteAllVersionData = (versionId) => {
+	let url = `${apiBase}/smart-list/version/${versionId}/data`
+	return (dispatch) => {
+		axios
+			.delete(url)
+			.then((response) => {})
+			.catch((error) => {
+				console.error('delete all version error', error)
+			})
+	}
+}
+
 export function setIsDownloadingExcel(isDownloadingExcel) {
 	return {
 		type: SET_IS_DOWNLOADING_EXCEL,

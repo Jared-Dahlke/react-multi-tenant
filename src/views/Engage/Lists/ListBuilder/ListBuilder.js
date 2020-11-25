@@ -24,7 +24,10 @@ import {
 	fetchFilterLanguages
 } from '../../../../redux/actions/engage/filters'
 
-import { patchVersionData } from '../../../../redux/actions/engage/lists'
+import {
+	patchVersionData,
+	deleteAllVersionData
+} from '../../../../redux/actions/engage/lists'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
@@ -50,12 +53,13 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
-		setHasNextPage: (bool) => dispatch(setHasNextPage(bool))
+		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
+		deleteAllVersionData: (versionId) =>
+			dispatch(deleteAllVersionData(versionId))
 	}
 }
 
 function ListBuilder(props) {
-	console.log(props)
 	const history = useHistory()
 	if (!props.location.state || props.location.state.from !== 'lists') {
 		history.push(routes.app.engage.lists.lists.path)
@@ -72,7 +76,6 @@ function ListBuilder(props) {
 	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
 
 	React.useEffect(() => {
-		console.log('firing fetch filters effect')
 		props.removeAllChannels()
 		props.removeAllVideos()
 		props.fetchFilterCategories()
@@ -81,7 +84,6 @@ function ListBuilder(props) {
 	}, [])
 
 	const _loadNextPage = (index) => {
-		console.log('loadnextPage')
 		setIsNextPageLoading(true)
 		props.setHasNextPage(true) // TODO: make this dynamic
 		setIsNextPageLoading(false)
@@ -110,7 +112,9 @@ function ListBuilder(props) {
 	const executeToggle = () => {
 		setIsChannels((prevState) => !prevState)
 		setShowWarning(false)
-		//props.deleteAllVersionData(createdListVersion)
+		props.removeAllChannels()
+		props.removeAllVideos()
+		props.deleteAllVersionData(createdListVersion.versionId)
 	}
 
 	const handleAction = (args) => {
@@ -159,19 +163,7 @@ function ListBuilder(props) {
 
 			_loadNextPage(0)
 		}
-
 		hasMountedRef.current = true
-		/* let params = {
-			versionId: createdListVersion.versionId,
-			pageNumber: 1,
-			filters: filterState
-		}
-
-		if (isChannels) {
-			props.fetchChannels(params)
-		} else {
-			props.fetchVideos(params)
-		} */
 	}, [filterState])
 
 	return (
