@@ -6,6 +6,8 @@ import ResultTable from './ResultTable'
 import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import WarningModal from './WarningModal'
+import TagPicker from 'rsuite/lib/TagPicker'
+import Panel from 'rsuite/lib/Panel'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -22,12 +24,16 @@ import {
 } from '../../../../redux/actions/engage/filters'
 
 import { patchVersionData } from '../../../../redux/actions/engage/lists'
+import { neutralLightColor } from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
 	return {
 		videos: state.videos,
 		channels: state.channels,
-		brandProfiles: state.brandProfiles
+		brandProfiles: state.brandProfiles,
+		filterCountries: state.engage.filterCountries,
+		filterLanguages: state.engage.filterLanguages,
+		filterCategories: state.engage.filterCategories
 	}
 }
 
@@ -114,7 +120,49 @@ function ListBuilder(props) {
 					checked={!isChannels}
 				/>
 			</Grid>
-			<Grid item xs={12}>
+
+			<Grid item xs={12} md={3}>
+				<Panel
+					bordered
+					header='Filters'
+					style={{ backgroundColor: neutralLightColor }}
+				>
+					<Grid container spacing={3}>
+						<Grid item xs={12}>
+							<TagPicker
+								data={props.filterCountries}
+								labelKey={'countryName'}
+								valueKey={'countryCode'}
+								block
+								virtualized={true}
+								placeholder='Countries'
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TagPicker
+								data={props.filterLanguages}
+								labelKey={'languageName'}
+								valueKey={'languageCode'}
+								block
+								virtualized={true}
+								placeholder='Languages'
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TagPicker
+								data={props.filterCategories}
+								labelKey={'categoryName'}
+								valueKey={'categoryCode'}
+								block
+								virtualized={true}
+								placeholder='Categories'
+							/>
+						</Grid>
+					</Grid>
+				</Panel>
+			</Grid>
+
+			<Grid item xs={9}>
 				<ResultTable
 					hasNextPage={hasNextPage}
 					isNextPageLoading={isNextPageLoading}
