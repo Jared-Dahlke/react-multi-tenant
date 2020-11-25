@@ -5,10 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Radio from 'rsuite/lib/Radio'
 import RadioGroup from 'rsuite/lib/RadioGroup'
 import Panel from 'rsuite/lib/Panel'
-import {
-	neutralExtraLightColor,
-	neutralLightColor
-} from '../../../../assets/jss/colorContants'
+import { neutralLightColor } from '../../../../assets/jss/colorContants'
 
 export default function ResultTable({
 	// Are there more items to load?

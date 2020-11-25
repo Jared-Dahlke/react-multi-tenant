@@ -14,7 +14,8 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setChannels
+	setChannels,
+	setHasNextPage
 } from '../../../../redux/actions/discover/channels'
 
 import {
@@ -33,7 +34,8 @@ const mapStateToProps = (state) => {
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
-		filterCategories: state.engage.filterCategories
+		filterCategories: state.engage.filterCategories,
+		hasNextPage: state.hasNextPage
 	}
 }
 
@@ -47,15 +49,19 @@ const mapDispatchToProps = (dispatch) => {
 		removeAllChannels: () => dispatch(removeAllChannels()),
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
-		fetchFilterLanguages: () => dispatch(fetchFilterLanguages())
+		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
+		setHasNextPage: (bool) => dispatch(setHasNextPage(bool))
 	}
 }
 
 function ListBuilder(props) {
+	console.log(props)
 	const history = useHistory()
 	if (!props.location.state || props.location.state.from !== 'lists') {
 		history.push(routes.app.engage.lists.lists.path)
 	}
+
+	const hasMountedRef = React.useRef(false)
 
 	const [createdListVersion, setCreatedListVersion] = React.useState(
 		props.location.state.createdListVersion
@@ -63,10 +69,10 @@ function ListBuilder(props) {
 
 	const [isChannels, setIsChannels] = React.useState(true)
 
-	const [hasNextPage, setHasNextPage] = React.useState(true)
 	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
 
 	React.useEffect(() => {
+		console.log('firing fetch filters effect')
 		props.removeAllChannels()
 		props.removeAllVideos()
 		props.fetchFilterCategories()
@@ -75,13 +81,15 @@ function ListBuilder(props) {
 	}, [])
 
 	const _loadNextPage = (index) => {
+		console.log('loadnextPage')
 		setIsNextPageLoading(true)
-		setHasNextPage(true) // TODO: make this dynamic
+		props.setHasNextPage(true) // TODO: make this dynamic
 		setIsNextPageLoading(false)
 		let pageNum = Math.round(index / 100)
 		let params = {
 			versionId: createdListVersion.versionId,
-			pageNumber: pageNum < 1 ? 1 : pageNum + 1
+			pageNumber: pageNum < 1 ? 1 : pageNum + 1,
+			filters: filterState
 		}
 		if (isChannels) {
 			props.fetchChannels(params)
@@ -90,12 +98,19 @@ function ListBuilder(props) {
 		}
 	}
 
+	const filters = {
+		kids: 'kids',
+		categories: 'categories',
+		languages: 'languages',
+		countries: 'countries'
+	}
+
 	const [showWarning, setShowWarning] = React.useState(false)
 
 	const executeToggle = () => {
 		setIsChannels((prevState) => !prevState)
 		setShowWarning(false)
-		props.deleteAllVersionData(createdListVersion)
+		//props.deleteAllVersionData(createdListVersion)
 	}
 
 	const handleAction = (args) => {
@@ -104,10 +119,60 @@ function ListBuilder(props) {
 		props.patchVersionData(args)
 	}
 
-	React.useEffect(() => {
-		if (isNextPageLoading) {
+	const [filterState, setFilterState] = React.useState({ kids: false })
+
+	const handleFilterChange = (filter, value) => {
+		console.log(value)
+		switch (filter) {
+			case filters.kids:
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						kids: value
+					}
+				})
+				break
+			case filters.countries:
+				let countries = []
+				for (const country of value) {
+					countries.push({ countryCode: country })
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						countries
+					}
+				})
+
+			default:
+				break
 		}
-	}, [isNextPageLoading])
+	}
+
+	React.useEffect(() => {
+		console.log('fiting filter change effect')
+		if (hasMountedRef.current) {
+			//props.setHasNextPage(true)
+
+			props.removeAllChannels()
+			props.removeAllVideos()
+
+			_loadNextPage(0)
+		}
+
+		hasMountedRef.current = true
+		/* let params = {
+			versionId: createdListVersion.versionId,
+			pageNumber: 1,
+			filters: filterState
+		}
+
+		if (isChannels) {
+			props.fetchChannels(params)
+		} else {
+			props.fetchVideos(params)
+		} */
+	}, [filterState])
 
 	return (
 		<Grid container spacing={3}>
@@ -128,34 +193,52 @@ function ListBuilder(props) {
 					style={{ backgroundColor: neutralLightColor }}
 				>
 					<Grid container spacing={3}>
+						{isChannels && (
+							<Grid item xs={12}>
+								<TagPicker
+									data={props.filterCountries}
+									labelKey={'countryName'}
+									valueKey={'countryCode'}
+									block
+									virtualized={true}
+									placeholder='Countries'
+									onChange={(val) => {
+										handleFilterChange(filters.countries, val)
+									}}
+								/>
+							</Grid>
+						)}
+
+						{!isChannels && (
+							<>
+								<Grid item xs={12}>
+									<TagPicker
+										data={props.filterLanguages}
+										labelKey={'languageName'}
+										valueKey={'languageCode'}
+										block
+										virtualized={true}
+										placeholder='Languages'
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TagPicker
+										data={props.filterCategories}
+										labelKey={'categoryName'}
+										valueKey={'categoryCode'}
+										block
+										virtualized={true}
+										placeholder='Categories'
+									/>
+								</Grid>
+							</>
+						)}
 						<Grid item xs={12}>
-							<TagPicker
-								data={props.filterCountries}
-								labelKey={'countryName'}
-								valueKey={'countryCode'}
-								block
-								virtualized={true}
-								placeholder='Countries'
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TagPicker
-								data={props.filterLanguages}
-								labelKey={'languageName'}
-								valueKey={'languageCode'}
-								block
-								virtualized={true}
-								placeholder='Languages'
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TagPicker
-								data={props.filterCategories}
-								labelKey={'categoryName'}
-								valueKey={'categoryCode'}
-								block
-								virtualized={true}
-								placeholder='Categories'
+							<Toggle
+								checkedChildren='Only Kids Content'
+								unCheckedChildren='No Kids Content'
+								onChange={(bool) => handleFilterChange(filters.kids, bool)}
+								//	checked={!isChannels}
 							/>
 						</Grid>
 					</Grid>
@@ -164,7 +247,7 @@ function ListBuilder(props) {
 
 			<Grid item xs={9}>
 				<ResultTable
-					hasNextPage={hasNextPage}
+					hasNextPage={props.hasNextPage}
 					isNextPageLoading={isNextPageLoading}
 					items={isChannels ? props.channels : props.videos}
 					loadNextPage={_loadNextPage}

@@ -103,7 +103,12 @@ module.exports = override(
 				'@nav-item-click-font-color': '#FFF',
 
 				'@dropdown-link-color': '#FFF',
-				'@dropdown-link-active-color': '#FFF'
+				'@dropdown-link-active-color': '#FFF',
+
+				//toggle
+				'@toggle-default-bg': neutralExtraLightColor,
+				'@toggle-inner-text-color': '#FFF',
+				'@toggle-default-hover-bg': neutralLightColor
 			}
 		}
 	})
