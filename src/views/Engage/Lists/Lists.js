@@ -80,6 +80,7 @@ const MyList = (props) => {
 					handleDownloadClick={props.handleDownloadClick}
 					isDownloadingExcel={props.isDownloadingExcel}
 					isDownloadingExcelVersionId={props.isDownloadingExcelVersionId}
+					handleEditClick={props.handleEditClick}
 				/>
 			}
 			bordered
@@ -102,6 +103,7 @@ const MyList = (props) => {
 									isDownloadingExcelVersionId={
 										props.isDownloadingExcelVersionId
 									}
+									handleEditClick={props.handleEditClick}
 								/>
 							</div>
 						)
@@ -300,6 +302,7 @@ const Version = (props) => {
 								size='sm'
 								block
 								disabled
+								onClick={() => props.handleEditClick(props.data)}
 							>
 								Edit
 							</IconButton>
@@ -404,6 +407,13 @@ function Lists(props) {
 
 	const handleActivateClick = (payload) => {
 		props.activateListVersion(payload)
+	}
+
+	const handleEditClick = (item) => {
+		history.push(routes.app.engage.lists.listBuilder.path, {
+			from: 'lists',
+			createdListVersion: props.createdListVersion
+		})
 	}
 
 	const archivedCount = React.useMemo(() => {
@@ -520,6 +530,7 @@ function Lists(props) {
 									handleArchiveClick={handleArchiveClick}
 									handleDownloadClick={handleDownloadClick}
 									handleActivateClick={handleActivateClick}
+									handleEditClick={handleEditClick}
 									isDownloadingExcel={props.isDownloadingExcel}
 									isDownloadingExcelVersionId={
 										props.isDownloadingExcelVersionId

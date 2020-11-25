@@ -62,6 +62,7 @@ module.exports = override(
 				'@btn-link-color': accentColor,
 				'@btn-subtle-color': '#FFF',
 				'@btn-subtle-active-color': accentColor,
+				'@btn-default-active-bg': '#EC3876',
 				'@btn-subtle-active-default-color': accentColor,
 
 				//messages
@@ -76,7 +77,7 @@ module.exports = override(
 				'@table-head-font-color': '#FFF',
 				//panel
 				'@panel-heading-color': '#FFF',
-				'@panel-border': '1px solid' + neutralExtraLightColor,
+				'@panel-border': '1px solid ' + neutralExtraLightColor,
 
 				//steps
 				//	'@steps-default-color': '#FFF',

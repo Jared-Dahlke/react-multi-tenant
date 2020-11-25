@@ -24,7 +24,11 @@ import {
 	fetchFilterLanguages
 } from '../../../../redux/actions/engage/filters'
 
-import { patchVersionData } from '../../../../redux/actions/engage/lists'
+import {
+	patchVersionData,
+	deleteAllVersionData,
+	deleteVersionDataItem
+} from '../../../../redux/actions/engage/lists'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
@@ -50,12 +54,14 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
-		setHasNextPage: (bool) => dispatch(setHasNextPage(bool))
+		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
+		deleteAllVersionData: (versionId) =>
+			dispatch(deleteAllVersionData(versionId)),
+		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params))
 	}
 }
 
 function ListBuilder(props) {
-	console.log(props)
 	const history = useHistory()
 	if (!props.location.state || props.location.state.from !== 'lists') {
 		history.push(routes.app.engage.lists.lists.path)
@@ -72,7 +78,6 @@ function ListBuilder(props) {
 	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
 
 	React.useEffect(() => {
-		console.log('firing fetch filters effect')
 		props.removeAllChannels()
 		props.removeAllVideos()
 		props.fetchFilterCategories()
@@ -81,7 +86,6 @@ function ListBuilder(props) {
 	}, [])
 
 	const _loadNextPage = (index) => {
-		console.log('loadnextPage')
 		setIsNextPageLoading(true)
 		props.setHasNextPage(true) // TODO: make this dynamic
 		setIsNextPageLoading(false)
@@ -110,19 +114,34 @@ function ListBuilder(props) {
 	const executeToggle = () => {
 		setIsChannels((prevState) => !prevState)
 		setShowWarning(false)
-		//props.deleteAllVersionData(createdListVersion)
+		props.removeAllChannels()
+		props.removeAllVideos()
+		props.deleteAllVersionData(createdListVersion.versionId)
 	}
 
-	const handleAction = (args) => {
-		args.versionId = createdListVersion.versionId
-		args.data = [{ actionId: args.action, id: args.id }]
-		props.patchVersionData(args)
+	const handleActionButtonClick = (actionId, item) => {
+		let unSelecting = item.actionId === actionId
+		let versionId = createdListVersion.versionId
+		if (unSelecting) {
+			delete item.actionId
+			let _args = {
+				versionId: versionId,
+				id: item.id
+			}
+			props.deleteVersionDataItem(_args)
+		} else {
+			item.actionId = actionId
+			let args = {
+				versionId: versionId,
+				data: [{ actionId: actionId, id: item.id }]
+			}
+			props.patchVersionData(args)
+		}
 	}
 
 	const [filterState, setFilterState] = React.useState({ kids: false })
 
 	const handleFilterChange = (filter, value) => {
-		console.log(value)
 		switch (filter) {
 			case filters.kids:
 				setFilterState((prevState) => {
@@ -150,7 +169,6 @@ function ListBuilder(props) {
 	}
 
 	React.useEffect(() => {
-		console.log('fiting filter change effect')
 		if (hasMountedRef.current) {
 			//props.setHasNextPage(true)
 
@@ -159,19 +177,7 @@ function ListBuilder(props) {
 
 			_loadNextPage(0)
 		}
-
 		hasMountedRef.current = true
-		/* let params = {
-			versionId: createdListVersion.versionId,
-			pageNumber: 1,
-			filters: filterState
-		}
-
-		if (isChannels) {
-			props.fetchChannels(params)
-		} else {
-			props.fetchVideos(params)
-		} */
 	}, [filterState])
 
 	return (
@@ -251,7 +257,7 @@ function ListBuilder(props) {
 					isNextPageLoading={isNextPageLoading}
 					items={isChannels ? props.channels : props.videos}
 					loadNextPage={_loadNextPage}
-					handleAction={(args) => handleAction(args)}
+					handleActionButtonClick={handleActionButtonClick}
 				/>
 			</Grid>
 			<WarningModal
