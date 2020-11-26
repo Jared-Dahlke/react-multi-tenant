@@ -162,6 +162,7 @@ function ListBuilder(props) {
 						countries
 					}
 				})
+				break
 			case filters.languages:
 				let languages = []
 				for (const language of value) {
@@ -173,6 +174,7 @@ function ListBuilder(props) {
 						languages
 					}
 				})
+				break
 			case filters.categories:
 				let categories = []
 				for (const category of value) {
@@ -184,6 +186,7 @@ function ListBuilder(props) {
 						categories
 					}
 				})
+				break
 
 			default:
 				break

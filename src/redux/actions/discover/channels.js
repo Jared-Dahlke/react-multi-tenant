@@ -11,7 +11,14 @@ import {
 
 const apiBase = config.api.listBuilderUrl
 
+let fetchVideosRequest = null
+
 export function fetchVideos(args) {
+	if (fetchVideosRequest) {
+		fetchVideosRequest.cancel()
+	}
+	fetchVideosRequest = axios.CancelToken.source()
+
 	let url =
 		apiBase +
 		`/smart-list/video?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
@@ -20,7 +27,8 @@ export function fetchVideos(args) {
 			const result = await defaultAxios({
 				method: 'POST',
 				url: url,
-				data: args.filters
+				data: args.filters,
+				cancelToken: fetchVideosRequest.token
 			})
 			//	const result = await defaultAxios.get(url, {)
 
@@ -65,13 +73,13 @@ export function removeAllChannels() {
 	}
 }
 
-let ajaxRequest = null
+let fetchChannelsRequest = null
 
 export function fetchChannels(args) {
-	if (ajaxRequest) {
-		ajaxRequest.cancel()
+	if (fetchChannelsRequest) {
+		fetchChannelsRequest.cancel()
 	}
-	ajaxRequest = axios.CancelToken.source()
+	fetchChannelsRequest = axios.CancelToken.source()
 
 	let url =
 		apiBase +
@@ -81,7 +89,7 @@ export function fetchChannels(args) {
 			method: 'POST',
 			url: url,
 			data: args.filters,
-			cancelToken: ajaxRequest.token
+			cancelToken: fetchChannelsRequest.token
 		})
 		try {
 			if (result.status === 200) {
