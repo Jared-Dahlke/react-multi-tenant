@@ -162,6 +162,31 @@ function ListBuilder(props) {
 						countries
 					}
 				})
+				break
+			case filters.languages:
+				let languages = []
+				for (const language of value) {
+					languages.push({ languageCode: language })
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						languages
+					}
+				})
+				break
+			case filters.categories:
+				let categories = []
+				for (const category of value) {
+					categories.push({ categoryId: Number(category) })
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						categories
+					}
+				})
+				break
 
 			default:
 				break
@@ -225,16 +250,22 @@ function ListBuilder(props) {
 										block
 										virtualized={true}
 										placeholder='Languages'
+										onChange={(val) => {
+											handleFilterChange(filters.languages, val)
+										}}
 									/>
 								</Grid>
 								<Grid item xs={12}>
 									<TagPicker
 										data={props.filterCategories}
 										labelKey={'categoryName'}
-										valueKey={'categoryCode'}
+										valueKey={'categoryId'}
 										block
 										virtualized={true}
 										placeholder='Categories'
+										onChange={(val) => {
+											handleFilterChange(filters.categories, val)
+										}}
 									/>
 								</Grid>
 							</>
@@ -244,7 +275,6 @@ function ListBuilder(props) {
 								checkedChildren='Only Kids Content'
 								unCheckedChildren='No Kids Content'
 								onChange={(bool) => handleFilterChange(filters.kids, bool)}
-								//	checked={!isChannels}
 							/>
 						</Grid>
 					</Grid>
