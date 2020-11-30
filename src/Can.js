@@ -4,9 +4,6 @@ var encryptor = require('simple-encryptor')(
 
 export const userCan = (event) => {
 	const myperms = encryptor.decrypt(localStorage.getItem('permissions'))
-	console.log('myperms')
-	console.log(myperms)
-
 	if (!myperms) return false
 	return myperms.includes(event)
 }

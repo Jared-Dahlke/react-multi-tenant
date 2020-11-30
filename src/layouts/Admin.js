@@ -6,7 +6,7 @@ import styles from '../assets/jss/material-dashboard-react/layouts/adminStyle.js
 import { connect } from 'react-redux'
 import { setUserId, setLoggedInUserPermissions } from '../redux/actions/auth.js'
 import { fetchSiteData } from '../redux/actions/accounts.js'
-import { modifiedRoutes, routes } from '../routes'
+import { routes } from '../routes'
 import { userCan, perms } from '../Can'
 import ProtectedRoute from './ProtectedRoute'
 var encryptor = require('simple-encryptor')(
