@@ -16,7 +16,9 @@ import {
 	fetchLists,
 	archiveList,
 	downloadExcelList,
-	activateListVersion
+	activateListVersion,
+	cloneListVersion,
+	setPostListSuccess
 } from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { neutralLightColor } from '../../../assets/jss/colorContants.js'
@@ -37,7 +39,12 @@ const mapStateToProps = (state) => {
 		isFetchingLists: state.engage.isFetchingLists,
 		fetchListsSuccess: state.engage.fetchListsSuccess,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
-		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId
+		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
+
+		isPostingList: state.engage.isPostingList,
+		postListSuccess: state.engage.postListSuccess,
+		isPostingListVersionId: state.engage.isPostingListVersionId,
+		createdListVersion: state.engage.createdListVersion
 	}
 }
 
@@ -46,7 +53,9 @@ const mapDispatchToProps = (dispatch) => {
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 		archiveList: (payload) => dispatch(archiveList(payload)),
 		downloadExcelList: (payload) => dispatch(downloadExcelList(payload)),
-		activateListVersion: (payload) => dispatch(activateListVersion(payload))
+		activateListVersion: (payload) => dispatch(activateListVersion(payload)),
+		cloneListVersion: (payload) => dispatch(cloneListVersion(payload)),
+		setPostListSuccess: (bool) => dispatch(setPostListSuccess(bool))
 	}
 }
 
@@ -80,6 +89,8 @@ const MyList = (props) => {
 					handleDownloadClick={props.handleDownloadClick}
 					isDownloadingExcel={props.isDownloadingExcel}
 					isDownloadingExcelVersionId={props.isDownloadingExcelVersionId}
+					isPostingList={props.isPostingList}
+					isPostingListVersionId={props.isPostingListVersionId}
 					handleEditClick={props.handleEditClick}
 				/>
 			}
@@ -104,6 +115,8 @@ const MyList = (props) => {
 										props.isDownloadingExcelVersionId
 									}
 									handleEditClick={props.handleEditClick}
+									isPostingList={props.isPostingList}
+									isPostingListVersionId={props.isPostingListVersionId}
 								/>
 							</div>
 						)
@@ -298,10 +311,13 @@ const Version = (props) => {
 							</IconButton>
 							<IconButton
 								appearance='ghost'
-								icon={<Icon icon={'file-download'} size='lg' />}
+								icon={<Icon icon={'edit'} size='lg' />}
 								size='sm'
 								block
-								disabled
+								loading={
+									props.isPostingList &&
+									props.isPostingListVersionId === props.data.versionId
+								}
 								onClick={() => props.handleEditClick(props.data)}
 							>
 								Edit
@@ -370,6 +386,23 @@ function Lists(props) {
 		}
 	}, [fetchLists, accounts])
 
+	let postListSuccess = props.postListSuccess
+	React.useEffect(() => {
+		if (postListSuccess) {
+			history.push(routes.app.engage.lists.listBuilder.path, {
+				from: 'lists',
+				createdListVersion: props.createdListVersion
+			})
+		}
+	}, [postListSuccess])
+
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			props.setPostListSuccess(false)
+		}
+	}, [])
+
 	const handleUploadNewList = () => {
 		history.push(routes.app.engage.lists.uploadList.path)
 	}
@@ -410,10 +443,11 @@ function Lists(props) {
 	}
 
 	const handleEditClick = (item) => {
-		history.push(routes.app.engage.lists.listBuilder.path, {
-			from: 'lists',
-			createdListVersion: props.createdListVersion
-		})
+		let params = {
+			versionId: item.versionId,
+			smartListName: item.smartListName
+		}
+		props.cloneListVersion(params)
 	}
 
 	const archivedCount = React.useMemo(() => {
@@ -535,6 +569,8 @@ function Lists(props) {
 									isDownloadingExcelVersionId={
 										props.isDownloadingExcelVersionId
 									}
+									isPostingList={props.isPostingList}
+									isPostingListVersionId={props.isPostingListVersionId}
 									viewAll={viewingAll}
 								/>
 							</animated.div>
