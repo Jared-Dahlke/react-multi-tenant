@@ -4,7 +4,7 @@ import {
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
 	SET_HAS_NEXT_PAGE
-} from '../../action-types/discover/channels'
+} from '../../action-types/engage/listBuilder'
 
 export function videos(state = [], action) {
 	switch (action.type) {

@@ -11,6 +11,8 @@ import {
 	createdListVersion
 } from './lists'
 
+import { videos, channels, hasNextPage } from './listBuilder'
+
 import { filterCountries, filterCategories, filterLanguages } from './filters'
 
 export default combineReducers({
@@ -25,5 +27,8 @@ export default combineReducers({
 	createdListVersion,
 	filterCountries,
 	filterCategories,
-	filterLanguages
+	filterLanguages,
+	videos,
+	channels,
+	hasNextPage
 })

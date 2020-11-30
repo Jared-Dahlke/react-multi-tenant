@@ -16,7 +16,7 @@ import {
 	removeAllChannels,
 	setChannels,
 	setHasNextPage
-} from '../../../../redux/actions/discover/channels'
+} from '../../../../redux/actions/engage/listBuilder'
 
 import {
 	fetchFilterCategories,
@@ -33,13 +33,13 @@ import { neutralLightColor } from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
 	return {
-		videos: state.videos,
-		channels: state.channels,
+		videos: state.engage.videos,
+		channels: state.engage.channels,
+		hasNextPage: state.engage.hasNextPage,
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
-		filterCategories: state.engage.filterCategories,
-		hasNextPage: state.hasNextPage
+		filterCategories: state.engage.filterCategories
 	}
 }
 
