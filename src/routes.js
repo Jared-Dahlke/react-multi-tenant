@@ -191,6 +191,7 @@ export const modifiedRoutes = {
 			engage: {
 				path: '/app/engage/lists',
 				component: Lists,
+				userCan: userCan(perms.ENGAGE_READ),
 				name: 'Lists',
 				subRoutes: [
 					{
@@ -213,7 +214,8 @@ export const modifiedRoutes = {
 			discover: {
 				path: '/app/discover/channelResearch',
 				name: 'Channel Research',
-				component: ChannelResearchTemp
+				component: ChannelResearchTemp,
+				userCan: userCan(perms.DISCOVER_READ)
 			},
 			settings_profile: {
 				path: '/app/settings/profile',
@@ -239,7 +241,7 @@ export const modifiedRoutes = {
 						path: '/app/settings/users/create',
 						name: 'Create',
 						component: CreateUser,
-						userCan : userCan(perms.USER_CREATE)
+						userCan: userCan(perms.USER_CREATE)
 					}
 				]
 			},
