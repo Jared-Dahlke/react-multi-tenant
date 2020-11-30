@@ -4,6 +4,7 @@ import {
 	SET_UPLOADED_LIST,
 	SET_POST_LIST_SUCCESS,
 	SET_IS_POSTING_LIST,
+	SET_IS_POSTING_LIST_VERSION_ID,
 	SET_IS_FETCHING_LISTS,
 	SET_FETCH_LISTS_SUCCESS,
 	SET_IS_DOWNLOADING_EXCEL,
@@ -74,6 +75,30 @@ export const postList = (data) => {
 			.then((response) => {
 				if (response.status === 200) {
 					response.data.smartListName = list.smartListName
+					dispatch(setCreatedListVersion(response.data))
+					dispatch(setIsPostingList(false))
+					dispatch(setPostListSuccess(true))
+				}
+			})
+			.catch((error) => {
+				dispatch(setIsPostingList(false))
+				console.error('create smartlist error', error)
+			})
+	}
+}
+
+export const cloneListVersion = (args) => {
+	let versionId = args.versionId
+	let smartListName = args.smartListName
+	let url = apiBase + `/smart-list/version/${versionId}/clone`
+	return (dispatch) => {
+		dispatch(setIsPostingList(true))
+		dispatch(setIsPostingListVersionId(versionId))
+		axios
+			.post(url)
+			.then((response) => {
+				if (response.status === 200) {
+					response.data.smartListName = smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
@@ -253,5 +278,12 @@ export function setIsPostingList(isPostingList) {
 	return {
 		type: SET_IS_POSTING_LIST,
 		isPostingList
+	}
+}
+
+export function setIsPostingListVersionId(isPostingListVersionId) {
+	return {
+		type: SET_IS_POSTING_LIST_VERSION_ID,
+		isPostingListVersionId
 	}
 }

@@ -3,6 +3,7 @@ import {
 	SET_LIST_ARCHIVED,
 	SET_UPLOADED_LIST,
 	SET_IS_POSTING_LIST,
+	SET_IS_POSTING_LIST_VERSION_ID,
 	SET_POST_LIST_SUCCESS,
 	SET_IS_FETCHING_LISTS,
 	SET_FETCH_LISTS_SUCCESS,
@@ -69,6 +70,15 @@ export function isPostingList(state = false, action) {
 	switch (action.type) {
 		case SET_IS_POSTING_LIST:
 			return action.isPostingList
+		default:
+			return state
+	}
+}
+
+export function isPostingListVersionId(state = null, action) {
+	switch (action.type) {
+		case SET_IS_POSTING_LIST_VERSION_ID:
+			return action.isPostingListVersionId
 		default:
 			return state
 	}
