@@ -13,17 +13,14 @@ import UserProfile from './views/UserProfile/UserProfile.js'
 import Account from './views/Account/Account'
 import UploadList from './views/Engage/Lists/UploadList'
 import CreateList from './views/Engage/Lists/CreateList'
-
 import ResetPassword from './pages/ResetPassword'
 import ChangePassword from './pages/ChangePassword'
 import Login from './pages/Login'
-
 import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
 import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
-
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
@@ -192,6 +189,7 @@ export const modifiedRoutes = {
 				path: '/app/engage/lists',
 				component: Lists,
 				name: 'Lists',
+				userCan: userCan(perms.ENGAGE_READ),
 				subRoutes: [
 					{
 						path: '/app/engage/lists/createList',

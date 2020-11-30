@@ -34,7 +34,6 @@ export default function ResultTable({
 
 	// Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
 	React.useEffect(() => {
-		console.log('running use effect loader')
 		// We only need to reset cached items when "sortOrder" changes.
 		// This effect will run on mount too; there's no need to reset in that case.
 		if (hasMountedRef.current) {

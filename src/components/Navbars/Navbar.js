@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -11,16 +10,13 @@ import Dropdown from 'rsuite/lib/Dropdown'
 import logo from '../../assets/img/sightly-logo.svg'
 import sidebarStyles from '../../assets/jss/material-dashboard-react/components/sidebarStyle.js'
 import { setAuthToken, setLoggedIn } from '../../redux/actions/auth'
-import styles from '../../assets/jss/material-dashboard-react/components/headerStyle.js'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { clearSiteData } from '../../redux/actions/accounts'
 import { perms, userCan } from '../../Can'
 import { routes, modifiedRoutes } from '../../routes'
-import Grid from '@material-ui/core/Grid'
 import SideBar from '../SideBar/SideBar'
 import IconButton from 'rsuite/lib/IconButton'
 
-const useStyles = makeStyles(styles)
 const useSidebarStyles = makeStyles(sidebarStyles)
 
 const mapDispatchToProps = (dispatch) => {
