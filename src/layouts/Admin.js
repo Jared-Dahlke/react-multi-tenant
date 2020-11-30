@@ -15,16 +15,30 @@ var encryptor = require('simple-encryptor')(
 
 const switchRoutes = (
 	<Switch>
-		<ProtectedRoute
+		<Route
 			path={routes.app.settings.brandMentality.path}
-			component={routes.app.settings.brandMentality.component}
-			canView={userCan(perms.BRAND_MENTALITY_READ)}
+			render={({ match: { url } }) => (
+				<>
+					<ProtectedRoute
+						path={routes.app.settings.brandMentality.path}
+						component={routes.app.settings.brandMentality.component}
+						canView={userCan(perms.BRAND_MENTALITY_READ)}
+					/>
+				</>
+			)}
 		/>
 
-		<ProtectedRoute
+		<Route
 			path={routes.app.discover.channelResearch.path}
-			component={routes.app.discover.channelResearch.component}
-			canView={userCan(perms.DISCOVER_READ)}
+			render={({ match: { url } }) => (
+				<>
+					<ProtectedRoute
+						path={routes.app.discover.channelResearch.path}
+						component={routes.app.discover.channelResearch.component}
+						canView={userCan(perms.DISCOVER_READ)}
+					/>
+				</>
+			)}
 		/>
 
 		<Route
@@ -90,10 +104,17 @@ const switchRoutes = (
 			component={routes.app.settings.profile.component}
 		/>
 
-		<ProtectedRoute
+		<Route
 			path={routes.app.settings.account.path}
-			component={routes.app.settings.account.component}
-			canView={userCan(perms.ACCOUNT_READ)}
+			render={({ match: { url } }) => (
+				<>
+					<ProtectedRoute
+						path={routes.app.settings.account.path}
+						component={routes.app.settings.account.component}
+						canView={userCan(perms.ACCOUNT_READ)}
+					/>
+				</>
+			)}
 		/>
 
 		<Route
