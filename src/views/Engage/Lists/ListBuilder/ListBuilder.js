@@ -156,6 +156,9 @@ function ListBuilder(props) {
 				break
 			case filters.countries:
 				let countries = []
+				if (!value) {
+					value = []
+				}
 				for (const country of value) {
 					countries.push({ countryCode: country })
 				}
@@ -168,6 +171,9 @@ function ListBuilder(props) {
 				break
 			case filters.languages:
 				let languages = []
+				if (!value) {
+					value = []
+				}
 				for (const language of value) {
 					languages.push({ languageCode: language })
 				}
@@ -180,6 +186,9 @@ function ListBuilder(props) {
 				break
 			case filters.categories:
 				let categories = []
+				if (!value) {
+					value = []
+				}
 				for (const category of value) {
 					categories.push({ categoryId: Number(category) })
 				}
