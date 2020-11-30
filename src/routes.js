@@ -192,6 +192,7 @@ export const modifiedRoutes = {
 				path: '/app/engage/lists',
 				component: Lists,
 				name: 'Lists',
+				userCan: userCan(perms.ENGAGE_READ),
 				subRoutes: [
 					{
 						path: '/app/engage/lists/createList',
