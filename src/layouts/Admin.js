@@ -180,6 +180,36 @@ const switchRoutes = (
 										</>
 									)}
 								/>
+
+								<Route
+									path={routes.app.settings.brandProfiles.admin.opinions.path}
+									render={({ match: { url } }) => (
+										<>
+											<ProtectedRoute
+												path={
+													routes.app.settings.brandProfiles.admin.opinions.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.opinions
+														.component
+												}
+												canView={userCan(perms.ADMIN_READ)}
+												exact
+											/>
+											<ProtectedRoute
+												path={
+													routes.app.settings.brandProfiles.admin.opinions
+														.create.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.opinions
+														.create.component
+												}
+												canView={userCan(perms.ADMIN_READ)}
+											/>
+										</>
+									)}
+								/>
 							</>
 						)}
 					/>
