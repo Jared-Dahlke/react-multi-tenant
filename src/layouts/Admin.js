@@ -16,6 +16,32 @@ var encryptor = require('simple-encryptor')(
 const switchRoutes = (
 	<Switch>
 		<Route
+			path={routes.app.homepage.path}
+			render={({ match: { url } }) => (
+				<>
+					<ProtectedRoute
+						path={routes.app.homepage.path}
+						component={routes.app.homepage.component}
+						canView={userCan(perms.HOME_READ)}
+					/>
+				</>
+			)}
+		/>
+
+		<Route
+			path={routes.app.measure.path}
+			render={({ match: { url } }) => (
+				<>
+					<ProtectedRoute
+						path={routes.app.measure.path}
+						component={routes.app.measure.component}
+						canView={true}
+					/>
+				</>
+			)}
+		/>
+
+		<Route
 			path={routes.app.settings.brandMentality.path}
 			render={({ match: { url } }) => (
 				<>
