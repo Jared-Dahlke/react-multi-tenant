@@ -29,7 +29,10 @@ import {
 	deleteAllVersionData,
 	deleteVersionDataItem
 } from '../../../../redux/actions/engage/lists'
-import { neutralLightColor } from '../../../../assets/jss/colorContants'
+import {
+	neutralLightColor,
+	neutralExtraLightColor
+} from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
 	return {
@@ -207,6 +210,9 @@ function ListBuilder(props) {
 
 	return (
 		<Grid container spacing={3}>
+			<Grid item xs={12} align='left'>
+				<h5>{createdListVersion.smartListName}</h5>
+			</Grid>
 			<Grid item xs={12}>
 				<Toggle
 					size='lg'
