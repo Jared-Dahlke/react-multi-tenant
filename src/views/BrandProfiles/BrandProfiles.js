@@ -108,11 +108,14 @@ function BrandProfiles(props) {
 			</Snackbar>
 
 			<GridItem xs={12} sm={12} md={8}>
-				<Grid container justify='flex-end'>
-					<Button appearance='link' onClick={handleAdminClick}>
-						Admin
-					</Button>
-				</Grid>
+				<UserCan do={perms.ADMIN_READ}>
+					<Grid container justify='flex-end'>
+						<Button appearance='link' onClick={handleAdminClick}>
+							Admin
+						</Button>
+					</Grid>
+				</UserCan>
+
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
 						<Grid container justify='flex-end'>
