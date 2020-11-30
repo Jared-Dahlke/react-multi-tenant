@@ -16,7 +16,7 @@ import {
 	removeAllChannels,
 	setChannels,
 	setHasNextPage
-} from '../../../../redux/actions/discover/channels'
+} from '../../../../redux/actions/engage/listBuilder'
 
 import {
 	fetchFilterCategories,
@@ -29,17 +29,20 @@ import {
 	deleteAllVersionData,
 	deleteVersionDataItem
 } from '../../../../redux/actions/engage/lists'
-import { neutralLightColor } from '../../../../assets/jss/colorContants'
+import {
+	neutralLightColor,
+	neutralExtraLightColor
+} from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
 	return {
-		videos: state.videos,
-		channels: state.channels,
+		videos: state.engage.videos,
+		channels: state.engage.channels,
+		hasNextPage: state.engage.hasNextPage,
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
-		filterCategories: state.engage.filterCategories,
-		hasNextPage: state.hasNextPage
+		filterCategories: state.engage.filterCategories
 	}
 }
 
@@ -207,6 +210,9 @@ function ListBuilder(props) {
 
 	return (
 		<Grid container spacing={3}>
+			<Grid item xs={12} align='left'>
+				<h5>{createdListVersion.smartListName}</h5>
+			</Grid>
 			<Grid item xs={12}>
 				<Toggle
 					size='lg'

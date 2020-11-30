@@ -175,7 +175,7 @@ const Version = (props) => {
 									justify='center'
 									style={{ textAlign: 'center' }}
 								>
-									{props.data.smartListId}
+									{props.data.smartListName}
 								</Grid>
 							</Grid>
 						</Grid>

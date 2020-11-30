@@ -66,7 +66,6 @@ export function setFetchListsSuccess(fetchListsSuccess) {
 export const postList = (data) => {
 	const list = data.list
 	const brandProfileId = data.brandProfileId
-	const accountId = data.accountId
 	let url = apiBase + `/brand-profile/${brandProfileId}/smart-list`
 	return (dispatch) => {
 		dispatch(setIsPostingList(true))
@@ -74,6 +73,7 @@ export const postList = (data) => {
 			.post(url, list)
 			.then((response) => {
 				if (response.status === 200) {
+					response.data.smartListName = list.smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
