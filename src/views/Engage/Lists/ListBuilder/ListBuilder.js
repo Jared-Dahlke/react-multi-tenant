@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import WarningModal from './WarningModal'
 import TagPicker from 'rsuite/lib/TagPicker'
 import Panel from 'rsuite/lib/Panel'
+import Button from 'rsuite/lib/Button'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -27,7 +28,8 @@ import {
 import {
 	patchVersionData,
 	deleteAllVersionData,
-	deleteVersionDataItem
+	deleteVersionDataItem,
+	downloadExcelList
 } from '../../../../redux/actions/engage/lists'
 import {
 	neutralLightColor,
@@ -42,7 +44,9 @@ const mapStateToProps = (state) => {
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
-		filterCategories: state.engage.filterCategories
+		filterCategories: state.engage.filterCategories,
+		isDownloadingExcel: state.engage.isDownloadingExcel,
+		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId
 	}
 }
 
@@ -60,7 +64,8 @@ const mapDispatchToProps = (dispatch) => {
 		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
 			dispatch(deleteAllVersionData(versionId)),
-		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params))
+		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params)),
+		downloadExcelList: (payload) => dispatch(downloadExcelList(payload))
 	}
 }
 
@@ -140,6 +145,14 @@ function ListBuilder(props) {
 			}
 			props.patchVersionData(args)
 		}
+	}
+
+	const handleDownloadClick = (versionId, smartListName) => {
+		let payload = {
+			versionId,
+			smartListName
+		}
+		props.downloadExcelList(payload)
 	}
 
 	const [filterState, setFilterState] = React.useState({ kids: false })
@@ -222,7 +235,7 @@ function ListBuilder(props) {
 			<Grid item xs={12} align='left'>
 				<h5>{createdListVersion.smartListName}</h5>
 			</Grid>
-			<Grid item xs={12}>
+			<Grid item xs={12} align='left'>
 				<Toggle
 					size='lg'
 					checkedChildren='Videos'
@@ -230,6 +243,22 @@ function ListBuilder(props) {
 					onChange={() => setShowWarning(true)}
 					checked={!isChannels}
 				/>
+
+				<Button
+					style={{ marginLeft: 20 }}
+					loading={
+						props.isDownloadingExcel &&
+						props.isDownloadingExcelVersionId === createdListVersion.versionId
+					}
+					onClick={() =>
+						handleDownloadClick(
+							createdListVersion.versionId,
+							createdListVersion.smartListName
+						)
+					}
+				>
+					Download
+				</Button>
 			</Grid>
 
 			<Grid item xs={12} md={3}>
