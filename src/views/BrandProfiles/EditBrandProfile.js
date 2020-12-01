@@ -117,10 +117,9 @@ function EditBrandProfile(props) {
 			props.brandProfiles,
 			Number(props.match.params.brandProfileId)
 		)
-		if (!current.scenarios) {
-			fetchBrandProfile(Number(props.match.params.brandProfileId))
-		}
-	}, [props.brandProfiles])
+
+		fetchBrandProfile(Number(props.match.params.brandProfileId))
+	}, [])
 
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = React.useState(0)
