@@ -113,11 +113,6 @@ function EditBrandProfile(props) {
 	let history = useHistory()
 	let { fetchBrandProfile } = props
 	React.useEffect(() => {
-		let current = getCurrent(
-			props.brandProfiles,
-			Number(props.match.params.brandProfileId)
-		)
-
 		fetchBrandProfile(Number(props.match.params.brandProfileId))
 	}, [])
 
