@@ -10,7 +10,8 @@ import {
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
-	SET_CREATED_LIST_VERSION
+	SET_CREATED_LIST_VERSION,
+	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
@@ -130,10 +131,21 @@ export const deleteAllVersionData = (versionId) => {
 	return (dispatch) => {
 		axios
 			.delete(url)
-			.then((response) => {})
+			.then((response) => {
+				if (response.status === 200) {
+					dispatch(setDeleteAllVersionDataSuccess(true))
+				}
+			})
 			.catch((error) => {
 				console.error('delete all version error', error)
 			})
+	}
+}
+
+export function setDeleteAllVersionDataSuccess(deleteAllVersionDataSuccess) {
+	return {
+		type: SET_DELETE_ALL_VERSION_DATA_SUCCESS,
+		deleteAllVersionDataSuccess
 	}
 }
 
