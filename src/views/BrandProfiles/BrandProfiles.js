@@ -130,7 +130,7 @@ function BrandProfiles(props) {
 									Create New Profile
 								</Button>
 
-								{1 != 2 && (
+								{1 != 1 && (
 									<Button onClick={handleCreateNewProfileClickPoc}>
 										Create Profile POC
 									</Button>

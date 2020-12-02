@@ -21,6 +21,10 @@ import {
 	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
 var fileDownload = require('js-file-download')
+var cwait = require('cwait')
+
+var queue = new cwait.TaskQueue(Promise, 1)
+
 const apiBase = config.api.listBuilderUrl
 
 export function fetchLists(accountId) {
@@ -129,7 +133,7 @@ export const cloneListVersion = (args) => {
 
 export const patchVersionData = (args) => {
 	let url = `${apiBase}/smart-list/version/${args.versionId}/data`
-	return async (dispatch) => {
+	return queue.wrap(async (dispatch) => {
 		try {
 			let params = args.data
 			const result = await axios.patch(url, params)
@@ -138,7 +142,7 @@ export const patchVersionData = (args) => {
 		} catch (error) {
 			alert(error)
 		}
-	}
+	})
 }
 
 export const deleteAllVersionData = (versionId) => {
