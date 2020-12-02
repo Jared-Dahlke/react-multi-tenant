@@ -18,7 +18,8 @@ import {
 	fetchBrandProfile,
 	deleteBrandProfile,
 	setBrandProfileDeleted,
-	removeBrandProfile
+	removeBrandProfile,
+	createBrandProfilePoc
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
@@ -54,7 +55,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(removeBrandProfile(brandProfileId)),
 		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
 		fetchBrandProfile: (brandProfileId) =>
-			dispatch(fetchBrandProfile(brandProfileId))
+			dispatch(fetchBrandProfile(brandProfileId)),
+		createBrandProfilePoc: () => dispatch(createBrandProfilePoc())
 	}
 }
 
@@ -83,6 +85,10 @@ function BrandProfiles(props) {
 	const handleCreateNewProfileClick = () => {
 		let url = `/app/settings/brandProfiles/create`
 		history.push(url)
+	}
+
+	const handleCreateNewProfileClickPoc = () => {
+		props.createBrandProfilePoc()
 	}
 
 	const handleAdminClick = () => {
@@ -123,6 +129,12 @@ function BrandProfiles(props) {
 								<Button onClick={handleCreateNewProfileClick}>
 									Create New Profile
 								</Button>
+
+								{1 != 2 && (
+									<Button onClick={handleCreateNewProfileClickPoc}>
+										Create Profile POC
+									</Button>
+								)}
 							</UserCan>
 						</Grid>
 

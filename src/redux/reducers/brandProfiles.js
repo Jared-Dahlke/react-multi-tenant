@@ -18,6 +18,7 @@ import {
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
 	SCENARIOS_IS_LOADING,
+	SET_BRAND_PROFILE_UNDER_EDIT
 } from '../action-types/brandProfiles'
 //import configureStore from '../store/index'
 //const store = configureStore()
@@ -54,6 +55,16 @@ export function brandProfilesIsLoading(state = true, action) {
 			return state
 	}
 }
+
+export function brandProfileUnderEdit(state = null, action) {
+	switch (action.type) {
+		case SET_BRAND_PROFILE_UNDER_EDIT:
+			return action.brandProfileUnderEdit
+		default:
+			return state
+	}
+}
+
 export function brandProfileSaving(state = false, action) {
 	switch (action.type) {
 		case SET_BRAND_PROFILE_SAVING:
