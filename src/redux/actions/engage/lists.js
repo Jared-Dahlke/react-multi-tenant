@@ -17,7 +17,8 @@ import config from '../../../config.js'
 import axios from '../../../axiosConfig'
 import {
 	listsObjValidation,
-	uploadedListObjValidation
+	uploadedListObjValidation,
+	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
 var fileDownload = require('js-file-download')
 const apiBase = config.api.listBuilderUrl
@@ -75,6 +76,13 @@ export const postList = (data) => {
 			.post(url, list)
 			.then((response) => {
 				if (response.status === 200) {
+					postListVersionResult.validate(response.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							'after posting this list version, we received different data from the api than expected, see console log for more details'
+						)
+					})
+
 					response.data.smartListName = list.smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
@@ -99,6 +107,13 @@ export const cloneListVersion = (args) => {
 			.post(url)
 			.then((response) => {
 				if (response.status === 200) {
+					postListVersionResult.validate(response.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							'after posting this list version, we received different data from the api than expected, see console log for more details'
+						)
+					})
+
 					response.data.smartListName = smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))

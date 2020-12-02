@@ -92,3 +92,41 @@ export const postListObjValidation = Yup.object().shape({
 		.min(2)
 		.max(50)
 })
+
+export const postListVersionResult = Yup.object().shape({
+	active: Yup.bool()
+		.strict(true)
+		.required(),
+	createdBy: Yup.number()
+		.strict(true)
+		.required(),
+	createdDate: Yup.date().required(),
+	smartListId: Yup.number()
+		.strict(true)
+		.required(),
+	versionId: Yup.number()
+		.strict(true)
+		.required()
+})
+
+export const channelsSchema = Yup.array().of(
+	Yup.object().shape({
+		id: Yup.string()
+			.strict(true)
+			.required(),
+		name: Yup.string()
+			.strict(true)
+			.required()
+	})
+)
+
+export const videosSchema = Yup.array().of(
+	Yup.object().shape({
+		id: Yup.string()
+			.strict(true)
+			.required(),
+		name: Yup.string()
+			.strict(true)
+			.required()
+	})
+)
