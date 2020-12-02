@@ -9,7 +9,8 @@ import {
 	fetchListsSuccess,
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
-	createdListVersion
+	createdListVersion,
+	deleteAllVersionDataSuccess
 } from './lists'
 
 import { videos, channels, hasNextPage } from './listBuilder'
@@ -32,5 +33,6 @@ export default combineReducers({
 	filterLanguages,
 	videos,
 	channels,
-	hasNextPage
+	hasNextPage,
+	deleteAllVersionDataSuccess
 })
