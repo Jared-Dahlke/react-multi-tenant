@@ -96,10 +96,10 @@ function Permissions(props) {
             props.insertPermissions(roleId, insert[0], adminPermissions)
         }
         else if (remove[0]) {
-            console.log("permission is inserted", remove[0])
+            console.log("permission is removed", remove[0])
             adminPermissions[index].captured_permissions = v
-            console.log("adminPermissions is inserted", adminPermissions)
-            props.insertPermissions(roleId, remove[0], adminPermissions)
+            console.log("adminPermissions is removed", adminPermissions)
+            props.removePermissions(roleId, remove[0], adminPermissions)
         }
         else {
             console.log("kuch b ni hua")
