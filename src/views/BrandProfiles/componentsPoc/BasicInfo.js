@@ -95,6 +95,7 @@ function BasicInfo(props) {
 										name='brandName'
 										labelText='Brand Profile Name'
 										formikValue={props.values.brandName}
+										autoFocus={true}
 									/>
 								</GridItem>
 

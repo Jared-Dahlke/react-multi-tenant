@@ -75,6 +75,7 @@ export const createBrandProfile = () => {
 			.post(url, brandProfile)
 			.then((response) => {
 				if (response.status === 200) {
+					response.data.industryVerticalId = ''
 					let copy = JSON.parse(JSON.stringify(response.data))
 					dispatch(addBrandProfile(copy))
 					dispatch(setBrandProfileCreating(false))
@@ -101,12 +102,25 @@ export const patchBrandProfileBasicInfo = (brandProfile) => {
 
 	return async (dispatch, getState) => {
 		dispatch(setBrandProfileSaving(true))
+
+		let profiles = JSON.parse(JSON.stringify(getState().brandProfiles))
+		for (const profile of profiles) {
+			if (profile.brandProfileId === brandProfile.brandProfileId) {
+				profile.brandName = brandProfile.brandName
+				profile.twitterProfileUrl = brandProfile.twitterProfileUrl
+				profile.industryVerticalId = brandProfile.industryVerticalId
+				profile.websiteUrl = brandProfile.websiteUrl
+			}
+		}
+		dispatch(setBrandProfiles(profiles))
+
 		brandProfile.accountId = getState().currentAccountId
 		let url = apiBase + `/brand-profile/${brandProfile.brandProfileId}`
 		const result = await axios.patch(url, brandProfile)
 		if (result.status === 200) {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))
+			//	dispatch()
 		}
 	}
 }

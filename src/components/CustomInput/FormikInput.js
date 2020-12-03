@@ -26,6 +26,10 @@ export default function CustomInput(props) {
 		form.validateField(props.name)
 	}
 
+	const handleFocus = (event) => {
+		event.target.select()
+	}
+
 	return (
 		<Field name={props.name}>
 			{({ field, form }) => (
@@ -46,6 +50,8 @@ export default function CustomInput(props) {
 						)}
 
 						<Input
+							autoFocus={props.autoFocus}
+							onFocus={handleFocus}
 							id={id}
 							value={props.formikValue}
 							onChange={(val) => handleChange(val, form)}
