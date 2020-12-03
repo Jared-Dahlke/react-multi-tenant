@@ -81,7 +81,6 @@ export const createBrandProfile = () => {
 					dispatch(setBrandProfileCreating(false))
 					dispatch(setBrandProfileCreated(true))
 					dispatch(setBrandProfileUnderEdit(response.data))
-					dispatch(addBrandProfile(response.data))
 				}
 			})
 			.catch((error) => {
@@ -98,8 +97,6 @@ export function setBrandProfileUnderEdit(brandProfileUnderEdit) {
 }
 
 export const patchBrandProfileBasicInfo = (brandProfile) => {
-	//let brandProfileId = data.brandProfileId
-
 	return async (dispatch, getState) => {
 		dispatch(setBrandProfileSaving(true))
 
@@ -121,6 +118,22 @@ export const patchBrandProfileBasicInfo = (brandProfile) => {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))
 			//	dispatch()
+		}
+	}
+}
+
+export const patchBrandProfileCompetitors = (data) => {
+	let brandProfileId = data.brandProfileId
+	let competitors = data.competitors
+
+	return async (dispatch, getState) => {
+		dispatch(setBrandProfileSaving(true))
+
+		let url = apiBase + `/brand-profile/${brandProfileId}/competitors`
+		const result = await axios.patch(url, competitors)
+		if (result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
 		}
 	}
 }

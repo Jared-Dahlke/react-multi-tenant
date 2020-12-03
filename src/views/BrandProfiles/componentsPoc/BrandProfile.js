@@ -4,8 +4,8 @@ import GridContainer from '../../../components/Grid/GridContainer'
 import GridItem from '../../../components/Grid/GridItem'
 /*import Topics from './components/Topics/Topics'
 import Categories from './components/Categories/Categories'
-import Scenarios from './components/Scenarios/Scenarios'
-import TopCompetitors from './components/Competitors/TopCompetitors'*/
+import Scenarios from './components/Scenarios/Scenarios' */
+import TopCompetitors from './Competitors'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
 import {
@@ -75,11 +75,6 @@ function BrandProfile(props) {
 
 	const [scenariosValid, setScenariosValid] = React.useState(false)
 
-	const springProps = useSpring({
-		opacity: props.brandProfileCreated ? 1 : 0,
-		marginTop: props.brandProfileCreated ? 30 : 500
-	})
-
 	const handleStepsClick = (ref) => {
 		scrollToElement(ref)
 	}
@@ -98,6 +93,16 @@ function BrandProfile(props) {
 		twitterProfileUrl: '',
 		industryVerticalId: '',
 		brandProfileId: ''
+	})
+
+	const springProps = useSpring({
+		from: {
+			opacity: 1
+		},
+		enter: { opacity: 0 },
+		leave: {
+			opacity: 0
+		}
 	})
 
 	React.useEffect(() => {
@@ -159,32 +164,33 @@ function BrandProfile(props) {
 						<GridItem xs={12} sm={12} md={10}>
 							<div style={{ padding: 10 }}>
 								<div ref={brandInformationRef} />
+								<animated.div style={springProps}>
+									<BasicInfo
+										brandProfile={brandProfile}
+										industryVerticals={props.industryVerticals}
+									/>
+								</animated.div>
 
-								<BasicInfo
+								<div ref={competitorsRef} />
+
+								<TopCompetitors
+									setCompetitorsValid={setCompetitorsValid}
 									brandProfile={brandProfile}
-									industryVerticals={props.industryVerticals}
 								/>
 
-								{/**	<div ref={competitorsRef} />
-								{props.brandProfileCreated && (
-									<animated.div style={springProps}>
-										<TopCompetitors setCompetitorsValid={setCompetitorsValid} />
+								{/** <div ref={categoriesRef} style={{ marginTop: 30 }} />
 
-										<div ref={categoriesRef} style={{ marginTop: 30 }} />
+								<Categories
+									categoriesValid={categoriesValid}
+									setCategoriesValid={setCategoriesValid}
+								/>
 
-										<Categories
-											categoriesValid={categoriesValid}
-											setCategoriesValid={setCategoriesValid}
-										/>
+								<div ref={topicsRef} style={{ marginTop: 30 }} />
 
-										<div ref={topicsRef} style={{ marginTop: 30 }} />
+								<Topics setTopicsValid={setTopicsValid} />
 
-										<Topics setTopicsValid={setTopicsValid} />
-
-										<div ref={scenariosRef} style={{ marginTop: 30 }} />
-										<Scenarios setScenariosValid={setScenariosValid} />
-									</animated.div>
-								)} */}
+								<div ref={scenariosRef} style={{ marginTop: 30 }} />
+								<Scenarios setScenariosValid={setScenariosValid} />*/}
 							</div>
 						</GridItem>
 					</GridList>
