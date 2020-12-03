@@ -14,16 +14,15 @@ import Label from '../CustomInputLabel/CustomInputLabel'
 import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
+import { neutralColor } from '../../assets/jss/colorContants.js'
 const useStyles = makeStyles(styles)
 
 export default function CustomInput(props) {
 	const classes = useStyles()
 	const { labelText, id } = props
-	const [myVal, setMyVal] = React.useState(props.formikValue)
 
-	const handleBlur = async (e, form) => {
-		e.preventDefault()
-		await form.setFieldValue(props.name, e.target.value)
+	const handleChange = async (val, form) => {
+		await form.setFieldValue(props.name, val)
 		form.validateField(props.name)
 	}
 
@@ -48,9 +47,8 @@ export default function CustomInput(props) {
 
 						<Input
 							id={id}
-							value={myVal}
-							onChange={(e) => setMyVal(e)}
-							onBlur={(e) => handleBlur(e, form)}
+							value={props.formikValue}
+							onChange={(val) => handleChange(val, form)}
 							disabled={props.disabled}
 							style={{
 								borderColor: 'white',
@@ -60,11 +58,17 @@ export default function CustomInput(props) {
 
 						{!props.simple && (
 							<InputGroup.Addon>
-								{!form.errors[field.name] &&
-								field.value.length > 0 &&
-								!props.specialError ? (
-									<Icon icon='check' style={{ color: successColor[0] }} />
-								) : null}
+								<Icon
+									icon='check'
+									style={{
+										color:
+											!form.errors[field.name] &&
+											field.value.length > 0 &&
+											!props.specialError
+												? successColor[0]
+												: neutralColor
+									}}
+								/>
 							</InputGroup.Addon>
 						)}
 					</InputGroup>

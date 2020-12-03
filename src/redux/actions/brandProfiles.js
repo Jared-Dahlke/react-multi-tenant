@@ -35,53 +35,52 @@ export function setBrandProfiles(brandProfiles) {
 	}
 }
 
-export const createBrandProfile = (brandProfile) => {
-	delete brandProfile.brandProfileId
-	let url = apiBase + `/brand-profile`
-	return (dispatch, getState) => {
-		dispatch(removeBrandProfile('placeholder'))
-		dispatch(setBrandProfileCreating(true))
-		dispatch(addBrandProfile(brandProfile))
-		axios
-			.post(url, brandProfile)
-			.then((response) => {
-				let brandProfilesCopy = JSON.parse(
+export function fetchBrandProfileBasic(brandProfileId) {
+	let url = apiBase + `/brand-profile/${brandProfileId}/basic`
+	return async (dispatch, getState) => {
+		//	dispatch(setBrandProfileLoading(true))
+		try {
+			const result = await axios.get(url)
+			console.log(result)
+			if (result.status === 200) {
+				console.log(result.data)
+
+				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
-				for (const [index, brandProfileCopy] of brandProfilesCopy.entries()) {
-					if (brandProfileCopy.brandProfileId === brandProfile.brandProfileId) {
-						brandProfilesCopy[index].brandProfileId =
-							response.data.brandProfileId
+
+				for (const [index, p] of currBrandProfiles.entries()) {
+					if (p.brandProfileId === brandProfileId) {
+						currBrandProfiles[index].brandName = result.data.brandName
 					}
 				}
-				dispatch(setBrandProfiles(brandProfilesCopy))
-				dispatch(setBrandProfileCreating(false))
-				dispatch(setBrandProfileCreated(true))
-			})
-			.catch((error) => {
-				//error
-			})
+				dispatch(setBrandProfiles(currBrandProfiles))
+			}
+		} catch (error) {
+			alert(error)
+		}
 	}
 }
 
-export const createBrandProfilePoc = () => {
-	let brandProfile = {
-		accountId: 1,
-		brandName: 'My first brand profile',
-		websiteUrl: 'test.com',
-		twitterProfileUrl: 'twittertest',
-		industryVerticalId: 1
-	}
+export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
+		let brandProfile = {
+			accountId: getState().currentAccountId,
+			brandName: 'My first brand profile'
+		}
+
 		dispatch(setBrandProfileCreating(true))
 		axios
 			.post(url, brandProfile)
 			.then((response) => {
 				if (response.status === 200) {
+					let copy = JSON.parse(JSON.stringify(response.data))
+					dispatch(addBrandProfile(copy))
 					dispatch(setBrandProfileCreating(false))
 					dispatch(setBrandProfileCreated(true))
 					dispatch(setBrandProfileUnderEdit(response.data))
+					dispatch(addBrandProfile(response.data))
 				}
 			})
 			.catch((error) => {
@@ -90,10 +89,25 @@ export const createBrandProfilePoc = () => {
 	}
 }
 
-export function setBrandProfileUnderEdit(brandProfile) {
+export function setBrandProfileUnderEdit(brandProfileUnderEdit) {
 	return {
 		type: SET_BRAND_PROFILE_UNDER_EDIT,
-		brandProfile
+		brandProfileUnderEdit
+	}
+}
+
+export const patchBrandProfileBasicInfo = (brandProfile) => {
+	//let brandProfileId = data.brandProfileId
+
+	return async (dispatch, getState) => {
+		dispatch(setBrandProfileSaving(true))
+		brandProfile.accountId = getState().currentAccountId
+		let url = apiBase + `/brand-profile/${brandProfile.brandProfileId}`
+		const result = await axios.patch(url, brandProfile)
+		if (result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
+		}
 	}
 }
 
@@ -190,8 +204,9 @@ export function fetchBrandProfile(brandProfileId) {
 		dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
-
+			console.log(result)
 			if (result.status === 200) {
+				console.log(result.data)
 				brandProfileObjValidation.validate(result.data).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert(
@@ -230,10 +245,10 @@ export function fetchBrandProfiles(accountId) {
 				if (brandProfiles.length < 1) {
 					dispatch(hasBrandProfiles(false))
 				}
-				brandProfilesObjValidation.validate(result.data).catch(function(err) {
-					console.log(err.name, err.errors)
-					alert("Could not validate account's brand profiles data")
-				})
+				///brandProfilesObjValidation.validate(result.data).catch(function(err) {
+				//	console.log(err.name, err.errors)
+				//	alert("Could not validate account's brand profiles data")
+				//	})
 				dispatch(setBrandProfiles(brandProfiles))
 				dispatch(brandProfilesIsLoading(false))
 			}
@@ -323,7 +338,7 @@ function addDefaultResponseIdToScenarios(scenarios) {
 }
 
 export function fetchBrandScenarios() {
-	let url = apiBase + `/brand-profile/scenario`
+	let url = apiBase + `/brand-profile/scenarios`
 	return async (dispatch) => {
 		dispatch(setScenariosIsLoading(true))
 		try {
@@ -370,7 +385,7 @@ export function setBrandIndustryVerticals(industryVerticals) {
 }
 
 export function fetchBrandTopics() {
-	let url = apiBase + `/brand-profile/topic`
+	let url = apiBase + `/brand-profile/topics`
 	return async (dispatch) => {
 		try {
 			const result = await axios.get(url)

@@ -19,7 +19,8 @@ import {
 	deleteBrandProfile,
 	setBrandProfileDeleted,
 	removeBrandProfile,
-	createBrandProfilePoc
+	createBrandProfile,
+	setBrandProfileCreated
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
@@ -42,7 +43,9 @@ const mapStateToProps = (state) => {
 		brandProfileDeleted: state.brandProfileDeleted,
 		scenarios: state.scenarios,
 		categories: state.brandCategories,
-		topics: state.topics
+		topics: state.topics,
+		brandProfileUnderEdit: state.brandProfileUnderEdit,
+		brandProfileCreated: state.brandProfileCreated
 	}
 }
 
@@ -56,7 +59,8 @@ const mapDispatchToProps = (dispatch) => {
 		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
 		fetchBrandProfile: (brandProfileId) =>
 			dispatch(fetchBrandProfile(brandProfileId)),
-		createBrandProfilePoc: () => dispatch(createBrandProfilePoc())
+		createBrandProfile: () => dispatch(createBrandProfile()),
+		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool))
 	}
 }
 
@@ -69,6 +73,21 @@ function BrandProfiles(props) {
 	const tableCellClasses = classnames(classes.tableCell, {
 		[classes.tableCellRTL]: false
 	})
+
+	React.useEffect(() => {
+		if (props.brandProfileUnderEdit && props.brandProfileCreated) {
+			let url = `/app/settings/brandProfiles/brandProfile/${props.brandProfileUnderEdit.brandProfileId}`
+
+			history.push(url)
+		}
+	}, [props.brandProfileUnderEdit])
+
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			props.setBrandProfileCreated(false)
+		}
+	}, [])
 
 	const userHeaders = ['Profile Name', 'Website', '']
 
@@ -83,12 +102,7 @@ function BrandProfiles(props) {
 	}
 
 	const handleCreateNewProfileClick = () => {
-		let url = `/app/settings/brandProfiles/create`
-		history.push(url)
-	}
-
-	const handleCreateNewProfileClickPoc = () => {
-		props.createBrandProfilePoc()
+		props.createBrandProfile()
 	}
 
 	const handleAdminClick = () => {
@@ -129,12 +143,6 @@ function BrandProfiles(props) {
 								<Button onClick={handleCreateNewProfileClick}>
 									Create New Profile
 								</Button>
-
-								{1 != 1 && (
-									<Button onClick={handleCreateNewProfileClickPoc}>
-										Create Profile POC
-									</Button>
-								)}
 							</UserCan>
 						</Grid>
 

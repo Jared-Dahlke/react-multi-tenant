@@ -24,6 +24,7 @@ import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.j
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
+import BrandProfile from './views/BrandProfiles/componentsPoc/BrandProfile'
 
 export const routes = {
 	login: {
@@ -107,16 +108,12 @@ export const routes = {
 				name: 'Brand Profiles',
 				component: BrandProfiles,
 
-				create: {
-					path: '/app/settings/brandProfiles/create',
-					name: 'Create',
-					component: CreateBrandProfile
+				brandProfile: {
+					path: '/app/settings/brandProfiles/brandProfile/:brandProfileId',
+					name: 'Brand Profile',
+					component: BrandProfile
 				},
-				edit: {
-					path: '/app/settings/brandProfiles/edit/:brandProfileId',
-					name: 'Edit',
-					component: EditBrandProfile
-				},
+
 				admin: {
 					path: '/app/settings/brandProfiles/admin',
 					name: 'Brand Profiles Admin',
@@ -247,16 +244,11 @@ export const modifiedRoutes = {
 				component: BrandProfiles,
 				subRoutes: [
 					{
-						path: '/app/settings/brandProfiles/create',
-						name: 'Create',
-						component: CreateBrandProfile,
-						userCan: userCan(perms.BRAND_PROFILE_CREATE)
+						path: '/app/settings/brandProfiles/brandProfile/:brandProfileId',
+						name: 'Brand Profile',
+						component: BrandProfile
 					},
-					{
-						path: '/app/settings/brandProfiles/edit/:brandProfileId',
-						name: 'Edit',
-						component: EditBrandProfile
-					},
+
 					{
 						path: '/app/settings/brandProfiles/admin',
 						name: 'Admin',
