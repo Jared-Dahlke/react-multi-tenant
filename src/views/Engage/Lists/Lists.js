@@ -481,12 +481,12 @@ function Lists(props) {
 	const transition = useTransition(visibleLists, {
 		from: {
 			opacity: 0,
-			maxHeight: `600px`
+			marginTop: 1000
 		},
-		enter: { opacity: 1, transform: `translateY(0px)` },
+		enter: { opacity: 1, marginTop: 0 },
 		leave: {
 			opacity: 0,
-			maxHeight: `0px`
+			marginTop: 0
 		},
 		keys: visibleLists.map((item, index) => item.smartListId)
 	})

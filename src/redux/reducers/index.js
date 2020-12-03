@@ -60,7 +60,8 @@ import {
 	brandProfileLoading,
 	brandProfileSaving,
 	brandProfileSaved,
-	scenariosIsLoading
+	scenariosIsLoading,
+	brandProfileUnderEdit
 } from './brandProfiles'
 
 import brandProfilesAdmin from './brandProfilesAdmin/index'
@@ -102,6 +103,7 @@ export default combineReducers({
 	editAccountAccountUsersLoading,
 	accountTypes,
 	brandProfilesIsLoading,
+	brandProfileUnderEdit,
 	brandProfileLoading,
 	accountCreated,
 	hasBrandProfiles,

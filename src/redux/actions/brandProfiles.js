@@ -15,7 +15,8 @@ import {
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
-	SCENARIOS_IS_LOADING
+	SCENARIOS_IS_LOADING,
+	SET_BRAND_PROFILE_UNDER_EDIT
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -60,6 +61,39 @@ export const createBrandProfile = (brandProfile) => {
 			.catch((error) => {
 				//error
 			})
+	}
+}
+
+export const createBrandProfilePoc = () => {
+	let brandProfile = {
+		accountId: 1,
+		brandName: 'My first brand profile',
+		websiteUrl: 'test.com',
+		twitterProfileUrl: 'twittertest',
+		industryVerticalId: 1
+	}
+	let url = apiBase + `/brand-profile`
+	return (dispatch, getState) => {
+		dispatch(setBrandProfileCreating(true))
+		axios
+			.post(url, brandProfile)
+			.then((response) => {
+				if (response.status === 200) {
+					dispatch(setBrandProfileCreating(false))
+					dispatch(setBrandProfileCreated(true))
+					dispatch(setBrandProfileUnderEdit(response.data))
+				}
+			})
+			.catch((error) => {
+				//error
+			})
+	}
+}
+
+export function setBrandProfileUnderEdit(brandProfile) {
+	return {
+		type: SET_BRAND_PROFILE_UNDER_EDIT,
+		brandProfile
 	}
 }
 

@@ -9,6 +9,11 @@ import {
 	SET_HAS_NEXT_PAGE
 } from '../../action-types/engage/listBuilder'
 
+import {
+	channelsSchema,
+	videosSchema
+} from '../../../schemas/Engage/Lists/schemas'
+
 const apiBase = config.api.listBuilderUrl
 
 let fetchVideosRequest = null
@@ -33,6 +38,13 @@ export function fetchVideos(args) {
 			//	const result = await defaultAxios.get(url, {)
 
 			if (result.status === 200) {
+				videosSchema.validate(result.data).catch((err) => {
+					console.log(err.name, err.errors)
+					alert(
+						'we received different data from the api than expected from fetchVideos, see console log for more details'
+					)
+				})
+
 				if (result.data.length < 100) {
 					dispatch(setHasNextPage(false))
 				}
@@ -93,6 +105,12 @@ export function fetchChannels(args) {
 		})
 		try {
 			if (result.status === 200) {
+				channelsSchema.validate(result.data).catch((err) => {
+					console.log(err.name, err.errors)
+					alert(
+						'we received different data from the api than expected from fetchChannels, see console log for more details'
+					)
+				})
 				if (result.data.length < 100) {
 					dispatch(setHasNextPage(false))
 				}

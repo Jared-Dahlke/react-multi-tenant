@@ -17,9 +17,14 @@ import config from '../../../config.js'
 import axios from '../../../axiosConfig'
 import {
 	listsObjValidation,
-	uploadedListObjValidation
+	uploadedListObjValidation,
+	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
 var fileDownload = require('js-file-download')
+var cwait = require('cwait')
+
+var queue = new cwait.TaskQueue(Promise, 1)
+
 const apiBase = config.api.listBuilderUrl
 
 export function fetchLists(accountId) {
@@ -75,6 +80,13 @@ export const postList = (data) => {
 			.post(url, list)
 			.then((response) => {
 				if (response.status === 200) {
+					postListVersionResult.validate(response.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							'after posting this list version, we received different data from the api than expected, see console log for more details'
+						)
+					})
+
 					response.data.smartListName = list.smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
@@ -99,6 +111,13 @@ export const cloneListVersion = (args) => {
 			.post(url)
 			.then((response) => {
 				if (response.status === 200) {
+					postListVersionResult.validate(response.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							'after posting this list version, we received different data from the api than expected, see console log for more details'
+						)
+					})
+
 					response.data.smartListName = smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
@@ -114,7 +133,7 @@ export const cloneListVersion = (args) => {
 
 export const patchVersionData = (args) => {
 	let url = `${apiBase}/smart-list/version/${args.versionId}/data`
-	return async (dispatch) => {
+	return queue.wrap(async (dispatch) => {
 		try {
 			let params = args.data
 			const result = await axios.patch(url, params)
@@ -123,7 +142,7 @@ export const patchVersionData = (args) => {
 		} catch (error) {
 			alert(error)
 		}
-	}
+	})
 }
 
 export const deleteAllVersionData = (versionId) => {
