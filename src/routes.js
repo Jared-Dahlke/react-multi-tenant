@@ -24,6 +24,7 @@ import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.j
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
+import Permissions from './views/BrandProfiles/Admin/Permissions.js'
 
 export const routes = {
 	login: {
@@ -142,6 +143,11 @@ export const routes = {
 							name: 'Create',
 							component: CreateOpinion
 						}
+					},
+					permissions: {
+						path: '/app/settings/brandProfiles/admin/permissions',
+						name: 'Brand Profiles Permissions',
+						component: Permissions
 					}
 				}
 			},
@@ -285,6 +291,18 @@ export const modifiedRoutes = {
 										component: CreateOpinion
 									}
 								]
+							},
+							{
+								path: '/app/settings/brandProfiles/admin/permissions',
+								name: 'Permissions',
+								component: Permissions
+								// , subRoutes: [
+								// 	{
+								// 		path: '/app/settings/brandProfiles/admin/opinions/create',
+								// 		name: 'Create',
+								// 		component: CreateOpinion
+								// 	}
+								// ]
 							}
 						]
 					}

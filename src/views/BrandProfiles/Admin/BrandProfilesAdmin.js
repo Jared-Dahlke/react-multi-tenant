@@ -17,6 +17,11 @@ function BrandProfilesAdmin(props) {
 		history.push(url)
 	}
 
+	const handlePermissionsClick = () => {
+		let url = routes.app.settings.brandProfiles.admin.permissions.path
+		history.push(url)
+	}
+
 	return (
 		<div
 			style={{
@@ -29,6 +34,8 @@ function BrandProfilesAdmin(props) {
 			<Button onClick={handleScenariosClick}>Configure Scenarios</Button>
 			&nbsp;
 			<Button onClick={handleOpinionsClick}>Configure Opinions</Button>
+			&nbsp;
+			<Button onClick={handlePermissionsClick}>Configure Permissions</Button>
 		</div>
 	)
 }

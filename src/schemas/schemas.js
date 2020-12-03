@@ -38,7 +38,7 @@ export const accountsObjValidation = Yup.array()
 		'The api sent accounts that have duplicate accountIds. Please address in api or database as this breaks the UI.',
 		(accounts) => {
 			let seen = new Set()
-			var hasDuplicates = accounts.some(function(currentObject) {
+			var hasDuplicates = accounts.some(function (currentObject) {
 				return seen.size === seen.add(currentObject.accountId).size
 			})
 
@@ -141,6 +141,15 @@ export const brandOpinionObjValidation = Yup.array().of(
 		question: Yup.string().required(),
 		opinionType: Yup.string().required(),
 		opinionResponseId: Yup.string()
+	})
+)
+
+export const brandPermissionsObjValidation = Yup.array().of(
+	Yup.object().shape({
+		default: Yup.bool().required(),
+		roleId: Yup.number().required(),
+		roleName: Yup.string().required(),
+		userType: Yup.string().required()
 	})
 )
 
