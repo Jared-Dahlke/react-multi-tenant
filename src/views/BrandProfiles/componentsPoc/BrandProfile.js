@@ -2,9 +2,9 @@ import React from 'react'
 import BasicInfo from './BasicInfo'
 import GridContainer from '../../../components/Grid/GridContainer'
 import GridItem from '../../../components/Grid/GridItem'
-/*import Topics from './components/Topics/Topics'
-import Categories from './components/Categories/Categories'
-import Scenarios from './components/Scenarios/Scenarios' */
+//import Topics from './components/Topics/Topics'
+import Categories from './Categories'
+//import Scenarios from './components/Scenarios/Scenarios'
 import TopCompetitors from './Competitors'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
@@ -178,12 +178,15 @@ function BrandProfile(props) {
 									brandProfile={brandProfile}
 								/>
 
-								{/** <div ref={categoriesRef} style={{ marginTop: 30 }} />
+								<div ref={categoriesRef} style={{ marginTop: 30 }} />
 
 								<Categories
 									categoriesValid={categoriesValid}
 									setCategoriesValid={setCategoriesValid}
+									brandProfile={brandProfile}
 								/>
+
+								{/** 
 
 								<div ref={topicsRef} style={{ marginTop: 30 }} />
 

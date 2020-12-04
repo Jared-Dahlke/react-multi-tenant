@@ -11,7 +11,10 @@ import { connect } from 'react-redux'
 import { UserCan, perms, userCan } from '../../../Can'
 import * as Yup from 'yup'
 import { neutralColor } from '../../../assets/jss/colorContants.js'
-import { patchBrandProfileCompetitors } from '../../../redux/actions/brandProfiles'
+import {
+	patchBrandProfileCompetitors,
+	fetchBrandProfileCompetitors
+} from '../../../redux/actions/brandProfiles'
 import { brandProfileModel } from '../Model'
 const urlRegex = require('url-regex')
 
@@ -25,27 +28,24 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		patchBrandProfileCompetitors: (competitors) =>
-			dispatch(patchBrandProfileCompetitors(competitors))
+			dispatch(patchBrandProfileCompetitors(competitors)),
+		fetchBrandProfileCompetitors: (brandProfileId) =>
+			dispatch(fetchBrandProfileCompetitors(brandProfileId))
 	}
 }
 
 function TopCompetitors(props) {
 	console.log('rendering top comp')
 
-	const getCurrent = (brandProfiles, brandProfileIdEditing) => {
-		for (const brandProfile of brandProfiles) {
-			if (brandProfile.brandProfileId == brandProfileIdEditing) {
-				return brandProfile
+	const [fetched, setFetched] = React.useState(false)
+	React.useEffect(() => {
+		if (!fetched) {
+			if (props.brandProfile && props.brandProfile.brandProfileId) {
+				props.fetchBrandProfileCompetitors(props.brandProfile.brandProfileId)
+				setFetched(true)
 			}
 		}
-		return brandProfileModel
-	}
-
-	let currentBrandProfile = JSON.parse(
-		JSON.stringify(
-			getCurrent(props.brandProfiles, props.brandProfileIdUnderEdit)
-		)
-	)
+	}, [props.brandProfile])
 
 	const handleSaveNew = (values, formik) => {
 		console.log('hanle save new')
@@ -165,8 +165,8 @@ function TopCompetitors(props) {
 			validateOnBlur={false}
 			onSubmit={(competitor, formik) => handleSaveNew(competitor, formik)}
 			initialValues={{
-				competitors: currentBrandProfile.competitors
-					? currentBrandProfile.competitors
+				competitors: props.brandProfile.competitors
+					? props.brandProfile.competitors
 					: [
 							{
 								competitorId: '',

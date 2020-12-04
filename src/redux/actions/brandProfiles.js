@@ -62,6 +62,60 @@ export function fetchBrandProfileBasic(brandProfileId) {
 	}
 }
 
+export function fetchBrandProfileCompetitors(brandProfileId) {
+	let url = apiBase + `/brand-profile/${brandProfileId}/competitors`
+	return async (dispatch, getState) => {
+		//	dispatch(setBrandProfileLoading(true))
+		try {
+			const result = await axios.get(url)
+			console.log(result)
+			if (result.status === 200) {
+				console.log(result.data)
+
+				let currBrandProfiles = JSON.parse(
+					JSON.stringify(getState().brandProfiles)
+				)
+
+				for (const [index, p] of currBrandProfiles.entries()) {
+					if (p.brandProfileId === brandProfileId) {
+						currBrandProfiles[index].competitors = result.data
+					}
+				}
+				dispatch(setBrandProfiles(currBrandProfiles))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function fetchBrandProfileCategories(brandProfileId) {
+	let url = apiBase + `/brand-profile/${brandProfileId}/categories`
+	return async (dispatch, getState) => {
+		//	dispatch(setBrandProfileLoading(true))
+		try {
+			const result = await axios.get(url)
+			console.log(result)
+			if (result.status === 200) {
+				console.log(result.data)
+
+				let currBrandProfiles = JSON.parse(
+					JSON.stringify(getState().brandProfiles)
+				)
+
+				for (const [index, p] of currBrandProfiles.entries()) {
+					if (p.brandProfileId === brandProfileId) {
+						currBrandProfiles[index].categories = result.data
+					}
+				}
+				dispatch(setBrandProfiles(currBrandProfiles))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
 export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
@@ -132,6 +186,28 @@ export const patchBrandProfileCompetitors = (data) => {
 		let url = apiBase + `/brand-profile/${brandProfileId}/competitors`
 		const result = await axios.patch(url, competitors)
 		if (result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
+		}
+	}
+}
+
+export const patchBrandProfileCategories = (data) => {
+	let brandProfileId = data.brandProfileId
+	let categories = data.categories
+
+	for (const category of categories) {
+		delete category.contentCategoryName
+		delete category.contentCategory
+		delete category.contentCategoryResponseName
+		delete category.brandProfileId
+	}
+
+	let url = apiBase + `/brand-profile/${brandProfileId}/categories`
+	return async (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
+		const result = await axios.patch(url, categories)
+		if (result.status === 201 || result.status === 200) {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))
 		}
