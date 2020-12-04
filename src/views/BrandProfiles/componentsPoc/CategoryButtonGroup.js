@@ -7,12 +7,17 @@ import { neutralColor } from '../../../assets/jss/colorContants'
 import { perms, userCan } from '../../../Can'
 
 export default function CategoryButtonGroup(props) {
+	const [handlingClick, setHandlingClick] = React.useState(false)
 	const handleClick = (val) => {
-		let contentCategoryResponseId = val
-		props.handleCategorySelect(
-			props.category.contentCategoryId,
-			contentCategoryResponseId
-		)
+		if (!handlingClick) {
+			setHandlingClick(true)
+			let contentCategoryResponseId = val
+			props.handleCategorySelect(
+				props.category.contentCategoryId,
+				contentCategoryResponseId
+			)
+			setHandlingClick(false)
+		}
 	}
 
 	return (

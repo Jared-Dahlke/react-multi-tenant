@@ -56,7 +56,7 @@ function Categories(props) {
 	const handleSetBrandProfiles = (categories) => {
 		let brandProfilesCopy = JSON.parse(JSON.stringify(props.brandProfiles))
 		for (const brandProfile of brandProfilesCopy) {
-			if ((brandProfile.brandProfileId = props.brandProfile.brandProfileId)) {
+			if (brandProfile.brandProfileId === props.brandProfile.brandProfileId) {
 				brandProfile.categories = categories
 			}
 		}
