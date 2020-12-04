@@ -28,6 +28,7 @@ import {
 
 var cwait = require('cwait')
 var categoriesQueue = new cwait.TaskQueue(Promise, 1)
+var topicsQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.userAccountUrl
 
@@ -109,6 +110,33 @@ export function fetchBrandProfileCategories(brandProfileId) {
 				for (const [index, p] of currBrandProfiles.entries()) {
 					if (p.brandProfileId === brandProfileId) {
 						currBrandProfiles[index].categories = result.data
+					}
+				}
+				dispatch(setBrandProfiles(currBrandProfiles))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function fetchBrandProfileTopics(brandProfileId) {
+	let url = apiBase + `/brand-profile/${brandProfileId}/topics`
+	return async (dispatch, getState) => {
+		//	dispatch(setBrandProfileLoading(true))
+		try {
+			const result = await axios.get(url)
+			console.log(result)
+			if (result.status === 200) {
+				console.log(result.data)
+
+				let currBrandProfiles = JSON.parse(
+					JSON.stringify(getState().brandProfiles)
+				)
+
+				for (const [index, p] of currBrandProfiles.entries()) {
+					if (p.brandProfileId === brandProfileId) {
+						currBrandProfiles[index].topics = result.data
 					}
 				}
 				dispatch(setBrandProfiles(currBrandProfiles))
@@ -213,6 +241,25 @@ export const patchBrandProfileCategories = (data) => {
 	return categoriesQueue.wrap(async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
 		const result = await axios.patch(url, categories)
+		if (result.status === 201 || result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
+		}
+	})
+}
+
+export const patchBrandProfileTopics = (data) => {
+	let brandProfileId = data.brandProfileId
+	let topics = data.topics
+
+	//for (const category of categories) {
+	//	delete category.contentCategoryName
+	//}
+
+	let url = apiBase + `/brand-profile/${brandProfileId}/topics`
+	return topicsQueue.wrap(async (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
+		const result = await axios.patch(url, topics)
 		if (result.status === 201 || result.status === 200) {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))
@@ -490,27 +537,6 @@ export function setBrandIndustryVerticals(industryVerticals) {
 	return {
 		type: SET_BRAND_INDUSTRY_VERTICALS,
 		industryVerticals
-	}
-}
-
-export function fetchBrandTopics() {
-	let url = apiBase + `/brand-profile/topics`
-	return async (dispatch) => {
-		try {
-			const result = await axios.get(url)
-			if (result.status === 200) {
-				dispatch(setBrandTopics(result.data))
-			}
-		} catch (error) {
-			alert(error)
-		}
-	}
-}
-
-export function setBrandTopics(topics) {
-	return {
-		type: SET_BRAND_TOPICS,
-		topics
 	}
 }
 

@@ -236,11 +236,7 @@ export function fetchSiteData(accountId) {
 
 			//
 
-			dispatch(fetchBrandScenarios())
 			dispatch(fetchBrandIndustryVerticals())
-			dispatch(fetchBrandTopics())
-			dispatch(fetchBrandCategories())
-
 			//
 			dispatch(isSwitchingAccounts(false))
 		} catch (error) {

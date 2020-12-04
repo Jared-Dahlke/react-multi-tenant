@@ -2,7 +2,7 @@ import React from 'react'
 import BasicInfo from './BasicInfo'
 import GridContainer from '../../../components/Grid/GridContainer'
 import GridItem from '../../../components/Grid/GridItem'
-//import Topics from './components/Topics/Topics'
+import Topics from './Topics'
 import Categories from './Categories'
 //import Scenarios from './components/Scenarios/Scenarios'
 import TopCompetitors from './Competitors'
@@ -186,12 +186,13 @@ function BrandProfile(props) {
 									brandProfile={brandProfile}
 								/>
 
-								{/** 
-
 								<div ref={topicsRef} style={{ marginTop: 30 }} />
 
-								<Topics setTopicsValid={setTopicsValid} />
-
+								<Topics
+									setTopicsValid={setTopicsValid}
+									brandProfile={brandProfile}
+								/>
+								{/** 
 								<div ref={scenariosRef} style={{ marginTop: 30 }} />
 								<Scenarios setScenariosValid={setScenariosValid} />*/}
 							</div>
