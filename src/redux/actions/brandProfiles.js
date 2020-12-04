@@ -26,6 +26,9 @@ import {
 	brandScenarioObjValidation
 } from '../../schemas/schemas'
 
+var cwait = require('cwait')
+var categoriesQueue = new cwait.TaskQueue(Promise, 1)
+
 const apiBase = config.api.userAccountUrl
 
 export function setBrandProfiles(brandProfiles) {
@@ -207,14 +210,14 @@ export const patchBrandProfileCategories = (data) => {
 	}
 
 	let url = apiBase + `/brand-profile/${brandProfileId}/categories`
-	return async (dispatch) => {
+	return categoriesQueue.wrap(async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
 		const result = await axios.patch(url, categories)
 		if (result.status === 201 || result.status === 200) {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))
 		}
-	}
+	})
 }
 
 export const saveBrandProfile = (brandProfile) => {
