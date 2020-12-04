@@ -25,16 +25,7 @@ export function permissions_list(state = [], action) {
     }
 }
 
-export function permissionsIsLoading(state = true, action) {
-    switch (action.type) {
-        case ADMIN_PERMISSIONS_IS_LOADING:
-            return action.adminPermissionsIsLoading
-        default:
-            return state
-    }
-}
-
-export function permissionsArchiving(state = '', action) {
+export function permissionsArchiving(state = false, action) {
     switch (action.type) {
         case PERMISSIONS_ARCHIVING:
             return action.permissionsArchiving

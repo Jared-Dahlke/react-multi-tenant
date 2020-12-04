@@ -36,10 +36,10 @@ export function setAllBrandPermissions(permissions) {
     }
 }
 
-export function setPermissionsArchiving(permissionsId) {
+export function setPermissionsArchiving(bool) {
     return {
         type: PERMISSIONS_ARCHIVING,
-        permissionsArchiving: permissionsId
+        permissionsArchiving: bool
     }
 }
 
@@ -62,13 +62,13 @@ export function setPermissionsRemoved(bool) {
 export const removePermissions = (roleId, permissionId, permissions) => {
     let url = apiBase + `/role/${roleId}/permission/${permissionId}`
     return (dispatch, getState) => {
-        // dispatch(setPermissionsSaving(true))
+        dispatch(setPermissionsArchiving(true))
         axios
             .delete(url)
             .then((response) => {
                 dispatch(setAdminBrandPermissions(permissions))
                 dispatch(setPermissionsRemoved(true))
-                // dispatch(setPermissionsSaving(false))
+                dispatch(setPermissionsArchiving(false))
             })
             .catch((error) => {
                 //error
@@ -79,13 +79,13 @@ export const removePermissions = (roleId, permissionId, permissions) => {
 export const insertPermissions = (roleId, permissionId, permissions) => {
     let url = apiBase + `/role/${roleId}/permission`
     return (dispatch, getState) => {
-        // dispatch(setPermissionsSaving(true))
+        dispatch(setPermissionsArchiving(true))
         axios
             .post(url, { "permissionId": permissionId })
             .then((response) => {
                 dispatch(setAdminBrandPermissions(permissions))
                 dispatch(setPermissionsArchived(true))
-                // dispatch(setPermissionsSaving(false))
+                dispatch(setPermissionsArchiving(false))
             })
             .catch((error) => {
                 //error

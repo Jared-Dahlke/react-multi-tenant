@@ -1,8 +1,8 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
-import Button from 'rsuite/lib/Button'
 import { TagPicker } from 'rsuite';
+import Loader from 'rsuite/lib/Loader'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
@@ -10,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow'
 import TableHead from '@material-ui/core/TableHead'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
-import { useHistory } from 'react-router-dom'
 import {
     fetchAdminBrandPermissions,
     fetchAllBrandPermissions,
@@ -24,8 +23,6 @@ import styles from '../../../assets/jss/material-dashboard-react/components/task
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
-import { FormLoader } from '../../../components/SkeletonLoader'
-import { routes } from '../../../routes'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -33,7 +30,6 @@ const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
     return {
-        permissionsIsLoading: state.brandProfilesAdmin.permissionsIsLoading,
         permissionsArchived: state.brandProfilesAdmin.permissionsArchived,
         permissionsRemoved: state.brandProfilesAdmin.permissionsRemoved,
         permissionsArchiving: state.brandProfilesAdmin.permissionsArchiving,
@@ -54,7 +50,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function Permissions(props) {
-    let history = useHistory()
 
     const classes = useStyles()
     const tableClasses = useTableStyles()
@@ -81,39 +76,36 @@ function Permissions(props) {
 
 
     const permissionsChange = (v, e, index) => {
-        // console.log("event triggering --", p);
-        // console.log("event triggered --", v);
         var p = adminPermissions[index].captured_permissions;
         var roleId = adminPermissions[index].roleId
         var insert = v.filter(x => !p.includes(x));
-        // console.log("insert ", insert[0])
         var remove = p.filter(x => !v.includes(x));
-        // console.log("delete ", remove[0])
         if (insert[0]) {
             console.log("permission is inserted", insert[0])
             adminPermissions[index].captured_permissions = v
-            console.log("adminPermissions is inserted", adminPermissions)
             props.insertPermissions(roleId, insert[0], adminPermissions)
         }
         else if (remove[0]) {
             console.log("permission is removed", remove[0])
             adminPermissions[index].captured_permissions = v
-            console.log("adminPermissions is removed", adminPermissions)
             props.removePermissions(roleId, remove[0], adminPermissions)
         }
         else {
-            console.log("kuch b ni hua")
+            console.log("no change")
         }
-    }
-
-
-    const handleCreateOpinionClick = () => {
-        let url = routes.app.settings.brandProfiles.admin.opinions.create.path
-        history.push(url)
     }
 
     return (
         <Grid container justify='center'>
+            <Loader size='sm' content='Updating...'
+                style={{
+                    display: props.permissionsArchiving ? 'flex' : 'none',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '20px',
+                    width: '100%',
+                    color: 'white'
+                }} />
             <Snackbar
                 autoHideDuration={2000}
                 place='bc'
@@ -197,24 +189,7 @@ function Permissions(props) {
                             </TableBody>
                         </Table>
                     </div>
-                ) : props.permissionsIsLoading ? (
-                    <FormLoader />
-                ) : (
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-
-                                    height: 'calc(100vh - 200px)',
-                                    color: 'white'
-                                }}
-                            >
-                                <Button appearance='primary' onClick={handleCreateOpinionClick}>
-                                    Create Permissions
-						</Button>
-                            </div>
-                        )}
+                ) : ''}
             </GridItem>
         </Grid>
     )
