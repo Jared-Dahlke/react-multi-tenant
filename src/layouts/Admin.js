@@ -243,7 +243,7 @@ const switchRoutes = (
 			)}
 		/>
 
-		<Redirect from='/app' to={routes.app.settings.profile.path} />
+		<Redirect from='/app' to={routes.app.settings.brandMentality.path} />
 	</Switch>
 )
 
