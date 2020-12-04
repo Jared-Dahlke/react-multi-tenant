@@ -4,7 +4,7 @@ import GridContainer from '../../../components/Grid/GridContainer'
 import GridItem from '../../../components/Grid/GridItem'
 import Topics from './Topics'
 import Categories from './Categories'
-//import Scenarios from './components/Scenarios/Scenarios'
+import Scenarios from './Scenarios/Scenarios'
 import TopCompetitors from './Competitors'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
@@ -192,9 +192,12 @@ function BrandProfile(props) {
 									setTopicsValid={setTopicsValid}
 									brandProfile={brandProfile}
 								/>
-								{/** 
+
 								<div ref={scenariosRef} style={{ marginTop: 30 }} />
-								<Scenarios setScenariosValid={setScenariosValid} />*/}
+								<Scenarios
+									setScenariosValid={setScenariosValid}
+									brandProfile={brandProfile}
+								/>
 							</div>
 						</GridItem>
 					</GridList>

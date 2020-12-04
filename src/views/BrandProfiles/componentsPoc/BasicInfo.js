@@ -79,6 +79,13 @@ function BasicInfo(props) {
 		}
 	}, [props.brandProfile])
 
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			setFetched(false)
+		}
+	}, [])
+
 	return (
 		<div>
 			<Grid container spacing={3} justify='center'>

@@ -29,6 +29,7 @@ import {
 var cwait = require('cwait')
 var categoriesQueue = new cwait.TaskQueue(Promise, 1)
 var topicsQueue = new cwait.TaskQueue(Promise, 1)
+var scenariosQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.userAccountUrl
 
@@ -147,6 +148,32 @@ export function fetchBrandProfileTopics(brandProfileId) {
 	}
 }
 
+export function fetchBrandProfileScenarios(brandProfileId) {
+	let url = apiBase + `/brand-profile/${brandProfileId}/scenarios`
+	return async (dispatch, getState) => {
+		//	dispatch(setBrandProfileLoading(true))
+		try {
+			const result = await axios.get(url)
+			console.log(result)
+			if (result.status === 200) {
+				console.log(result.data)
+
+				let currBrandProfiles = JSON.parse(
+					JSON.stringify(getState().brandProfiles)
+				)
+
+				for (const [index, p] of currBrandProfiles.entries()) {
+					if (p.brandProfileId === brandProfileId) {
+						currBrandProfiles[index].scenarios = result.data
+					}
+				}
+				dispatch(setBrandProfiles(currBrandProfiles))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
 export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
@@ -260,6 +287,27 @@ export const patchBrandProfileTopics = (data) => {
 	return topicsQueue.wrap(async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
 		const result = await axios.patch(url, topics)
+		if (result.status === 201 || result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
+		}
+	})
+}
+
+export const patchBrandProfileScenarios = (data) => {
+	let brandProfileId = data.brandProfileId
+	let scenarios = data.scenarios
+
+	let datas = {
+		scenarios: scenarios,
+		scenarioResponseId: Math.floor(Math.random() * 3) + 1
+	}
+
+	let url = apiBase + `/brand-profile/${brandProfileId}/scenarios`
+
+	return scenariosQueue.wrap(async (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
+		const result = await axios.patch(url, scenarios)
 		if (result.status === 201 || result.status === 200) {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))

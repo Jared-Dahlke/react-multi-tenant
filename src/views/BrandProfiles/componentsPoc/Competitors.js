@@ -47,6 +47,13 @@ function TopCompetitors(props) {
 		}
 	}, [props.brandProfile])
 
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			setFetched(false)
+		}
+	}, [])
+
 	const handleSaveNew = (values, formik) => {
 		console.log('hanle save new')
 		props.setCompetitorsValid(true)

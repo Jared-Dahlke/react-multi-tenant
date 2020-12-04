@@ -53,6 +53,13 @@ function Categories(props) {
 		}
 	}, [props.brandProfile])
 
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			setFetched(false)
+		}
+	}, [])
+
 	const handleSetBrandProfiles = (categories) => {
 		let brandProfilesCopy = JSON.parse(JSON.stringify(props.brandProfiles))
 		for (const brandProfile of brandProfilesCopy) {
