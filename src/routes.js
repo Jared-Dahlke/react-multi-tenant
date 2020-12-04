@@ -7,8 +7,6 @@ import ListBuilder from './views/Engage/Lists/ListBuilder/ListBuilder.js'
 import Lists from './views/Engage/Lists/Lists.js'
 import Users from './views/Users/Users'
 import BrandProfiles from './views/BrandProfiles/BrandProfiles.js'
-import CreateBrandProfile from './views/BrandProfiles/CreateBrandProfile.js'
-import EditBrandProfile from './views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from './views/UserProfile/UserProfile.js'
 import Account from './views/Account/Account'
 import UploadList from './views/Engage/Lists/UploadList'
@@ -24,7 +22,7 @@ import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.j
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
-import BrandProfile from './views/BrandProfiles/componentsPoc/BrandProfile'
+import BrandProfile from './views/BrandProfiles/components/BrandProfile'
 
 export const routes = {
 	login: {

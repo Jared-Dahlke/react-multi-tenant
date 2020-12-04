@@ -15,7 +15,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import {
 	fetchBrandProfiles,
-	fetchBrandProfile,
 	deleteBrandProfile,
 	setBrandProfileDeleted,
 	removeBrandProfile,
@@ -57,8 +56,6 @@ const mapDispatchToProps = (dispatch) => {
 		removeBrandProfile: (brandProfileId) =>
 			dispatch(removeBrandProfile(brandProfileId)),
 		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
-		fetchBrandProfile: (brandProfileId) =>
-			dispatch(fetchBrandProfile(brandProfileId)),
 		createBrandProfile: () => dispatch(createBrandProfile()),
 		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool))
 	}
@@ -96,7 +93,6 @@ function BrandProfiles(props) {
 	}
 
 	const handleEditBrandProfileClick = (profile) => {
-		//props.fetchBrandProfile(profile.brandProfileId)
 		let url = `/app/settings/brandProfiles/brandProfile/${profile.brandProfileId}`
 		history.push(url)
 	}

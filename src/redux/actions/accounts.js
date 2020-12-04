@@ -36,10 +36,7 @@ import {
 	setBrandProfiles,
 	fetchBrandProfiles,
 	brandProfilesIsLoading,
-	fetchBrandScenarios,
-	fetchBrandCategories,
-	fetchBrandIndustryVerticals,
-	fetchBrandTopics
+	fetchBrandIndustryVerticals
 } from '../actions/brandProfiles'
 import { findAccountNodeByAccountId } from '../../utils'
 import { setLists } from './engage/lists'

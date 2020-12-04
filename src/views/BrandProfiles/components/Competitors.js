@@ -2,17 +2,17 @@ import React from 'react'
 import { Formik, FieldArray, useFormikContext } from 'formik'
 import Panel from 'rsuite/lib/Panel'
 import Button from 'rsuite/lib/Button'
-import { dangerColor } from '../../../../assets/jss/material-dashboard-react.js'
 import Grid from '@material-ui/core/Grid'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import debounce from 'just-debounce-it'
-import FormikInput from '../../../../components/CustomInput/FormikInput'
+import FormikInput from '../../../components/CustomInput/FormikInput'
 import { connect } from 'react-redux'
-import { UserCan, perms, userCan } from '../../../../Can'
+import { UserCan, perms, userCan } from '../../../Can'
 import * as Yup from 'yup'
-import { neutralColor } from '../../../../assets/jss/colorContants.js'
-import { patchBrandProfileCompetitors } from '../../../../redux/actions/brandProfiles'
-import { brandProfileModel } from '../../Model'
+import { neutralColor } from '../../../assets/jss/colorContants.js'
+import {
+	patchBrandProfileCompetitors,
+	fetchBrandProfileCompetitors
+} from '../../../redux/actions/brandProfiles'
 const urlRegex = require('url-regex')
 
 const mapStateToProps = (state) => {
@@ -25,25 +25,29 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		patchBrandProfileCompetitors: (competitors) =>
-			dispatch(patchBrandProfileCompetitors(competitors))
+			dispatch(patchBrandProfileCompetitors(competitors)),
+		fetchBrandProfileCompetitors: (brandProfileId) =>
+			dispatch(fetchBrandProfileCompetitors(brandProfileId))
 	}
 }
 
 function TopCompetitors(props) {
-	const getCurrent = (brandProfiles, brandProfileIdEditing) => {
-		for (const brandProfile of brandProfiles) {
-			if (brandProfile.brandProfileId == brandProfileIdEditing) {
-				return brandProfile
+	const [fetched, setFetched] = React.useState(false)
+	React.useEffect(() => {
+		if (!fetched) {
+			if (props.brandProfile && props.brandProfile.brandProfileId) {
+				props.fetchBrandProfileCompetitors(props.brandProfile.brandProfileId)
+				setFetched(true)
 			}
 		}
-		return brandProfileModel
-	}
+	}, [props.brandProfile])
 
-	let currentBrandProfile = JSON.parse(
-		JSON.stringify(
-			getCurrent(props.brandProfiles, props.brandProfileIdUnderEdit)
-		)
-	)
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			setFetched(false)
+		}
+	}, [])
 
 	const handleSaveNew = (values, formik) => {
 		props.setCompetitorsValid(true)
@@ -66,7 +70,12 @@ function TopCompetitors(props) {
 			newCompsWithoutId.push(newCompetitorWithoutId)
 		}
 
-		props.patchBrandProfileCompetitors(newCompsWithoutId)
+		let data = {
+			competitors: newCompsWithoutId,
+			brandProfileId: props.brandProfile.brandProfileId
+		}
+
+		props.patchBrandProfileCompetitors(data)
 	}
 
 	const handleAddNew = (values, setFieldValue) => {
@@ -157,8 +166,8 @@ function TopCompetitors(props) {
 			validateOnBlur={false}
 			onSubmit={(competitor, formik) => handleSaveNew(competitor, formik)}
 			initialValues={{
-				competitors: currentBrandProfile.competitors
-					? currentBrandProfile.competitors
+				competitors: props.brandProfile.competitors
+					? props.brandProfile.competitors
 					: [
 							{
 								competitorId: '',

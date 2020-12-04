@@ -3,16 +3,11 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SET_BRAND_SCENARIOS,
 	SET_BRAND_INDUSTRY_VERTICALS,
-	SET_BRAND_TOPICS,
-	SET_BRAND_CATEGORIES,
 	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_CREATING,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
-	SET_BRAND_PROFILE_BASIC_INFO,
-	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILES,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
@@ -136,15 +131,6 @@ export function hasBrandProfiles(state = true, action) {
 	}
 }
 
-export function scenarios(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_SCENARIOS:
-			return action.scenarios
-		default:
-			return state
-	}
-}
-
 export function scenariosIsLoading(state = true, action) {
 	switch (action.type) {
 		case SCENARIOS_IS_LOADING:
@@ -158,50 +144,6 @@ export function industryVerticals(state = [], action) {
 	switch (action.type) {
 		case SET_BRAND_INDUSTRY_VERTICALS:
 			return action.industryVerticals
-		default:
-			return state
-	}
-}
-
-export function brandProfileBasicInfo(
-	state = {
-		twitterProfileUrl: '',
-		websiteUrl: '',
-		brandName: '',
-		industryVerticalId: ''
-	},
-	action
-) {
-	switch (action.type) {
-		case SET_BRAND_PROFILE_BASIC_INFO:
-			return action.brandProfileBasicInfo
-		default:
-			return state
-	}
-}
-
-export function brandProfileCompetitors(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_PROFILE_COMPETITORS:
-			return action.brandProfileCompetitors
-		default:
-			return state
-	}
-}
-
-export function brandCategories(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_CATEGORIES:
-			return action.brandCategories
-		default:
-			return state
-	}
-}
-
-export function topics(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_TOPICS:
-			return action.topics
 		default:
 			return state
 	}
