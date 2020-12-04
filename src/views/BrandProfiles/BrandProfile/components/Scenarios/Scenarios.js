@@ -5,7 +5,7 @@ import {
 	patchBrandProfileScenarios,
 	fetchBrandProfileScenarios,
 	setBrandProfiles
-} from '../../../../redux/actions/brandProfiles'
+} from '../../../../../redux/actions/brandProfiles'
 import Panel from 'rsuite/lib/Panel'
 
 const mapStateToProps = (state) => {

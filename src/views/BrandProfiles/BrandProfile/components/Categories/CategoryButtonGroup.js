@@ -1,10 +1,10 @@
 import React from 'react'
-import GridItem from '../../../components/Grid/GridItem'
-import GridContainer from '../../../components/Grid/GridContainer'
+import GridItem from '../../../../../components/Grid/GridItem'
+import GridContainer from '../../../../../components/Grid/GridContainer'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
-import { neutralColor } from '../../../assets/jss/colorContants'
-import { perms, userCan } from '../../../Can'
+import { neutralColor } from '../../../../../assets/jss/colorContants'
+import { perms, userCan } from '../../../../../Can'
 
 export default function CategoryButtonGroup(props) {
 	const [handlingClick, setHandlingClick] = React.useState(false)

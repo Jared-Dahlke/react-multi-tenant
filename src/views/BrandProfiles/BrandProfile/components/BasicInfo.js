@@ -1,20 +1,18 @@
 import React from 'react'
-import GridItem from '../../../components/Grid/GridItem.js'
+import GridItem from '../../../../components/Grid/GridItem.js'
 import Panel from 'rsuite/lib/Panel'
-import FormikInput from '../../../components/CustomInput/FormikInput'
-import FormikSelect from '../../../components/CustomSelect/FormikSelect'
+import FormikInput from '../../../../components/CustomInput/FormikInput'
+import FormikSelect from '../../../../components/CustomSelect/FormikSelect'
 import Grid from '@material-ui/core/Grid'
 import { withFormik, Form, useFormikContext } from 'formik'
 import debounce from 'just-debounce-it'
 import {
 	patchBrandProfileBasicInfo,
 	fetchBrandProfileBasic
-} from '../../../redux/actions/brandProfiles'
+} from '../../../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import * as Yup from 'yup'
-import { UserCan, perms, userCan } from '../../../Can'
-import Loader from 'rsuite/lib/Loader'
-import { Debug } from '../../Debug'
+import { UserCan, perms, userCan } from '../../../../Can'
 const urlRegex = require('url-regex')
 
 export const schemaValidation = Yup.object().shape({

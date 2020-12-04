@@ -4,15 +4,15 @@ import Panel from 'rsuite/lib/Panel'
 import Button from 'rsuite/lib/Button'
 import Grid from '@material-ui/core/Grid'
 import debounce from 'just-debounce-it'
-import FormikInput from '../../../components/CustomInput/FormikInput'
+import FormikInput from '../../../../components/CustomInput/FormikInput'
 import { connect } from 'react-redux'
-import { UserCan, perms, userCan } from '../../../Can'
+import { UserCan, perms, userCan } from '../../../../Can'
 import * as Yup from 'yup'
-import { neutralColor } from '../../../assets/jss/colorContants.js'
+import { neutralColor } from '../../../../assets/jss/colorContants.js'
 import {
 	patchBrandProfileCompetitors,
 	fetchBrandProfileCompetitors
-} from '../../../redux/actions/brandProfiles'
+} from '../../../../redux/actions/brandProfiles'
 const urlRegex = require('url-regex')
 
 const mapStateToProps = (state) => {

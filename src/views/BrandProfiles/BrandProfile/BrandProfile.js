@@ -1,11 +1,11 @@
 import React from 'react'
-import BasicInfo from './BasicInfo'
+import BasicInfo from './components/BasicInfo'
 import GridContainer from '../../../components/Grid/GridContainer'
 import GridItem from '../../../components/Grid/GridItem'
-import Topics from './Topics'
-import Categories from './Categories'
-import Scenarios from './Scenarios/Scenarios'
-import TopCompetitors from './Competitors'
+import Topics from './components/Topics'
+import Categories from './components/Categories/Categories'
+import Scenarios from './components/Scenarios/Scenarios'
+import TopCompetitors from './components/Competitors'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
 import {
@@ -17,11 +17,9 @@ import {
 	setBrandProfileUnderEdit
 } from '../../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
-import { accentColor } from '../../../assets/jss/colorContants.js'
 import { GridList } from '@material-ui/core'
 import { useScroll } from 'react-scroll-hooks'
 import Steps from 'rsuite/lib/Steps'
-import Loader from 'rsuite/lib/Loader'
 
 const mapDispatchToProps = (dispatch) => {
 	return {

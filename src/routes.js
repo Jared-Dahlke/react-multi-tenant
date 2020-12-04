@@ -22,7 +22,7 @@ import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.j
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
-import BrandProfile from './views/BrandProfiles/components/BrandProfile'
+import BrandProfile from './views/BrandProfiles/BrandProfile/BrandProfile'
 
 export const routes = {
 	login: {

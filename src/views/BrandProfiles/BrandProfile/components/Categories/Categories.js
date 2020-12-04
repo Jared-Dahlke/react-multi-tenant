@@ -6,8 +6,7 @@ import {
 	patchBrandProfileCategories,
 	fetchBrandProfileCategories,
 	setBrandProfiles
-} from '../../../redux/actions/brandProfiles'
-import { brandProfileModel } from '../Model'
+} from '../../../../../redux/actions/brandProfiles'
 
 const mapStateToProps = (state) => {
 	return {

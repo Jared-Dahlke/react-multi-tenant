@@ -8,7 +8,7 @@ import lodashToLower from 'lodash/toLower'
 import lodashIsEmpty from 'lodash/isEmpty'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
-import { perms, userCan } from '../../../Can'
+import { perms, userCan } from '../../../../Can'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
 import Panel from 'rsuite/lib/Panel'
@@ -18,7 +18,7 @@ import {
 	patchBrandProfileTopics,
 	fetchBrandProfileTopics,
 	setBrandProfiles
-} from '../../../redux/actions/brandProfiles'
+} from '../../../../redux/actions/brandProfiles'
 
 const mapStateToProps = (state) => {
 	return {
