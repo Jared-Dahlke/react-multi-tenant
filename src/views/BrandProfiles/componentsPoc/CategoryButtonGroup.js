@@ -26,7 +26,7 @@ export default function CategoryButtonGroup(props) {
 						float: 'right'
 					}}
 				>
-					{props.category.contentCategoryName}
+					{props.category.contentCategory}
 				</div>
 			</GridItem>
 

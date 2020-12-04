@@ -201,6 +201,9 @@ export const patchBrandProfileCategories = (data) => {
 		delete category.contentCategory
 		delete category.contentCategoryResponseName
 		delete category.brandProfileId
+		if (!category.contentCategoryResponseId) {
+			category.contentCategoryResponseId = -1
+		}
 	}
 
 	let url = apiBase + `/brand-profile/${brandProfileId}/categories`
