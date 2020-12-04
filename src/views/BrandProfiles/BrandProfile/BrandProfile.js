@@ -78,7 +78,6 @@ function BrandProfile(props) {
 	}
 
 	const getBrandProfileById = (brandProfiles, brandProfileId) => {
-		console.log(brandProfiles, brandProfileId)
 		for (const brandProfile of brandProfiles) {
 			if (brandProfile.brandProfileId === brandProfileId)
 				return JSON.parse(JSON.stringify(brandProfile))

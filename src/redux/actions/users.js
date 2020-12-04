@@ -293,7 +293,6 @@ export const createUser = (user) => {
 		try {
 			response = await axios.post(url, user)
 		} catch (error) {
-			console.log('inside catch')
 			console.log(error)
 		}
 

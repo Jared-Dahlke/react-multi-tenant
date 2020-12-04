@@ -151,6 +151,7 @@ function TopicsTree(props) {
 	}, [searchTerm])
 
 	const executeSearch = debounce(() => {
+		if (!componentTopics) return
 		let copyTopics2 = JSON.parse(JSON.stringify(componentTopics))
 		let end = filterTree(searchTerm, copyTopics2)
 		if (searchTerm.length > 0) {
@@ -165,7 +166,6 @@ function TopicsTree(props) {
 
 	React.useEffect(() => {
 		if (componentTopics && componentTopics.length > 0 && !receivedTopics) {
-			console.log('receied component topics')
 			setDisplayedTopics(componentTopics)
 			setReceivedTopics(true)
 			setAllTopicIds(getTopicValues(componentTopics))

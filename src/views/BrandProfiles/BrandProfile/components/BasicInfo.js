@@ -162,9 +162,6 @@ function BasicInfo(props) {
 
 const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
-		console.log('reinit')
-		console.log(props)
-
 		return {
 			brandName: props.brandProfile.brandName,
 			websiteUrl: props.brandProfile.websiteUrl,
