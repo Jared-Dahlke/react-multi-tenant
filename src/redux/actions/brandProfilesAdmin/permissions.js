@@ -13,8 +13,7 @@ import {
     brandPermissionsObjValidation
 } from '../../../schemas/schemas'
 
-// const apiBase = config.api.userAccountUrl
-const apiBase = 'http://localhost:4000'
+const apiBase = config.api.userAccountUrl
 
 export function setAdminPermissionsIsLoading(bool) {
     return {
