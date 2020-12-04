@@ -4,6 +4,7 @@ import {
     SET_ALL_BRAND_PERMISSIONS,
     PERMISSIONS_ARCHIVING,
     PERMISSIONS_ARCHIVED,
+    PERMISSIONS_TO_REMOVE,
     PERMISSIONS_REMOVED
 } from '../../action-types/brandProfilesAdmin/permissions'
 
@@ -11,6 +12,15 @@ export function permissions(state = [], action) {
     switch (action.type) {
         case SET_ADMIN_BRAND_PERMISSIONS:
             return action.permissions
+        default:
+            return state
+    }
+}
+
+export function permissionsIsLoading(state = true, action) {
+    switch (action.type) {
+        case ADMIN_PERMISSIONS_IS_LOADING:
+            return action.adminPermissionsIsLoading
         default:
             return state
     }
@@ -38,6 +48,15 @@ export function permissionsArchived(state = false, action) {
     switch (action.type) {
         case PERMISSIONS_ARCHIVED:
             return action.permissionsArchived
+        default:
+            return state
+    }
+}
+
+export function permissionSureToRemove(state = { "show": false }, action) {
+    switch (action.type) {
+        case PERMISSIONS_TO_REMOVE:
+            return action.permissionSureToRemove
         default:
             return state
     }

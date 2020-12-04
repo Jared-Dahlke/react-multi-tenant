@@ -4,7 +4,8 @@ import {
     SET_ALL_BRAND_PERMISSIONS,
     PERMISSIONS_ARCHIVING,
     PERMISSIONS_ARCHIVED,
-    PERMISSIONS_REMOVED,
+    PERMISSIONS_TO_REMOVE,
+    PERMISSIONS_REMOVED
 } from '../../action-types/brandProfilesAdmin/permissions'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
@@ -50,6 +51,12 @@ export function setPermissionsArchived(bool) {
     }
 }
 
+export function setPermissionSureToRemove(pData) {
+    return {
+        type: PERMISSIONS_TO_REMOVE,
+        permissionSureToRemove: pData
+    }
+}
 
 export function setPermissionsRemoved(bool) {
     return {

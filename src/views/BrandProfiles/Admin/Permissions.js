@@ -1,7 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
-import { TagPicker } from 'rsuite';
+import { TagPicker, Modal, Button, Icon } from 'rsuite';
 import Loader from 'rsuite/lib/Loader'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
@@ -13,9 +13,11 @@ import classnames from 'classnames'
 import {
     fetchAdminBrandPermissions,
     fetchAllBrandPermissions,
+    setAdminBrandPermissions,
     insertPermissions,
     removePermissions,
     setPermissionsArchived,
+    setPermissionSureToRemove,
     setPermissionsRemoved
 } from '../../../redux/actions/brandProfilesAdmin/permissions'
 import { connect } from 'react-redux'
@@ -23,6 +25,7 @@ import styles from '../../../assets/jss/material-dashboard-react/components/task
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
+import { FormLoader } from '../../../components/SkeletonLoader'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -30,7 +33,9 @@ const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
     return {
+        permissionsIsLoading: state.brandProfilesAdmin.permissionsIsLoading,
         permissionsArchived: state.brandProfilesAdmin.permissionsArchived,
+        permissionSureToRemove: state.brandProfilesAdmin.permissionSureToRemove,
         permissionsRemoved: state.brandProfilesAdmin.permissionsRemoved,
         permissionsArchiving: state.brandProfilesAdmin.permissionsArchiving,
         adminPermissions: state.brandProfilesAdmin.permissions,
@@ -42,9 +47,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchAdminBrandPermissions: () => dispatch(fetchAdminBrandPermissions()),
         fetchAllBrandPermissions: () => dispatch(fetchAllBrandPermissions()),
+        setAdminBrandPermissions: (permissions) => dispatch(setAdminBrandPermissions(permissions)),
         insertPermissions: (roleId, p, adminPermissions) => dispatch(insertPermissions(roleId, p, adminPermissions)),
         removePermissions: (roleId, p, adminPermissions) => dispatch(removePermissions(roleId, p, adminPermissions)),
         setPermissionsArchived: (bol) => dispatch(setPermissionsArchived(bol)),
+        setPermissionSureToRemove: (pData) => dispatch(setPermissionSureToRemove(pData)),
         setPermissionsRemoved: (bol) => dispatch(setPermissionsRemoved(bol))
     }
 }
@@ -53,6 +60,7 @@ function Permissions(props) {
 
     const classes = useStyles()
     const tableClasses = useTableStyles()
+    let permissionToRemove = {}
 
     const { fetchAdminBrandPermissions, adminPermissions } = props
     React.useEffect(() => {
@@ -87,25 +95,57 @@ function Permissions(props) {
         }
         else if (remove[0]) {
             console.log("permission is removed", remove[0])
-            adminPermissions[index].captured_permissions = v
-            props.removePermissions(roleId, remove[0], adminPermissions)
+            // adminPermissions[index].captured_permissions = v
+            permissionToRemove = {
+                "show": true,
+                "roleId": roleId,
+                "remove": remove[0],
+                "index": index,
+                "captured_permissions": v
+            }
+
+            props.setPermissionSureToRemove(permissionToRemove)
+            // props.removePermissions(roleId, remove[0], adminPermissions)
         }
         else {
             console.log("no change")
         }
     }
 
+    const confirmDelete = () => {
+        if (props.permissionSureToRemove) {
+            adminPermissions[props.permissionSureToRemove.index].captured_permissions = props.permissionSureToRemove.captured_permissions
+            props.removePermissions(props.permissionSureToRemove.roleId, props.permissionSureToRemove.remove, adminPermissions)
+            props.setPermissionSureToRemove({ "show": false });
+        }
+    }
+
+    const cancelDelete = () => {
+        if (props.permissionSureToRemove) {
+            adminPermissions[props.permissionSureToRemove.index].captured_permissions = props.permissionSureToRemove.captured_permissions
+            props.setAdminBrandPermissions(adminPermissions);
+            adminPermissions[props.permissionSureToRemove.index].captured_permissions.push(props.permissionSureToRemove.remove)
+            props.setAdminBrandPermissions(adminPermissions);
+            props.setPermissionSureToRemove({ "show": false });
+        }
+    }
+
     return (
         <Grid container justify='center'>
-            <Loader size='sm' content='Updating...'
-                style={{
-                    display: props.permissionsArchiving ? 'flex' : 'none',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '20px',
-                    width: '100%',
-                    color: 'white'
-                }} />
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '20px',
+                width: '100%',
+                color: 'white'
+            }}>
+                <Loader size='sm' content='Updating...'
+                    style={{
+                        display: props.permissionsArchiving ? 'flex' : 'none'
+                    }} />
+            </div>
+
             <Snackbar
                 autoHideDuration={2000}
                 place='bc'
@@ -134,6 +174,27 @@ function Permissions(props) {
                     Permissions Removed
 				</Alert>
             </Snackbar>
+            <Modal backdrop="static" show={props.permissionSureToRemove.show} onHide={() => cancelDelete()} size="xs">
+                < Modal.Body >
+                    <Icon
+                        icon="remind"
+                        style={{
+                            color: '#ffb300',
+                            fontSize: 24
+                        }}
+                    />
+                    {'  '}
+                    You are trying to remove permission . are you sure you want to proceed ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={() => confirmDelete()} appearance="primary">
+                        Ok
+                    </Button>
+                    <Button onClick={() => cancelDelete()} appearance="subtle">
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
             <GridItem xs={12} sm={12} md={8}>
                 {adminPermissions && adminPermissions.length > 0 ? (
@@ -189,9 +250,11 @@ function Permissions(props) {
                             </TableBody>
                         </Table>
                     </div>
+                ) : props.permissionsIsLoading ? (
+                    <FormLoader />
                 ) : ''}
             </GridItem>
-        </Grid>
+        </Grid >
     )
 }
 

@@ -22,8 +22,10 @@ import {
 import {
 	permissions,
 	permissions_list,
+	permissionsIsLoading,
 	permissionsArchiving,
 	permissionsArchived,
+	permissionSureToRemove,
 	permissionsRemoved
 } from './permissions'
 // import { brandProfileAdminPermissions } from './permissions'
@@ -44,7 +46,9 @@ export default combineReducers({
 	// brandProfileAdminOpinions
 	permissions,
 	permissions_list,
+	permissionsIsLoading,
 	permissionsArchiving,
 	permissionsArchived,
+	permissionSureToRemove,
 	permissionsRemoved
 })
