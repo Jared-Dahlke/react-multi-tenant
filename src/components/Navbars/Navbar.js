@@ -208,6 +208,7 @@ function Header(props) {
 										label='Account'
 									/>
 								)}
+
 								{userCan(perms.USER_READ) && (
 									<NavLink
 										href={routes.app.settings.users.path}
@@ -221,6 +222,7 @@ function Header(props) {
 										label='Brand Profiles'
 									/>
 								)}
+
 								{userCan(perms.BRAND_MENTALITY_READ) && (
 									<NavLink
 										href={routes.app.settings.brandMentality.path}
