@@ -4,14 +4,14 @@ steps:
   # build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args:
-      - "build"
-      - "-f"
-      - "Dockerfile"
-      - "-t"
-      - "gcr.io/$PROJECT_ID/front-end-demo"
-      - "--build-arg"
-      - "ENVIRONMENT=demo"
-      - "."
+      - 'build'
+      - '-f'
+      - 'Dockerfile'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/front-end-demo'
+      - '--build-arg'
+      - 'ENVIRONMENT=demo'
+      - '.'
 
   # push the container image
   - name: 'gcr.io/cloud-builders/docker'
