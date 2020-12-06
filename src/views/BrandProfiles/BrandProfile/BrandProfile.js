@@ -8,6 +8,7 @@ import Scenarios from './components/Scenarios/Scenarios'
 import Opinions from './components/Opinions/Opinions'
 import TopCompetitors from './components/Competitors'
 import { useSpring, animated } from 'react-spring'
+import { accentColor } from '../../../assets/jss/colorContants'
 import Grid from '@material-ui/core/Grid'
 import {
 	createBrandProfile,
@@ -195,6 +196,8 @@ function BrandProfile(props) {
 			setBrandProfile(bp)
 		}
 	}, [props.brandProfiles])
+
+	const { brandProfileSaving, brandProfileSaved } = props
 
 	return (
 		<div>
