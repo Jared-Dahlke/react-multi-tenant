@@ -1,6 +1,5 @@
 import React from 'react'
 import GridItem from '../../../../components/Grid/GridItem.js'
-import Panel from 'rsuite/lib/Panel'
 import FormikInput from '../../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../../components/CustomSelect/FormikSelect'
 import Grid from '@material-ui/core/Grid'
@@ -13,6 +12,7 @@ import {
 import { connect } from 'react-redux'
 import * as Yup from 'yup'
 import { UserCan, perms, userCan } from '../../../../Can'
+import Panel from '../../../../components/CustomPanel'
 const urlRegex = require('url-regex')
 
 export const schemaValidation = Yup.object().shape({
@@ -91,7 +91,11 @@ function BasicInfo(props) {
 					<Panel
 						header='Brand Information'
 						bordered
-						style={{ position: 'relative' }}
+						style={{
+							position: 'relative',
+							boxShadow: '0 -2px 20px rgba(0, 0, 0, 1)'
+							//	border: '1px solid darkgrey'
+						}}
 					>
 						<Form>
 							<Grid container>

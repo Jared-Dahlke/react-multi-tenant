@@ -6,7 +6,7 @@ import {
 	fetchBrandProfileOpinions,
 	setBrandProfiles
 } from '../../../../../redux/actions/brandProfiles'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../../../components/CustomPanel'
 
 const mapStateToProps = (state) => {
 	return {

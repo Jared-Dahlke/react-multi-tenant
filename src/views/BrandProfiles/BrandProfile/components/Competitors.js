@@ -1,6 +1,6 @@
 import React from 'react'
 import { Formik, FieldArray, useFormikContext } from 'formik'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import Grid from '@material-ui/core/Grid'
 import debounce from 'just-debounce-it'

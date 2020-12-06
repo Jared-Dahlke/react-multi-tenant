@@ -75,6 +75,13 @@ function BrandProfile(props) {
 	const scenariosVisible = useOnScreen(scenariosRef)
 	const opinionsVisible = useOnScreen(opinionsRef)
 
+	const [state, toggle] = React.useState(true)
+	const { x } = useSpring({
+		from: { x: 0 },
+		x: state ? 1 : 0,
+		config: { duration: 1000 }
+	})
+
 	React.useEffect(() => {
 		if (brandInformationVisible) {
 			setActiveStep(brandProfileSteps.brandInformation)
@@ -209,6 +216,7 @@ function BrandProfile(props) {
 									: 'wait'
 							}
 						/>
+
 						<Steps.Item
 							title='Competitors'
 							onClick={() =>

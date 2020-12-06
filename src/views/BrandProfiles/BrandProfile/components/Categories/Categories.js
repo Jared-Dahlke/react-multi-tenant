@@ -1,6 +1,6 @@
 import React from 'react'
 import CategoryButtonGroup from './CategoryButtonGroup'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../../../components/CustomPanel'
 import { connect } from 'react-redux'
 import {
 	patchBrandProfileCategories,

@@ -11,7 +11,7 @@ import Button from 'rsuite/lib/Button'
 import { perms, userCan } from '../../../../Can'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../../components/CustomPanel'
 
 import { connect } from 'react-redux'
 import {

@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { FormLoader } from '../../../components/SkeletonLoader'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../routes'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../components/CustomPanel'
 import Checkbox from 'rsuite/lib/Checkbox'
 import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
@@ -483,7 +483,7 @@ function Lists(props) {
 			opacity: 0,
 			marginTop: 1000
 		},
-		enter: { opacity: 1, marginTop: 0 },
+		enter: { opacity: 1, marginTop: 40 },
 		leave: {
 			opacity: 0,
 			marginTop: 0

@@ -17,9 +17,10 @@ module.exports = override(
 				'@dropdown-bg': neutralLightColor,
 
 				//input
-				'@input-bg': neutralColor,
+				'@input-bg': neutralLightColor,
+				'@input-bg-disabled': neutralLightColor,
 				'@input-color': '#FFF',
-				'@input-group-addon-bg': neutralColor,
+				'@input-group-addon-bg': neutralLightColor,
 
 				'@picker-select-menu-item-selected-bg': neutralLightColor,
 
@@ -33,7 +34,6 @@ module.exports = override(
 				'@text-color': '#FFF',
 				'@font-family-base': '"Roboto", "Helvetica", "Arial", sans-serif',
 				'@font-size-base': '16px',
-				'@input-bg-disabled': neutralColor,
 
 				//navbar
 				'@nav-bar-default-bg': neutralColor,
@@ -110,6 +110,8 @@ module.exports = override(
 				'@toggle-default-bg': neutralExtraLightColor,
 				'@toggle-inner-text-color': '#FFF',
 				'@toggle-default-hover-bg': neutralLightColor
+
+				//input
 			}
 		}
 	})
