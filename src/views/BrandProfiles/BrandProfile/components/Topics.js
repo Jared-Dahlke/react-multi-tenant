@@ -39,16 +39,21 @@ const mapDispatchToProps = (dispatch) => {
 const Node = (props) => {
 	const nodeProps = props.nodeProps
 
-	const handleClick = (e, val) => {
+	const handleClick = (e, topicId, oldVal, newValProposed) => {
 		e.preventDefault()
 		props.setTopicsValid(true)
 		let newTopics = JSON.parse(JSON.stringify(props.componentTopics))
-		setTopicAction(nodeProps.topicId, val, newTopics)
-		//props.setFieldValue('topics', newTopics)
+		setTopicAction(nodeProps.topicId, newValProposed, newTopics)
 		props.handleSetBrandProfiles(newTopics)
 		props.setComponentTopics(newTopics)
+		let newVal = getNewTopicsVal(newValProposed, nodeProps.topicResponseId)
 		let params = {
-			topics: newTopics,
+			topics: [
+				{
+					topicId: nodeProps.topicId,
+					topicResponseId: newVal
+				}
+			],
 			brandProfileId: props.brandProfile.brandProfileId
 		}
 		props.patchBrandProfileTopics(params)
@@ -58,6 +63,12 @@ const Node = (props) => {
 			copiedTopics = filterTree(props.searchTerm, copiedTopics)
 		}
 		props.setDisplayedTopics(copiedTopics)
+	}
+	function getNewTopicsVal(newValProposed, oldVal) {
+		console.log('get new topics val')
+		console.log(newValProposed, oldVal)
+		if (newValProposed == oldVal) return -1
+		return newValProposed
 	}
 
 	function setTopicAction(topicId, value, topics) {
@@ -69,7 +80,7 @@ const Node = (props) => {
 	function markSelected(topicId, value, topic) {
 		if (topic.topicId == topicId) {
 			if (topic.topicResponseId === value) {
-				value = 3
+				value = -1
 			}
 			topic.topicResponseId = value
 		} else {
@@ -90,7 +101,9 @@ const Node = (props) => {
 						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						key='0'
 						id='0'
-						onClick={(e) => handleClick(e, 1)}
+						onClick={(e) =>
+							handleClick(e, nodeProps.topicId, nodeProps.topicResponseId, 1)
+						}
 						color={nodeProps.topicResponseId == 1 ? 'green' : 'blue'}
 					>
 						Include
@@ -99,7 +112,9 @@ const Node = (props) => {
 						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						id='test'
 						key='1'
-						onClick={(e) => handleClick(e, 2)}
+						onClick={(e) =>
+							handleClick(e, nodeProps.topicId, nodeProps.topicResponseId, 2)
+						}
 						color={nodeProps.topicResponseId == 2 ? 'red' : 'blue'}
 					>
 						Exclude
@@ -238,7 +253,7 @@ function TopicsTree(props) {
 
 	function unselectAll(topics) {
 		for (const topic of topics) {
-			topic.topicResponseId = 3
+			topic.topicResponseId = -1
 			if (topic.children && topic.children.length > 0) {
 				unselectAll(topic.children)
 			}
