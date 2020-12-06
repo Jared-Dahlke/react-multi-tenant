@@ -5,6 +5,7 @@ import GridItem from '../../../components/Grid/GridItem'
 import Topics from './components/Topics'
 import Categories from './components/Categories/Categories'
 import Scenarios from './components/Scenarios/Scenarios'
+import Opinions from './components/Opinions/Opinions'
 import TopCompetitors from './components/Competitors'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
@@ -54,6 +55,7 @@ function BrandProfile(props) {
 	const categoriesRef = React.useRef()
 	const topicsRef = React.useRef()
 	const scenariosRef = React.useRef()
+	const opinionsRef = React.useRef()
 	const competitorsRef = React.useRef()
 	const brandInformationRef = React.useRef()
 	const scrollSpeed = 40
@@ -193,6 +195,11 @@ function BrandProfile(props) {
 								<div ref={scenariosRef} style={{ marginTop: 30 }} />
 								<Scenarios
 									setScenariosValid={setScenariosValid}
+									brandProfile={brandProfile}
+								/>
+								<div ref={opinionsRef} style={{ marginTop: 30 }} />
+								<Opinions
+									//setScenariosValid={setScenariosValid}
 									brandProfile={brandProfile}
 								/>
 							</div>
