@@ -70,7 +70,7 @@ function Opinions(props) {
 		props.setBrandProfiles(brandProfilesCopy)
 	}
 
-	const handleOpinionselect = (opinionId, opinionResponseId) => {
+	const handleOpinionSelect = (opinionId, opinionResponseId) => {
 		let data = {
 			opinionId: opinionId,
 			opinionResponseId: opinionResponseId
@@ -81,9 +81,9 @@ function Opinions(props) {
 
 		let scenToSave = JSON.parse(JSON.stringify(newopinions))
 		for (const [index, scen] of scenToSave.entries()) {
-			delete scen.opinionName
-			delete scen.archived
+			delete scen.question
 			delete scen.brandProfileId
+			delete scen.opinionType
 			delete scen.opinionResponseName
 		}
 
@@ -99,7 +99,6 @@ function Opinions(props) {
 				valid = false
 			}
 		}
-		props.setOpinionsValid(valid)
 	}
 
 	return (
@@ -111,7 +110,7 @@ function Opinions(props) {
 						return (
 							<CustomRadio
 								key={index}
-								handleOpinionselect={handleOpinionselect}
+								handleOpinionSelect={handleOpinionSelect}
 								opinion={opinion}
 							/>
 						)
