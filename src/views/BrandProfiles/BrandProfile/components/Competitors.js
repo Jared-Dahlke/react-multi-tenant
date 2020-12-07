@@ -49,7 +49,7 @@ function TopCompetitors(props) {
 		}
 	}, [])
 
-	const handleSaveNew = (values, formik) => {
+	const handleSaveNew = (values) => {
 		props.setCompetitorsValid(true)
 		let newComps = []
 		let newCompsWithoutId = []
@@ -103,6 +103,11 @@ function TopCompetitors(props) {
 			)
 		]
 		setFieldValue('competitors', newComps)
+
+		let newValues = {
+			competitors: newComps
+		}
+		handleSaveNew(newValues)
 	}
 
 	const schema = Yup.object().shape({
@@ -151,8 +156,9 @@ function TopCompetitors(props) {
 		)
 
 		React.useEffect(() => {
-			if (formik.values !== formik.initialValues && formik.dirty)
+			if (formik.values !== formik.initialValues && formik.dirty) {
 				debouncedSubmit()
+			}
 		}, [debouncedSubmit, formik.values])
 
 		return null
@@ -164,7 +170,7 @@ function TopCompetitors(props) {
 			validateOnMount={true}
 			validationSchema={schema}
 			validateOnBlur={false}
-			onSubmit={(competitor, formik) => handleSaveNew(competitor, formik)}
+			onSubmit={(values, formik) => handleSaveNew(values)}
 			initialValues={{
 				competitors: props.brandProfile.competitors
 					? props.brandProfile.competitors
