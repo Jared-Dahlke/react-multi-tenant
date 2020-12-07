@@ -9,29 +9,18 @@ import Opinions from './components/Opinions/Opinions'
 import TopCompetitors from './components/Competitors'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
-import {
-	createBrandProfile,
-	setBrandProfileCreated,
-	setBrandProfileSaved,
-	setBrandProfileSaving,
-	removeBrandProfile,
-	setBrandProfileUnderEdit
-} from '../../../redux/actions/brandProfiles'
+import { setBrandProfileUnderEdit } from '../../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { GridList } from '@material-ui/core'
 import { useScroll } from 'react-scroll-hooks'
 import Steps from 'rsuite/lib/Steps'
 import useOnScreen from './useOnScreen'
+import { FormLoader } from '../../../components/SkeletonLoader'
+import { accentColor } from '../../../assets/jss/colorContants'
+import Loader from 'rsuite/lib/Loader'
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		createBrandProfile: (brandProfile) =>
-			dispatch(createBrandProfile(brandProfile)),
-		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool)),
-		setBrandProfileSaved: (bool) => dispatch(setBrandProfileSaved(bool)),
-		setBrandProfileSaving: (bool) => dispatch(setBrandProfileSaving(bool)),
-		removeBrandProfile: (brandProfileId) =>
-			dispatch(removeBrandProfile(brandProfileId)),
 		setBrandProfileUnderEdit: () => dispatch(setBrandProfileUnderEdit(null))
 	}
 }
@@ -39,9 +28,6 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
 	return {
 		industryVerticals: state.industryVerticals,
-		topics: state.topics,
-		categories: state.brandCategories,
-		scenarios: state.scenarios,
 		currentAccountId: state.currentAccountId,
 		brandProfileCreated: state.brandProfileCreated,
 		brandProfileCreating: state.brandProfileCreating,
@@ -75,12 +61,7 @@ function BrandProfile(props) {
 	const scenariosVisible = useOnScreen(scenariosRef)
 	const opinionsVisible = useOnScreen(opinionsRef)
 
-	const [state, toggle] = React.useState(true)
-	const { x } = useSpring({
-		from: { x: 0 },
-		x: state ? 1 : 0,
-		config: { duration: 1000 }
-	})
+	const [loadPercent, setLoadPercent] = React.useState(0)
 
 	React.useEffect(() => {
 		if (brandInformationVisible) {
@@ -116,7 +97,7 @@ function BrandProfile(props) {
 		scenariosVisible
 	])
 
-	const scrollSpeed = 80
+	const scrollSpeed = 90
 	const { scrollToElement, scrollToY } = useScroll({
 		scrollSpeed,
 		containerRef,
@@ -124,13 +105,9 @@ function BrandProfile(props) {
 	})
 
 	const [competitorsValid, setCompetitorsValid] = React.useState(false)
-
 	const [categoriesValid, setCategoriesValid] = React.useState(false)
-
 	const [topicsValid, setTopicsValid] = React.useState(false)
-
 	const [scenariosValid, setScenariosValid] = React.useState(false)
-
 	const [opinionsValid, setOpinionsValid] = React.useState(false)
 
 	const [activeStep, setActiveStep] = React.useState(
@@ -138,7 +115,6 @@ function BrandProfile(props) {
 	)
 
 	const handleStepsClick = (step, ref) => {
-		//	setActiveStep(step)
 		scrollToElement(ref)
 	}
 
@@ -163,30 +139,26 @@ function BrandProfile(props) {
 
 	const competitorsProps = useSpring({
 		opacity: brandProfile.competitors ? 1 : 0
-		//	marginTop: brandProfile.competitors ? 20 : 500
 	})
 
 	const categoriesProps = useSpring({
 		opacity: brandProfile.categories ? 1 : 0
-		//	marginTop: brandProfile.categories ? 20 : 500
 	})
 
 	const topicsProps = useSpring({
 		opacity: brandProfile.topics ? 1 : 0
-		//	marginTop: brandProfile.categories ? 20 : 500
 	})
 
 	const opinionsProps = useSpring({
 		opacity: brandProfile.opinions ? 1 : 0
-		//	marginTop: brandProfile.categories ? 20 : 500
 	})
 
 	const scenariosProps = useSpring({
 		opacity: brandProfile.scenarios ? 1 : 0
-		//	marginTop: brandProfile.categories ? 20 : 500
 	})
 
 	React.useEffect(() => {
+		setLoadPercent(100)
 		if (props.brandProfiles.length > 0) {
 			let bp = getBrandProfileById(
 				props.brandProfiles,
@@ -195,8 +167,6 @@ function BrandProfile(props) {
 			setBrandProfile(bp)
 		}
 	}, [props.brandProfiles])
-
-	const { brandProfileSaving, brandProfileSaved } = props
 
 	return (
 		<div>
@@ -292,6 +262,18 @@ function BrandProfile(props) {
 						ref={containerRef}
 					>
 						<GridItem xs={12} sm={12} md={10}>
+							{brandProfile.brandName.length === 0 && (
+								<div
+									style={{
+										textAlign: 'center',
+										height: '100px',
+										marginTop: 100
+									}}
+								>
+									<Loader speed='slow' size='lg' />
+								</div>
+							)}
+
 							<div style={{ padding: 10 }}>
 								<div ref={brandInformationRef} />
 								<animated.div style={brandInfoProps}>

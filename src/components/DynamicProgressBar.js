@@ -34,11 +34,6 @@ export default class DynamicProgress extends React.Component {
 		const { percent, color, status } = this.state
 		return (
 			<div>
-				<ButtonGroup>
-					<Button onClick={this.decline}>-</Button>
-					<Button onClick={this.increase}>+</Button>
-				</ButtonGroup>
-				<hr />
 				<Line percent={percent} strokeColor={color} status={status} />
 			</div>
 		)
