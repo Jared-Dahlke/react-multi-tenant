@@ -73,10 +73,6 @@ function BrandProfiles(props) {
 		[classes.tableCellRTL]: false
 	})
 
-	const animatedProps = useSpring({
-		opacity: props.brandProfileCreating ? 0 : 1
-	})
-
 	React.useEffect(() => {
 		if (props.brandProfileUnderEdit && props.brandProfileCreated) {
 			let url = `/app/settings/brandProfiles/brandProfile/${props.brandProfileUnderEdit.brandProfileId}`
@@ -246,7 +242,6 @@ function BrandProfiles(props) {
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
-
 							height: 'calc(100vh - 200px)',
 							color: 'white'
 						}}

@@ -37,7 +37,8 @@ export const schemaValidation = Yup.object().shape({
 const mapStateToProps = (state) => {
 	return {
 		currentAccountId: state.currentAccountId,
-		brandProfiles: state.brandProfiles
+		brandProfiles: state.brandProfiles,
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -65,15 +66,21 @@ const AutoSave = ({ debounceMs }) => {
 }
 
 function BasicInfo(props) {
+	console.log(props)
 	let fetchBrandProfileBasic = props.fetchBrandProfileBasic
 
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
+		console.log('use effect fired')
 		if (!fetched) {
-			if (props.brandProfile && props.brandProfile.brandProfileId) {
-				fetchBrandProfileBasic(props.brandProfile.brandProfileId)
-				setFetched(true)
-			}
+			console.log('effect')
+			console.log(props.brandProfile)
+			//	if (props.brandProfile && props.brandProfile.brandProfileId.length > 0) {
+			console.log('calling fetch')
+
+			fetchBrandProfileBasic(props.brandProfileId)
+			setFetched(true)
+			//	}
 		}
 	}, [props.brandProfile])
 

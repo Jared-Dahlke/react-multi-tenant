@@ -13,10 +13,13 @@ import {
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
 	SCENARIOS_IS_LOADING,
-	SET_BRAND_PROFILE_UNDER_EDIT
+	SET_BRAND_PROFILE_UNDER_EDIT,
+	SET_BRAND_PROFILE_CATEGORIES,
+	SET_BRAND_PROFILE_COMPETITORS,
+	SET_BRAND_PROFILE_TOPICS,
+	SET_BRAND_PROFILE_SCENARIOS,
+	SET_BRAND_PROFILE_OPINIONS
 } from '../action-types/brandProfiles'
-//import configureStore from '../store/index'
-//const store = configureStore()
 
 export function brandProfiles(state = [], action) {
 	switch (action.type) {
@@ -35,7 +38,6 @@ export function brandProfiles(state = [], action) {
 				stateData = JSON.parse(JSON.stringify(state))
 			}
 			stateData.push(action.brandProfile)
-
 			return stateData
 		default:
 			return state
@@ -51,10 +53,49 @@ export function brandProfilesIsLoading(state = true, action) {
 	}
 }
 
-export function brandProfileUnderEdit(state = null, action) {
+export function brandProfileUnderEdit(
+	state = {
+		brandName: '',
+		websiteUrl: '',
+		industryVerticalId: -1,
+		twitterProfileUrl: '',
+		//competitors: [],
+		//categories: [],
+		//	topics: [],
+		//	scenarios: [],
+		//	opinions: [],
+		brandProfileId: ''
+	},
+	action
+) {
 	switch (action.type) {
 		case SET_BRAND_PROFILE_UNDER_EDIT:
 			return action.brandProfileUnderEdit
+		case SET_BRAND_PROFILE_COMPETITORS:
+			return {
+				...state,
+				competitors: action.competitors
+			}
+		case SET_BRAND_PROFILE_CATEGORIES:
+			return {
+				...state,
+				categories: action.categories
+			}
+		case SET_BRAND_PROFILE_TOPICS:
+			return {
+				...state,
+				topics: action.topics
+			}
+		case SET_BRAND_PROFILE_SCENARIOS:
+			return {
+				...state,
+				scenarios: action.scenarios
+			}
+		case SET_BRAND_PROFILE_OPINIONS:
+			return {
+				...state,
+				opinions: action.opinions
+			}
 		default:
 			return state
 	}

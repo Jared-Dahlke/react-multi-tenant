@@ -5,15 +5,12 @@ import { connect } from 'react-redux'
 import {
 	patchBrandProfileCategories,
 	fetchBrandProfileCategories,
-	setBrandProfiles
+	setBrandProfileCategories
 } from '../../../../../redux/actions/brandProfiles'
 
 const mapStateToProps = (state) => {
 	return {
-		currentAccountId: state.currentAccountId,
-		brandProfileIdUnderEdit: state.brandProfileIdUnderEdit,
-		categories: state.brandCategories,
-		brandProfiles: state.brandProfiles
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -23,8 +20,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(patchBrandProfileCategories(data)),
 		fetchBrandProfileCategories: (data) =>
 			dispatch(fetchBrandProfileCategories(data)),
-		setBrandProfiles: (brandProfiles) =>
-			dispatch(setBrandProfiles(brandProfiles))
+		setBrandProfileCategories: (cats) =>
+			dispatch(setBrandProfileCategories(cats))
 	}
 }
 
@@ -45,28 +42,21 @@ function Categories(props) {
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
 		if (!fetched) {
-			if (props.brandProfile && props.brandProfile.brandProfileId) {
-				props.fetchBrandProfileCategories(props.brandProfile.brandProfileId)
-				setFetched(true)
-			}
+			props.fetchBrandProfileCategories(props.brandProfileId)
+			setFetched(true)
 		}
-	}, [props.brandProfile])
+	}, [])
 
 	React.useEffect(() => {
 		return () => {
-			//clean up on unmount
 			setFetched(false)
 		}
 	}, [])
 
 	const handleSetBrandProfiles = (categories) => {
-		let brandProfilesCopy = JSON.parse(JSON.stringify(props.brandProfiles))
-		for (const brandProfile of brandProfilesCopy) {
-			if (brandProfile.brandProfileId === props.brandProfile.brandProfileId) {
-				brandProfile.categories = categories
-			}
-		}
-		props.setBrandProfiles(brandProfilesCopy)
+		let categoriesCopy = JSON.parse(JSON.stringify(categories))
+		//	brandProfile.categories = categories
+		props.setBrandProfileCategories(categoriesCopy)
 	}
 
 	const handleCategorySelect = (
@@ -82,7 +72,6 @@ function Categories(props) {
 			JSON.stringify(props.brandProfile.categories)
 		)
 		setCategoryAction(data, newCategories)
-		//setBrandProfilessetComponentCategories(newCategories)
 		handleSetBrandProfiles(newCategories)
 		let newFinalCategories = JSON.parse(JSON.stringify(newCategories))
 		let params = {

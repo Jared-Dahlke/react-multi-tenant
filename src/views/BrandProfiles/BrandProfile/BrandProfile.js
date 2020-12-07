@@ -34,7 +34,8 @@ const mapStateToProps = (state) => {
 		brandProfileCreating: state.brandProfileCreating,
 		brandProfileSaved: state.brandProfileSaved,
 		brandProfileSaving: state.brandProfileSaving,
-		brandProfiles: state.brandProfiles
+		brandProfiles: state.brandProfiles,
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -61,8 +62,6 @@ function BrandProfile(props) {
 	const topicsVisible = useOnScreen(topicsRef)
 	const scenariosVisible = useOnScreen(scenariosRef)
 	const opinionsVisible = useOnScreen(opinionsRef)
-
-	const [loadPercent, setLoadPercent] = React.useState(0)
 
 	React.useEffect(() => {
 		if (brandInformationVisible) {
@@ -119,55 +118,29 @@ function BrandProfile(props) {
 		scrollToElement(ref)
 	}
 
-	const getBrandProfileById = (brandProfiles, brandProfileId) => {
-		for (const brandProfile of brandProfiles) {
-			if (brandProfile.brandProfileId === brandProfileId)
-				return JSON.parse(JSON.stringify(brandProfile))
-		}
-	}
-
-	const [brandProfile, setBrandProfile] = React.useState({
-		brandName: '',
-		websiteUrl: '',
-		twitterProfileUrl: '',
-		industryVerticalId: '',
-		brandProfileId: ''
-	})
-
 	const brandInfoProps = useSpring({
-		opacity: brandProfile.brandName.length > 0 ? 1 : 0
+		opacity: props.brandProfile.brandName.length > 0 ? 1 : 0
 	})
 
 	const competitorsProps = useSpring({
-		opacity: brandProfile.competitors ? 1 : 0
+		opacity: props.brandProfile.competitors ? 1 : 0
 	})
 
 	const categoriesProps = useSpring({
-		opacity: brandProfile.categories ? 1 : 0
+		opacity: props.brandProfile.categories ? 1 : 0
 	})
 
 	const topicsProps = useSpring({
-		opacity: brandProfile.topics ? 1 : 0
+		opacity: props.brandProfile.topics ? 1 : 0
 	})
 
 	const opinionsProps = useSpring({
-		opacity: brandProfile.opinions ? 1 : 0
+		opacity: props.brandProfile.opinions ? 1 : 0
 	})
 
 	const scenariosProps = useSpring({
-		opacity: brandProfile.scenarios ? 1 : 0
+		opacity: props.brandProfile.scenarios ? 1 : 0
 	})
-
-	React.useEffect(() => {
-		setLoadPercent(100)
-		if (props.brandProfiles.length > 0) {
-			let bp = getBrandProfileById(
-				props.brandProfiles,
-				Number(props.match.params.brandProfileId)
-			)
-			setBrandProfile(bp)
-		}
-	}, [props.brandProfiles])
 
 	return (
 		<div>
@@ -263,7 +236,7 @@ function BrandProfile(props) {
 						ref={containerRef}
 					>
 						<GridItem xs={12} sm={12} md={10}>
-							{brandProfile.brandName.length === 0 && (
+							{props.brandProfile.brandName.length === 0 && (
 								<div
 									style={{
 										textAlign: 'center',
@@ -279,53 +252,49 @@ function BrandProfile(props) {
 								<div ref={brandInformationRef} />
 								<animated.div style={brandInfoProps}>
 									<BasicInfo
-										brandProfile={brandProfile}
 										industryVerticals={props.industryVerticals}
+										brandProfileId={props.match.params.brandProfileId}
 									/>
 								</animated.div>
-
 								<div ref={competitorsRef} style={{ marginTop: 60 }}>
 									<animated.div style={competitorsProps}>
 										<TopCompetitors
 											setCompetitorsValid={setCompetitorsValid}
-											brandProfile={brandProfile}
+											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
 								</div>
-
 								<div ref={categoriesRef} style={{ marginTop: 60 }}>
 									<animated.div style={categoriesProps}>
 										<Categories
 											categoriesValid={categoriesValid}
 											setCategoriesValid={setCategoriesValid}
-											brandProfile={brandProfile}
+											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
 								</div>
-
 								<div ref={topicsRef} style={{ marginTop: 60 }}>
 									<animated.div style={topicsProps}>
 										<Topics
 											setTopicsValid={setTopicsValid}
-											brandProfile={brandProfile}
+											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
 								</div>
-
 								<div ref={scenariosRef} style={{ marginTop: 60 }}>
 									<animated.div style={scenariosProps}>
-										<Scenarios
+										{/**	<Scenarios
 											setScenariosValid={setScenariosValid}
-											brandProfile={brandProfile}
-										/>
+											brandProfileId={props.match.params.brandProfileId}
+										/> */}
 									</animated.div>
 								</div>
 								<div ref={opinionsRef} style={{ marginTop: 60 }}>
 									<animated.div style={opinionsProps}>
-										<Opinions
+										{/**<Opinions
 											//setScenariosValid={setScenariosValid}
-											brandProfile={brandProfile}
-										/>
+											brandProfileId={props.match.params.brandProfileId}
+										/> */}
 									</animated.div>
 								</div>
 							</div>

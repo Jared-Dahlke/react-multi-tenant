@@ -17,13 +17,14 @@ import { connect } from 'react-redux'
 import {
 	patchBrandProfileTopics,
 	fetchBrandProfileTopics,
-	setBrandProfiles
+	setBrandProfileTopics
 } from '../../../../redux/actions/brandProfiles'
 
 const mapStateToProps = (state) => {
 	return {
 		currentAccountId: state.currentAccountId,
-		brandProfiles: state.brandProfiles
+		brandProfiles: state.brandProfiles,
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -31,8 +32,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		patchBrandProfileTopics: (data) => dispatch(patchBrandProfileTopics(data)),
 		fetchBrandProfileTopics: (data) => dispatch(fetchBrandProfileTopics(data)),
-		setBrandProfiles: (brandProfiles) =>
-			dispatch(setBrandProfiles(brandProfiles))
+		setBrandProfileTopics: (topics) => dispatch(setBrandProfileTopics(topics))
 	}
 }
 
@@ -57,7 +57,6 @@ const Node = (props) => {
 			brandProfileId: props.brandProfile.brandProfileId
 		}
 		props.patchBrandProfileTopics(params)
-		//get filtered if any then set displayed
 		let copiedTopics = JSON.parse(JSON.stringify(newTopics))
 		if (props.searchTerm && props.searchTerm.length > 0) {
 			copiedTopics = filterTree(props.searchTerm, copiedTopics)
@@ -65,8 +64,6 @@ const Node = (props) => {
 		props.setDisplayedTopics(copiedTopics)
 	}
 	function getNewTopicsVal(newValProposed, oldVal) {
-		console.log('get new topics val')
-		console.log(newValProposed, oldVal)
 		if (newValProposed == oldVal) return -1
 		return newValProposed
 	}
@@ -140,12 +137,10 @@ function TopicsTree(props) {
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
 		if (!fetched) {
-			if (props.brandProfile && props.brandProfile.brandProfileId) {
-				props.fetchBrandProfileTopics(props.brandProfile.brandProfileId)
-				setFetched(true)
-			}
+			props.fetchBrandProfileTopics(props.brandProfileId)
+			setFetched(true)
 		}
-	}, [props.brandProfile])
+	}, [])
 
 	const [searchTerm, setSearchTerm] = React.useState('')
 	const [receivedTopics, setReceivedTopics] = React.useState(false)
@@ -189,8 +184,8 @@ function TopicsTree(props) {
 
 	React.useEffect(() => {
 		return () => {
-			//clean up on unmount
 			setReceivedTopics(false)
+			setFetched(false)
 		}
 	}, [])
 
@@ -222,22 +217,14 @@ function TopicsTree(props) {
 	}
 
 	const handleSetBrandProfiles = (topics) => {
-		let brandProfilesCopy = JSON.parse(JSON.stringify(props.brandProfiles))
-		for (const brandProfile of brandProfilesCopy) {
-			if (brandProfile.brandProfileId === props.brandProfile.brandProfileId) {
-				brandProfile.topics = topics
-			}
-		}
-		props.setBrandProfiles(brandProfilesCopy)
+		let topicsCopy = JSON.parse(JSON.stringify(topics))
+		props.setBrandProfileTopics(topicsCopy)
 	}
 
 	const handleUnselectAll = () => {
 		let newTopics = JSON.parse(JSON.stringify(componentTopics))
 		unselectAll(newTopics)
 		handleSetBrandProfiles(newTopics)
-		//props.setFieldValue('topics', newTopics)
-
-		//get filtered if any then set displayed
 		let copiedTopics = JSON.parse(JSON.stringify(newTopics))
 		if (props.searchTerm && props.searchTerm.length > 0) {
 			copiedTopics = filterTree(props.searchTerm, copiedTopics)
