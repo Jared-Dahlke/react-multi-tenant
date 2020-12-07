@@ -8,7 +8,10 @@ import FormikInput from '../../../../components/CustomInput/FormikInput'
 import { connect } from 'react-redux'
 import { UserCan, perms, userCan } from '../../../../Can'
 import * as Yup from 'yup'
-import { neutralColor } from '../../../../assets/jss/colorContants.js'
+import {
+	neutralColor,
+	neutralLightColor
+} from '../../../../assets/jss/colorContants.js'
 import {
 	patchBrandProfileCompetitors,
 	fetchBrandProfileCompetitors
@@ -241,7 +244,7 @@ function TopCompetitors(props) {
 															/>
 														</Grid>
 														<Grid item xs={12} sm={12} md={2}>
-															<p style={{ color: neutralColor }}>
+															<p style={{ color: neutralLightColor }}>
 																{index === 0 ? 'a' : ' '}
 															</p>
 

@@ -18,6 +18,7 @@ import useOnScreen from './useOnScreen'
 import { FormLoader } from '../../../components/SkeletonLoader'
 import { accentColor } from '../../../assets/jss/colorContants'
 import Loader from 'rsuite/lib/Loader'
+import Panel from '../../../components/CustomPanel'
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -256,7 +257,7 @@ function BrandProfile(props) {
 				<Grid item xs={12} sm={10} md={10}>
 					<GridList
 						style={{
-							height: 600,
+							height: 670,
 							position: 'relative'
 						}}
 						ref={containerRef}
