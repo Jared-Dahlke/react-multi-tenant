@@ -18,6 +18,16 @@ import {
 import axios from '../../axiosConfig'
 import config from '../../config.js'
 
+import {
+	brandProfilesObjValidation,
+	basicInfoObjValidation,
+	competitorsObjValidation,
+	categoriesObjValidation,
+	topicsObjValidation,
+	scenariosObjValidation,
+	opinionsObjValidation
+} from '../../schemas/brandProfiles'
+
 var cwait = require('cwait')
 var categoriesQueue = new cwait.TaskQueue(Promise, 1)
 var topicsQueue = new cwait.TaskQueue(Promise, 1)
@@ -36,10 +46,16 @@ export function setBrandProfiles(brandProfiles) {
 export function fetchBrandProfileBasic(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/basic`
 	return async (dispatch, getState) => {
-		//	dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
+				basicInfoObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching brand profile basic info, see console log for more details'
+					)
+				})
+
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
@@ -60,11 +76,19 @@ export function fetchBrandProfileBasic(brandProfileId) {
 export function fetchBrandProfileCompetitors(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/competitors`
 	return async (dispatch, getState) => {
-		//	dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
+				if (result.data.length > 0) {
+					competitorsObjValidation.validate(result.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							' we received different data from the api than expected while fetching brand profile competitors, see console log for more details'
+						)
+					})
+				}
+
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
@@ -85,11 +109,17 @@ export function fetchBrandProfileCompetitors(brandProfileId) {
 export function fetchBrandProfileCategories(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/categories`
 	return async (dispatch, getState) => {
-		//	dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
+				categoriesObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching brand profile categories, see console log for more details'
+					)
+				})
+
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
@@ -110,11 +140,17 @@ export function fetchBrandProfileCategories(brandProfileId) {
 export function fetchBrandProfileTopics(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/topics`
 	return async (dispatch, getState) => {
-		//	dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
+				topicsObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching brand profile topics, see console log for more details'
+					)
+				})
+
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
@@ -135,11 +171,17 @@ export function fetchBrandProfileTopics(brandProfileId) {
 export function fetchBrandProfileScenarios(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/scenarios`
 	return async (dispatch, getState) => {
-		//	dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
+				scenariosObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching brand profile scenarios, see console log for more details'
+					)
+				})
+
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
@@ -160,11 +202,17 @@ export function fetchBrandProfileScenarios(brandProfileId) {
 export function fetchBrandProfileOpinions(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/opinions`
 	return async (dispatch, getState) => {
-		//	dispatch(setBrandProfileLoading(true))
 		try {
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
+				opinionsObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching brand profile opinions, see console log for more details'
+					)
+				})
+
 				let currBrandProfiles = JSON.parse(
 					JSON.stringify(getState().brandProfiles)
 				)
@@ -371,6 +419,13 @@ export function fetchBrandProfiles(accountId) {
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
+				brandProfilesObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching all brand profiles, see console log for more details'
+					)
+				})
+
 				let brandProfiles = result.data
 				if (brandProfiles.length < 1) {
 					dispatch(hasBrandProfiles(false))
