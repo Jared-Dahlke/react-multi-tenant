@@ -243,7 +243,14 @@ export const createBrandProfile = () => {
 			.post(url, brandProfile)
 			.then((response) => {
 				if (response.status === 200) {
-					response.data.industryVerticalId = ''
+					basicInfoObjValidation.validate(response.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							' we received different data from the api than expected after creating a  brand profile, see console log for more details'
+						)
+					})
+
+					response.data.industryVerticalId = -1
 					let copy = JSON.parse(JSON.stringify(response.data))
 					dispatch(addBrandProfile(copy))
 					dispatch(setBrandProfileCreating(false))
