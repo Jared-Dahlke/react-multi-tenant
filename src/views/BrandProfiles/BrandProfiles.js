@@ -29,6 +29,7 @@ import Alert from '@material-ui/lab/Alert'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
 import { UserCan, perms, userCan } from '../../Can'
+import { useSpring, animated } from 'react-spring'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -44,7 +45,8 @@ const mapStateToProps = (state) => {
 		categories: state.brandCategories,
 		topics: state.topics,
 		brandProfileUnderEdit: state.brandProfileUnderEdit,
-		brandProfileCreated: state.brandProfileCreated
+		brandProfileCreated: state.brandProfileCreated,
+		brandProfileCreating: state.brandProfileCreating
 	}
 }
 
@@ -71,10 +73,13 @@ function BrandProfiles(props) {
 		[classes.tableCellRTL]: false
 	})
 
+	const animatedProps = useSpring({
+		opacity: props.brandProfileCreating ? 0 : 1
+	})
+
 	React.useEffect(() => {
 		if (props.brandProfileUnderEdit && props.brandProfileCreated) {
 			let url = `/app/settings/brandProfiles/brandProfile/${props.brandProfileUnderEdit.brandProfileId}`
-
 			history.push(url)
 		}
 	}, [props.brandProfileUnderEdit])
@@ -136,7 +141,11 @@ function BrandProfiles(props) {
 					<div>
 						<Grid container justify='flex-end'>
 							<UserCan do={perms.BRAND_PROFILE_CREATE}>
-								<Button onClick={handleCreateNewProfileClick}>
+								<Button
+									onClick={handleCreateNewProfileClick}
+									loading={props.brandProfileCreating}
+									disabled={props.brandProfileCreating}
+								>
 									Create New Profile
 								</Button>
 							</UserCan>

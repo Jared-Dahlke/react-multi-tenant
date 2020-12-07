@@ -185,12 +185,12 @@ export function fetchBrandProfileOpinions(brandProfileId) {
 export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
+		dispatch(setBrandProfileCreating(true))
 		let brandProfile = {
 			accountId: getState().currentAccountId,
 			brandName: 'My first brand profile'
 		}
 
-		dispatch(setBrandProfileCreating(true))
 		axios
 			.post(url, brandProfile)
 			.then((response) => {
@@ -282,26 +282,9 @@ export const patchBrandProfileCategories = (data) => {
 	})
 }
 
-function setDefaultTopicsResponseId(topics) {
-	console.log(topics)
-	for (const topic of topics) {
-		if (!topic.topicResponseId) {
-			console.log('changing to -1')
-			topic.topicsResponseId = -1
-		}
-		if (topic.children) {
-			//for (const child of topic.children) {
-			setDefaultTopicsResponseId(topic.children)
-			//}
-		}
-	}
-}
-
 export const patchBrandProfileTopics = (data) => {
 	let brandProfileId = data.brandProfileId
-	//	let topics = data.topics
 	let topics = data.topics
-	//setDefaultTopicsResponseId(topics) //TODO: delete this function once the api accepts null responseIds
 	let url = apiBase + `/brand-profile/${brandProfileId}/topics`
 	return topicsQueue.wrap(async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))

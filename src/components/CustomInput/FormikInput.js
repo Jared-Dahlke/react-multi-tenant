@@ -14,7 +14,10 @@ import Label from '../CustomInputLabel/CustomInputLabel'
 import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
-import { neutralColor } from '../../assets/jss/colorContants.js'
+import {
+	neutralColor,
+	neutralLightColor
+} from '../../assets/jss/colorContants.js'
 const useStyles = makeStyles(styles)
 
 export default function CustomInput(props) {
@@ -72,7 +75,7 @@ export default function CustomInput(props) {
 											field.value.length > 0 &&
 											!props.specialError
 												? successColor[0]
-												: neutralColor
+												: neutralLightColor
 									}}
 								/>
 							</InputGroup.Addon>

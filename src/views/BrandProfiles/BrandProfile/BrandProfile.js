@@ -8,7 +8,6 @@ import Scenarios from './components/Scenarios/Scenarios'
 import Opinions from './components/Opinions/Opinions'
 import TopCompetitors from './components/Competitors'
 import { useSpring, animated } from 'react-spring'
-import { accentColor } from '../../../assets/jss/colorContants'
 import Grid from '@material-ui/core/Grid'
 import {
 	createBrandProfile,
@@ -203,76 +202,85 @@ function BrandProfile(props) {
 		<div>
 			<GridContainer justify='center' style={{ paddingTop: 20 }}>
 				<Grid item xs={2}>
-					<Steps vertical>
-						<Steps.Item
-							title='Brand Information'
-							onClick={() =>
-								handleStepsClick(
-									brandProfileSteps.brandInformation,
-									brandInformationRef
-								)
-							}
-							style={{ cursor: 'pointer' }}
-							status={
-								activeStep === brandProfileSteps.brandInformation
-									? 'process'
-									: 'wait'
-							}
-						/>
+					<animated.div style={brandInfoProps}>
+						<Steps vertical>
+							<Steps.Item
+								title='Brand Information'
+								onClick={() =>
+									handleStepsClick(
+										brandProfileSteps.brandInformation,
+										brandInformationRef
+									)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.brandInformation
+										? 'process'
+										: 'wait'
+								}
+							/>
 
-						<Steps.Item
-							title='Competitors'
-							onClick={() =>
-								handleStepsClick(brandProfileSteps.competitors, competitorsRef)
-							}
-							style={{ cursor: 'pointer' }}
-							status={
-								activeStep === brandProfileSteps.competitors
-									? 'process'
-									: 'wait'
-							}
-						/>
-						<Steps.Item
-							title='Categories'
-							onClick={() =>
-								handleStepsClick(brandProfileSteps.categories, categoriesRef)
-							}
-							style={{ cursor: 'pointer' }}
-							status={
-								activeStep === brandProfileSteps.categories ? 'process' : 'wait'
-							}
-						/>
-						<Steps.Item
-							title='Topics'
-							onClick={() =>
-								handleStepsClick(brandProfileSteps.topics, topicsRef)
-							}
-							style={{ cursor: 'pointer' }}
-							status={
-								activeStep === brandProfileSteps.topics ? 'process' : 'wait'
-							}
-						/>
-						<Steps.Item
-							title='Scenarios'
-							onClick={() =>
-								handleStepsClick(brandProfileSteps.scenarios, scenariosRef)
-							}
-							style={{ cursor: 'pointer' }}
-							status={
-								activeStep === brandProfileSteps.scenarios ? 'process' : 'wait'
-							}
-						/>
-						<Steps.Item
-							title='Opinions'
-							onClick={() =>
-								handleStepsClick(brandProfileSteps.opinions, opinionsRef)
-							}
-							style={{ cursor: 'pointer' }}
-							status={
-								activeStep === brandProfileSteps.opinions ? 'process' : 'wait'
-							}
-						/>
-					</Steps>
+							<Steps.Item
+								title='Competitors'
+								onClick={() =>
+									handleStepsClick(
+										brandProfileSteps.competitors,
+										competitorsRef
+									)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.competitors
+										? 'process'
+										: 'wait'
+								}
+							/>
+							<Steps.Item
+								title='Categories'
+								onClick={() =>
+									handleStepsClick(brandProfileSteps.categories, categoriesRef)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.categories
+										? 'process'
+										: 'wait'
+								}
+							/>
+							<Steps.Item
+								title='Topics'
+								onClick={() =>
+									handleStepsClick(brandProfileSteps.topics, topicsRef)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.topics ? 'process' : 'wait'
+								}
+							/>
+							<Steps.Item
+								title='Scenarios'
+								onClick={() =>
+									handleStepsClick(brandProfileSteps.scenarios, scenariosRef)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.scenarios
+										? 'process'
+										: 'wait'
+								}
+							/>
+							<Steps.Item
+								title='Opinions'
+								onClick={() =>
+									handleStepsClick(brandProfileSteps.opinions, opinionsRef)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.opinions ? 'process' : 'wait'
+								}
+							/>
+						</Steps>
+					</animated.div>
 				</Grid>
 
 				<Grid item xs={12} sm={10} md={10}>
