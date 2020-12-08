@@ -79,7 +79,7 @@ export function userAdded(state = false, action) {
 	}
 }
 
-export function userAddError(state = false, action) {
+export function userAddError(state = 0, action) {
 	switch (action.type) {
 		case SET_USER_ADD_ERROR:
 			return action.userAddError
