@@ -93,6 +93,25 @@ const BrandProfilesLayout = () => {
 										</>
 									)}
 								/>
+
+								<Route
+									path={routes.app.settings.brandProfiles.admin.permissions.path}
+									render={({ match: { url } }) => (
+										<>
+											<ProtectedRoute
+												path={
+													routes.app.settings.brandProfiles.admin.permissions.path
+												}
+												component={
+													routes.app.settings.brandProfiles.admin.permissions
+														.component
+												}
+												canView={userCan(perms.ADMIN_READ)}
+												exact
+											/>
+										</>
+									)}
+								/>
 							</>
 						)}
 					/>

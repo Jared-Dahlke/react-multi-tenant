@@ -35,19 +35,19 @@ export function permissions_list(state = [], action) {
     }
 }
 
-export function permissionsArchiving(state = false, action) {
+export function permissionsUpdating(state = false, action) {
     switch (action.type) {
         case PERMISSIONS_UPDATING:
-            return action.permissionsArchiving
+            return action.permissionsUpdating
         default:
             return state
     }
 }
 
-export function permissionsArchived(state = false, action) {
+export function permissionsAdded(state = false, action) {
     switch (action.type) {
         case PERMISSIONS_ADDED:
-            return action.permissionsArchived
+            return action.permissionsAdded
         default:
             return state
     }

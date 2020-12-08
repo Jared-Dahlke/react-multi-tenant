@@ -39,14 +39,14 @@ export function setAllPermissions(permissions) {
 export function setPermissionsUpdating(bool) {
     return {
         type: PERMISSIONS_UPDATING,
-        permissionsArchiving: bool
+        permissionsUpdating: bool
     }
 }
 
 export function setPermissionsAdded(bool) {
     return {
         type: PERMISSIONS_ADDED,
-        permissionsArchived: bool
+        permissionsAdded: bool
     }
 }
 

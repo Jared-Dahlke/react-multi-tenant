@@ -34,10 +34,10 @@ const useStyles = makeStyles(styles)
 const mapStateToProps = (state) => {
     return {
         permissionsIsLoading: state.brandProfilesAdmin.permissionsIsLoading,
-        permissionsArchived: state.brandProfilesAdmin.permissionsArchived,
+        permissionsAdded: state.brandProfilesAdmin.permissionsAdded,
         permissionSureToRemove: state.brandProfilesAdmin.permissionSureToRemove,
         permissionsRemoved: state.brandProfilesAdmin.permissionsRemoved,
-        permissionsArchiving: state.brandProfilesAdmin.permissionsArchiving,
+        permissionsUpdating: state.brandProfilesAdmin.permissionsUpdating,
         adminPermissions: state.brandProfilesAdmin.permissions,
         allPermissions: state.brandProfilesAdmin.permissions_list
     }
@@ -147,14 +147,14 @@ function Permissions(props) {
             }}>
                 <Loader size='sm' content='Updating...'
                     style={{
-                        display: props.permissionsArchiving ? 'flex' : 'none'
+                        display: props.permissionsUpdating ? 'flex' : 'none'
                     }} />
             </div>
 
             <Snackbar
                 autoHideDuration={2000}
                 place='bc'
-                open={props.permissionsArchived}
+                open={props.permissionsAdded}
                 onClose={() => props.setPermissionsAdded(false)}
                 color='success'>
                 <Alert

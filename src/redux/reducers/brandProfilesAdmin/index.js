@@ -23,8 +23,8 @@ import {
 	permissions,
 	permissions_list,
 	permissionsIsLoading,
-	permissionsArchiving,
-	permissionsArchived,
+	permissionsUpdating,
+	permissionsAdded,
 	permissionSureToRemove,
 	permissionsRemoved
 } from './permissions'
@@ -47,8 +47,8 @@ export default combineReducers({
 	permissions,
 	permissions_list,
 	permissionsIsLoading,
-	permissionsArchiving,
-	permissionsArchived,
+	permissionsUpdating,
+	permissionsAdded,
 	permissionSureToRemove,
 	permissionsRemoved
 })
