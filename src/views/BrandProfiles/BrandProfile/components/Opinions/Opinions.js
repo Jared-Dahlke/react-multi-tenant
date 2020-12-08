@@ -4,15 +4,13 @@ import { connect } from 'react-redux'
 import {
 	patchBrandProfileOpinions,
 	fetchBrandProfileOpinions,
-	setBrandProfiles
+	setBrandProfileOpinions
 } from '../../../../../redux/actions/brandProfiles'
 import Panel from '../../../../../components/CustomPanel'
 
 const mapStateToProps = (state) => {
 	return {
-		currentAccountId: state.currentAccountId,
-		brandProfileIdUnderEdit: state.brandProfileIdUnderEdit,
-		brandProfiles: state.brandProfiles
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -22,8 +20,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(patchBrandProfileOpinions(data)),
 		fetchBrandProfileOpinions: (data) =>
 			dispatch(fetchBrandProfileOpinions(data)),
-		setBrandProfiles: (brandProfiles) =>
-			dispatch(setBrandProfiles(brandProfiles))
+		setBrandProfileOpinions: (opinions) =>
+			dispatch(setBrandProfileOpinions(opinions))
 	}
 }
 
@@ -46,28 +44,20 @@ function Opinions(props) {
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
 		if (!fetched) {
-			if (props.brandProfile && props.brandProfile.brandProfileId) {
-				props.fetchBrandProfileOpinions(props.brandProfile.brandProfileId)
-				setFetched(true)
-			}
+			props.fetchBrandProfileOpinions(props.brandProfileId)
+			setFetched(true)
 		}
-	}, [props.brandProfile])
+	}, [])
 
 	React.useEffect(() => {
 		return () => {
-			//clean up on unmount
 			setFetched(false)
 		}
 	}, [])
 
 	const handleSetBrandProfiles = (opinions) => {
-		let brandProfilesCopy = JSON.parse(JSON.stringify(props.brandProfiles))
-		for (const brandProfile of brandProfilesCopy) {
-			if (brandProfile.brandProfileId === props.brandProfile.brandProfileId) {
-				brandProfile.opinions = opinions
-			}
-		}
-		props.setBrandProfiles(brandProfilesCopy)
+		let opinionsCopy = JSON.parse(JSON.stringify(opinions))
+		props.setBrandProfileOpinions(opinionsCopy)
 	}
 
 	const handleOpinionSelect = (opinionId, opinionResponseId) => {

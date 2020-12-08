@@ -4,15 +4,13 @@ import { connect } from 'react-redux'
 import {
 	patchBrandProfileScenarios,
 	fetchBrandProfileScenarios,
-	setBrandProfiles
+	setBrandProfileScenarios
 } from '../../../../../redux/actions/brandProfiles'
 import Panel from '../../../../../components/CustomPanel'
 
 const mapStateToProps = (state) => {
 	return {
-		currentAccountId: state.currentAccountId,
-		brandProfileIdUnderEdit: state.brandProfileIdUnderEdit,
-		brandProfiles: state.brandProfiles
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -22,8 +20,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(patchBrandProfileScenarios(data)),
 		fetchBrandProfileScenarios: (data) =>
 			dispatch(fetchBrandProfileScenarios(data)),
-		setBrandProfiles: (brandProfiles) =>
-			dispatch(setBrandProfiles(brandProfiles))
+		setBrandProfileScenarios: (scenarios) =>
+			dispatch(setBrandProfileScenarios(scenarios))
 	}
 }
 
@@ -46,28 +44,20 @@ function Scenarios(props) {
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
 		if (!fetched) {
-			if (props.brandProfile && props.brandProfile.brandProfileId) {
-				props.fetchBrandProfileScenarios(props.brandProfile.brandProfileId)
-				setFetched(true)
-			}
+			props.fetchBrandProfileScenarios(props.brandProfileId)
+			setFetched(true)
 		}
-	}, [props.brandProfile])
+	}, [])
 
 	React.useEffect(() => {
 		return () => {
-			//clean up on unmount
 			setFetched(false)
 		}
 	}, [])
 
 	const handleSetBrandProfiles = (scenarios) => {
-		let brandProfilesCopy = JSON.parse(JSON.stringify(props.brandProfiles))
-		for (const brandProfile of brandProfilesCopy) {
-			if (brandProfile.brandProfileId === props.brandProfile.brandProfileId) {
-				brandProfile.scenarios = scenarios
-			}
-		}
-		props.setBrandProfiles(brandProfilesCopy)
+		let scenariosCopy = JSON.parse(JSON.stringify(scenarios))
+		props.setBrandProfileScenarios(scenariosCopy)
 	}
 
 	const handleScenarioSelect = (scenarioId, scenarioResponseId) => {

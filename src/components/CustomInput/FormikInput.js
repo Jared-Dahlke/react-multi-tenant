@@ -10,14 +10,10 @@ import {
 } from '../../assets/jss/material-dashboard-react'
 import { Field } from 'formik'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import Label from '../CustomInputLabel/CustomInputLabel'
 import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
-import {
-	neutralColor,
-	neutralLightColor
-} from '../../assets/jss/colorContants.js'
+import { neutralLightColor } from '../../assets/jss/colorContants.js'
 const useStyles = makeStyles(styles)
 
 export default function CustomInput(props) {

@@ -18,7 +18,8 @@ import {
 	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_TOPICS,
 	SET_BRAND_PROFILE_SCENARIOS,
-	SET_BRAND_PROFILE_OPINIONS
+	SET_BRAND_PROFILE_OPINIONS,
+	SET_BRAND_PROFILE_BASIC_INFO
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -152,17 +153,7 @@ export function fetchBrandProfileScenarios(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile scenarios, see console log for more details'
 					)
 				})
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].scenarios = result.data
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				dispatch(setBrandProfileScenarios(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -183,17 +174,7 @@ export function fetchBrandProfileOpinions(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile opinions, see console log for more details'
 					)
 				})
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].opinions = result.data
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				dispatch(setBrandProfileOpinions(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -226,7 +207,6 @@ export const createBrandProfile = () => {
 					dispatch(addBrandProfile(copy))
 					dispatch(setBrandProfileCreating(false))
 					dispatch(setBrandProfileCreated(true))
-					console.log('about to set bp under edit in create')
 					dispatch(setBrandProfileUnderEdit(response.data))
 				}
 			})
@@ -240,6 +220,13 @@ export function setBrandProfileUnderEdit(brandProfileUnderEdit) {
 	return {
 		type: SET_BRAND_PROFILE_UNDER_EDIT,
 		brandProfileUnderEdit
+	}
+}
+
+export function setBrandProfileBasicInfo(basicInfo) {
+	return {
+		type: SET_BRAND_PROFILE_BASIC_INFO,
+		basicInfo
 	}
 }
 

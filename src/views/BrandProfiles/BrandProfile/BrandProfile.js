@@ -15,10 +15,7 @@ import { GridList } from '@material-ui/core'
 import { useScroll } from 'react-scroll-hooks'
 import Steps from 'rsuite/lib/Steps'
 import useOnScreen from './useOnScreen'
-import { FormLoader } from '../../../components/SkeletonLoader'
-import { accentColor } from '../../../assets/jss/colorContants'
 import Loader from 'rsuite/lib/Loader'
-import Panel from '../../../components/CustomPanel'
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -283,18 +280,18 @@ function BrandProfile(props) {
 								</div>
 								<div ref={scenariosRef} style={{ marginTop: 60 }}>
 									<animated.div style={scenariosProps}>
-										{/**	<Scenarios
+										<Scenarios
 											setScenariosValid={setScenariosValid}
 											brandProfileId={props.match.params.brandProfileId}
-										/> */}
+										/>
 									</animated.div>
 								</div>
 								<div ref={opinionsRef} style={{ marginTop: 60 }}>
 									<animated.div style={opinionsProps}>
-										{/**<Opinions
+										<Opinions
 											//setScenariosValid={setScenariosValid}
 											brandProfileId={props.match.params.brandProfileId}
-										/> */}
+										/>
 									</animated.div>
 								</div>
 							</div>

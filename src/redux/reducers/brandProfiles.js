@@ -18,7 +18,8 @@ import {
 	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_TOPICS,
 	SET_BRAND_PROFILE_SCENARIOS,
-	SET_BRAND_PROFILE_OPINIONS
+	SET_BRAND_PROFILE_OPINIONS,
+	SET_BRAND_PROFILE_BASIC_INFO
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -59,11 +60,6 @@ export function brandProfileUnderEdit(
 		websiteUrl: '',
 		industryVerticalId: -1,
 		twitterProfileUrl: '',
-		//competitors: [],
-		//categories: [],
-		//	topics: [],
-		//	scenarios: [],
-		//	opinions: [],
 		brandProfileId: ''
 	},
 	action
@@ -71,6 +67,14 @@ export function brandProfileUnderEdit(
 	switch (action.type) {
 		case SET_BRAND_PROFILE_UNDER_EDIT:
 			return action.brandProfileUnderEdit
+		case SET_BRAND_PROFILE_BASIC_INFO:
+			return {
+				...state,
+				brandName: action.basicInfo.brandName,
+				industryVerticalId: action.basicInfo.industryVerticalId,
+				websiteUrl: action.basicInfo.websiteUrl,
+				twitterProfileUrl: action.basicInfo.twitterProfileUrl
+			}
 		case SET_BRAND_PROFILE_COMPETITORS:
 			return {
 				...state,

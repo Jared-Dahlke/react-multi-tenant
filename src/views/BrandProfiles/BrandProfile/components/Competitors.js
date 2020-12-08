@@ -8,10 +8,7 @@ import FormikInput from '../../../../components/CustomInput/FormikInput'
 import { connect } from 'react-redux'
 import { UserCan, perms, userCan } from '../../../../Can'
 import * as Yup from 'yup'
-import {
-	neutralColor,
-	neutralLightColor
-} from '../../../../assets/jss/colorContants.js'
+import { neutralLightColor } from '../../../../assets/jss/colorContants.js'
 import {
 	patchBrandProfileCompetitors,
 	fetchBrandProfileCompetitors
