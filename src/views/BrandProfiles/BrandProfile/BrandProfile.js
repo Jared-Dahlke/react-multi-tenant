@@ -26,12 +26,10 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
 	return {
 		industryVerticals: state.industryVerticals,
-		currentAccountId: state.currentAccountId,
 		brandProfileCreated: state.brandProfileCreated,
 		brandProfileCreating: state.brandProfileCreating,
 		brandProfileSaved: state.brandProfileSaved,
 		brandProfileSaving: state.brandProfileSaving,
-		brandProfiles: state.brandProfiles,
 		brandProfile: state.brandProfileUnderEdit
 	}
 }
