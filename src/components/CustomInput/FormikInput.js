@@ -10,21 +10,23 @@ import {
 } from '../../assets/jss/material-dashboard-react'
 import { Field } from 'formik'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import Label from '../CustomInputLabel/CustomInputLabel'
 import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
+import { neutralLightColor } from '../../assets/jss/colorContants.js'
 const useStyles = makeStyles(styles)
 
 export default function CustomInput(props) {
 	const classes = useStyles()
 	const { labelText, id } = props
-	const [myVal, setMyVal] = React.useState(props.formikValue)
 
-	const handleBlur = async (e, form) => {
-		e.preventDefault()
-		await form.setFieldValue(props.name, e.target.value)
+	const handleChange = async (val, form) => {
+		await form.setFieldValue(props.name, val)
 		form.validateField(props.name)
+	}
+
+	const handleFocus = (event) => {
+		event.target.select()
 	}
 
 	return (
@@ -47,10 +49,11 @@ export default function CustomInput(props) {
 						)}
 
 						<Input
+							autoFocus={props.autoFocus}
+							onFocus={handleFocus}
 							id={id}
-							value={myVal}
-							onChange={(e) => setMyVal(e)}
-							onBlur={(e) => handleBlur(e, form)}
+							value={props.formikValue}
+							onChange={(val) => handleChange(val, form)}
 							disabled={props.disabled}
 							style={{
 								borderColor: 'white',
@@ -60,11 +63,17 @@ export default function CustomInput(props) {
 
 						{!props.simple && (
 							<InputGroup.Addon>
-								{!form.errors[field.name] &&
-								field.value.length > 0 &&
-								!props.specialError ? (
-									<Icon icon='check' style={{ color: successColor[0] }} />
-								) : null}
+								<Icon
+									icon='check'
+									style={{
+										color:
+											!form.errors[field.name] &&
+											field.value.length > 0 &&
+											!props.specialError
+												? successColor[0]
+												: neutralLightColor
+									}}
+								/>
 							</InputGroup.Addon>
 						)}
 					</InputGroup>

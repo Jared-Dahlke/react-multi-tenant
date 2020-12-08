@@ -15,10 +15,11 @@ import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import {
 	fetchBrandProfiles,
-	fetchBrandProfile,
 	deleteBrandProfile,
 	setBrandProfileDeleted,
-	removeBrandProfile
+	removeBrandProfile,
+	createBrandProfile,
+	setBrandProfileCreated
 } from '../../redux/actions/brandProfiles.js'
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
@@ -28,6 +29,7 @@ import Alert from '@material-ui/lab/Alert'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
 import { UserCan, perms, userCan } from '../../Can'
+import { useSpring, animated } from 'react-spring'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -41,7 +43,10 @@ const mapStateToProps = (state) => {
 		brandProfileDeleted: state.brandProfileDeleted,
 		scenarios: state.scenarios,
 		categories: state.brandCategories,
-		topics: state.topics
+		topics: state.topics,
+		brandProfileUnderEdit: state.brandProfileUnderEdit,
+		brandProfileCreated: state.brandProfileCreated,
+		brandProfileCreating: state.brandProfileCreating
 	}
 }
 
@@ -53,8 +58,8 @@ const mapDispatchToProps = (dispatch) => {
 		removeBrandProfile: (brandProfileId) =>
 			dispatch(removeBrandProfile(brandProfileId)),
 		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
-		fetchBrandProfile: (brandProfileId) =>
-			dispatch(fetchBrandProfile(brandProfileId))
+		createBrandProfile: () => dispatch(createBrandProfile()),
+		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool))
 	}
 }
 
@@ -68,6 +73,20 @@ function BrandProfiles(props) {
 		[classes.tableCellRTL]: false
 	})
 
+	React.useEffect(() => {
+		if (props.brandProfileUnderEdit && props.brandProfileCreated) {
+			let url = `/app/settings/brandProfiles/brandProfile/${props.brandProfileUnderEdit.brandProfileId}`
+			history.push(url)
+		}
+	}, [props.brandProfileUnderEdit])
+
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			props.setBrandProfileCreated(false)
+		}
+	}, [])
+
 	const userHeaders = ['Profile Name', 'Website', '']
 
 	const handleDeleteBrandProfileClick = (brandProfileId) => {
@@ -75,14 +94,12 @@ function BrandProfiles(props) {
 	}
 
 	const handleEditBrandProfileClick = (profile) => {
-		//props.fetchBrandProfile(profile.brandProfileId)
-		let url = `/app/settings/brandProfiles/edit/${profile.brandProfileId}`
+		let url = `/app/settings/brandProfiles/brandProfile/${profile.brandProfileId}`
 		history.push(url)
 	}
 
 	const handleCreateNewProfileClick = () => {
-		let url = `/app/settings/brandProfiles/create`
-		history.push(url)
+		props.createBrandProfile()
 	}
 
 	const handleAdminClick = () => {
@@ -120,7 +137,11 @@ function BrandProfiles(props) {
 					<div>
 						<Grid container justify='flex-end'>
 							<UserCan do={perms.BRAND_PROFILE_CREATE}>
-								<Button onClick={handleCreateNewProfileClick}>
+								<Button
+									onClick={handleCreateNewProfileClick}
+									loading={props.brandProfileCreating}
+									disabled={props.brandProfileCreating}
+								>
 									Create New Profile
 								</Button>
 							</UserCan>
@@ -221,7 +242,6 @@ function BrandProfiles(props) {
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
-
 							height: 'calc(100vh - 200px)',
 							color: 'white'
 						}}

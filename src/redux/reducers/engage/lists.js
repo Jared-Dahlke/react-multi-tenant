@@ -10,7 +10,8 @@ import {
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
-	SET_CREATED_LIST_VERSION
+	SET_CREATED_LIST_VERSION,
+	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
 
 export function lists(state = [], action) {
@@ -124,6 +125,15 @@ export function isDownloadingExcelVersionId(state = null, action) {
 	switch (action.type) {
 		case SET_IS_DOWNLOADING_EXCEL_VERSION_ID:
 			return action.isDownloadingExcelVersionId
+		default:
+			return state
+	}
+}
+
+export function deleteAllVersionDataSuccess(state = false, action) {
+	switch (action.type) {
+		case SET_DELETE_ALL_VERSION_DATA_SUCCESS:
+			return action.deleteAllVersionDataSuccess
 		default:
 			return state
 	}

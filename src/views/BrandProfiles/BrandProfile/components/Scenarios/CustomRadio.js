@@ -1,6 +1,6 @@
 import React from 'react'
-import GridItem from '../../../../components/Grid/GridItem'
-import GridContainer from '../../../../components/Grid/GridContainer'
+import GridItem from '../../../../../components/Grid/GridItem'
+import GridContainer from '../../../../../components/Grid/GridContainer'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
@@ -8,10 +8,10 @@ import {
 	whiteColor,
 	primaryColor,
 	grayColor
-} from '../../../../assets/jss/material-dashboard-react.js'
+} from '../../../../../assets/jss/material-dashboard-react.js'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { neutralColor } from '../../../../assets/jss/colorContants'
-import { perms, userCan } from '../../../../Can'
+import { neutralColor } from '../../../../../assets/jss/colorContants'
+import { perms, userCan } from '../../../../../Can'
 
 const styles = (theme) => ({
 	radio: {

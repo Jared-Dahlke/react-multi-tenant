@@ -10,9 +10,7 @@ import {
 } from '../../action-types/brandProfilesAdmin/scenarios'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
-import {
-	brandScenarioObjValidation
-} from '../../../schemas/schemas'
+import { brandScenarioObjValidation } from '../../../schemas/schemas'
 
 const apiBase = config.api.userAccountUrl
 
@@ -107,7 +105,7 @@ export const createScenario = (scenario) => {
 }
 
 export function fetchAdminBrandScenarios() {
-	let url = apiBase + `/brand-profile/scenario`
+	let url = apiBase + `/brand-profile/scenarios`
 	return async (dispatch) => {
 		dispatch(setAdminScenariosIsLoading(true))
 		try {
@@ -115,7 +113,7 @@ export function fetchAdminBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'

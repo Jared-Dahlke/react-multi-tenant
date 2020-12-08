@@ -10,7 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
 import AccountDropdown from '../../components/AccountDropdown'
-
+import Panel from '../../components/CustomPanel'
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../redux/actions/users.js'
@@ -166,7 +166,7 @@ function Account(props) {
 			<GridContainer>
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
-					<Card>
+					<Panel>
 						<Form>
 							<CardBody>
 								<GridContainer>
@@ -310,8 +310,7 @@ function Account(props) {
 								</Snackbar>
 							</CardFooter>
 						</Form>
-						)}
-					</Card>
+					</Panel>
 				</GridItem>
 			</GridContainer>
 		)

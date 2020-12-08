@@ -7,8 +7,6 @@ import ListBuilder from './views/Engage/Lists/ListBuilder/ListBuilder.js'
 import Lists from './views/Engage/Lists/Lists.js'
 import Users from './views/Users/Users'
 import BrandProfiles from './views/BrandProfiles/BrandProfiles.js'
-import CreateBrandProfile from './views/BrandProfiles/CreateBrandProfile.js'
-import EditBrandProfile from './views/BrandProfiles/EditBrandProfile.js'
 import UserProfile from './views/UserProfile/UserProfile.js'
 import Account from './views/Account/Account'
 import UploadList from './views/Engage/Lists/UploadList'
@@ -25,6 +23,7 @@ import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
 import Permissions from './views/BrandProfiles/Admin/Permissions.js'
+import BrandProfile from './views/BrandProfiles/BrandProfile/BrandProfile'
 
 export const routes = {
 	login: {
@@ -108,16 +107,12 @@ export const routes = {
 				name: 'Brand Profiles',
 				component: BrandProfiles,
 
-				create: {
-					path: '/app/settings/brandProfiles/create',
-					name: 'Create',
-					component: CreateBrandProfile
+				brandProfile: {
+					path: '/app/settings/brandProfiles/brandProfile/:brandProfileId',
+					name: 'Brand Profile',
+					component: BrandProfile
 				},
-				edit: {
-					path: '/app/settings/brandProfiles/edit/:brandProfileId',
-					name: 'Edit',
-					component: EditBrandProfile
-				},
+
 				admin: {
 					path: '/app/settings/brandProfiles/admin',
 					name: 'Brand Profiles Admin',
@@ -253,16 +248,11 @@ export const modifiedRoutes = {
 				component: BrandProfiles,
 				subRoutes: [
 					{
-						path: '/app/settings/brandProfiles/create',
-						name: 'Create',
-						component: CreateBrandProfile,
-						userCan: userCan(perms.BRAND_PROFILE_CREATE)
+						path: '/app/settings/brandProfiles/brandProfile/:brandProfileId',
+						name: 'Brand Profile',
+						component: BrandProfile
 					},
-					{
-						path: '/app/settings/brandProfiles/edit/:brandProfileId',
-						name: 'Edit',
-						component: EditBrandProfile
-					},
+
 					{
 						path: '/app/settings/brandProfiles/admin',
 						name: 'Admin',
@@ -296,13 +286,6 @@ export const modifiedRoutes = {
 								path: '/app/settings/brandProfiles/admin/permissions',
 								name: 'Permissions',
 								component: Permissions
-								// , subRoutes: [
-								// 	{
-								// 		path: '/app/settings/brandProfiles/admin/opinions/create',
-								// 		name: 'Create',
-								// 		component: CreateOpinion
-								// 	}
-								// ]
 							}
 						]
 					}

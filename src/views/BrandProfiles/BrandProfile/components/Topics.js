@@ -11,25 +11,61 @@ import Button from 'rsuite/lib/Button'
 import { perms, userCan } from '../../../../Can'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import { dangerColor } from '../../../../assets/jss/material-dashboard-react'
-import Divider from 'rsuite/lib/Divider'
+import Panel from '../../../../components/CustomPanel'
+
+import { connect } from 'react-redux'
+import {
+	patchBrandProfileTopics,
+	fetchBrandProfileTopics,
+	setBrandProfileTopics
+} from '../../../../redux/actions/brandProfiles'
+
+const mapStateToProps = (state) => {
+	return {
+		currentAccountId: state.currentAccountId,
+		brandProfiles: state.brandProfiles,
+		brandProfile: state.brandProfileUnderEdit
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		patchBrandProfileTopics: (data) => dispatch(patchBrandProfileTopics(data)),
+		fetchBrandProfileTopics: (data) => dispatch(fetchBrandProfileTopics(data)),
+		setBrandProfileTopics: (topics) => dispatch(setBrandProfileTopics(topics))
+	}
+}
 
 const Node = (props) => {
 	const nodeProps = props.nodeProps
 
-	const handleClick = (e, val) => {
+	const handleClick = (e, topicId, oldVal, newValProposed) => {
 		e.preventDefault()
-		let newTopics = JSON.parse(JSON.stringify(props.formikTopics))
-		setTopicAction(nodeProps.topicId, val, newTopics)
-		props.setFieldValue('topics', newTopics)
-
-		//get filtered if any then set displayed
+		props.setTopicsValid(true)
+		let newTopics = JSON.parse(JSON.stringify(props.componentTopics))
+		setTopicAction(nodeProps.topicId, newValProposed, newTopics)
+		props.handleSetBrandProfiles(newTopics)
+		props.setComponentTopics(newTopics)
+		let newVal = getNewTopicsVal(newValProposed, nodeProps.topicResponseId)
+		let params = {
+			topics: [
+				{
+					topicId: nodeProps.topicId,
+					topicResponseId: newVal
+				}
+			],
+			brandProfileId: props.brandProfile.brandProfileId
+		}
+		props.patchBrandProfileTopics(params)
 		let copiedTopics = JSON.parse(JSON.stringify(newTopics))
 		if (props.searchTerm && props.searchTerm.length > 0) {
 			copiedTopics = filterTree(props.searchTerm, copiedTopics)
 		}
 		props.setDisplayedTopics(copiedTopics)
+	}
+	function getNewTopicsVal(newValProposed, oldVal) {
+		if (newValProposed == oldVal) return -1
+		return newValProposed
 	}
 
 	function setTopicAction(topicId, value, topics) {
@@ -41,7 +77,7 @@ const Node = (props) => {
 	function markSelected(topicId, value, topic) {
 		if (topic.topicId == topicId) {
 			if (topic.topicResponseId === value) {
-				value = 3
+				value = -1
 			}
 			topic.topicResponseId = value
 		} else {
@@ -62,7 +98,9 @@ const Node = (props) => {
 						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						key='0'
 						id='0'
-						onClick={(e) => handleClick(e, 1)}
+						onClick={(e) =>
+							handleClick(e, nodeProps.topicId, nodeProps.topicResponseId, 1)
+						}
 						color={nodeProps.topicResponseId == 1 ? 'green' : 'blue'}
 					>
 						Include
@@ -71,7 +109,9 @@ const Node = (props) => {
 						disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						id='test'
 						key='1'
-						onClick={(e) => handleClick(e, 2)}
+						onClick={(e) =>
+							handleClick(e, nodeProps.topicId, nodeProps.topicResponseId, 2)
+						}
 						color={nodeProps.topicResponseId == 2 ? 'red' : 'blue'}
 					>
 						Exclude
@@ -93,20 +133,36 @@ const filterTree = (filter, list) => {
 	})
 }
 
-export default function TopicsTree(props) {
+function TopicsTree(props) {
+	const [fetched, setFetched] = React.useState(false)
+	React.useEffect(() => {
+		if (!fetched) {
+			props.fetchBrandProfileTopics(props.brandProfileId)
+			setFetched(true)
+		}
+	}, [])
+
 	const [searchTerm, setSearchTerm] = React.useState('')
 	const [receivedTopics, setReceivedTopics] = React.useState(false)
 	const [allTopicIds, setAllTopicIds] = React.useState([])
-	const [displayedTopics, setDisplayedTopics] = React.useState(
-		props.formikTopics
+	const [componentTopics, setComponentTopics] = React.useState(
+		props.brandProfile.topics
 	)
+	const [displayedTopics, setDisplayedTopics] = React.useState(componentTopics)
+
+	React.useEffect(() => {
+		if (props.brandProfile.topics && props.brandProfile.topics.length > 0) {
+			setComponentTopics(props.brandProfile.topics)
+		}
+	}, [props.brandProfile.topics])
 
 	React.useEffect(() => {
 		executeSearch()
 	}, [searchTerm])
 
 	const executeSearch = debounce(() => {
-		let copyTopics2 = JSON.parse(JSON.stringify(props.formikTopics))
+		if (!componentTopics) return
+		let copyTopics2 = JSON.parse(JSON.stringify(componentTopics))
 		let end = filterTree(searchTerm, copyTopics2)
 		if (searchTerm.length > 0) {
 			let vals = getValues(end)
@@ -119,12 +175,19 @@ export default function TopicsTree(props) {
 	}, 800)
 
 	React.useEffect(() => {
-		if (props.formikTopics.length > 0 && !receivedTopics) {
-			setDisplayedTopics(props.formikTopics)
+		if (componentTopics && componentTopics.length > 0 && !receivedTopics) {
+			setDisplayedTopics(componentTopics)
 			setReceivedTopics(true)
-			setAllTopicIds(getTopicValues(props.formikTopics))
+			setAllTopicIds(getTopicValues(componentTopics))
 		}
-	}, [props.formikTopics])
+	}, [componentTopics])
+
+	React.useEffect(() => {
+		return () => {
+			setReceivedTopics(false)
+			setFetched(false)
+		}
+	}, [])
 
 	function getTopicValues(topics) {
 		let tab = []
@@ -153,22 +216,31 @@ export default function TopicsTree(props) {
 		return tab
 	}
 
-	const handleUnselectAll = () => {
-		let newTopics = JSON.parse(JSON.stringify(props.formikTopics))
-		unselectAll(newTopics)
-		props.setFieldValue('topics', newTopics)
+	const handleSetBrandProfiles = (topics) => {
+		let topicsCopy = JSON.parse(JSON.stringify(topics))
+		props.setBrandProfileTopics(topicsCopy)
+	}
 
-		//get filtered if any then set displayed
+	const handleUnselectAll = () => {
+		let newTopics = JSON.parse(JSON.stringify(componentTopics))
+		unselectAll(newTopics)
+		handleSetBrandProfiles(newTopics)
 		let copiedTopics = JSON.parse(JSON.stringify(newTopics))
 		if (props.searchTerm && props.searchTerm.length > 0) {
 			copiedTopics = filterTree(props.searchTerm, copiedTopics)
 		}
 		setDisplayedTopics(copiedTopics)
+
+		let params = {
+			topics: JSON.parse(JSON.stringify(newTopics)),
+			brandProfileId: props.brandProfile.brandProfileId
+		}
+		props.patchBrandProfileTopics(params)
 	}
 
 	function unselectAll(topics) {
 		for (const topic of topics) {
-			topic.topicResponseId = 3
+			topic.topicResponseId = -1
 			if (topic.children && topic.children.length > 0) {
 				unselectAll(topic.children)
 			}
@@ -176,8 +248,7 @@ export default function TopicsTree(props) {
 	}
 
 	return (
-		<div>
-			<Divider style={{ color: 'white' }}>Topics</Divider>
+		<Panel bordered header='Topics'>
 			<InputGroup>
 				<InputGroup.Addon>
 					<Icon icon='search' />
@@ -199,24 +270,20 @@ export default function TopicsTree(props) {
 				renderTreeNode={(nodeProps) => {
 					return (
 						<Node
+							brandProfile={props.brandProfile}
+							patchBrandProfileTopics={props.patchBrandProfileTopics}
+							brandProfileIdUnderEdit={props.brandProfileIdUnderEdit}
 							nodeProps={nodeProps}
-							formikTopics={props.formikTopics}
-							setFieldValue={props.setFieldValue}
+							componentTopics={componentTopics}
+							setComponentTopics={setComponentTopics}
 							setDisplayedTopics={setDisplayedTopics}
 							searchTerm={searchTerm}
+							setTopicsValid={props.setTopicsValid}
+							handleSetBrandProfiles={handleSetBrandProfiles}
 						/>
 					)
 				}}
 			/>
-
-			<FormHelperText
-				id='component-helper-text'
-				style={{
-					color: dangerColor[0]
-				}}
-			>
-				{props.errors.topics ? props.errors.topics : ' '}
-			</FormHelperText>
 
 			<Button
 				size={'sm'}
@@ -235,6 +302,8 @@ export default function TopicsTree(props) {
 			>
 				Unselect All
 			</Button>
-		</div>
+		</Panel>
 	)
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopicsTree)

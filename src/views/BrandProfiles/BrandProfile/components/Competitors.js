@@ -1,51 +1,51 @@
 import React from 'react'
 import { Formik, FieldArray, useFormikContext } from 'formik'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
-import { dangerColor } from '../../../../assets/jss/material-dashboard-react.js'
 import Grid from '@material-ui/core/Grid'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import debounce from 'just-debounce-it'
 import FormikInput from '../../../../components/CustomInput/FormikInput'
 import { connect } from 'react-redux'
 import { UserCan, perms, userCan } from '../../../../Can'
 import * as Yup from 'yup'
-import { neutralColor } from '../../../../assets/jss/colorContants.js'
-import { patchBrandProfileCompetitors } from '../../../../redux/actions/brandProfiles'
-import { brandProfileModel } from '../../Model'
+import { neutralLightColor } from '../../../../assets/jss/colorContants.js'
+import {
+	patchBrandProfileCompetitors,
+	fetchBrandProfileCompetitors
+} from '../../../../redux/actions/brandProfiles'
 const urlRegex = require('url-regex')
 
 const mapStateToProps = (state) => {
 	return {
-		brandProfiles: state.brandProfiles,
-		brandProfileIdUnderEdit: state.brandProfileIdUnderEdit
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		patchBrandProfileCompetitors: (competitors) =>
-			dispatch(patchBrandProfileCompetitors(competitors))
+			dispatch(patchBrandProfileCompetitors(competitors)),
+		fetchBrandProfileCompetitors: (brandProfileId) =>
+			dispatch(fetchBrandProfileCompetitors(brandProfileId))
 	}
 }
 
 function TopCompetitors(props) {
-	const getCurrent = (brandProfiles, brandProfileIdEditing) => {
-		for (const brandProfile of brandProfiles) {
-			if (brandProfile.brandProfileId == brandProfileIdEditing) {
-				return brandProfile
-			}
+	const [fetched, setFetched] = React.useState(false)
+	React.useEffect(() => {
+		if (!fetched) {
+			props.fetchBrandProfileCompetitors(props.brandProfileId)
+			setFetched(true)
 		}
-		return brandProfileModel
-	}
+	}, [])
 
-	let currentBrandProfile = JSON.parse(
-		JSON.stringify(
-			getCurrent(props.brandProfiles, props.brandProfileIdUnderEdit)
-		)
-	)
+	React.useEffect(() => {
+		return () => {
+			setFetched(false)
+		}
+	}, [])
 
-	const handleSaveNew = (values, formik) => {
+	const handleSaveNew = (values) => {
 		props.setCompetitorsValid(true)
 		let newComps = []
 		let newCompsWithoutId = []
@@ -66,7 +66,12 @@ function TopCompetitors(props) {
 			newCompsWithoutId.push(newCompetitorWithoutId)
 		}
 
-		props.patchBrandProfileCompetitors(newCompsWithoutId)
+		let data = {
+			competitors: newCompsWithoutId,
+			brandProfileId: props.brandProfile.brandProfileId
+		}
+
+		props.patchBrandProfileCompetitors(data)
 	}
 
 	const handleAddNew = (values, setFieldValue) => {
@@ -94,6 +99,11 @@ function TopCompetitors(props) {
 			)
 		]
 		setFieldValue('competitors', newComps)
+
+		let newValues = {
+			competitors: newComps
+		}
+		handleSaveNew(newValues)
 	}
 
 	const schema = Yup.object().shape({
@@ -142,8 +152,9 @@ function TopCompetitors(props) {
 		)
 
 		React.useEffect(() => {
-			if (formik.values !== formik.initialValues && formik.dirty)
+			if (formik.values !== formik.initialValues && formik.dirty) {
 				debouncedSubmit()
+			}
 		}, [debouncedSubmit, formik.values])
 
 		return null
@@ -155,10 +166,10 @@ function TopCompetitors(props) {
 			validateOnMount={true}
 			validationSchema={schema}
 			validateOnBlur={false}
-			onSubmit={(competitor, formik) => handleSaveNew(competitor, formik)}
+			onSubmit={(values, formik) => handleSaveNew(values)}
 			initialValues={{
-				competitors: currentBrandProfile.competitors
-					? currentBrandProfile.competitors
+				competitors: props.brandProfile.competitors
+					? props.brandProfile.competitors
 					: [
 							{
 								competitorId: '',
@@ -226,7 +237,7 @@ function TopCompetitors(props) {
 															/>
 														</Grid>
 														<Grid item xs={12} sm={12} md={2}>
-															<p style={{ color: neutralColor }}>
+															<p style={{ color: neutralLightColor }}>
 																{index === 0 ? 'a' : ' '}
 															</p>
 
@@ -238,6 +249,7 @@ function TopCompetitors(props) {
 																		borderColor: '#F44336'
 																	}}
 																	appearance='ghost'
+																	disabled
 																	onClick={() =>
 																		handleDeleteCompetitor(
 																			competitor.competitorId,

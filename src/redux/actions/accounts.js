@@ -36,10 +36,7 @@ import {
 	setBrandProfiles,
 	fetchBrandProfiles,
 	brandProfilesIsLoading,
-	fetchBrandScenarios,
-	fetchBrandCategories,
-	fetchBrandIndustryVerticals,
-	fetchBrandTopics
+	fetchBrandIndustryVerticals
 } from '../actions/brandProfiles'
 import { findAccountNodeByAccountId } from '../../utils'
 import { setLists } from './engage/lists'
@@ -236,11 +233,7 @@ export function fetchSiteData(accountId) {
 
 			//
 
-			dispatch(fetchBrandScenarios())
 			dispatch(fetchBrandIndustryVerticals())
-			dispatch(fetchBrandTopics())
-			dispatch(fetchBrandCategories())
-
 			//
 			dispatch(isSwitchingAccounts(false))
 		} catch (error) {

@@ -7,7 +7,7 @@ import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import WarningModal from './WarningModal'
 import TagPicker from 'rsuite/lib/TagPicker'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import {
 	fetchVideos,
@@ -46,7 +46,8 @@ const mapStateToProps = (state) => {
 		filterLanguages: state.engage.filterLanguages,
 		filterCategories: state.engage.filterCategories,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
-		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId
+		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
+		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess
 	}
 }
 
@@ -92,6 +93,10 @@ function ListBuilder(props) {
 		props.fetchFilterCountries()
 		props.fetchFilterLanguages()
 	}, [])
+
+	React.useEffect(() => {
+		_loadNextPage(0)
+	}, [props.deleteAllVersionDataSuccess])
 
 	const _loadNextPage = (index) => {
 		setIsNextPageLoading(true)

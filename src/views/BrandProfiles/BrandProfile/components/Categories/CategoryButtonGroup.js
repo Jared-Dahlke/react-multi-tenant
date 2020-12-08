@@ -1,18 +1,23 @@
 import React from 'react'
-import GridItem from '../../../../components/Grid/GridItem'
-import GridContainer from '../../../../components/Grid/GridContainer'
+import GridItem from '../../../../../components/Grid/GridItem'
+import GridContainer from '../../../../../components/Grid/GridContainer'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
-import { neutralColor } from '../../../../assets/jss/colorContants'
-import { perms, userCan } from '../../../../Can'
+import { neutralColor } from '../../../../../assets/jss/colorContants'
+import { perms, userCan } from '../../../../../Can'
 
 export default function CategoryButtonGroup(props) {
+	const [handlingClick, setHandlingClick] = React.useState(false)
 	const handleClick = (val) => {
-		let contentCategoryResponseId = val
-		props.handleCategorySelect(
-			props.category.contentCategoryId,
-			contentCategoryResponseId
-		)
+		if (!handlingClick) {
+			setHandlingClick(true)
+			let contentCategoryResponseId = val
+			props.handleCategorySelect(
+				props.category.contentCategoryId,
+				contentCategoryResponseId
+			)
+			setHandlingClick(false)
+		}
 	}
 
 	return (
@@ -26,7 +31,7 @@ export default function CategoryButtonGroup(props) {
 						float: 'right'
 					}}
 				>
-					{props.category.contentCategoryName}
+					{props.category.contentCategory}
 				</div>
 			</GridItem>
 

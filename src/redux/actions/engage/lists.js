@@ -10,15 +10,21 @@ import {
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
-	SET_CREATED_LIST_VERSION
+	SET_CREATED_LIST_VERSION,
+	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
 import {
 	listsObjValidation,
-	uploadedListObjValidation
+	uploadedListObjValidation,
+	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
 var fileDownload = require('js-file-download')
+var cwait = require('cwait')
+
+var queue = new cwait.TaskQueue(Promise, 1)
+
 const apiBase = config.api.listBuilderUrl
 
 export function fetchLists(accountId) {
@@ -74,6 +80,13 @@ export const postList = (data) => {
 			.post(url, list)
 			.then((response) => {
 				if (response.status === 200) {
+					postListVersionResult.validate(response.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							'after posting this list version, we received different data from the api than expected, see console log for more details'
+						)
+					})
+
 					response.data.smartListName = list.smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
@@ -98,6 +111,13 @@ export const cloneListVersion = (args) => {
 			.post(url)
 			.then((response) => {
 				if (response.status === 200) {
+					postListVersionResult.validate(response.data).catch(function(err) {
+						console.log(err.name, err.errors)
+						alert(
+							'after posting this list version, we received different data from the api than expected, see console log for more details'
+						)
+					})
+
 					response.data.smartListName = smartListName
 					dispatch(setCreatedListVersion(response.data))
 					dispatch(setIsPostingList(false))
@@ -113,7 +133,7 @@ export const cloneListVersion = (args) => {
 
 export const patchVersionData = (args) => {
 	let url = `${apiBase}/smart-list/version/${args.versionId}/data`
-	return async (dispatch) => {
+	return queue.wrap(async (dispatch) => {
 		try {
 			let params = args.data
 			const result = await axios.patch(url, params)
@@ -122,7 +142,7 @@ export const patchVersionData = (args) => {
 		} catch (error) {
 			alert(error)
 		}
-	}
+	})
 }
 
 export const deleteAllVersionData = (versionId) => {
@@ -130,10 +150,21 @@ export const deleteAllVersionData = (versionId) => {
 	return (dispatch) => {
 		axios
 			.delete(url)
-			.then((response) => {})
+			.then((response) => {
+				if (response.status === 200) {
+					dispatch(setDeleteAllVersionDataSuccess(true))
+				}
+			})
 			.catch((error) => {
 				console.error('delete all version error', error)
 			})
+	}
+}
+
+export function setDeleteAllVersionDataSuccess(deleteAllVersionDataSuccess) {
+	return {
+		type: SET_DELETE_ALL_VERSION_DATA_SUCCESS,
+		deleteAllVersionDataSuccess
 	}
 }
 

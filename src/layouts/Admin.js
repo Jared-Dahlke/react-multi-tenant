@@ -9,6 +9,7 @@ import { fetchSiteData } from '../redux/actions/accounts.js'
 import { routes } from '../routes'
 import { userCan, perms } from '../Can'
 import ProtectedRoute from './ProtectedRoute'
+import BrandProfilesLayout from './BrandProfilesLayout'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
 )
@@ -261,6 +262,7 @@ const switchRoutes = (
 				</>
 			)}
 		/>
+		<Route path='/app/settings/brandProfiles' component={BrandProfilesLayout} />
 
 		<Redirect from='/app' to={routes.app.settings.profile.path} />
 	</Switch>
