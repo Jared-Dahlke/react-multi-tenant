@@ -8,10 +8,7 @@ import FormikInput from '../../../../components/CustomInput/FormikInput'
 import { connect } from 'react-redux'
 import { UserCan, perms, userCan } from '../../../../Can'
 import * as Yup from 'yup'
-import {
-	neutralColor,
-	neutralLightColor
-} from '../../../../assets/jss/colorContants.js'
+import { neutralLightColor } from '../../../../assets/jss/colorContants.js'
 import {
 	patchBrandProfileCompetitors,
 	fetchBrandProfileCompetitors
@@ -20,8 +17,7 @@ const urlRegex = require('url-regex')
 
 const mapStateToProps = (state) => {
 	return {
-		brandProfiles: state.brandProfiles,
-		brandProfileIdUnderEdit: state.brandProfileIdUnderEdit
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -38,16 +34,13 @@ function TopCompetitors(props) {
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
 		if (!fetched) {
-			if (props.brandProfile && props.brandProfile.brandProfileId) {
-				props.fetchBrandProfileCompetitors(props.brandProfile.brandProfileId)
-				setFetched(true)
-			}
+			props.fetchBrandProfileCompetitors(props.brandProfileId)
+			setFetched(true)
 		}
-	}, [props.brandProfile])
+	}, [])
 
 	React.useEffect(() => {
 		return () => {
-			//clean up on unmount
 			setFetched(false)
 		}
 	}, [])
@@ -256,6 +249,7 @@ function TopCompetitors(props) {
 																		borderColor: '#F44336'
 																	}}
 																	appearance='ghost'
+																	disabled
 																	onClick={() =>
 																		handleDeleteCompetitor(
 																			competitor.competitorId,

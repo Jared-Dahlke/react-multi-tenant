@@ -13,7 +13,13 @@ import {
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
 	SCENARIOS_IS_LOADING,
-	SET_BRAND_PROFILE_UNDER_EDIT
+	SET_BRAND_PROFILE_UNDER_EDIT,
+	SET_BRAND_PROFILE_CATEGORIES,
+	SET_BRAND_PROFILE_COMPETITORS,
+	SET_BRAND_PROFILE_TOPICS,
+	SET_BRAND_PROFILE_SCENARIOS,
+	SET_BRAND_PROFILE_OPINIONS,
+	SET_BRAND_PROFILE_BASIC_INFO
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -44,8 +50,8 @@ export function setBrandProfiles(brandProfiles) {
 }
 
 export function fetchBrandProfileBasic(brandProfileId) {
-	let url = apiBase + `/brand-profile/${brandProfileId}/basic`
 	return async (dispatch, getState) => {
+		let url = apiBase + `/brand-profile/${brandProfileId}/basic`
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
@@ -55,17 +61,13 @@ export function fetchBrandProfileBasic(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile basic info, see console log for more details'
 					)
 				})
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].brandName = result.data.brandName
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				let brandProfile = getState().brandProfileUnderEdit
+				brandProfile.brandProfileId = result.data.brandProfileId
+				brandProfile.brandName = result.data.brandName
+				brandProfile.websiteUrl = result.data.websiteUrl
+				brandProfile.industryVerticalId = result.data.industryVerticalId
+				brandProfile.twitterProfileUrl = result.data.twitterProfileUrl
+				dispatch(setBrandProfileUnderEdit(brandProfile))
 			}
 		} catch (error) {
 			alert(error)
@@ -88,17 +90,7 @@ export function fetchBrandProfileCompetitors(brandProfileId) {
 						)
 					})
 				}
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].competitors = result.data
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				dispatch(setBrandProfileCompetitors(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -119,17 +111,7 @@ export function fetchBrandProfileCategories(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile categories, see console log for more details'
 					)
 				})
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].categories = result.data
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				dispatch(setBrandProfileCategories(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -150,17 +132,7 @@ export function fetchBrandProfileTopics(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile topics, see console log for more details'
 					)
 				})
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].topics = result.data
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				dispatch(setBrandProfileTopics(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -181,17 +153,7 @@ export function fetchBrandProfileScenarios(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile scenarios, see console log for more details'
 					)
 				})
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].scenarios = result.data
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				dispatch(setBrandProfileScenarios(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -212,17 +174,7 @@ export function fetchBrandProfileOpinions(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile opinions, see console log for more details'
 					)
 				})
-
-				let currBrandProfiles = JSON.parse(
-					JSON.stringify(getState().brandProfiles)
-				)
-
-				for (const [index, p] of currBrandProfiles.entries()) {
-					if (p.brandProfileId === brandProfileId) {
-						currBrandProfiles[index].opinions = result.data
-					}
-				}
-				dispatch(setBrandProfiles(currBrandProfiles))
+				dispatch(setBrandProfileOpinions(result.data))
 			}
 		} catch (error) {
 			alert(error)
@@ -268,6 +220,48 @@ export function setBrandProfileUnderEdit(brandProfileUnderEdit) {
 	return {
 		type: SET_BRAND_PROFILE_UNDER_EDIT,
 		brandProfileUnderEdit
+	}
+}
+
+export function setBrandProfileBasicInfo(basicInfo) {
+	return {
+		type: SET_BRAND_PROFILE_BASIC_INFO,
+		basicInfo
+	}
+}
+
+export function setBrandProfileCategories(categories) {
+	return {
+		type: SET_BRAND_PROFILE_CATEGORIES,
+		categories
+	}
+}
+
+export function setBrandProfileCompetitors(competitors) {
+	return {
+		type: SET_BRAND_PROFILE_COMPETITORS,
+		competitors
+	}
+}
+
+export function setBrandProfileTopics(topics) {
+	return {
+		type: SET_BRAND_PROFILE_TOPICS,
+		topics
+	}
+}
+
+export function setBrandProfileScenarios(scenarios) {
+	return {
+		type: SET_BRAND_PROFILE_SCENARIOS,
+		scenarios
+	}
+}
+
+export function setBrandProfileOpinions(opinions) {
+	return {
+		type: SET_BRAND_PROFILE_OPINIONS,
+		opinions
 	}
 }
 

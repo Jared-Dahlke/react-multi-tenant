@@ -7,11 +7,12 @@ import { withFormik, Form, useFormikContext } from 'formik'
 import debounce from 'just-debounce-it'
 import {
 	patchBrandProfileBasicInfo,
-	fetchBrandProfileBasic
+	fetchBrandProfileBasic,
+	setBrandProfileBasicInfo
 } from '../../../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import * as Yup from 'yup'
-import { UserCan, perms, userCan } from '../../../../Can'
+import { perms, userCan } from '../../../../Can'
 import Panel from '../../../../components/CustomPanel'
 const urlRegex = require('url-regex')
 
@@ -36,8 +37,7 @@ export const schemaValidation = Yup.object().shape({
 
 const mapStateToProps = (state) => {
 	return {
-		currentAccountId: state.currentAccountId,
-		brandProfiles: state.brandProfiles
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
@@ -46,7 +46,9 @@ const mapDispatchToProps = (dispatch) => {
 		patchBrandProfileBasicInfo: (data) =>
 			dispatch(patchBrandProfileBasicInfo(data)),
 		fetchBrandProfileBasic: (brandProfileId) =>
-			dispatch(fetchBrandProfileBasic(brandProfileId))
+			dispatch(fetchBrandProfileBasic(brandProfileId)),
+		setBrandProfileBasicInfo: (basicInfo) =>
+			dispatch(setBrandProfileBasicInfo(basicInfo))
 	}
 }
 
@@ -66,20 +68,16 @@ const AutoSave = ({ debounceMs }) => {
 
 function BasicInfo(props) {
 	let fetchBrandProfileBasic = props.fetchBrandProfileBasic
-
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
 		if (!fetched) {
-			if (props.brandProfile && props.brandProfile.brandProfileId) {
-				fetchBrandProfileBasic(props.brandProfile.brandProfileId)
-				setFetched(true)
-			}
+			fetchBrandProfileBasic(props.brandProfileId)
+			setFetched(true)
 		}
-	}, [props.brandProfile])
+	}, [])
 
 	React.useEffect(() => {
 		return () => {
-			//clean up on unmount
 			setFetched(false)
 		}
 	}, [])
@@ -94,7 +92,6 @@ function BasicInfo(props) {
 						style={{
 							position: 'relative',
 							boxShadow: '0 -2px 20px rgba(0, 0, 0, 1)'
-							//	border: '1px solid darkgrey'
 						}}
 					>
 						<Form>
@@ -178,6 +175,7 @@ const FormikForm = withFormik({
 	validateOnMount: false,
 	validationSchema: schemaValidation,
 	handleSubmit: (values, { props }) => {
+		props.setBrandProfileBasicInfo(values)
 		props.patchBrandProfileBasicInfo(values)
 	}
 })(BasicInfo)
