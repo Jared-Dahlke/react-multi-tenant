@@ -154,7 +154,7 @@ function Users(props) {
 			<GridItem xs={12} sm={12} md={12}>
 				<Card>
 					<CardBody>
-						{props.users && props.users.length > 0 ? (
+						{props.users && props.users.length > 0 && !props.usersIsLoading ? (
 							<Table className={classes.table}>
 								<TableHead className={tableClasses['primaryTableHeader']}>
 									<TableRow className={tableClasses.tableHeadRow}>

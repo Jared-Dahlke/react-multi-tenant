@@ -10,7 +10,9 @@ import { connect } from 'react-redux'
 import {
 	createUser,
 	setUserAdded,
-	setUserAddError
+	setUserAddError,
+	usersIsLoading,
+	usersFetchData
 } from '../../redux/actions/users'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
@@ -71,7 +73,10 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		addNewUser: (user) => dispatch(createUser(user)),
 		setUserAdded: (bool) => dispatch(setUserAdded(bool)),
-		setUserAddError: (bool) => dispatch(setUserAddError(bool))
+		setUserAddError: (bool) => dispatch(setUserAddError(bool)),
+		usersIsLoading: (bool) => dispatch(usersIsLoading(bool)),
+		fetchUsersData: (currentAccountId) =>
+			dispatch(usersFetchData(currentAccountId))
 	}
 }
 
@@ -116,6 +121,7 @@ function CreateUser(props) {
 			roleId: values.roleId,
 			accounts: accountsToLink
 		}
+		props.usersIsLoading(true)
 		props.addNewUser(newUser)
 	}
 
