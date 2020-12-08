@@ -144,7 +144,7 @@ export const brandOpinionObjValidation = Yup.array().of(
 	})
 )
 
-export const brandPermissionsObjValidation = Yup.array().of(
+export const adminPermissionsObjValidation = Yup.array().of(
 	Yup.object().shape({
 		default: Yup.bool().required(),
 		roleId: Yup.number().required(),

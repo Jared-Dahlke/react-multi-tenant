@@ -1,16 +1,16 @@
 import {
     ADMIN_PERMISSIONS_IS_LOADING,
-    SET_ADMIN_BRAND_PERMISSIONS,
-    SET_ALL_BRAND_PERMISSIONS,
-    PERMISSIONS_ARCHIVING,
-    PERMISSIONS_ARCHIVED,
+    SET_ADMIN_ROLE_PERMISSIONS,
+    SET_ALL_PERMISSIONS,
+    PERMISSIONS_UPDATING,
+    PERMISSIONS_ADDED,
     PERMISSIONS_TO_REMOVE,
     PERMISSIONS_REMOVED
 } from '../../action-types/brandProfilesAdmin/permissions'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import {
-    brandPermissionsObjValidation
+    adminPermissionsObjValidation
 } from '../../../schemas/schemas'
 
 const apiBase = config.api.userAccountUrl
@@ -22,30 +22,30 @@ export function setAdminPermissionsIsLoading(bool) {
     }
 }
 
-export function setAdminBrandPermissions(permissions) {
+export function setAdminRolePermissions(permissions) {
     return {
-        type: SET_ADMIN_BRAND_PERMISSIONS,
+        type: SET_ADMIN_ROLE_PERMISSIONS,
         permissions
     }
 }
 
-export function setAllBrandPermissions(permissions) {
+export function setAllPermissions(permissions) {
     return {
-        type: SET_ALL_BRAND_PERMISSIONS,
+        type: SET_ALL_PERMISSIONS,
         permissions_list: permissions
     }
 }
 
-export function setPermissionsArchiving(bool) {
+export function setPermissionsUpdating(bool) {
     return {
-        type: PERMISSIONS_ARCHIVING,
+        type: PERMISSIONS_UPDATING,
         permissionsArchiving: bool
     }
 }
 
-export function setPermissionsArchived(bool) {
+export function setPermissionsAdded(bool) {
     return {
-        type: PERMISSIONS_ARCHIVED,
+        type: PERMISSIONS_ADDED,
         permissionsArchived: bool
     }
 }
@@ -68,16 +68,16 @@ export function setPermissionsRemoved(bool) {
 export const removePermissions = (roleId, permissionId, permissions) => {
     let url = apiBase + `/role/${roleId}/permission/${permissionId}`
     return (dispatch, getState) => {
-        dispatch(setPermissionsArchiving(true))
+        dispatch(setPermissionsUpdating(true))
         axios
             .delete(url)
             .then((response) => {
-                dispatch(setAdminBrandPermissions(permissions))
+                dispatch(setAdminRolePermissions(permissions))
                 dispatch(setPermissionsRemoved(true))
-                dispatch(setPermissionsArchiving(false))
+                dispatch(setPermissionsUpdating(false))
             })
             .catch((error) => {
-                //error
+                alert(error)
             })
     }
 }
@@ -85,21 +85,21 @@ export const removePermissions = (roleId, permissionId, permissions) => {
 export const insertPermissions = (roleId, permissionId, permissions) => {
     let url = apiBase + `/role/${roleId}/permission`
     return (dispatch, getState) => {
-        dispatch(setPermissionsArchiving(true))
+        dispatch(setPermissionsUpdating(true))
         axios
             .post(url, { "permissionId": permissionId })
             .then((response) => {
-                dispatch(setAdminBrandPermissions(permissions))
-                dispatch(setPermissionsArchived(true))
-                dispatch(setPermissionsArchiving(false))
+                dispatch(setAdminRolePermissions(permissions))
+                dispatch(setPermissionsAdded(true))
+                dispatch(setPermissionsUpdating(false))
             })
             .catch((error) => {
-                //error
+                alert(error)
             })
     }
 }
 
-export function fetchAdminBrandPermissions() {
+export function fetchAdminRolePermissions() {
     let url = apiBase + `/account/1/roles?permissions=true`
     return async (dispatch) => {
         dispatch(setAdminPermissionsIsLoading(true))
@@ -108,7 +108,7 @@ export function fetchAdminBrandPermissions() {
             if (result.status === 200) {
                 let permissions = result.data
 
-                brandPermissionsObjValidation.validate(permissions).catch(function (err) {
+                adminPermissionsObjValidation.validate(permissions).catch(function (err) {
                     console.log(err.name, err.errors)
                     alert(
                         'We received different API data than expected, see the console log for more details.'
@@ -123,7 +123,7 @@ export function fetchAdminBrandPermissions() {
                     permissions[p]["captured_permissions"] = per
                 }
 
-                dispatch(setAdminBrandPermissions(permissions))
+                dispatch(setAdminRolePermissions(permissions))
                 dispatch(setAdminPermissionsIsLoading(false))
             }
         } catch (error) {
@@ -132,7 +132,7 @@ export function fetchAdminBrandPermissions() {
     }
 }
 
-export function fetchAllBrandPermissions() {
+export function fetchAllPermissions() {
     let url = apiBase + `/permission`
     return async (dispatch) => {
         dispatch(setAdminPermissionsIsLoading(true))
@@ -141,7 +141,7 @@ export function fetchAllBrandPermissions() {
             if (result.status === 200) {
                 let permissions = result.data
 
-                dispatch(setAllBrandPermissions(permissions))
+                dispatch(setAllPermissions(permissions))
                 dispatch(setAdminPermissionsIsLoading(false))
             }
         } catch (error) {

@@ -11,12 +11,12 @@ import TableHead from '@material-ui/core/TableHead'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import classnames from 'classnames'
 import {
-    fetchAdminBrandPermissions,
-    fetchAllBrandPermissions,
-    setAdminBrandPermissions,
+    fetchAdminRolePermissions,
+    fetchAllPermissions,
+    setAdminRolePermissions,
     insertPermissions,
     removePermissions,
-    setPermissionsArchived,
+    setPermissionsAdded,
     setPermissionSureToRemove,
     setPermissionsRemoved
 } from '../../../redux/actions/brandProfilesAdmin/permissions'
@@ -45,12 +45,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchAdminBrandPermissions: () => dispatch(fetchAdminBrandPermissions()),
-        fetchAllBrandPermissions: () => dispatch(fetchAllBrandPermissions()),
-        setAdminBrandPermissions: (permissions) => dispatch(setAdminBrandPermissions(permissions)),
+        fetchAdminRolePermissions: () => dispatch(fetchAdminRolePermissions()),
+        fetchAllPermissions: () => dispatch(fetchAllPermissions()),
+        setAdminRolePermissions: (permissions) => dispatch(setAdminRolePermissions(permissions)),
         insertPermissions: (roleId, p, adminPermissions) => dispatch(insertPermissions(roleId, p, adminPermissions)),
         removePermissions: (roleId, p, adminPermissions) => dispatch(removePermissions(roleId, p, adminPermissions)),
-        setPermissionsArchived: (bol) => dispatch(setPermissionsArchived(bol)),
+        setPermissionsAdded: (bol) => dispatch(setPermissionsAdded(bol)),
         setPermissionSureToRemove: (pData) => dispatch(setPermissionSureToRemove(pData)),
         setPermissionsRemoved: (bol) => dispatch(setPermissionsRemoved(bol))
     }
@@ -62,17 +62,17 @@ function Permissions(props) {
     const tableClasses = useTableStyles()
     let permissionToRemove = {}
 
-    const { fetchAdminBrandPermissions, adminPermissions } = props
+    const { fetchAdminRolePermissions, adminPermissions } = props
     React.useEffect(() => {
         if (adminPermissions.length === 0) {
-            fetchAdminBrandPermissions();
+            fetchAdminRolePermissions();
         }
     })
 
-    const { fetchAllBrandPermissions, allPermissions } = props
+    const { fetchAllPermissions, allPermissions } = props
     React.useEffect(() => {
         if (allPermissions.length === 0) {
-            fetchAllBrandPermissions();
+            fetchAllPermissions();
         }
     })
 
@@ -95,7 +95,6 @@ function Permissions(props) {
         }
         else if (remove[0]) {
             console.log("permission is removed", remove[0])
-            // adminPermissions[index].captured_permissions = v
             permissionToRemove = {
                 "show": true,
                 "roleId": roleId,
@@ -103,9 +102,7 @@ function Permissions(props) {
                 "index": index,
                 "captured_permissions": v
             }
-
             props.setPermissionSureToRemove(permissionToRemove)
-            // props.removePermissions(roleId, remove[0], adminPermissions)
         }
         else {
             console.log("no change")
@@ -118,14 +115,22 @@ function Permissions(props) {
             props.removePermissions(props.permissionSureToRemove.roleId, props.permissionSureToRemove.remove, adminPermissions)
             props.setPermissionSureToRemove({ "show": false });
         }
+        else {
+            console.log("something wrong with", props.permissionSureToRemove)
+            props.setPermissionSureToRemove({ "show": false });
+        }
     }
 
     const cancelDelete = () => {
         if (props.permissionSureToRemove) {
             adminPermissions[props.permissionSureToRemove.index].captured_permissions = props.permissionSureToRemove.captured_permissions
-            props.setAdminBrandPermissions(adminPermissions);
+            props.setAdminRolePermissions(adminPermissions);
             adminPermissions[props.permissionSureToRemove.index].captured_permissions.push(props.permissionSureToRemove.remove)
-            props.setAdminBrandPermissions(adminPermissions);
+            props.setAdminRolePermissions(adminPermissions);
+            props.setPermissionSureToRemove({ "show": false });
+        }
+        else {
+            console.log("something wrong with", props.permissionSureToRemove)
             props.setPermissionSureToRemove({ "show": false });
         }
     }
@@ -150,13 +155,11 @@ function Permissions(props) {
                 autoHideDuration={2000}
                 place='bc'
                 open={props.permissionsArchived}
-                onClose={() => props.setPermissionsArchived(false)}
-                color='success'
-            >
+                onClose={() => props.setPermissionsAdded(false)}
+                color='success'>
                 <Alert
-                    onClose={() => props.setPermissionsArchived(false)}
-                    severity='success'
-                >
+                    onClose={() => props.setPermissionsAdded(false)}
+                    severity='success'>
                     Permissions Archived
 				</Alert>
             </Snackbar>
@@ -165,12 +168,10 @@ function Permissions(props) {
                 place='bc'
                 open={props.permissionsRemoved}
                 onClose={() => props.setPermissionsRemoved(false)}
-                color='success'
-            >
+                color='success'>
                 <Alert
                     onClose={() => props.setPermissionsRemoved(false)}
-                    severity='success'
-                >
+                    severity='success'>
                     Permissions Removed
 				</Alert>
             </Snackbar>
@@ -181,8 +182,7 @@ function Permissions(props) {
                         style={{
                             color: '#ffb300',
                             fontSize: 24
-                        }}
-                    />
+                        }} />
                     {'  '}
                     You are trying to remove permission . are you sure you want to proceed ?
                 </Modal.Body>
@@ -210,8 +210,7 @@ function Permissions(props) {
                                                     ' ' +
                                                     tableClasses.tableHeadCell
                                                 }
-                                                key={key}
-                                            >
+                                                key={key}>
                                                 {prop}
                                             </TableCell>
                                         )
@@ -224,8 +223,7 @@ function Permissions(props) {
                                     adminPermissions.map((permissions, index) => (
                                         <TableRow
                                             key={permissions.roleId || 'placeholder'}
-                                            className={classes.tableRow}
-                                        >
+                                            className={classes.tableRow}>
                                             <TableCell className={tableCellClasses}>
                                                 {permissions.roleName}
                                             </TableCell>
