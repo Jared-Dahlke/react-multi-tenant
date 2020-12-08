@@ -161,7 +161,7 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export function Admin({ ...rest }) {
+export function Main({ ...rest }) {
 	const classes = useStyles()
 	const mainPanel = React.createRef()
 	const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -201,4 +201,4 @@ export function Admin({ ...rest }) {
 	)
 }
 
-export default connect(null, mapDispatchToProps)(Admin)
+export default connect(null, mapDispatchToProps)(Main)
