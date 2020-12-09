@@ -249,7 +249,6 @@ function TopCompetitors(props) {
 																		borderColor: '#F44336'
 																	}}
 																	appearance='ghost'
-																	disabled
 																	onClick={() =>
 																		handleDeleteCompetitor(
 																			competitor.competitorId,
