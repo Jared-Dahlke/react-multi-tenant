@@ -28,6 +28,11 @@ import {
 	setAccountSaved
 } from '../../redux/actions/accounts'
 import { UserCan, perms, userCan } from '../../Can'
+import { GoogleLogin } from 'react-google-login'
+
+const responseGoogle = (response) => {
+	console.log(response)
+}
 
 const mapStateToProps = (state) => {
 	return {
@@ -167,6 +172,15 @@ function Account(props) {
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
 					<Panel>
+						{/** <GoogleLogin
+							//	clientId='852173835398-t2tbsu5co8nbukci9tikid2vhdct6241.apps.googleusercontent.com'
+							clientId='684929987565-ak8ie9fpp827dckbqb0r0ch9376drkm7.apps.googleusercontent.com'
+							buttonText='Login'
+							onSuccess={responseGoogle}
+							onFailure={responseGoogle}
+							cookiePolicy={'single_host_origin'}
+						/>*/}
+
 						<Form>
 							<CardBody>
 								<GridContainer>
