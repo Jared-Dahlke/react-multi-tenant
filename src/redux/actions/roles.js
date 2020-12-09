@@ -9,7 +9,10 @@ import {
 } from '../action-types/roles'
 import axios from '../../axiosConfig'
 import config from '../../config'
-import { rolesAndPermissionsObjValidation } from '../../schemas/schemas'
+import {
+	rolesAndPermissionsObjValidation,
+	rolesObjValidation
+} from '../../schemas/schemas'
 
 const apiBase = config.api.userAccountUrl
 

@@ -18,6 +18,10 @@ import { FormLoader } from '../../components/SkeletonLoader'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
+import Icon from 'rsuite/lib/Icon'
+import IconButton from 'rsuite/lib/IconButton'
+import Whisper from 'rsuite/lib/Whisper'
+import Tooltip from 'rsuite/lib/Tooltip'
 import * as Yup from 'yup'
 import { getCurrentAccount } from '../../utils'
 import {
@@ -29,6 +33,7 @@ import {
 } from '../../redux/actions/accounts'
 import { UserCan, perms, userCan } from '../../Can'
 import { GoogleLogin } from 'react-google-login'
+import { accentColor } from '../../assets/jss/colorContants.js'
 
 const responseGoogle = (response) => {
 	console.log(response)
@@ -171,29 +176,46 @@ function Account(props) {
 			<GridContainer>
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
-					<Panel>
-						{/** <GoogleLogin
+
+					<Panel
+						header={
+							<Grid container justify='flex-end'>
+								<UserCan do={perms.ACCOUNT_CREATE}>
+									<Button onClick={() => handleCreateChild(current)}>
+										Create Child Account
+									</Button>
+								</UserCan>
+							</Grid>
+						}
+					>
+						{/***/}
+						<GoogleLogin
 							//	clientId='852173835398-t2tbsu5co8nbukci9tikid2vhdct6241.apps.googleusercontent.com'
 							clientId='684929987565-ak8ie9fpp827dckbqb0r0ch9376drkm7.apps.googleusercontent.com'
-							buttonText='Login'
+							buttonText='Connect to Google Ads'
+							render={(renderProps) => (
+								<IconButton
+									onClick={renderProps.onClick}
+									disabled={renderProps.disabled}
+									block
+									icon={
+										<Icon
+											style={{ backgroundColor: accentColor }}
+											icon='google'
+										/>
+									}
+								>
+									Connect this account to Google Ads
+								</IconButton>
+							)}
 							onSuccess={responseGoogle}
 							onFailure={responseGoogle}
 							cookiePolicy={'single_host_origin'}
-						/>*/}
+						/>
 
 						<Form>
 							<CardBody>
 								<GridContainer>
-									<Grid container justify='flex-end'>
-										<GridItem>
-											<UserCan do={perms.ACCOUNT_CREATE}>
-												<Button onClick={() => handleCreateChild(current)}>
-													Create Child Account
-												</Button>
-											</UserCan>
-										</GridItem>
-									</Grid>
-
 									<GridItem xs={12} sm={12} md={12}>
 										<FormikInput
 											name='accountName'

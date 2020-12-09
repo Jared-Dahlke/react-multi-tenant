@@ -84,14 +84,14 @@ export const rolesAndPermissionsObjValidation = Yup.array()
 			permissions: Yup.array()
 				.min(1, 'No permissions for given role')
 				.of(
-					Yup.object()
-					// .shape({
-					//   permissionId: Yup.number().required(),
-					//   permissionName: Yup.string().required(),
-					//   permissionDescription: Yup.string().required(),
-					//   moduleName: Yup.string().required()
-					// })
+					Yup.object().shape({
+						permissionId: Yup.number().required(),
+						permissionName: Yup.string().required(),
+						permissionDescription: Yup.string().required(),
+						moduleName: Yup.string().required()
+					})
 				)
+				.required()
 		})
 	)
 
