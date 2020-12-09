@@ -36,7 +36,7 @@ const schemaValidation = Yup.object().shape({
   scenarioName: Yup.string()
     .required('Required')
     .min(2, 'Must be greater than 1 character')
-    .max(50, 'Must be less than 50 characters'),
+    .max(120, 'Must be less than 120 characters'),
 })
 
 function Scenario(props) {
