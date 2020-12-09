@@ -9,7 +9,10 @@ import {
 } from '../action-types/roles'
 import axios from '../../axiosConfig'
 import config from '../../config'
-import { rolesAndPermissionsObjValidation } from '../../schemas/schemas'
+import {
+	rolesAndPermissionsObjValidation,
+	rolesObjValidation
+} from '../../schemas/schemas'
 
 const apiBase = config.api.userAccountUrl
 
@@ -58,7 +61,7 @@ export function rolesFetchData(accountId) {
 		dispatch(rolesIsLoading(true))
 
 		try {
-			let url = apiBase + `/role?permissions=false`
+			let url = apiBase + `/account/${accountId}/roles?permissions=false`
 			const result = await axios.get(url)
 			dispatch(rolesIsLoading(false))
 			if (result.status === 200) {
@@ -90,7 +93,7 @@ export function rolesPermissionsFetchData(accountId) {
 		// dispatch(rolesPermissionsIsLoading(true));
 
 		try {
-			let url = apiBase + `/role?permissions=true`
+			let url = apiBase + `/account/${accountId}/roles?permissions=true`
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
