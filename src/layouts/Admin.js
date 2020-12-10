@@ -10,7 +10,6 @@ import { routes } from '../routes'
 import { userCan, perms } from '../Can'
 import ProtectedRoute from './ProtectedRoute'
 import BrandProfilesLayout from './BrandProfilesLayout'
-import AdminLayout from './AdminLayout'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
 )
@@ -146,8 +145,6 @@ const switchRoutes = (
 		/>
 
 		<Route path='/app/settings/brandProfiles' component={BrandProfilesLayout} />
-
-		<Route path='/admin' component={AdminLayout} />
 
 		<Redirect from='/app' to={routes.app.settings.profile.path} />
 	</Switch>
