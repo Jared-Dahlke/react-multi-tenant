@@ -1,11 +1,11 @@
 import {
-    ADMIN_PERMISSIONS_IS_LOADING,
+    SET_PERMISSIONS_LOADING,
     SET_ADMIN_ROLE_PERMISSIONS,
     SET_ALL_PERMISSIONS,
-    PERMISSIONS_UPDATING,
-    PERMISSIONS_ADDED,
-    PERMISSIONS_TO_REMOVE,
-    PERMISSIONS_REMOVED
+    SET_PERMISSIONS_UPDATING,
+    SET_PERMISSIONS_ADDED,
+    SET_PERMISSIONS_TO_REMOVE,
+    SET_PERMISSIONS_REMOVED
 } from '../../action-types/brandProfilesAdmin/permissions'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
@@ -17,7 +17,7 @@ const apiBase = config.api.userAccountUrl
 
 export function setAdminPermissionsIsLoading(bool) {
     return {
-        type: ADMIN_PERMISSIONS_IS_LOADING,
+        type: SET_PERMISSIONS_LOADING,
         adminPermissionsIsLoading: bool
     }
 }
@@ -38,28 +38,28 @@ export function setAllPermissions(permissions) {
 
 export function setPermissionsUpdating(bool) {
     return {
-        type: PERMISSIONS_UPDATING,
+        type: SET_PERMISSIONS_UPDATING,
         permissionsUpdating: bool
     }
 }
 
 export function setPermissionsAdded(bool) {
     return {
-        type: PERMISSIONS_ADDED,
+        type: SET_PERMISSIONS_ADDED,
         permissionsAdded: bool
     }
 }
 
 export function setPermissionSureToRemove(pData) {
     return {
-        type: PERMISSIONS_TO_REMOVE,
+        type: SET_PERMISSIONS_TO_REMOVE,
         permissionSureToRemove: pData
     }
 }
 
 export function setPermissionsRemoved(bool) {
     return {
-        type: PERMISSIONS_REMOVED,
+        type: SET_PERMISSIONS_REMOVED,
         permissionsRemoved: bool
     }
 }

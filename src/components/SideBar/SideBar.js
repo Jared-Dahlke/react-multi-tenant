@@ -33,11 +33,11 @@ export default function Sidebar(props) {
 	const MyLink = React.forwardRef((props, ref) => {
 		const { href, as, label, ...rest } = props
 
-			return (
-				<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
-					{label}
-				</Link>
-			)
+		return (
+			<Link to={href} style={{ textDecoration: 'none' }} ref={ref} {...rest}>
+				{label}
+			</Link>
+		)
 	})
 
 	return (
@@ -71,8 +71,8 @@ export default function Sidebar(props) {
 							/>
 						</Dropdown>
 						<Dropdown eventKey='4' title='Engage' icon={<Icon icon='bolt' />} style={{
-									display: userCan(perms.ENGAGE_READ) ? 'flex' : 'none'
-								}}>
+							display: userCan(perms.ENGAGE_READ) ? 'flex' : 'none'
+						}}>
 							<NavLink
 								href={routes.app.engage.lists.lists.path}
 								label='Smart Lists'
@@ -84,33 +84,57 @@ export default function Sidebar(props) {
 							icon={<Icon icon='sliders' />}
 						>
 							{userCan(perms.ACCOUNT_READ) && (
-									<NavLink
-										href={routes.app.settings.account.path}
-										label='Account'
-									/>
-								)}
+								<NavLink
+									href={routes.app.settings.account.path}
+									label='Account'
+								/>
+							)}
 
 							{userCan(perms.USER_READ) && (
-									<NavLink
-										href={routes.app.settings.users.path}
-										label='Users'
-									/>
-								)}
+								<NavLink
+									href={routes.app.settings.users.path}
+									label='Users'
+								/>
+							)}
 							{userCan(perms.BRAND_PROFILE_READ) && (
+								<NavLink
+									href={routes.app.settings.brandProfiles.path}
+									label='Brand Profiles'
+								/>
+							)}
+
+							{userCan(perms.BRAND_MENTALITY_READ) && (
+								<NavLink
+									href={routes.app.settings.brandMentality.path}
+									label='Brand Mentality'
+								/>
+							)}
+						</Dropdown>
+						{/* <Nav.Item href={routes.app.measure.path}>Measure</Nav.Item> */}
+						{userCan(perms.ADMIN_READ) && (
+							<Dropdown title='Admin' eventKey='6' icon={<Icon icon='gears2' />}>
+								{userCan(perms.ADMIN_READ) && (
 									<NavLink
-										href={routes.app.settings.brandProfiles.path}
-										label='Brand Profiles'
+										href={routes.admin.scenarios.path}
+										label='Configure Scenarios'
 									/>
 								)}
 
-							{userCan(perms.BRAND_MENTALITY_READ) && (
+								{userCan(perms.ADMIN_READ) && (
 									<NavLink
-										href={routes.app.settings.brandMentality.path}
-										label='Brand Mentality'
+										href={routes.admin.opinions.path}
+										label='Configure Opinions'
 									/>
 								)}
-						</Dropdown>
-						{/* <Nav.Item href={routes.app.measure.path}>Measure</Nav.Item> */}
+
+								{userCan(perms.ADMIN_READ) && (
+									<NavLink
+										href={routes.admin.permissions.path}
+										label='Configure Permissions'
+									/>
+								)}
+							</Dropdown>
+						)}
 					</Nav>
 				</Sidenav.Body>
 			</Sidenav>

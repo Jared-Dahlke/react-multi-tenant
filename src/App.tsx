@@ -15,6 +15,7 @@ function App() {
 			<Router>
 				<div>
 					<Route exact path='/' component={routes.login.component} />
+
 					<Route path={routes.login.path} component={routes.login.component} />
 
 					<Route
@@ -25,6 +26,11 @@ function App() {
 					<Route
 						path={routes.changePassword.path}
 						component={routes.changePassword.component}
+					/>
+
+					<Route
+						path={routes.admin.path}
+						component={Admin}
 					/>
 
 					<PrivateRoute path={routes.app.path} component={Admin} />

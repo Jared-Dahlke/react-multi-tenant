@@ -68,7 +68,6 @@ export const routes = {
 				}
 			}
 		},
-
 		discover: {
 			channelResearch: {
 				path: '/app/discover/channelResearch',
@@ -76,7 +75,6 @@ export const routes = {
 				component: ChannelResearchTemp
 			}
 		},
-
 		settings: {
 			profile: {
 				path: '/app/settings/profile',
@@ -106,44 +104,10 @@ export const routes = {
 				path: '/app/settings/brandProfiles',
 				name: 'Brand Profiles',
 				component: BrandProfiles,
-
 				brandProfile: {
 					path: '/app/settings/brandProfiles/brandProfile/:brandProfileId',
 					name: 'Brand Profile',
 					component: BrandProfile
-				},
-
-				admin: {
-					path: '/app/settings/brandProfiles/admin',
-					name: 'Brand Profiles Admin',
-					component: BrandProfilesAdmin,
-					scenarios: {
-						path: '/app/settings/brandProfiles/admin/scenarios',
-						name: 'Brand Profiles Scenarios',
-						component: Scenarios,
-
-						create: {
-							path: '/app/settings/brandProfiles/admin/scenarios/create',
-							name: 'Create',
-							component: CreateScenario
-						}
-					},
-					opinions: {
-						path: '/app/settings/brandProfiles/admin/opinions',
-						name: 'Brand Profiles Opinions',
-						component: Opinions,
-
-						create: {
-							path: '/app/settings/brandProfiles/admin/opinions/create',
-							name: 'Create',
-							component: CreateOpinion
-						}
-					},
-					permissions: {
-						path: '/app/settings/brandProfiles/admin/permissions',
-						name: 'Brand Profiles Permissions',
-						component: Permissions
-					}
 				}
 			},
 			brandMentality: {
@@ -152,7 +116,6 @@ export const routes = {
 				component: BrandMentality
 			}
 		},
-
 		homepage: {
 			path: '/app/home',
 			name: '',
@@ -162,6 +125,36 @@ export const routes = {
 			path: '/app/measure',
 			name: 'Measure',
 			component: MeasurePage
+		}
+	},
+	admin: {
+		path: '/admin',
+		name: 'Brand Profiles Admin',
+		component: BrandProfilesAdmin,
+		scenarios: {
+			path: '/admin/scenarios',
+			name: 'Brand Profiles Scenarios',
+			component: Scenarios,
+			create: {
+				path: '/admin/scenarios/create',
+				name: 'Create',
+				component: CreateScenario
+			}
+		},
+		opinions: {
+			path: '/admin/opinions',
+			name: 'Brand Profiles Opinions',
+			component: Opinions,
+			create: {
+				path: '/admin/opinions/create',
+				name: 'Create',
+				component: CreateOpinion
+			}
+		},
+		permissions: {
+			path: '/admin/permissions',
+			name: 'Permissions',
+			component: Permissions
 		}
 	}
 }
@@ -251,43 +244,6 @@ export const modifiedRoutes = {
 						path: '/app/settings/brandProfiles/brandProfile/:brandProfileId',
 						name: 'Brand Profile',
 						component: BrandProfile
-					},
-
-					{
-						path: '/app/settings/brandProfiles/admin',
-						name: 'Admin',
-						component: BrandProfilesAdmin,
-						subRoutes: [
-							{
-								path: '/app/settings/brandProfiles/admin/scenarios',
-								name: 'Scenarios',
-								component: Scenarios,
-								subRoutes: [
-									{
-										path: '/app/settings/brandProfiles/admin/scenarios/create',
-										name: 'Create',
-										component: CreateScenario
-									}
-								]
-							},
-							{
-								path: '/app/settings/brandProfiles/admin/opinions',
-								name: 'Opinions',
-								component: Opinions,
-								subRoutes: [
-									{
-										path: '/app/settings/brandProfiles/admin/opinions/create',
-										name: 'Create',
-										component: CreateOpinion
-									}
-								]
-							},
-							{
-								path: '/app/settings/brandProfiles/admin/permissions',
-								name: 'Permissions',
-								component: Permissions
-							}
-						]
 					}
 				]
 			},
@@ -306,6 +262,41 @@ export const modifiedRoutes = {
 				path: '/app/measure',
 				name: 'Measure',
 				component: MeasurePage
+			}
+		}
+	},
+	admin: {
+		path: '/admin',
+		component: BrandProfilesAdmin,
+		subRoutes: {
+			scenarios: {
+				path: '/admin/scenarios',
+				name: 'Scenarios',
+				component: Scenarios,
+				subRoutes: [
+					{
+						path: '/admin/scenarios/create',
+						name: 'Create',
+						component: CreateScenario
+					}
+				]
+			},
+			opinions: {
+				path: '/admin/opinions',
+				name: 'Opinions',
+				component: Opinions,
+				subRoutes: [
+					{
+						path: '/admin/opinions/create',
+						name: 'Create',
+						component: CreateOpinion
+					}
+				]
+			},
+			permissions: {
+				path: '/admin/permissions',
+				name: 'Permissions',
+				component: Permissions
 			}
 		}
 	}

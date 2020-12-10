@@ -68,7 +68,7 @@ function Opinions(props) {
   }
 
   const handleCreateOpinionClick = () => {
-    let url = routes.app.settings.brandProfiles.admin.opinions.create.path
+    let url = routes.admin.opinions.create.path
     history.push(url)
   }
 

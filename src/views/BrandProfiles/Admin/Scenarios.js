@@ -69,7 +69,7 @@ function Scenarios(props) {
 	}
 
 	const handleCreateScenarioClick = () => {
-		let url = routes.app.settings.brandProfiles.admin.scenarios.create.path
+		let url = routes.admin.scenarios.create.path
 		history.push(url)
 	}
 

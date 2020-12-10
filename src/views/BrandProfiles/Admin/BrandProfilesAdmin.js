@@ -8,17 +8,17 @@ function BrandProfilesAdmin(props) {
 	let history = useHistory()
 
 	const handleScenariosClick = () => {
-		let url = routes.app.settings.brandProfiles.admin.scenarios.path
+		let url = routes.admin.scenarios.path
 		history.push(url)
 	}
 
 	const handleOpinionsClick = () => {
-		let url = routes.app.settings.brandProfiles.admin.opinions.path
+		let url = routes.admin.opinions.path
 		history.push(url)
 	}
 
 	const handlePermissionsClick = () => {
-		let url = routes.app.settings.brandProfiles.admin.permissions.path
+		let url = routes.admin.permissions.path
 		history.push(url)
 	}
 

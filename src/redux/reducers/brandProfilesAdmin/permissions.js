@@ -1,11 +1,11 @@
 import {
-    ADMIN_PERMISSIONS_IS_LOADING,
+    SET_PERMISSIONS_LOADING,
     SET_ADMIN_ROLE_PERMISSIONS,
     SET_ALL_PERMISSIONS,
-    PERMISSIONS_UPDATING,
-    PERMISSIONS_ADDED,
-    PERMISSIONS_TO_REMOVE,
-    PERMISSIONS_REMOVED
+    SET_PERMISSIONS_UPDATING,
+    SET_PERMISSIONS_ADDED,
+    SET_PERMISSIONS_TO_REMOVE,
+    SET_PERMISSIONS_REMOVED
 } from '../../action-types/brandProfilesAdmin/permissions'
 
 export function permissions(state = [], action) {
@@ -19,7 +19,7 @@ export function permissions(state = [], action) {
 
 export function permissionsIsLoading(state = true, action) {
     switch (action.type) {
-        case ADMIN_PERMISSIONS_IS_LOADING:
+        case SET_PERMISSIONS_LOADING:
             return action.adminPermissionsIsLoading
         default:
             return state
@@ -37,7 +37,7 @@ export function permissions_list(state = [], action) {
 
 export function permissionsUpdating(state = false, action) {
     switch (action.type) {
-        case PERMISSIONS_UPDATING:
+        case SET_PERMISSIONS_UPDATING:
             return action.permissionsUpdating
         default:
             return state
@@ -46,7 +46,7 @@ export function permissionsUpdating(state = false, action) {
 
 export function permissionsAdded(state = false, action) {
     switch (action.type) {
-        case PERMISSIONS_ADDED:
+        case SET_PERMISSIONS_ADDED:
             return action.permissionsAdded
         default:
             return state
@@ -55,7 +55,7 @@ export function permissionsAdded(state = false, action) {
 
 export function permissionSureToRemove(state = { "show": false }, action) {
     switch (action.type) {
-        case PERMISSIONS_TO_REMOVE:
+        case SET_PERMISSIONS_TO_REMOVE:
             return action.permissionSureToRemove
         default:
             return state
@@ -64,7 +64,7 @@ export function permissionSureToRemove(state = { "show": false }, action) {
 
 export function permissionsRemoved(state = false, action) {
     switch (action.type) {
-        case PERMISSIONS_REMOVED:
+        case SET_PERMISSIONS_REMOVED:
             return action.permissionsRemoved
         default:
             return state
