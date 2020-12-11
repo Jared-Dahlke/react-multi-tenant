@@ -70,8 +70,7 @@ export function setGoogleRefreshToken(code) {
 			if (result.status === 200) {
 				let refreshToken = result.data.refreshToken
 				if (!refreshToken) {
-					refreshToken =
-						'1//068TncrrhKCNZCgYIARAAGAYSNwF-L9Iri3hAlYbC4FvyIlJ0jlCk1UBcSt8sUZtOZXDPN_SukGnfV88F0cuGR2IXTK5gqb8Pcm4' //received 12/10/20 4pm
+					refreshToken = process.env.DEV_EXAMPLE_REFRESH_TOKEN //received 12/10/20 4pm // TODO: this will be replaced with another backend function call before going live
 				}
 				dispatch(fetchGoogleAccountCampaigns(refreshToken))
 			}

@@ -235,7 +235,7 @@ export function fetchSiteData(accountId) {
 			//
 
 			dispatch(fetchBrandIndustryVerticals())
-			dispatch(fetchGoogleLoginUrl())
+			// dispatch(fetchGoogleLoginUrl())  //TODO: uncomment this once API is ready
 			//
 			dispatch(isSwitchingAccounts(false))
 		} catch (error) {
