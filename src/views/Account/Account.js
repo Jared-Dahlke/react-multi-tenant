@@ -20,10 +20,10 @@ import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
-import Whisper from 'rsuite/lib/Whisper'
-import Tooltip from 'rsuite/lib/Tooltip'
 import * as Yup from 'yup'
 import { getCurrentAccount } from '../../utils'
+import Modal from 'rsuite/lib/Modal'
+import InputPicker from 'rsuite/lib/InputPicker'
 import {
 	updateAccount,
 	deleteAccount,
@@ -31,13 +31,16 @@ import {
 	accountCreated,
 	setAccountSaved
 } from '../../redux/actions/accounts'
-import { UserCan, perms, userCan } from '../../Can'
-import { GoogleLogin } from 'react-google-login'
-import { accentColor } from '../../assets/jss/colorContants.js'
 
-const responseGoogle = (response) => {
-	console.log(response)
-}
+import queryString from 'query-string'
+
+import { setGoogleRefreshToken } from '../../redux/actions/ThirdParty/Google/google'
+import { UserCan, perms, userCan } from '../../Can'
+import {
+	accentColor,
+	neutralLightColor,
+	neutralExtraLightColor
+} from '../../assets/jss/colorContants.js'
 
 const mapStateToProps = (state) => {
 	return {
@@ -49,7 +52,10 @@ const mapStateToProps = (state) => {
 		accountSaved: state.accountSaved,
 		accountSaving: state.accountSaving,
 		rolesIsLoading: state.rolesIsLoading,
-		user: state.user
+		user: state.user,
+		googleLoginUrl: state.thirdParty.googleLoginUrl,
+		accountHasValidGoogleToken: state.thirdParty.accountHasValidGoogleToken,
+		googleAccountCampaigns: state.thirdParty.googleAccountCampaigns
 	}
 }
 
@@ -61,7 +67,8 @@ const mapDispatchToProps = (dispatch) => {
 		deleteAccount: (accountId) => dispatch(deleteAccount(accountId)),
 		createAccount: (account) => dispatch(createAccount(account)),
 		setAccountCreated: (val) => dispatch(accountCreated(val)),
-		setAccountSaved: (bool) => dispatch(setAccountSaved(bool))
+		setAccountSaved: (bool) => dispatch(setAccountSaved(bool)),
+		setGoogleRefreshToken: (code) => dispatch(setGoogleRefreshToken(code))
 	}
 }
 
@@ -111,6 +118,18 @@ const getAccountTypeNameById = (accountTypeId, accountTypes) => {
 }
 
 function Account(props) {
+	React.useEffect(() => {
+		let params = queryString.parse(location.search)
+		if (params && params.code) {
+			props.setGoogleRefreshToken(params.code)
+		}
+	}, [])
+
+	const handleGoogleLogin = () => {
+		let url = props.googleLoginUrl
+		window.open(url)
+	}
+
 	const handleCreateChild = (current) => {
 		let levelId = current.accountLevelId + 1
 		if (levelId > 3) {
@@ -174,8 +193,61 @@ function Account(props) {
 	} else {
 		return (
 			<GridContainer>
+				<Modal
+					show={
+						props.googleAccountCampaigns &&
+						props.googleAccountCampaigns.length > 0
+					}
+					onHide={console.log('please close')}
+				>
+					<Modal.Header>
+						<Modal.Title>Choose a Google Ads campaign</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<InputPicker
+							block
+							size='lg'
+							id='googleCampaignId'
+							label='Google Ads Campaigns'
+							placeholder='Select'
+							labelKey='name'
+							valueKey='id'
+							data={props.googleAccountCampaigns}
+							//	value={brandProfileId}
+							//onChange={(val) => setBrandProfileId(val)}
+						/>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button onClick={console.log('ok clicked')} appearance='primary'>
+							Ok
+						</Button>
+						<Button onClick={console.log('cancel clicked')} appearance='subtle'>
+							Cancel
+						</Button>
+					</Modal.Footer>
+				</Modal>
+
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
+
+					{!props.accountHasValidGoogleToken && 1 === 2 && (
+						<IconButton
+							style={{
+								backgroundColor: neutralExtraLightColor,
+								marginBottom: 15
+							}}
+							onClick={handleGoogleLogin}
+							block
+							icon={
+								<Icon
+									style={{ backgroundColor: neutralExtraLightColor }}
+									icon='google'
+								/>
+							}
+						>
+							Connect this account to Google Ads
+						</IconButton>
+					)}
 
 					<Panel
 						header={
@@ -188,31 +260,6 @@ function Account(props) {
 							</Grid>
 						}
 					>
-						{/***/}
-						<GoogleLogin
-							//	clientId='852173835398-t2tbsu5co8nbukci9tikid2vhdct6241.apps.googleusercontent.com'
-							clientId='684929987565-ak8ie9fpp827dckbqb0r0ch9376drkm7.apps.googleusercontent.com'
-							buttonText='Connect to Google Ads'
-							render={(renderProps) => (
-								<IconButton
-									onClick={renderProps.onClick}
-									disabled={renderProps.disabled}
-									block
-									icon={
-										<Icon
-											style={{ backgroundColor: accentColor }}
-											icon='google'
-										/>
-									}
-								>
-									Connect this account to Google Ads
-								</IconButton>
-							)}
-							onSuccess={responseGoogle}
-							onFailure={responseGoogle}
-							cookiePolicy={'single_host_origin'}
-						/>
-
 						<Form>
 							<CardBody>
 								<GridContainer>

@@ -61,6 +61,7 @@ import {
 
 import brandProfilesAdmin from './brandProfilesAdmin/index'
 import engage from './engage/index'
+import thirdParty from './ThirdParty/index'
 
 export default combineReducers({
 	authToken,
@@ -113,5 +114,6 @@ export default combineReducers({
 	resettingPassword,
 	scenariosIsLoading,
 	brandProfilesAdmin,
-	engage
+	engage,
+	thirdParty
 })
