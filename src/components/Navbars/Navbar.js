@@ -38,13 +38,14 @@ const generateBreadCrumbs = (routes) => {
 
 	const findRoute = (route) => {
 		let subRoutes = Object.values(route.subRoutes)
+		
 		let matchedRoute = subRoutes.find((route) => {
 			if (url === route.path) return true
 			if (
 				route.name.toLowerCase().includes('edit') &&
 				url.includes(getPathWithoutParams(route.path))
-			)
-				return true
+			)	return true
+			if(route.path.includes(':') && url.includes(getPathWithoutParams(route.path))) return true
 			if (route.subRoutes) return findRoute(route)
 			return false
 		})
