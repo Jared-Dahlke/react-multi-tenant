@@ -90,7 +90,7 @@ function Scenarios(props) {
 				</Alert>
 			</Snackbar>
 
-			<GridItem xs={12} sm={12} md={6}>
+			<GridItem xs={12} sm={12} md={10}>
 				{adminScenarios && adminScenarios.length > 0 ? (
 					<div>
 						<Button appearance='primary' onClick={handleCreateScenarioClick}>

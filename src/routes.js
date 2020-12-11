@@ -18,7 +18,6 @@ import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
 import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
-import BrandProfilesAdmin from './views/BrandProfiles/Admin/BrandProfilesAdmin.js'
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
@@ -129,8 +128,6 @@ export const routes = {
 	},
 	admin: {
 		path: '/admin',
-		name: 'Brand Profiles Admin',
-		component: BrandProfilesAdmin,
 		scenarios: {
 			path: '/admin/scenarios',
 			name: 'Brand Profiles Scenarios',
@@ -267,7 +264,6 @@ export const modifiedRoutes = {
 	},
 	admin: {
 		path: '/admin',
-		component: BrandProfilesAdmin,
 		subRoutes: {
 			scenarios: {
 				path: '/admin/scenarios',

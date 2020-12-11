@@ -10,13 +10,6 @@ const AdminLayoutRoutes = () => {
             path={routes.admin.path}
             render={({ match: { url } }) => (
                 <>
-                    <ProtectedRoute
-                        path={routes.admin.path}
-                        component={routes.admin.component}
-                        canView={userCan(perms.ADMIN_READ)}
-                        exact
-                    />
-
                     <Route
                         path={routes.admin.scenarios.path}
                         render={({ match: { url } }) => (
