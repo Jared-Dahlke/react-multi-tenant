@@ -32,6 +32,7 @@ import {
 	setRolesPermissions,
 	rolesPermissionsIsLoading
 } from '../actions/roles'
+import { fetchGoogleLoginUrl } from '../actions/ThirdParty/Google/google'
 import {
 	setBrandProfiles,
 	fetchBrandProfiles,
@@ -234,6 +235,7 @@ export function fetchSiteData(accountId) {
 			//
 
 			dispatch(fetchBrandIndustryVerticals())
+			dispatch(fetchGoogleLoginUrl())
 			//
 			dispatch(isSwitchingAccounts(false))
 		} catch (error) {
