@@ -1,6 +1,6 @@
 import {
 	SET_GOOGLE_LOGIN_URL,
-	SET_ACCOUNT_HAS_VALID_GOOGLE_TOKEN,
+	SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN,
 	SET_GOOGLE_ACCOUNT_CAMPAIGNS
 } from '../../../action-types/ThirdParty/Google/google'
 
@@ -23,14 +23,18 @@ export function setGoogleAccountCampaigns(googleAccountCampaigns) {
 	}
 }
 
-export function setAccountHasValidGoogleToken(accountHasValidGoogleToken) {
+export function setAccountHasValidGoogleRefreshToken(
+	accountHasValidGoogleRefreshToken
+) {
 	return {
-		type: SET_ACCOUNT_HAS_VALID_GOOGLE_TOKEN,
-		accountHasValidGoogleToken
+		type: SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN,
+		accountHasValidGoogleRefreshToken
 	}
 }
 
 export function fetchGoogleAccountCampaigns(refreshToken) {
+	console.log('fetchGoogleAccountCampaigns')
+	console.log(refreshToken)
 	return async (dispatch) => {
 		let url = apiBase + `/google/campaigns/${encodeURIComponent(refreshToken)}`
 		try {
@@ -62,22 +66,26 @@ export function fetchGoogleLoginUrl() {
 	}
 }
 
-export function setGoogleRefreshToken(code) {
-	return async (dispatch) => {
-		let url = apiBase + `/google/setRefreshToken/${encodeURIComponent(code)}`
-		try {
-			let result = await axios.get(url)
-			if (result.status === 200) {
-				let refreshToken = result.data.refreshToken
-				if (!refreshToken) {
-					refreshToken = process.env.DEV_EXAMPLE_REFRESH_TOKEN //received 12/10/20 4pm // TODO: this will be replaced with another backend function call before going live
-				}
-				dispatch(fetchGoogleAccountCampaigns(refreshToken))
-			}
-		} catch (error) {
-			alert(
-				'Error on set google refresh token: ' + JSON.stringify(error, null, 2)
-			)
-		}
+export function handleGoogleAdsApiConsent(params) {
+	console.log('handle consent params')
+	console.log(params)
+	let { code, accountId } = params
+	return async (dispatch, getState) => {
+		let url =
+			apiBase +
+			`/google/handleGoogleAdsApiConsent/${encodeURIComponent(
+				code
+			)}/${accountId}`
+		//	try {
+		let result = await axios.get(url)
+		//if (result.status === 200) {
+		console.log(result.data)
+		//let refreshToken = result.data.refresh_token
+		//	if (!refreshToken) {
+		//	console.log('settting from env')
+		//	console.log(process.env.REACT_APP_DEV_EXAMPLE_REFRESH_TOKEN)
+		//	refreshToken = process.env.REACT_APP_DEV_EXAMPLE_REFRESH_TOKEN //received 12/10/20 4pm // TODO: this will be replaced with another backend function call before going live
+		//	}
+		//dispatch(fetchGoogleAccountCampaigns(refreshToken))
 	}
 }
