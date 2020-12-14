@@ -234,7 +234,7 @@ function Account(props) {
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
 
-					{!props.accountHasValidGoogleRefreshToken && (
+					{!props.accountHasValidGoogleRefreshToken && 1 === 2 && (
 						<IconButton
 							style={{
 								backgroundColor: neutralExtraLightColor,
