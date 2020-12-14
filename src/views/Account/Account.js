@@ -34,13 +34,9 @@ import {
 
 import queryString from 'query-string'
 
-import { setGoogleRefreshToken } from '../../redux/actions/ThirdParty/Google/google'
+import { handleGoogleAdsApiConsent } from '../../redux/actions/ThirdParty/Google/google'
 import { UserCan, perms, userCan } from '../../Can'
-import {
-	accentColor,
-	neutralLightColor,
-	neutralExtraLightColor
-} from '../../assets/jss/colorContants.js'
+import { neutralExtraLightColor } from '../../assets/jss/colorContants.js'
 
 const mapStateToProps = (state) => {
 	return {
@@ -54,7 +50,8 @@ const mapStateToProps = (state) => {
 		rolesIsLoading: state.rolesIsLoading,
 		user: state.user,
 		googleLoginUrl: state.thirdParty.googleLoginUrl,
-		accountHasValidGoogleToken: state.thirdParty.accountHasValidGoogleToken,
+		accountHasValidGoogleRefreshToken:
+			state.thirdParty.accountHasValidGoogleRefreshToken,
 		googleAccountCampaigns: state.thirdParty.googleAccountCampaigns
 	}
 }
@@ -68,7 +65,8 @@ const mapDispatchToProps = (dispatch) => {
 		createAccount: (account) => dispatch(createAccount(account)),
 		setAccountCreated: (val) => dispatch(accountCreated(val)),
 		setAccountSaved: (bool) => dispatch(setAccountSaved(bool)),
-		setGoogleRefreshToken: (code) => dispatch(setGoogleRefreshToken(code))
+		handleGoogleAdsApiConsent: (params) =>
+			dispatch(handleGoogleAdsApiConsent(params))
 	}
 }
 
@@ -119,11 +117,17 @@ const getAccountTypeNameById = (accountTypeId, accountTypes) => {
 
 function Account(props) {
 	React.useEffect(() => {
-		let params = queryString.parse(location.search)
-		if (params && params.code) {
-			props.setGoogleRefreshToken(params.code)
+		if (props.currentAccountId && props.currentAccountId.length > 0) {
+			let params = queryString.parse(location.search)
+			if (params && params.code) {
+				let args = {
+					code: params.code,
+					accountId: props.currentAccountId
+				}
+				props.handleGoogleAdsApiConsent(args)
+			}
 		}
-	}, [])
+	}, [props.currentAccountId])
 
 	const handleGoogleLogin = () => {
 		let url = props.googleLoginUrl
@@ -230,7 +234,7 @@ function Account(props) {
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
 
-					{!props.accountHasValidGoogleToken && 1 === 2 && (
+					{!props.accountHasValidGoogleRefreshToken && (
 						<IconButton
 							style={{
 								backgroundColor: neutralExtraLightColor,

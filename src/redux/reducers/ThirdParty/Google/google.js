@@ -1,6 +1,6 @@
 import {
 	SET_GOOGLE_LOGIN_URL,
-	SET_ACCOUNT_HAS_VALID_GOOGLE_TOKEN,
+	SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN,
 	SET_GOOGLE_ACCOUNT_CAMPAIGNS
 } from '../../../action-types/ThirdParty/Google/google'
 
@@ -13,10 +13,10 @@ export function googleLoginUrl(state = null, action) {
 	}
 }
 
-export function accountHasValidGoogleToken(state = false, action) {
+export function accountHasValidGoogleRefreshToken(state = false, action) {
 	switch (action.type) {
-		case SET_ACCOUNT_HAS_VALID_GOOGLE_TOKEN:
-			return action.accountHasValidGoogleToken
+		case SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN:
+			return action.accountHasValidGoogleRefreshToken
 		default:
 			return state
 	}
