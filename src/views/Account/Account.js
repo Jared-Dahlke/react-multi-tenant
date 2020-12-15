@@ -18,8 +18,12 @@ import { FormLoader } from '../../components/SkeletonLoader'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
+import Icon from 'rsuite/lib/Icon'
+import IconButton from 'rsuite/lib/IconButton'
 import * as Yup from 'yup'
 import { getCurrentAccount } from '../../utils'
+import Modal from 'rsuite/lib/Modal'
+import InputPicker from 'rsuite/lib/InputPicker'
 import {
 	updateAccount,
 	deleteAccount,
@@ -27,7 +31,12 @@ import {
 	accountCreated,
 	setAccountSaved
 } from '../../redux/actions/accounts'
+
+import queryString from 'query-string'
+
+import { handleGoogleAdsApiConsent } from '../../redux/actions/ThirdParty/Google/google'
 import { UserCan, perms, userCan } from '../../Can'
+import { neutralExtraLightColor } from '../../assets/jss/colorContants.js'
 
 const mapStateToProps = (state) => {
 	return {
@@ -39,7 +48,11 @@ const mapStateToProps = (state) => {
 		accountSaved: state.accountSaved,
 		accountSaving: state.accountSaving,
 		rolesIsLoading: state.rolesIsLoading,
-		user: state.user
+		user: state.user,
+		googleLoginUrl: state.thirdParty.googleLoginUrl,
+		accountHasValidGoogleRefreshToken:
+			state.thirdParty.accountHasValidGoogleRefreshToken,
+		googleAccountCampaigns: state.thirdParty.googleAccountCampaigns
 	}
 }
 
@@ -51,7 +64,9 @@ const mapDispatchToProps = (dispatch) => {
 		deleteAccount: (accountId) => dispatch(deleteAccount(accountId)),
 		createAccount: (account) => dispatch(createAccount(account)),
 		setAccountCreated: (val) => dispatch(accountCreated(val)),
-		setAccountSaved: (bool) => dispatch(setAccountSaved(bool))
+		setAccountSaved: (bool) => dispatch(setAccountSaved(bool)),
+		handleGoogleAdsApiConsent: (params) =>
+			dispatch(handleGoogleAdsApiConsent(params))
 	}
 }
 
@@ -101,6 +116,24 @@ const getAccountTypeNameById = (accountTypeId, accountTypes) => {
 }
 
 function Account(props) {
+	React.useEffect(() => {
+		if (props.currentAccountId && props.currentAccountId.length > 0) {
+			let params = queryString.parse(location.search)
+			if (params && params.code) {
+				let args = {
+					code: params.code,
+					accountId: props.currentAccountId
+				}
+				props.handleGoogleAdsApiConsent(args)
+			}
+		}
+	}, [props.currentAccountId])
+
+	const handleGoogleLogin = () => {
+		let url = props.googleLoginUrl
+		window.open(url)
+	}
+
 	const handleCreateChild = (current) => {
 		let levelId = current.accountLevelId + 1
 		if (levelId > 3) {
@@ -164,22 +197,76 @@ function Account(props) {
 	} else {
 		return (
 			<GridContainer>
+				<Modal
+					show={
+						props.googleAccountCampaigns &&
+						props.googleAccountCampaigns.length > 0
+					}
+					onHide={console.log('please close')}
+				>
+					<Modal.Header>
+						<Modal.Title>Choose a Google Ads campaign</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<InputPicker
+							block
+							size='lg'
+							id='googleCampaignId'
+							label='Google Ads Campaigns'
+							placeholder='Select'
+							labelKey='name'
+							valueKey='id'
+							data={props.googleAccountCampaigns}
+							//	value={brandProfileId}
+							//onChange={(val) => setBrandProfileId(val)}
+						/>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button onClick={console.log('ok clicked')} appearance='primary'>
+							Ok
+						</Button>
+						<Button onClick={console.log('cancel clicked')} appearance='subtle'>
+							Cancel
+						</Button>
+					</Modal.Footer>
+				</Modal>
+
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
-					<Panel>
+
+					{!props.accountHasValidGoogleRefreshToken && 1 === 2 && (
+						<IconButton
+							style={{
+								backgroundColor: neutralExtraLightColor,
+								marginBottom: 15
+							}}
+							onClick={handleGoogleLogin}
+							block
+							icon={
+								<Icon
+									style={{ backgroundColor: neutralExtraLightColor }}
+									icon='google'
+								/>
+							}
+						>
+							Connect this account to Google Ads
+						</IconButton>
+					)}
+
+					<Panel
+						header={
+							<Grid container justify='flex-end'>
+								<UserCan do={perms.ACCOUNT_CREATE}>
+									<Button onClick={() => handleCreateChild(current)}>
+										Create Child Account
+									</Button>
+								</UserCan>
+							</Grid>
+						}
+					>
 						<Form>
 							<CardBody>
 								<GridContainer>
-									<Grid container justify='flex-end'>
-										<GridItem>
-											<UserCan do={perms.ACCOUNT_CREATE}>
-												<Button onClick={() => handleCreateChild(current)}>
-													Create Child Account
-												</Button>
-											</UserCan>
-										</GridItem>
-									</Grid>
-
 									<GridItem xs={12} sm={12} md={12}>
 										<FormikInput
 											name='accountName'

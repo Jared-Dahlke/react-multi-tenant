@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import PrivateRoute from './pages/PrivateRoute.js'
 import { Provider } from 'react-redux'
 import configureStore from './redux/store/index.js'
-import Admin from '../src/layouts/Admin.js'
+import Main from '../src/layouts/Main.js'
 import { routes } from './routes'
 import Loading from '../src/views/Loading.js'
 
@@ -38,7 +38,7 @@ function App() {
 						/>
 					</Suspense>
 
-					<PrivateRoute path={routes.app.path} component={Admin} />
+					<PrivateRoute path={routes.app.path} component={Main} />
 				</div>
 			</Router>
 		</Provider>

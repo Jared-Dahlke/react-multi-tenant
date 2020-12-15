@@ -285,16 +285,13 @@ export const createUser = (user) => {
 	return async (dispatch) => {
 		dispatch(setUserAdding(true))
 		let response = ''
-		try {
-			response = await axios.post(url, user)
-		} catch (error) {
-			console.log(error)
-		}
-
+		response = await axios.post(url, user)
 		if (response.status === 200) {
 			dispatch(setUserAdded(true))
+		} else if (response.response.status === 403) {
+			dispatch(setUserAddError(403))
 		} else {
-			dispatch(setUserAddError(true))
+			dispatch(setUserAddError(1))
 		}
 		dispatch(setUserAdding(false))
 	}

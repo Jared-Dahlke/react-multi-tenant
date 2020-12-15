@@ -74,7 +74,6 @@ function CreateNewListModal(props) {
 		let list = {
 			smartListName: values.smartListName,
 			objectiveId: values.objectiveId
-			//	smartListData: [{ id: 'UCu-sMNXPu_mqjFVbR9YF7JA', action: 'target' }]
 		}
 
 		let data = {
@@ -84,6 +83,10 @@ function CreateNewListModal(props) {
 		}
 
 		props.postList(data)
+	}
+
+	const handleCancelClick = () => {
+		history.push(routes.app.engage.lists.lists.path)
 	}
 
 	return (
@@ -152,11 +155,9 @@ function CreateNewListModal(props) {
 								</Button>
 
 								<Button
-									//	disabled={!dirty || !isValid || props.isPostingList}
-									//	onClick={handleClose}
+									onClick={handleCancelClick}
 									color='red'
 									appearance='subtle'
-									//	loading={props.isPostingList}
 								>
 									Cancel
 								</Button>

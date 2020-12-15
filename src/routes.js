@@ -1,4 +1,4 @@
-import Admin from './layouts/Admin'
+import Main from './layouts/Main'
 import EditUser from './views/Users/EditUser'
 import CreateUser from './views/Users/CreateUser'
 import BrandMentality from './views/BrandMentality/BrandMentality'
@@ -42,7 +42,7 @@ export const routes = {
 	},
 	app: {
 		path: '/app',
-		component: Admin,
+		component: Main,
 		engage: {
 			lists: {
 				lists: {
@@ -174,7 +174,7 @@ export const modifiedRoutes = {
 	},
 	app: {
 		path: '/app',
-		component: Admin,
+		component: Main,
 		subRoutes: {
 			engage: {
 				path: '/app/engage/lists',
