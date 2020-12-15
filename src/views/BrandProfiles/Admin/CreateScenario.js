@@ -14,105 +14,98 @@ import { withFormik, Form } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import * as Yup from 'yup'
 import {
-  createScenario,
-  setScenarioCreated
-} from '../../../redux/actions/brandProfilesAdmin/scenarios'
+	createScenario,
+	setScenarioCreated
+} from '../../../redux/actions/admin/scenarios'
 
 const mapStateToProps = (state) => {
-  return {
-    scenarioCreated: state.brandProfilesAdmin.scenarioCreated,
-    scenarioSaving: state.brandProfilesAdmin.scenarioSaving
-  }
+	return {
+		scenarioCreated: state.admin.scenarioCreated,
+		scenarioSaving: state.admin.scenarioSaving
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    createScenario: (scenario) => dispatch(createScenario(scenario)),
-    setScenarioCreated: (val) => dispatch(setScenarioCreated(val))
-  }
+	return {
+		createScenario: (scenario) => dispatch(createScenario(scenario)),
+		setScenarioCreated: (val) => dispatch(setScenarioCreated(val))
+	}
 }
 
 const schemaValidation = Yup.object().shape({
-  scenarioName: Yup.string()
-    .required('Required')
-    .min(2, 'Must be greater than 1 character')
-    .max(120, 'Must be less than 120 characters'),
+	scenarioName: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(120, 'Must be less than 120 characters')
 })
 
 function Scenario(props) {
+	const { values, isValid, dirty } = props
 
-  const {
-    values,
-    isValid,
-    dirty
-  } = props
+	return (
+		<GridContainer>
+			<GridItem xs={12} sm={12} md={6}>
+				<Card>
+					<Form>
+						<CardBody>
+							<GridContainer>
+								<GridItem xs={12} sm={12} md={12}>
+									<FormikInput
+										name='scenarioName'
+										formikValue={values.scenarioName}
+										labelText='Scenario Name'
+										id='scenarioName'
+									/>
+								</GridItem>
+							</GridContainer>
+						</CardBody>
 
-  return (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={6}>
-        <Card>
-          <Form>
-            <CardBody>
-              <GridContainer>
-
-                <GridItem xs={12} sm={12} md={12}>
-                  <FormikInput
-                    name='scenarioName'
-                    formikValue={values.scenarioName}
-                    labelText='Scenario Name'
-                    id='scenarioName'
-                  />
-
-                </GridItem>
-              </GridContainer>
-            </CardBody>
-
-            <CardFooter>
-              <Button
-                loading={props.scenarioSaving}
-                disabled={!isValid || !dirty || props.scenarioSaving}
-                type='submit'
-              >
-                Save
-              </Button>
-              <Snackbar
-                autoHideDuration={2000}
-                place='bc'
-                open={props.scenarioCreated}
-                onClose={() => props.setScenarioCreated(false)}
-              >
-                <Alert
-                  onClose={() => props.setScenarioCreated(false)}
-                  severity='success'
-                >
-                  Scenario created
-                </Alert>
-              </Snackbar>
-            </CardFooter>
-          </Form>
-        </Card>
-      </GridItem>
-    </GridContainer>
-  )
+						<CardFooter>
+							<Button
+								loading={props.scenarioSaving}
+								disabled={!isValid || !dirty || props.scenarioSaving}
+								type='submit'
+							>
+								Save
+							</Button>
+							<Snackbar
+								autoHideDuration={2000}
+								place='bc'
+								open={props.scenarioCreated}
+								onClose={() => props.setScenarioCreated(false)}
+							>
+								<Alert
+									onClose={() => props.setScenarioCreated(false)}
+									severity='success'
+								>
+									Scenario created
+								</Alert>
+							</Snackbar>
+						</CardFooter>
+					</Form>
+				</Card>
+			</GridItem>
+		</GridContainer>
+	)
 }
 
 const FormikForm = withFormik({
-  mapPropsToValues: (props) => {
-    return {
-      scenarioName: ''
-    }
-  },
-  enableReinitialize: true,
-  validateOnMount: true,
-  validateOnChange: true,
-  validateOnBlur: true,
-  validationSchema: schemaValidation,
-  handleSubmit: (values, { props }) => {
-    let scenario = {
-      scenarioName: values.scenarioName,
-    }
-    props.createScenario(scenario)
-  }
+	mapPropsToValues: (props) => {
+		return {
+			scenarioName: ''
+		}
+	},
+	enableReinitialize: true,
+	validateOnMount: true,
+	validateOnChange: true,
+	validateOnBlur: true,
+	validationSchema: schemaValidation,
+	handleSubmit: (values, { props }) => {
+		let scenario = {
+			scenarioName: values.scenarioName
+		}
+		props.createScenario(scenario)
+	}
 })(Scenario)
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)

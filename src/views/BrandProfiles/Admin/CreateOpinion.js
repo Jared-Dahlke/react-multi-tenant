@@ -15,136 +15,135 @@ import FormikInput from '../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
 import {
-  createOpinion,
-  setOpinionCreated
-} from '../../../redux/actions/brandProfilesAdmin/opinions'
+	createOpinion,
+	setOpinionCreated
+} from '../../../redux/actions/admin/opinions'
 
 const mapStateToProps = (state) => {
-  return {
-    opinionCreated: state.brandProfilesAdmin.opinionCreated,
-    opinionSaving: state.brandProfilesAdmin.opinionSaving
-  }
+	return {
+		opinionCreated: state.admin.opinionCreated,
+		opinionSaving: state.admin.opinionSaving
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    createOpinion: (opinion) => dispatch(createOpinion(opinion)),
-    setOpinionCreated: (val) => dispatch(setOpinionCreated(val))
-  }
+	return {
+		createOpinion: (opinion) => dispatch(createOpinion(opinion)),
+		setOpinionCreated: (val) => dispatch(setOpinionCreated(val))
+	}
 }
 
 const schemaValidation = Yup.object().shape({
-  question: Yup.string()
-    .required('Required')
-    .min(2, 'Must be greater than 1 character')
-    .max(50, 'Must be less than 50 characters'),
-  opinionType: Yup.string()
-    .required('Required')
+	question: Yup.string()
+		.required('Required')
+		.min(2, 'Must be greater than 1 character')
+		.max(50, 'Must be less than 50 characters'),
+	opinionType: Yup.string().required('Required')
 })
 
 function Opinion(props) {
+	const {
+		isValid,
+		dirty,
+		values,
+		setFieldValue,
+		setFieldTouched,
+		errors,
+		validateField,
+		validateForm,
+		touched
+	} = props
 
-  const {
-    isValid,
-    dirty,
-    values,
-    setFieldValue,
-    setFieldTouched,
-    errors,
-    validateField,
-    validateForm,
-    touched
-  } = props
+	const opinionTypeOptions = [
+		{ id: 'Sports', name: 'Sports' },
+		{ id: 'Music', name: 'Music' }
+	]
 
-  const opinionTypeOptions = [{ id: "Sports", name: "Sports" }, { id: "Music", name: "Music" }]
+	return (
+		<GridContainer>
+			<GridItem xs={12} sm={12} md={6}>
+				<Card>
+					<Form>
+						<CardBody>
+							<GridContainer>
+								<GridItem xs={12} sm={12} md={12}>
+									<FormikInput
+										name='question'
+										formikValue={values.question}
+										labelText='Question'
+										id='question'
+									/>
 
-  return (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={6}>
-        <Card>
-          <Form>
-            <CardBody>
-              <GridContainer>
+									<FormikSelect
+										id='opinionType'
+										name='opinionType'
+										data-qa='opinionType'
+										label='Opinion Type'
+										placeholder='Opinion Type'
+										optionLabel='name'
+										optionValue='id'
+										options={opinionTypeOptions}
+										value={values.opinionType}
+										onChange={setFieldValue}
+										onBlur={setFieldTouched}
+										validateField={validateField}
+										validateForm={validateForm}
+										touched={touched.opinionType}
+										error={errors.opinionType}
+										hideSearch
+									/>
+								</GridItem>
+							</GridContainer>
+						</CardBody>
 
-                <GridItem xs={12} sm={12} md={12}>
-                  <FormikInput
-                    name='question'
-                    formikValue={values.question}
-                    labelText='Question'
-                    id='question'
-                  />
-
-                  <FormikSelect
-                    id='opinionType'
-                    name='opinionType'
-                    data-qa='opinionType'
-                    label='Opinion Type'
-                    placeholder='Opinion Type'
-                    optionLabel='name'
-                    optionValue='id'
-                    options={opinionTypeOptions}
-                    value={values.opinionType}
-                    onChange={setFieldValue}
-                    onBlur={setFieldTouched}
-                    validateField={validateField}
-                    validateForm={validateForm}
-                    touched={touched.opinionType}
-                    error={errors.opinionType}
-                    hideSearch
-                  />
-
-                </GridItem>
-              </GridContainer>
-            </CardBody>
-
-            <CardFooter>
-              <Button
-                loading={props.opinionSaving}
-                disabled={!isValid || !dirty || props.opinionSaving}
-                type='submit'
-              >
-                Save
-              </Button>
-              <Snackbar
-                autoHideDuration={2000}
-                place='bc'
-                open={props.opinionCreated}
-                onClose={() => props.setOpinionCreated(false)}
-              >
-                <Alert
-                  onClose={() => props.setOpinionCreated(false)}
-                  severity='success'
-                >
-                  Opinion created
-                </Alert>
-              </Snackbar>
-            </CardFooter>
-          </Form>
-        </Card>
-      </GridItem>
-    </GridContainer>
-  )
+						<CardFooter>
+							<Button
+								loading={props.opinionSaving}
+								disabled={!isValid || !dirty || props.opinionSaving}
+								type='submit'
+							>
+								Save
+							</Button>
+							<Snackbar
+								autoHideDuration={2000}
+								place='bc'
+								open={props.opinionCreated}
+								onClose={() => props.setOpinionCreated(false)}
+							>
+								<Alert
+									onClose={() => props.setOpinionCreated(false)}
+									severity='success'
+								>
+									Opinion created
+								</Alert>
+							</Snackbar>
+						</CardFooter>
+					</Form>
+				</Card>
+			</GridItem>
+		</GridContainer>
+	)
 }
 
 const FormikForm = withFormik({
-  mapPropsToValues: (props) => {
-    return {
-      question: '',
-      opinionType: ''
-    }
-  },
-  enableReinitialize: true,
-  validateOnMount: true,
-  validateOnChange: true,
-  validateOnBlur: true,
-  validationSchema: schemaValidation,
-  handleSubmit: (values, { props }) => {
-    let opinion = {
-      question: values.question,
-      opinionType: values.opinionType
-    }
-    props.createOpinion(opinion)
-  }
+	mapPropsToValues: (props) => {
+		return {
+			question: '',
+			opinionType: ''
+		}
+	},
+	enableReinitialize: true,
+	validateOnMount: true,
+	validateOnChange: true,
+	validateOnBlur: true,
+	validationSchema: schemaValidation,
+	handleSubmit: (values, { props }) => {
+		let opinion = {
+			question: values.question,
+			opinionType: values.opinionType
+		}
+		props.createOpinion(opinion)
+	}
 })(Opinion)
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)
