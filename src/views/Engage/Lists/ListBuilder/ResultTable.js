@@ -70,6 +70,12 @@ export default function ResultTable({
 						header={item.name}
 					>
 						<Grid container>
+							<img
+								src='https://yt3.ggpht.com/ytc/AAUvwngHo9IA5uRX8YEEOw44hfDtqbBZEDtfUKOZHZnC7Q=s800-c-k-c0x00ffffff-no-rj'
+								alt='new'
+								width='200'
+								height='200'
+							/>
 							<Grid item xs={6}></Grid>
 							<Grid item xs={6}>
 								<ButtonGroup>

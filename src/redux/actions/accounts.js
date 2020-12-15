@@ -32,7 +32,10 @@ import {
 	setRolesPermissions,
 	rolesPermissionsIsLoading
 } from '../actions/roles'
-import { fetchGoogleLoginUrl } from '../actions/ThirdParty/Google/google'
+import {
+	fetchGoogleLoginUrl,
+	setAccountHasValidGoogleRefreshToken
+} from '../actions/ThirdParty/Google/google'
 import {
 	setBrandProfiles,
 	fetchBrandProfiles,
@@ -226,6 +229,9 @@ export function fetchSiteData(accountId) {
 			dispatch(userProfileFetchData())
 			dispatch(setCurrentAccount(accountId))
 			dispatch(setCurrentAccountId(accountId))
+			if (config.googleAuth) {
+				dispatch(fetchGoogleAdsAuthInfo(accountId))
+			}
 
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData(accountId))
@@ -235,8 +241,11 @@ export function fetchSiteData(accountId) {
 			//
 
 			dispatch(fetchBrandIndustryVerticals())
-			//dispatch(fetchGoogleLoginUrl()) //TODO: uncomment this once API is ready
-			//
+
+			if (config.googleAuth) {
+				dispatch(fetchGoogleLoginUrl())
+			}
+
 			dispatch(isSwitchingAccounts(false))
 		} catch (error) {
 			console.log('caught in account action')
@@ -257,6 +266,37 @@ export function accountsSetAccountUsers(accountId, users) {
 	return {
 		type: ACCOUNTS_SET_ACCOUNT_USERS,
 		payload
+	}
+}
+
+export function fetchGoogleAdsAuthInfo(accountId) {
+	let url = apiBase + `/account/googleAdsAuthInfo/${accountId}`
+	return async (dispatch) => {
+		try {
+			let result = []
+
+			try {
+				result = await axios.get(url)
+			} catch (error) {
+				console.log(error)
+			}
+
+			if (result.status === 200) {
+				let {
+					googleAdsCustomerId,
+					hasGoogleAdsRefreshToken,
+					hasValidGoogleAdsRefreshToken
+				} = result.data
+
+				dispatch(
+					setAccountHasValidGoogleRefreshToken(hasValidGoogleAdsRefreshToken)
+				) // TODO: we have to figure out a way to make this = false when returned from consent page
+			}
+		} catch (error) {
+			alert(
+				'Error on fetch google ads auth info: ' + JSON.stringify(error, null, 2)
+			)
+		}
 	}
 }
 

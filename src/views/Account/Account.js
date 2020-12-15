@@ -24,6 +24,8 @@ import * as Yup from 'yup'
 import { getCurrentAccount } from '../../utils'
 import Modal from 'rsuite/lib/Modal'
 import InputPicker from 'rsuite/lib/InputPicker'
+import { useHistory } from 'react-router-dom'
+import config from '../../config'
 import {
 	updateAccount,
 	deleteAccount,
@@ -34,9 +36,14 @@ import {
 
 import queryString from 'query-string'
 
-import { handleGoogleAdsApiConsent } from '../../redux/actions/ThirdParty/Google/google'
+import {
+	handleGoogleAdsApiConsent,
+	setAccountHasValidGoogleRefreshToken
+} from '../../redux/actions/ThirdParty/Google/google'
 import { UserCan, perms, userCan } from '../../Can'
 import { neutralExtraLightColor } from '../../assets/jss/colorContants.js'
+
+const googleAuth = config.googleAuth
 
 const mapStateToProps = (state) => {
 	return {
@@ -66,7 +73,9 @@ const mapDispatchToProps = (dispatch) => {
 		setAccountCreated: (val) => dispatch(accountCreated(val)),
 		setAccountSaved: (bool) => dispatch(setAccountSaved(bool)),
 		handleGoogleAdsApiConsent: (params) =>
-			dispatch(handleGoogleAdsApiConsent(params))
+			dispatch(handleGoogleAdsApiConsent(params)),
+		setAccountHasValidGoogleRefreshToken: (bool) =>
+			dispatch(setAccountHasValidGoogleRefreshToken(bool))
 	}
 }
 
@@ -116,6 +125,8 @@ const getAccountTypeNameById = (accountTypeId, accountTypes) => {
 }
 
 function Account(props) {
+	let history = useHistory()
+
 	React.useEffect(() => {
 		if (props.currentAccountId && props.currentAccountId.length > 0) {
 			let params = queryString.parse(location.search)
@@ -124,6 +135,8 @@ function Account(props) {
 					code: params.code,
 					accountId: props.currentAccountId
 				}
+				history.push('/app/settings/account')
+				props.setAccountHasValidGoogleRefreshToken(true)
 				props.handleGoogleAdsApiConsent(args)
 			}
 		}
@@ -222,10 +235,16 @@ function Account(props) {
 						/>
 					</Modal.Body>
 					<Modal.Footer>
-						<Button onClick={console.log('ok clicked')} appearance='primary'>
+						<Button
+							onClick={() => console.log('ok clicked')}
+							appearance='primary'
+						>
 							Ok
 						</Button>
-						<Button onClick={console.log('cancel clicked')} appearance='subtle'>
+						<Button
+							onClick={() => console.log('cancel clicked')}
+							appearance='subtle'
+						>
 							Cancel
 						</Button>
 					</Modal.Footer>
@@ -234,7 +253,7 @@ function Account(props) {
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
 
-					{!props.accountHasValidGoogleRefreshToken && 1 === 2 && (
+					{!props.accountHasValidGoogleRefreshToken && googleAuth && (
 						<IconButton
 							style={{
 								backgroundColor: neutralExtraLightColor,
