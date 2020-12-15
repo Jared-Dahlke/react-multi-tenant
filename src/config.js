@@ -51,7 +51,7 @@ switch (process.env.REACT_APP_STAGE) {
 		config = production
 }
 
-const googleAuth = false
+const googleAuth = true
 
 export default {
 	// Add common config values here

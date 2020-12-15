@@ -34,6 +34,8 @@ import {
 	setAccountSaved
 } from '../../redux/actions/accounts'
 
+import { setFromGoogleAuthCallback } from '../../redux/actions/ThirdParty/Google/google'
+
 import queryString from 'query-string'
 
 import {
@@ -75,7 +77,9 @@ const mapDispatchToProps = (dispatch) => {
 		handleGoogleAdsApiConsent: (params) =>
 			dispatch(handleGoogleAdsApiConsent(params)),
 		setAccountHasValidGoogleRefreshToken: (bool) =>
-			dispatch(setAccountHasValidGoogleRefreshToken(bool))
+			dispatch(setAccountHasValidGoogleRefreshToken(bool)),
+		setFromGoogleAuthCallback: (bool) =>
+			dispatch(setFromGoogleAuthCallback(bool))
 	}
 }
 
@@ -135,8 +139,9 @@ function Account(props) {
 					code: params.code,
 					accountId: props.currentAccountId
 				}
-				history.push('/app/settings/account')
+				props.setFromGoogleAuthCallback(true)
 				props.setAccountHasValidGoogleRefreshToken(true)
+				history.push('/app/settings/account')
 				props.handleGoogleAdsApiConsent(args)
 			}
 		}
