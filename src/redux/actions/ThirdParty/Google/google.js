@@ -1,7 +1,8 @@
 import {
 	SET_GOOGLE_LOGIN_URL,
 	SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN,
-	SET_GOOGLE_ACCOUNT_CAMPAIGNS
+	SET_GOOGLE_ACCOUNT_CAMPAIGNS,
+	SET_FROM_GOOGLE_AUTH_CALLBACK
 } from '../../../action-types/ThirdParty/Google/google'
 
 import axios from '../../../../axiosConfig'
@@ -20,6 +21,13 @@ export function setGoogleAccountCampaigns(googleAccountCampaigns) {
 	return {
 		type: SET_GOOGLE_ACCOUNT_CAMPAIGNS,
 		googleAccountCampaigns
+	}
+}
+
+export function setFromGoogleAuthCallback(fromGoogleAuthCallback) {
+	return {
+		type: SET_FROM_GOOGLE_AUTH_CALLBACK,
+		fromGoogleAuthCallback
 	}
 }
 

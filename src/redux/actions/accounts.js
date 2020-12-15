@@ -271,7 +271,7 @@ export function accountsSetAccountUsers(accountId, users) {
 
 export function fetchGoogleAdsAuthInfo(accountId) {
 	let url = apiBase + `/account/googleAdsAuthInfo/${accountId}`
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		try {
 			let result = []
 
@@ -288,9 +288,20 @@ export function fetchGoogleAdsAuthInfo(accountId) {
 					hasValidGoogleAdsRefreshToken
 				} = result.data
 
-				dispatch(
-					setAccountHasValidGoogleRefreshToken(hasValidGoogleAdsRefreshToken)
-				) // TODO: we have to figure out a way to make this = false when returned from consent page
+				let fromGoogleAuthCallback = getState().thirdParty
+					.fromGoogleAuthCallback
+
+				console.log('about to set had valid refresh')
+				console.log('from google auth calbakc')
+				console.log(fromGoogleAuthCallback)
+
+				let hasValidToken
+				if (fromGoogleAuthCallback) {
+					hasValidToken = true
+				} else {
+					hasValidToken = hasValidGoogleAdsRefreshToken
+				}
+				dispatch(setAccountHasValidGoogleRefreshToken(hasValidToken)) // TODO: we have to figure out a way to make this = false when returned from consent page
 			}
 		} catch (error) {
 			alert(
