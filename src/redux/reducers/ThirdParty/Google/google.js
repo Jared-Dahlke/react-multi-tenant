@@ -13,7 +13,7 @@ export function googleLoginUrl(state = null, action) {
 	}
 }
 
-export function accountHasValidGoogleRefreshToken(state = false, action) {
+export function accountHasValidGoogleRefreshToken(state = true, action) {
 	switch (action.type) {
 		case SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN:
 			return action.accountHasValidGoogleRefreshToken
