@@ -59,7 +59,7 @@ import {
 	brandProfileUnderEdit
 } from './brandProfiles'
 
-import brandProfilesAdmin from './brandProfilesAdmin/index'
+import admin from './admin/index'
 import engage from './engage/index'
 import thirdParty from './ThirdParty/index'
 
@@ -113,7 +113,7 @@ export default combineReducers({
 	loggedInUserPermissions,
 	resettingPassword,
 	scenariosIsLoading,
-	brandProfilesAdmin,
+	admin,
 	engage,
 	thirdParty
 })

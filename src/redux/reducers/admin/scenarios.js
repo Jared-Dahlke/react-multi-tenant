@@ -6,8 +6,8 @@ import {
 	SCENARIO_SAVING,
 	SCENARIO_CREATED,
 	SCENARIO_ARCHIVING,
-	SCENARIO_ARCHIVED,
-} from '../../action-types/brandProfilesAdmin/scenarios'
+	SCENARIO_ARCHIVED
+} from '../../action-types/admin/scenarios'
 
 export function scenarios(state = [], action) {
 	switch (action.type) {

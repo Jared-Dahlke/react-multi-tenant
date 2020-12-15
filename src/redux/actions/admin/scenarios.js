@@ -7,7 +7,7 @@ import {
 	SCENARIO_CREATED,
 	SCENARIO_SAVING,
 	ADD_SCENARIO
-} from '../../action-types/brandProfilesAdmin/scenarios'
+} from '../../action-types/admin/scenarios'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import { brandScenarioObjValidation } from '../../../schemas/schemas'

@@ -232,6 +232,30 @@ function Header(props) {
 								)}
 							</Dropdown>
 							{/* <Nav.Item href={routes.app.measure.path}>Measure</Nav.Item> */}
+							{userCan(perms.ADMIN_READ) && (
+								<Dropdown title='Admin' icon={<Icon icon='gears2' />}>
+									{userCan(perms.ADMIN_READ) && (
+										<NavLink
+											href={routes.admin.scenarios.path}
+											label='Configure Scenarios'
+										/>
+									)}
+
+									{userCan(perms.ADMIN_READ) && (
+										<NavLink
+											href={routes.admin.opinions.path}
+											label='Configure Opinions'
+										/>
+									)}
+
+									{userCan(perms.ADMIN_READ) && (
+										<NavLink
+											href={routes.admin.permissions.path}
+											label='Configure Permissions'
+										/>
+									)}
+								</Dropdown>
+							)}
 						</Nav>
 						<Nav pullRight style={{ marginRight: 30 }}>
 							<Dropdown title='' icon={<Icon icon='avatar' />}>

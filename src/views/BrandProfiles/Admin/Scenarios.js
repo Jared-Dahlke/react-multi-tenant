@@ -14,7 +14,7 @@ import {
 	fetchAdminBrandScenarios,
 	archiveScenario,
 	setScenarioArchived
-} from '../../../redux/actions/brandProfilesAdmin/scenarios'
+} from '../../../redux/actions/admin/scenarios'
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
@@ -29,10 +29,10 @@ const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
 	return {
-		scenariosIsLoading: state.brandProfilesAdmin.scenariosIsLoading,
-		scenarioArchived: state.brandProfilesAdmin.scenarioArchived,
-		scenarioArchiving: state.brandProfilesAdmin.scenarioArchiving,
-		adminScenarios: state.brandProfilesAdmin.scenarios
+		scenariosIsLoading: state.admin.scenariosIsLoading,
+		scenarioArchived: state.admin.scenarioArchived,
+		scenarioArchiving: state.admin.scenarioArchiving,
+		adminScenarios: state.admin.scenarios
 	}
 }
 
@@ -53,10 +53,9 @@ function Scenarios(props) {
 	const { fetchAdminBrandScenarios, adminScenarios } = props
 	React.useEffect(() => {
 		if (adminScenarios.length === 0) {
-			fetchAdminBrandScenarios();
+			fetchAdminBrandScenarios()
 		}
 	})
-
 
 	const tableCellClasses = classnames(classes.tableCell, {
 		[classes.tableCellRTL]: false
@@ -69,7 +68,7 @@ function Scenarios(props) {
 	}
 
 	const handleCreateScenarioClick = () => {
-		let url = routes.app.settings.brandProfiles.admin.scenarios.create.path
+		let url = routes.admin.scenarios.create.path
 		history.push(url)
 	}
 
@@ -90,7 +89,7 @@ function Scenarios(props) {
 				</Alert>
 			</Snackbar>
 
-			<GridItem xs={12} sm={12} md={6}>
+			<GridItem xs={12} sm={12} md={10}>
 				{adminScenarios && adminScenarios.length > 0 ? (
 					<div>
 						<Button appearance='primary' onClick={handleCreateScenarioClick}>
@@ -154,21 +153,21 @@ function Scenarios(props) {
 				) : props.scenariosIsLoading ? (
 					<FormLoader />
 				) : (
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
 
-									height: 'calc(100vh - 200px)',
-									color: 'white'
-								}}
-							>
-								<Button appearance='primary' onClick={handleCreateScenarioClick}>
-									Create Scenario
+							height: 'calc(100vh - 200px)',
+							color: 'white'
+						}}
+					>
+						<Button appearance='primary' onClick={handleCreateScenarioClick}>
+							Create Scenario
 						</Button>
-							</div>
-						)}
+					</div>
+				)}
 			</GridItem>
 		</Grid>
 	)
