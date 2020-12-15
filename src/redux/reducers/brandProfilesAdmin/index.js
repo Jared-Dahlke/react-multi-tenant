@@ -18,6 +18,18 @@ import {
 } from './opinions'
 // import { brandProfileAdminOpinions } from './opinions'
 
+
+import {
+	permissions,
+	permissions_list,
+	permissionsIsLoading,
+	permissionsUpdating,
+	permissionsAdded,
+	permissionSureToRemove,
+	permissionsRemoved
+} from './permissions'
+// import { brandProfileAdminPermissions } from './permissions'
+
 export default combineReducers({
 	scenarios,
 	scenariosIsLoading,
@@ -30,6 +42,13 @@ export default combineReducers({
 	opinionSaving,
 	opinionCreated,
 	opinionArchiving,
-	opinionArchived
+	opinionArchived,
 	// brandProfileAdminOpinions
+	permissions,
+	permissions_list,
+	permissionsIsLoading,
+	permissionsUpdating,
+	permissionsAdded,
+	permissionSureToRemove,
+	permissionsRemoved
 })

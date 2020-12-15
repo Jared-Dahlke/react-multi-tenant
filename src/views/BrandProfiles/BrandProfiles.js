@@ -103,7 +103,7 @@ function BrandProfiles(props) {
 	}
 
 	const handleAdminClick = () => {
-		let url = `/app/settings/brandProfiles/admin`
+		let url = `/admin`
 		history.push(url)
 	}
 
@@ -125,14 +125,6 @@ function BrandProfiles(props) {
 			</Snackbar>
 
 			<GridItem xs={12} sm={12} md={8}>
-				<UserCan do={perms.ADMIN_READ}>
-					<Grid container justify='flex-end'>
-						<Button appearance='link' onClick={handleAdminClick}>
-							Admin
-						</Button>
-					</Grid>
-				</UserCan>
-
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
 						<Grid container justify='flex-end'>
@@ -237,24 +229,24 @@ function BrandProfiles(props) {
 				) : props.brandProfilesIsLoading ? (
 					<FormLoader />
 				) : (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							height: 'calc(100vh - 200px)',
-							color: 'white'
-						}}
-					>
-						<UserCan do={perms.BRAND_PROFILE_CREATE}>
-							<Button onClick={handleCreateNewProfileClick}>
-								Create New Profile
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+									height: 'calc(100vh - 200px)',
+									color: 'white'
+								}}
+							>
+								<UserCan do={perms.BRAND_PROFILE_CREATE}>
+									<Button onClick={handleCreateNewProfileClick}>
+										Create New Profile
 							</Button>
-						</UserCan>
-						{!userCan(perms.BRAND_PROFILE_CREATE) &&
-							'There are currently no brand profiles associated with this account'}
-					</div>
-				)}
+								</UserCan>
+								{!userCan(perms.BRAND_PROFILE_CREATE) &&
+									'There are currently no brand profiles associated with this account'}
+							</div>
+						)}
 			</GridItem>
 		</Grid>
 	)

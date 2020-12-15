@@ -69,7 +69,7 @@ function Scenarios(props) {
 	}
 
 	const handleCreateScenarioClick = () => {
-		let url = routes.app.settings.brandProfiles.admin.scenarios.create.path
+		let url = routes.admin.scenarios.create.path
 		history.push(url)
 	}
 
@@ -90,7 +90,7 @@ function Scenarios(props) {
 				</Alert>
 			</Snackbar>
 
-			<GridItem xs={12} sm={12} md={6}>
+			<GridItem xs={12} sm={12} md={10}>
 				{adminScenarios && adminScenarios.length > 0 ? (
 					<div>
 						<Button appearance='primary' onClick={handleCreateScenarioClick}>
