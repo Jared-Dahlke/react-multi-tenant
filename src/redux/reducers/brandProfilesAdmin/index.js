@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import {
 	scenarios,
 	scenariosIsLoading,
+	scenarioLabels,
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
@@ -33,6 +34,7 @@ import {
 export default combineReducers({
 	scenarios,
 	scenariosIsLoading,
+	scenarioLabels,
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,

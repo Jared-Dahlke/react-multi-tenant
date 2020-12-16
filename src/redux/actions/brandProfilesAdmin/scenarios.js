@@ -1,6 +1,7 @@
 import {
 	ADMIN_SCENARIOS_IS_LOADING,
 	SET_ADMIN_BRAND_SCENARIOS,
+	SET_SCENARIO_LABELS,
 	SCENARIO_ARCHIVING,
 	SCENARIO_ARCHIVED,
 	SCENARIO_TO_ARCHIVE,
@@ -25,6 +26,13 @@ export function setAdminBrandScenarios(scenarios) {
 	return {
 		type: SET_ADMIN_BRAND_SCENARIOS,
 		scenarios
+	}
+}
+
+export function setScenarioLabels(scenarioLabels) {
+	return {
+		type: SET_SCENARIO_LABELS,
+		scenarioLabels
 	}
 }
 
@@ -88,7 +96,7 @@ export const archiveScenario = (scenarioId) => {
 }
 
 export const createScenario = (scenario) => {
-	let url = apiBase + `/brand-profile/scenario`
+	let url = apiBase + `/brand-profile/scenarios`
 	return (dispatch, getState) => {
 		dispatch(setScenarioSaving(true))
 		axios
@@ -113,7 +121,7 @@ export function fetchAdminBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'
@@ -122,6 +130,21 @@ export function fetchAdminBrandScenarios() {
 
 				dispatch(setAdminBrandScenarios(scenarios))
 				dispatch(setAdminScenariosIsLoading(false))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function fetchAdminBrandScenarioLabels() {
+	let url = apiBase + `/brand-profile/scenario-labels`
+	return async (dispatch) => {
+		try {
+			const result = await axios.get(url)
+			if (result.status === 200) {
+				let scenarioLabels = result.data
+				dispatch(setScenarioLabels(scenarioLabels))
 			}
 		} catch (error) {
 			alert(error)

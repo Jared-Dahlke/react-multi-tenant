@@ -2,7 +2,8 @@
 import React from 'react'
 import GridItem from '../../../components/Grid/GridItem.js'
 import GridContainer from '../../../components/Grid/GridContainer.js'
-import Button from 'rsuite/lib/Button'
+import { TagPicker, Button } from 'rsuite';
+
 import Card from '../../../components/Card/Card.js'
 import CardBody from '../../../components/Card/CardBody.js'
 import CardFooter from '../../../components/Card/CardFooter.js'
@@ -15,20 +16,23 @@ import FormikInput from '../../../components/CustomInput/FormikInput'
 import * as Yup from 'yup'
 import {
   createScenario,
-  setScenarioCreated
+  setScenarioCreated,
+  fetchAdminBrandScenarioLabels
 } from '../../../redux/actions/brandProfilesAdmin/scenarios'
 
 const mapStateToProps = (state) => {
   return {
     scenarioCreated: state.brandProfilesAdmin.scenarioCreated,
-    scenarioSaving: state.brandProfilesAdmin.scenarioSaving
+    scenarioSaving: state.brandProfilesAdmin.scenarioSaving,
+    scenarioLabels: state.brandProfilesAdmin.scenarioLabels
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     createScenario: (scenario) => dispatch(createScenario(scenario)),
-    setScenarioCreated: (val) => dispatch(setScenarioCreated(val))
+    setScenarioCreated: (val) => dispatch(setScenarioCreated(val)),
+    fetchAdminBrandScenarioLabels: () => dispatch(fetchAdminBrandScenarioLabels())
   }
 }
 
@@ -47,6 +51,13 @@ function Scenario(props) {
     dirty
   } = props
 
+  const { fetchAdminBrandScenarioLabels, scenarioLabels } = props
+  React.useEffect(() => {
+    if (scenarioLabels.length === 0) {
+      fetchAdminBrandScenarioLabels();
+    }
+  })
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={6}>
@@ -62,7 +73,18 @@ function Scenario(props) {
                     labelText='Scenario Name'
                     id='scenarioName'
                   />
-
+                  <TagPicker id={'scenario category'}
+                    creatable
+                    block
+                    cleanable={false}
+                    data={scenarioLabels}
+                    labelKey="labelName" valueKey="labelName"
+                    placeholder='Scenario Category'
+                    onChange={(v) => values.scenarioLabelsSelected = v}
+                    style={{
+                      marginTop: 20
+                    }}
+                  />
                 </GridItem>
               </GridContainer>
             </CardBody>
@@ -99,7 +121,8 @@ function Scenario(props) {
 const FormikForm = withFormik({
   mapPropsToValues: (props) => {
     return {
-      scenarioName: ''
+      scenarioName: '',
+      scenarioLabelsSelected: []
     }
   },
   enableReinitialize: true,
@@ -110,6 +133,7 @@ const FormikForm = withFormik({
   handleSubmit: (values, { props }) => {
     let scenario = {
       scenarioName: values.scenarioName,
+      scenarioLabels: values.scenarioLabelsSelected
     }
     props.createScenario(scenario)
   }
