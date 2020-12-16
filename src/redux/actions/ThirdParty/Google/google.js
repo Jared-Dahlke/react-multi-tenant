@@ -2,7 +2,8 @@ import {
 	SET_GOOGLE_LOGIN_URL,
 	SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN,
 	SET_GOOGLE_ACCOUNT_CAMPAIGNS,
-	SET_FROM_GOOGLE_AUTH_CALLBACK
+	SET_FROM_GOOGLE_AUTH_CALLBACK,
+	SET_GOOGLE_ACCOUNTS
 } from '../../../action-types/ThirdParty/Google/google'
 
 import axios from '../../../../axiosConfig'
@@ -21,6 +22,13 @@ export function setGoogleAccountCampaigns(googleAccountCampaigns) {
 	return {
 		type: SET_GOOGLE_ACCOUNT_CAMPAIGNS,
 		googleAccountCampaigns
+	}
+}
+
+export function setGoogleAccounts(googleAccounts) {
+	return {
+		type: SET_GOOGLE_ACCOUNTS,
+		googleAccounts
 	}
 }
 
@@ -53,6 +61,32 @@ export function fetchGoogleAccountCampaigns(refreshToken) {
 					camps.push(campaign.campaign)
 				}
 				dispatch(setGoogleAccountCampaigns(camps))
+			}
+		} catch (error) {
+			alert('Error on fetch google data: ' + JSON.stringify(error, null, 2))
+		}
+	}
+}
+
+export function fetchGoogleAccounts(accountId) {
+	console.log('fetchGoogleAccounts')
+	return async (dispatch) => {
+		let url = apiBase + `/google/googleAccounts/${accountId}`
+		try {
+			let result = await axios.get(url)
+			if (result.status === 200) {
+				if (result.data.length < 1) {
+					setTimeout(() => {
+						dispatch(fetchGoogleAccounts(accountId))
+					}, 1000)
+				} else {
+					dispatch(setGoogleAccounts(result.data))
+				}
+				//let camps = []
+				//for (const campaign of result.data) {
+				//	camps.push(campaign.campaign)
+				//}
+				//dispatch(setGoogleAccountCampaigns(camps))
 			}
 		} catch (error) {
 			alert('Error on fetch google data: ' + JSON.stringify(error, null, 2))

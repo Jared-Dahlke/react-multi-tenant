@@ -61,7 +61,8 @@ const mapStateToProps = (state) => {
 		googleLoginUrl: state.thirdParty.googleLoginUrl,
 		accountHasValidGoogleRefreshToken:
 			state.thirdParty.accountHasValidGoogleRefreshToken,
-		googleAccountCampaigns: state.thirdParty.googleAccountCampaigns
+		googleAccountCampaigns: state.thirdParty.googleAccountCampaigns,
+		googleAccounts: state.thirdParty.googleAccounts
 	}
 }
 
@@ -215,46 +216,6 @@ function Account(props) {
 	} else {
 		return (
 			<GridContainer>
-				<Modal
-					show={
-						props.googleAccountCampaigns &&
-						props.googleAccountCampaigns.length > 0
-					}
-					onHide={console.log('please close')}
-				>
-					<Modal.Header>
-						<Modal.Title>Choose a Google Ads campaign</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<InputPicker
-							block
-							size='lg'
-							id='googleCampaignId'
-							label='Google Ads Campaigns'
-							placeholder='Select'
-							labelKey='name'
-							valueKey='id'
-							data={props.googleAccountCampaigns}
-							//	value={brandProfileId}
-							//onChange={(val) => setBrandProfileId(val)}
-						/>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button
-							onClick={() => console.log('ok clicked')}
-							appearance='primary'
-						>
-							Ok
-						</Button>
-						<Button
-							onClick={() => console.log('cancel clicked')}
-							appearance='subtle'
-						>
-							Cancel
-						</Button>
-					</Modal.Footer>
-				</Modal>
-
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
 
@@ -276,6 +237,30 @@ function Account(props) {
 							Connect this account to Google Ads
 						</IconButton>
 					)}
+
+					{props.accountHasValidGoogleRefreshToken &&
+						props.googleAccounts &&
+						googleAuth && (
+							<>
+								<p>
+									Your linked Google Ads Account (this comes from Google Ads API
+									based off the user you authenticated with)
+								</p>
+								<InputPicker
+									block
+									style={{
+										backgroundColor: neutralExtraLightColor,
+										marginBottom: 15
+									}}
+									id='googleAccountId'
+									label='Google Ads Accounts'
+									placeholder='Select a Google Account to Link'
+									labelKey='accountId'
+									valueKey='accountId'
+									data={props.googleAccounts}
+								/>
+							</>
+						)}
 
 					<Panel
 						header={
