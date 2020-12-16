@@ -2,6 +2,7 @@ import {
 	ADMIN_SCENARIOS_IS_LOADING,
 	SET_ADMIN_BRAND_SCENARIOS,
 	SET_SCENARIO_LABELS,
+	SCENARIO_LABELS_IS_LOADING,
 	SCENARIO_TO_ARCHIVE,
 	ADD_SCENARIO,
 	SCENARIO_SAVING,
@@ -49,6 +50,15 @@ export function scenariosIsLoading(state = true, action) {
 	switch (action.type) {
 		case ADMIN_SCENARIOS_IS_LOADING:
 			return action.adminScenariosIsLoading
+		default:
+			return state
+	}
+}
+
+export function scenariosLabelsIsLoading(state = false, action) {
+	switch (action.type) {
+		case SCENARIO_LABELS_IS_LOADING:
+			return action.scenariosLabelsIsLoading
 		default:
 			return state
 	}

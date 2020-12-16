@@ -2,6 +2,7 @@ import {
 	ADMIN_SCENARIOS_IS_LOADING,
 	SET_ADMIN_BRAND_SCENARIOS,
 	SET_SCENARIO_LABELS,
+	SCENARIO_LABELS_IS_LOADING,
 	SCENARIO_ARCHIVING,
 	SCENARIO_ARCHIVED,
 	SCENARIO_TO_ARCHIVE,
@@ -19,6 +20,13 @@ export function setAdminScenariosIsLoading(bool) {
 	return {
 		type: ADMIN_SCENARIOS_IS_LOADING,
 		adminScenariosIsLoading: bool
+	}
+}
+
+export function setScenariosLabelsIsLoading(bool) {
+	return {
+		type: SCENARIO_LABELS_IS_LOADING,
+		scenariosLabelsIsLoading: bool
 	}
 }
 
@@ -137,14 +145,16 @@ export function fetchAdminBrandScenarios() {
 	}
 }
 
-export function fetchAdminBrandScenarioLabels() {
-	let url = apiBase + `/brand-profile/scenario-labels`
+export function fetchAdminBrandScenarioLabels(text) {
+	let url = apiBase + `/brand-profile/scenario-labels?name=${text}`
 	return async (dispatch) => {
+		dispatch(setScenariosLabelsIsLoading(true))
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
 				let scenarioLabels = result.data
 				dispatch(setScenarioLabels(scenarioLabels))
+				dispatch(setScenariosLabelsIsLoading(false))
 			}
 		} catch (error) {
 			alert(error)

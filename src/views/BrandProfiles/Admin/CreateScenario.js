@@ -2,8 +2,7 @@
 import React from 'react'
 import GridItem from '../../../components/Grid/GridItem.js'
 import GridContainer from '../../../components/Grid/GridContainer.js'
-import { TagPicker, Button } from 'rsuite';
-
+import { TagPicker, Button, Loader } from 'rsuite';
 import Card from '../../../components/Card/Card.js'
 import CardBody from '../../../components/Card/CardBody.js'
 import CardFooter from '../../../components/Card/CardFooter.js'
@@ -14,6 +13,7 @@ import { connect } from 'react-redux'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import * as Yup from 'yup'
+import { debounce } from 'lodash';
 import {
   createScenario,
   setScenarioCreated,
@@ -24,7 +24,8 @@ const mapStateToProps = (state) => {
   return {
     scenarioCreated: state.brandProfilesAdmin.scenarioCreated,
     scenarioSaving: state.brandProfilesAdmin.scenarioSaving,
-    scenarioLabels: state.brandProfilesAdmin.scenarioLabels
+    scenarioLabels: state.brandProfilesAdmin.scenarioLabels,
+    scenariosLabelsIsLoading: state.brandProfilesAdmin.scenariosLabelsIsLoading
   }
 }
 
@@ -32,7 +33,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     createScenario: (scenario) => dispatch(createScenario(scenario)),
     setScenarioCreated: (val) => dispatch(setScenarioCreated(val)),
-    fetchAdminBrandScenarioLabels: () => dispatch(fetchAdminBrandScenarioLabels())
+    fetchAdminBrandScenarioLabels: (text) => dispatch(fetchAdminBrandScenarioLabels(text))
   }
 }
 
@@ -52,11 +53,12 @@ function Scenario(props) {
   } = props
 
   const { fetchAdminBrandScenarioLabels, scenarioLabels } = props
-  React.useEffect(() => {
-    if (scenarioLabels.length === 0) {
-      fetchAdminBrandScenarioLabels();
+
+  const handleKeyPress = debounce((text) => {
+    if (text != "") {
+      fetchAdminBrandScenarioLabels(text);
     }
-  })
+  }, 700)
 
   return (
     <GridContainer>
@@ -65,7 +67,6 @@ function Scenario(props) {
           <Form>
             <CardBody>
               <GridContainer>
-
                 <GridItem xs={12} sm={12} md={12}>
                   <FormikInput
                     name='scenarioName'
@@ -73,6 +74,19 @@ function Scenario(props) {
                     labelText='Scenario Name'
                     id='scenarioName'
                   />
+                  <div style={{
+                    height: '20px',
+                    width: '100%',
+                    float: 'right',
+                    color: 'white'
+                  }}>
+                    <Loader size='sm'
+                      style={{
+                        float: 'right',
+                        display: props.scenariosLabelsIsLoading ? 'block' : 'none'
+                      }}
+                    />
+                  </div>
                   <TagPicker id={'scenario category'}
                     creatable
                     block
@@ -81,8 +95,9 @@ function Scenario(props) {
                     labelKey="labelName" valueKey="labelName"
                     placeholder='Scenario Category'
                     onChange={(v) => values.scenarioLabelsSelected = v}
+                    onSearch={(text) => handleKeyPress(text)}
                     style={{
-                      marginTop: 20
+                      marginTop: 25
                     }}
                   />
                 </GridItem>
