@@ -26,8 +26,6 @@ import {
 	editUserUserAccountsLoading
 } from '../actions/users'
 import {
-	rolesFetchData,
-	setRoles,
 	rolesPermissionsFetchData,
 	setRolesPermissions,
 	rolesPermissionsIsLoading
@@ -35,8 +33,7 @@ import {
 import {
 	fetchGoogleLoginUrl,
 	fetchGoogleAccounts,
-	setAccountHasValidGoogleRefreshToken,
-	fetchGoogleAccountCampaigns
+	setAccountHasValidGoogleRefreshToken
 } from '../actions/ThirdParty/Google/google'
 import {
 	setBrandProfiles,
@@ -171,7 +168,6 @@ export function clearSiteData() {
 		dispatch(setAccounts([]))
 		dispatch(setCurrentAccountId(null))
 		dispatch(setUsers([]))
-		dispatch(setRoles([]))
 		dispatch(setRolesPermissions([]))
 		dispatch(setBrandProfiles([]))
 		dispatch(setAccountTypes([]))
@@ -237,7 +233,6 @@ export function fetchSiteData(accountId) {
 
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData(accountId))
-			dispatch(rolesFetchData(accountId))
 			dispatch(fetchBrandProfiles(accountId))
 
 			//

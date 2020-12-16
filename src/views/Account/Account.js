@@ -56,7 +56,7 @@ const mapStateToProps = (state) => {
 		accountCreated: state.accountCreated,
 		accountSaved: state.accountSaved,
 		accountSaving: state.accountSaving,
-		rolesIsLoading: state.rolesIsLoading,
+		rolesPermissionsIsLoading: state.rolesPermissionsIsLoading,
 		user: state.user,
 		googleLoginUrl: state.thirdParty.googleLoginUrl,
 		accountHasValidGoogleRefreshToken:
@@ -202,7 +202,7 @@ function Account(props) {
 	} = props
 
 	if (
-		props.rolesIsLoading ||
+		props.rolesPermissionsIsLoading ||
 		props.isSwitchingAccounts ||
 		values.accountTypeName.length < 1
 	) {
