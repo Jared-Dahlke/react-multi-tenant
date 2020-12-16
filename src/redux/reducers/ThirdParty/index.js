@@ -3,12 +3,14 @@ import {
 	googleLoginUrl,
 	accountHasValidGoogleRefreshToken,
 	googleAccountCampaigns,
-	fromGoogleAuthCallback
+	fromGoogleAuthCallback,
+	googleAccounts
 } from './Google/google'
 
 export default combineReducers({
 	googleLoginUrl,
 	accountHasValidGoogleRefreshToken,
 	googleAccountCampaigns,
-	fromGoogleAuthCallback
+	fromGoogleAuthCallback,
+	googleAccounts
 })

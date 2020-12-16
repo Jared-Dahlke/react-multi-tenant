@@ -34,7 +34,9 @@ import {
 } from '../actions/roles'
 import {
 	fetchGoogleLoginUrl,
-	setAccountHasValidGoogleRefreshToken
+	fetchGoogleAccounts,
+	setAccountHasValidGoogleRefreshToken,
+	fetchGoogleAccountCampaigns
 } from '../actions/ThirdParty/Google/google'
 import {
 	setBrandProfiles,
@@ -301,7 +303,11 @@ export function fetchGoogleAdsAuthInfo(accountId) {
 				} else {
 					hasValidToken = hasValidGoogleAdsRefreshToken
 				}
-				dispatch(setAccountHasValidGoogleRefreshToken(hasValidToken)) // TODO: we have to figure out a way to make this = false when returned from consent page
+				dispatch(setAccountHasValidGoogleRefreshToken(hasValidToken))
+
+				if (hasValidToken) {
+					dispatch(fetchGoogleAccounts(accountId))
+				}
 			}
 		} catch (error) {
 			alert(

@@ -2,7 +2,8 @@ import {
 	SET_GOOGLE_LOGIN_URL,
 	SET_ACCOUNT_HAS_VALID_GOOGLE_REFRESH_TOKEN,
 	SET_GOOGLE_ACCOUNT_CAMPAIGNS,
-	SET_FROM_GOOGLE_AUTH_CALLBACK
+	SET_FROM_GOOGLE_AUTH_CALLBACK,
+	SET_GOOGLE_ACCOUNTS
 } from '../../../action-types/ThirdParty/Google/google'
 
 export function googleLoginUrl(state = null, action) {
@@ -36,6 +37,15 @@ export function googleAccountCampaigns(state = [], action) {
 	switch (action.type) {
 		case SET_GOOGLE_ACCOUNT_CAMPAIGNS:
 			return action.googleAccountCampaigns
+		default:
+			return state
+	}
+}
+
+export function googleAccounts(state = [], action) {
+	switch (action.type) {
+		case SET_GOOGLE_ACCOUNTS:
+			return action.googleAccounts
 		default:
 			return state
 	}
