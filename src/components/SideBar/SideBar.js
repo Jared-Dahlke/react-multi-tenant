@@ -48,20 +48,18 @@ export default function Sidebar(props) {
 			onHide={props.closeMobileDrawer}
 		>
 			<Sidenav defaultOpenKeys={['3', '4']} activeKey='1'>
-				< Sidenav.Header >
+				<Sidenav.Header>
 					<Nav>
 						<Nav.Item href={routes.app.homepage.path}>{brand}</Nav.Item>
 					</Nav>
-				</Sidenav.Header >
+				</Sidenav.Header>
 				<Sidenav.Body>
 					<Nav>
 						<Dropdown
 							eventKey='3'
 							title='Discover'
 							style={{
-								display: userCan(perms.DISCOVER_READ)
-									? 'flex'
-									: 'none'
+								display: userCan(perms.DISCOVER_READ) ? 'flex' : 'none'
 							}}
 							icon={<Icon icon='pie-chart' />}
 						>
@@ -70,9 +68,14 @@ export default function Sidebar(props) {
 								label='Channel Research'
 							/>
 						</Dropdown>
-						<Dropdown eventKey='4' title='Engage' icon={<Icon icon='bolt' />} style={{
-							display: userCan(perms.ENGAGE_READ) ? 'flex' : 'none'
-						}}>
+						<Dropdown
+							eventKey='4'
+							title='Engage'
+							icon={<Icon icon='bolt' />}
+							style={{
+								display: userCan(perms.ENGAGE_READ) ? 'flex' : 'none'
+							}}
+						>
 							<NavLink
 								href={routes.app.engage.lists.lists.path}
 								label='Smart Lists'
@@ -91,10 +94,7 @@ export default function Sidebar(props) {
 							)}
 
 							{userCan(perms.USER_READ) && (
-								<NavLink
-									href={routes.app.settings.users.path}
-									label='Users'
-								/>
+								<NavLink href={routes.app.settings.users.path} label='Users' />
 							)}
 							{userCan(perms.BRAND_PROFILE_READ) && (
 								<NavLink
@@ -110,9 +110,12 @@ export default function Sidebar(props) {
 								/>
 							)}
 						</Dropdown>
-						{/* <Nav.Item href={routes.app.measure.path}>Measure</Nav.Item> */}
 						{userCan(perms.ADMIN_READ) && (
-							<Dropdown title='Admin' eventKey='6' icon={<Icon icon='gears2' />}>
+							<Dropdown
+								title='Admin'
+								eventKey='6'
+								icon={<Icon icon='gears2' />}
+							>
 								{userCan(perms.ADMIN_READ) && (
 									<NavLink
 										href={routes.admin.scenarios.path}
@@ -141,56 +144,3 @@ export default function Sidebar(props) {
 		</Drawer>
 	)
 }
-
-/**
-    
-				<Nav>
-					<Dropdown
-						title='Discover'
-						icon={<Icon icon='pie-chart' />}
-						style={{ marginRight: 15 }}
-						id='Channel_Research_Nav_Tab'
-					>
-						<NavLink
-							href={routes.app.discover.channelResearch.path}
-							label='Channel Research'
-						/>
-					</Dropdown>
-
-					<Dropdown
-						title='Engage'
-						icon={<Icon icon='bolt' />}
-						style={{ marginRight: 15 }}
-						id='Engage_Nav_Tab'
-					>
-						<NavLink href={routes.app.engage.lists.lists.path} label='Lists' />
-						<NavLink
-							href={routes.app.engage.lists.listBuilder.path}
-							label='List Builder'
-						/>
-					</Dropdown>
-
-					<Dropdown title='Account Settings' icon={<Icon icon='sliders' />}>
-						<NavLink href={routes.app.settings.account.path} label='Account' />
-
-						<NavLink href={routes.app.settings.users.path} label='Users' />
-						<NavLink
-							href={routes.app.settings.brandProfiles.path}
-							label='Brand Profiles'
-						/>
-
-						<NavLink
-							href={routes.app.settings.brandMentality.path}
-							label='Brand Mentality'
-						/>
-					</Dropdown>
-				</Nav>
-				<Nav pullRight style={{ marginRight: 30 }}>
-					<Dropdown title='' icon={<Icon icon='avatar' />}>
-						<NavLink href={routes.app.settings.profile.path} label='Profile' />
-
-						<Dropdown.Item onSelect={() => handleLogOut(props)}>
-							Logout
-						</Dropdown.Item>
-					</Dropdown>
-				</Nav> */

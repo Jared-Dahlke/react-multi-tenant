@@ -17,6 +17,7 @@ import CustomInput from '../components/CustomInput/CustomInput'
 import svgLogo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
 import { routes } from '../routes'
+import { useSpring, animated } from 'react-spring'
 
 const mapStateToProps = (state) => {
 	return {
@@ -60,6 +61,19 @@ const useStyles = makeStyles((theme) => ({
 const useAdminStyles = makeStyles(adminStyle)
 
 function Login(props) {
+	const [flipped, set] = React.useState(false)
+	const { transform, opacity } = useSpring({
+		opacity: flipped ? 1 : 1,
+		transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
+		config: { mass: 40, tension: 500, friction: 80 }
+	})
+
+	React.useEffect(() => {
+		setTimeout(() => {
+			set(true)
+		}, 0)
+	}, [])
+
 	const classes = useStyles()
 	const adminClasses = useAdminStyles()
 	let referer = props.location.state
@@ -85,7 +99,14 @@ function Login(props) {
 		<div className={adminClasses.authPanel}>
 			<Container maxWidth='xs'>
 				<div className={classes.paper}>
-					<img src={svgLogo} alt='logo' style={logoStyle} />
+					<animated.div
+						style={{
+							opacity,
+							transform: transform.interpolate((t) => `${t} rotateX(180deg)`)
+						}}
+					>
+						<img src={svgLogo} alt='logo' style={logoStyle} />
+					</animated.div>
 
 					<form className={classes.form} noValidate>
 						<CustomInput

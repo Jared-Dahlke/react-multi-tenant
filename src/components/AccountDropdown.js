@@ -70,6 +70,7 @@ function SimplePopover(props) {
 					<ControlLabel>Active Account</ControlLabel>
 
 					<TreePicker
+						placement={'bottomEnd'}
 						classes={{ root: marginTop }}
 						defaultExpandAll
 						data={props.accounts.data}
@@ -80,6 +81,8 @@ function SimplePopover(props) {
 						value={currentAccount.accountId}
 						onChange={(e, v) => handleSelect(e, v)}
 						cleanable={false}
+						menuStyle={{ zIndex: 999999 }}
+						searchable={props.searchable}
 					/>
 					<div style={{ position: 'absolute', top: 30, right: -30 }}>
 						<Whisper
