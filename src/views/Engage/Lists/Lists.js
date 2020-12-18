@@ -34,7 +34,7 @@ import {
 } from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
 import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
-import { useTransition, animated } from 'react-spring'
+import { animated, useSpring, config } from 'react-spring'
 import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import InputPicker from 'rsuite/lib/InputPicker'
 import Table from 'rsuite/lib/Table'
@@ -549,17 +549,20 @@ function Lists(props) {
 			.sort((a, b) => handleSort(a, b))
 	}, [props.lists, currentSort, filterState])
 
+	const [lastSubscribers, setLastSubscribers] = React.useState(0)
+	const [lastVideos, setLastVideos] = React.useState(0)
+	const [lastChannels, setLastChannels] = React.useState(0)
+
 	const totals = React.useMemo(() => {
 		let _subscribers = 0
 		let _channels = 0
 		let _videos = 0
 		for (const version of visibleLists) {
-			console.log(version.subscriberCount)
 			_subscribers = _subscribers + version.subscriberCount
 			_channels = _channels + version.channelCount
 			_videos = _videos + version.videoCount
 		}
-		let subscribersFormatted = numeral(_subscribers).format('0.0a')
+		let subscribersFormatted = _subscribers // numeral(_subscribers).format('0.0a')
 		let channelsFormatted = numeral(_channels).format('0a')
 		let videosFormatted = numeral(_videos).format('0a')
 
@@ -569,6 +572,30 @@ function Lists(props) {
 			videos: videosFormatted
 		}
 	}, [props.lists, currentSort, filterState])
+
+	React.useEffect(() => {
+		setLastSubscribers(totals.subscribers)
+		setLastVideos(totals.videos)
+		setLastChannels(totals.channels)
+	}, [totals])
+
+	const videosValue = useSpring({
+		to: { number: Number(totals.videos) },
+		from: { number: Number(lastVideos) },
+		config: { duration: 250 }
+	})
+
+	const channelsValue = useSpring({
+		to: { number: Number(totals.channels) },
+		from: { number: Number(lastChannels) },
+		config: { duration: 250 }
+	})
+
+	const subscribersValue = useSpring({
+		to: { number: Number(totals.subscribers) },
+		from: { number: Number(lastSubscribers) },
+		config: { duration: 250 }
+	})
 
 	if (props.isFetchingLists) {
 		return <FormLoader />
@@ -744,17 +771,25 @@ function Lists(props) {
 			<Grid container justify='center' spacing={2}>
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Channels'>
-						<h2>{totals.channels}</h2>
+						<animated.h2>
+							{channelsValue.number.interpolate((val) => Math.floor(val))}
+						</animated.h2>
 					</CustomPanel>
 				</Grid>
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Videos'>
-						<h2>{totals.videos}</h2>
+						<animated.h2>
+							{videosValue.number.interpolate((val) => Math.floor(val))}
+						</animated.h2>
 					</CustomPanel>
 				</Grid>
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Subscribers'>
-						<h2>{totals.subscribers}</h2>
+						<animated.h2>
+							{subscribersValue.number.interpolate((val) =>
+								numeral(Math.floor(val)).format('0.0a')
+							)}
+						</animated.h2>
 					</CustomPanel>
 				</Grid>
 			</Grid>
@@ -776,6 +811,11 @@ function Lists(props) {
 					</Table.Column>
 
 					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>SmartList</Table.HeaderCell>
+						<Table.Cell dataKey='smartListName' />
+					</Table.Column>
+
+					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Brand Profile</Table.HeaderCell>
 						<Table.Cell dataKey='brandName' />
 					</Table.Column>
@@ -783,10 +823,7 @@ function Lists(props) {
 						<Table.HeaderCell>Objective</Table.HeaderCell>
 						<Table.Cell dataKey='objectiveName' />
 					</Table.Column>
-					<Table.Column flexGrow={1} sortable>
-						<Table.HeaderCell>SmartList</Table.HeaderCell>
-						<Table.Cell dataKey='smartListName' />
-					</Table.Column>
+
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Type</Table.HeaderCell>
 						<Table.Cell dataKey='dataTypeName' />
