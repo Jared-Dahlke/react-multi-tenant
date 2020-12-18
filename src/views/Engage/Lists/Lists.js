@@ -394,8 +394,8 @@ function Lists(props) {
 		brandProfileId: null,
 		smartListId: null,
 		dataTypeId: null,
-		activeStatusId: null,
-		archivedStatusId: true
+		activeStatusId: 1,
+		archivedStatusId: 2
 	})
 
 	let fetchLists = props.fetchLists
@@ -500,27 +500,54 @@ function Lists(props) {
 		}
 	}
 
+	const handleFilter = (list) => {
+		if (filterState.dataTypeId && list.dataTypeId != filterState.dataTypeId) {
+			return false
+		}
+
+		if (
+			filterState.objectiveId &&
+			list.objectiveId != filterState.objectiveId
+		) {
+			return false
+		}
+
+		if (
+			filterState.brandProfileId &&
+			list.brandProfileId != filterState.brandProfileId
+		) {
+			return false
+		}
+
+		if (
+			filterState.smartListId &&
+			list.smartListId != filterState.smartListId
+		) {
+			return false
+		}
+
+		if (
+			filterState.activeStatusId &&
+			list.active != (filterState.activeStatusId === 1 ? true : false)
+		) {
+			return false
+		}
+
+		if (
+			filterState.archivedStatusId &&
+			list.archived != (filterState.archivedStatusId === 1 ? true : false)
+		) {
+			return false
+		}
+
+		return true
+	}
+
 	const visibleLists = React.useMemo(() => {
-		/*	if (viewArchivedLists) {
-			if (brandProfileId) {
-				return props.lists
-					.filter((list) => list.brandProfileId === brandProfileId)
-					.sort((a, b) => handleSort(a, b))
-			} else {
-				return props.lists.sort((a, b) => handleSort(a, b))
-			}
-		} else {
-			if (brandProfileId) {
-				return props.lists
-					.filter(
-						(list) => !list.archived && list.brandProfileId === brandProfileId
-					)
-					.sort((a, b) => handleSort(a, b))
-			} else { */
 		return props.lists
-			.filter((list) => !list.archived)
+			.filter((list) => handleFilter(list))
 			.sort((a, b) => handleSort(a, b))
-	}, [props.lists, currentSort])
+	}, [props.lists, currentSort, filterState])
 
 	if (props.isFetchingLists) {
 		return <FormLoader />
@@ -579,6 +606,30 @@ function Lists(props) {
 
 					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
 						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>SmartList Name</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='smartListId'
+							label='SmartList'
+							placeholder='Select a SmartList'
+							labelKey='smartListName'
+							valueKey='smartListId'
+							data={smartLists}
+							value={filterState.smartListId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										smartListId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
 							<p>Objective</p>
 						</div>
 						<InputPicker
@@ -595,30 +646,6 @@ function Lists(props) {
 									return {
 										...prevState,
 										objectiveId: val
-									}
-								})
-							}
-						/>
-					</Grid>
-
-					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
-						<div style={{ position: 'absolute', top: -20, left: 0 }}>
-							<p>Name</p>
-						</div>
-						<InputPicker
-							size={'sm'}
-							id='smartListId'
-							label='SmartList'
-							placeholder='Select a SmartList'
-							labelKey='smartListName'
-							valueKey='smartListId'
-							data={smartLists}
-							value={filterState.smartListId}
-							onChange={(val) =>
-								setFilterState((prevState) => {
-									return {
-										...prevState,
-										smartListId: val
 									}
 								})
 							}
@@ -756,6 +783,10 @@ function Lists(props) {
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Subscribers</Table.HeaderCell>
 						<Table.Cell dataKey='subscriberCount' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Archived</Table.HeaderCell>
+						<Table.Cell dataKey='archivedText' />
 					</Table.Column>
 				</Table>
 			</Grid>

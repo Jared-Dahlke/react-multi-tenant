@@ -57,6 +57,14 @@ export function fetchLists(accountId) {
 						} else {
 							version.activeText = 'False'
 						}
+
+						version.archived = list.archived
+						if (list.archived) {
+							version.archivedText = 'True'
+						} else {
+							version.archivedText = 'False'
+						}
+
 						versions.push(version)
 					}
 				}

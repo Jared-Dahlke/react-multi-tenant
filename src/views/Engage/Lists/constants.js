@@ -5,8 +5,8 @@ export const objectives = [
 ]
 
 export const dataTypes = [
-	{ dataTypeId: 1, dataTypeName: 'Videos' },
-	{ dataTypeId: 2, dataTypeName: 'Channels' }
+	{ dataTypeId: 1, dataTypeName: 'Channels' },
+	{ dataTypeId: 2, dataTypeName: 'Videos' }
 ]
 
 export const activeStatuses = [
