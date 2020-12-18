@@ -27,6 +27,9 @@ import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
 import { useTransition, animated } from 'react-spring'
 import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import InputPicker from 'rsuite/lib/InputPicker'
+import Table from 'rsuite/lib/Table'
+import { setScenarioToArchived } from '../../../redux/actions/admin/scenarios.js'
+
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -375,6 +378,10 @@ function Lists(props) {
 	const history = useHistory()
 	const [viewArchivedLists, setViewArchivedLists] = React.useState(false)
 	const [brandProfileId, setBrandProfileId] = React.useState(null)
+	const [currentSort, setCurrentSort] = React.useState({
+		sortColumn: 'brandName',
+		sortType: 'desc'
+	})
 
 	let fetchLists = props.fetchLists
 	let accounts = props.accounts.data
@@ -458,40 +465,46 @@ function Lists(props) {
 		return _archivedCount
 	}, [props.lists])
 
+	const handleSort = (a, b) => {
+		let { sortColumn, sortType } = currentSort
+		let x = a[sortColumn]
+		let y = b[sortColumn]
+		if (typeof x === 'string') {
+			x = x.charCodeAt()
+		}
+		if (typeof y === 'string') {
+			y = y.charCodeAt()
+		}
+		if (sortType === 'asc') {
+			return x - y
+		} else {
+			return y - x
+		}
+	}
+
 	const visibleLists = React.useMemo(() => {
 		if (viewArchivedLists) {
 			if (brandProfileId) {
-				return props.lists.filter(
-					(list) => list.brandProfileId === brandProfileId
-				)
-			} else {
 				return props.lists
+					.filter((list) => list.brandProfileId === brandProfileId)
+					.sort((a, b) => handleSort(a, b))
+			} else {
+				return props.lists.sort((a, b) => handleSort(a, b))
 			}
 		} else {
 			if (brandProfileId) {
-				return props.lists.filter(
-					(list) => !list.archived && list.brandProfileId === brandProfileId
-				)
+				return props.lists
+					.filter(
+						(list) => !list.archived && list.brandProfileId === brandProfileId
+					)
+					.sort((a, b) => handleSort(a, b))
 			} else {
-				return props.lists.filter((list) => !list.archived)
+				return props.lists
+					.filter((list) => !list.archived)
+					.sort((a, b) => handleSort(a, b))
 			}
 		}
-	}, [viewArchivedLists, props.lists, brandProfileId])
-
-	const transition = useTransition(visibleLists, {
-		from: {
-			opacity: 0,
-			marginTop: 1000
-		},
-		enter: { opacity: 1, marginTop: 40 },
-		leave: {
-			opacity: 0,
-			marginTop: 0
-		},
-		keys: visibleLists.map((item, index) => item.smartListId)
-	})
-
-	//	const tableTransitionProps = useSpring({ opacity: 1, from: { opacity: 0 } })
+	}, [viewArchivedLists, props.lists, brandProfileId, currentSort])
 
 	if (props.isFetchingLists) {
 		return <FormLoader />
@@ -548,35 +561,56 @@ function Lists(props) {
 					</Grid>
 				</Grid>
 			</Grid>
-			{visibleLists &&
-				visibleLists.length > 0 &&
-				!props.isFetchingLists &&
-				transition((values, item) => {
-					let list = item
-					let key = item.smartListId
-					return (
-						<Grid item xs={12} key={key}>
-							<animated.div style={values}>
-								<MyList
-									list={list}
-									handleViewAllClick={handleViewAllClick}
-									handleHideAllClick={handleHideAllClick}
-									handleArchiveClick={handleArchiveClick}
-									handleDownloadClick={handleDownloadClick}
-									handleActivateClick={handleActivateClick}
-									handleEditClick={handleEditClick}
-									isDownloadingExcel={props.isDownloadingExcel}
-									isDownloadingExcelVersionId={
-										props.isDownloadingExcelVersionId
-									}
-									isPostingList={props.isPostingList}
-									isPostingListVersionId={props.isPostingListVersionId}
-									viewAll={viewingAll}
-								/>
-							</animated.div>
-						</Grid>
-					)
-				})}
+			<Grid item xs={12}>
+				<Table
+					height={600}
+					data={visibleLists}
+					sortColumn={currentSort.sortColumn}
+					sortType={currentSort.sortType}
+					onSortColumn={(sortColumn, sortType) => {
+						console.log(sortColumn, sortType)
+						setCurrentSort({ sortColumn, sortType })
+					}}
+				>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Id</Table.HeaderCell>
+						<Table.Cell dataKey='smartListId' />
+					</Table.Column>
+
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Brand Profile</Table.HeaderCell>
+						<Table.Cell dataKey='brandName' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Objective</Table.HeaderCell>
+						<Table.Cell dataKey='objectiveName' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>SmartList</Table.HeaderCell>
+						<Table.Cell dataKey='smartListName' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Type</Table.HeaderCell>
+						<Table.Cell dataKey='dataTypeName' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Active</Table.HeaderCell>
+						<Table.Cell dataKey='activeText' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Channels</Table.HeaderCell>
+						<Table.Cell dataKey='channelCount' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Videos</Table.HeaderCell>
+						<Table.Cell dataKey='videoCount' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Subscribers</Table.HeaderCell>
+						<Table.Cell dataKey='subscriberCount' />
+					</Table.Column>
+				</Table>
+			</Grid>
 
 			{!props.isFetchingLists &&
 				props.fetchListsSuccess &&

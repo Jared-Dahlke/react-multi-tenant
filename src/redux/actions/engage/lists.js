@@ -48,7 +48,19 @@ export function fetchLists(accountId) {
 						'we received different data from the api than expected, see console log for more details'
 					)
 				})
-				dispatch(setLists(result.data))
+
+				let versions = []
+				for (const list of result.data) {
+					for (const version of list.versions) {
+						if (version.active) {
+							version.activeText = 'True'
+						} else {
+							version.activeText = 'False'
+						}
+						versions.push(version)
+					}
+				}
+				dispatch(setLists(versions))
 			}
 		} catch (error) {
 			alert('Error on fetch account users: ' + JSON.stringify(error, null, 2))
