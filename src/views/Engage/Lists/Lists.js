@@ -12,6 +12,7 @@ import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
+import CustomPanel from '../../../components/CustomPanel'
 import {
 	objectives,
 	dataTypes,
@@ -433,7 +434,6 @@ function Lists(props) {
 			from: 'lists'
 		})
 	}
-	//let subscribers = numeral(item.channelSubscribers).format('0.0a')
 
 	const handleArchiveClick = (smartListId, archive) => {
 		const payload = {
@@ -549,13 +549,34 @@ function Lists(props) {
 			.sort((a, b) => handleSort(a, b))
 	}, [props.lists, currentSort, filterState])
 
+	const totals = React.useMemo(() => {
+		let _subscribers = 0
+		let _channels = 0
+		let _videos = 0
+		for (const version of visibleLists) {
+			console.log(version.subscriberCount)
+			_subscribers = _subscribers + version.subscriberCount
+			_channels = _channels + version.channelCount
+			_videos = _videos + version.videoCount
+		}
+		let subscribersFormatted = numeral(_subscribers).format('0.0a')
+		let channelsFormatted = numeral(_channels).format('0a')
+		let videosFormatted = numeral(_videos).format('0a')
+
+		return {
+			subscribers: subscribersFormatted,
+			channels: channelsFormatted,
+			videos: videosFormatted
+		}
+	}, [props.lists, currentSort, filterState])
+
 	if (props.isFetchingLists) {
 		return <FormLoader />
 	}
 
 	return (
-		<Grid container justify='center'>
-			<Grid item xs={12} sm={12} md={12}>
+		<Grid container justify='center' spacing={5}>
+			<Grid item xs={12}>
 				<Grid
 					container
 					justify='flex-end'
@@ -574,12 +595,7 @@ function Lists(props) {
 			</Grid>
 
 			<Grid item xs={12}>
-				<Grid
-					container
-					spacing={2}
-					justify='center'
-					style={{ marginBottom: 20 }}
-				>
+				<Grid container justify='space-evenly'>
 					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
 						<div style={{ position: 'absolute', top: -20, left: 0 }}>
 							<p>Brand Profile</p>
@@ -724,18 +740,25 @@ function Lists(props) {
 						/>
 					</Grid>
 				</Grid>
-				<Grid container justify='center' spacing={2}>
-					<Grid item xs={12} md={3} style={{ position: 'relative' }}>
-						Channels
-					</Grid>
-					<Grid item xs={12} md={3} style={{ position: 'relative' }}>
-						Videos
-					</Grid>
-					<Grid item xs={12} md={3} style={{ position: 'relative' }}>
-						Subscribers
-					</Grid>
+			</Grid>
+			<Grid container justify='center' spacing={2}>
+				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+					<CustomPanel header='Channels'>
+						<h2>{totals.channels}</h2>
+					</CustomPanel>
+				</Grid>
+				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+					<CustomPanel header='Videos'>
+						<h2>{totals.videos}</h2>
+					</CustomPanel>
+				</Grid>
+				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+					<CustomPanel header='Subscribers'>
+						<h2>{totals.subscribers}</h2>
+					</CustomPanel>
 				</Grid>
 			</Grid>
+
 			<Grid item xs={12}>
 				<Table
 					height={600}
