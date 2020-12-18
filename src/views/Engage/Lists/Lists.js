@@ -13,6 +13,12 @@ import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
 import {
+	objectives,
+	dataTypes,
+	activeStatuses,
+	archivedStatuses
+} from './constants'
+import {
 	fetchLists,
 	archiveList,
 	downloadExcelList,
@@ -21,7 +27,10 @@ import {
 	setPostListSuccess
 } from '../../../redux/actions/engage/lists'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
-import { neutralLightColor } from '../../../assets/jss/colorContants.js'
+import {
+	neutralLightColor,
+	accentColor
+} from '../../../assets/jss/colorContants.js'
 import { getCurrentAccount } from '../../../utils'
 import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
 import { useTransition, animated } from 'react-spring'
@@ -376,11 +385,17 @@ const Version = (props) => {
 
 function Lists(props) {
 	const history = useHistory()
-	const [viewArchivedLists, setViewArchivedLists] = React.useState(false)
-	const [brandProfileId, setBrandProfileId] = React.useState(null)
 	const [currentSort, setCurrentSort] = React.useState({
 		sortColumn: 'brandName',
 		sortType: 'desc'
+	})
+	const [filterState, setFilterState] = React.useState({
+		objectiveId: null,
+		brandProfileId: null,
+		smartListId: null,
+		dataTypeId: null,
+		activeStatusId: null,
+		archivedStatusId: true
 	})
 
 	let fetchLists = props.fetchLists
@@ -419,15 +434,6 @@ function Lists(props) {
 		})
 	}
 	//let subscribers = numeral(item.channelSubscribers).format('0.0a')
-	const [viewingAll, setViewingAll] = React.useState([])
-	const handleViewAllClick = (smartListId) => {
-		setViewingAll([...viewingAll, smartListId])
-	}
-
-	const handleHideAllClick = (smartListId) => {
-		let newArr = viewingAll.filter((id) => id !== smartListId)
-		setViewingAll(newArr)
-	}
 
 	const handleArchiveClick = (smartListId, archive) => {
 		const payload = {
@@ -465,6 +471,18 @@ function Lists(props) {
 		return _archivedCount
 	}, [props.lists])
 
+	const smartLists = React.useMemo(() => {
+		let _smartLists = []
+		let currentIds = []
+		for (const list of props.lists) {
+			if (!currentIds.includes(list.smartListId)) {
+				_smartLists.push(list)
+				currentIds.push(list.smartListId)
+			}
+		}
+		return _smartLists
+	}, [props.lists])
+
 	const handleSort = (a, b) => {
 		let { sortColumn, sortType } = currentSort
 		let x = a[sortColumn]
@@ -483,7 +501,7 @@ function Lists(props) {
 	}
 
 	const visibleLists = React.useMemo(() => {
-		if (viewArchivedLists) {
+		/*	if (viewArchivedLists) {
 			if (brandProfileId) {
 				return props.lists
 					.filter((list) => list.brandProfileId === brandProfileId)
@@ -498,13 +516,11 @@ function Lists(props) {
 						(list) => !list.archived && list.brandProfileId === brandProfileId
 					)
 					.sort((a, b) => handleSort(a, b))
-			} else {
-				return props.lists
-					.filter((list) => !list.archived)
-					.sort((a, b) => handleSort(a, b))
-			}
-		}
-	}, [viewArchivedLists, props.lists, brandProfileId, currentSort])
+			} else { */
+		return props.lists
+			.filter((list) => !list.archived)
+			.sort((a, b) => handleSort(a, b))
+	}, [props.lists, currentSort])
 
 	if (props.isFetchingLists) {
 		return <FormLoader />
@@ -512,27 +528,7 @@ function Lists(props) {
 
 	return (
 		<Grid container justify='center'>
-			<Grid item xs={12} sm={12} md={5}>
-				<Grid container justify='flex-start' style={{ marginBottom: 20 }}>
-					<Grid item style={{ position: 'relative' }}>
-						<div style={{ position: 'absolute', top: -20, left: 0 }}>
-							<p>Brand Profile</p>
-						</div>
-						<InputPicker
-							size='lg'
-							id='brandProfileId'
-							label='Brand Profile'
-							placeholder='Select a BrandProfile'
-							labelKey='brandName'
-							valueKey='brandProfileId'
-							data={props.brandProfiles}
-							value={brandProfileId}
-							onChange={(val) => setBrandProfileId(val)}
-						/>
-					</Grid>
-				</Grid>
-			</Grid>
-			<Grid item xs={12} sm={12} md={7}>
+			<Grid item xs={12} sm={12} md={12}>
 				<Grid
 					container
 					justify='flex-end'
@@ -540,24 +536,176 @@ function Lists(props) {
 					style={{ marginBottom: 20 }}
 				>
 					<Grid item>
-						{archivedCount > 0 && (
-							<Checkbox
-								checked={viewArchivedLists}
-								onChange={(e, val) => {
-									setViewArchivedLists(val)
-								}}
-							>
-								View archived
-							</Checkbox>
-						)}
-					</Grid>
-					<Grid item>
 						<ButtonToolbar>
 							<Button onClick={() => handleCreateNewList()} color='green'>
 								Build New SmartList
 							</Button>
 							<Button onClick={handleUploadNewList}>Upload Excel/CSV</Button>
 						</ButtonToolbar>
+					</Grid>
+				</Grid>
+			</Grid>
+
+			<Grid item xs={12}>
+				<Grid
+					container
+					spacing={2}
+					justify='center'
+					style={{ marginBottom: 20 }}
+				>
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Brand Profile</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='brandProfileId'
+							label='Brand Profile'
+							placeholder='Filter by Brand Profile'
+							labelKey='brandName'
+							valueKey='brandProfileId'
+							data={props.brandProfiles}
+							value={filterState.brandProfileId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										brandProfileId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Objective</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='objectiveId'
+							label='Objective'
+							placeholder='Filter by Objective'
+							labelKey='objectiveName'
+							valueKey='objectiveId'
+							data={objectives}
+							value={filterState.objectiveId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										objectiveId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Name</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='smartListId'
+							label='SmartList'
+							placeholder='Select a SmartList'
+							labelKey='smartListName'
+							valueKey='smartListId'
+							data={smartLists}
+							value={filterState.smartListId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										smartListId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Type</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='dataTypeId'
+							label='Type'
+							placeholder='Select a Type'
+							labelKey='dataTypeName'
+							valueKey='dataTypeId'
+							data={dataTypes}
+							value={filterState.dataTypeId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										dataTypeId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Version Status</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='activeStatusId'
+							label='Active'
+							placeholder='Select a status'
+							labelKey='activeStatusName'
+							valueKey='activeStatusId'
+							data={activeStatuses}
+							value={filterState.activeStatusId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										activeStatusId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Archived Status</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='archivedStatusId'
+							label='Archived'
+							placeholder='Select a status'
+							labelKey='archivedStatusName'
+							valueKey='archivedStatusId'
+							data={archivedStatuses}
+							value={filterState.archivedStatusId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										archivedStatusId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+				</Grid>
+				<Grid container justify='center' spacing={2}>
+					<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+						Channels
+					</Grid>
+					<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+						Videos
+					</Grid>
+					<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+						Subscribers
 					</Grid>
 				</Grid>
 			</Grid>
