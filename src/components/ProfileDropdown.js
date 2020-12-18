@@ -10,6 +10,7 @@ import {
 import AccountDropdown from '../components/AccountDropdown'
 import Whisper from 'rsuite/lib/Whisper'
 import CustomPanel from './CustomPanel'
+import { routes } from '../routes'
 import Panel from 'rsuite/lib/Panel'
 import PanelGroup from 'rsuite/lib/PanelGroup'
 import Button from 'rsuite/lib/Button'
