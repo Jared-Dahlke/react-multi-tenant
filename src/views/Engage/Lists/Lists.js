@@ -14,6 +14,9 @@ import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
 import CustomPanel from '../../../components/CustomPanel'
 import Divider from 'rsuite/lib/Divider'
+import Whisper from 'rsuite/lib/Whisper'
+import Dropdown from 'rsuite/lib/Dropdown'
+import Popover from 'rsuite/lib/Popover'
 import {
 	objectives,
 	dataTypes,
@@ -40,6 +43,7 @@ import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import InputPicker from 'rsuite/lib/InputPicker'
 import Table from 'rsuite/lib/Table'
 import { setScenarioToArchived } from '../../../redux/actions/admin/scenarios.js'
+import { useDispatch } from 'react-redux'
 
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
@@ -457,7 +461,6 @@ function Lists(props) {
 	}
 
 	const handleEditClick = (item) => {
-		console.log(item)
 		let params = {
 			versionId: item.versionId,
 			smartListName: item.smartListName
@@ -591,27 +594,152 @@ function Lists(props) {
 		config: { duration: 250 }
 	})
 
-	const ActionCell = ({ rowData, dataKey, ...props }) => {
-		console.log('action cell')
-		console.log(rowData)
-		console.log(props)
-		//	if (!rowData.archived) {
+	const ActionCell = ({ rowData, dataKey, customProps, ...props }) => {
 		return (
-			<Table.Cell {...props} className='link-group'>
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ align: 'center', padding: 5 }}
+			>
 				<IconButton
 					appearance='subtle'
 					onClick={() => handleEditClick(rowData)}
 					icon={<Icon icon='edit2' />}
 					loading={
-						props.customProps.isPostingList &&
-						props.customProps.isPostingListVersionId === rowData.versionId
+						customProps.isPostingList &&
+						customProps.isPostingListVersionId === rowData.versionId
 					}
 				/>
 				<Divider vertical />
+				<CustomWhisper rowData={rowData}>
+					<IconButton
+						appearance='subtle'
+						icon={<Icon icon='more' />}
+						loading={
+							customProps.isDownloadingExcel &&
+							customProps.isDownloadingExcelVersionId === rowData.versionId
+						}
+					/>
+				</CustomWhisper>
 			</Table.Cell>
 		)
-		//}
-		//return <Table.Cell dataKey='archivedText' />
+	}
+
+	const ArchivedCell = ({ rowData, dataKey, customProps, ...props }) => {
+		return (
+			<Table.Cell {...props}>{rowData.archived ? 'True' : 'False'}</Table.Cell>
+		)
+	}
+
+	const ActiveCell = ({ rowData, dataKey, customProps, ...props }) => {
+		return (
+			<Table.Cell {...props}>{rowData.active ? 'True' : 'False'}</Table.Cell>
+		)
+	}
+
+	const Menu = (props) => {
+		const dispatch = useDispatch()
+		return (
+			<Dropdown.Menu onSelect={props.onSelect}>
+				<Dropdown.Item
+					eventKey={3}
+					onClick={(e) => {
+						let payload = {
+							versionId: props.rowData.versionId,
+							smartListName: props.rowData.smartListName
+						}
+						dispatch(downloadExcelList(payload))
+					}}
+				>
+					Download
+				</Dropdown.Item>
+				{!props.rowData.archived && (
+					<Dropdown.Item
+						eventKey={7}
+						onClick={() => {
+							const payload = {
+								smartListId: props.rowData.smartListId,
+								archive: true
+							}
+							dispatch(archiveList(payload))
+						}}
+					>
+						Archive All Versions
+					</Dropdown.Item>
+				)}
+
+				{props.rowData.archived && (
+					<Dropdown.Item
+						eventKey={7}
+						onClick={() => {
+							const payload = {
+								smartListId: props.rowData.smartListId,
+								archive: false
+							}
+							dispatch(archiveList(payload))
+						}}
+					>
+						UnArchive All Versions
+					</Dropdown.Item>
+				)}
+
+				{!props.rowData.active && (
+					<Dropdown.Item
+						eventKey={7}
+						onClick={() => {
+							let payload = {
+								versionId: props.rowData.versionId,
+								smartListId: props.rowData.smartListId
+							}
+
+							dispatch(activateListVersion(payload))
+						}}
+					>
+						Activate Version
+					</Dropdown.Item>
+				)}
+			</Dropdown.Menu>
+		)
+	}
+
+	const MenuPopover = ({ onSelect, rowData, ...rest }) => (
+		<Popover {...rest} full>
+			<Menu onSelect={onSelect} rowData={rowData} />
+		</Popover>
+	)
+
+	let tableBody
+
+	class CustomWhisper extends React.Component {
+		constructor(props) {
+			super(props)
+			this.handleSelectMenu = this.handleSelectMenu.bind(this)
+		}
+		handleSelectMenu(eventKey, event) {
+			this.trigger.hide()
+		}
+		render() {
+			return (
+				<Whisper
+					placement='bottomEnd'
+					trigger='click'
+					triggerRef={(ref) => {
+						this.trigger = ref
+					}}
+					container={() => {
+						return tableBody
+					}}
+					speaker={
+						<MenuPopover
+							rowData={this.props.rowData}
+							onSelect={this.handleSelectMenu}
+						/>
+					}
+				>
+					{this.props.children}
+				</Whisper>
+			)
+		}
 	}
 
 	if (props.isFetchingLists) {
@@ -818,11 +946,10 @@ function Lists(props) {
 					sortColumn={currentSort.sortColumn}
 					sortType={currentSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {
-						console.log(sortColumn, sortType)
 						setCurrentSort({ sortColumn, sortType })
 					}}
 				>
-					<Table.Column flexGrow={1} sortable>
+					<Table.Column width={60} sortable>
 						<Table.HeaderCell>Id</Table.HeaderCell>
 						<Table.Cell dataKey='smartListId' />
 					</Table.Column>
@@ -841,13 +968,13 @@ function Lists(props) {
 						<Table.Cell dataKey='objectiveName' />
 					</Table.Column>
 
-					<Table.Column flexGrow={1} sortable>
+					<Table.Column width={80} sortable>
 						<Table.HeaderCell>Type</Table.HeaderCell>
 						<Table.Cell dataKey='dataTypeName' />
 					</Table.Column>
-					<Table.Column flexGrow={1} sortable>
+					<Table.Column width={80} sortable>
 						<Table.HeaderCell>Active</Table.HeaderCell>
-						<Table.Cell dataKey='activeText' />
+						<ActiveCell customProps={props} />
 					</Table.Column>
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Channels</Table.HeaderCell>
@@ -861,11 +988,11 @@ function Lists(props) {
 						<Table.HeaderCell>Subscribers</Table.HeaderCell>
 						<Table.Cell dataKey='subscriberCount' />
 					</Table.Column>
-					<Table.Column flexGrow={1} sortable>
+					<Table.Column width={80} sortable>
 						<Table.HeaderCell>Archived</Table.HeaderCell>
-						<Table.Cell dataKey='archivedText' />
+						<ArchivedCell customProps={props} />
 					</Table.Column>
-					<Table.Column flexGrow={1}>
+					<Table.Column width={120}>
 						<Table.HeaderCell>Actions</Table.HeaderCell>
 						<ActionCell customProps={props} />
 					</Table.Column>
