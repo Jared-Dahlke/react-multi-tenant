@@ -13,6 +13,7 @@ import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
 import CustomPanel from '../../../components/CustomPanel'
+import Divider from 'rsuite/lib/Divider'
 import {
 	objectives,
 	dataTypes,
@@ -456,20 +457,13 @@ function Lists(props) {
 	}
 
 	const handleEditClick = (item) => {
+		console.log(item)
 		let params = {
 			versionId: item.versionId,
 			smartListName: item.smartListName
 		}
 		props.cloneListVersion(params)
 	}
-
-	const archivedCount = React.useMemo(() => {
-		let _archivedCount = 0
-		for (const list of props.lists) {
-			if (list.archived) ++_archivedCount
-		}
-		return _archivedCount
-	}, [props.lists])
 
 	const smartLists = React.useMemo(() => {
 		let _smartLists = []
@@ -596,6 +590,29 @@ function Lists(props) {
 		from: { number: Number(lastSubscribers) },
 		config: { duration: 250 }
 	})
+
+	const ActionCell = ({ rowData, dataKey, ...props }) => {
+		console.log('action cell')
+		console.log(rowData)
+		console.log(props)
+		//	if (!rowData.archived) {
+		return (
+			<Table.Cell {...props} className='link-group'>
+				<IconButton
+					appearance='subtle'
+					onClick={() => handleEditClick(rowData)}
+					icon={<Icon icon='edit2' />}
+					loading={
+						props.customProps.isPostingList &&
+						props.customProps.isPostingListVersionId === rowData.versionId
+					}
+				/>
+				<Divider vertical />
+			</Table.Cell>
+		)
+		//}
+		//return <Table.Cell dataKey='archivedText' />
+	}
 
 	if (props.isFetchingLists) {
 		return <FormLoader />
@@ -847,6 +864,10 @@ function Lists(props) {
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Archived</Table.HeaderCell>
 						<Table.Cell dataKey='archivedText' />
+					</Table.Column>
+					<Table.Column flexGrow={1}>
+						<Table.HeaderCell>Actions</Table.HeaderCell>
+						<ActionCell customProps={props} />
 					</Table.Column>
 				</Table>
 			</Grid>
