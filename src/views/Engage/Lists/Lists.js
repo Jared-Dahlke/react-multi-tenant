@@ -625,18 +625,6 @@ function Lists(props) {
 		)
 	}
 
-	const ArchivedCell = ({ rowData, dataKey, customProps, ...props }) => {
-		return (
-			<Table.Cell {...props}>{rowData.archived ? 'True' : 'False'}</Table.Cell>
-		)
-	}
-
-	const ActiveCell = ({ rowData, dataKey, customProps, ...props }) => {
-		return (
-			<Table.Cell {...props}>{rowData.active ? 'True' : 'False'}</Table.Cell>
-		)
-	}
-
 	const Menu = (props) => {
 		const dispatch = useDispatch()
 		return (
@@ -974,7 +962,7 @@ function Lists(props) {
 					</Table.Column>
 					<Table.Column width={80} sortable>
 						<Table.HeaderCell>Active</Table.HeaderCell>
-						<ActiveCell customProps={props} />
+						<Table.Cell dataKey={'activeText'} />
 					</Table.Column>
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Channels</Table.HeaderCell>
@@ -988,9 +976,9 @@ function Lists(props) {
 						<Table.HeaderCell>Subscribers</Table.HeaderCell>
 						<Table.Cell dataKey='subscriberCount' />
 					</Table.Column>
-					<Table.Column width={80} sortable>
+					<Table.Column width={90} sortable>
 						<Table.HeaderCell>Archived</Table.HeaderCell>
-						<ArchivedCell customProps={props} />
+						<Table.Cell dataKey={'archivedText'} />
 					</Table.Column>
 					<Table.Column width={120}>
 						<Table.HeaderCell>Actions</Table.HeaderCell>
