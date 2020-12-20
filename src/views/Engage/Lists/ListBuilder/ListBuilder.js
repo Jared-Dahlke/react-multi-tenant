@@ -337,6 +337,7 @@ function ListBuilder(props) {
 					items={isChannels ? props.channels : props.videos}
 					loadNextPage={_loadNextPage}
 					handleActionButtonClick={handleActionButtonClick}
+					isChannels={isChannels}
 				/>
 			</Grid>
 			<WarningModal

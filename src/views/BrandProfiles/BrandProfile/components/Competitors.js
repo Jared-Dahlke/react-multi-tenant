@@ -152,7 +152,7 @@ function TopCompetitors(props) {
 		)
 
 		React.useEffect(() => {
-			if (formik.values !== formik.initialValues && formik.dirty) {
+			if (formik.dirty) {
 				debouncedSubmit()
 			}
 		}, [debouncedSubmit, formik.values])
@@ -165,7 +165,7 @@ function TopCompetitors(props) {
 			enableReinitialize={true}
 			validateOnMount={true}
 			validationSchema={schema}
-			validateOnBlur={false}
+			//	validateOnBlur={false}
 			onSubmit={(values, formik) => handleSaveNew(values)}
 			initialValues={{
 				competitors: props.brandProfile.competitors

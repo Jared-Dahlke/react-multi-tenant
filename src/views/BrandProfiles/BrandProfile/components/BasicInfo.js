@@ -17,20 +17,24 @@ import Panel from '../../../../components/CustomPanel'
 const urlRegex = require('url-regex')
 
 export const schemaValidation = Yup.object().shape({
-	industryVerticalId: Yup.number()
-		.typeError('Required')
-		.required('Required'),
 	brandName: Yup.string()
 		.required('Required')
 		.min(2, 'Must be greater than 1 character')
 		.max(50, 'Must be less than 50 characters'),
-	websiteUrl: Yup.string()
-		.required('Required')
-		.test('urlTest', 'Valid URL required', (basicInfoWebsiteUrl) => {
-			return urlRegex({ exact: true, strict: false }).test(basicInfoWebsiteUrl)
-		}),
+	websiteUrl: Yup.string().test(
+		'urlTest',
+		'Valid URL required',
+		(basicInfoWebsiteUrl) => {
+			if (!basicInfoWebsiteUrl) {
+				return true
+			} else {
+				return urlRegex({ exact: true, strict: false }).test(
+					basicInfoWebsiteUrl
+				)
+			}
+		}
+	),
 	twitterProfileUrl: Yup.string()
-		.required('Required')
 		.min(2, 'Must be greater than 1 character')
 		.max(50, 'Must be less than 30 characters')
 })
@@ -60,7 +64,9 @@ const AutoSave = ({ debounceMs }) => {
 	)
 
 	React.useEffect(() => {
-		if (formik.isValid && formik.dirty) debouncedSubmit()
+		if (formik.dirty) {
+			debouncedSubmit()
+		}
 	}, [debouncedSubmit, formik.values])
 
 	return null
@@ -152,8 +158,8 @@ function BasicInfo(props) {
 									/>
 								</GridItem>
 							</Grid>
+							<AutoSave debounceMs={700} />
 						</Form>
-						<AutoSave debounceMs={500} />
 					</Panel>
 				</Grid>
 			</Grid>
