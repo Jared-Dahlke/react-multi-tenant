@@ -109,9 +109,12 @@ module.exports = override(
 				//toggle
 				'@toggle-default-bg': neutralExtraLightColor,
 				'@toggle-inner-text-color': '#FFF',
-				'@toggle-default-hover-bg': neutralLightColor
+				'@toggle-default-hover-bg': neutralLightColor,
 
-				//input
+				//** Tooltip text color
+				'@tooltip-color': 'black',
+				//** Tooltip background color
+				'@tooltip-bg': '#FFF'
 			}
 		}
 	})

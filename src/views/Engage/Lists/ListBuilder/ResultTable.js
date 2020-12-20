@@ -3,7 +3,10 @@ import { FixedSizeList as List } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import Grid from '@material-ui/core/Grid'
 import Panel from '../../../../components/CustomPanel'
-import { neutralLightColor } from '../../../../assets/jss/colorContants'
+import {
+	neutralLightColor,
+	neutralExtraExtraLightColor
+} from '../../../../assets/jss/colorContants'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import numeral from 'numeral'
@@ -63,7 +66,9 @@ export default function ResultTable({
 			return <div style={style}>Loading...</div>
 		} else {
 			let item = items[index]
-			let abbreviatedDescription = item.description.substring(0, 50) // String(item.description).substring(0, 50)
+			let abbreviatedDescription = item.description
+				? item.description.substring(0, 50)
+				: ''
 			return (
 				<div style={style}>
 					<Panel
@@ -78,7 +83,7 @@ export default function ResultTable({
 						<Grid container spacing={3} style={{ position: 'relative' }}>
 							<Grid item xs={12}>
 								<Whisper
-									placement='topStart'
+									placement='bottomStart'
 									trigger='hover'
 									speaker={<Tooltip>{item.description}</Tooltip>}
 								>
