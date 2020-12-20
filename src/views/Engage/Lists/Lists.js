@@ -594,6 +594,12 @@ function Lists(props) {
 		config: { duration: 250 }
 	})
 
+	const SubscriberCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props}>{rowData.subscriberCountFormatted}</Table.Cell>
+		)
+	}
+
 	const ActionCell = ({ rowData, dataKey, customProps, ...props }) => {
 		return (
 			<Table.Cell
@@ -934,6 +940,7 @@ function Lists(props) {
 					sortColumn={currentSort.sortColumn}
 					sortType={currentSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {
+						console.log(sortColumn, sortType)
 						setCurrentSort({ sortColumn, sortType })
 					}}
 				>
@@ -974,7 +981,7 @@ function Lists(props) {
 					</Table.Column>
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Subscribers</Table.HeaderCell>
-						<Table.Cell dataKey='subscriberCount' />
+						<SubscriberCell dataKey={'subscriberCount'} />
 					</Table.Column>
 					<Table.Column width={90} sortable>
 						<Table.HeaderCell>Archived</Table.HeaderCell>

@@ -20,6 +20,7 @@ import {
 	uploadedListObjValidation,
 	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
+import numeral from 'numeral'
 var fileDownload = require('js-file-download')
 var cwait = require('cwait')
 
@@ -64,6 +65,10 @@ export function fetchLists(accountId) {
 						} else {
 							version.archivedText = 'False'
 						}
+
+						version.subscriberCountFormatted = numeral(
+							version.subscriberCount
+						).format('0.0a')
 
 						versions.push(version)
 					}
