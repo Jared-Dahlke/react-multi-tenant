@@ -45,10 +45,6 @@ import Table from 'rsuite/lib/Table'
 import { setScenarioToArchived } from '../../../redux/actions/admin/scenarios.js'
 import { useDispatch } from 'react-redux'
 
-var dayjs = require('dayjs')
-var calendar = require('dayjs/plugin/calendar')
-dayjs.extend(calendar)
-
 const mapStateToProps = (state) => {
 	return {
 		lists: state.engage.lists,

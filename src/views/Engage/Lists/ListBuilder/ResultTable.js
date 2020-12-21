@@ -12,7 +12,9 @@ import Button from 'rsuite/lib/Button'
 import numeral from 'numeral'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
-import Icon from 'rsuite/lib/Icon'
+var dayjs = require('dayjs')
+var calendar = require('dayjs/plugin/calendar')
+dayjs.extend(calendar)
 
 export default function ResultTable({
 	// Are there more items to load?
@@ -67,8 +69,11 @@ export default function ResultTable({
 		} else {
 			let item = items[index]
 			let abbreviatedDescription = item.description
-				? item.description.substring(0, 50)
-				: ''
+				? item.description.length > 40
+					? item.description.substring(0, 40) + '...'
+					: item.description
+				: '[No description]'
+			let createdDate = dayjs(item.created).calendar()
 			return (
 				<div style={style}>
 					<Panel
@@ -78,9 +83,19 @@ export default function ResultTable({
 							marginRight: 20,
 							backgroundColor: neutralLightColor
 						}}
-						header={<h4>{item.name}</h4>}
+						header={
+							<>
+								<h4>{item.name}</h4>
+								<br />
+								<div style={{ color: 'grey', marginTop: -20 }}>
+									<i>{`${createdDate} | ${item.id}`}</i>
+									<br />
+									<p>Category: {item.categoryName}</p>
+								</div>
+							</>
+						}
 					>
-						<Grid container spacing={3} style={{ position: 'relative' }}>
+						<Grid container spacing={2}>
 							<Grid item xs={12}>
 								<Whisper
 									placement='bottomStart'
@@ -101,22 +116,17 @@ export default function ResultTable({
 										<Grid item xs={2}>
 											Videos
 											<br />
-											{numeral(item.videos).format('0.0a')}
+											{numeral(item.videos).format('0a')}
 										</Grid>
 										<Grid item xs={2}>
 											Views
 											<br />
 											{numeral(item.views).format('0.0a')}
 										</Grid>
-										<Grid item xs={2}>
+										<Grid item xs={1}>
 											Country
 											<br />
 											{item.country}
-										</Grid>
-										<Grid item xs={2}>
-											Id
-											<br />
-											{item.id}
 										</Grid>
 									</Grid>
 								)}
@@ -171,7 +181,7 @@ export default function ResultTable({
 					className='List'
 					height={500}
 					itemCount={itemCount}
-					itemSize={250}
+					itemSize={290}
 					onItemsRendered={onItemsRendered}
 					ref={ref}
 					width={800}
