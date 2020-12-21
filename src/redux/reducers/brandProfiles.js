@@ -3,25 +3,24 @@ import {
 	ADD_BRAND_PROFILE,
 	BRAND_PROFILES_IS_LOADING,
 	HAS_BRAND_PROFILES,
-	SET_BRAND_SCENARIOS,
 	SET_BRAND_INDUSTRY_VERTICALS,
-	SET_BRAND_TOPICS,
-	SET_BRAND_CATEGORIES,
 	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_CREATING,
 	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
-	SET_BRAND_PROFILE_BASIC_INFO,
-	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILES,
 	SET_BRAND_PROFILE_LOADING,
 	SET_BRAND_PROFILE_SAVING,
 	SET_BRAND_PROFILE_SAVED,
 	SCENARIOS_IS_LOADING,
-	SET_BRAND_PROFILE_UNDER_EDIT
+	SET_BRAND_PROFILE_UNDER_EDIT,
+	SET_BRAND_PROFILE_CATEGORIES,
+	SET_BRAND_PROFILE_COMPETITORS,
+	SET_BRAND_PROFILE_TOPICS,
+	SET_BRAND_PROFILE_SCENARIOS,
+	SET_BRAND_PROFILE_OPINIONS,
+	SET_BRAND_PROFILE_BASIC_INFO
 } from '../action-types/brandProfiles'
-//import configureStore from '../store/index'
-//const store = configureStore()
 
 export function brandProfiles(state = [], action) {
 	switch (action.type) {
@@ -40,7 +39,6 @@ export function brandProfiles(state = [], action) {
 				stateData = JSON.parse(JSON.stringify(state))
 			}
 			stateData.push(action.brandProfile)
-
 			return stateData
 		default:
 			return state
@@ -56,10 +54,52 @@ export function brandProfilesIsLoading(state = true, action) {
 	}
 }
 
-export function brandProfileUnderEdit(state = null, action) {
+export function brandProfileUnderEdit(
+	state = {
+		brandName: '',
+		websiteUrl: '',
+		industryVerticalId: -1,
+		twitterProfileUrl: '',
+		brandProfileId: ''
+	},
+	action
+) {
 	switch (action.type) {
 		case SET_BRAND_PROFILE_UNDER_EDIT:
 			return action.brandProfileUnderEdit
+		case SET_BRAND_PROFILE_BASIC_INFO:
+			return {
+				...state,
+				brandName: action.basicInfo.brandName,
+				industryVerticalId: action.basicInfo.industryVerticalId,
+				websiteUrl: action.basicInfo.websiteUrl,
+				twitterProfileUrl: action.basicInfo.twitterProfileUrl
+			}
+		case SET_BRAND_PROFILE_COMPETITORS:
+			return {
+				...state,
+				competitors: action.competitors
+			}
+		case SET_BRAND_PROFILE_CATEGORIES:
+			return {
+				...state,
+				categories: action.categories
+			}
+		case SET_BRAND_PROFILE_TOPICS:
+			return {
+				...state,
+				topics: action.topics
+			}
+		case SET_BRAND_PROFILE_SCENARIOS:
+			return {
+				...state,
+				scenarios: action.scenarios
+			}
+		case SET_BRAND_PROFILE_OPINIONS:
+			return {
+				...state,
+				opinions: action.opinions
+			}
 		default:
 			return state
 	}
@@ -136,15 +176,6 @@ export function hasBrandProfiles(state = true, action) {
 	}
 }
 
-export function scenarios(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_SCENARIOS:
-			return action.scenarios
-		default:
-			return state
-	}
-}
-
 export function scenariosIsLoading(state = true, action) {
 	switch (action.type) {
 		case SCENARIOS_IS_LOADING:
@@ -158,50 +189,6 @@ export function industryVerticals(state = [], action) {
 	switch (action.type) {
 		case SET_BRAND_INDUSTRY_VERTICALS:
 			return action.industryVerticals
-		default:
-			return state
-	}
-}
-
-export function brandProfileBasicInfo(
-	state = {
-		twitterProfileUrl: '',
-		websiteUrl: '',
-		brandName: '',
-		industryVerticalId: ''
-	},
-	action
-) {
-	switch (action.type) {
-		case SET_BRAND_PROFILE_BASIC_INFO:
-			return action.brandProfileBasicInfo
-		default:
-			return state
-	}
-}
-
-export function brandProfileCompetitors(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_PROFILE_COMPETITORS:
-			return action.brandProfileCompetitors
-		default:
-			return state
-	}
-}
-
-export function brandCategories(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_CATEGORIES:
-			return action.brandCategories
-		default:
-			return state
-	}
-}
-
-export function topics(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_TOPICS:
-			return action.topics
 		default:
 			return state
 	}

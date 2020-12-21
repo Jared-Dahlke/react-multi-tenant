@@ -7,7 +7,7 @@ import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import WarningModal from './WarningModal'
 import TagPicker from 'rsuite/lib/TagPicker'
-import Panel from 'rsuite/lib/Panel'
+import Panel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import {
 	fetchVideos,

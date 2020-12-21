@@ -1,8 +1,5 @@
 import { combineReducers } from 'redux'
 import {
-	roles,
-	rolesHasErrored,
-	rolesIsLoading,
 	rolesPermissionsIsLoading,
 	rolesPermissions,
 	rolesPermissionsHasErrored
@@ -47,16 +44,11 @@ import {
 	brandProfiles,
 	brandProfilesIsLoading,
 	hasBrandProfiles,
-	scenarios,
 	industryVerticals,
-	topics,
 	brandProfileCreated,
 	brandProfileCreating,
 	brandProfileDeleted,
 	brandProfileDeleting,
-	brandCategories,
-	brandProfileBasicInfo,
-	brandProfileCompetitors,
 	brandProfileLoading,
 	brandProfileSaving,
 	brandProfileSaved,
@@ -64,16 +56,14 @@ import {
 	brandProfileUnderEdit
 } from './brandProfiles'
 
-import brandProfilesAdmin from './brandProfilesAdmin/index'
+import admin from './admin/index'
 import engage from './engage/index'
+import thirdParty from './ThirdParty/index'
 
 export default combineReducers({
 	authToken,
-	roles,
 	rolesPermissions,
-	rolesHasErrored,
 	rolesPermissionsHasErrored,
-	rolesIsLoading,
 	rolesPermissionsIsLoading,
 	isLoggedIn,
 	loggingIn,
@@ -107,12 +97,7 @@ export default combineReducers({
 	brandProfileLoading,
 	accountCreated,
 	hasBrandProfiles,
-	scenarios,
 	industryVerticals,
-	topics,
-	brandCategories,
-	brandProfileBasicInfo,
-	brandProfileCompetitors,
 	accountSaving,
 	accountSaved,
 	brandProfileSaving,
@@ -122,6 +107,7 @@ export default combineReducers({
 	loggedInUserPermissions,
 	resettingPassword,
 	scenariosIsLoading,
-	brandProfilesAdmin,
-	engage
+	admin,
+	engage,
+	thirdParty
 })

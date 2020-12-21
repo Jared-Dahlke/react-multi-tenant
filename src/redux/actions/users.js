@@ -277,30 +277,21 @@ export const deleteUser = (userId) => {
 }
 
 export const createUser = (user) => {
-	let userCopy = JSON.parse(JSON.stringify(user))
-
 	user.userName = 'placeholder'
 	user.phoneNumber = '123123123'
-
 	delete user.userId
 	delete user.internal
-
 	let url = apiBase + `/user/invite`
 	return async (dispatch) => {
 		dispatch(setUserAdding(true))
-		dispatch(usersAddUser(userCopy))
 		let response = ''
-		try {
-			response = await axios.post(url, user)
-		} catch (error) {
-			console.log('inside catch')
-			console.log(error)
-		}
-
+		response = await axios.post(url, user)
 		if (response.status === 200) {
 			dispatch(setUserAdded(true))
+		} else if (response.response.status === 403) {
+			dispatch(setUserAddError(403))
 		} else {
-			dispatch(setUserAddError(true))
+			dispatch(setUserAddError(1))
 		}
 		dispatch(setUserAdding(false))
 	}

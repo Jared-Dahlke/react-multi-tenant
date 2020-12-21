@@ -26,20 +26,20 @@ import {
 	editUserUserAccountsLoading
 } from '../actions/users'
 import {
-	rolesFetchData,
-	setRoles,
 	rolesPermissionsFetchData,
 	setRolesPermissions,
 	rolesPermissionsIsLoading
 } from '../actions/roles'
 import {
+	fetchGoogleLoginUrl,
+	fetchGoogleAccounts,
+	setAccountHasValidGoogleRefreshToken
+} from '../actions/ThirdParty/Google/google'
+import {
 	setBrandProfiles,
 	fetchBrandProfiles,
 	brandProfilesIsLoading,
-	fetchBrandScenarios,
-	fetchBrandCategories,
-	fetchBrandIndustryVerticals,
-	fetchBrandTopics
+	fetchBrandIndustryVerticals
 } from '../actions/brandProfiles'
 import { findAccountNodeByAccountId } from '../../utils'
 import { setLists } from './engage/lists'
@@ -168,7 +168,6 @@ export function clearSiteData() {
 		dispatch(setAccounts([]))
 		dispatch(setCurrentAccountId(null))
 		dispatch(setUsers([]))
-		dispatch(setRoles([]))
 		dispatch(setRolesPermissions([]))
 		dispatch(setBrandProfiles([]))
 		dispatch(setAccountTypes([]))
@@ -228,20 +227,22 @@ export function fetchSiteData(accountId) {
 			dispatch(userProfileFetchData())
 			dispatch(setCurrentAccount(accountId))
 			dispatch(setCurrentAccountId(accountId))
+			if (config.googleAuth) {
+				dispatch(fetchGoogleAdsAuthInfo(accountId))
+			}
 
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData(accountId))
-			dispatch(rolesFetchData(accountId))
 			dispatch(fetchBrandProfiles(accountId))
 
 			//
 
-			dispatch(fetchBrandScenarios())
 			dispatch(fetchBrandIndustryVerticals())
-			dispatch(fetchBrandTopics())
-			dispatch(fetchBrandCategories())
 
-			//
+			if (config.googleAuth) {
+				dispatch(fetchGoogleLoginUrl())
+			}
+
 			dispatch(isSwitchingAccounts(false))
 		} catch (error) {
 			console.log('caught in account action')
@@ -262,6 +263,52 @@ export function accountsSetAccountUsers(accountId, users) {
 	return {
 		type: ACCOUNTS_SET_ACCOUNT_USERS,
 		payload
+	}
+}
+
+export function fetchGoogleAdsAuthInfo(accountId) {
+	let url = apiBase + `/account/googleAdsAuthInfo/${accountId}`
+	return async (dispatch, getState) => {
+		try {
+			let result = []
+
+			try {
+				result = await axios.get(url)
+			} catch (error) {
+				console.log(error)
+			}
+
+			if (result.status === 200) {
+				let {
+					googleAdsCustomerId,
+					hasGoogleAdsRefreshToken,
+					hasValidGoogleAdsRefreshToken
+				} = result.data
+
+				let fromGoogleAuthCallback = getState().thirdParty
+					.fromGoogleAuthCallback
+
+				console.log('about to set had valid refresh')
+				console.log('from google auth calbakc')
+				console.log(fromGoogleAuthCallback)
+
+				let hasValidToken
+				if (fromGoogleAuthCallback) {
+					hasValidToken = true
+				} else {
+					hasValidToken = hasValidGoogleAdsRefreshToken
+				}
+				dispatch(setAccountHasValidGoogleRefreshToken(hasValidToken))
+
+				if (hasValidToken) {
+					dispatch(fetchGoogleAccounts(accountId))
+				}
+			}
+		} catch (error) {
+			alert(
+				'Error on fetch google ads auth info: ' + JSON.stringify(error, null, 2)
+			)
+		}
 	}
 }
 

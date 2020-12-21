@@ -8,6 +8,10 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import ControlLabel from 'rsuite/lib/ControlLabel'
 import FormGroup from 'rsuite/lib/FormGroup'
 import Form from 'rsuite/lib/Form'
+import Icon from 'rsuite/lib/Icon'
+import IconButton from 'rsuite/lib/IconButton'
+import Whisper from 'rsuite/lib/Whisper'
+import Tooltip from 'rsuite/lib/Tooltip'
 
 import styles from '../assets/jss/material-dashboard-react/components/customInputStyle.js' //"assets/jss/material-dashboard-react/components/customInputStyle.js";
 const useStyles = makeStyles(styles)
@@ -62,7 +66,7 @@ function SimplePopover(props) {
 	return (
 		<div style={{ marginTop: '30px', marginBottom: '15px' }}>
 			<Form>
-				<FormGroup>
+				<FormGroup style={{ position: 'relative' }}>
 					<ControlLabel>Active Account</ControlLabel>
 
 					<TreePicker
@@ -77,6 +81,20 @@ function SimplePopover(props) {
 						onChange={(e, v) => handleSelect(e, v)}
 						cleanable={false}
 					/>
+					<div style={{ position: 'absolute', top: 30, right: -30 }}>
+						<Whisper
+							placement='topStart'
+							trigger='hover'
+							speaker={
+								<Tooltip>
+									Your Active Account is what drives which brand profiles, smart
+									lists, and users you see on this site.
+								</Tooltip>
+							}
+						>
+							<Icon size='lg' icon='question' />
+						</Whisper>
+					</div>
 				</FormGroup>
 			</Form>
 		</div>

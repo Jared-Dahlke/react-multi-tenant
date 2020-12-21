@@ -56,7 +56,7 @@ const schemaValidation = Yup.object().shape({
 
 const mapStateToProps = (state) => {
 	return {
-		roles: state.roles.data,
+		roles: state.rolesPermissions.data,
 		accounts: state.accounts,
 		users: state.users,
 		editUserUserAccountsLoading: state.editUserUserAccountsLoading,

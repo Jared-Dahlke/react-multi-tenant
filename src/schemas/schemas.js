@@ -38,7 +38,7 @@ export const accountsObjValidation = Yup.array()
 		'The api sent accounts that have duplicate accountIds. Please address in api or database as this breaks the UI.',
 		(accounts) => {
 			let seen = new Set()
-			var hasDuplicates = accounts.some(function(currentObject) {
+			var hasDuplicates = accounts.some(function (currentObject) {
 				return seen.size === seen.add(currentObject.accountId).size
 			})
 
@@ -84,14 +84,14 @@ export const rolesAndPermissionsObjValidation = Yup.array()
 			permissions: Yup.array()
 				.min(1, 'No permissions for given role')
 				.of(
-					Yup.object()
-					// .shape({
-					//   permissionId: Yup.number().required(),
-					//   permissionName: Yup.string().required(),
-					//   permissionDescription: Yup.string().required(),
-					//   moduleName: Yup.string().required()
-					// })
+					Yup.object().shape({
+						permissionId: Yup.number().required(),
+						permissionName: Yup.string().required(),
+						permissionDescription: Yup.string().required(),
+						moduleName: Yup.string().required()
+					})
 				)
+				.required()
 		})
 	)
 
@@ -115,16 +115,6 @@ export const accountTypesObjValidation = Yup.array()
 		})
 	)
 
-export const brandProfilesObjValidation = Yup.array().of(
-	Yup.object().shape({
-		accountId: Yup.number().required(),
-		brandName: Yup.string().required(),
-		brandProfileId: Yup.number().required(),
-		twitterProfileUrl: Yup.string().required(),
-		websiteUrl: Yup.string().required()
-	})
-)
-
 export const brandScenarioObjValidation = Yup.array().of(
 	Yup.object().shape({
 		archived: Yup.bool().required(),
@@ -141,6 +131,15 @@ export const brandOpinionObjValidation = Yup.array().of(
 		question: Yup.string().required(),
 		opinionType: Yup.string().required(),
 		opinionResponseId: Yup.string()
+	})
+)
+
+export const adminPermissionsObjValidation = Yup.array().of(
+	Yup.object().shape({
+		default: Yup.bool().required(),
+		roleId: Yup.number().required(),
+		roleName: Yup.string().required(),
+		userType: Yup.string().required()
 	})
 )
 

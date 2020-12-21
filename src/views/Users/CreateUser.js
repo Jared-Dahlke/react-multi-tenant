@@ -10,7 +10,9 @@ import { connect } from 'react-redux'
 import {
 	createUser,
 	setUserAdded,
-	setUserAddError
+	setUserAddError,
+	usersIsLoading,
+	usersFetchData
 } from '../../redux/actions/users'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
@@ -55,9 +57,8 @@ const schemaValidation = Yup.object().shape({
 
 const mapStateToProps = (state) => {
 	return {
-		roles: state.roles.data,
-		hasErrored: state.rolesHasErrored,
-		isLoading: state.rolesIsLoading,
+		roles: state.rolesPermissions.data,
+		isLoading: state.rolesPermissionsIsLoading,
 		accounts: state.accounts,
 		currentAccountId: state.currentAccountId,
 		userAdded: state.userAdded,
@@ -71,7 +72,10 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		addNewUser: (user) => dispatch(createUser(user)),
 		setUserAdded: (bool) => dispatch(setUserAdded(bool)),
-		setUserAddError: (bool) => dispatch(setUserAddError(bool))
+		setUserAddError: (value) => dispatch(setUserAddError(value)),
+		usersIsLoading: (bool) => dispatch(usersIsLoading(bool)),
+		fetchUsersData: (currentAccountId) =>
+			dispatch(usersFetchData(currentAccountId))
 	}
 }
 
@@ -116,6 +120,7 @@ function CreateUser(props) {
 			roleId: values.roleId,
 			accounts: accountsToLink
 		}
+		props.usersIsLoading(true)
 		props.addNewUser(newUser)
 	}
 
@@ -282,16 +287,14 @@ function CreateUser(props) {
 						<Snackbar
 							autoHideDuration={2000}
 							place='bc'
-							open={props.userAddError}
-							onClose={() => props.setUserAddError(false)}
+							open={props.userAddError > 0}
+							onClose={() => props.setUserAddError(0)}
 						>
-							<Alert
-								onClose={() => props.setUserAddError(false)}
-								severity='error'
-							>
+							<Alert onClose={() => props.setUserAddError(0)} severity='error'>
 								Error inviting user.
+								{props.userAddError === 403 && ' This user already exists.'}
+								{props.userAddError === 1 && '. An unhandled error ocurred.'}
 							</Alert>
-							{/**TODO: this message can be more descriptive once api returns a better error response: https://sightly.atlassian.net/browse/EN-4452 */}
 						</Snackbar>
 					</div>
 				)}
