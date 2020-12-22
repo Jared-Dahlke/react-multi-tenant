@@ -266,12 +266,8 @@ function ListBuilder(props) {
 				</Button>
 			</Grid>
 
-			<Grid item xs={12} md={3}>
-				<Panel
-					bordered
-					header='Filters'
-					style={{ backgroundColor: neutralLightColor }}
-				>
+			<Grid item xs={12}>
+				<Panel style={{ backgroundColor: neutralLightColor }}>
 					<Grid container spacing={3}>
 						{isChannels && (
 							<Grid item xs={12}>
@@ -330,7 +326,7 @@ function ListBuilder(props) {
 				</Panel>
 			</Grid>
 
-			<Grid item xs={9}>
+			<Grid item xs={12}>
 				<ResultTable
 					hasNextPage={props.hasNextPage}
 					isNextPageLoading={isNextPageLoading}
