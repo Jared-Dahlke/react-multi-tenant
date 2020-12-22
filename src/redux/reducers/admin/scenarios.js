@@ -8,7 +8,15 @@ import {
 	SCENARIO_SAVING,
 	SCENARIO_CREATED,
 	SCENARIO_ARCHIVING,
-	SCENARIO_ARCHIVED
+	SCENARIO_ARCHIVED,
+	SET_ADMIN_LABELS,
+	LABELS_IS_LOADING,
+	LABEL_DELETING,
+	LABEL_DELETED,
+	LABEL_TO_DELETE,
+	ADD_LABEL,
+	LABEL_SAVING,
+	LABEL_CREATED
 } from '../../action-types/admin/scenarios'
 
 export function scenarios(state = [], action) {
@@ -95,6 +103,75 @@ export function scenarioArchived(state = false, action) {
 	switch (action.type) {
 		case SCENARIO_ARCHIVED:
 			return action.scenarioArchived
+		default:
+			return state
+	}
+}
+
+export function labels(state = [], action) {
+	switch (action.type) {
+		case SET_ADMIN_LABELS:
+			return action.labels
+		case LABEL_TO_DELETE:
+			let newState = [
+				...state.filter(
+					({ labelId }) => labelId !== action.labelId
+				)
+			]
+			return newState
+		case ADD_LABEL:
+			let stateData = []
+			if (state && state.length > 0) {
+				stateData = JSON.parse(JSON.stringify(state))
+			}
+			stateData.push(action.label)
+
+			return stateData
+		default:
+			return state
+	}
+}
+
+export function labelDeleting(state = '', action) {
+	switch (action.type) {
+		case LABEL_DELETING:
+			return action.labelDeleting
+		default:
+			return state
+	}
+}
+
+export function labelDeleted(state = false, action) {
+	switch (action.type) {
+		case LABEL_DELETED:
+			return action.labelDeleted
+		default:
+			return state
+	}
+}
+
+export function labelsIsLoading(state = false, action) {
+	switch (action.type) {
+		case LABELS_IS_LOADING:
+			return action.labelsIsLoading
+		default:
+			return state
+	}
+}
+
+export function labelSaving(state = false, action) {
+	switch (action.type) {
+		case LABEL_SAVING:
+			return action.labelSaving
+		default:
+			return state
+	}
+}
+
+export function labelCreated(state = false, action) {
+	switch (action.type) {
+		case LABEL_CREATED:
+			return action.labelCreated
 		default:
 			return state
 	}

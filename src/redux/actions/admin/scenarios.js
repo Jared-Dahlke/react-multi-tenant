@@ -8,7 +8,15 @@ import {
 	SCENARIO_TO_ARCHIVE,
 	SCENARIO_CREATED,
 	SCENARIO_SAVING,
-	ADD_SCENARIO
+	ADD_SCENARIO,
+	SET_ADMIN_LABELS,
+	LABELS_IS_LOADING,
+	LABEL_DELETING,
+	LABEL_DELETED,
+	LABEL_TO_DELETE,
+	LABEL_CREATED,
+	LABEL_SAVING,
+	ADD_LABEL,
 } from '../../action-types/admin/scenarios'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
@@ -159,5 +167,119 @@ export function fetchAdminBrandScenarioLabels(text) {
 		} catch (error) {
 			alert(error)
 		}
+	}
+}
+
+export function setAdminLabels(labels) {
+	return {
+		type: SET_ADMIN_LABELS,
+		labels
+	}
+}
+
+export function setLabelDeleting(labelId) {
+	return {
+		type: LABEL_DELETING,
+		labelDeleting: labelId
+	}
+}
+
+export function setLabelDeleted(bool) {
+	return {
+		type: LABEL_DELETED,
+		labelDeleted: bool
+	}
+}
+
+export function setLabelToDeleted(labelId) {
+	return {
+		type: LABEL_TO_DELETE,
+		labelId
+	}
+}
+
+export function setLabelCreated(bool) {
+	return {
+		type: LABEL_CREATED,
+		labelCreated: bool
+	}
+}
+
+export function setLabelSaving(bool) {
+	return {
+		type: LABEL_SAVING,
+		labelSaving: bool
+	}
+}
+
+export function addLabel(label) {
+	return {
+		type: ADD_LABEL,
+		label
+	}
+}
+
+export function setLabelsIsLoading(bool) {
+	return {
+		type: LABELS_IS_LOADING,
+		labelsIsLoading: bool
+	}
+}
+
+export function setLabels(labels) {
+	return {
+		type: SET_ADMIN_LABELS,
+		labels
+	}
+}
+
+export function fetchAdminLabels() {
+	let url = apiBase + `/scenarios/labels`
+	return async (dispatch) => {
+		dispatch(setLabelsIsLoading(true))
+		try {
+			const result = await axios.get(url)
+			if (result.status === 200) {
+				let labels = result.data
+				dispatch(setLabels(labels))
+				dispatch(setLabelsIsLoading(false))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export const createLabel = (label) => {
+	let url = apiBase + `/scenarios/labels`
+	return (dispatch, getState) => {
+		dispatch(setLabelSaving(true))
+		axios
+			.post(url, label)
+			.then((response) => {
+				dispatch(addLabel(response.data[0]))
+				dispatch(setLabelSaving(false))
+				dispatch(setLabelCreated(true))
+			})
+			.catch((error) => {
+				//error
+			})
+	}
+}
+
+export const deleteLabel = (labelId) => {
+	let url = apiBase + `/scenarios/labels/${labelId}`
+	return (dispatch) => {
+		dispatch(setLabelDeleting(labelId))
+		axios
+			.delete(url)
+			.then((response) => {
+				dispatch(setLabelToDeleted(labelId))
+				dispatch(setLabelDeleting(''))
+				dispatch(setLabelDeleted(true))
+			})
+			.catch((error) => {
+				console.error(error)
+			})
 	}
 }

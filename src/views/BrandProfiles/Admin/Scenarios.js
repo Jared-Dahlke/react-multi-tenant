@@ -2,6 +2,7 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
 import Button from 'rsuite/lib/Button'
+import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
@@ -72,6 +73,11 @@ function Scenarios(props) {
 		history.push(url)
 	}
 
+	const handleConfigureLabelsClick = () => {
+		let url = routes.admin.scenarios.labels.path
+		history.push(url)
+	}
+
 	return (
 		<Grid container justify='center'>
 			<Snackbar
@@ -92,9 +98,14 @@ function Scenarios(props) {
 			<GridItem xs={12} sm={12} md={10}>
 				{adminScenarios && adminScenarios.length > 0 ? (
 					<div>
-						<Button appearance='primary' onClick={handleCreateScenarioClick}>
-							Create Scenario
+						<ButtonToolbar>
+							<Button appearance='primary' onClick={handleCreateScenarioClick}>
+								Create Scenario
 						</Button>
+							<Button appearance='primary' onClick={handleConfigureLabelsClick}>
+								Configure Labels
+						</Button>
+						</ButtonToolbar>
 
 						<Table className={classes.table}>
 							<TableHead className={tableClasses['primaryTableHeader']}>
@@ -153,21 +164,21 @@ function Scenarios(props) {
 				) : props.scenariosIsLoading ? (
 					<FormLoader />
 				) : (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
 
-							height: 'calc(100vh - 200px)',
-							color: 'white'
-						}}
-					>
-						<Button appearance='primary' onClick={handleCreateScenarioClick}>
-							Create Scenario
+									height: 'calc(100vh - 200px)',
+									color: 'white'
+								}}
+							>
+								<Button appearance='primary' onClick={handleCreateScenarioClick}>
+									Create Scenario
 						</Button>
-					</div>
-				)}
+							</div>
+						)}
 			</GridItem>
 		</Grid>
 	)

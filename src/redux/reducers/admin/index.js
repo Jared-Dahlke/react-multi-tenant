@@ -8,6 +8,12 @@ import {
 	scenarioCreated,
 	scenarioArchiving,
 	scenarioArchived,
+	labels,
+	labelDeleting,
+	labelDeleted,
+	labelsIsLoading,
+	labelSaving,
+	labelCreated
 } from './scenarios'
 
 import {
@@ -41,6 +47,12 @@ export default combineReducers({
 	scenarioCreated,
 	scenarioArchiving,
 	scenarioArchived,
+	labels,
+	labelDeleting,
+	labelDeleted,
+	labelsIsLoading,
+	labelSaving,
+	labelCreated,
 	opinions,
 	opinionsIsLoading,
 	opinionSaving,
