@@ -210,7 +210,7 @@ function Header(props) {
 							>
 								<NavLink
 									href={routes.app.engage.lists.lists.path}
-									label='Smart Lists'
+									label='SmartLists'
 								/>
 							</Dropdown>
 

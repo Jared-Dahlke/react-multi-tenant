@@ -48,7 +48,7 @@ export const routes = {
 				lists: {
 					path: '/app/engage/lists',
 					component: Lists,
-					name: 'Lists'
+					name: 'SmartLists'
 				},
 				uploadList: {
 					path: '/app/engage/lists/uploadList',
@@ -179,7 +179,7 @@ export const modifiedRoutes = {
 			engage: {
 				path: '/app/engage/lists',
 				component: Lists,
-				name: 'Lists',
+				name: 'SmartLists',
 				userCan: userCan(perms.ENGAGE_READ),
 				subRoutes: [
 					{
