@@ -81,14 +81,15 @@ const Video = ({
 				<Grid container spacing={2} justify='center'>
 					<Grid item xs={6}>
 						<div style={{ position: 'relative' }}>
-							<img
-								src={
-									'https://yt3.ggpht.com/ppck-AwbY6EkWjzOKkLBaWrsahJrfAMxhqeNJXAyKMW6E9IXv4qPM9q61qIcauOBWYNuaTF4HQ=s800-c-k-c0x00ffffff-no-rj'
-								}
-								width={'25%'}
-								style={{ borderRadius: 10 }}
+							<iframe
+								src={`https://www.youtube.com/embed/${item.id}`}
+								frameBorder='0'
+								allow='autoplay; encrypted-media'
+								allowFullScreen
+								play
+								title='video'
 							/>
-							<div style={{ position: 'absolute', left: 102, bottom: 5 }}>
+							<div style={{ position: 'absolute', left: 10, bottom: 5 }}>
 								<Duration seconds={item.duration} />
 							</div>
 						</div>

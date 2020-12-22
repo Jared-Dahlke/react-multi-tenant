@@ -46,9 +46,7 @@ const Channel = ({
 				<Grid container spacing={2} justify='center'>
 					<Grid item xs={6}>
 						<img
-							src={
-								'https://yt3.ggpht.com/ppck-AwbY6EkWjzOKkLBaWrsahJrfAMxhqeNJXAyKMW6E9IXv4qPM9q61qIcauOBWYNuaTF4HQ=s800-c-k-c0x00ffffff-no-rj'
-							}
+							src={item.thumbnail}
 							width={'25%'}
 							style={{ borderRadius: 180 }}
 						/>
