@@ -18,14 +18,14 @@ import {
   createScenario,
   setScenarioCreated,
   fetchAdminBrandScenarioLabels
-} from '../../../redux/actions/brandProfilesAdmin/scenarios'
+} from '../../../redux/actions/admin/scenarios'
 
 const mapStateToProps = (state) => {
   return {
-    scenarioCreated: state.brandProfilesAdmin.scenarioCreated,
-    scenarioSaving: state.brandProfilesAdmin.scenarioSaving,
-    scenarioLabels: state.brandProfilesAdmin.scenarioLabels,
-    scenariosLabelsIsLoading: state.brandProfilesAdmin.scenariosLabelsIsLoading
+    scenarioCreated: state.admin.scenarioCreated,
+    scenarioSaving: state.admin.scenarioSaving,
+    scenarioLabels: state.admin.scenarioLabels,
+    scenariosLabelsIsLoading: state.admin.scenariosLabelsIsLoading
   }
 }
 
@@ -41,21 +41,15 @@ const schemaValidation = Yup.object().shape({
   scenarioName: Yup.string()
     .required('Required')
     .min(2, 'Must be greater than 1 character')
-    .max(50, 'Must be less than 50 characters'),
+    .max(120, 'Must be less than 120 characters')
 })
 
 function Scenario(props) {
-
-  const {
-    values,
-    isValid,
-    dirty
-  } = props
+  const { values, isValid, dirty } = props
 
   const { fetchAdminBrandScenarioLabels, scenarioLabels } = props
-
   const handleKeyPress = debounce((text) => {
-    if (text != "") {
+    if (text !== "") {
       fetchAdminBrandScenarioLabels(text);
     }
   }, 700)
@@ -74,20 +68,24 @@ function Scenario(props) {
                     labelText='Scenario Name'
                     id='scenarioName'
                   />
-                  <div style={{
-                    height: '20px',
-                    width: '100%',
-                    float: 'right',
-                    color: 'white'
-                  }}>
-                    <Loader size='sm'
+                  <div
+                    style={{
+                      height: '20px',
+                      width: '100%',
+                      float: 'right',
+                      color: 'white'
+                    }}>
+                    <Loader
+                      size='sm'
                       style={{
                         float: 'right',
                         display: props.scenariosLabelsIsLoading ? 'block' : 'none'
                       }}
                     />
                   </div>
-                  <TagPicker id={'scenario category'}
+
+                  <TagPicker
+                    id={'scenario category'}
                     creatable
                     block
                     cleanable={false}
@@ -111,7 +109,7 @@ function Scenario(props) {
                 type='submit'
               >
                 Save
-              </Button>
+							</Button>
               <Snackbar
                 autoHideDuration={2000}
                 place='bc'
@@ -123,7 +121,7 @@ function Scenario(props) {
                   severity='success'
                 >
                   Scenario created
-                </Alert>
+								</Alert>
               </Snackbar>
             </CardFooter>
           </Form>

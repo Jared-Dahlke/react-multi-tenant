@@ -18,8 +18,14 @@ import { FormLoader } from '../../components/SkeletonLoader'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
+import Icon from 'rsuite/lib/Icon'
+import IconButton from 'rsuite/lib/IconButton'
 import * as Yup from 'yup'
 import { getCurrentAccount } from '../../utils'
+import Modal from 'rsuite/lib/Modal'
+import InputPicker from 'rsuite/lib/InputPicker'
+import { useHistory } from 'react-router-dom'
+import config from '../../config'
 import {
 	updateAccount,
 	deleteAccount,
@@ -27,7 +33,19 @@ import {
 	accountCreated,
 	setAccountSaved
 } from '../../redux/actions/accounts'
+
+import { setFromGoogleAuthCallback } from '../../redux/actions/ThirdParty/Google/google'
+
+import queryString from 'query-string'
+
+import {
+	handleGoogleAdsApiConsent,
+	setAccountHasValidGoogleRefreshToken
+} from '../../redux/actions/ThirdParty/Google/google'
 import { UserCan, perms, userCan } from '../../Can'
+import { neutralExtraLightColor } from '../../assets/jss/colorContants.js'
+
+const googleAuth = config.googleAuth
 
 const mapStateToProps = (state) => {
 	return {
@@ -38,8 +56,13 @@ const mapStateToProps = (state) => {
 		accountCreated: state.accountCreated,
 		accountSaved: state.accountSaved,
 		accountSaving: state.accountSaving,
-		rolesIsLoading: state.rolesIsLoading,
-		user: state.user
+		rolesPermissionsIsLoading: state.rolesPermissionsIsLoading,
+		user: state.user,
+		googleLoginUrl: state.thirdParty.googleLoginUrl,
+		accountHasValidGoogleRefreshToken:
+			state.thirdParty.accountHasValidGoogleRefreshToken,
+		googleAccountCampaigns: state.thirdParty.googleAccountCampaigns,
+		googleAccounts: state.thirdParty.googleAccounts
 	}
 }
 
@@ -51,7 +74,13 @@ const mapDispatchToProps = (dispatch) => {
 		deleteAccount: (accountId) => dispatch(deleteAccount(accountId)),
 		createAccount: (account) => dispatch(createAccount(account)),
 		setAccountCreated: (val) => dispatch(accountCreated(val)),
-		setAccountSaved: (bool) => dispatch(setAccountSaved(bool))
+		setAccountSaved: (bool) => dispatch(setAccountSaved(bool)),
+		handleGoogleAdsApiConsent: (params) =>
+			dispatch(handleGoogleAdsApiConsent(params)),
+		setAccountHasValidGoogleRefreshToken: (bool) =>
+			dispatch(setAccountHasValidGoogleRefreshToken(bool)),
+		setFromGoogleAuthCallback: (bool) =>
+			dispatch(setFromGoogleAuthCallback(bool))
 	}
 }
 
@@ -101,6 +130,29 @@ const getAccountTypeNameById = (accountTypeId, accountTypes) => {
 }
 
 function Account(props) {
+	let history = useHistory()
+
+	React.useEffect(() => {
+		if (props.currentAccountId && props.currentAccountId.length > 0) {
+			let params = queryString.parse(location.search)
+			if (params && params.code) {
+				let args = {
+					code: params.code,
+					accountId: props.currentAccountId
+				}
+				props.setFromGoogleAuthCallback(true)
+				props.setAccountHasValidGoogleRefreshToken(true)
+				history.push('/app/settings/account')
+				props.handleGoogleAdsApiConsent(args)
+			}
+		}
+	}, [props.currentAccountId])
+
+	const handleGoogleLogin = () => {
+		let url = props.googleLoginUrl
+		window.open(url)
+	}
+
 	const handleCreateChild = (current) => {
 		let levelId = current.accountLevelId + 1
 		if (levelId > 3) {
@@ -150,7 +202,7 @@ function Account(props) {
 	} = props
 
 	if (
-		props.rolesIsLoading ||
+		props.rolesPermissionsIsLoading ||
 		props.isSwitchingAccounts ||
 		values.accountTypeName.length < 1
 	) {
@@ -166,20 +218,64 @@ function Account(props) {
 			<GridContainer>
 				<GridItem xs={12} sm={12} md={6}>
 					<AccountDropdown />
-					<Panel>
+
+					{!props.accountHasValidGoogleRefreshToken && googleAuth && (
+						<IconButton
+							style={{
+								backgroundColor: neutralExtraLightColor,
+								marginBottom: 15
+							}}
+							onClick={handleGoogleLogin}
+							block
+							icon={
+								<Icon
+									style={{ backgroundColor: neutralExtraLightColor }}
+									icon='google'
+								/>
+							}
+						>
+							Connect this account to Google Ads
+						</IconButton>
+					)}
+
+					{props.accountHasValidGoogleRefreshToken &&
+						props.googleAccounts &&
+						googleAuth && (
+							<>
+								<p>
+									Your linked Google Ads Account (this comes from Google Ads API
+									based off the user you authenticated with)
+								</p>
+								<InputPicker
+									block
+									style={{
+										backgroundColor: neutralExtraLightColor,
+										marginBottom: 15
+									}}
+									id='googleAccountId'
+									label='Google Ads Accounts'
+									placeholder='Select a Google Account to Link'
+									labelKey='accountId'
+									valueKey='accountId'
+									data={props.googleAccounts}
+								/>
+							</>
+						)}
+
+					<Panel
+						header={
+							<Grid container justify='flex-end'>
+								<UserCan do={perms.ACCOUNT_CREATE}>
+									<Button onClick={() => handleCreateChild(current)}>
+										Create Child Account
+									</Button>
+								</UserCan>
+							</Grid>
+						}
+					>
 						<Form>
 							<CardBody>
 								<GridContainer>
-									<Grid container justify='flex-end'>
-										<GridItem>
-											<UserCan do={perms.ACCOUNT_CREATE}>
-												<Button onClick={() => handleCreateChild(current)}>
-													Create Child Account
-												</Button>
-											</UserCan>
-										</GridItem>
-									</Grid>
-
 									<GridItem xs={12} sm={12} md={12}>
 										<FormikInput
 											name='accountName'

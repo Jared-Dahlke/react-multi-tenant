@@ -51,8 +51,11 @@ switch (process.env.REACT_APP_STAGE) {
 		config = production
 }
 
+const googleAuth = false
+
 export default {
 	// Add common config values here
 	// MAX_ATTACHMENT_SIZE: 5000000,
+	googleAuth,
 	...config
 }

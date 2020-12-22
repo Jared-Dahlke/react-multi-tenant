@@ -9,7 +9,7 @@ import {
 	SCENARIO_CREATED,
 	SCENARIO_SAVING,
 	ADD_SCENARIO
-} from '../../action-types/brandProfilesAdmin/scenarios'
+} from '../../action-types/admin/scenarios'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import { brandScenarioObjValidation } from '../../../schemas/schemas'
@@ -87,7 +87,7 @@ export function addScenario(scenario) {
 }
 
 export const archiveScenario = (scenarioId) => {
-	let url = apiBase + `/brand-profile/scenario/${scenarioId}`
+	let url = apiBase + `/brand-profile/scenarios/${scenarioId}`
 	return (dispatch) => {
 		dispatch(setScenarioArchiving(scenarioId))
 		axios
