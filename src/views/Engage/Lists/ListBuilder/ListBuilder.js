@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
-import ResultTable from './ResultTable'
+import ResultTable from './components/ResultTable'
 import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import WarningModal from './WarningModal'
 import TagPicker from 'rsuite/lib/TagPicker'
-import Panel from '../../../../components/CustomPanel'
+import Panel from 'rsuite/lib/Panel'
 import Button from 'rsuite/lib/Button'
 import {
 	fetchVideos,
@@ -33,7 +33,8 @@ import {
 } from '../../../../redux/actions/engage/lists'
 import {
 	neutralLightColor,
-	neutralExtraLightColor
+	neutralExtraLightColor,
+	neutralColor
 } from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
@@ -237,10 +238,7 @@ function ListBuilder(props) {
 
 	return (
 		<Grid container spacing={3}>
-			<Grid item xs={12} align='left'>
-				<h5>{createdListVersion.smartListName}</h5>
-			</Grid>
-			<Grid item xs={12} align='left'>
+			<Grid item xs={4} align='left'>
 				<Toggle
 					size='lg'
 					checkedChildren='Videos'
@@ -248,7 +246,12 @@ function ListBuilder(props) {
 					onChange={() => setShowWarning(true)}
 					checked={!isChannels}
 				/>
+			</Grid>
 
+			<Grid item xs={4} align='center'>
+				<h5>{createdListVersion.smartListName}</h5>
+			</Grid>
+			<Grid item xs={4} align='right'>
 				<Button
 					style={{ marginLeft: 20 }}
 					loading={
@@ -267,7 +270,7 @@ function ListBuilder(props) {
 			</Grid>
 
 			<Grid item xs={12}>
-				<Panel style={{ backgroundColor: neutralLightColor }}>
+				<Panel style={{ backgroundColor: neutralColor }}>
 					<Grid container spacing={3}>
 						{isChannels && (
 							<Grid item xs={12}>
