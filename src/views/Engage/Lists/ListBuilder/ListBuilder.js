@@ -15,7 +15,6 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setChannels,
 	setHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
 
@@ -31,11 +30,7 @@ import {
 	deleteVersionDataItem,
 	downloadExcelList
 } from '../../../../redux/actions/engage/lists'
-import {
-	neutralLightColor,
-	neutralExtraLightColor,
-	neutralColor
-} from '../../../../assets/jss/colorContants'
+import { neutralColor } from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
 	return {
@@ -249,7 +244,7 @@ function ListBuilder(props) {
 			</Grid>
 
 			<Grid item xs={4} align='center'>
-				<h5>{createdListVersion.smartListName}</h5>
+				<h4>{createdListVersion.smartListName}</h4>
 			</Grid>
 			<Grid item xs={4} align='right'>
 				<Button
