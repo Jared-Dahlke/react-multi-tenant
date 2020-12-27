@@ -86,7 +86,6 @@ const Video = ({
 								frameBorder='0'
 								allow='autoplay; encrypted-media'
 								allowFullScreen
-								play
 								title='video'
 							/>
 							<div style={{ position: 'absolute', left: 10, bottom: 5 }}>
