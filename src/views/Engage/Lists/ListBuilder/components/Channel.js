@@ -12,6 +12,7 @@ import Button from 'rsuite/lib/Button'
 import numeral from 'numeral'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
+import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
 
 const Channel = ({
 	item,
@@ -83,6 +84,7 @@ const Channel = ({
 										Country
 										<br />
 										{item.countryName}
+										{countryCodeToFlagEmoji(item.countryCode)}
 									</Grid>
 								</Grid>
 							</Grid>
