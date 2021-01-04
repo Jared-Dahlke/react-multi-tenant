@@ -16,7 +16,8 @@ import {
 	LABEL_TO_DELETE,
 	ADD_LABEL,
 	LABEL_SAVING,
-	LABEL_CREATED
+	LABEL_CREATED,
+	LABEL_TO_CREATE
 } from '../../action-types/admin/scenarios'
 
 export function scenarios(state = [], action) {
@@ -172,6 +173,15 @@ export function labelCreated(state = false, action) {
 	switch (action.type) {
 		case LABEL_CREATED:
 			return action.labelCreated
+		default:
+			return state
+	}
+}
+
+export function initLabelAdd(state = false, action) {
+	switch (action.type) {
+		case LABEL_TO_CREATE:
+			return action.initLabelAdd
 		default:
 			return state
 	}

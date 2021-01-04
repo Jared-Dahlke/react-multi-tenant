@@ -1,5 +1,5 @@
 /*eslint-disable no-restricted-globals*/
-import React from 'react'
+import React, { useState } from 'react'
 import GridItem from '../../../components/Grid/GridItem.js'
 import GridContainer from '../../../components/Grid/GridContainer.js'
 import { TagPicker, Button, Loader } from 'rsuite';
@@ -54,6 +54,13 @@ function Scenario(props) {
     }
   }, 700)
 
+  const [cachedData, setCacheData] = useState([]);
+  const handleSelect = (value, item) => {
+    var cdata = [...cachedData]
+    cdata.push(item)
+    setCacheData(cdata)
+  }
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={6}>
@@ -86,13 +93,14 @@ function Scenario(props) {
 
                   <TagPicker
                     id={'scenario category'}
-                    creatable
                     block
                     cleanable={false}
                     data={scenarioLabels}
-                    labelKey="labelName" valueKey="labelName"
-                    placeholder='Scenario Category'
+                    cacheData={cachedData}
+                    labelKey="labelName" valueKey="labelId"
+                    placeholder='Scenario label'
                     onChange={(v) => values.scenarioLabelsSelected = v}
+                    onSelect={(v, i) => handleSelect(v, i)}
                     onSearch={(text) => handleKeyPress(text)}
                     style={{
                       marginTop: 25

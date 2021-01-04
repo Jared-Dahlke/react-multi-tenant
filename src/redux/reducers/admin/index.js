@@ -13,7 +13,8 @@ import {
 	labelDeleted,
 	labelsIsLoading,
 	labelSaving,
-	labelCreated
+	labelCreated,
+	initLabelAdd
 } from './scenarios'
 
 import {
@@ -53,6 +54,7 @@ export default combineReducers({
 	labelsIsLoading,
 	labelSaving,
 	labelCreated,
+	initLabelAdd,
 	opinions,
 	opinionsIsLoading,
 	opinionSaving,

@@ -17,6 +17,7 @@ import {
 	LABEL_CREATED,
 	LABEL_SAVING,
 	ADD_LABEL,
+	LABEL_TO_CREATE
 } from '../../action-types/admin/scenarios'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
@@ -198,6 +199,13 @@ export function setLabelToDeleted(labelId) {
 	}
 }
 
+export function setInitLabelAdd(bool) {
+	return {
+		type: LABEL_TO_CREATE,
+		initLabelAdd: bool
+	}
+}
+
 export function setLabelCreated(bool) {
 	return {
 		type: LABEL_CREATED,
@@ -260,6 +268,7 @@ export const createLabel = (label) => {
 				dispatch(addLabel(response.data[0]))
 				dispatch(setLabelSaving(false))
 				dispatch(setLabelCreated(true))
+				dispatch(setInitLabelAdd(false))
 			})
 			.catch((error) => {
 				//error
