@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-// import PropTypes from "prop-types"
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -7,16 +6,13 @@ import CustomInput from '../components/CustomInput/CustomInput'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
-import { setAlert, changePassword } from '../redux/actions/auth'
-import Snackbar from '@material-ui/core/Snackbar'
-import AddAlert from '@material-ui/icons/AddAlert'
-import Alert from '@material-ui/lab/Alert'
+import { changePassword } from '../redux/actions/auth'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import Button from '../components/CustomButtons/Button'
 import logo from '../assets/img/sightly-logo.svg'
 import { logoStyle } from '../assets/jss/material-dashboard-react'
 import { routes } from '../routes'
-import { userCan, perms } from '../Can'
+import toast from 'react-hot-toast'
 
 // Validation
 import * as v from '../validations'
@@ -34,8 +30,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		changePassword: (password, userId, token) =>
-			dispatch(changePassword(password, userId, token)),
-		setAlert: (alert) => dispatch(setAlert(alert))
+			dispatch(changePassword(password, userId, token))
 	}
 }
 
@@ -73,14 +68,7 @@ function PasswordChange(props) {
 		if (password === password_confirmation) {
 			props.changePassword(password, userId, token)
 		} else {
-			props.setAlert({
-				show: true,
-				message: 'Passwords do not match.',
-				severity: 'error'
-			})
-			setTimeout(() => {
-				props.setAlert({ show: false })
-			}, 5000)
+			toast.error('Passwords do not match.')
 		}
 	}
 
@@ -163,18 +151,6 @@ function PasswordChange(props) {
 						>
 							{props.updatingPassword ? 'Updating...' : 'Change Password'}
 						</Button>
-
-						<Snackbar
-							autoHideDuration={5000}
-							place='bc'
-							icon={AddAlert}
-							open={props.alert.show}
-							onClose={() => props.setAlert({ show: false })}
-						>
-							<Alert severity={props.alert.severity}>
-								{props.alert.message}
-							</Alert>
-						</Snackbar>
 					</form>
 				</div>
 			</Container>
