@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
 import Button from 'rsuite/lib/Button'
+import { Modal } from 'rsuite'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
@@ -49,6 +50,7 @@ function Labels(props) {
 
   const classes = useStyles()
   const tableClasses = useTableStyles()
+  const [showAddLabelModal, setShowAddLabelModal] = useState(false);
 
   const { fetchAdminLabels, adminLabels } = props
   React.useEffect(() => {
@@ -91,9 +93,25 @@ function Labels(props) {
       <GridItem xs={12} sm={12} md={10}>
         {adminLabels && adminLabels.length > 0 ? (
           <div>
-            <Button appearance='primary' onClick={handleCreateLabelClick}>
+            <Button appearance='primary' onClick={() => setShowAddLabelModal(true)}>
               Create Label
 						</Button>
+
+            <Modal show={showAddLabelModal} onHide={() => setShowAddLabelModal(false)}>
+              <Modal.Header>
+                <Modal.Title>Add Label</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={() => setShowAddLabelModal(false)} appearance="primary">
+                  Ok
+                </Button>
+                <Button onClick={() => setShowAddLabelModal(false)} appearance="subtle">
+                  Cancel
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
             <Table className={classes.table}>
               <TableHead className={tableClasses['primaryTableHeader']}>
