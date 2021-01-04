@@ -223,9 +223,9 @@ function Lists(props) {
 			_channels = _channels + version.channelCount
 			_videos = _videos + version.videoCount
 		}
-		let subscribersFormatted = _subscribers // numeral(_subscribers).format('0.0a')
-		let channelsFormatted = numeral(_channels).format('0a')
-		let videosFormatted = numeral(_videos).format('0a')
+		let subscribersFormatted = _subscribers
+		let channelsFormatted = _channels
+		let videosFormatted = _videos
 
 		return {
 			subscribers: subscribersFormatted,
@@ -575,14 +575,18 @@ function Lists(props) {
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Channels'>
 						<animated.h2>
-							{channelsValue.number.interpolate((val) => Math.floor(val))}
+							{channelsValue.number.interpolate((val) =>
+								numeral(Math.floor(val)).format('0.0a')
+							)}
 						</animated.h2>
 					</CustomPanel>
 				</Grid>
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Videos'>
 						<animated.h2>
-							{videosValue.number.interpolate((val) => Math.floor(val))}
+							{videosValue.number.interpolate((val) =>
+								numeral(Math.floor(val)).format('0.0a')
+							)}
 						</animated.h2>
 					</CustomPanel>
 				</Grid>
