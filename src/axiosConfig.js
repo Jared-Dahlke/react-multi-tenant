@@ -1,6 +1,7 @@
 import axios from 'axios'
 import configureStore from './redux/store/index'
 import { setAuthToken } from './redux/actions/auth'
+import toast from 'react-hot-toast'
 
 axios.interceptors.request.use(
 	(config) => {
@@ -22,6 +23,8 @@ axios.interceptors.response.use(
 	(error) => {
 		if (axios.isCancel(error)) {
 			console.log('cancelled duplicate request, OK')
+		} else if (!error.response) {
+			toast.error('Unable to connect to our API. Please try again later.')
 		} else if (error.response.status === 401) {
 			const store = configureStore()
 			localStorage.removeItem('token')

@@ -3,18 +3,16 @@ import { connect } from 'react-redux'
 import Popover from 'rsuite/lib/Popover'
 import Avatar from 'rsuite/lib/Avatar'
 import Grid from '@material-ui/core/Grid'
-import {
-	accentColor,
-	neutralExtraExtraLightColor
-} from '../assets/jss/colorContants'
+import { neutralExtraExtraLightColor } from '../assets/jss/colorContants'
 import AccountDropdown from '../components/AccountDropdown'
 import Whisper from 'rsuite/lib/Whisper'
-import CustomPanel from './CustomPanel'
 import { routes } from '../routes'
 import Panel from 'rsuite/lib/Panel'
 import PanelGroup from 'rsuite/lib/PanelGroup'
 import Button from 'rsuite/lib/Button'
 import { useHistory } from 'react-router-dom'
+import { setAuthToken, setLoggedIn } from '../redux/actions/auth'
+import { clearSiteData } from '../redux/actions/accounts'
 
 const mapStateToProps = (state) => {
 	return { user: state.user }
@@ -23,7 +21,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchSiteData: (accountId) => dispatch(fetchSiteData(accountId)),
-		clearSiteData: () => dispatch(clearSiteData())
+		clearSiteData: () => dispatch(clearSiteData()),
+		setAuthToken: (val) => dispatch(setAuthToken(val)),
+		setLoggedIn: (val) => dispatch(setLoggedIn(val))
 	}
 }
 

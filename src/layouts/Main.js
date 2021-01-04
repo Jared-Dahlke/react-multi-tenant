@@ -10,6 +10,7 @@ import { routes } from '../routes'
 import { userCan, perms } from '../Can'
 import ProtectedRoute from './ProtectedRoute'
 import BrandProfilesLayout from './BrandProfilesLayout'
+import { Toaster } from 'react-hot-toast'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
 )

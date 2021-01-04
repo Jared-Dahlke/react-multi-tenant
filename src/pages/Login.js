@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-//import Button from '../components/CustomButtons/Button'
 import Button from 'rsuite/lib/Button'
 import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
-import { login, setAlert } from '../redux/actions/auth.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import AddAlert from '@material-ui/icons/AddAlert'
-import Alert from '@material-ui/lab/Alert'
+import { login } from '../redux/actions/auth.js'
 import adminStyle from '../assets/jss/material-dashboard-react/layouts/adminStyle'
 import { whiteColor } from '../assets/jss/material-dashboard-react.js'
 import CustomInput from '../components/CustomInput/CustomInput'
@@ -30,8 +26,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		login: (credentials) => dispatch(login(credentials)),
-		setAlert: (alert) => dispatch(setAlert(alert))
+		login: (credentials) => dispatch(login(credentials))
 	}
 }
 
@@ -154,18 +149,6 @@ function Login(props) {
 								</Link>
 							</Grid>
 						</Grid>
-
-						<Snackbar
-							autoHideDuration={5000}
-							place='bc'
-							icon={AddAlert}
-							open={props.alert.show}
-							onClose={() => props.setAlert({ show: false })}
-						>
-							<Alert severity={props.alert.severity}>
-								{props.alert.message}
-							</Alert>
-						</Snackbar>
 					</form>
 				</div>
 			</Container>

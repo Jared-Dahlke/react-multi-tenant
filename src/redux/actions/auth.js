@@ -3,7 +3,6 @@ import {
 	SET_LOGGED_IN,
 	SET_USER,
 	SET_USER_ID,
-	SET_ALERT,
 	USER_PROFILE_IS_LOADING,
 	SET_LOGGING_IN,
 	SET_UPDATING_PASSWORD,
@@ -13,6 +12,7 @@ import {
 import axios from '../../axiosConfig'
 import config from '../../config'
 import { userObjValidation } from '../../schemas/schemas'
+import toast from 'react-hot-toast'
 var encryptor = require('simple-encryptor')(
 	process.env.REACT_APP_LOCAL_STORAGE_KEY
 )
@@ -20,10 +20,6 @@ const apiBase = config.api.userAccountUrl
 
 export function setAuthToken(payload) {
 	return { type: SET_AUTH_TOKEN, payload }
-}
-
-export function setAlert(payload) {
-	return { type: SET_ALERT, payload }
 }
 
 export function userProfileIsLoading(bool) {
@@ -58,29 +54,22 @@ export function setLoggedInUserPermissions(loggedInUserPermissions) {
 		loggedInUserPermissions
 	}
 }
-
 export function login(credentials) {
 	let url = apiBase + '/authenticate'
 	return async (dispatch) => {
 		dispatch(setLoggingIn(true))
-		try {
-			const result = await axios.post(url, {
-				username: credentials.username,
-				password: credentials.password
-			})
 
+		const result = await axios.post(url, {
+			username: credentials.username,
+			password: credentials.password
+		})
+		if (!result.status) {
+			return
+		}
+		try {
 			if (!result.data.jwt) {
 				dispatch(setLoggingIn(false))
-				dispatch(
-					setAlert({
-						show: true,
-						message: result.data.message,
-						severity: 'error'
-					})
-				)
-				setTimeout(() => {
-					dispatch(setAlert({ show: false }))
-				}, 5000)
+				toast.error(result.data.message)
 				return
 			}
 
@@ -112,7 +101,7 @@ export function login(credentials) {
 			}
 		} catch (error) {
 			dispatch(setLoggingIn(false))
-			alert(error)
+			alert('auth error: ' + error)
 		}
 	}
 }
@@ -171,31 +160,13 @@ export function resetPassword(email) {
 			dispatch(setResettingPassword(false))
 
 			if (result.status === 200) {
-				dispatch(
-					setAlert({
-						show: true,
-						message: 'Reset password email sent. Check Your email.',
-						severity: 'success'
-					})
-				)
+				toast.success('Reset password email sent. Check Your email.')
 			} else {
-				dispatch(
-					setAlert({
-						show: true,
-						message: result.response.data.Error,
-						severity: 'error'
-					})
-				)
+				toast.error(result.response.data.Error)
 			}
 		} catch (error) {
 			dispatch(setResettingPassword(false))
-			dispatch(
-				setAlert({
-					show: true,
-					message: error.response.data.message,
-					severity: 'error'
-				})
-			)
+			toast.error(error.response.data.message)
 		}
 	}
 }
@@ -224,36 +195,18 @@ export function changePassword(password, userId, token) {
 			})
 			dispatch(setUpdatingPassword(false))
 			if (result.status === 200) {
-				dispatch(
-					setAlert({
-						show: true,
-						message:
-							'Password has been reset. Please proceed to login with your new password.',
-						severity: 'success'
-					})
-				)
+				toast.success('Password reset. Redirecting you to login page now...')
 				setTimeout(() => {
-					dispatch(setAlert({ show: false }))
 					window.location.href = '/login'
 				}, 2000)
 			} else {
-				dispatch(
-					setAlert({
-						show: true,
-						message: result.response.data.Error,
-						severity: 'error'
-					})
-				)
+				toast.error(result.response.data.Error)
 			}
 		} catch (error) {
 			dispatch(setUpdatingPassword(false))
-			dispatch(
-				setAlert({
-					show: true,
-					message:
-						'An error ocurred while updating your password. Please try again later.',
-					severity: 'error'
-				})
+
+			toast.error(
+				'An error ocurred while updating your password. Please try again later.'
 			)
 		}
 	}
