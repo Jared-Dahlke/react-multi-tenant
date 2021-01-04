@@ -80,7 +80,7 @@ export default function ResultTable({
 			} else if (!item.description.replace(/\s/g, '').length) {
 				description = '[No description]'
 			} else {
-				description = item.description
+				description = item.description.substring(0, 500)
 			}
 
 			if (isChannels) {

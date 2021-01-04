@@ -2,8 +2,6 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Panel from 'rsuite/lib/Panel'
 import {
-	neutralLightColor,
-	neutralExtraExtraLightColor,
 	neutralColor,
 	accentColor
 } from '../../../../../assets/jss/colorContants'
@@ -56,9 +54,10 @@ const Channel = ({
 						<Grid container spacing={1}>
 							<Grid item xs={12}>
 								<Whisper
-									placement='bottomStart'
+									placement='topStart'
 									trigger='hover'
 									speaker={<Tooltip>{description}</Tooltip>}
+									preventOverflow={true}
 								>
 									<div>{abbreviatedDescription}</div>
 								</Whisper>
