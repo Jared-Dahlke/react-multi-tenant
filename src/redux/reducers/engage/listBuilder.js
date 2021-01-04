@@ -3,8 +3,7 @@ import {
 	SET_VIDEOS,
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
-	SET_HAS_NEXT_PAGE,
-	SET_IS_TAKING_ACTION
+	SET_HAS_NEXT_PAGE
 } from '../../action-types/engage/listBuilder'
 
 export function videos(state = [], action) {
