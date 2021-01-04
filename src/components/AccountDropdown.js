@@ -9,7 +9,6 @@ import ControlLabel from 'rsuite/lib/ControlLabel'
 import FormGroup from 'rsuite/lib/FormGroup'
 import Form from 'rsuite/lib/Form'
 import Icon from 'rsuite/lib/Icon'
-import IconButton from 'rsuite/lib/IconButton'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 
