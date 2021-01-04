@@ -69,16 +69,8 @@ function Scenarios(props) {
 		setScenarioAction(data, newScenarios)
 		handleSetBrandProfiles(newScenarios)
 
-		let scenToSave = JSON.parse(JSON.stringify(newScenarios))
-		for (const [index, scen] of scenToSave.entries()) {
-			delete scen.scenarioName
-			delete scen.archived
-			delete scen.brandProfileId
-			delete scen.scenarioResponseName
-		}
-
 		let params = {
-			scenarios: scenToSave.filter(checkResponse),
+			scenarios: [data],
 			brandProfileId: props.brandProfile.brandProfileId
 		}
 		props.patchBrandProfileScenarios(params)
