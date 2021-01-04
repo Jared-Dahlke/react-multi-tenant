@@ -4,7 +4,7 @@ import Popover from 'rsuite/lib/Popover'
 import Avatar from 'rsuite/lib/Avatar'
 import Grid from '@material-ui/core/Grid'
 import { neutralExtraExtraLightColor } from '../assets/jss/colorContants'
-import AccountDropdown from '../components/AccountDropdown'
+import { getCurrentAccount } from '../utils'
 import Whisper from 'rsuite/lib/Whisper'
 import { routes } from '../routes'
 import Panel from 'rsuite/lib/Panel'
@@ -15,7 +15,7 @@ import { setAuthToken, setLoggedIn } from '../redux/actions/auth'
 import { clearSiteData } from '../redux/actions/accounts'
 
 const mapStateToProps = (state) => {
-	return { user: state.user }
+	return { user: state.user, accounts: state.accounts }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -39,6 +39,18 @@ function ProfileDropdown(props) {
 
 	const handleProfileClick = () => {
 		history.push(routes.app.settings.profile.path)
+	}
+
+	let currentAccount = React.useMemo(() => {
+		let current = getCurrentAccount(props.accounts.data)
+		if (!current) {
+			return {}
+		}
+		return current
+	}, [props.accounts.data])
+
+	const handleAccountClick = () => {
+		history.push(routes.app.settings.account.path)
 	}
 
 	return (
@@ -89,7 +101,13 @@ function ProfileDropdown(props) {
 							</Grid>
 						</Panel>
 						<Panel>
-							<AccountDropdown searchable={false} />
+							<Button
+								appearance={'link'}
+								style={{ fontSize: '16px' }}
+								onClick={handleAccountClick}
+							>
+								{currentAccount.accountName}
+							</Button>
 						</Panel>
 
 						<Panel>
