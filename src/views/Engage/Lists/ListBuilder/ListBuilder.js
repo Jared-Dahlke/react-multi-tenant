@@ -31,6 +31,7 @@ import {
 	downloadExcelList
 } from '../../../../redux/actions/engage/lists'
 import { neutralColor } from '../../../../assets/jss/colorContants'
+import toast from 'react-hot-toast'
 
 const mapStateToProps = (state) => {
 	return {
@@ -144,7 +145,12 @@ function ListBuilder(props) {
 				versionId: versionId,
 				data: [{ actionId: actionId, id: item.id }]
 			}
-			props.patchVersionData(args)
+
+			toast.promise(props.patchVersionData(args), {
+				loading: 'Saving...',
+				success: <b>saved!</b>,
+				error: <b>Could not save.</b>
+			})
 		}
 	}
 

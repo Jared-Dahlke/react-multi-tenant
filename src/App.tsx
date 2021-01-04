@@ -16,7 +16,7 @@ const store = configureStore()
 function App() {
 	return (
 		<Provider store={store}>
-			<Toaster />
+			<Toaster position={'bottom-left'} />
 			<Router>
 				<div>
 					<Route exact path='/' component={routes.login.component} />
