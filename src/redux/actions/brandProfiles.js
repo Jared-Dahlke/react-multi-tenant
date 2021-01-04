@@ -348,12 +348,6 @@ export const patchBrandProfileTopics = (data) => {
 export const patchBrandProfileScenarios = (data) => {
 	let brandProfileId = data.brandProfileId
 	let scenarios = data.scenarios
-
-	let datas = {
-		scenarios: scenarios,
-		scenarioResponseId: Math.floor(Math.random() * 3) + 1
-	}
-
 	let url = apiBase + `/brand-profile/${brandProfileId}/scenarios`
 
 	return scenariosQueue.wrap(async (dispatch) => {
