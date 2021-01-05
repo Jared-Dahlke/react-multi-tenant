@@ -96,7 +96,7 @@ export function addScenario(scenario) {
 }
 
 export const archiveScenario = (scenarioId) => {
-	let url = apiBase + `/brand-profile/scenarios/${scenarioId}`
+	let url = apiBase + `/scenarios/${scenarioId}`
 	return (dispatch) => {
 		dispatch(setScenarioArchiving(scenarioId))
 		axios
@@ -113,7 +113,7 @@ export const archiveScenario = (scenarioId) => {
 }
 
 export const createScenario = (scenario) => {
-	let url = apiBase + `/brand-profile/scenarios`
+	let url = apiBase + `/scenarios`
 	return (dispatch, getState) => {
 		dispatch(setScenarioSaving(true))
 		axios
@@ -130,7 +130,7 @@ export const createScenario = (scenario) => {
 }
 
 export function fetchAdminBrandScenarios() {
-	let url = apiBase + `/brand-profile/scenarios`
+	let url = apiBase + `/scenarios`
 	return async (dispatch) => {
 		dispatch(setAdminScenariosIsLoading(true))
 		try {
@@ -155,7 +155,7 @@ export function fetchAdminBrandScenarios() {
 }
 
 export function fetchAdminBrandScenarioLabels(text) {
-	let url = apiBase + `/brand-profile/scenario-labels?name=${text}`
+	let url = apiBase + `/scenarios/labels?name=${text}`
 	return async (dispatch) => {
 		dispatch(setScenariosLabelsIsLoading(true))
 		try {
