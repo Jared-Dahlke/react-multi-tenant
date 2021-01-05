@@ -6,6 +6,7 @@ import Topics from './components/Topics'
 import Categories from './components/Categories/Categories'
 import Scenarios from './components/Scenarios/Scenarios'
 import Opinions from './components/Opinions/Opinions'
+import Questions from './components/Questions/Questions'
 import TopCompetitors from './components/Competitors'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
@@ -40,7 +41,8 @@ const brandProfileSteps = {
 	categories: 'categories',
 	topics: 'topics',
 	scenarios: 'scenarios',
-	opinions: 'opinions'
+	opinions: 'opinions',
+	questions: 'questions'
 }
 
 function BrandProfile(props) {
@@ -50,6 +52,7 @@ function BrandProfile(props) {
 	const topicsRef = React.useRef()
 	const scenariosRef = React.useRef()
 	const opinionsRef = React.useRef()
+	const questionsRef = React.useRef()
 	const competitorsRef = React.useRef()
 	const brandInformationVisible = useOnScreen(brandInformationRef)
 	const competitorsVisible = useOnScreen(competitorsRef)
@@ -57,6 +60,7 @@ function BrandProfile(props) {
 	const topicsVisible = useOnScreen(topicsRef)
 	const scenariosVisible = useOnScreen(scenariosRef)
 	const opinionsVisible = useOnScreen(opinionsRef)
+	const questionsVisible = useOnScreen(questionsRef)
 
 	React.useEffect(() => {
 		if (brandInformationVisible) {
@@ -75,6 +79,10 @@ function BrandProfile(props) {
 			setActiveStep(brandProfileSteps.topics)
 			return
 		}
+		if (questionsVisible) {
+			setActiveStep(brandProfileSteps.questions)
+			return
+		}
 		if (scenariosVisible) {
 			setActiveStep(brandProfileSteps.scenarios)
 			return
@@ -88,6 +96,7 @@ function BrandProfile(props) {
 		competitorsVisible,
 		categoriesVisible,
 		topicsVisible,
+		questionsVisible,
 		opinionsVisible,
 		scenariosVisible
 	])
@@ -104,6 +113,7 @@ function BrandProfile(props) {
 	const [topicsValid, setTopicsValid] = React.useState(false)
 	const [scenariosValid, setScenariosValid] = React.useState(false)
 	const [opinionsValid, setOpinionsValid] = React.useState(false)
+	const [questionsValid, setQuestionsValid] = React.useState(false)
 
 	const [activeStep, setActiveStep] = React.useState(
 		brandProfileSteps.brandInformation
@@ -135,6 +145,10 @@ function BrandProfile(props) {
 
 	const scenariosProps = useSpring({
 		opacity: props.brandProfile.scenarios ? 1 : 0
+	})
+
+	const questionsProps = useSpring({
+		opacity: props.brandProfile.questions ? 1 : 0
 	})
 
 	return (
@@ -194,6 +208,18 @@ function BrandProfile(props) {
 								style={{ cursor: 'pointer' }}
 								status={
 									activeStep === brandProfileSteps.topics ? 'process' : 'wait'
+								}
+							/>
+							<Steps.Item
+								title='Questions'
+								onClick={() =>
+									handleStepsClick(brandProfileSteps.questions, questionsRef)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.questions
+										? 'process'
+										: 'wait'
 								}
 							/>
 							<Steps.Item
@@ -276,6 +302,13 @@ function BrandProfile(props) {
 										/>
 									</animated.div>
 								</div>
+								<div ref={questionsRef} style={{ marginTop: 60 }}>
+									<animated.div style={questionsProps}>
+										<Questions
+											brandProfileId={props.match.params.brandProfileId}
+										/>
+									</animated.div>
+								</div>
 								<div ref={scenariosRef} style={{ marginTop: 60 }}>
 									<animated.div style={scenariosProps}>
 										<Scenarios
@@ -287,7 +320,6 @@ function BrandProfile(props) {
 								<div ref={opinionsRef} style={{ marginTop: 60 }}>
 									<animated.div style={opinionsProps}>
 										<Opinions
-											//setScenariosValid={setScenariosValid}
 											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
