@@ -194,7 +194,7 @@ export const questionsObjValidation = Yup.array()
 				'my test',
 				'api sent different data than expected for brand profile questions brandProfileId',
 				(text) => {
-					if (typeof text === 'integer' || text == null) {
+					if (typeof text === 'number' || text == null) {
 						return true
 					} else {
 						return false
