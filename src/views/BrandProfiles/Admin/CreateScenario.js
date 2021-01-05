@@ -154,7 +154,7 @@ const FormikForm = withFormik({
   handleSubmit: (values, { props }) => {
     let scenario = {
       scenarioName: values.scenarioName,
-      scenarioLabels: values.scenarioLabelsSelected
+      scenarioLabelIds: values.scenarioLabelsSelected
     }
     props.createScenario(scenario)
   }

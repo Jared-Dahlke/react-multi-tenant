@@ -113,7 +113,7 @@ export const archiveScenario = (scenarioId) => {
 }
 
 export const createScenario = (scenario) => {
-	let url = apiBase + `/brand-profile/scenarios`
+	let url = apiBase + `/scenarios`
 	return (dispatch, getState) => {
 		dispatch(setScenarioSaving(true))
 		axios
