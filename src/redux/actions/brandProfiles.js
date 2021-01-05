@@ -19,7 +19,8 @@ import {
 	SET_BRAND_PROFILE_TOPICS,
 	SET_BRAND_PROFILE_SCENARIOS,
 	SET_BRAND_PROFILE_OPINIONS,
-	SET_BRAND_PROFILE_BASIC_INFO
+	SET_BRAND_PROFILE_BASIC_INFO,
+	SET_BRAND_PROFILE_QUESTIONS
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
@@ -31,7 +32,8 @@ import {
 	categoriesObjValidation,
 	topicsObjValidation,
 	scenariosObjValidation,
-	opinionsObjValidation
+	opinionsObjValidation,
+	questionsObjValidation
 } from '../../schemas/brandProfiles'
 
 var cwait = require('cwait')
@@ -39,6 +41,7 @@ var categoriesQueue = new cwait.TaskQueue(Promise, 1)
 var topicsQueue = new cwait.TaskQueue(Promise, 1)
 var scenariosQueue = new cwait.TaskQueue(Promise, 1)
 var opinionsQueue = new cwait.TaskQueue(Promise, 1)
+var questionsQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.userAccountUrl
 
@@ -182,6 +185,27 @@ export function fetchBrandProfileOpinions(brandProfileId) {
 	}
 }
 
+export function fetchBrandProfileQuestions(brandProfileId) {
+	let url = apiBase + `/brand-profile/${brandProfileId}/questions`
+	return async (dispatch, getState) => {
+		try {
+			const result = await axios.get(url)
+
+			if (result.status === 200) {
+				questionsObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching brand profile questions, see console log for more details'
+					)
+				})
+				dispatch(setBrandProfileQuestions(result.data))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
 export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
@@ -262,6 +286,13 @@ export function setBrandProfileOpinions(opinions) {
 	return {
 		type: SET_BRAND_PROFILE_OPINIONS,
 		opinions
+	}
+}
+
+export function setBrandProfileQuestions(questions) {
+	return {
+		type: SET_BRAND_PROFILE_QUESTIONS,
+		questions
 	}
 }
 
@@ -369,6 +400,22 @@ export const patchBrandProfileOpinions = (data) => {
 	return opinionsQueue.wrap(async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
 		const result = await axios.patch(url, opinions)
+		if (result.status === 201 || result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
+		}
+	})
+}
+
+export const patchBrandProfileQuestions = (data) => {
+	let brandProfileId = data.brandProfileId
+	let questions = data.questions
+
+	let url = apiBase + `/brand-profile/${brandProfileId}/questions`
+
+	return questionsQueue.wrap(async (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
+		const result = await axios.patch(url, questions)
 		if (result.status === 201 || result.status === 200) {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))

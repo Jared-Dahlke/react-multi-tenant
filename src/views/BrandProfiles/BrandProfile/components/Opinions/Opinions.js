@@ -36,10 +36,6 @@ function setOpinionAction(data, opinions) {
 	}
 }
 
-function checkResponse(opinion) {
-	return opinion.opinionResponseId > 0
-}
-
 function Opinions(props) {
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
