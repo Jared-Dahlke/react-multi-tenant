@@ -140,7 +140,7 @@ export const channelsSchema = Yup.array().of(
 			.required(),
 		thumbnail: Yup.string()
 			.strict(true)
-			.required(),
+			.nullable(),
 		views: Yup.number()
 			.strict(true)
 			.required()

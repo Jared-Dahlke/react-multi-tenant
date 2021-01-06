@@ -13,6 +13,10 @@ import {
 	channelsSchema,
 	videosSchema
 } from '../../../schemas/Engage/Lists/schemas'
+import numeral from 'numeral'
+var dayjs = require('dayjs')
+var calendar = require('dayjs/plugin/calendar')
+dayjs.extend(calendar)
 
 const apiBase = config.api.listBuilderUrl
 
@@ -85,14 +89,7 @@ export function removeAllChannels() {
 	}
 }
 
-let fetchChannelsRequest = null
-
 export function fetchChannels(args) {
-	if (fetchChannelsRequest) {
-		fetchChannelsRequest.cancel()
-	}
-	fetchChannelsRequest = axios.CancelToken.source()
-
 	let url =
 		apiBase +
 		`/smart-list/channel?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
@@ -100,26 +97,59 @@ export function fetchChannels(args) {
 		const result = await axios({
 			method: 'POST',
 			url: url,
-			data: args.filters,
-			cancelToken: fetchChannelsRequest.token
+			data: args.filters
 		})
-		try {
-			if (result.status === 200) {
-				channelsSchema.validate(result.data).catch((err) => {
-					console.log(err.name, err.errors)
-					alert(
-						'we received different data from the api than expected from fetchChannels, see console log for more details'
-					)
-				})
-				if (result.data.length < 100) {
-					dispatch(setHasNextPage(false))
-				}
-				dispatch(setChannels(result.data))
+
+		if (result.status === 200) {
+			channelsSchema.validate(result.data).catch((err) => {
+				console.log(err.name, err.errors)
+				alert(
+					'we received different data from the api than expected from fetchChannels, see console log for more details'
+				)
+			})
+			if (result.data.length < 100) {
+				dispatch(setHasNextPage(false))
 			}
-		} catch (error) {
-			alert('error fetching channels', error)
+			let formattedChannels = formatChannels(result.data)
+			dispatch(setChannels(formattedChannels))
 		}
 	}
+}
+
+const formatChannels = (channels) => {
+	for (const item of channels) {
+		let abbreviatedDescription
+		if (!item.description) {
+			abbreviatedDescription = '[No description]'
+		} else if (item.description.length > 40) {
+			abbreviatedDescription = item.description.substring(0, 40) + '...'
+		} else if (!item.description.replace(/\s/g, '').length) {
+			abbreviatedDescription = '[No description]'
+		} else {
+			abbreviatedDescription = item.description
+		}
+		item.abbreviatedDescription = abbreviatedDescription
+
+		let createDate = item.created
+			? dayjs(item.created).calendar()
+			: dayjs(item.published).calendar()
+		item.createDate = createDate
+		let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
+		item.name = name
+		let description
+		if (!item.description) {
+			description = '[No description]'
+		} else if (!item.description.replace(/\s/g, '').length) {
+			description = '[No description]'
+		} else {
+			description = item.description.substring(0, 500)
+		}
+		item.description = description
+		item.subscribersCount = numeral(item.subscribers).format('0a')
+		item.videosCount = numeral(item.videos).format('0a')
+		item.viewsCount = numeral(item.views).format('0a')
+	}
+	return channels
 }
 
 export function setChannels(channels) {
