@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import TagPicker from 'rsuite/lib/TagPicker'
 import Panel from 'rsuite/lib/Panel'
 import Button from 'rsuite/lib/Button'
+import VideoModal from './components/VideoModal'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -97,7 +98,10 @@ function ListBuilder(props) {
 		let params = {
 			versionId: createdListVersion.versionId,
 			pageNumber: currentPage,
-			filters: filterState
+			filters: {
+				channelFilters: filterState,
+				videoFilters: {}
+			}
 		}
 		props.fetchChannels(params)
 	}, [currentPage])
@@ -215,8 +219,14 @@ function ListBuilder(props) {
 		hasMountedRef.current = true
 	}, [filterState])
 
+	const [showVideoModal, setShowVideoModal] = React.useState(false)
+
 	return (
 		<Grid container spacing={3}>
+			<VideoModal
+				show={showVideoModal}
+				close={() => setShowVideoModal(false)}
+			/>
 			<Grid item xs={4} align='center'>
 				<h4>{createdListVersion.smartListName}</h4>
 			</Grid>
@@ -302,6 +312,7 @@ function ListBuilder(props) {
 					items={props.channels}
 					incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
 					handleActionButtonClick={handleActionButtonClick}
+					handleVideosClick={() => setShowVideoModal(true)}
 				/>
 			</Grid>
 		</Grid>

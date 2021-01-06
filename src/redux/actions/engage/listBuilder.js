@@ -146,7 +146,10 @@ const formatChannels = (channels) => {
 		}
 		item.description = description
 		item.subscribersCount = numeral(item.subscribers).format('0a')
-		item.videosCount = numeral(item.videos).format('0a')
+		item.videosCount =
+			numeral(item.filteredVideoCount).format('0a') +
+			'/' +
+			numeral(item.allVideoCount).format('0a')
 		item.viewsCount = numeral(item.views).format('0a')
 	}
 	return channels

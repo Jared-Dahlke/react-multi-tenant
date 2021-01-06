@@ -8,6 +8,8 @@ import debounce from 'just-debounce-it'
 import Channel from './Channel'
 import Table from 'rsuite/lib/Table'
 import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
+import IconButton from 'rsuite/lib/IconButton'
+import Icon from 'rsuite/lib/Icon'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
@@ -28,7 +30,8 @@ export default function ResultTable({
 	// Callback function responsible for loading the next page of items.
 	incrementPage,
 
-	handleActionButtonClick
+	handleActionButtonClick,
+	handleVideosClick
 }) {
 	// We create a reference for the InfiniteLoader
 	const infiniteLoaderRef = React.useRef(null)
@@ -124,6 +127,20 @@ export default function ResultTable({
 		)
 	}
 
+	const VideoCountCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ align: 'center', padding: 5 }}
+			>
+				<Button appearance='link' onClick={handleVideosClick}>
+					{rowData.videosCount}
+				</Button>
+			</Table.Cell>
+		)
+	}
+
 	return (
 		<Table
 			virtualized
@@ -169,9 +186,9 @@ export default function ResultTable({
 				<Table.HeaderCell>Subscribers</Table.HeaderCell>
 				<Table.Cell dataKey='subscribersCount' />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1}>
+			<Table.Column verticalAlign={'middle'}>
 				<Table.HeaderCell>Videos</Table.HeaderCell>
-				<Table.Cell dataKey='videosCount' />
+				<VideoCountCell />
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} flexGrow={1}>
 				<Table.HeaderCell>Views</Table.HeaderCell>
