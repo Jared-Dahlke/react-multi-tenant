@@ -2,9 +2,13 @@ import React from 'react'
 import { FixedSizeList as InfiniteList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import Video from './Video'
+import ButtonGroup from 'rsuite/lib/ButtonGroup'
+import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Channel from './Channel'
 import Table from 'rsuite/lib/Table'
+import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
+import { accentColor } from '../../../../../assets/jss/colorContants'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -46,15 +50,59 @@ export default function ResultTable({
 
 	const handleScroll = debounce(() => {
 		incrementPage()
-	}, 800)
+	}, 1200)
+
+	const ActionCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<ButtonGroup vertical={false} size='xs'>
+					<Button
+						appearance={'ghost'}
+						active={rowData.actionId === 1}
+						style={{
+							backgroundColor: rowData.actionId === 1 ? accentColor : ''
+						}}
+						onClick={() => {
+							handleActionButtonClick(1, rowData)
+							setActionsTaken((prevState) => prevState + 1)
+						}}
+					>
+						Target
+					</Button>
+					<Button
+						appearance={'ghost'}
+						active={rowData.actionId === 3}
+						style={{
+							backgroundColor: rowData.actionId === 3 ? accentColor : ''
+						}}
+						onClick={() => {
+							handleActionButtonClick(3, rowData)
+							setActionsTaken((prevState) => prevState + 1)
+						}}
+					>
+						Watch
+					</Button>
+					<Button
+						appearance={'ghost'}
+						active={rowData.actionId === 2}
+						style={{
+							backgroundColor: rowData.actionId === 2 ? accentColor : ''
+						}}
+						onClick={() => {
+							handleActionButtonClick(2, rowData)
+							setActionsTaken((prevState) => prevState + 1)
+						}}
+					>
+						Block
+					</Button>
+				</ButtonGroup>
+			</Table.Cell>
+		)
+	}
 
 	const ImageCell = ({ rowData, dataKey, ...props }) => {
 		return (
-			<Table.Cell
-				{...props}
-				className='link-group'
-				style={{ align: 'center', padding: 5 }}
-			>
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
 				<img
 					src={rowData.thumbnail}
 					width={'45%'}
@@ -64,10 +112,22 @@ export default function ResultTable({
 		)
 	}
 
+	const CountryCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ align: 'center', padding: 5 }}
+			>
+				{countryCodeToFlagEmoji(rowData.countryCode)}
+			</Table.Cell>
+		)
+	}
+
 	return (
 		<Table
 			virtualized
-			height={600}
+			height={500}
 			rowHeight={80}
 			data={items}
 			shouldUpdateScroll={false}
@@ -78,6 +138,11 @@ export default function ResultTable({
 			<Table.Column verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ImageCell />
+			</Table.Column>
+
+			<Table.Column width={30} verticalAlign={'middle'}>
+				<Table.HeaderCell></Table.HeaderCell>
+				<CountryCell />
 			</Table.Column>
 
 			<Table.Column verticalAlign={'middle'} resizable>
@@ -111,6 +176,10 @@ export default function ResultTable({
 			<Table.Column verticalAlign={'middle'} flexGrow={1}>
 				<Table.HeaderCell>Views</Table.HeaderCell>
 				<Table.Cell dataKey='viewsCount' />
+			</Table.Column>
+			<Table.Column width={200} verticalAlign={'middle'}>
+				<Table.HeaderCell></Table.HeaderCell>
+				<ActionCell />
 			</Table.Column>
 		</Table>
 	)
