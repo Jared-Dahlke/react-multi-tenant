@@ -135,12 +135,15 @@ export const channelsSchema = Yup.array().of(
 		subscribers: Yup.number()
 			.strict(true)
 			.nullable(),
-		videos: Yup.number()
+		allVideoCount: Yup.number()
+			.strict(true)
+			.required(),
+		filteredVideoCount: Yup.number()
 			.strict(true)
 			.required(),
 		thumbnail: Yup.string()
 			.strict(true)
-			.required(),
+			.nullable(),
 		views: Yup.number()
 			.strict(true)
 			.required()

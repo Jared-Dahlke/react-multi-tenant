@@ -2,7 +2,15 @@ import React from 'react'
 import { FixedSizeList as InfiniteList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import Video from './Video'
+import ButtonGroup from 'rsuite/lib/ButtonGroup'
+import Button from 'rsuite/lib/Button'
+import debounce from 'just-debounce-it'
 import Channel from './Channel'
+import Table from 'rsuite/lib/Table'
+import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
+import IconButton from 'rsuite/lib/IconButton'
+import Icon from 'rsuite/lib/Icon'
+import { accentColor } from '../../../../../assets/jss/colorContants'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -20,10 +28,10 @@ export default function ResultTable({
 	items,
 
 	// Callback function responsible for loading the next page of items.
-	loadNextPage,
+	incrementPage,
 
 	handleActionButtonClick,
-	isChannels
+	handleVideosClick
 }) {
 	// We create a reference for the InfiniteLoader
 	const infiniteLoaderRef = React.useRef(null)
@@ -43,96 +51,153 @@ export default function ResultTable({
 		hasMountedRef.current = true
 	}, [actionsTaken])
 
-	// If there are more items to be loaded then add an extra row to hold a loading indicator.
-	const itemCount = hasNextPage ? items.length + 1 : items.length
+	const handleScroll = debounce(() => {
+		incrementPage()
+	}, 1200)
 
-	// Only load 1 page of items at a time.
-	// Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
-	const loadMoreItems = isNextPageLoading ? () => {} : loadNextPage
+	const ActionCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<ButtonGroup vertical={false} size='xs'>
+					<Button
+						appearance={'ghost'}
+						active={rowData.actionId === 1}
+						style={{
+							backgroundColor: rowData.actionId === 1 ? accentColor : ''
+						}}
+						onClick={() => {
+							handleActionButtonClick(1, rowData)
+							setActionsTaken((prevState) => prevState + 1)
+						}}
+					>
+						Target
+					</Button>
+					<Button
+						appearance={'ghost'}
+						active={rowData.actionId === 3}
+						style={{
+							backgroundColor: rowData.actionId === 3 ? accentColor : ''
+						}}
+						onClick={() => {
+							handleActionButtonClick(3, rowData)
+							setActionsTaken((prevState) => prevState + 1)
+						}}
+					>
+						Watch
+					</Button>
+					<Button
+						appearance={'ghost'}
+						active={rowData.actionId === 2}
+						style={{
+							backgroundColor: rowData.actionId === 2 ? accentColor : ''
+						}}
+						onClick={() => {
+							handleActionButtonClick(2, rowData)
+							setActionsTaken((prevState) => prevState + 1)
+						}}
+					>
+						Block
+					</Button>
+				</ButtonGroup>
+			</Table.Cell>
+		)
+	}
 
-	// Every row is loaded except for our loading indicator row.
-	const isItemLoaded = (index) => !hasNextPage || index < items.length
+	const ImageCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<img
+					src={rowData.thumbnail}
+					width={'45%'}
+					style={{ borderRadius: 180 }}
+				/>
+			</Table.Cell>
+		)
+	}
 
-	// Render an item or a loading indicator.
-	const Item = ({ index, style }) => {
-		if (!isItemLoaded(index)) {
-			return <div style={style}>Loading...</div>
-		} else {
-			let item = items[index]
-			let abbreviatedDescription
-			if (!item.description) {
-				abbreviatedDescription = '[No description]'
-			} else if (item.description.length > 40) {
-				abbreviatedDescription = item.description.substring(0, 40) + '...'
-			} else if (!item.description.replace(/\s/g, '').length) {
-				abbreviatedDescription = '[No description]'
-			} else {
-				abbreviatedDescription = item.description
-			}
+	const CountryCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ align: 'center', padding: 5 }}
+			>
+				{countryCodeToFlagEmoji(rowData.countryCode)}
+			</Table.Cell>
+		)
+	}
 
-			let createDate = item.created
-				? dayjs(item.created).calendar()
-				: dayjs(item.published).calendar()
-			let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
-			let description
-			if (!item.description) {
-				description = '[No description]'
-			} else if (!item.description.replace(/\s/g, '').length) {
-				description = '[No description]'
-			} else {
-				description = item.description.substring(0, 500)
-			}
-
-			if (isChannels) {
-				return (
-					<Channel
-						item={item}
-						name={name}
-						style={style}
-						createDate={createDate}
-						description={description}
-						abbreviatedDescription={abbreviatedDescription}
-						handleActionButtonClick={handleActionButtonClick}
-						setActionsTaken={setActionsTaken}
-					/>
-				)
-			} else {
-				return (
-					<Video
-						item={item}
-						name={name}
-						style={style}
-						createDate={createDate}
-						description={description}
-						abbreviatedDescription={abbreviatedDescription}
-						handleActionButtonClick={handleActionButtonClick}
-						setActionsTaken={setActionsTaken}
-					/>
-				)
-			}
-		}
+	const VideoCountCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ align: 'center', padding: 5 }}
+			>
+				<Button appearance='link' onClick={handleVideosClick}>
+					{rowData.videosCount}
+				</Button>
+			</Table.Cell>
+		)
 	}
 
 	return (
-		<InfiniteLoader
-			ref={infiniteLoaderRef}
-			isItemLoaded={isItemLoaded}
-			itemCount={itemCount}
-			loadMoreItems={loadMoreItems}
+		<Table
+			virtualized
+			height={500}
+			rowHeight={80}
+			data={items}
+			shouldUpdateScroll={false}
+			onScroll={() => {
+				handleScroll()
+			}}
 		>
-			{({ onItemsRendered, ref }) => (
-				<InfiniteList
-					className='List'
-					height={500}
-					itemCount={itemCount}
-					itemSize={isChannels ? 290 : 430}
-					onItemsRendered={onItemsRendered}
-					ref={ref}
-					width={'100%'}
-				>
-					{Item}
-				</InfiniteList>
-			)}
-		</InfiniteLoader>
+			<Table.Column verticalAlign={'middle'}>
+				<Table.HeaderCell></Table.HeaderCell>
+				<ImageCell />
+			</Table.Column>
+
+			<Table.Column width={30} verticalAlign={'middle'}>
+				<Table.HeaderCell></Table.HeaderCell>
+				<CountryCell />
+			</Table.Column>
+
+			<Table.Column verticalAlign={'middle'} resizable>
+				<Table.HeaderCell>Name</Table.HeaderCell>
+				<Table.Cell dataKey='name' />
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'}>
+				<Table.HeaderCell>Date</Table.HeaderCell>
+				<Table.Cell dataKey='createDate' style={{ color: 'grey' }} />
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'}>
+				<Table.HeaderCell>Id</Table.HeaderCell>
+				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'}>
+				<Table.HeaderCell>Category</Table.HeaderCell>
+				<Table.Cell dataKey='categoryName' />
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'} flexGrow={1}>
+				<Table.HeaderCell>Description</Table.HeaderCell>
+				<Table.Cell dataKey='abbreviatedDescription' />
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'} flexGrow={1}>
+				<Table.HeaderCell>Subscribers</Table.HeaderCell>
+				<Table.Cell dataKey='subscribersCount' />
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'}>
+				<Table.HeaderCell>Videos</Table.HeaderCell>
+				<VideoCountCell />
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'} flexGrow={1}>
+				<Table.HeaderCell>Views</Table.HeaderCell>
+				<Table.Cell dataKey='viewsCount' />
+			</Table.Column>
+			<Table.Column width={200} verticalAlign={'middle'}>
+				<Table.HeaderCell></Table.HeaderCell>
+				<ActionCell />
+			</Table.Column>
+		</Table>
 	)
 }

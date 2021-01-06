@@ -5,10 +5,10 @@ import { routes } from '../../../../routes'
 import ResultTable from './components/ResultTable'
 import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
-import WarningModal from './WarningModal'
 import TagPicker from 'rsuite/lib/TagPicker'
 import Panel from 'rsuite/lib/Panel'
 import Button from 'rsuite/lib/Button'
+import VideoModal from './components/VideoModal'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -79,54 +79,38 @@ function ListBuilder(props) {
 		props.location.state.createdListVersion
 	)
 
-	const [isChannels, setIsChannels] = React.useState(true)
-
 	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
 
 	React.useEffect(() => {
+		console.log('firing [] useEffect')
 		props.removeAllChannels()
 		props.removeAllVideos()
 		props.fetchFilterCategories()
 		props.fetchFilterCountries()
 		props.fetchFilterLanguages()
+		setCurrentPage(1)
 	}, [])
 
-	React.useEffect(() => {
-		_loadNextPage(0)
-	}, [props.deleteAllVersionDataSuccess])
+	const [currentPage, setCurrentPage] = React.useState(1)
 
-	const _loadNextPage = (index) => {
-		setIsNextPageLoading(true)
-		props.setHasNextPage(true) // TODO: make this dynamic
-		setIsNextPageLoading(false)
-		let pageNum = Math.round(index / 100)
+	React.useEffect(() => {
+		console.log('firing currentPage useEffect')
 		let params = {
 			versionId: createdListVersion.versionId,
-			pageNumber: pageNum < 1 ? 1 : pageNum + 1,
-			filters: filterState
+			pageNumber: currentPage,
+			filters: {
+				channelFilters: filterState,
+				videoFilters: {}
+			}
 		}
-		if (isChannels) {
-			props.fetchChannels(params)
-		} else {
-			props.fetchVideos(params)
-		}
-	}
+		props.fetchChannels(params)
+	}, [currentPage])
 
 	const filters = {
 		kids: 'kids',
 		categories: 'categories',
 		languages: 'languages',
 		countries: 'countries'
-	}
-
-	const [showWarning, setShowWarning] = React.useState(false)
-
-	const executeToggle = () => {
-		setIsChannels((prevState) => !prevState)
-		setShowWarning(false)
-		props.removeAllChannels()
-		props.removeAllVideos()
-		props.deleteAllVersionData(createdListVersion.versionId)
 	}
 
 	const handleActionButtonClick = (actionId, item) => {
@@ -227,28 +211,22 @@ function ListBuilder(props) {
 
 	React.useEffect(() => {
 		if (hasMountedRef.current) {
-			//props.setHasNextPage(true)
-
+			console.log('firing filter state change load')
 			props.removeAllChannels()
 			props.removeAllVideos()
-
-			_loadNextPage(0)
+			setCurrentPage(1)
 		}
 		hasMountedRef.current = true
 	}, [filterState])
 
+	const [showVideoModal, setShowVideoModal] = React.useState(false)
+
 	return (
 		<Grid container spacing={3}>
-			<Grid item xs={4} align='left'>
-				<Toggle
-					size='lg'
-					checkedChildren='Videos'
-					unCheckedChildren='Channels'
-					onChange={() => setShowWarning(true)}
-					checked={!isChannels}
-				/>
-			</Grid>
-
+			<VideoModal
+				show={showVideoModal}
+				close={() => setShowVideoModal(false)}
+			/>
 			<Grid item xs={4} align='center'>
 				<h4>{createdListVersion.smartListName}</h4>
 			</Grid>
@@ -273,52 +251,49 @@ function ListBuilder(props) {
 			<Grid item xs={12}>
 				<Panel style={{ backgroundColor: neutralColor }}>
 					<Grid container spacing={3}>
-						{isChannels && (
-							<Grid item xs={12}>
-								<TagPicker
-									data={props.filterCountries}
-									labelKey={'countryName'}
-									valueKey={'countryCode'}
-									block
-									virtualized={true}
-									placeholder='Countries'
-									onChange={(val) => {
-										handleFilterChange(filters.countries, val)
-									}}
-								/>
-							</Grid>
-						)}
+						<p>channel filters</p>
+						<Grid item xs={12}>
+							<TagPicker
+								data={props.filterCountries}
+								labelKey={'countryName'}
+								valueKey={'countryCode'}
+								block
+								virtualized={true}
+								placeholder='Countries'
+								onChange={(val) => {
+									handleFilterChange(filters.countries, val)
+								}}
+							/>
+						</Grid>
 
-						{!isChannels && (
-							<>
-								<Grid item xs={12}>
-									<TagPicker
-										data={props.filterLanguages}
-										labelKey={'languageName'}
-										valueKey={'languageCode'}
-										block
-										virtualized={true}
-										placeholder='Languages'
-										onChange={(val) => {
-											handleFilterChange(filters.languages, val)
-										}}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TagPicker
-										data={props.filterCategories}
-										labelKey={'categoryName'}
-										valueKey={'categoryId'}
-										block
-										virtualized={true}
-										placeholder='Categories'
-										onChange={(val) => {
-											handleFilterChange(filters.categories, val)
-										}}
-									/>
-								</Grid>
-							</>
-						)}
+						<Grid item xs={12}>
+							<p>video filters</p>
+							<TagPicker
+								data={props.filterLanguages}
+								labelKey={'languageName'}
+								valueKey={'languageCode'}
+								block
+								virtualized={true}
+								placeholder='Languages'
+								onChange={(val) => {
+									handleFilterChange(filters.languages, val)
+								}}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TagPicker
+								data={props.filterCategories}
+								labelKey={'categoryName'}
+								valueKey={'categoryId'}
+								block
+								virtualized={true}
+								placeholder='Categories'
+								onChange={(val) => {
+									handleFilterChange(filters.categories, val)
+								}}
+							/>
+						</Grid>
+
 						<Grid item xs={12}>
 							<Toggle
 								checkedChildren='Only Kids Content'
@@ -334,17 +309,12 @@ function ListBuilder(props) {
 				<ResultTable
 					hasNextPage={props.hasNextPage}
 					isNextPageLoading={isNextPageLoading}
-					items={isChannels ? props.channels : props.videos}
-					loadNextPage={_loadNextPage}
+					items={props.channels}
+					incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
 					handleActionButtonClick={handleActionButtonClick}
-					isChannels={isChannels}
+					handleVideosClick={() => setShowVideoModal(true)}
 				/>
 			</Grid>
-			<WarningModal
-				show={showWarning}
-				handleClose={() => setShowWarning(false)}
-				executeToggle={executeToggle}
-			/>
 		</Grid>
 	)
 }
