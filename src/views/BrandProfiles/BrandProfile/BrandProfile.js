@@ -40,9 +40,9 @@ const brandProfileSteps = {
 	competitors: 'competitors',
 	categories: 'categories',
 	topics: 'topics',
+	questions: 'questions',
 	scenarios: 'scenarios',
-	opinions: 'opinions',
-	questions: 'questions'
+	opinions: 'opinions'
 }
 
 function BrandProfile(props) {

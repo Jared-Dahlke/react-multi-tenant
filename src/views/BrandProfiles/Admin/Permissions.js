@@ -207,8 +207,8 @@ function Permissions(props) {
 						}}
 					/>
 					{'  '}
-					You are trying to remove permission . are you sure you want to proceed
-					?
+					You are trying to remove a permission . Are you sure you want to
+					proceed?
 				</Modal.Body>
 				<Modal.Footer>
 					<Button onClick={() => confirmDelete()} appearance='primary'>
