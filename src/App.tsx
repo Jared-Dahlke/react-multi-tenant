@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import PrivateRoute from './pages/PrivateRoute.js'
@@ -7,15 +7,16 @@ import configureStore from './redux/store/index.js'
 import Main from '../src/layouts/Main.js'
 import { routes } from './routes'
 import Loading from '../src/views/Loading.js'
-
+import { Toaster } from 'react-hot-toast'
 
 //lazy load component
-const AdminLayout = lazy(() => import('../src/layouts/AdminLayout.js'));
+const AdminLayout = lazy(() => import('../src/layouts/AdminLayout.js'))
 
 const store = configureStore()
 function App() {
 	return (
 		<Provider store={store}>
+			<Toaster position={'bottom-left'} />
 			<Router>
 				<div>
 					<Route exact path='/' component={routes.login.component} />
@@ -31,11 +32,8 @@ function App() {
 						path={routes.changePassword.path}
 						component={routes.changePassword.component}
 					/>
-					<Suspense fallback={<Loading/>}>
-						<Route
-							path={routes.admin.path}
-							component={AdminLayout}
-						/>
+					<Suspense fallback={<Loading />}>
+						<Route path={routes.admin.path} component={AdminLayout} />
 					</Suspense>
 
 					<PrivateRoute path={routes.app.path} component={Main} />

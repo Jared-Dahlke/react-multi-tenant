@@ -20,6 +20,7 @@ import {
 	uploadedListObjValidation,
 	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
+import numeral from 'numeral'
 var fileDownload = require('js-file-download')
 var cwait = require('cwait')
 
@@ -48,7 +49,31 @@ export function fetchLists(accountId) {
 						'we received different data from the api than expected, see console log for more details'
 					)
 				})
-				dispatch(setLists(result.data))
+
+				let versions = []
+				for (const list of result.data) {
+					for (const version of list.versions) {
+						if (version.active) {
+							version.activeText = 'True'
+						} else {
+							version.activeText = 'False'
+						}
+
+						version.archived = list.archived
+						if (list.archived) {
+							version.archivedText = 'True'
+						} else {
+							version.archivedText = 'False'
+						}
+
+						version.subscriberCountFormatted = numeral(
+							version.subscriberCount
+						).format('0.0a')
+
+						versions.push(version)
+					}
+				}
+				dispatch(setLists(versions))
 			}
 		} catch (error) {
 			alert('Error on fetch account users: ' + JSON.stringify(error, null, 2))

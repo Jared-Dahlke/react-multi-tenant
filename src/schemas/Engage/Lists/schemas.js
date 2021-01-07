@@ -111,10 +111,40 @@ export const postListVersionResult = Yup.object().shape({
 
 export const channelsSchema = Yup.array().of(
 	Yup.object().shape({
+		actionId: Yup.number()
+			.strict(true)
+			.nullable(),
+		categoryName: Yup.string()
+			.strict(true)
+			.nullable(),
+		countryName: Yup.string()
+			.strict(true)
+			.nullable(),
+		created: Yup.string()
+			.strict(true)
+			.required(),
+		description: Yup.string()
+			.strict(true)
+			.nullable(),
 		id: Yup.string()
 			.strict(true)
 			.required(),
 		name: Yup.string()
+			.strict(true)
+			.required(),
+		subscribers: Yup.number()
+			.strict(true)
+			.nullable(),
+		allVideoCount: Yup.number()
+			.strict(true)
+			.required(),
+		filteredVideoCount: Yup.number()
+			.strict(true)
+			.required(),
+		thumbnail: Yup.string()
+			.strict(true)
+			.nullable(),
+		views: Yup.number()
 			.strict(true)
 			.required()
 	})
@@ -122,10 +152,40 @@ export const channelsSchema = Yup.array().of(
 
 export const videosSchema = Yup.array().of(
 	Yup.object().shape({
+		actionId: Yup.number()
+			.strict(true)
+			.nullable(),
+		categoryName: Yup.string()
+			.strict(true)
+			.nullable(),
+		channelName: Yup.string()
+			.strict(true)
+			.nullable(),
+		countryName: Yup.string()
+			.strict(true)
+			.nullable(),
+		published: Yup.string()
+			.strict(true)
+			.required(),
+		description: Yup.string()
+			.strict(true)
+			.nullable(),
 		id: Yup.string()
 			.strict(true)
 			.required(),
 		name: Yup.string()
+			.strict(true)
+			.required(),
+		thumbnail: Yup.string()
+			.strict(true)
+			.nullable(),
+		subscribers: Yup.number()
+			.strict(true)
+			.nullable(),
+		kids: Yup.boolean()
+			.strict(true)
+			.required(),
+		views: Yup.number()
 			.strict(true)
 			.required()
 	})

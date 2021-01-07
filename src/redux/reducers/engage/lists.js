@@ -35,11 +35,9 @@ export function lists(state = [], action) {
 			let versionId = action.payload.versionId
 			for (const list of newLists) {
 				if (list.smartListId === smartListId) {
-					for (const version of list.versions) {
-						version.active = false
-						if (version.versionId === versionId) {
-							version.active = true
-						}
+					list.active = false
+					if (list.versionId === versionId) {
+						list.active = true
 					}
 				}
 			}

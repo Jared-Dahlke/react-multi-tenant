@@ -3,7 +3,6 @@ import React from 'react'
 import GridItem from '../../components/Grid/GridItem.js'
 import GridContainer from '../../components/Grid/GridContainer.js'
 import Button from 'rsuite/lib/Button'
-import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
 import Snackbar from '@material-ui/core/Snackbar'
@@ -22,7 +21,6 @@ import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
 import * as Yup from 'yup'
 import { getCurrentAccount } from '../../utils'
-import Modal from 'rsuite/lib/Modal'
 import InputPicker from 'rsuite/lib/InputPicker'
 import { useHistory } from 'react-router-dom'
 import config from '../../config'
@@ -217,7 +215,7 @@ function Account(props) {
 		return (
 			<GridContainer>
 				<GridItem xs={12} sm={12} md={6}>
-					<AccountDropdown />
+					<AccountDropdown searchable={true} />
 
 					{!props.accountHasValidGoogleRefreshToken && googleAuth && (
 						<IconButton

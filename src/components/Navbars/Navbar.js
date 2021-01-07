@@ -16,6 +16,8 @@ import { perms, userCan } from '../../Can'
 import { routes, modifiedRoutes } from '../../routes'
 import SideBar from '../SideBar/SideBar'
 import IconButton from 'rsuite/lib/IconButton'
+import ProfileDropdown from '../../components/ProfileDropdown'
+import Grid from '@material-ui/core/Grid'
 
 const useSidebarStyles = makeStyles(sidebarStyles)
 
@@ -24,6 +26,12 @@ const mapDispatchToProps = (dispatch) => {
 		setAuthToken: (authToken) => dispatch(setAuthToken(authToken)),
 		setLoggedIn: (loggedIn) => dispatch(setLoggedIn(loggedIn)),
 		clearSiteData: () => dispatch(clearSiteData())
+	}
+}
+
+const mapStateToProps = (state) => {
+	return {
+		user: state.user
 	}
 }
 
@@ -38,14 +46,19 @@ const generateBreadCrumbs = (routes) => {
 
 	const findRoute = (route) => {
 		let subRoutes = Object.values(route.subRoutes)
-		
+
 		let matchedRoute = subRoutes.find((route) => {
 			if (url === route.path) return true
 			if (
 				route.name.toLowerCase().includes('edit') &&
 				url.includes(getPathWithoutParams(route.path))
-			)	return true
-			if(route.path.includes(':') && url.includes(getPathWithoutParams(route.path))) return true
+			)
+				return true
+			if (
+				route.path.includes(':') &&
+				url.includes(getPathWithoutParams(route.path))
+			)
+				return true
 			if (route.subRoutes) return findRoute(route)
 			return false
 		})
@@ -131,27 +144,26 @@ function Header(props) {
 		)
 	})
 
-	const handleLogOut = (props) => {
-		localStorage.removeItem('token')
-		localStorage.removeItem('userId')
-		props.setAuthToken(null)
-		props.setLoggedIn(false)
-		props.clearSiteData()
-	}
-
 	const NavLink = (props) => (
 		<Dropdown.Item componentClass={MyLink} {...props} />
 	)
 
 	if (isMobile) {
 		return (
-			<div>
-				<IconButton
-					style={{ marginLeft: 30, marginTop: 30 }}
-					appearance='ghost'
-					icon={<Icon icon='bars' />}
-					onClick={() => openMobileDrawer()}
-				></IconButton>
+			<Grid container>
+				<Grid item xs={10}>
+					<IconButton
+						style={{ marginLeft: 30, marginTop: 30 }}
+						appearance='ghost'
+						icon={<Icon icon='bars' />}
+						onClick={() => openMobileDrawer()}
+					></IconButton>
+				</Grid>
+				<Grid item xs={2}>
+					<div style={{ marginTop: 30 }}>
+						<ProfileDropdown />
+					</div>
+				</Grid>
 				<SideBar
 					closeMobileDrawer={closeMobileDrawer}
 					showMobileDrawer={showMobileDrawer}
@@ -160,7 +172,7 @@ function Header(props) {
 				<div style={{ paddingLeft: 30, paddingTop: 20 }}>
 					{generateBreadCrumbs(modifiedRoutes.app)}
 				</div>
-			</div>
+			</Grid>
 		)
 	} else {
 		return (
@@ -198,7 +210,7 @@ function Header(props) {
 							>
 								<NavLink
 									href={routes.app.engage.lists.lists.path}
-									label='Smart Lists'
+									label='SmartLists'
 								/>
 							</Dropdown>
 
@@ -257,17 +269,10 @@ function Header(props) {
 								</Dropdown>
 							)}
 						</Nav>
-						<Nav pullRight style={{ marginRight: 30 }}>
-							<Dropdown title='' icon={<Icon icon='avatar' />}>
-								<NavLink
-									href={routes.app.settings.profile.path}
-									label='Profile'
-								/>
-
-								<Dropdown.Item onSelect={() => handleLogOut(props)}>
-									Logout
-								</Dropdown.Item>
-							</Dropdown>
+						<Nav pullRight style={{ marginRight: 30, marginTop: 8 }}>
+							<Grid container justify='center'>
+								<ProfileDropdown />
+							</Grid>
 						</Nav>
 					</Navbar.Body>
 				</Navbar>
@@ -279,4 +284,4 @@ function Header(props) {
 	}
 }
 
-export default connect(null, mapDispatchToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

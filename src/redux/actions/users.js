@@ -106,10 +106,6 @@ export function setUserEditSaved(bool) {
 	}
 }
 
-export function setAlert(payload) {
-	return { type: SET_ALERT, payload }
-}
-
 export function editUserUserAccountsLoading(bool) {
 	return {
 		type: EDIT_USER_USER_ACCOUNTS_LOADING,

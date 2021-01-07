@@ -6,7 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Container from '@material-ui/core/Container'
-import { setAlert, resetPassword } from '../redux/actions/auth.js'
+import { resetPassword } from '../redux/actions/auth.js'
 import Snackbar from '@material-ui/core/Snackbar'
 import AddAlert from '@material-ui/icons/AddAlert'
 import Alert from '@material-ui/lab/Alert'
@@ -26,8 +26,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		resetPassword: (email) => dispatch(resetPassword(email)),
-		setAlert: (alert) => dispatch(setAlert(alert))
+		resetPassword: (email) => dispatch(resetPassword(email))
 	}
 }
 
@@ -97,18 +96,6 @@ function PasswordReset(props) {
 						>
 							Reset Password
 						</Button>
-
-						<Snackbar
-							autoHideDuration={5000}
-							place='bc'
-							icon={AddAlert}
-							open={props.alert.show}
-							onClose={() => props.setAlert({ show: false })}
-						>
-							<Alert severity={props.alert.severity}>
-								{props.alert.message}
-							</Alert>
-						</Snackbar>
 					</form>
 				</div>
 			</Container>

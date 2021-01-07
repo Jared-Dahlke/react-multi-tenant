@@ -19,7 +19,8 @@ import {
 	SET_BRAND_PROFILE_TOPICS,
 	SET_BRAND_PROFILE_SCENARIOS,
 	SET_BRAND_PROFILE_OPINIONS,
-	SET_BRAND_PROFILE_BASIC_INFO
+	SET_BRAND_PROFILE_BASIC_INFO,
+	SET_BRAND_PROFILE_QUESTIONS
 } from '../action-types/brandProfiles'
 
 export function brandProfiles(state = [], action) {
@@ -99,6 +100,11 @@ export function brandProfileUnderEdit(
 			return {
 				...state,
 				opinions: action.opinions
+			}
+		case SET_BRAND_PROFILE_QUESTIONS:
+			return {
+				...state,
+				questions: action.questions
 			}
 		default:
 			return state
