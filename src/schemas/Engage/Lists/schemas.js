@@ -187,6 +187,6 @@ export const videosSchema = Yup.array().of(
 			.required(),
 		views: Yup.number()
 			.strict(true)
-			.required()
+			.nullable()
 	})
 )

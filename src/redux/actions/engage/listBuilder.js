@@ -6,7 +6,8 @@ import {
 	SET_VIDEOS,
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
-	SET_HAS_NEXT_PAGE
+	SET_HAS_NEXT_PAGE,
+	SET_VIDEOS_HAS_NEXT_PAGE
 } from '../../action-types/engage/listBuilder'
 
 import {
@@ -50,7 +51,7 @@ export function fetchVideos(args) {
 				})
 
 				if (result.data.length < 100) {
-					dispatch(setHasNextPage(false))
+					dispatch(setVideosHasNextPage(false))
 				}
 				dispatch(setVideos(result.data))
 			}
@@ -72,6 +73,13 @@ export function setHasNextPage(hasNextPage) {
 	return {
 		type: SET_HAS_NEXT_PAGE,
 		hasNextPage
+	}
+}
+
+export function setVideosHasNextPage(videosHasNextPage) {
+	return {
+		type: SET_VIDEOS_HAS_NEXT_PAGE,
+		videosHasNextPage
 	}
 }
 

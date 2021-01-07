@@ -15,7 +15,8 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setHasNextPage
+	setHasNextPage,
+	setVideosHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
 
 import {
@@ -38,6 +39,7 @@ const mapStateToProps = (state) => {
 		videos: state.engage.videos,
 		channels: state.engage.channels,
 		hasNextPage: state.engage.hasNextPage,
+		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
@@ -60,6 +62,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
 		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
+		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
 			dispatch(deleteAllVersionData(versionId)),
 		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params)),
@@ -75,6 +78,14 @@ function ListBuilder(props) {
 
 	const hasMountedRef = React.useRef(false)
 
+	React.useEffect(() => {
+		return () => {
+			//clean up on unmount
+			props.setHasNextPage(true)
+			props.setVideosHasNextPage(true)
+		}
+	}, [])
+
 	const [createdListVersion, setCreatedListVersion] = React.useState(
 		props.location.state.createdListVersion
 	)
@@ -87,7 +98,6 @@ function ListBuilder(props) {
 	] = React.useState(null)
 
 	React.useEffect(() => {
-		console.log('firing [] useEffect')
 		props.removeAllChannels()
 		props.removeAllVideos()
 		props.fetchFilterCategories()
@@ -100,21 +110,27 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
-		console.log('firing currentPage useEffect')
-		let params = {
-			versionId: createdListVersion.versionId,
-			pageNumber: currentPage,
-			filters: {
-				channelFilters: filterState,
-				videoFilters: {}
+		if (props.hasNextPage) {
+			let params = {
+				versionId: createdListVersion.versionId,
+				pageNumber: currentPage,
+				filters: {
+					channelFilters: filterState,
+					videoFilters: {}
+				}
 			}
+			props.fetchChannels(params)
 		}
-		props.fetchChannels(params)
 	}, [currentPage])
 
+	let videosHasNextPage = props.videosHasNextPage
+
 	React.useEffect(() => {
-		console.log('firing currentVideoPage useEffect')
-		if (currentVideoPage > 0 && viewingVideosForChannelId) {
+		if (
+			currentVideoPage > 0 &&
+			viewingVideosForChannelId &&
+			videosHasNextPage
+		) {
 			let params = {
 				versionId: createdListVersion.versionId,
 				pageNumber: currentVideoPage,
@@ -231,7 +247,6 @@ function ListBuilder(props) {
 
 	React.useEffect(() => {
 		if (hasMountedRef.current) {
-			console.log('firing filter state change load')
 			props.removeAllChannels()
 			props.removeAllVideos()
 			setCurrentPage(1)
@@ -241,23 +256,24 @@ function ListBuilder(props) {
 
 	const [showVideoModal, setShowVideoModal] = React.useState(false)
 
-	React.useEffect(() => {
-		if (viewingVideosForChannelId) {
-			//fetch videos for the channelId
-		}
-	}, [viewingVideosForChannelId])
-
 	const handleVideosClick = (channelId) => {
 		setShowVideoModal(true)
 		setViewingVideosForChannelId(channelId)
 		setCurrentVideoPage(1)
 	}
 
+	const handleVideoModalClose = () => {
+		setShowVideoModal(false)
+		props.setVideosHasNextPage(true)
+		setViewingVideosForChannelId(null)
+		props.removeAllVideos()
+	}
+
 	return (
 		<Grid container spacing={3}>
 			<VideoModal
 				show={showVideoModal}
-				close={() => setShowVideoModal(false)}
+				close={handleVideoModalClose}
 				videos={props.videos}
 				incrementPage={() => setCurrentVideoPage((prevState) => prevState + 1)}
 			/>

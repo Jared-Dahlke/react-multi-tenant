@@ -67,7 +67,7 @@ const VideoModal = (props) => {
 	}
 
 	const handleVideoScroll = debounce(() => {
-		incrementPage()
+		props.incrementPage()
 	}, 1200)
 
 	return (
