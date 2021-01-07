@@ -7,7 +7,9 @@ import {
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
 	SET_HAS_NEXT_PAGE,
-	SET_VIDEOS_HAS_NEXT_PAGE
+	SET_VIDEOS_HAS_NEXT_PAGE,
+	SET_CHANNELS_IS_LOADING,
+	SET_VIDEOS_IS_LOADING
 } from '../../action-types/engage/listBuilder'
 
 import {
@@ -33,6 +35,7 @@ export function fetchVideos(args) {
 		apiBase +
 		`/smart-list/video?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
 	return async (dispatch) => {
+		dispatch(setVideosIsLoading(true))
 		try {
 			const result = await defaultAxios({
 				method: 'POST',
@@ -53,7 +56,9 @@ export function fetchVideos(args) {
 				if (result.data.length < 100) {
 					dispatch(setVideosHasNextPage(false))
 				}
-				dispatch(setVideos(result.data))
+				let formattedVideos = formatChannels(result.data)
+				dispatch(setVideos(formattedVideos))
+				dispatch(setVideosIsLoading(false))
 			}
 		} catch (error) {
 			alert(error)
@@ -73,6 +78,20 @@ export function setHasNextPage(hasNextPage) {
 	return {
 		type: SET_HAS_NEXT_PAGE,
 		hasNextPage
+	}
+}
+
+export function setVideosIsLoading(videosIsLoading) {
+	return {
+		type: SET_VIDEOS_IS_LOADING,
+		videosIsLoading
+	}
+}
+
+export function setChannelsIsLoading(channelsIsLoading) {
+	return {
+		type: SET_CHANNELS_IS_LOADING,
+		channelsIsLoading
 	}
 }
 
@@ -102,6 +121,7 @@ export function fetchChannels(args) {
 		apiBase +
 		`/smart-list/channel?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
 	return async (dispatch) => {
+		dispatch(setChannelsIsLoading(true))
 		const result = await axios({
 			method: 'POST',
 			url: url,
@@ -120,6 +140,7 @@ export function fetchChannels(args) {
 			}
 			let formattedChannels = formatChannels(result.data)
 			dispatch(setChannels(formattedChannels))
+			dispatch(setChannelsIsLoading(false))
 		}
 	}
 }
@@ -162,6 +183,65 @@ const formatChannels = (channels) => {
 	}
 	return channels
 }
+
+const formatVideos = (videos) => {
+	for (const item of videos) {
+		let abbreviatedDescription
+		if (!item.description) {
+			abbreviatedDescription = '[No description]'
+		} else if (item.description.length > 40) {
+			abbreviatedDescription = item.description.substring(0, 40) + '...'
+		} else if (!item.description.replace(/\s/g, '').length) {
+			abbreviatedDescription = '[No description]'
+		} else {
+			abbreviatedDescription = item.description
+		}
+		item.abbreviatedDescription = abbreviatedDescription
+
+		let createDate = item.created
+			? dayjs(item.created).calendar()
+			: dayjs(item.published).calendar()
+		item.createDate = createDate
+		let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
+		item.name = name
+		let description
+		if (!item.description) {
+			description = '[No description]'
+		} else if (!item.description.replace(/\s/g, '').length) {
+			description = '[No description]'
+		} else {
+			description = item.description.substring(0, 500)
+		}
+		item.description = description
+		item.subscribersCount = numeral(item.subscribers).format('0a')
+		item.videosCount =
+			numeral(item.filteredVideoCount).format('0a') +
+			'/' +
+			numeral(item.allVideoCount).format('0a')
+		item.viewsCount = numeral(item.views).format('0a')
+
+		let language = item.languageName?.replace(/\s/g, '').length
+			? item.languageName
+			: '[No language]'
+		item.language = language
+	}
+	return channels
+}
+
+/**let minutes = Math.floor(seconds / 60)
+		let remainingSeconds = Math.floor(seconds - minutes * 60) - 1
+		return (
+			<div
+				style={{
+					backgroundColor: 'black',
+					color: 'white',
+					width: 33,
+					height: 18,
+					margin: 4,
+					letterSpacing: 0.5
+				}}
+			>
+				{`${minutes}:${remainingSeconds}`} */
 
 export function setChannels(channels) {
 	return {

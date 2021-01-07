@@ -13,7 +13,14 @@ import {
 	deleteAllVersionDataSuccess
 } from './lists'
 
-import { videos, channels, hasNextPage, videosHasNextPage } from './listBuilder'
+import {
+	videos,
+	channels,
+	hasNextPage,
+	videosHasNextPage,
+	videosIsLoading,
+	channelsIsLoading
+} from './listBuilder'
 
 import { filterCountries, filterCategories, filterLanguages } from './filters'
 
@@ -35,5 +42,7 @@ export default combineReducers({
 	channels,
 	hasNextPage,
 	videosHasNextPage,
-	deleteAllVersionDataSuccess
+	deleteAllVersionDataSuccess,
+	videosIsLoading,
+	channelsIsLoading
 })
