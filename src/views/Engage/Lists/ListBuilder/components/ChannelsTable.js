@@ -5,7 +5,6 @@ import Video from './Video'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
-import Channel from './Channel'
 import Table from 'rsuite/lib/Table'
 import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
 import IconButton from 'rsuite/lib/IconButton'
@@ -15,7 +14,7 @@ var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
 
-export default function ResultTable({
+export default function ChannelsTable({
 	// Are there more items to load?
 	// (This information comes from the most recent API request.)
 	hasNextPage,
@@ -134,7 +133,7 @@ export default function ResultTable({
 				className='link-group'
 				style={{ align: 'center', padding: 5 }}
 			>
-				<Button appearance='link' onClick={handleVideosClick}>
+				<Button appearance='link' onClick={() => handleVideosClick(rowData.id)}>
 					{rowData.videosCount}
 				</Button>
 			</Table.Cell>
@@ -143,6 +142,7 @@ export default function ResultTable({
 
 	return (
 		<Table
+			loading={items.length < 1}
 			virtualized
 			height={500}
 			rowHeight={80}

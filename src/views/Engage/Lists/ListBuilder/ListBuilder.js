@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
-import ResultTable from './components/ResultTable'
+import ChannelsTable from './components/ChannelsTable'
 import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import TagPicker from 'rsuite/lib/TagPicker'
@@ -81,6 +81,11 @@ function ListBuilder(props) {
 
 	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
 
+	const [
+		viewingVideosForChannelId,
+		setViewingVideosForChannelId
+	] = React.useState(null)
+
 	React.useEffect(() => {
 		console.log('firing [] useEffect')
 		props.removeAllChannels()
@@ -92,6 +97,7 @@ function ListBuilder(props) {
 	}, [])
 
 	const [currentPage, setCurrentPage] = React.useState(1)
+	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
 		console.log('firing currentPage useEffect')
@@ -105,6 +111,20 @@ function ListBuilder(props) {
 		}
 		props.fetchChannels(params)
 	}, [currentPage])
+
+	React.useEffect(() => {
+		console.log('firing currentVideoPage useEffect')
+		if (currentVideoPage > 0 && viewingVideosForChannelId) {
+			let params = {
+				versionId: createdListVersion.versionId,
+				pageNumber: currentVideoPage,
+				filters: {
+					channelId: viewingVideosForChannelId
+				}
+			}
+			props.fetchVideos(params)
+		}
+	}, [currentVideoPage, viewingVideosForChannelId])
 
 	const filters = {
 		kids: 'kids',
@@ -221,11 +241,25 @@ function ListBuilder(props) {
 
 	const [showVideoModal, setShowVideoModal] = React.useState(false)
 
+	React.useEffect(() => {
+		if (viewingVideosForChannelId) {
+			//fetch videos for the channelId
+		}
+	}, [viewingVideosForChannelId])
+
+	const handleVideosClick = (channelId) => {
+		setShowVideoModal(true)
+		setViewingVideosForChannelId(channelId)
+		setCurrentVideoPage(1)
+	}
+
 	return (
 		<Grid container spacing={3}>
 			<VideoModal
 				show={showVideoModal}
 				close={() => setShowVideoModal(false)}
+				videos={props.videos}
+				incrementPage={() => setCurrentVideoPage((prevState) => prevState + 1)}
 			/>
 			<Grid item xs={4} align='center'>
 				<h4>{createdListVersion.smartListName}</h4>
@@ -306,13 +340,13 @@ function ListBuilder(props) {
 			</Grid>
 
 			<Grid item xs={12}>
-				<ResultTable
+				<ChannelsTable
 					hasNextPage={props.hasNextPage}
 					isNextPageLoading={isNextPageLoading}
 					items={props.channels}
 					incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
 					handleActionButtonClick={handleActionButtonClick}
-					handleVideosClick={() => setShowVideoModal(true)}
+					handleVideosClick={handleVideosClick}
 				/>
 			</Grid>
 		</Grid>
