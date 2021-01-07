@@ -2,7 +2,9 @@
 import React, { useState } from 'react'
 import GridItem from '../../../components/Grid/GridItem.js'
 import GridContainer from '../../../components/Grid/GridContainer.js'
-import { TagPicker, Button, Loader } from 'rsuite';
+import Button from 'rsuite/lib/Button'
+import TagPicker from 'rsuite/lib/TagPicker'
+import Loader from 'rsuite/lib/Loader'
 import Card from '../../../components/Card/Card.js'
 import CardBody from '../../../components/Card/CardBody.js'
 import CardFooter from '../../../components/Card/CardFooter.js'

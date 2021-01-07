@@ -1,23 +1,23 @@
 import {
-	ADMIN_SCENARIOS_IS_LOADING,
+	SET_ADMIN_SCENARIOS_IS_LOADING,
 	SET_ADMIN_BRAND_SCENARIOS,
 	SET_SCENARIO_LABELS,
-	SCENARIO_LABELS_IS_LOADING,
-	SCENARIO_ARCHIVING,
-	SCENARIO_ARCHIVED,
-	SCENARIO_TO_ARCHIVE,
-	SCENARIO_CREATED,
-	SCENARIO_SAVING,
-	ADD_SCENARIO,
+	SET_SCENARIO_LABELS_IS_LOADING,
+	SET_SCENARIO_ARCHIVING,
+	SET_SCENARIO_ARCHIVED,
+	SET_SCENARIO_TO_ARCHIVE,
+	SET_SCENARIO_CREATED,
+	SET_SCENARIO_SAVING,
+	SET_ADD_SCENARIO,
 	SET_ADMIN_LABELS,
-	LABELS_IS_LOADING,
-	LABEL_DELETING,
-	LABEL_DELETED,
-	LABEL_TO_DELETE,
-	LABEL_CREATED,
-	LABEL_SAVING,
-	ADD_LABEL,
-	LABEL_TO_CREATE
+	SET_LABELS_IS_LOADING,
+	SET_LABEL_DELETING,
+	SET_LABEL_DELETED,
+	SET_LABEL_TO_DELETE,
+	SET_LABEL_CREATED,
+	SET_LABEL_SAVING,
+	SET_ADD_LABEL,
+	SET_LABEL_TO_CREATE
 } from '../../action-types/admin/scenarios'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
@@ -27,14 +27,14 @@ const apiBase = config.api.userAccountUrl
 
 export function setAdminScenariosIsLoading(bool) {
 	return {
-		type: ADMIN_SCENARIOS_IS_LOADING,
+		type: SET_ADMIN_SCENARIOS_IS_LOADING,
 		adminScenariosIsLoading: bool
 	}
 }
 
 export function setScenariosLabelsIsLoading(bool) {
 	return {
-		type: SCENARIO_LABELS_IS_LOADING,
+		type: SET_SCENARIO_LABELS_IS_LOADING,
 		scenariosLabelsIsLoading: bool
 	}
 }
@@ -55,42 +55,42 @@ export function setScenarioLabels(scenarioLabels) {
 
 export function setScenarioArchiving(scenarioId) {
 	return {
-		type: SCENARIO_ARCHIVING,
+		type: SET_SCENARIO_ARCHIVING,
 		scenarioArchiving: scenarioId
 	}
 }
 
 export function setScenarioArchived(bool) {
 	return {
-		type: SCENARIO_ARCHIVED,
+		type: SET_SCENARIO_ARCHIVED,
 		scenarioArchived: bool
 	}
 }
 
 export function setScenarioToArchived(scenarioId) {
 	return {
-		type: SCENARIO_TO_ARCHIVE,
+		type: SET_SCENARIO_TO_ARCHIVE,
 		scenarioId
 	}
 }
 
 export function setScenarioCreated(bool) {
 	return {
-		type: SCENARIO_CREATED,
+		type: SET_SCENARIO_CREATED,
 		scenarioCreated: bool
 	}
 }
 
 export function setScenarioSaving(bool) {
 	return {
-		type: SCENARIO_SAVING,
+		type: SET_SCENARIO_SAVING,
 		scenarioSaving: bool
 	}
 }
 
 export function addScenario(scenario) {
 	return {
-		type: ADD_SCENARIO,
+		type: SET_ADD_SCENARIO,
 		scenario
 	}
 }
@@ -180,56 +180,56 @@ export function setAdminLabels(labels) {
 
 export function setLabelDeleting(labelId) {
 	return {
-		type: LABEL_DELETING,
+		type: SET_LABEL_DELETING,
 		labelDeleting: labelId
 	}
 }
 
 export function setLabelDeleted(bool) {
 	return {
-		type: LABEL_DELETED,
+		type: SET_LABEL_DELETED,
 		labelDeleted: bool
 	}
 }
 
 export function setLabelToDeleted(labelId) {
 	return {
-		type: LABEL_TO_DELETE,
+		type: SET_LABEL_TO_DELETE,
 		labelId
 	}
 }
 
 export function setInitLabelAdd(bool) {
 	return {
-		type: LABEL_TO_CREATE,
+		type: SET_LABEL_TO_CREATE,
 		initLabelAdd: bool
 	}
 }
 
 export function setLabelCreated(bool) {
 	return {
-		type: LABEL_CREATED,
+		type: SET_LABEL_CREATED,
 		labelCreated: bool
 	}
 }
 
 export function setLabelSaving(bool) {
 	return {
-		type: LABEL_SAVING,
+		type: SET_LABEL_SAVING,
 		labelSaving: bool
 	}
 }
 
 export function addLabel(label) {
 	return {
-		type: ADD_LABEL,
+		type: SET_ADD_LABEL,
 		label
 	}
 }
 
 export function setLabelsIsLoading(bool) {
 	return {
-		type: LABELS_IS_LOADING,
+		type: SET_LABELS_IS_LOADING,
 		labelsIsLoading: bool
 	}
 }
