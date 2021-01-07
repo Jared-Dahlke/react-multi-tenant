@@ -6,7 +6,8 @@ import ChannelsTable from './components/ChannelsTable'
 import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import TagPicker from 'rsuite/lib/TagPicker'
-import Panel from 'rsuite/lib/Panel'
+import PanelGroup from 'rsuite/lib/PanelGroup'
+import CustomPanel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
 import {
@@ -116,8 +117,15 @@ function ListBuilder(props) {
 				versionId: createdListVersion.versionId,
 				pageNumber: currentPage,
 				filters: {
-					channelFilters: filterState,
-					videoFilters: {}
+					channelFilters: {
+						countries: filterState.countries,
+						kids: filterState.kids
+					},
+					videoFilters: {
+						languages: filterState.languages,
+						categories: filterState.categories,
+						kids: filterState.kids
+					}
 				}
 			}
 			props.fetchChannels(params)
@@ -179,7 +187,10 @@ function ListBuilder(props) {
 		props.downloadExcelList(payload)
 	}
 
-	const [filterState, setFilterState] = React.useState({ kids: false })
+	const [filterState, setFilterState] = React.useState({
+		kids: false,
+		countries: [{ countryCode: 'US' }]
+	})
 
 	const handleFilterChange = (filter, value) => {
 		switch (filter) {
@@ -278,10 +289,8 @@ function ListBuilder(props) {
 				handleActionButtonClick={handleActionButtonClick}
 				channel={viewingVideosForChannel}
 			/>
-			<Grid item xs={4} align='center'>
-				<h4>{createdListVersion.smartListName}</h4>
-			</Grid>
-			<Grid item xs={4} align='right'>
+
+			<Grid item xs={12} align='right'>
 				<Button
 					style={{ marginLeft: 20 }}
 					loading={
@@ -300,16 +309,22 @@ function ListBuilder(props) {
 			</Grid>
 
 			<Grid item xs={12}>
-				<Panel style={{ backgroundColor: neutralColor }}>
+				<CustomPanel>
+					<h4>{createdListVersion.smartListName}</h4>
+				</CustomPanel>
+			</Grid>
+
+			<Grid item xs={12}>
+				<CustomPanel header='YouTube Filters'>
 					<Grid container spacing={3}>
-						<p>channel filters</p>
-						<Grid item xs={12}>
+						<Grid item xs={3}>
 							<TagPicker
+								block
+								size={'xs'}
 								data={props.filterCountries}
 								labelKey={'countryName'}
 								valueKey={'countryCode'}
-								block
-								virtualized={true}
+								defaultValue={['US']}
 								placeholder='Countries'
 								onChange={(val) => {
 									handleFilterChange(filters.countries, val)
@@ -317,13 +332,14 @@ function ListBuilder(props) {
 							/>
 						</Grid>
 
-						<Grid item xs={12}>
-							<p>video filters</p>
+						<Grid item xs={3}>
 							<TagPicker
+								block
+								size={'xs'}
 								data={props.filterLanguages}
 								labelKey={'languageName'}
 								valueKey={'languageCode'}
-								block
+								defaultValue={['en']}
 								virtualized={true}
 								placeholder='Languages'
 								onChange={(val) => {
@@ -331,12 +347,13 @@ function ListBuilder(props) {
 								}}
 							/>
 						</Grid>
-						<Grid item xs={12}>
+						<Grid item xs={3}>
 							<TagPicker
+								block
+								size={'xs'}
 								data={props.filterCategories}
 								labelKey={'categoryName'}
 								valueKey={'categoryId'}
-								block
 								virtualized={true}
 								placeholder='Categories'
 								onChange={(val) => {
@@ -345,15 +362,16 @@ function ListBuilder(props) {
 							/>
 						</Grid>
 
-						<Grid item xs={12}>
+						<Grid item xs={3}>
 							<Toggle
+								size={'xs'}
 								checkedChildren='Only Kids Content'
 								unCheckedChildren='No Kids Content'
 								onChange={(bool) => handleFilterChange(filters.kids, bool)}
 							/>
 						</Grid>
 					</Grid>
-				</Panel>
+				</CustomPanel>
 			</Grid>
 
 			<Grid item xs={12}>
