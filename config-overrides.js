@@ -75,6 +75,7 @@ module.exports = override(
 				'@table-head-background': neutralColor,
 				'@table-body-hover-background': neutralExtraLightColor,
 				'@table-head-font-color': '#FFF',
+				'@loader-backdrop-color': neutralColor,
 				//panel
 				'@panel-heading-color': '#FFF',
 				'@panel-border': '1px solid ' + neutralExtraLightColor,
