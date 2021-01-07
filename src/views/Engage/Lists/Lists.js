@@ -17,6 +17,8 @@ import Divider from 'rsuite/lib/Divider'
 import Whisper from 'rsuite/lib/Whisper'
 import Dropdown from 'rsuite/lib/Dropdown'
 import Popover from 'rsuite/lib/Popover'
+import orderBy from 'lodash/orderBy'
+//import byKey from 'lodash/byKey'
 import {
 	objectives,
 	dataTypes,
@@ -144,23 +146,6 @@ function Lists(props) {
 		return _smartLists
 	}, [props.lists])
 
-	const handleSort = (a, b) => {
-		let { sortColumn, sortType } = currentSort
-		let x = a[sortColumn]
-		let y = b[sortColumn]
-		if (typeof x === 'string') {
-			x = x.charCodeAt()
-		}
-		if (typeof y === 'string') {
-			y = y.charCodeAt()
-		}
-		if (sortType === 'asc') {
-			return x - y
-		} else {
-			return y - x
-		}
-	}
-
 	const handleFilter = (list) => {
 		if (filterState.dataTypeId && list.dataTypeId != filterState.dataTypeId) {
 			return false
@@ -205,9 +190,14 @@ function Lists(props) {
 	}
 
 	const visibleLists = React.useMemo(() => {
-		return props.lists
-			.filter((list) => handleFilter(list))
-			.sort((a, b) => handleSort(a, b))
+		let filtered = props.lists.filter((list) => handleFilter(list))
+		let { sortColumn, sortType } = currentSort
+		let sorted = orderBy(
+			filtered,
+			[(item) => item[sortColumn].toLowerCase()],
+			[sortType]
+		)
+		return sorted
 	}, [props.lists, currentSort, filterState])
 
 	const [lastSubscribers, setLastSubscribers] = React.useState(0)
@@ -337,7 +327,7 @@ function Lists(props) {
 							dispatch(archiveList(payload))
 						}}
 					>
-						UnArchive All Versions
+						Unarchive All Versions
 					</Dropdown.Item>
 				)}
 
@@ -608,7 +598,6 @@ function Lists(props) {
 					sortColumn={currentSort.sortColumn}
 					sortType={currentSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {
-						console.log(sortColumn, sortType)
 						setCurrentSort({ sortColumn, sortType })
 					}}
 				>
