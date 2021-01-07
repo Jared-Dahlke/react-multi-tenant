@@ -193,7 +193,6 @@ export function updateUserData(user) {
 				alert('Could not validate new user')
 			})
 			delete myUser.accounts
-			dispatch(setUser(myUser))
 			const result = await axios.patch(url, myUser)
 			if (result.status === 200) {
 				dispatch(userProfileSaving(false))
