@@ -27,6 +27,25 @@ const VideoModal = (props) => {
 		hasMountedRef.current = true
 	}, [actionsTaken])
 
+	const Duration = ({ seconds }) => {
+		let minutes = Math.floor(seconds / 60)
+		let remainingSeconds = Math.floor(seconds - minutes * 60) - 1
+		return (
+			<div
+				style={{
+					backgroundColor: 'black',
+					color: 'white',
+					width: '100%',
+					height: 18,
+					margin: 4,
+					letterSpacing: 0.5
+				}}
+			>
+				{`${minutes}:${remainingSeconds}`}
+			</div>
+		)
+	}
+
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
@@ -78,11 +97,12 @@ const VideoModal = (props) => {
 	const ImageCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<img
-					src={rowData.thumbnail}
-					width={'45%'}
-					style={{ borderRadius: 180 }}
-				/>
+				<div style={{ position: 'relative' }}>
+					<img src={rowData.thumbnail} width={'100%'} />
+					<div style={{ position: 'absolute', left: 0, bottom: 5 }}>
+						<Duration seconds={rowData.duration} />
+					</div>
+				</div>
 			</Table.Cell>
 		)
 	}
@@ -94,7 +114,7 @@ const VideoModal = (props) => {
 	return (
 		<Modal full show={props.show} onHide={props.close}>
 			<Modal.Header>
-				<Modal.Title>{props?.videos[0]?.channelName || ' '}</Modal.Title>
+				<Modal.Title>Videos for {props?.channel?.name}</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<Table
@@ -150,10 +170,7 @@ const VideoModal = (props) => {
 			</Modal.Body>
 			<Modal.Footer>
 				<Button onClick={props.close} appearance='primary'>
-					Ok
-				</Button>
-				<Button onClick={props.close} appearance='subtle'>
-					Cancel
+					Back to channels
 				</Button>
 			</Modal.Footer>
 		</Modal>

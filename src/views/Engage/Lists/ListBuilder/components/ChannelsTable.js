@@ -15,33 +15,19 @@ var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
 
 export default function ChannelsTable({
-	// Are there more items to load?
-	// (This information comes from the most recent API request.)
 	hasNextPage,
-
-	// Are we currently loading a page of items?
-	// (This may be an in-flight flag in your Redux store for example.)
-	isNextPageLoading,
-
-	// Array of items loaded so far.
+	channelsIsLoading,
 	items,
-
-	// Callback function responsible for loading the next page of items.
 	incrementPage,
-
 	handleActionButtonClick,
 	handleVideosClick
 }) {
-	// We create a reference for the InfiniteLoader
 	const infiniteLoaderRef = React.useRef(null)
 	const hasMountedRef = React.useRef(false)
 
 	const [actionsTaken, setActionsTaken] = React.useState(0)
 
-	// Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
 	React.useEffect(() => {
-		// We only need to reset cached items when "sortOrder" changes.
-		// This effect will run on mount too; there's no need to reset in that case.
 		if (hasMountedRef.current) {
 			if (infiniteLoaderRef.current) {
 				//	infiniteLoaderRef.current.resetloadMoreItemsCache()
@@ -133,7 +119,7 @@ export default function ChannelsTable({
 				className='link-group'
 				style={{ align: 'center', padding: 5 }}
 			>
-				<Button appearance='link' onClick={() => handleVideosClick(rowData.id)}>
+				<Button appearance='link' onClick={() => handleVideosClick(rowData)}>
 					{rowData.videosCount}
 				</Button>
 			</Table.Cell>
@@ -142,7 +128,7 @@ export default function ChannelsTable({
 
 	return (
 		<Table
-			loading={items.length < 1}
+			loading={items.length < 1 && channelsIsLoading}
 			virtualized
 			height={500}
 			rowHeight={80}

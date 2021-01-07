@@ -38,6 +38,8 @@ const mapStateToProps = (state) => {
 	return {
 		videos: state.engage.videos,
 		channels: state.engage.channels,
+		channelsIsLoading: state.engage.channelsIsLoading,
+		videosIsLoading: state.engage.videosIsLoading,
 		hasNextPage: state.engage.hasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
@@ -90,12 +92,9 @@ function ListBuilder(props) {
 		props.location.state.createdListVersion
 	)
 
-	const [isNextPageLoading, setIsNextPageLoading] = React.useState(false)
-
-	const [
-		viewingVideosForChannelId,
-		setViewingVideosForChannelId
-	] = React.useState(null)
+	const [viewingVideosForChannel, setViewingVideosForChannel] = React.useState(
+		null
+	)
 
 	React.useEffect(() => {
 		props.removeAllChannels()
@@ -110,6 +109,8 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
+		console.log('firing currentPage useEffect')
+		console.log(props.hasNextPage)
 		if (props.hasNextPage) {
 			let params = {
 				versionId: createdListVersion.versionId,
@@ -126,21 +127,17 @@ function ListBuilder(props) {
 	let videosHasNextPage = props.videosHasNextPage
 
 	React.useEffect(() => {
-		if (
-			currentVideoPage > 0 &&
-			viewingVideosForChannelId &&
-			videosHasNextPage
-		) {
+		if (currentVideoPage > 0 && viewingVideosForChannel && videosHasNextPage) {
 			let params = {
 				versionId: createdListVersion.versionId,
 				pageNumber: currentVideoPage,
 				filters: {
-					channelId: viewingVideosForChannelId
+					channelId: viewingVideosForChannel.id
 				}
 			}
 			props.fetchVideos(params)
 		}
-	}, [currentVideoPage, viewingVideosForChannelId])
+	}, [currentVideoPage, viewingVideosForChannel])
 
 	const filters = {
 		kids: 'kids',
@@ -168,7 +165,7 @@ function ListBuilder(props) {
 
 			toast.promise(props.patchVersionData(args), {
 				loading: 'Saving...',
-				success: <b>saved!</b>,
+				success: <b>Saved!</b>,
 				error: <b>Could not save.</b>
 			})
 		}
@@ -202,6 +199,7 @@ function ListBuilder(props) {
 				for (const country of value) {
 					countries.push({ countryCode: country })
 				}
+				console.log('setting country filter state')
 				setFilterState((prevState) => {
 					return {
 						...prevState,
@@ -246,6 +244,8 @@ function ListBuilder(props) {
 	}
 
 	React.useEffect(() => {
+		console.log('firing filterState useEffect')
+		console.log(hasMountedRef.current)
 		if (hasMountedRef.current) {
 			props.removeAllChannels()
 			props.removeAllVideos()
@@ -256,16 +256,16 @@ function ListBuilder(props) {
 
 	const [showVideoModal, setShowVideoModal] = React.useState(false)
 
-	const handleVideosClick = (channelId) => {
-		setShowVideoModal(true)
-		setViewingVideosForChannelId(channelId)
+	const handleVideosClick = (channel) => {
+		setViewingVideosForChannel(channel)
 		setCurrentVideoPage(1)
+		setShowVideoModal(true)
 	}
 
 	const handleVideoModalClose = () => {
 		setShowVideoModal(false)
 		props.setVideosHasNextPage(true)
-		setViewingVideosForChannelId(null)
+		setViewingVideosForChannel(null)
 		props.removeAllVideos()
 	}
 
@@ -277,6 +277,7 @@ function ListBuilder(props) {
 				videos={props.videos}
 				incrementPage={() => setCurrentVideoPage((prevState) => prevState + 1)}
 				handleActionButtonClick={handleActionButtonClick}
+				channel={viewingVideosForChannel}
 			/>
 			<Grid item xs={4} align='center'>
 				<h4>{createdListVersion.smartListName}</h4>
@@ -359,7 +360,7 @@ function ListBuilder(props) {
 			<Grid item xs={12}>
 				<ChannelsTable
 					hasNextPage={props.hasNextPage}
-					isNextPageLoading={isNextPageLoading}
+					channelsIsLoading={props.channelsIsLoading}
 					items={props.channels}
 					incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
 					handleActionButtonClick={handleActionButtonClick}
