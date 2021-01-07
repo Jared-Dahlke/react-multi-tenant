@@ -4,8 +4,29 @@ import Button from 'rsuite/lib/Button'
 import Table from 'rsuite/lib/Table'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
+import { accentColor } from '../../../../../assets/jss/colorContants'
 
 const VideoModal = (props) => {
+	let handleActionButtonClick = props.handleActionButtonClick
+
+	// We create a reference for the InfiniteLoader
+	const infiniteLoaderRef = React.useRef(null)
+	const hasMountedRef = React.useRef(false)
+
+	const [actionsTaken, setActionsTaken] = React.useState(0)
+
+	// Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
+	React.useEffect(() => {
+		// We only need to reset cached items when "sortOrder" changes.
+		// This effect will run on mount too; there's no need to reset in that case.
+		if (hasMountedRef.current) {
+			if (infiniteLoaderRef.current) {
+				//	infiniteLoaderRef.current.resetloadMoreItemsCache()
+			}
+		}
+		hasMountedRef.current = true
+	}, [actionsTaken])
+
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>

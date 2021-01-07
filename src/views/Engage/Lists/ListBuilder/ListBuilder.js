@@ -276,6 +276,7 @@ function ListBuilder(props) {
 				close={handleVideoModalClose}
 				videos={props.videos}
 				incrementPage={() => setCurrentVideoPage((prevState) => prevState + 1)}
+				handleActionButtonClick={handleActionButtonClick}
 			/>
 			<Grid item xs={4} align='center'>
 				<h4>{createdListVersion.smartListName}</h4>

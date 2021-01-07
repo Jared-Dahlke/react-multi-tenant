@@ -44,7 +44,7 @@ export default function ChannelsTable({
 		// This effect will run on mount too; there's no need to reset in that case.
 		if (hasMountedRef.current) {
 			if (infiniteLoaderRef.current) {
-				infiniteLoaderRef.current.resetloadMoreItemsCache()
+				//	infiniteLoaderRef.current.resetloadMoreItemsCache()
 			}
 		}
 		hasMountedRef.current = true
