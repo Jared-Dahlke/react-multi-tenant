@@ -96,6 +96,8 @@ function ListBuilder(props) {
 		null
 	)
 
+	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
+
 	React.useEffect(() => {
 		props.removeAllChannels()
 		props.removeAllVideos()
@@ -109,8 +111,6 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
-		console.log('firing currentPage useEffect')
-		console.log(props.hasNextPage)
 		if (props.hasNextPage) {
 			let params = {
 				versionId: createdListVersion.versionId,
@@ -122,7 +122,7 @@ function ListBuilder(props) {
 			}
 			props.fetchChannels(params)
 		}
-	}, [currentPage])
+	}, [currentPage, channelsFetchTrigger])
 
 	let videosHasNextPage = props.videosHasNextPage
 
@@ -199,7 +199,6 @@ function ListBuilder(props) {
 				for (const country of value) {
 					countries.push({ countryCode: country })
 				}
-				console.log('setting country filter state')
 				setFilterState((prevState) => {
 					return {
 						...prevState,
@@ -244,12 +243,12 @@ function ListBuilder(props) {
 	}
 
 	React.useEffect(() => {
-		console.log('firing filterState useEffect')
-		console.log(hasMountedRef.current)
 		if (hasMountedRef.current) {
 			props.removeAllChannels()
 			props.removeAllVideos()
+			props.setHasNextPage(true)
 			setCurrentPage(1)
+			setChannelsFetchTrigger((prevState) => prevState + 1)
 		}
 		hasMountedRef.current = true
 	}, [filterState])
