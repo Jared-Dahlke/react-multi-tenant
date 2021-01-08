@@ -140,7 +140,8 @@ function ListBuilder(props) {
 				versionId: createdListVersion.versionId,
 				pageNumber: currentVideoPage,
 				filters: {
-					channelId: viewingVideosForChannel.id
+					channelId: viewingVideosForChannel.id,
+					kids: filterState.kids
 				}
 			}
 			props.fetchVideos(params)
@@ -163,7 +164,12 @@ function ListBuilder(props) {
 				versionId: versionId,
 				id: item.id
 			}
-			props.deleteVersionDataItem(_args)
+
+			toast.promise(props.deleteVersionDataItem(_args), {
+				loading: 'Deleting...',
+				success: 'Deleted!   ',
+				error: <b>Could not delete.</b>
+			})
 		} else {
 			item.actionId = actionId
 			let args = {
@@ -173,7 +179,7 @@ function ListBuilder(props) {
 
 			toast.promise(props.patchVersionData(args), {
 				loading: 'Saving...',
-				success: <b>Saved!</b>,
+				success: 'Saved!   ',
 				error: <b>Could not save.</b>
 			})
 		}

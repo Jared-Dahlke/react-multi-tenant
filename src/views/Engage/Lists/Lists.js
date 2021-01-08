@@ -194,7 +194,15 @@ function Lists(props) {
 		let { sortColumn, sortType } = currentSort
 		let sorted = orderBy(
 			filtered,
-			[(item) => item[sortColumn].toLowerCase()],
+			[
+				(item) => {
+					if (typeof item[sortColumn] === 'string') {
+						return item[sortColumn].toLowerCase()
+					} else {
+						return item[sortColumn]
+					}
+				}
+			],
 			[sortType]
 		)
 		return sorted
@@ -620,10 +628,6 @@ function Lists(props) {
 						<Table.Cell dataKey='objectiveName' />
 					</Table.Column>
 
-					<Table.Column width={80} sortable>
-						<Table.HeaderCell>Type</Table.HeaderCell>
-						<Table.Cell dataKey='dataTypeName' />
-					</Table.Column>
 					<Table.Column width={80} sortable>
 						<Table.HeaderCell>Active</Table.HeaderCell>
 						<Table.Cell dataKey={'activeText'} />

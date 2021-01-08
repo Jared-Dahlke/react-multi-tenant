@@ -25,6 +25,7 @@ var fileDownload = require('js-file-download')
 var cwait = require('cwait')
 
 var queue = new cwait.TaskQueue(Promise, 1)
+var deleteQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.listBuilderUrl
 
@@ -66,9 +67,13 @@ export function fetchLists(accountId) {
 							version.archivedText = 'False'
 						}
 
-						version.subscriberCountFormatted = numeral(
-							version.subscriberCount
-						).format('0.0a')
+						if (Number(version.subscriberCount) < 1000) {
+							version.subscriberCountFormatted = version.subscriberCount
+						} else {
+							version.subscriberCountFormatted = numeral(
+								version.subscriberCount
+							).format('0.0a')
+						}
 
 						versions.push(version)
 					}
@@ -197,14 +202,9 @@ export const deleteVersionDataItem = (args) => {
 	let versionId = args.versionId
 	let id = args.id
 	let url = `${apiBase}/smart-list/version/${versionId}/data/${id}`
-	return (dispatch) => {
-		axios
-			.delete(url)
-			.then((response) => {})
-			.catch((error) => {
-				console.error('delete version data item error', error)
-			})
-	}
+	return deleteQueue.wrap(async (dispatch) => {
+		const result = await axios.delete(url)
+	})
 }
 
 export function setIsDownloadingExcel(isDownloadingExcel) {

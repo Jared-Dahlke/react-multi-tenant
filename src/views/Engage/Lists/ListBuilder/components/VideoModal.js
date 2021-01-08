@@ -5,6 +5,9 @@ import Table from 'rsuite/lib/Table'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
 import { accentColor } from '../../../../../assets/jss/colorContants'
+import Whisper from 'rsuite/lib/Whisper'
+import Tooltip from 'rsuite/lib/Tooltip'
+import numeral from 'numeral'
 
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
@@ -107,6 +110,76 @@ const VideoModal = (props) => {
 		)
 	}
 
+	const NameCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<Whisper
+					placement='bottomStart'
+					trigger='hover'
+					speaker={<Tooltip>{rowData.description}</Tooltip>}
+				>
+					<div>{rowData.name}</div>
+				</Whisper>
+			</Table.Cell>
+		)
+	}
+
+	const DislikesCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<Whisper
+					placement='bottomStart'
+					trigger='hover'
+					speaker={<Tooltip>{numeral(rowData.dislikes).format('0,0')}</Tooltip>}
+				>
+					<div>{numeral(rowData.dislikes).format('0.0a')}</div>
+				</Whisper>
+			</Table.Cell>
+		)
+	}
+
+	const LikesCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<Whisper
+					placement='bottomStart'
+					trigger='hover'
+					speaker={<Tooltip>{numeral(rowData.likes).format('0,0')}</Tooltip>}
+				>
+					<div>{numeral(rowData.likes).format('0.0a')}</div>
+				</Whisper>
+			</Table.Cell>
+		)
+	}
+
+	const ViewsCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<Whisper
+					placement='bottomStart'
+					trigger='hover'
+					speaker={<Tooltip>{numeral(rowData.views).format('0,0')}</Tooltip>}
+				>
+					<div>{numeral(rowData.views).format('0.0a')}</div>
+				</Whisper>
+			</Table.Cell>
+		)
+	}
+
+	const CommentsCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<Whisper
+					placement='bottomStart'
+					trigger='hover'
+					speaker={<Tooltip>{numeral(rowData.comments).format('0,0')}</Tooltip>}
+				>
+					<div>{numeral(rowData.comments).format('0.0a')}</div>
+				</Whisper>
+			</Table.Cell>
+		)
+	}
+
 	const handleVideoScroll = debounce(() => {
 		props.incrementPage()
 	}, 1200)
@@ -135,7 +208,7 @@ const VideoModal = (props) => {
 
 					<Table.Column verticalAlign={'middle'} resizable>
 						<Table.HeaderCell>Name</Table.HeaderCell>
-						<Table.Cell dataKey='name' />
+						<NameCell />
 					</Table.Column>
 					<Table.Column verticalAlign={'middle'}>
 						<Table.HeaderCell>Date</Table.HeaderCell>
@@ -149,10 +222,27 @@ const VideoModal = (props) => {
 						<Table.HeaderCell>Category</Table.HeaderCell>
 						<Table.Cell dataKey='categoryName' />
 					</Table.Column>
+
 					<Table.Column verticalAlign={'middle'} flexGrow={1}>
-						<Table.HeaderCell>Description</Table.HeaderCell>
-						<Table.Cell dataKey='abbreviatedDescription' />
+						<Table.HeaderCell>Likes</Table.HeaderCell>
+						<LikesCell />
 					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+						<Table.HeaderCell>Dislikes</Table.HeaderCell>
+						<DislikesCell />
+					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+						<Table.HeaderCell>Views</Table.HeaderCell>
+						<ViewsCell />
+					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+						<Table.HeaderCell>Comments</Table.HeaderCell>
+						<CommentsCell />
+					</Table.Column>
+
 					<Table.Column verticalAlign={'middle'} flexGrow={1}>
 						<Table.HeaderCell>Subscribers</Table.HeaderCell>
 						<Table.Cell dataKey='subscribersCount' />
