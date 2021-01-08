@@ -1,15 +1,13 @@
 import React from 'react'
-import { FixedSizeList as InfiniteList } from 'react-window'
-import InfiniteLoader from 'react-window-infinite-loader'
-import Video from './Video'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Table from 'rsuite/lib/Table'
 import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
-import IconButton from 'rsuite/lib/IconButton'
-import Icon from 'rsuite/lib/Icon'
 import { accentColor } from '../../../../../assets/jss/colorContants'
+import Whisper from 'rsuite/lib/Whisper'
+import Tooltip from 'rsuite/lib/Tooltip'
+
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -91,11 +89,7 @@ export default function ChannelsTable({
 	const ImageCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<img
-					src={rowData.thumbnail}
-					width={'45%'}
-					style={{ borderRadius: 180 }}
-				/>
+				<img src={rowData.thumbnail} width={50} style={{ borderRadius: 180 }} />
 			</Table.Cell>
 		)
 	}
@@ -107,7 +101,13 @@ export default function ChannelsTable({
 				className='link-group'
 				style={{ align: 'center', padding: 5 }}
 			>
-				{countryCodeToFlagEmoji(rowData.countryCode)}
+				<Whisper
+					placement='topStart'
+					trigger='hover'
+					speaker={<Tooltip>{rowData.countryName}</Tooltip>}
+				>
+					<div>{countryCodeToFlagEmoji(rowData.countryCode)}</div>
+				</Whisper>
 			</Table.Cell>
 		)
 	}
@@ -126,6 +126,20 @@ export default function ChannelsTable({
 		)
 	}
 
+	const NameCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<Whisper
+					placement='topStart'
+					trigger='hover'
+					speaker={<Tooltip>{rowData.description}</Tooltip>}
+				>
+					<div>{rowData.name}</div>
+				</Whisper>
+			</Table.Cell>
+		)
+	}
+
 	return (
 		<Table
 			loading={items.length < 1 && channelsIsLoading}
@@ -138,19 +152,19 @@ export default function ChannelsTable({
 				handleScroll()
 			}}
 		>
-			<Table.Column verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} width={80}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ImageCell />
 			</Table.Column>
 
-			<Table.Column width={30} verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} width={60}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<CountryCell />
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} resizable>
+			<Table.Column verticalAlign={'middle'} flexGrow={2}>
 				<Table.HeaderCell>Name</Table.HeaderCell>
-				<Table.Cell dataKey='name' />
+				<NameCell />
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'}>
 				<Table.HeaderCell>Date</Table.HeaderCell>
@@ -160,15 +174,11 @@ export default function ChannelsTable({
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} flexGrow={2}>
 				<Table.HeaderCell>Category</Table.HeaderCell>
 				<Table.Cell dataKey='categoryName' />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1}>
-				<Table.HeaderCell>Description</Table.HeaderCell>
-				<Table.Cell dataKey='abbreviatedDescription' />
-			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1}>
+			<Table.Column verticalAlign={'middle'}>
 				<Table.HeaderCell>Subscribers</Table.HeaderCell>
 				<Table.Cell dataKey='subscribersCount' />
 			</Table.Column>
@@ -176,11 +186,11 @@ export default function ChannelsTable({
 				<Table.HeaderCell>Videos</Table.HeaderCell>
 				<VideoCountCell />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1}>
+			<Table.Column verticalAlign={'middle'}>
 				<Table.HeaderCell>Views</Table.HeaderCell>
 				<Table.Cell dataKey='viewsCount' />
 			</Table.Column>
-			<Table.Column width={200} verticalAlign={'middle'}>
+			<Table.Column width={180} verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ActionCell />
 			</Table.Column>
