@@ -55,9 +55,9 @@ export function fetchLists(accountId) {
 				for (const list of result.data) {
 					for (const version of list.versions) {
 						if (version.active) {
-							version.activeText = 'True'
+							version.activeText = 'Active'
 						} else {
-							version.activeText = 'False'
+							version.activeText = 'Not Active'
 						}
 
 						version.archived = list.archived
