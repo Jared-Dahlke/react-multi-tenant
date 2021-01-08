@@ -61,7 +61,7 @@ function Opinions(props) {
 		[classes.tableCellRTL]: false
 	})
 
-	const userHeaders = ['Question', 'OpinionType', 'Archived', '']
+	const userHeaders = ['Question', 'Opinion Type', 'Archived', '']
 
 	const handleArchiveOpinionClick = (opinionId) => {
 		props.archiveOpinion(opinionId)
