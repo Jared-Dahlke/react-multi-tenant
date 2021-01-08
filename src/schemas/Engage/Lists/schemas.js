@@ -88,9 +88,24 @@ export const postListObjValidation = Yup.object().shape({
 	objectiveId: Yup.number().required(),
 	brandProfileId: Yup.number().required(),
 	smartListName: Yup.string()
-		.required()
-		.min(2)
-		.max(50)
+		.required('Please enter a name for this SmartList')
+		.min(2, 'Min 2 characters')
+		.max(50, 'Max 50 characters')
+		.test({
+			name: 'duplication',
+			exclusive: false,
+			params: {},
+			message: 'Sorry, this name is already taken. Please try another.',
+			test: function(value) {
+				for (const version of this.parent.smartLists) {
+					if (version.smartListName === value) {
+						return false
+					} else {
+						return true
+					}
+				}
+			}
+		})
 })
 
 export const postListVersionResult = Yup.object().shape({

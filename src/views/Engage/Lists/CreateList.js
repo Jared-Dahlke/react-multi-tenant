@@ -173,6 +173,7 @@ function CreateNewListModal(props) {
 const MyEnhancedForm = withFormik({
 	mapPropsToValues: (props) => {
 		return {
+			smartLists: props.lists,
 			smartListName: '',
 			objectiveId: 1,
 			brandProfileId: props.brandProfiles[0]

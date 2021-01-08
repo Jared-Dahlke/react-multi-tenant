@@ -1,24 +1,18 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import GridItem from '../../../components/Grid/GridItem.js'
 import Button from 'rsuite/lib/Button'
 import { connect } from 'react-redux'
 import { FormLoader } from '../../../components/SkeletonLoader'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../routes'
-import Panel from '../../../components/CustomPanel'
-import Checkbox from 'rsuite/lib/Checkbox'
-import Label from '../../../components/CustomInputLabel/CustomInputLabel'
 import numeral from 'numeral'
 import Icon from 'rsuite/lib/Icon'
 import IconButton from 'rsuite/lib/IconButton'
 import CustomPanel from '../../../components/CustomPanel'
-import Divider from 'rsuite/lib/Divider'
 import Whisper from 'rsuite/lib/Whisper'
 import Dropdown from 'rsuite/lib/Dropdown'
 import Popover from 'rsuite/lib/Popover'
 import orderBy from 'lodash/orderBy'
-//import byKey from 'lodash/byKey'
 import {
 	objectives,
 	dataTypes,
@@ -33,18 +27,11 @@ import {
 	cloneListVersion,
 	setPostListSuccess
 } from '../../../redux/actions/engage/lists'
-import ButtonGroup from 'rsuite/lib/ButtonGroup'
-import {
-	neutralLightColor,
-	accentColor
-} from '../../../assets/jss/colorContants.js'
-import { getCurrentAccount } from '../../../utils'
 import { whiteColor } from '../../../assets/jss/material-dashboard-react.js'
-import { animated, useSpring, config } from 'react-spring'
+import { animated, useSpring } from 'react-spring'
 import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import InputPicker from 'rsuite/lib/InputPicker'
 import Table from 'rsuite/lib/Table'
-import { setScenarioToArchived } from '../../../redux/actions/admin/scenarios.js'
 import { useDispatch } from 'react-redux'
 
 const mapStateToProps = (state) => {
@@ -56,7 +43,6 @@ const mapStateToProps = (state) => {
 		fetchListsSuccess: state.engage.fetchListsSuccess,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
-
 		isPostingList: state.engage.isPostingList,
 		postListSuccess: state.engage.postListSuccess,
 		isPostingListVersionId: state.engage.isPostingListVersionId,
@@ -89,16 +75,6 @@ function Lists(props) {
 		activeStatusId: 1,
 		archivedStatusId: 2
 	})
-
-	let fetchLists = props.fetchLists
-	let accounts = props.accounts.data
-
-	React.useEffect(() => {
-		let currentAccount = getCurrentAccount(props.accounts.data)
-		if (currentAccount) {
-			fetchLists(currentAccount.accountId)
-		}
-	}, [fetchLists, accounts])
 
 	let postListSuccess = props.postListSuccess
 	React.useEffect(() => {
@@ -269,23 +245,16 @@ function Lists(props) {
 				className='link-group'
 				style={{ align: 'center', padding: 5 }}
 			>
-				<IconButton
-					appearance='subtle'
-					onClick={() => handleEditClick(rowData)}
-					icon={<Icon icon='edit2' />}
-					loading={
-						customProps.isPostingList &&
-						customProps.isPostingListVersionId === rowData.versionId
-					}
-				/>
-				<Divider vertical />
 				<CustomWhisper rowData={rowData}>
 					<IconButton
 						appearance='subtle'
 						icon={<Icon icon='more' />}
 						loading={
-							customProps.isDownloadingExcel &&
-							customProps.isDownloadingExcelVersionId === rowData.versionId
+							(customProps.isDownloadingExcel &&
+								customProps.isDownloadingExcelVersionId ===
+									rowData.versionId) ||
+							(customProps.isPostingList &&
+								customProps.isPostingListVersionId === rowData.versionId)
 						}
 					/>
 				</CustomWhisper>
@@ -354,6 +323,15 @@ function Lists(props) {
 						Activate Version
 					</Dropdown.Item>
 				)}
+
+				<Dropdown.Item
+					eventKey={7}
+					onClick={() => {
+						handleEditClick(props.rowData)
+					}}
+				>
+					Edit
+				</Dropdown.Item>
 			</Dropdown.Menu>
 		)
 	}
@@ -377,7 +355,7 @@ function Lists(props) {
 		render() {
 			return (
 				<Whisper
-					placement='bottomEnd'
+					placement='topEnd'
 					trigger='click'
 					triggerRef={(ref) => {
 						this.trigger = ref
@@ -404,6 +382,36 @@ function Lists(props) {
 
 	return (
 		<Grid container justify='center' spacing={5}>
+			<Grid container justify='center' spacing={2}>
+				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+					<CustomPanel header='Channels'>
+						<animated.h2 style={{ height: 40 }}>
+							{channelsValue.number.interpolate((val) =>
+								numeral(Math.floor(val)).format('0.0a')
+							)}
+						</animated.h2>
+					</CustomPanel>
+				</Grid>
+				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+					<CustomPanel header='Videos'>
+						<animated.h2 style={{ height: 40 }}>
+							{videosValue.number.interpolate((val) =>
+								numeral(Math.floor(val)).format('0.0a')
+							)}
+						</animated.h2>
+					</CustomPanel>
+				</Grid>
+				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
+					<CustomPanel header='Subscribers'>
+						<animated.h2 style={{ height: 40 }}>
+							{subscribersValue.number.interpolate((val) =>
+								numeral(Math.floor(val)).format('0.0a')
+							)}
+						</animated.h2>
+					</CustomPanel>
+				</Grid>
+			</Grid>
+
 			<Grid item xs={12}>
 				<Grid
 					container
@@ -414,9 +422,9 @@ function Lists(props) {
 					<Grid item>
 						<ButtonToolbar>
 							<Button onClick={() => handleCreateNewList()} color='green'>
-								Build New SmartList
+								Build
 							</Button>
-							<Button onClick={handleUploadNewList}>Upload Excel/CSV</Button>
+							<Button onClick={handleUploadNewList}>Upload</Button>
 						</ButtonToolbar>
 					</Grid>
 				</Grid>
@@ -522,7 +530,7 @@ function Lists(props) {
 
 					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
 						<div style={{ position: 'absolute', top: -20, left: 0 }}>
-							<p>Version Status</p>
+							<p>Status</p>
 						</div>
 						<InputPicker
 							size={'sm'}
@@ -569,35 +577,6 @@ function Lists(props) {
 					</Grid>
 				</Grid>
 			</Grid>
-			<Grid container justify='center' spacing={2}>
-				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
-					<CustomPanel header='Channels'>
-						<animated.h2>
-							{channelsValue.number.interpolate((val) =>
-								numeral(Math.floor(val)).format('0.0a')
-							)}
-						</animated.h2>
-					</CustomPanel>
-				</Grid>
-				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
-					<CustomPanel header='Videos'>
-						<animated.h2>
-							{videosValue.number.interpolate((val) =>
-								numeral(Math.floor(val)).format('0.0a')
-							)}
-						</animated.h2>
-					</CustomPanel>
-				</Grid>
-				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
-					<CustomPanel header='Subscribers'>
-						<animated.h2>
-							{subscribersValue.number.interpolate((val) =>
-								numeral(Math.floor(val)).format('0.0a')
-							)}
-						</animated.h2>
-					</CustomPanel>
-				</Grid>
-			</Grid>
 
 			<Grid item xs={12}>
 				<Table
@@ -628,8 +607,8 @@ function Lists(props) {
 						<Table.Cell dataKey='objectiveName' />
 					</Table.Column>
 
-					<Table.Column width={80} sortable>
-						<Table.HeaderCell>Active</Table.HeaderCell>
+					<Table.Column sortable>
+						<Table.HeaderCell>Status</Table.HeaderCell>
 						<Table.Cell dataKey={'activeText'} />
 					</Table.Column>
 					<Table.Column flexGrow={1} sortable>
@@ -644,11 +623,8 @@ function Lists(props) {
 						<Table.HeaderCell>Subscribers</Table.HeaderCell>
 						<SubscriberCell dataKey={'subscriberCount'} />
 					</Table.Column>
-					<Table.Column width={90} sortable>
-						<Table.HeaderCell>Archived</Table.HeaderCell>
-						<Table.Cell dataKey={'archivedText'} />
-					</Table.Column>
-					<Table.Column width={120}>
+
+					<Table.Column width={60}>
 						<Table.HeaderCell>Actions</Table.HeaderCell>
 						<ActionCell customProps={props} />
 					</Table.Column>

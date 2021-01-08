@@ -206,8 +206,7 @@ function Permissions(props) {
 							fontSize: 24
 						}}
 					/>
-					{'  '}
-					You are trying to remove a permission . Are you sure you want to
+					You are trying to remove a permission. Are you sure you want to
 					proceed?
 				</Modal.Body>
 				<Modal.Footer>
