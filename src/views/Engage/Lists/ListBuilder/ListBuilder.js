@@ -7,6 +7,7 @@ import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import TagPicker from 'rsuite/lib/TagPicker'
 import PanelGroup from 'rsuite/lib/PanelGroup'
+import SelectPicker from 'rsuite/lib/SelectPicker'
 import CustomPanel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
@@ -32,7 +33,6 @@ import {
 	deleteVersionDataItem,
 	downloadExcelList
 } from '../../../../redux/actions/engage/lists'
-import { neutralColor } from '../../../../assets/jss/colorContants'
 import toast from 'react-hot-toast'
 
 const mapStateToProps = (state) => {
@@ -119,12 +119,14 @@ function ListBuilder(props) {
 				filters: {
 					channelFilters: {
 						countries: filterState.countries,
-						kids: filterState.kids
+						kids: filterState.kids,
+						actionIds: filterState.actionIds
 					},
 					videoFilters: {
 						languages: filterState.languages,
 						categories: filterState.categories,
-						kids: filterState.kids
+						kids: filterState.kids,
+						actionIds: filterState.actionIds
 					}
 				}
 			}
@@ -152,8 +154,21 @@ function ListBuilder(props) {
 		kids: 'kids',
 		categories: 'categories',
 		languages: 'languages',
-		countries: 'countries'
+		countries: 'countries',
+		actionIds: 'actionIds'
 	}
+
+	const actionIdOptions = [
+		{ label: 'View Targeted Items', actionIds: [1], id: 1 },
+		{ label: 'View Blocked Items', actionIds: [2], id: 2 },
+		{ label: 'View Watched Items', actionIds: [3], id: 3 },
+		{
+			label: 'View Targeted, Watched, and Blocked Items',
+			actionIds: [1, 2, 3],
+			id: 4
+		},
+		{ label: 'View All Items', actionIds: [], id: 5 }
+	]
 
 	const handleActionButtonClick = (actionId, item) => {
 		let unSelecting = item.actionId === actionId
@@ -195,7 +210,8 @@ function ListBuilder(props) {
 
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
-		countries: [{ countryCode: 'US' }]
+		countries: [{ countryCode: 'US' }],
+		actionIds: []
 	})
 
 	const handleFilterChange = (filter, value) => {
@@ -250,6 +266,22 @@ function ListBuilder(props) {
 					return {
 						...prevState,
 						categories
+					}
+				})
+				break
+
+			case filters.actionIds:
+				let actionIds = []
+				if (!value) {
+					value = []
+				}
+				for (const actionId of value) {
+					actionIds.push(actionId)
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						actionIds
 					}
 				})
 				break
@@ -317,6 +349,30 @@ function ListBuilder(props) {
 			<Grid item xs={12}>
 				<CustomPanel>
 					<h4>{createdListVersion.smartListName}</h4>
+				</CustomPanel>
+			</Grid>
+
+			<Grid item xs={12}>
+				<CustomPanel header='Smartlist Filters'>
+					<Grid container spacing={3}>
+						<Grid item xs={3}>
+							<SelectPicker
+								size='xs'
+								labelKey={'label'}
+								valueKey={'actionIds'}
+								placeholder={'Select'}
+								data={actionIdOptions}
+								defaultValue={[]}
+								onChange={(val) => {
+									handleFilterChange(filters.actionIds, val)
+								}}
+								cleanable={false}
+								block
+								preventOverflow={true}
+								searchable={false}
+							/>
+						</Grid>
+					</Grid>
 				</CustomPanel>
 			</Grid>
 
