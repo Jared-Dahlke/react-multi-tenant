@@ -56,7 +56,7 @@ export function fetchVideos(args) {
 				if (result.data.length < 100) {
 					dispatch(setVideosHasNextPage(false))
 				}
-				let formattedVideos = formatChannels(result.data)
+				let formattedVideos = formatVideos(result.data)
 				dispatch(setVideos(formattedVideos))
 				dispatch(setVideosIsLoading(false))
 			}
@@ -219,29 +219,18 @@ const formatVideos = (videos) => {
 			'/' +
 			numeral(item.allVideoCount).format('0a')
 		item.viewsCount = numeral(item.views).format('0a')
+		item.commentsCount = numeral(item.comments).format('0a')
+
+		item.dislikesCount = numeral(item.dislikes).format('0a')
+		item.likesCount = numeral(item.likes).format('0a')
 
 		let language = item.languageName?.replace(/\s/g, '').length
 			? item.languageName
 			: '[No language]'
 		item.language = language
 	}
-	return channels
+	return videos
 }
-
-/**let minutes = Math.floor(seconds / 60)
-		let remainingSeconds = Math.floor(seconds - minutes * 60) - 1
-		return (
-			<div
-				style={{
-					backgroundColor: 'black',
-					color: 'white',
-					width: 33,
-					height: 18,
-					margin: 4,
-					letterSpacing: 0.5
-				}}
-			>
-				{`${minutes}:${remainingSeconds}`} */
 
 export function setChannels(channels) {
 	return {

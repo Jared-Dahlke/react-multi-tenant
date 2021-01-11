@@ -132,7 +132,7 @@ const VideoModal = (props) => {
 					trigger='hover'
 					speaker={<Tooltip>{numeral(rowData.dislikes).format('0,0')}</Tooltip>}
 				>
-					<div>{numeral(rowData.dislikes).format('0.0a')}</div>
+					<div>{rowData.dislikesCount}</div>
 				</Whisper>
 			</Table.Cell>
 		)
@@ -146,7 +146,7 @@ const VideoModal = (props) => {
 					trigger='hover'
 					speaker={<Tooltip>{numeral(rowData.likes).format('0,0')}</Tooltip>}
 				>
-					<div>{numeral(rowData.likes).format('0.0a')}</div>
+					<div>{rowData.likesCount}</div>
 				</Whisper>
 			</Table.Cell>
 		)
@@ -160,7 +160,7 @@ const VideoModal = (props) => {
 					trigger='hover'
 					speaker={<Tooltip>{numeral(rowData.views).format('0,0')}</Tooltip>}
 				>
-					<div>{numeral(rowData.views).format('0.0a')}</div>
+					<div>{numeral(rowData.views).format('0a')}</div>
 				</Whisper>
 			</Table.Cell>
 		)
@@ -174,7 +174,7 @@ const VideoModal = (props) => {
 					trigger='hover'
 					speaker={<Tooltip>{numeral(rowData.comments).format('0,0')}</Tooltip>}
 				>
-					<div>{numeral(rowData.comments).format('0.0a')}</div>
+					<div>{rowData.commentsCount}</div>
 				</Whisper>
 			</Table.Cell>
 		)
@@ -243,15 +243,6 @@ const VideoModal = (props) => {
 						<CommentsCell />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
-						<Table.HeaderCell>Subscribers</Table.HeaderCell>
-						<Table.Cell dataKey='subscribersCount' />
-					</Table.Column>
-
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
-						<Table.HeaderCell>Views</Table.HeaderCell>
-						<Table.Cell dataKey='viewsCount' />
-					</Table.Column>
 					<Table.Column width={200} verticalAlign={'middle'}>
 						<Table.HeaderCell></Table.HeaderCell>
 						<ActionCell />
