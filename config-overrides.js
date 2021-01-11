@@ -41,7 +41,7 @@ module.exports = override(
 				'@nav-bar-default-font-color': '#FFF',
 				'@nav-bar-default-active-bg': neutralColor,
 				'@nav-item-default-hover-bg': neutralExtraLightColor,
-				'@dropdown-link-hover-bg': neutralLightColor,
+				'@dropdown-link-hover-bg': neutralExtraLightColor,
 
 				//'@btn-default-hover-bg': 'yellow',
 				////	'@btn-default-active-bg': accentColor,

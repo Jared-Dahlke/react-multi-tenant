@@ -102,9 +102,7 @@ function ListBuilder(props) {
 
 	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
 
-	let [parsedVersionId, setParsedVersionId] = React.useState(
-		props.match.params.versionId
-	)
+	let [parsedVersionId] = React.useState(props.match.params.versionId)
 
 	if (!parsedVersionId || isNaN(parsedVersionId)) {
 		history.push(routes.app.engage.lists.lists.path)
@@ -393,8 +391,13 @@ function ListBuilder(props) {
 
 				<Grid item xs={12}>
 					<CustomPanel header={props.smartListVersionUnderEdit.smartListName}>
-						<p style={{ color: 'white' }}>
+						<b>Brand Profile:</b>
+						<p style={{ color: 'grey' }}>
 							{props.smartListVersionUnderEdit.brandName}
+						</p>
+						<b>Objective:</b>
+						<p style={{ color: 'grey' }}>
+							{props.smartListVersionUnderEdit.objectiveName}
 						</p>
 					</CustomPanel>
 				</Grid>
