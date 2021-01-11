@@ -32,7 +32,7 @@ import {
 	deleteAllVersionData,
 	deleteVersionDataItem,
 	downloadExcelList,
-	setCreatedListVersion,
+	setSmartListVersionUnderEdit,
 	fetchLists
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
@@ -40,7 +40,7 @@ import Loader from 'rsuite/lib/Loader'
 
 const mapStateToProps = (state) => {
 	return {
-		createdListVersion: state.engage.createdListVersion,
+		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit,
 		lists: state.engage.lists,
 		fetchListsSuccess: state.engage.fetchListsSuccess,
 		videos: state.engage.videos,
@@ -66,8 +66,8 @@ const mapDispatchToProps = (dispatch) => {
 		setVideos: (videos) => dispatch(setVideos(videos)),
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 
-		setCreatedListVersion: (version) =>
-			dispatch(setCreatedListVersion(version)),
+		setSmartListVersionUnderEdit: (version) =>
+			dispatch(setSmartListVersionUnderEdit(version)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
@@ -324,7 +324,7 @@ function ListBuilder(props) {
 				version.versionId == parsedVersionId ||
 				version.versionId === parsedVersionId
 			) {
-				props.setCreatedListVersion(version)
+				props.setSmartListVersionUnderEdit(version)
 				setPageIsLoading(false)
 			}
 		}
@@ -383,7 +383,7 @@ function ListBuilder(props) {
 						onClick={() =>
 							handleDownloadClick(
 								parsedVersionId,
-								props.createdListVersion.smartListName
+								props.smartListVersionUnderEdit.smartListName
 							)
 						}
 					>
@@ -392,9 +392,9 @@ function ListBuilder(props) {
 				</Grid>
 
 				<Grid item xs={12}>
-					<CustomPanel header={props.createdListVersion.smartListName}>
+					<CustomPanel header={props.smartListVersionUnderEdit.smartListName}>
 						<p style={{ color: 'white' }}>
-							{props.createdListVersion.brandName}
+							{props.smartListVersionUnderEdit.brandName}
 						</p>
 					</CustomPanel>
 				</Grid>

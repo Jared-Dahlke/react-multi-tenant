@@ -10,7 +10,7 @@ import {
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
-	SET_CREATED_LIST_VERSION,
+	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
@@ -129,7 +129,7 @@ export const postList = (data) => {
 					})
 
 					response.data.smartListName = list.smartListName
-					dispatch(setCreatedListVersion(response.data))
+					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
@@ -160,7 +160,7 @@ export const cloneListVersion = (args) => {
 					})
 
 					response.data.smartListName = smartListName
-					dispatch(setCreatedListVersion(response.data))
+					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
@@ -232,10 +232,10 @@ export function setIsDownloadingExcelVersionId(isDownloadingExcelVersionId) {
 	}
 }
 
-export function setCreatedListVersion(createdListVersion) {
+export function setSmartListVersionUnderEdit(smartListVersionUnderEdit) {
 	return {
-		type: SET_CREATED_LIST_VERSION,
-		createdListVersion
+		type: SET_SMARTLIST_VERSION_UNDER_EDIT,
+		smartListVersionUnderEdit
 	}
 }
 
