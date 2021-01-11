@@ -32,7 +32,7 @@ import {
 	deleteAllVersionData,
 	deleteVersionDataItem,
 	downloadExcelList,
-	setsmartListVersionUnderEdit,
+	setSmartListVersionUnderEdit,
 	fetchLists
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
@@ -66,8 +66,8 @@ const mapDispatchToProps = (dispatch) => {
 		setVideos: (videos) => dispatch(setVideos(videos)),
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 
-		setsmartListVersionUnderEdit: (version) =>
-			dispatch(setsmartListVersionUnderEdit(version)),
+		setSmartListVersionUnderEdit: (version) =>
+			dispatch(setSmartListVersionUnderEdit(version)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
@@ -324,7 +324,7 @@ function ListBuilder(props) {
 				version.versionId == parsedVersionId ||
 				version.versionId === parsedVersionId
 			) {
-				props.setsmartListVersionUnderEdit(version)
+				props.setSmartListVersionUnderEdit(version)
 				setPageIsLoading(false)
 			}
 		}

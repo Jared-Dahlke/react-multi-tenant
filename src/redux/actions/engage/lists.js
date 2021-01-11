@@ -129,7 +129,7 @@ export const postList = (data) => {
 					})
 
 					response.data.smartListName = list.smartListName
-					dispatch(setsmartListVersionUnderEdit(response.data))
+					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
@@ -160,7 +160,7 @@ export const cloneListVersion = (args) => {
 					})
 
 					response.data.smartListName = smartListName
-					dispatch(setsmartListVersionUnderEdit(response.data))
+					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
@@ -232,7 +232,7 @@ export function setIsDownloadingExcelVersionId(isDownloadingExcelVersionId) {
 	}
 }
 
-export function setsmartListVersionUnderEdit(smartListVersionUnderEdit) {
+export function setSmartListVersionUnderEdit(smartListVersionUnderEdit) {
 	return {
 		type: SET_CREATED_LIST_VERSION,
 		smartListVersionUnderEdit
