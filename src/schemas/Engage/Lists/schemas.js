@@ -3,42 +3,32 @@ import * as Yup from 'yup'
 export const listsObjValidation = Yup.array()
 	.of(
 		Yup.object().shape({
-			archived: Yup.bool().required(),
+			createdDate: Yup.date().required(),
 			objectiveId: Yup.number().required(),
 			objectiveName: Yup.string().required(),
 			smartListId: Yup.number().required(),
 			smartListName: Yup.string().required(),
-			versions: Yup.array()
-				.min(1, 'each smartlist should have at least one version')
-				.of(
-					Yup.object().shape({
-						createdDate: Yup.date().required(),
-						objectiveId: Yup.number().required(),
-						objectiveName: Yup.string().required(),
-						smartListId: Yup.number().required(),
-						smartListName: Yup.string().required(),
-						subscriberCount: Yup.number().required(),
-						channelCount: Yup.number().required(),
-						videoCount: Yup.number().required(),
-						versionId: Yup.number().required(),
-						createdBy: Yup.object().shape({
-							email: Yup.string().required(),
-							firstName: Yup.string().required(),
-							lastName: Yup.string().required(),
-							userId: Yup.number().required()
-						})
-					})
-				)
-				.required()
+			subscriberCount: Yup.number().required(),
+			channelCount: Yup.number().required(),
+			videoCount: Yup.number().required(),
+			versionId: Yup.number().required(),
+			createdBy: Yup.object().shape({
+				email: Yup.string().required(),
+				firstName: Yup.string().required(),
+				lastName: Yup.string().required(),
+				userId: Yup.number().required()
+			}),
+			archived: Yup.bool().required(),
+			active: Yup.bool().required()
 		})
 	)
 	.test(
 		'idTest',
-		'The api sent smartlists that have duplicate smartListIds. Please address in api or database as this breaks the UI.',
+		'The api sent smartlists that have duplicate versionIds. Please address in api or database as this breaks the UI.',
 		(lists) => {
 			let seen = new Set()
 			var hasDuplicates = lists.some(function(currentObject) {
-				return seen.size === seen.add(currentObject.smartListId).size
+				return seen.size === seen.add(currentObject.versionId).size
 			})
 
 			return !hasDuplicates
@@ -120,7 +110,10 @@ export const postListVersionResult = Yup.object().shape({
 		.required(),
 	versionId: Yup.number()
 		.strict(true)
-		.required()
+		.required(),
+	smartListName: Yup.string(),
+	objectiveName: Yup.string().required(),
+	brandProfileName: Yup.string().required()
 })
 
 export const channelsSchema = Yup.array().of(

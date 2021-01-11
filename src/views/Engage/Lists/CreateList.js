@@ -40,10 +40,8 @@ function CreateNewListModal(props) {
 	const { postListSuccess } = props
 	React.useEffect(() => {
 		if (postListSuccess) {
-			history.push(routes.app.engage.lists.listBuilder.path, {
-				from: 'lists',
-				createdListVersion: props.createdListVersion
-			})
+			let url = `/app/engage/lists/listBuilder/${props.createdListVersion.versionId}`
+			history.push(url)
 		}
 	}, [postListSuccess])
 

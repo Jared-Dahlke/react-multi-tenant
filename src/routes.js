@@ -61,7 +61,7 @@ export const routes = {
 					name: 'Create List'
 				},
 				listBuilder: {
-					path: '/app/engage/lists/listBuilder',
+					path: '/app/engage/lists/listBuilder/:versionId',
 					name: 'List Builder',
 					component: ListBuilder
 				}
@@ -193,7 +193,7 @@ export const modifiedRoutes = {
 						name: 'Upload List'
 					},
 					{
-						path: '/app/engage/lists/listBuilder',
+						path: '/app/engage/lists/listBuilder/:versionId',
 						name: 'List Builder',
 						component: ListBuilder
 					}

@@ -31,12 +31,18 @@ import {
 	patchVersionData,
 	deleteAllVersionData,
 	deleteVersionDataItem,
-	downloadExcelList
+	downloadExcelList,
+	setCreatedListVersion,
+	fetchLists
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
+import Loader from 'rsuite/lib/Loader'
 
 const mapStateToProps = (state) => {
 	return {
+		createdListVersion: state.engage.createdListVersion,
+		lists: state.engage.lists,
+		fetchListsSuccess: state.engage.fetchListsSuccess,
 		videos: state.engage.videos,
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
@@ -49,13 +55,19 @@ const mapStateToProps = (state) => {
 		filterCategories: state.engage.filterCategories,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
-		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess
+		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess,
+		isPostingList: state.engage.isPostingList,
+		currentAccountId: state.currentAccountId
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setVideos: (videos) => dispatch(setVideos(videos)),
+		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
+
+		setCreatedListVersion: (version) =>
+			dispatch(setCreatedListVersion(version)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
@@ -75,7 +87,26 @@ const mapDispatchToProps = (dispatch) => {
 
 function ListBuilder(props) {
 	const history = useHistory()
-	if (!props.location.state || props.location.state.from !== 'lists') {
+
+	let fetchLists = props.fetchLists
+	let currentAccountId = props.currentAccountId
+	let [listsFetched, setListsFetched] = React.useState(false)
+	React.useEffect(() => {
+		if (!listsFetched && currentAccountId) {
+			fetchLists(currentAccountId)
+			setListsFetched(true)
+		}
+	}, [fetchLists, currentAccountId])
+
+	const [pageIsLoading, setPageIsLoading] = React.useState(true)
+
+	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
+
+	let [parsedVersionId, setParsedVersionId] = React.useState(
+		props.match.params.versionId
+	)
+
+	if (!parsedVersionId || isNaN(parsedVersionId)) {
 		history.push(routes.app.engage.lists.lists.path)
 	}
 
@@ -89,15 +120,9 @@ function ListBuilder(props) {
 		}
 	}, [])
 
-	const [createdListVersion, setCreatedListVersion] = React.useState(
-		props.location.state.createdListVersion
-	)
-
 	const [viewingVideosForChannel, setViewingVideosForChannel] = React.useState(
 		null
 	)
-
-	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
 
 	React.useEffect(() => {
 		props.removeAllChannels()
@@ -114,7 +139,7 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		if (props.hasNextPage) {
 			let params = {
-				versionId: createdListVersion.versionId,
+				versionId: parsedVersionId,
 				pageNumber: currentPage,
 				filters: {
 					channelFilters: {
@@ -140,7 +165,7 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		if (currentVideoPage > 0 && viewingVideosForChannel && videosHasNextPage) {
 			let params = {
-				versionId: createdListVersion.versionId,
+				versionId: parsedVersionId,
 				pageNumber: currentVideoPage,
 				filters: {
 					channelId: viewingVideosForChannel.id,
@@ -173,7 +198,7 @@ function ListBuilder(props) {
 
 	const handleActionButtonClick = (actionId, item) => {
 		let unSelecting = item.actionId === actionId
-		let versionId = createdListVersion.versionId
+		let versionId = parsedVersionId
 		if (unSelecting) {
 			delete item.actionId
 			let _args = {
@@ -292,6 +317,19 @@ function ListBuilder(props) {
 		}
 	}
 
+	let lists = props.lists
+	React.useEffect(() => {
+		for (const version of props.lists) {
+			if (
+				version.versionId == parsedVersionId ||
+				version.versionId === parsedVersionId
+			) {
+				props.setCreatedListVersion(version)
+				setPageIsLoading(false)
+			}
+		}
+	}, [lists])
+
 	React.useEffect(() => {
 		if (hasMountedRef.current) {
 			props.removeAllChannels()
@@ -318,138 +356,146 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 	}
 
-	return (
-		<Grid container spacing={3}>
-			<VideoModal
-				show={showVideoModal}
-				close={handleVideoModalClose}
-				videos={props.videos}
-				incrementPage={() => setCurrentVideoPage((prevState) => prevState + 1)}
-				handleActionButtonClick={handleActionButtonClick}
-				channel={viewingVideosForChannel}
-				videosIsLoading={props.videosIsLoading}
-			/>
-
-			<Grid item xs={12} align='right'>
-				<Button
-					style={{ marginLeft: 20 }}
-					loading={
-						props.isDownloadingExcel &&
-						props.isDownloadingExcelVersionId === createdListVersion.versionId
+	if (pageIsLoading) {
+		return <Loader center content='Loading...' vertical />
+	} else {
+		return (
+			<Grid container spacing={3}>
+				<VideoModal
+					show={showVideoModal}
+					close={handleVideoModalClose}
+					videos={props.videos}
+					incrementPage={() =>
+						setCurrentVideoPage((prevState) => prevState + 1)
 					}
-					onClick={() =>
-						handleDownloadClick(
-							createdListVersion.versionId,
-							createdListVersion.smartListName
-						)
-					}
-				>
-					Download
-				</Button>
-			</Grid>
-
-			<Grid item xs={12}>
-				<CustomPanel>
-					<h4>{createdListVersion.smartListName}</h4>
-				</CustomPanel>
-			</Grid>
-
-			<Grid item xs={12}>
-				<CustomPanel header='Smartlist Filters'>
-					<Grid container spacing={3}>
-						<Grid item xs={3}>
-							<SelectPicker
-								size='xs'
-								labelKey={'label'}
-								valueKey={'actionIds'}
-								placeholder={'Select'}
-								data={actionIdOptions}
-								defaultValue={[]}
-								onChange={(val) => {
-									handleFilterChange(filters.actionIds, val)
-								}}
-								cleanable={false}
-								block
-								preventOverflow={true}
-								searchable={false}
-							/>
-						</Grid>
-					</Grid>
-				</CustomPanel>
-			</Grid>
-
-			<Grid item xs={12}>
-				<CustomPanel header='YouTube Filters'>
-					<Grid container spacing={3}>
-						<Grid item xs={3}>
-							<TagPicker
-								block
-								size={'xs'}
-								data={props.filterCountries}
-								labelKey={'countryName'}
-								valueKey={'countryCode'}
-								defaultValue={['US']}
-								placeholder='Countries'
-								onChange={(val) => {
-									handleFilterChange(filters.countries, val)
-								}}
-							/>
-						</Grid>
-
-						<Grid item xs={3}>
-							<TagPicker
-								block
-								size={'xs'}
-								data={props.filterLanguages}
-								labelKey={'languageName'}
-								valueKey={'languageCode'}
-								defaultValue={['en']}
-								virtualized={true}
-								placeholder='Languages'
-								onChange={(val) => {
-									handleFilterChange(filters.languages, val)
-								}}
-							/>
-						</Grid>
-						<Grid item xs={3}>
-							<TagPicker
-								block
-								size={'xs'}
-								data={props.filterCategories}
-								labelKey={'categoryName'}
-								valueKey={'categoryId'}
-								virtualized={true}
-								placeholder='Categories'
-								onChange={(val) => {
-									handleFilterChange(filters.categories, val)
-								}}
-							/>
-						</Grid>
-
-						<Grid item xs={3}>
-							<Toggle
-								size={'xs'}
-								checkedChildren='Only Kids Content'
-								unCheckedChildren='No Kids Content'
-								onChange={(bool) => handleFilterChange(filters.kids, bool)}
-							/>
-						</Grid>
-					</Grid>
-				</CustomPanel>
-			</Grid>
-
-			<Grid item xs={12}>
-				<ChannelsTable
-					hasNextPage={props.hasNextPage}
-					channelsIsLoading={props.channelsIsLoading}
-					items={props.channels}
-					incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
 					handleActionButtonClick={handleActionButtonClick}
-					handleVideosClick={handleVideosClick}
+					channel={viewingVideosForChannel}
+					videosIsLoading={props.videosIsLoading}
 				/>
+
+				<Grid item xs={12} align='right'>
+					<Button
+						style={{ marginLeft: 20 }}
+						loading={
+							props.isDownloadingExcel &&
+							props.isDownloadingExcelVersionId === parsedVersionId
+						}
+						onClick={() =>
+							handleDownloadClick(
+								parsedVersionId,
+								props.createdListVersion.smartListName
+							)
+						}
+					>
+						Download
+					</Button>
+				</Grid>
+
+				<Grid item xs={12}>
+					<CustomPanel header={props.createdListVersion.smartListName}>
+						<p style={{ color: 'white' }}>
+							{props.createdListVersion.brandName}
+						</p>
+					</CustomPanel>
+				</Grid>
+
+				<Grid item xs={12}>
+					<CustomPanel header='Smartlist Filters'>
+						<Grid container spacing={3}>
+							<Grid item xs={3}>
+								<SelectPicker
+									size='xs'
+									labelKey={'label'}
+									valueKey={'actionIds'}
+									placeholder={'Select'}
+									data={actionIdOptions}
+									defaultValue={[]}
+									onChange={(val) => {
+										handleFilterChange(filters.actionIds, val)
+									}}
+									cleanable={false}
+									block
+									preventOverflow={true}
+									searchable={false}
+								/>
+							</Grid>
+						</Grid>
+					</CustomPanel>
+				</Grid>
+
+				<Grid item xs={12}>
+					<CustomPanel header='YouTube Filters'>
+						<Grid container spacing={3}>
+							<Grid item xs={3}>
+								<TagPicker
+									block
+									size={'xs'}
+									data={props.filterCountries}
+									labelKey={'countryName'}
+									valueKey={'countryCode'}
+									defaultValue={['US']}
+									placeholder='Countries'
+									onChange={(val) => {
+										handleFilterChange(filters.countries, val)
+									}}
+								/>
+							</Grid>
+
+							<Grid item xs={3}>
+								<TagPicker
+									block
+									size={'xs'}
+									data={props.filterLanguages}
+									labelKey={'languageName'}
+									valueKey={'languageCode'}
+									defaultValue={['en']}
+									virtualized={true}
+									placeholder='Languages'
+									onChange={(val) => {
+										handleFilterChange(filters.languages, val)
+									}}
+								/>
+							</Grid>
+							<Grid item xs={3}>
+								<TagPicker
+									block
+									size={'xs'}
+									data={props.filterCategories}
+									labelKey={'categoryName'}
+									valueKey={'categoryId'}
+									virtualized={true}
+									placeholder='Categories'
+									onChange={(val) => {
+										handleFilterChange(filters.categories, val)
+									}}
+								/>
+							</Grid>
+
+							<Grid item xs={3}>
+								<Toggle
+									size={'xs'}
+									checkedChildren='Only Kids Content'
+									unCheckedChildren='No Kids Content'
+									onChange={(bool) => handleFilterChange(filters.kids, bool)}
+								/>
+							</Grid>
+						</Grid>
+					</CustomPanel>
+				</Grid>
+
+				<Grid item xs={12}>
+					<ChannelsTable
+						hasNextPage={props.hasNextPage}
+						channelsIsLoading={props.channelsIsLoading}
+						items={props.channels}
+						incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
+						handleActionButtonClick={handleActionButtonClick}
+						handleVideosClick={handleVideosClick}
+					/>
+				</Grid>
 			</Grid>
-		</Grid>
-	)
+		)
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListBuilder)

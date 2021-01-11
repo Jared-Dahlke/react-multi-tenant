@@ -91,10 +91,8 @@ function Lists(props) {
 	let postListSuccess = props.postListSuccess
 	React.useEffect(() => {
 		if (postListSuccess) {
-			history.push(routes.app.engage.lists.listBuilder.path, {
-				from: 'lists',
-				createdListVersion: props.createdListVersion
-			})
+			let url = `/app/engage/lists/listBuilder/${props.createdListVersion.versionId}`
+			history.push(url)
 		}
 	}, [postListSuccess])
 
@@ -117,7 +115,8 @@ function Lists(props) {
 	const handleEditClick = (item) => {
 		let params = {
 			versionId: item.versionId,
-			smartListName: item.smartListName
+			smartListName: item.smartListName,
+			brandProfileName: item.brandProfileName
 		}
 		props.cloneListVersion(params)
 	}
