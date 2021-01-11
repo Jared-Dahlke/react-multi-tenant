@@ -191,7 +191,7 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
-					loading={props.videos.length < 1}
+					loading={props.videos.length < 1 && props.videosIsLoading}
 					virtualized
 					height={500}
 					rowHeight={80}
