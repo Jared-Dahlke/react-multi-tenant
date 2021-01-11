@@ -250,6 +250,14 @@ function Lists(props) {
 		)
 	}
 
+	const ChannelCell = ({ rowData, dataKey, ...props }) => {
+		return <Table.Cell {...props}>{rowData.channelCountFormatted}</Table.Cell>
+	}
+
+	const VideoCell = ({ rowData, dataKey, ...props }) => {
+		return <Table.Cell {...props}>{rowData.videoCountFormatted}</Table.Cell>
+	}
+
 	const ActionCell = ({ rowData, dataKey, customProps, ...props }) => {
 		return (
 			<Table.Cell
@@ -398,27 +406,39 @@ function Lists(props) {
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Channels'>
 						<animated.h2 style={{ height: 40 }}>
-							{channelsValue.number.interpolate((val) =>
-								numeral(Math.floor(val)).format('0.0a')
-							)}
+							{channelsValue.number.interpolate((val) => {
+								if (val < 1000) {
+									return numeral(Math.floor(val)).format('0,0')
+								} else {
+									return numeral(Math.floor(val)).format('0.0a')
+								}
+							})}
 						</animated.h2>
 					</CustomPanel>
 				</Grid>
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Videos'>
 						<animated.h2 style={{ height: 40 }}>
-							{videosValue.number.interpolate((val) =>
-								numeral(Math.floor(val)).format('0.0a')
-							)}
+							{videosValue.number.interpolate((val) => {
+								if (val < 1000) {
+									return numeral(Math.floor(val)).format('0,0')
+								} else {
+									return numeral(Math.floor(val)).format('0.0a')
+								}
+							})}
 						</animated.h2>
 					</CustomPanel>
 				</Grid>
 				<Grid item xs={12} md={3} style={{ position: 'relative' }}>
 					<CustomPanel header='Subscribers'>
 						<animated.h2 style={{ height: 40 }}>
-							{subscribersValue.number.interpolate((val) =>
-								numeral(Math.floor(val)).format('0.0a')
-							)}
+							{subscribersValue.number.interpolate((val) => {
+								if (val < 1000) {
+									return numeral(Math.floor(val)).format('0,0')
+								} else {
+									return numeral(Math.floor(val)).format('0.0a')
+								}
+							})}
 						</animated.h2>
 					</CustomPanel>
 				</Grid>
@@ -625,11 +645,11 @@ function Lists(props) {
 					</Table.Column>
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Channels</Table.HeaderCell>
-						<Table.Cell dataKey='channelCount' />
+						<ChannelCell dataKey={'channelCount'} />
 					</Table.Column>
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Videos</Table.HeaderCell>
-						<Table.Cell dataKey='videoCount' />
+						<VideoCell dataKey={'videoCount'} />
 					</Table.Column>
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Subscribers</Table.HeaderCell>

@@ -75,6 +75,22 @@ export function fetchLists(accountId) {
 							).format('0.0a')
 						}
 
+						if (Number(version.channelCount) < 1000) {
+							version.channelCountFormatted = version.channelCount
+						} else {
+							version.channelCountFormatted = numeral(
+								version.channelCount
+							).format('0.0a')
+						}
+
+						if (Number(version.videoCount) < 1000) {
+							version.videoCountFormatted = version.videoCount
+						} else {
+							version.videoCountFormatted = numeral(version.videoCount).format(
+								'0.0a'
+							)
+						}
+
 						versions.push(version)
 					}
 				}
