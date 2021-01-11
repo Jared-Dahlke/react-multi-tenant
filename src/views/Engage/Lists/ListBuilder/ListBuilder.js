@@ -119,6 +119,7 @@ function ListBuilder(props) {
 				filters: {
 					channelFilters: {
 						countries: filterState.countries,
+						categories: filterState.categories,
 						kids: filterState.kids,
 						actionIds: filterState.actionIds
 					},
@@ -326,6 +327,7 @@ function ListBuilder(props) {
 				incrementPage={() => setCurrentVideoPage((prevState) => prevState + 1)}
 				handleActionButtonClick={handleActionButtonClick}
 				channel={viewingVideosForChannel}
+				videosIsLoading={props.videosIsLoading}
 			/>
 
 			<Grid item xs={12} align='right'>
