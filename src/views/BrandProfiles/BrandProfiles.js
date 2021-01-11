@@ -102,11 +102,6 @@ function BrandProfiles(props) {
 		props.createBrandProfile()
 	}
 
-	const handleAdminClick = () => {
-		let url = `/admin`
-		history.push(url)
-	}
-
 	return (
 		<Grid container justify='center'>
 			<Snackbar
@@ -229,24 +224,24 @@ function BrandProfiles(props) {
 				) : props.brandProfilesIsLoading ? (
 					<FormLoader />
 				) : (
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-									height: 'calc(100vh - 200px)',
-									color: 'white'
-								}}
-							>
-								<UserCan do={perms.BRAND_PROFILE_CREATE}>
-									<Button onClick={handleCreateNewProfileClick}>
-										Create New Profile
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: 'calc(100vh - 200px)',
+							color: 'white'
+						}}
+					>
+						<UserCan do={perms.BRAND_PROFILE_CREATE}>
+							<Button onClick={handleCreateNewProfileClick}>
+								Create New Profile
 							</Button>
-								</UserCan>
-								{!userCan(perms.BRAND_PROFILE_CREATE) &&
-									'There are currently no brand profiles associated with this account'}
-							</div>
-						)}
+						</UserCan>
+						{!userCan(perms.BRAND_PROFILE_CREATE) &&
+							'There are currently no brand profiles associated with this account'}
+					</div>
+				)}
 			</GridItem>
 		</Grid>
 	)

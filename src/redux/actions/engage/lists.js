@@ -33,71 +33,66 @@ export function fetchLists(accountId) {
 	let url = apiBase + `/account/${accountId}/smart-list`
 	return async (dispatch) => {
 		dispatch(setIsFetchingLists(true))
+
+		let result = []
+
 		try {
-			let result = []
-
-			try {
-				result = await axios.get(url)
-			} catch (error) {
-				console.log(error)
-			}
-			dispatch(setIsFetchingLists(false))
-			if (result.status === 200) {
-				dispatch(setFetchListsSuccess(true))
-				listsObjValidation.validate(result.data).catch(function(err) {
-					console.log(err.name, err.errors)
-					alert(
-						'we received different data from the api than expected, see console log for more details'
-					)
-				})
-
-				let versions = []
-				for (const list of result.data) {
-					for (const version of list.versions) {
-						if (version.active) {
-							version.activeText = 'Active'
-						} else {
-							version.activeText = 'Not Active'
-						}
-
-						version.archived = list.archived
-						if (list.archived) {
-							version.archivedText = 'True'
-						} else {
-							version.archivedText = 'False'
-						}
-
-						if (Number(version.subscriberCount) < 1000) {
-							version.subscriberCountFormatted = version.subscriberCount
-						} else {
-							version.subscriberCountFormatted = numeral(
-								version.subscriberCount
-							).format('0.0a')
-						}
-
-						if (Number(version.channelCount) < 1000) {
-							version.channelCountFormatted = version.channelCount
-						} else {
-							version.channelCountFormatted = numeral(
-								version.channelCount
-							).format('0.0a')
-						}
-
-						if (Number(version.videoCount) < 1000) {
-							version.videoCountFormatted = version.videoCount
-						} else {
-							version.videoCountFormatted = numeral(version.videoCount).format(
-								'0.0a'
-							)
-						}
-
-						versions.push(version)
-					}
-				}
-				dispatch(setLists(versions))
-			}
+			result = await axios.get(url)
 		} catch (error) {
-			alert('Error on fetch account users: ' + JSON.stringify(error, null, 2))
+			console.log(error)
+		}
+		dispatch(setIsFetchingLists(false))
+		if (result.status === 200) {
+			dispatch(setFetchListsSuccess(true))
+			listsObjValidation.validate(result.data).catch(function(err) {
+				console.log(err.name, err.errors)
+				alert(
+					'we received different data from the api than expected, see console log for more details'
+				)
+			})
+
+			let versions = []
+			for (const version of result.data) {
+				//	for (const version of list.versions) {
+				if (version.active) {
+					version.activeText = 'Active'
+				} else {
+					version.activeText = 'Not Active'
+				}
+
+				if (version.archived) {
+					version.archivedText = 'True'
+				} else {
+					version.archivedText = 'False'
+				}
+
+				if (Number(version.subscriberCount) < 1000) {
+					version.subscriberCountFormatted = version.subscriberCount
+				} else {
+					version.subscriberCountFormatted = numeral(
+						version.subscriberCount
+					).format('0.0a')
+				}
+
+				if (Number(version.channelCount) < 1000) {
+					version.channelCountFormatted = version.channelCount
+				} else {
+					version.channelCountFormatted = numeral(version.channelCount).format(
+						'0.0a'
+					)
+				}
+
+				if (Number(version.videoCount) < 1000) {
+					version.videoCountFormatted = version.videoCount
+				} else {
+					version.videoCountFormatted = numeral(version.videoCount).format(
+						'0.0a'
+					)
+				}
+
+				versions.push(version)
+			}
+			dispatch(setLists(versions))
 		}
 	}
 }

@@ -175,7 +175,7 @@ export default function ChannelsTable({
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} flexGrow={2}>
-				<Table.HeaderCell>Category</Table.HeaderCell>
+				<Table.HeaderCell>Video Categories</Table.HeaderCell>
 				<Table.Cell dataKey='categoryName' />
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'}>
