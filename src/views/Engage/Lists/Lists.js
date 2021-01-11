@@ -13,6 +13,7 @@ import Whisper from 'rsuite/lib/Whisper'
 import Dropdown from 'rsuite/lib/Dropdown'
 import Popover from 'rsuite/lib/Popover'
 import orderBy from 'lodash/orderBy'
+import { getCurrentAccount } from '../../../utils'
 import {
 	objectives,
 	dataTypes,
@@ -63,6 +64,7 @@ const mapDispatchToProps = (dispatch) => {
 
 function Lists(props) {
 	const history = useHistory()
+
 	const [currentSort, setCurrentSort] = React.useState({
 		sortColumn: 'brandName',
 		sortType: 'desc'
@@ -75,6 +77,16 @@ function Lists(props) {
 		activeStatusId: 1,
 		archivedStatusId: 2
 	})
+
+	let fetchLists = props.fetchLists
+	let accounts = props.accounts.data
+
+	React.useEffect(() => {
+		let currentAccount = getCurrentAccount(props.accounts.data)
+		if (currentAccount) {
+			fetchLists(currentAccount.accountId)
+		}
+	}, [fetchLists, accounts])
 
 	let postListSuccess = props.postListSuccess
 	React.useEffect(() => {

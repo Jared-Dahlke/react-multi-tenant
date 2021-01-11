@@ -98,12 +98,11 @@ export const postListObjValidation = Yup.object().shape({
 			message: 'Sorry, this name is already taken. Please try another.',
 			test: function(value) {
 				for (const version of this.parent.smartLists) {
-					if (version.smartListName === value) {
+					if (version.smartListName.toLowerCase() === value?.toLowerCase()) {
 						return false
-					} else {
-						return true
 					}
 				}
+				return true
 			}
 		})
 })

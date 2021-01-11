@@ -295,7 +295,7 @@ const validateNew = (values, errors) => {
 	}
 
 	for (const version of values.smartLists) {
-		if (version.smartListName === values.name) {
+		if (version.smartListName.toLowerCase() === values?.name?.toLowerCase()) {
 			errors.name = 'Sorry, this name is already taken. Please try another.'
 		} else {
 		}
