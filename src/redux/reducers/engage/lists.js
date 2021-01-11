@@ -56,10 +56,10 @@ export function uploadedList(state = [], action) {
 	}
 }
 
-export function createdListVersion(state = {}, action) {
+export function smartListVersionUnderEdit(state = {}, action) {
 	switch (action.type) {
 		case SET_CREATED_LIST_VERSION:
-			return action.createdListVersion
+			return action.smartListVersionUnderEdit
 		default:
 			return state
 	}

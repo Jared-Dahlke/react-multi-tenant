@@ -9,7 +9,7 @@ import {
 	fetchListsSuccess,
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
-	createdListVersion,
+	smartListVersionUnderEdit,
 	deleteAllVersionDataSuccess
 } from './lists'
 
@@ -34,7 +34,7 @@ export default combineReducers({
 	fetchListsSuccess,
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
-	createdListVersion,
+	smartListVersionUnderEdit,
 	filterCountries,
 	filterCategories,
 	filterLanguages,

@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
 		accounts: state.accounts,
 		brandProfiles: state.brandProfiles,
 		lists: state.engage.lists,
-		createdListVersion: state.engage.createdListVersion
+		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit
 	}
 }
 
@@ -40,7 +40,7 @@ function CreateNewListModal(props) {
 	const { postListSuccess } = props
 	React.useEffect(() => {
 		if (postListSuccess) {
-			let url = `/app/engage/lists/listBuilder/${props.createdListVersion.versionId}`
+			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
 			history.push(url)
 		}
 	}, [postListSuccess])

@@ -47,7 +47,7 @@ const mapStateToProps = (state) => {
 		isPostingList: state.engage.isPostingList,
 		postListSuccess: state.engage.postListSuccess,
 		isPostingListVersionId: state.engage.isPostingListVersionId,
-		createdListVersion: state.engage.createdListVersion
+		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit
 	}
 }
 
@@ -91,7 +91,7 @@ function Lists(props) {
 	let postListSuccess = props.postListSuccess
 	React.useEffect(() => {
 		if (postListSuccess) {
-			let url = `/app/engage/lists/listBuilder/${props.createdListVersion.versionId}`
+			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
 			history.push(url)
 		}
 	}, [postListSuccess])
