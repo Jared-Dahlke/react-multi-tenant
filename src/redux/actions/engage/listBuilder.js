@@ -116,7 +116,14 @@ export function removeAllChannels() {
 	}
 }
 
+let fetchChannelsRequest = null
+
 export function fetchChannels(args) {
+	if (fetchChannelsRequest) {
+		fetchChannelsRequest.cancel()
+	}
+	fetchChannelsRequest = axios.CancelToken.source()
+
 	let url =
 		apiBase +
 		`/smart-list/channel?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
@@ -125,7 +132,8 @@ export function fetchChannels(args) {
 		const result = await axios({
 			method: 'POST',
 			url: url,
-			data: args.filters
+			data: args.filters,
+			cancelToken: fetchChannelsRequest.token
 		})
 
 		if (result.status === 200) {
