@@ -115,7 +115,11 @@ module.exports = override(
 				//** Tooltip text color
 				'@tooltip-color': 'black',
 				//** Tooltip background color
-				'@tooltip-bg': '#FFF'
+				'@tooltip-bg': '#FFF',
+
+				//Tag
+				'@tag-default-background': neutralExtraLightColor,
+				'@tag-default-color': '#FFF'
 			}
 		}
 	})
