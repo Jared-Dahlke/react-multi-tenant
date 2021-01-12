@@ -187,7 +187,9 @@ function ListBuilder(props) {
 					kids: filterState.kids,
 					views: filterState.views,
 					videoDurationSeconds: filterState.videoDurationSeconds,
-					uploadDate: filterState.uploadDate
+					uploadDate: filterState.uploadDate,
+					actionIds: filterState.actionIds,
+					categories: filterState.categories
 				}
 			}
 			props.fetchVideos(params)
