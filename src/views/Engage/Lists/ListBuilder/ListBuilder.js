@@ -8,9 +8,17 @@ import Grid from '@material-ui/core/Grid'
 import TagPicker from 'rsuite/lib/TagPicker'
 import PanelGroup from 'rsuite/lib/PanelGroup'
 import SelectPicker from 'rsuite/lib/SelectPicker'
+import Icon from 'rsuite/lib/Icon'
 import CustomPanel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
+import InputGroup from 'rsuite/lib/InputGroup'
+import InputNumber from 'rsuite/lib/InputNumber'
+import DateRangePicker from 'rsuite/lib/DateRangePicker'
+import Input from 'rsuite/lib/Input'
+import FiltersLabel from './components/FiltersLabel'
+import Panel from 'rsuite/lib/Panel'
+
 import {
 	fetchVideos,
 	fetchChannels,
@@ -37,6 +45,9 @@ import {
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
+import { Checkbox } from 'rsuite'
+import { neutralLightColor } from '../../../../assets/jss/colorContants'
+var dayjs = require('dayjs')
 
 const mapStateToProps = (state) => {
 	return {
@@ -144,13 +155,19 @@ function ListBuilder(props) {
 						countries: filterState.countries,
 						categories: filterState.categories,
 						kids: filterState.kids,
-						actionIds: filterState.actionIds
+						actionIds: filterState.actionIds,
+						views: filterState.views,
+						videoDurationSeconds: filterState.videoDurationSeconds,
+						uploadDate: filterState.uploadDate
 					},
 					videoFilters: {
 						languages: filterState.languages,
 						categories: filterState.categories,
 						kids: filterState.kids,
-						actionIds: filterState.actionIds
+						actionIds: filterState.actionIds,
+						views: filterState.views,
+						videoDurationSeconds: filterState.videoDurationSeconds,
+						uploadDate: filterState.uploadDate
 					}
 				}
 			}
@@ -167,7 +184,10 @@ function ListBuilder(props) {
 				pageNumber: currentVideoPage,
 				filters: {
 					channelId: viewingVideosForChannel.id,
-					kids: filterState.kids
+					kids: filterState.kids,
+					views: filterState.views,
+					videoDurationSeconds: filterState.videoDurationSeconds,
+					uploadDate: filterState.uploadDate
 				}
 			}
 			props.fetchVideos(params)
@@ -179,7 +199,10 @@ function ListBuilder(props) {
 		categories: 'categories',
 		languages: 'languages',
 		countries: 'countries',
-		actionIds: 'actionIds'
+		actionIds: 'actionIds',
+		views: 'views',
+		videoDurationSeconds: 'videoDurationSeconds',
+		uploadDate: 'uploadDate'
 	}
 
 	const actionIdOptions = [
@@ -235,7 +258,15 @@ function ListBuilder(props) {
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
 		countries: [{ countryCode: 'US' }],
-		actionIds: []
+		actionIds: [],
+		views: {
+			min: 0,
+			max: 100000000000000
+		},
+		videoDurationSeconds: {
+			min: 0,
+			max: 100000000000000
+		}
 	})
 
 	const handleFilterChange = (filter, value) => {
@@ -310,6 +341,45 @@ function ListBuilder(props) {
 				})
 				break
 
+			case filters.views:
+				if (!value) {
+					value = {}
+				}
+
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						views: value
+					}
+				})
+				break
+
+			case filters.videoDurationSeconds:
+				if (!value) {
+					value = {}
+				}
+
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						videoDurationSeconds: value
+					}
+				})
+				break
+
+			case filters.uploadDate:
+				if (!value) {
+					value = {}
+				}
+
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						uploadDate: value
+					}
+				})
+				break
+
 			default:
 				break
 		}
@@ -328,16 +398,13 @@ function ListBuilder(props) {
 		}
 	}, [lists])
 
-	React.useEffect(() => {
-		if (hasMountedRef.current) {
-			props.removeAllChannels()
-			props.removeAllVideos()
-			props.setHasNextPage(true)
-			setCurrentPage(1)
-			setChannelsFetchTrigger((prevState) => prevState + 1)
-		}
-		hasMountedRef.current = true
-	}, [filterState])
+	const handleApplyFiltersButtonClick = () => {
+		props.removeAllChannels()
+		props.removeAllVideos()
+		props.setHasNextPage(true)
+		setCurrentPage(1)
+		setChannelsFetchTrigger((prevState) => prevState + 1)
+	}
 
 	const [showVideoModal, setShowVideoModal] = React.useState(false)
 
@@ -358,7 +425,7 @@ function ListBuilder(props) {
 		return <Loader center content='Loading...' vertical />
 	} else {
 		return (
-			<Grid container spacing={3}>
+			<Grid container spacing={2}>
 				<VideoModal
 					show={showVideoModal}
 					close={handleVideoModalClose}
@@ -374,6 +441,7 @@ function ListBuilder(props) {
 				<Grid item xs={12} align='right'>
 					<Button
 						style={{ marginLeft: 20 }}
+						size='xs'
 						loading={
 							props.isDownloadingExcel &&
 							props.isDownloadingExcelVersionId === parsedVersionId
@@ -389,112 +457,240 @@ function ListBuilder(props) {
 					</Button>
 				</Grid>
 
-				<Grid item xs={12}>
-					<CustomPanel header={props.smartListVersionUnderEdit.smartListName}>
-						<b>Brand Profile:</b>
-						<p style={{ color: 'grey' }}>
-							{props.smartListVersionUnderEdit.brandName}
-						</p>
-						<b>Objective:</b>
-						<p style={{ color: 'grey' }}>
-							{props.smartListVersionUnderEdit.objectiveName}
-						</p>
-					</CustomPanel>
+				<Grid item xs={3}>
+					<Grid container>
+						<Panel
+							header={<Icon size='lg' icon='filter' />}
+							bodyFill
+							style={{
+								background: neutralLightColor
+							}}
+						>
+							<PanelGroup>
+								<CustomPanel header='Actions Taken'>
+									<SelectPicker
+										size='xs'
+										labelKey={'label'}
+										valueKey={'actionIds'}
+										placeholder={'Select'}
+										data={actionIdOptions}
+										defaultValue={[]}
+										onChange={(val) => {
+											handleFilterChange(filters.actionIds, val)
+										}}
+										cleanable={false}
+										block
+										preventOverflow={true}
+										searchable={false}
+									/>
+								</CustomPanel>
+
+								<CustomPanel header='YouTube Filters'>
+									<Grid container spacing={3}>
+										<Grid item xs={12}>
+											<TagPicker
+												block
+												size={'xs'}
+												data={props.filterCountries}
+												labelKey={'countryName'}
+												valueKey={'countryCode'}
+												defaultValue={['US']}
+												placeholder='Countries'
+												onChange={(val) => {
+													handleFilterChange(filters.countries, val)
+												}}
+											/>
+										</Grid>
+
+										<Grid item xs={12}>
+											<TagPicker
+												block
+												size={'xs'}
+												data={props.filterLanguages}
+												labelKey={'languageName'}
+												valueKey={'languageCode'}
+												defaultValue={['en']}
+												virtualized={true}
+												placeholder='Languages'
+												onChange={(val) => {
+													handleFilterChange(filters.languages, val)
+												}}
+											/>
+										</Grid>
+										<Grid item xs={12}>
+											<TagPicker
+												block
+												size={'xs'}
+												data={props.filterCategories}
+												labelKey={'categoryName'}
+												valueKey={'categoryId'}
+												virtualized={true}
+												placeholder='Categories'
+												onChange={(val) => {
+													handleFilterChange(filters.categories, val)
+												}}
+											/>
+										</Grid>
+
+										<Grid item xs={12}>
+											<Checkbox
+												size={'xs'}
+												onChange={(na, bool) => {
+													handleFilterChange(filters.kids, bool)
+												}}
+											>
+												Kids Only
+											</Checkbox>
+										</Grid>
+									</Grid>
+								</CustomPanel>
+								<CustomPanel header='Video Filters'>
+									<Grid container spacing={3}>
+										<Grid item xs={12}>
+											<FiltersLabel text='Views' />
+											<InputGroup size='xs'>
+												<Input
+													size='xs'
+													onFocus={(event) => event.target.select()}
+													defaultValue={'No Min'}
+													min={0}
+													max={1000000000000000000}
+													onChange={(nextValue) => {
+														let maximum = filters.views.max
+														if (nextValue > maximum) {
+															return
+														}
+														let value = {
+															min: Number(nextValue),
+															max: filterState.views.max
+														}
+														handleFilterChange(filters.views, value)
+													}}
+												/>
+												<InputGroup.Addon>to</InputGroup.Addon>
+												<Input
+													onFocus={(event) => event.target.select()}
+													size='xs'
+													min={0}
+													max={1000000000000000000}
+													defaultValue={'No Max'}
+													onChange={(nextValue) => {
+														let minimum = filters.views.minimum
+
+														if (minimum > nextValue) {
+															return
+														}
+														let value = {
+															min: filterState.views.min,
+															max: Number(nextValue)
+														}
+														handleFilterChange(filters.views, value)
+													}}
+												/>
+											</InputGroup>
+										</Grid>
+
+										<Grid item xs={12}>
+											<FiltersLabel text='Duration (minutes)' />
+											<InputGroup size='xs'>
+												<Input
+													size='xs'
+													onFocus={(event) => event.target.select()}
+													defaultValue={'No Min'}
+													min={0}
+													max={1000000000000000000}
+													onChange={(nextValue) => {
+														let value = {
+															min: Number(nextValue) * 60,
+															max: filterState.views.max
+														}
+														handleFilterChange(
+															filters.videoDurationSeconds,
+															value
+														)
+													}}
+												/>
+
+												<InputGroup.Addon>to</InputGroup.Addon>
+												<Input
+													onFocus={(event) => event.target.select()}
+													size='xs'
+													min={0}
+													max={1000000000000000000}
+													defaultValue={'No Max'}
+													onChange={(nextValue) => {
+														let value = {
+															min: filterState.views.min,
+															max: Number(nextValue) * 60
+														}
+														handleFilterChange(
+															filters.videoDurationSeconds,
+															value
+														)
+													}}
+												/>
+											</InputGroup>
+										</Grid>
+
+										<Grid item xs={12}>
+											<FiltersLabel text='Upload Date' />
+											<DateRangePicker
+												block
+												size='xs'
+												showOneCalendar
+												placement='topStart'
+												onChange={(val) => {
+													let value = {}
+													if (val.length > 0) {
+														value = {
+															min: dayjs(val[0]).format('YYYY-MM-DD'),
+															max: dayjs(val[1]).format('YYYY-MM-DD')
+														}
+													}
+													handleFilterChange(filters.uploadDate, value)
+												}}
+											/>
+										</Grid>
+									</Grid>
+								</CustomPanel>
+								<CustomPanel>
+									<Button
+										block
+										size='xs'
+										onClick={handleApplyFiltersButtonClick}
+									>
+										Apply Filters
+									</Button>
+								</CustomPanel>
+							</PanelGroup>
+						</Panel>
+					</Grid>
 				</Grid>
 
-				<Grid item xs={12}>
-					<CustomPanel header='Smartlist Filters'>
-						<Grid container spacing={3}>
-							<Grid item xs={3}>
-								<SelectPicker
-									size='xs'
-									labelKey={'label'}
-									valueKey={'actionIds'}
-									placeholder={'Select'}
-									data={actionIdOptions}
-									defaultValue={[]}
-									onChange={(val) => {
-										handleFilterChange(filters.actionIds, val)
-									}}
-									cleanable={false}
-									block
-									preventOverflow={true}
-									searchable={false}
-								/>
-							</Grid>
-						</Grid>
-					</CustomPanel>
-				</Grid>
+				<Grid item xs={9}>
+					<Grid item xs={12}>
+						<CustomPanel header={props.smartListVersionUnderEdit.smartListName}>
+							<b>Brand Profile:</b>
+							<p style={{ color: 'grey' }}>
+								{props.smartListVersionUnderEdit.brandName}
+							</p>
+							<b>Objective:</b>
+							<p style={{ color: 'grey' }}>
+								{props.smartListVersionUnderEdit.objectiveName}
+							</p>
+						</CustomPanel>
+					</Grid>
 
-				<Grid item xs={12}>
-					<CustomPanel header='YouTube Filters'>
-						<Grid container spacing={3}>
-							<Grid item xs={3}>
-								<TagPicker
-									block
-									size={'xs'}
-									data={props.filterCountries}
-									labelKey={'countryName'}
-									valueKey={'countryCode'}
-									defaultValue={['US']}
-									placeholder='Countries'
-									onChange={(val) => {
-										handleFilterChange(filters.countries, val)
-									}}
-								/>
-							</Grid>
-
-							<Grid item xs={3}>
-								<TagPicker
-									block
-									size={'xs'}
-									data={props.filterLanguages}
-									labelKey={'languageName'}
-									valueKey={'languageCode'}
-									defaultValue={['en']}
-									virtualized={true}
-									placeholder='Languages'
-									onChange={(val) => {
-										handleFilterChange(filters.languages, val)
-									}}
-								/>
-							</Grid>
-							<Grid item xs={3}>
-								<TagPicker
-									block
-									size={'xs'}
-									data={props.filterCategories}
-									labelKey={'categoryName'}
-									valueKey={'categoryId'}
-									virtualized={true}
-									placeholder='Categories'
-									onChange={(val) => {
-										handleFilterChange(filters.categories, val)
-									}}
-								/>
-							</Grid>
-
-							<Grid item xs={3}>
-								<Toggle
-									size={'xs'}
-									checkedChildren='Only Kids Content'
-									unCheckedChildren='No Kids Content'
-									onChange={(bool) => handleFilterChange(filters.kids, bool)}
-								/>
-							</Grid>
-						</Grid>
-					</CustomPanel>
-				</Grid>
-
-				<Grid item xs={12}>
-					<ChannelsTable
-						hasNextPage={props.hasNextPage}
-						channelsIsLoading={props.channelsIsLoading}
-						items={props.channels}
-						incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
-						handleActionButtonClick={handleActionButtonClick}
-						handleVideosClick={handleVideosClick}
-					/>
+					<Grid item xs={12}>
+						<ChannelsTable
+							hasNextPage={props.hasNextPage}
+							channelsIsLoading={props.channelsIsLoading}
+							items={props.channels}
+							incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
+							handleActionButtonClick={handleActionButtonClick}
+							handleVideosClick={handleVideosClick}
+						/>
+					</Grid>
 				</Grid>
 			</Grid>
 		)
