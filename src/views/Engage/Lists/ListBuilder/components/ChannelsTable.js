@@ -140,6 +140,20 @@ export default function ChannelsTable({
 		)
 	}
 
+	const VideoCategoriesCell = ({ rowData, dataKey, ...props }) => {
+		return (
+			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+				<Whisper
+					placement='topStart'
+					trigger='hover'
+					speaker={<Tooltip>{rowData.categoryName}</Tooltip>}
+				>
+					<div>{rowData.categoryName}</div>
+				</Whisper>
+			</Table.Cell>
+		)
+	}
+
 	return (
 		<Table
 			loading={items.length < 1 && channelsIsLoading}
@@ -174,9 +188,9 @@ export default function ChannelsTable({
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={2}>
+			<Table.Column verticalAlign={'middle'} flexGrow={1}>
 				<Table.HeaderCell>Video Categories</Table.HeaderCell>
-				<Table.Cell dataKey='categoryName' />
+				<VideoCategoriesCell />
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'}>
 				<Table.HeaderCell>Subscribers</Table.HeaderCell>
