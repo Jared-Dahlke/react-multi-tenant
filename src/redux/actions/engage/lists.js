@@ -10,7 +10,7 @@ import {
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
-	SET_CREATED_LIST_VERSION,
+	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
 import config from '../../../config.js'
@@ -25,6 +25,7 @@ var fileDownload = require('js-file-download')
 var cwait = require('cwait')
 
 var queue = new cwait.TaskQueue(Promise, 1)
+var deleteQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.listBuilderUrl
 
@@ -32,51 +33,66 @@ export function fetchLists(accountId) {
 	let url = apiBase + `/account/${accountId}/smart-list`
 	return async (dispatch) => {
 		dispatch(setIsFetchingLists(true))
+
+		let result = []
+
 		try {
-			let result = []
-
-			try {
-				result = await axios.get(url)
-			} catch (error) {
-				console.log(error)
-			}
-			dispatch(setIsFetchingLists(false))
-			if (result.status === 200) {
-				dispatch(setFetchListsSuccess(true))
-				listsObjValidation.validate(result.data).catch(function(err) {
-					console.log(err.name, err.errors)
-					alert(
-						'we received different data from the api than expected, see console log for more details'
-					)
-				})
-
-				let versions = []
-				for (const list of result.data) {
-					for (const version of list.versions) {
-						if (version.active) {
-							version.activeText = 'True'
-						} else {
-							version.activeText = 'False'
-						}
-
-						version.archived = list.archived
-						if (list.archived) {
-							version.archivedText = 'True'
-						} else {
-							version.archivedText = 'False'
-						}
-
-						version.subscriberCountFormatted = numeral(
-							version.subscriberCount
-						).format('0.0a')
-
-						versions.push(version)
-					}
-				}
-				dispatch(setLists(versions))
-			}
+			result = await axios.get(url)
 		} catch (error) {
-			alert('Error on fetch account users: ' + JSON.stringify(error, null, 2))
+			console.log(error)
+		}
+		dispatch(setIsFetchingLists(false))
+		if (result.status === 200) {
+			dispatch(setFetchListsSuccess(true))
+			listsObjValidation.validate(result.data).catch(function(err) {
+				console.log(err.name, err.errors)
+				alert(
+					'we received different data from the api than expected, see console log for more details'
+				)
+			})
+
+			let versions = []
+			for (const version of result.data) {
+				//	for (const version of list.versions) {
+				if (version.active) {
+					version.activeText = 'Active'
+				} else {
+					version.activeText = 'Not Active'
+				}
+
+				if (version.archived) {
+					version.archivedText = 'True'
+				} else {
+					version.archivedText = 'False'
+				}
+
+				if (Number(version.subscriberCount) < 1000) {
+					version.subscriberCountFormatted = version.subscriberCount
+				} else {
+					version.subscriberCountFormatted = numeral(
+						version.subscriberCount
+					).format('0.0a')
+				}
+
+				if (Number(version.channelCount) < 1000) {
+					version.channelCountFormatted = version.channelCount
+				} else {
+					version.channelCountFormatted = numeral(version.channelCount).format(
+						'0.0a'
+					)
+				}
+
+				if (Number(version.videoCount) < 1000) {
+					version.videoCountFormatted = version.videoCount
+				} else {
+					version.videoCountFormatted = numeral(version.videoCount).format(
+						'0.0a'
+					)
+				}
+
+				versions.push(version)
+			}
+			dispatch(setLists(versions))
 		}
 	}
 }
@@ -113,7 +129,7 @@ export const postList = (data) => {
 					})
 
 					response.data.smartListName = list.smartListName
-					dispatch(setCreatedListVersion(response.data))
+					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
@@ -144,7 +160,7 @@ export const cloneListVersion = (args) => {
 					})
 
 					response.data.smartListName = smartListName
-					dispatch(setCreatedListVersion(response.data))
+					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}
@@ -197,14 +213,9 @@ export const deleteVersionDataItem = (args) => {
 	let versionId = args.versionId
 	let id = args.id
 	let url = `${apiBase}/smart-list/version/${versionId}/data/${id}`
-	return (dispatch) => {
-		axios
-			.delete(url)
-			.then((response) => {})
-			.catch((error) => {
-				console.error('delete version data item error', error)
-			})
-	}
+	return deleteQueue.wrap(async (dispatch) => {
+		const result = await axios.delete(url)
+	})
 }
 
 export function setIsDownloadingExcel(isDownloadingExcel) {
@@ -221,10 +232,10 @@ export function setIsDownloadingExcelVersionId(isDownloadingExcelVersionId) {
 	}
 }
 
-export function setCreatedListVersion(createdListVersion) {
+export function setSmartListVersionUnderEdit(smartListVersionUnderEdit) {
 	return {
-		type: SET_CREATED_LIST_VERSION,
-		createdListVersion
+		type: SET_SMARTLIST_VERSION_UNDER_EDIT,
+		smartListVersionUnderEdit
 	}
 }
 

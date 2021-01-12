@@ -11,7 +11,7 @@ export const dataTypes = [
 
 export const activeStatuses = [
 	{ activeStatusId: 1, activeStatusName: 'Active' },
-	{ activeStatusId: 2, activeStatusName: 'Inactive' }
+	{ activeStatusId: 2, activeStatusName: 'Not Active' }
 ]
 
 export const archivedStatuses = [

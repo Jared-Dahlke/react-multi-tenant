@@ -46,7 +46,6 @@ function Question(props) {
 						<FormikInput
 							name='questionResponse'
 							formikValue={props.values.questionResponse}
-							autoFocus={true}
 							disabled={!userCan(perms.BRAND_PROFILE_UPDATE)}
 						/>
 					</GridItem>

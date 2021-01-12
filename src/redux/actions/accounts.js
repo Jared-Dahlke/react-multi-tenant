@@ -42,7 +42,7 @@ import {
 	fetchBrandIndustryVerticals
 } from '../actions/brandProfiles'
 import { findAccountNodeByAccountId } from '../../utils'
-import { setLists } from './engage/lists'
+import { setLists, fetchLists } from './engage/lists'
 
 const apiBase = config.api.userAccountUrl
 
@@ -234,9 +234,7 @@ export function fetchSiteData(accountId) {
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData(accountId))
 			dispatch(fetchBrandProfiles(accountId))
-
-			//
-
+			dispatch(fetchLists(accountId))
 			dispatch(fetchBrandIndustryVerticals())
 
 			if (config.googleAuth) {
