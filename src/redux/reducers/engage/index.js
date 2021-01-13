@@ -16,7 +16,7 @@ import {
 import {
 	videos,
 	channels,
-	hasNextPage,
+	channelsHasNextPage,
 	videosHasNextPage,
 	videosIsLoading,
 	channelsIsLoading
@@ -40,7 +40,7 @@ export default combineReducers({
 	filterLanguages,
 	videos,
 	channels,
-	hasNextPage,
+	channelsHasNextPage,
 	videosHasNextPage,
 	deleteAllVersionDataSuccess,
 	videosIsLoading,

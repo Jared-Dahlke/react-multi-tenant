@@ -23,7 +23,7 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setHasNextPage,
+	setChannelsHasNextPage,
 	setVideosHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
 
@@ -56,7 +56,7 @@ const mapStateToProps = (state) => {
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
 		videosIsLoading: state.engage.videosIsLoading,
-		hasNextPage: state.engage.hasNextPage,
+		channelsHasNextPage: state.engage.channelsHasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
@@ -85,7 +85,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
-		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
+		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
 			dispatch(deleteAllVersionData(versionId)),
@@ -120,7 +120,7 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
-			props.setHasNextPage(true)
+			props.setChannelsHasNextPage(true)
 			props.setVideosHasNextPage(true)
 		}
 	}, [])
@@ -142,7 +142,7 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
-		if (props.hasNextPage) {
+		if (props.channelsHasNextPage) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentPage,
@@ -437,7 +437,7 @@ function ListBuilder(props) {
 	const handleApplyFiltersButtonClick = () => {
 		props.removeAllChannels()
 		props.removeAllVideos()
-		props.setHasNextPage(true)
+		props.setChannelsHasNextPage(true)
 		setCurrentPage(1)
 		setChannelsFetchTrigger((prevState) => prevState + 1)
 	}
@@ -736,7 +736,7 @@ function ListBuilder(props) {
 
 					<Grid item xs={12}>
 						<ChannelsTable
-							hasNextPage={props.hasNextPage}
+							channelsHasNextPage={props.channelsHasNextPage}
 							channelsIsLoading={props.channelsIsLoading}
 							items={props.channels}
 							incrementPage={() => setCurrentPage((prevState) => prevState + 1)}

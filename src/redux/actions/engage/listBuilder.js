@@ -6,7 +6,7 @@ import {
 	SET_VIDEOS,
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
-	SET_HAS_NEXT_PAGE,
+	SET_CHANNELS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_CHANNELS_IS_LOADING,
 	SET_VIDEOS_IS_LOADING
@@ -75,10 +75,10 @@ export function setVideos(videos) {
 	}
 }
 
-export function setHasNextPage(hasNextPage) {
+export function setChannelsHasNextPage(channelsHasNextPage) {
 	return {
-		type: SET_HAS_NEXT_PAGE,
-		hasNextPage
+		type: SET_CHANNELS_HAS_NEXT_PAGE,
+		channelsHasNextPage
 	}
 }
 
@@ -145,7 +145,7 @@ export function fetchChannels(args) {
 				)
 			})
 			if (result.data.length < 100) {
-				dispatch(setHasNextPage(false))
+				dispatch(setChannelsHasNextPage(false))
 			}
 			let formattedChannels = formatChannels(result.data)
 			dispatch(setChannels(formattedChannels))

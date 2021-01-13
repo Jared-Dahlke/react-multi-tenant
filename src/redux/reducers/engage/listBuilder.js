@@ -3,7 +3,7 @@ import {
 	SET_VIDEOS,
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
-	SET_HAS_NEXT_PAGE,
+	SET_CHANNELS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_VIDEOS_IS_LOADING,
 	SET_CHANNELS_IS_LOADING
@@ -33,10 +33,10 @@ export function channels(state = [], action) {
 	}
 }
 
-export function hasNextPage(state = true, action) {
+export function channelsHasNextPage(state = true, action) {
 	switch (action.type) {
-		case SET_HAS_NEXT_PAGE:
-			return action.hasNextPage
+		case SET_CHANNELS_HAS_NEXT_PAGE:
+			return action.channelsHasNextPage
 		default:
 			return state
 	}

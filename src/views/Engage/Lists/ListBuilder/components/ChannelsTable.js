@@ -14,14 +14,12 @@ var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
 
 export default function ChannelsTable({
-	hasNextPage,
 	channelsIsLoading,
 	items,
 	incrementPage,
 	handleActionButtonClick,
 	handleVideosClick
 }) {
-	const infiniteLoaderRef = React.useRef(null)
 	const hasMountedRef = React.useRef(false)
 
 	const [actionsTaken, setActionsTaken] = React.useState(0)
