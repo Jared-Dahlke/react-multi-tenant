@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
-import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import TagPicker from 'rsuite/lib/TagPicker'
 import PanelGroup from 'rsuite/lib/PanelGroup'
@@ -15,7 +14,6 @@ import VideoModal from './components/VideoModal'
 import InputGroup from 'rsuite/lib/InputGroup'
 import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
-import Input from 'rsuite/lib/Input'
 import FiltersLabel from './components/FiltersLabel'
 import Panel from 'rsuite/lib/Panel'
 
@@ -207,6 +205,7 @@ function ListBuilder(props) {
 				filters: {
 					channelId: viewingVideosForChannel.id,
 					kids: filterState.kids,
+					languages: filterState.languages,
 					views: {
 						min: filterState.views.min ? filterState.views.min : 0,
 						max: filterState.views.max
@@ -295,6 +294,7 @@ function ListBuilder(props) {
 		kids: false,
 		countries: [{ countryCode: 'US' }],
 		actionIds: [],
+		languages: [{ languageCode: 'en' }],
 		views: {
 			min: null,
 			max: null

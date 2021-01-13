@@ -26,6 +26,8 @@ const apiBase = config.api.listBuilderUrl
 let fetchVideosRequest = null
 
 export function fetchVideos(args) {
+	console.log('fetch videos')
+	console.log(args.filters)
 	if (fetchVideosRequest) {
 		fetchVideosRequest.cancel()
 	}
