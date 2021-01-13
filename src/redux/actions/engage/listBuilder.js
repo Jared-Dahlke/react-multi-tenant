@@ -36,7 +36,6 @@ export function fetchVideos(args) {
 				url: url,
 				data: args.filters
 			})
-			//	const result = await defaultAxios.get(url, {)
 
 			if (result.status === 200) {
 				videosSchema.validate(result.data).catch((err) => {
@@ -108,8 +107,6 @@ export function removeAllChannels() {
 		channels: []
 	}
 }
-
-let fetchChannelsRequest = null
 
 export function fetchChannels(args) {
 	let url =
@@ -230,8 +227,6 @@ const formatVideos = (videos) => {
 		item.likesDisplay = numeral(item.likes).format('0a')
 		item.likesTooltip = numeral(item.likes).format('0,0')
 	}
-	console.log('formatted videos')
-	console.log(videos)
 	return videos
 }
 

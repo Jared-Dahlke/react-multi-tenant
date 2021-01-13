@@ -466,9 +466,11 @@ function ListBuilder(props) {
 					show={showVideoModal}
 					close={handleVideoModalClose}
 					videos={props.videos}
-					incrementPage={() =>
-						setCurrentVideoPage((prevState) => prevState + 1)
-					}
+					incrementPage={() => {
+						if (!props.videosIsLoading) {
+							setCurrentVideoPage((prevState) => prevState + 1)
+						}
+					}}
 					handleActionButtonClick={handleActionButtonClick}
 					channel={viewingVideosForChannel}
 					videosIsLoading={props.videosIsLoading}
@@ -739,7 +741,11 @@ function ListBuilder(props) {
 							channelsHasNextPage={props.channelsHasNextPage}
 							channelsIsLoading={props.channelsIsLoading}
 							items={props.channels}
-							incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
+							incrementPage={() => {
+								if (!props.channelsIsLoading) {
+									setCurrentPage((prevState) => prevState + 1)
+								}
+							}}
 							handleActionButtonClick={handleActionButtonClick}
 							handleVideosClick={handleVideosClick}
 						/>
