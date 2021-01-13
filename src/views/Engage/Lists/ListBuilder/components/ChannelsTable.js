@@ -133,7 +133,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} flexGrow={2}>
+			<Table.Column verticalAlign={'middle'} flexGrow={2} fixed>
 				<Table.HeaderCell>Name</Table.HeaderCell>
 				<TooltipCell
 					displayProp='nameDisplay'

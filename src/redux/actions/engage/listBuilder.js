@@ -24,14 +24,7 @@ dayjs.extend(calendar)
 
 const apiBase = config.api.listBuilderUrl
 
-let fetchVideosRequest = null
-
 export function fetchVideos(args) {
-	if (fetchVideosRequest) {
-		fetchVideosRequest.cancel()
-	}
-	fetchVideosRequest = axios.CancelToken.source()
-
 	let url =
 		apiBase +
 		`/smart-list/video?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
@@ -41,8 +34,7 @@ export function fetchVideos(args) {
 			const result = await defaultAxios({
 				method: 'POST',
 				url: url,
-				data: args.filters,
-				cancelToken: fetchVideosRequest.token
+				data: args.filters
 			})
 			//	const result = await defaultAxios.get(url, {)
 
@@ -120,11 +112,6 @@ export function removeAllChannels() {
 let fetchChannelsRequest = null
 
 export function fetchChannels(args) {
-	if (fetchChannelsRequest) {
-		fetchChannelsRequest.cancel()
-	}
-	fetchChannelsRequest = axios.CancelToken.source()
-
 	let url =
 		apiBase +
 		`/smart-list/channel?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
@@ -133,8 +120,7 @@ export function fetchChannels(args) {
 		const result = await axios({
 			method: 'POST',
 			url: url,
-			data: args.filters,
-			cancelToken: fetchChannelsRequest.token
+			data: args.filters
 		})
 
 		if (result.status === 200) {
