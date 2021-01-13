@@ -30,9 +30,23 @@ const VideoModal = (props) => {
 		hasMountedRef.current = true
 	}, [actionsTaken])
 
+	function secondsToTime(e) {
+		var h = Math.floor(e / 3600)
+				.toString()
+				.padStart(2, '0'),
+			m = Math.floor((e % 3600) / 60)
+				.toString()
+				.padStart(2, '0'),
+			s = Math.floor(e % 60)
+				.toString()
+				.padStart(2, '0')
+		if (h == '00') {
+			return m + ':' + s
+		}
+		return h + ':' + m + ':' + s
+	}
+
 	const Duration = ({ seconds }) => {
-		let minutes = Math.floor(seconds / 60)
-		let remainingSeconds = Math.floor(seconds - minutes * 60) - 1
 		return (
 			<div
 				style={{
@@ -44,7 +58,7 @@ const VideoModal = (props) => {
 					letterSpacing: 0.5
 				}}
 			>
-				{`${minutes}:${remainingSeconds}`}
+				{`${secondsToTime(seconds)}`}
 			</div>
 		)
 	}
