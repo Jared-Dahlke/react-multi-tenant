@@ -27,11 +27,6 @@ export default function ChannelsTable({
 	const [actionsTaken, setActionsTaken] = React.useState(0)
 
 	React.useEffect(() => {
-		if (hasMountedRef.current) {
-			if (infiniteLoaderRef.current) {
-				//	infiniteLoaderRef.current.resetloadMoreItemsCache()
-			}
-		}
 		hasMountedRef.current = true
 	}, [actionsTaken])
 
