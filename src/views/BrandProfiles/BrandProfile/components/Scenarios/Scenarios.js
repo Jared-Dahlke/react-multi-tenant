@@ -74,14 +74,6 @@ function Scenarios(props) {
 			brandProfileId: props.brandProfile.brandProfileId
 		}
 		props.patchBrandProfileScenarios(params)
-
-		let valid = true
-		for (const scen of props.brandProfile.scenarios) {
-			if (scen.scenarioResponseId === '') {
-				valid = false
-			}
-		}
-		props.setScenariosValid(valid)
 	}
 
 	return (

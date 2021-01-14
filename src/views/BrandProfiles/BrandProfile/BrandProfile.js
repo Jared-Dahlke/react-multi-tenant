@@ -102,18 +102,11 @@ function BrandProfile(props) {
 	])
 
 	const scrollSpeed = 90
-	const { scrollToElement, scrollToY } = useScroll({
+	const { scrollToElement } = useScroll({
 		scrollSpeed,
 		containerRef,
 		verticalOffset: 0
 	})
-
-	const [competitorsValid, setCompetitorsValid] = React.useState(false)
-	const [categoriesValid, setCategoriesValid] = React.useState(false)
-	const [topicsValid, setTopicsValid] = React.useState(false)
-	const [scenariosValid, setScenariosValid] = React.useState(false)
-	const [opinionsValid, setOpinionsValid] = React.useState(false)
-	const [questionsValid, setQuestionsValid] = React.useState(false)
 
 	const [activeStep, setActiveStep] = React.useState(
 		brandProfileSteps.brandInformation
@@ -280,7 +273,6 @@ function BrandProfile(props) {
 								<div ref={competitorsRef} style={{ marginTop: 60 }}>
 									<animated.div style={competitorsProps}>
 										<TopCompetitors
-											setCompetitorsValid={setCompetitorsValid}
 											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
@@ -288,8 +280,6 @@ function BrandProfile(props) {
 								<div ref={categoriesRef} style={{ marginTop: 60 }}>
 									<animated.div style={categoriesProps}>
 										<Categories
-											categoriesValid={categoriesValid}
-											setCategoriesValid={setCategoriesValid}
 											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
@@ -297,7 +287,6 @@ function BrandProfile(props) {
 								<div ref={topicsRef} style={{ marginTop: 60 }}>
 									<animated.div style={topicsProps}>
 										<Topics
-											setTopicsValid={setTopicsValid}
 											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
@@ -312,7 +301,6 @@ function BrandProfile(props) {
 								<div ref={scenariosRef} style={{ marginTop: 60 }}>
 									<animated.div style={scenariosProps}>
 										<Scenarios
-											setScenariosValid={setScenariosValid}
 											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
