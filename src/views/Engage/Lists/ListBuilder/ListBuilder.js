@@ -153,18 +153,16 @@ function ListBuilder(props) {
 						kids: filterState.kids,
 						actionIds: filterState.actionIds,
 						views: {
-							min: filterState.views.min ? filterState.views.min : 0,
+							min: filterState.views.min,
 							max: filterState.views.max
-								? filterState.views.max
-								: 1000000000000000
 						},
 						videoDurationSeconds: {
 							min: filterState.videoDurationSeconds.min
 								? filterState.videoDurationSeconds.min * 60
-								: 0,
+								: null,
 							max: filterState.videoDurationSeconds.max
 								? filterState.videoDurationSeconds.max * 60
-								: 1000000000000000
+								: null
 						},
 						uploadDate: filterState.uploadDate
 					},
@@ -174,18 +172,16 @@ function ListBuilder(props) {
 						kids: filterState.kids,
 						actionIds: filterState.actionIds,
 						views: {
-							min: filterState.views.min ? filterState.views.min : 0,
+							min: filterState.views.min,
 							max: filterState.views.max
-								? filterState.views.max
-								: 1000000000000000
 						},
 						videoDurationSeconds: {
 							min: filterState.videoDurationSeconds.min
 								? filterState.videoDurationSeconds.min * 60
-								: 0,
+								: null,
 							max: filterState.videoDurationSeconds.max
 								? filterState.videoDurationSeconds.max * 60
-								: 1000000000000000
+								: null
 						},
 						uploadDate: filterState.uploadDate
 					}
@@ -207,18 +203,16 @@ function ListBuilder(props) {
 					kids: filterState.kids,
 					languages: filterState.languages,
 					views: {
-						min: filterState.views.min ? filterState.views.min : 0,
+						min: filterState.views.min,
 						max: filterState.views.max
-							? filterState.views.max
-							: 1000000000000000
 					},
 					videoDurationSeconds: {
 						min: filterState.videoDurationSeconds.min
 							? filterState.videoDurationSeconds.min * 60
-							: 0,
+							: null,
 						max: filterState.videoDurationSeconds.max
 							? filterState.videoDurationSeconds.max * 60
-							: 1000000000000000
+							: null
 					},
 					uploadDate: filterState.uploadDate,
 					actionIds: filterState.actionIds,
