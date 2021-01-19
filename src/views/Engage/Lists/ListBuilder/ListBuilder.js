@@ -537,7 +537,7 @@ function ListBuilder(props) {
 												labelKey={'categoryName'}
 												valueKey={'categoryId'}
 												virtualized={true}
-												placeholder='Categories'
+												placeholder='Youtube Categories'
 												onChange={(val) => {
 													handleFilterChange(filters.categories, val)
 												}}
