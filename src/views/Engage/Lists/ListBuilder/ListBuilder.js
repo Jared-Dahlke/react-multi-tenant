@@ -147,43 +147,23 @@ function ListBuilder(props) {
 				versionId: parsedVersionId,
 				pageNumber: currentPage,
 				filters: {
-					channelFilters: {
-						countries: filterState.countries,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: {
-							min: filterState.views.min,
-							max: filterState.views.max
-						},
-						videoDurationSeconds: {
-							min: filterState.videoDurationSeconds.min
-								? filterState.videoDurationSeconds.min * 60
-								: null,
-							max: filterState.videoDurationSeconds.max
-								? filterState.videoDurationSeconds.max * 60
-								: null
-						},
-						uploadDate: filterState.uploadDate
+					countries: filterState.countries,
+					kids: filterState.kids,
+					actionIds: filterState.actionIds,
+					uploadDate: filterState.uploadDate,
+					languages: filterState.languages,
+					categories: filterState.categories,
+					views: {
+						min: filterState.views.min,
+						max: filterState.views.max
 					},
-					videoFilters: {
-						languages: filterState.languages,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: {
-							min: filterState.views.min,
-							max: filterState.views.max
-						},
-						videoDurationSeconds: {
-							min: filterState.videoDurationSeconds.min
-								? filterState.videoDurationSeconds.min * 60
-								: null,
-							max: filterState.videoDurationSeconds.max
-								? filterState.videoDurationSeconds.max * 60
-								: null
-						},
-						uploadDate: filterState.uploadDate
+					videoDurationSeconds: {
+						min: filterState.videoDurationSeconds.min
+							? filterState.videoDurationSeconds.min * 60
+							: null,
+						max: filterState.videoDurationSeconds.max
+							? filterState.videoDurationSeconds.max * 60
+							: null
 					}
 				}
 			}
