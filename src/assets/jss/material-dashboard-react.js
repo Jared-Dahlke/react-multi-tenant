@@ -46,9 +46,11 @@ const container = {
 const whiteColor = '#FFF'
 
 const defaultFont = {
-	fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+	fontFamily: `-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+	Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif`,
 	fontWeight: '300',
-	lineHeight: '1.5em',
+	lineHeight: 1.6,
+	fontSize: 18,
 	color: whiteColor
 }
 

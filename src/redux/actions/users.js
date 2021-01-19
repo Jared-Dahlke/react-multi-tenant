@@ -106,10 +106,6 @@ export function setUserEditSaved(bool) {
 	}
 }
 
-export function setAlert(payload) {
-	return { type: SET_ALERT, payload }
-}
-
 export function editUserUserAccountsLoading(bool) {
 	return {
 		type: EDIT_USER_USER_ACCOUNTS_LOADING,
@@ -197,7 +193,6 @@ export function updateUserData(user) {
 				alert('Could not validate new user')
 			})
 			delete myUser.accounts
-			dispatch(setUser(myUser))
 			const result = await axios.patch(url, myUser)
 			if (result.status === 200) {
 				dispatch(userProfileSaving(false))

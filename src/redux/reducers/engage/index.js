@@ -9,11 +9,18 @@ import {
 	fetchListsSuccess,
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
-	createdListVersion,
+	smartListVersionUnderEdit,
 	deleteAllVersionDataSuccess
 } from './lists'
 
-import { videos, channels, hasNextPage } from './listBuilder'
+import {
+	videos,
+	channels,
+	hasNextPage,
+	videosHasNextPage,
+	videosIsLoading,
+	channelsIsLoading
+} from './listBuilder'
 
 import { filterCountries, filterCategories, filterLanguages } from './filters'
 
@@ -27,12 +34,15 @@ export default combineReducers({
 	fetchListsSuccess,
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
-	createdListVersion,
+	smartListVersionUnderEdit,
 	filterCountries,
 	filterCategories,
 	filterLanguages,
 	videos,
 	channels,
 	hasNextPage,
-	deleteAllVersionDataSuccess
+	videosHasNextPage,
+	deleteAllVersionDataSuccess,
+	videosIsLoading,
+	channelsIsLoading
 })

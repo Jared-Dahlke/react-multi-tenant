@@ -87,8 +87,20 @@ function UploadList(props) {
 		touched
 	} = props
 
-	const unarchivedLists = React.useMemo(() => {
-		return props.lists.filter((list) => !list.archived)
+	const smartListsNames = React.useMemo(() => {
+		let unarchivedLists = props.lists.filter((list) => !list.archived)
+		let names = []
+		let ids = []
+		for (const version of unarchivedLists) {
+			if (!ids.includes(version.smartListId)) {
+				names.push({
+					smartListId: version.smartListId,
+					smartListName: version.smartListName
+				})
+				ids.push(version.smartListId)
+			}
+		}
+		return names
 	}, [props.lists])
 
 	const handleUploadSuccess = (data) => {
@@ -147,7 +159,7 @@ function UploadList(props) {
 										label='Smart List'
 										optionLabel='smartListName'
 										optionValue='smartListId'
-										options={unarchivedLists}
+										options={smartListsNames}
 										value={values.smartListId}
 										onChange={setFieldValue}
 										onBlur={setFieldTouched}
@@ -281,6 +293,14 @@ const validateNew = (values, errors) => {
 	if (values.brandProfileId.length < 1) {
 		errors.brandProfileId = 'Please select a brand profile'
 	}
+
+	for (const version of values.smartLists) {
+		if (version.smartListName.toLowerCase() === values?.name?.toLowerCase()) {
+			errors.name = 'Sorry, this name is already taken. Please try another.'
+		} else {
+		}
+	}
+
 	return errors
 }
 
@@ -304,6 +324,7 @@ const MyEnhancedForm = withFormik({
 			objectiveId: 1,
 			smartListId: '',
 			uploadedList: [],
+			smartLists: props.lists,
 			brandProfileId: props.brandProfiles[0]
 				? props.brandProfiles[0].brandProfileId
 				: ''

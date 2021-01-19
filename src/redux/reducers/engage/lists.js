@@ -10,7 +10,7 @@ import {
 	SET_IS_DOWNLOADING_EXCEL,
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
-	SET_CREATED_LIST_VERSION,
+	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
 
@@ -35,11 +35,9 @@ export function lists(state = [], action) {
 			let versionId = action.payload.versionId
 			for (const list of newLists) {
 				if (list.smartListId === smartListId) {
-					for (const version of list.versions) {
-						version.active = false
-						if (version.versionId === versionId) {
-							version.active = true
-						}
+					list.active = false
+					if (list.versionId === versionId) {
+						list.active = true
 					}
 				}
 			}
@@ -58,10 +56,10 @@ export function uploadedList(state = [], action) {
 	}
 }
 
-export function createdListVersion(state = {}, action) {
+export function smartListVersionUnderEdit(state = {}, action) {
 	switch (action.type) {
-		case SET_CREATED_LIST_VERSION:
-			return action.createdListVersion
+		case SET_SMARTLIST_VERSION_UNDER_EDIT:
+			return action.smartListVersionUnderEdit
 		default:
 			return state
 	}

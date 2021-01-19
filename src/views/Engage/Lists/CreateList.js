@@ -7,7 +7,6 @@ import FormikInput from '../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import Grid from '@material-ui/core/Grid'
 import { objectives } from './constants'
-import FormGroup from 'rsuite/lib/FormGroup'
 import { connect } from 'react-redux'
 import { postListObjValidation } from '../../../schemas/Engage/Lists/schemas'
 import { getCurrentAccount } from '../../../utils'
@@ -25,7 +24,7 @@ const mapStateToProps = (state) => {
 		accounts: state.accounts,
 		brandProfiles: state.brandProfiles,
 		lists: state.engage.lists,
-		createdListVersion: state.engage.createdListVersion
+		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit
 	}
 }
 
@@ -41,10 +40,8 @@ function CreateNewListModal(props) {
 	const { postListSuccess } = props
 	React.useEffect(() => {
 		if (postListSuccess) {
-			history.push(routes.app.engage.lists.listBuilder.path, {
-				from: 'lists',
-				createdListVersion: props.createdListVersion
-			})
+			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
+			history.push(url)
 		}
 	}, [postListSuccess])
 
@@ -173,6 +170,7 @@ function CreateNewListModal(props) {
 const MyEnhancedForm = withFormik({
 	mapPropsToValues: (props) => {
 		return {
+			smartLists: props.lists,
 			smartListName: '',
 			objectiveId: 1,
 			brandProfileId: props.brandProfiles[0]

@@ -41,7 +41,7 @@ module.exports = override(
 				'@nav-bar-default-font-color': '#FFF',
 				'@nav-bar-default-active-bg': neutralColor,
 				'@nav-item-default-hover-bg': neutralExtraLightColor,
-				'@dropdown-link-hover-bg': neutralLightColor,
+				'@dropdown-link-hover-bg': neutralExtraLightColor,
 
 				//'@btn-default-hover-bg': 'yellow',
 				////	'@btn-default-active-bg': accentColor,
@@ -75,6 +75,7 @@ module.exports = override(
 				'@table-head-background': neutralColor,
 				'@table-body-hover-background': neutralExtraLightColor,
 				'@table-head-font-color': '#FFF',
+				'@loader-backdrop-color': neutralColor,
 				//panel
 				'@panel-heading-color': '#FFF',
 				'@panel-border': '1px solid ' + neutralExtraLightColor,
@@ -109,9 +110,16 @@ module.exports = override(
 				//toggle
 				'@toggle-default-bg': neutralExtraLightColor,
 				'@toggle-inner-text-color': '#FFF',
-				'@toggle-default-hover-bg': neutralLightColor
+				'@toggle-default-hover-bg': neutralLightColor,
 
-				//input
+				//** Tooltip text color
+				'@tooltip-color': 'black',
+				//** Tooltip background color
+				'@tooltip-bg': '#FFF',
+
+				//Tag
+				'@tag-default-background': neutralExtraLightColor,
+				'@tag-default-color': '#FFF'
 			}
 		}
 	})

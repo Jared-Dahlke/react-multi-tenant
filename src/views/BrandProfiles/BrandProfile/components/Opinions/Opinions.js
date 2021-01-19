@@ -36,10 +36,6 @@ function setOpinionAction(data, opinions) {
 	}
 }
 
-function checkResponse(opinion) {
-	return opinion.opinionResponseId > 0
-}
-
 function Opinions(props) {
 	const [fetched, setFetched] = React.useState(false)
 	React.useEffect(() => {
@@ -69,26 +65,11 @@ function Opinions(props) {
 		setOpinionAction(data, newopinions)
 		handleSetBrandProfiles(newopinions)
 
-		let scenToSave = JSON.parse(JSON.stringify(newopinions))
-		for (const [index, scen] of scenToSave.entries()) {
-			delete scen.question
-			delete scen.brandProfileId
-			delete scen.opinionType
-			delete scen.opinionResponseName
-		}
-
 		let params = {
-			opinions: scenToSave.filter(checkResponse),
+			opinions: [data],
 			brandProfileId: props.brandProfile.brandProfileId
 		}
 		props.patchBrandProfileOpinions(params)
-
-		let valid = true
-		for (const scen of props.brandProfile.opinions) {
-			if (scen.opinionResponseId === '') {
-				valid = false
-			}
-		}
 	}
 
 	return (

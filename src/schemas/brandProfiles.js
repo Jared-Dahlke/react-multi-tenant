@@ -185,3 +185,36 @@ export const opinionsObjValidation = Yup.array()
 			)
 		})
 	)
+
+export const questionsObjValidation = Yup.array()
+	.min(1)
+	.of(
+		Yup.object().shape({
+			brandProfileId: Yup.mixed().test(
+				'my test',
+				'api sent different data than expected for brand profile questions brandProfileId',
+				(text) => {
+					if (typeof text === 'number' || text == null) {
+						return true
+					} else {
+						return false
+					}
+				}
+			),
+			question: Yup.string().required(),
+			questionId: Yup.number()
+				.strict(true)
+				.required(),
+			responseText: Yup.mixed().test(
+				'my test',
+				'api sent different data than expected for brand profile questions responseText',
+				(text) => {
+					if (typeof text === 'string' || text == null) {
+						return true
+					} else {
+						return false
+					}
+				}
+			)
+		})
+	)

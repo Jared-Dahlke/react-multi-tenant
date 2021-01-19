@@ -48,7 +48,7 @@ export const routes = {
 				lists: {
 					path: '/app/engage/lists',
 					component: Lists,
-					name: 'Lists'
+					name: 'SmartLists'
 				},
 				uploadList: {
 					path: '/app/engage/lists/uploadList',
@@ -61,7 +61,7 @@ export const routes = {
 					name: 'Create List'
 				},
 				listBuilder: {
-					path: '/app/engage/lists/listBuilder',
+					path: '/app/engage/lists/listBuilder/:versionId',
 					name: 'List Builder',
 					component: ListBuilder
 				}
@@ -179,7 +179,7 @@ export const modifiedRoutes = {
 			engage: {
 				path: '/app/engage/lists',
 				component: Lists,
-				name: 'Lists',
+				name: 'SmartLists',
 				userCan: userCan(perms.ENGAGE_READ),
 				subRoutes: [
 					{
@@ -193,7 +193,7 @@ export const modifiedRoutes = {
 						name: 'Upload List'
 					},
 					{
-						path: '/app/engage/lists/listBuilder',
+						path: '/app/engage/lists/listBuilder/:versionId',
 						name: 'List Builder',
 						component: ListBuilder
 					}
