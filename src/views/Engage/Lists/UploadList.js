@@ -121,12 +121,37 @@ function UploadList(props) {
 		setUploadedCount(uploadedCount - 1)
 	}
 
+	const handleDownloadTemplateClick = () => {
+		window.location.href =
+			'https://storage.googleapis.com/sightlyoutcomeintelligence_temp/channels_and_videos_sample.xlsx' //TODO : replace this with the actual template URL
+	}
+
 	return (
 		<div>
 			<Grid container spacing={3} justify='center'>
 				<Grid item xs={12} sm={6} md={10}>
 					<Form>
-						<Panel header='Upload a list' bordered>
+						<Panel
+							header={
+								<Grid container>
+									<Grid item xs={6}>
+										Upload a list
+									</Grid>
+
+									<Grid item xs={6} align='right'>
+										<Button
+											disabled
+											appearance='link'
+											style={{ margin: 0, padding: 0 }}
+											onClick={handleDownloadTemplateClick}
+										>
+											Click to download template
+										</Button>
+									</Grid>
+								</Grid>
+							}
+							bordered
+						>
 							<Grid container>
 								<RadioGroup
 									inline
