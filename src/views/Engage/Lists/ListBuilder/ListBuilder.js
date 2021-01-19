@@ -23,7 +23,7 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setHasNextPage,
+	setChannelsHasNextPage,
 	setVideosHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
 
@@ -56,7 +56,7 @@ const mapStateToProps = (state) => {
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
 		videosIsLoading: state.engage.videosIsLoading,
-		hasNextPage: state.engage.hasNextPage,
+		channelsHasNextPage: state.engage.channelsHasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
@@ -85,7 +85,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
-		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
+		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
 			dispatch(deleteAllVersionData(versionId)),
@@ -120,7 +120,7 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
-			props.setHasNextPage(true)
+			props.setChannelsHasNextPage(true)
 			props.setVideosHasNextPage(true)
 		}
 	}, [])
@@ -142,52 +142,28 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
-		if (props.hasNextPage) {
+		if (props.channelsHasNextPage) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentPage,
 				filters: {
-					channelFilters: {
-						countries: filterState.countries,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: {
-							min: filterState.views.min ? filterState.views.min : 0,
-							max: filterState.views.max
-								? filterState.views.max
-								: 1000000000000000
-						},
-						videoDurationSeconds: {
-							min: filterState.videoDurationSeconds.min
-								? filterState.videoDurationSeconds.min * 60
-								: 0,
-							max: filterState.videoDurationSeconds.max
-								? filterState.videoDurationSeconds.max * 60
-								: 1000000000000000
-						},
-						uploadDate: filterState.uploadDate
+					countries: filterState.countries,
+					kids: filterState.kids,
+					actionIds: filterState.actionIds,
+					uploadDate: filterState.uploadDate,
+					languages: filterState.languages,
+					categories: filterState.categories,
+					views: {
+						min: filterState.views.min,
+						max: filterState.views.max
 					},
-					videoFilters: {
-						languages: filterState.languages,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: {
-							min: filterState.views.min ? filterState.views.min : 0,
-							max: filterState.views.max
-								? filterState.views.max
-								: 1000000000000000
-						},
-						videoDurationSeconds: {
-							min: filterState.videoDurationSeconds.min
-								? filterState.videoDurationSeconds.min * 60
-								: 0,
-							max: filterState.videoDurationSeconds.max
-								? filterState.videoDurationSeconds.max * 60
-								: 1000000000000000
-						},
-						uploadDate: filterState.uploadDate
+					videoDurationSeconds: {
+						min: filterState.videoDurationSeconds.min
+							? filterState.videoDurationSeconds.min * 60
+							: null,
+						max: filterState.videoDurationSeconds.max
+							? filterState.videoDurationSeconds.max * 60
+							: null
 					}
 				}
 			}
@@ -207,18 +183,16 @@ function ListBuilder(props) {
 					kids: filterState.kids,
 					languages: filterState.languages,
 					views: {
-						min: filterState.views.min ? filterState.views.min : 0,
+						min: filterState.views.min,
 						max: filterState.views.max
-							? filterState.views.max
-							: 1000000000000000
 					},
 					videoDurationSeconds: {
 						min: filterState.videoDurationSeconds.min
 							? filterState.videoDurationSeconds.min * 60
-							: 0,
+							: null,
 						max: filterState.videoDurationSeconds.max
 							? filterState.videoDurationSeconds.max * 60
-							: 1000000000000000
+							: null
 					},
 					uploadDate: filterState.uploadDate,
 					actionIds: filterState.actionIds,
@@ -437,7 +411,7 @@ function ListBuilder(props) {
 	const handleApplyFiltersButtonClick = () => {
 		props.removeAllChannels()
 		props.removeAllVideos()
-		props.setHasNextPage(true)
+		props.setChannelsHasNextPage(true)
 		setCurrentPage(1)
 		setChannelsFetchTrigger((prevState) => prevState + 1)
 	}
@@ -466,9 +440,11 @@ function ListBuilder(props) {
 					show={showVideoModal}
 					close={handleVideoModalClose}
 					videos={props.videos}
-					incrementPage={() =>
-						setCurrentVideoPage((prevState) => prevState + 1)
-					}
+					incrementPage={() => {
+						if (!props.videosIsLoading) {
+							setCurrentVideoPage((prevState) => prevState + 1)
+						}
+					}}
 					handleActionButtonClick={handleActionButtonClick}
 					channel={viewingVideosForChannel}
 					videosIsLoading={props.videosIsLoading}
@@ -736,10 +712,14 @@ function ListBuilder(props) {
 
 					<Grid item xs={12}>
 						<ChannelsTable
-							hasNextPage={props.hasNextPage}
+							channelsHasNextPage={props.channelsHasNextPage}
 							channelsIsLoading={props.channelsIsLoading}
 							items={props.channels}
-							incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
+							incrementPage={() => {
+								if (!props.channelsIsLoading) {
+									setCurrentPage((prevState) => prevState + 1)
+								}
+							}}
 							handleActionButtonClick={handleActionButtonClick}
 							handleVideosClick={handleVideosClick}
 						/>

@@ -3,34 +3,28 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Table from 'rsuite/lib/Table'
-import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
+
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
+import { TooltipCell } from './TooltipCell'
 
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
 
 export default function ChannelsTable({
-	hasNextPage,
 	channelsIsLoading,
 	items,
 	incrementPage,
 	handleActionButtonClick,
 	handleVideosClick
 }) {
-	const infiniteLoaderRef = React.useRef(null)
 	const hasMountedRef = React.useRef(false)
 
 	const [actionsTaken, setActionsTaken] = React.useState(0)
 
 	React.useEffect(() => {
-		if (hasMountedRef.current) {
-			if (infiniteLoaderRef.current) {
-				//	infiniteLoaderRef.current.resetloadMoreItemsCache()
-			}
-		}
 		hasMountedRef.current = true
 	}, [actionsTaken])
 
@@ -94,24 +88,6 @@ export default function ChannelsTable({
 		)
 	}
 
-	const CountryCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell
-				{...props}
-				className='link-group'
-				style={{ align: 'center', padding: 5 }}
-			>
-				<Whisper
-					placement='topStart'
-					trigger='hover'
-					speaker={<Tooltip>{rowData.countryName}</Tooltip>}
-				>
-					<div>{countryCodeToFlagEmoji(rowData.countryCode)}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
 	const VideoCountCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell
@@ -119,36 +95,14 @@ export default function ChannelsTable({
 				className='link-group'
 				style={{ align: 'center', padding: 5 }}
 			>
-				<Button appearance='link' onClick={() => handleVideosClick(rowData)}>
-					{rowData.videosCount}
-				</Button>
-			</Table.Cell>
-		)
-	}
-
-	const NameCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
 				<Whisper
-					placement='topStart'
+					placement={'bottom'}
 					trigger='hover'
-					speaker={<Tooltip>{rowData.description}</Tooltip>}
+					speaker={<Tooltip>{rowData.videosTooltip}</Tooltip>}
 				>
-					<div>{rowData.name}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const VideoCategoriesCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='topStart'
-					trigger='hover'
-					speaker={<Tooltip>{rowData.categoryName}</Tooltip>}
-				>
-					<div>{rowData.categoryName}</div>
+					<Button appearance='link' onClick={() => handleVideosClick(rowData)}>
+						{rowData.videosDisplay}
+					</Button>
 				</Whisper>
 			</Table.Cell>
 		)
@@ -171,38 +125,54 @@ export default function ChannelsTable({
 				<ImageCell />
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} width={60}>
+			<Table.Column verticalAlign={'middle'} width={60} align='center'>
 				<Table.HeaderCell></Table.HeaderCell>
-				<CountryCell />
+				<TooltipCell
+					displayProp='countryDisplay'
+					tooltipProp='countryTooltip'
+				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} flexGrow={2}>
+			<Table.Column verticalAlign={'middle'} flexGrow={2} fixed>
 				<Table.HeaderCell>Name</Table.HeaderCell>
-				<NameCell />
+				<TooltipCell
+					displayProp='nameDisplay'
+					tooltipProp='nameTooltip'
+					tooltipPlacement='topLeft'
+				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Date</Table.HeaderCell>
-				<Table.Cell dataKey='createDate' style={{ color: 'grey' }} />
+				<TooltipCell
+					displayProp='createDateDisplay'
+					tooltipProp='createDateTooltip'
+				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1}>
+			<Table.Column verticalAlign={'middle'} flexGrow={1} align='center'>
 				<Table.HeaderCell>Video Categories</Table.HeaderCell>
-				<VideoCategoriesCell />
+				<TooltipCell
+					displayProp='categoryDisplay'
+					tooltipProp='categoryTooltip'
+				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Subscribers</Table.HeaderCell>
-				<Table.Cell dataKey='subscribersCount' />
+				<TooltipCell
+					displayProp='subscribersDisplay'
+					tooltipProp='subscribersTooltip'
+				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Videos</Table.HeaderCell>
 				<VideoCountCell />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'}>
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Views</Table.HeaderCell>
-				<Table.Cell dataKey='viewsCount' />
+				<TooltipCell displayProp='viewsDisplay' tooltipProp='viewsTooltip' />
 			</Table.Column>
 			<Table.Column width={180} verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>

@@ -41,7 +41,7 @@ const Node = (props) => {
 
 	const handleClick = (e, topicId, oldVal, newValProposed) => {
 		e.preventDefault()
-		props.setTopicsValid(true)
+
 		let newTopics = JSON.parse(JSON.stringify(props.componentTopics))
 		setTopicAction(nodeProps.topicId, newValProposed, newTopics)
 		props.handleSetBrandProfiles(newTopics)
@@ -278,7 +278,6 @@ function TopicsTree(props) {
 							setComponentTopics={setComponentTopics}
 							setDisplayedTopics={setDisplayedTopics}
 							searchTerm={searchTerm}
-							setTopicsValid={props.setTopicsValid}
 							handleSetBrandProfiles={handleSetBrandProfiles}
 						/>
 					)
