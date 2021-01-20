@@ -8,21 +8,15 @@ import Scenarios from './components/Scenarios/Scenarios'
 import Opinions from './components/Opinions/Opinions'
 import Questions from './components/Questions/Questions'
 import TopCompetitors from './components/Competitors'
+import Outcomes from './components/Outcomes'
 import { useSpring, animated } from 'react-spring'
 import Grid from '@material-ui/core/Grid'
-import { setBrandProfileUnderEdit } from '../../../redux/actions/brandProfiles'
 import { connect } from 'react-redux'
 import { GridList } from '@material-ui/core'
 import { useScroll } from 'react-scroll-hooks'
 import Steps from 'rsuite/lib/Steps'
 import useOnScreen from './useOnScreen'
 import Loader from 'rsuite/lib/Loader'
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		setBrandProfileUnderEdit: () => dispatch(setBrandProfileUnderEdit(null))
-	}
-}
 
 const mapStateToProps = (state) => {
 	return {
@@ -37,6 +31,7 @@ const mapStateToProps = (state) => {
 
 const brandProfileSteps = {
 	brandInformation: 'brandInformation',
+	outcomes: 'outcomes',
 	competitors: 'competitors',
 	categories: 'categories',
 	topics: 'topics',
@@ -48,6 +43,7 @@ const brandProfileSteps = {
 function BrandProfile(props) {
 	const containerRef = React.useRef()
 	const brandInformationRef = React.useRef()
+	const outcomesRef = React.useRef()
 	const categoriesRef = React.useRef()
 	const topicsRef = React.useRef()
 	const scenariosRef = React.useRef()
@@ -55,6 +51,7 @@ function BrandProfile(props) {
 	const questionsRef = React.useRef()
 	const competitorsRef = React.useRef()
 	const brandInformationVisible = useOnScreen(brandInformationRef)
+	const outcomesVisible = useOnScreen(outcomesRef)
 	const competitorsVisible = useOnScreen(competitorsRef)
 	const categoriesVisible = useOnScreen(categoriesRef)
 	const topicsVisible = useOnScreen(topicsRef)
@@ -65,6 +62,10 @@ function BrandProfile(props) {
 	React.useEffect(() => {
 		if (brandInformationVisible) {
 			setActiveStep(brandProfileSteps.brandInformation)
+			return
+		}
+		if (outcomesVisible) {
+			setActiveStep(brandProfileSteps.outcomes)
 			return
 		}
 		if (competitorsVisible) {
@@ -93,6 +94,7 @@ function BrandProfile(props) {
 		}
 	}, [
 		brandInformationVisible,
+		outcomesVisible,
 		competitorsVisible,
 		categoriesVisible,
 		topicsVisible,
@@ -117,6 +119,10 @@ function BrandProfile(props) {
 	}
 
 	const brandInfoProps = useSpring({
+		opacity: props.brandProfile.brandName.length > 0 ? 1 : 0
+	})
+
+	const outcomesProps = useSpring({
 		opacity: props.brandProfile.brandName.length > 0 ? 1 : 0
 	})
 
@@ -163,6 +169,17 @@ function BrandProfile(props) {
 									activeStep === brandProfileSteps.brandInformation
 										? 'process'
 										: 'wait'
+								}
+							/>
+
+							<Steps.Item
+								title='Outcomes'
+								onClick={() =>
+									handleStepsClick(brandProfileSteps.outcomes, outcomesRef)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.outcomes ? 'process' : 'wait'
 								}
 							/>
 
@@ -270,6 +287,13 @@ function BrandProfile(props) {
 										brandProfileId={props.match.params.brandProfileId}
 									/>
 								</animated.div>
+								<div ref={outcomesRef} style={{ marginTop: 60 }}>
+									<animated.div style={outcomesProps}>
+										<Outcomes
+											brandProfileId={props.match.params.brandProfileId}
+										/>
+									</animated.div>
+								</div>
 								<div ref={competitorsRef} style={{ marginTop: 60 }}>
 									<animated.div style={competitorsProps}>
 										<TopCompetitors
@@ -321,4 +345,4 @@ function BrandProfile(props) {
 	)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandProfile)
+export default connect(mapStateToProps, null)(BrandProfile)

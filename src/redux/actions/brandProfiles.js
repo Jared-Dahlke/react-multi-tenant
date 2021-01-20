@@ -64,12 +64,22 @@ export function fetchBrandProfileBasic(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile basic info, see console log for more details'
 					)
 				})
+
 				let brandProfile = getState().brandProfileUnderEdit
 				brandProfile.brandProfileId = result.data.brandProfileId
 				brandProfile.brandName = result.data.brandName
 				brandProfile.websiteUrl = result.data.websiteUrl
 				brandProfile.industryVerticalId = result.data.industryVerticalId
 				brandProfile.twitterProfileUrl = result.data.twitterProfileUrl
+				brandProfile.primaryKPI = result.data.primaryKPI
+					? result.data.primaryKPI
+					: ''
+				brandProfile.secondaryKPI = result.data.secondaryKPI
+					? result.data.secondaryKPI
+					: ''
+				brandProfile.tertiaryKPI = result.data.tertiaryKPI
+					? result.data.tertiaryKPI
+					: ''
 				dispatch(setBrandProfileUnderEdit(brandProfile))
 			}
 		} catch (error) {
@@ -209,10 +219,14 @@ export function fetchBrandProfileQuestions(brandProfileId) {
 export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
+		let initialName =
+			getState().brandProfiles.length > 0
+				? 'UNTITLED_BRAND_PROFILE'
+				: 'My first brand profile'
 		dispatch(setBrandProfileCreating(true))
 		let brandProfile = {
 			accountId: getState().currentAccountId,
-			brandName: 'My first brand profile'
+			brandName: initialName
 		}
 
 		axios
@@ -307,6 +321,9 @@ export const patchBrandProfileBasicInfo = (brandProfile) => {
 				profile.twitterProfileUrl = brandProfile.twitterProfileUrl
 				profile.industryVerticalId = brandProfile.industryVerticalId
 				profile.websiteUrl = brandProfile.websiteUrl
+				profile.primaryKPI = brandProfile.primaryKPI
+				profile.secondaryKPI = brandProfile.secondaryKPI
+				profile.tertiaryKPI = brandProfile.tertiaryKPI
 			}
 		}
 		dispatch(setBrandProfiles(profiles))
