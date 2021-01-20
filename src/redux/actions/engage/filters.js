@@ -1,7 +1,8 @@
 import {
 	SET_FILTER_COUNTRIES,
 	SET_FILTER_CATEGORIES,
-	SET_FILTER_LANGUAGES
+	SET_FILTER_LANGUAGES,
+	SET_FILTER_IAB_CATEGORIES
 } from '../../action-types/engage/filters'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
@@ -32,6 +33,35 @@ export function setFilterCountries(filterCountries) {
 	return {
 		type: SET_FILTER_COUNTRIES,
 		filterCountries
+	}
+}
+
+export function fetchFilterIabCategories() {
+	let url = apiBase + `/smart-list/filters/iab-category`
+	return async (dispatch) => {
+		try {
+			let result = []
+			try {
+				result = await axios.get(url)
+			} catch (error) {
+				console.log(error)
+			}
+			if (result.status === 200) {
+				dispatch(setFilterIabCategories(result.data))
+			}
+		} catch (error) {
+			alert(
+				'Error on fetch filter iab categories: ' +
+					JSON.stringify(error, null, 2)
+			)
+		}
+	}
+}
+
+export function setFilterIabCategories(filterIabCategories) {
+	return {
+		type: SET_FILTER_IAB_CATEGORIES,
+		filterIabCategories
 	}
 }
 
