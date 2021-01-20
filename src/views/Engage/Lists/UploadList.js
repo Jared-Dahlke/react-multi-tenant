@@ -54,7 +54,6 @@ const objectives = [
 ]
 
 function UploadList(props) {
-	const [token, setToken] = React.useState(localStorage.getItem('token'))
 	let fetchLists = props.fetchLists
 	let accounts = props.accounts.data
 
@@ -245,7 +244,7 @@ function UploadList(props) {
 										listType='text'
 										accept='.xlsx, .xls, .csv'
 										action={parseExcelUrl}
-										headers={{ Authorization: token }}
+										headers={{ Authorization: localStorage.getItem('token') }}
 										multiple={false}
 										draggable
 										onError={(err) => console.log('err consolelog:', err)}
