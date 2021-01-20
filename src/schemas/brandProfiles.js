@@ -40,6 +40,39 @@ export const basicInfoObjValidation = Yup.object().shape({
 	brandName: Yup.string().required(),
 	brandProfileId: Yup.number().required(),
 	industryVerticalId: Yup.number().required(),
+	primaryKPI: Yup.mixed().test(
+		'my test',
+		'api sent different data than expected for primaryKPI',
+		(text) => {
+			if (typeof text === 'string') {
+				return true
+			} else {
+				return false
+			}
+		}
+	),
+	secondaryKPI: Yup.mixed().test(
+		'my test',
+		'api sent different data than expected for secondaryKPI',
+		(text) => {
+			if (typeof text === 'string') {
+				return true
+			} else {
+				return false
+			}
+		}
+	),
+	tertiaryKPI: Yup.mixed().test(
+		'my test',
+		'api sent different data than expected for tertiaryKPI',
+		(text) => {
+			if (typeof text === 'string') {
+				return true
+			} else {
+				return false
+			}
+		}
+	),
 	twitterProfileUrl: Yup.mixed().test(
 		'my test',
 		'api sent different data than expected for twitterprofileUrl',
