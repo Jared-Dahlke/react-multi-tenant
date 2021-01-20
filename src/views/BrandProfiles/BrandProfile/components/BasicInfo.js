@@ -174,7 +174,10 @@ const FormikForm = withFormik({
 			websiteUrl: props.brandProfile.websiteUrl,
 			industryVerticalId: props.brandProfile.industryVerticalId,
 			twitterProfileUrl: props.brandProfile.twitterProfileUrl,
-			brandProfileId: props.brandProfile.brandProfileId
+			brandProfileId: props.brandProfile.brandProfileId,
+			primaryKPI: props.brandProfile.primaryKPI,
+			secondaryKPI: props.brandProfile.secondaryKPI,
+			tertiaryKPI: props.brandProfile.tertiaryKPI
 		}
 	},
 	enableReinitialize: true,
