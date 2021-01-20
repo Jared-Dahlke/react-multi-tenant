@@ -15,6 +15,9 @@ import Button from 'rsuite/lib/Button'
 import { getCurrentAccount } from '../../../utils'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
+import Whisper from 'rsuite/lib/Whisper'
+import Tooltip from 'rsuite/lib/Tooltip'
+import Icon from 'rsuite/lib/Icon'
 import {
 	fetchLists,
 	setUploadedList,
@@ -123,7 +126,7 @@ function UploadList(props) {
 
 	const handleDownloadTemplateClick = () => {
 		window.location.href =
-			'https://storage.googleapis.com/sightlyoutcomeintelligence_temp/channels_and_videos_sample.xlsx' //TODO : replace this with the actual template URL
+			'https://storage.googleapis.com/sightlyoutcomeintelligence_templates/SmartList_Upload_Template.xlsx'
 	}
 
 	return (
@@ -136,17 +139,43 @@ function UploadList(props) {
 								<Grid container>
 									<Grid item xs={6}>
 										Upload a list
+										<Whisper
+											placement='bottom'
+											trigger='hover'
+											speaker={
+												<Tooltip>
+													The list can be either channels or videos, but not
+													both.
+												</Tooltip>
+											}
+										>
+											<Icon
+												size='lg'
+												icon='question2'
+												style={{ marginLeft: 20 }}
+											/>
+										</Whisper>
 									</Grid>
 
 									<Grid item xs={6} align='right'>
-										<Button
-											disabled
-											appearance='link'
-											style={{ margin: 0, padding: 0 }}
-											onClick={handleDownloadTemplateClick}
+										<Whisper
+											placement='bottom'
+											trigger='hover'
+											speaker={
+												<Tooltip>
+													The list can be either channels or videos, but not
+													both.
+												</Tooltip>
+											}
 										>
-											Click to download template
-										</Button>
+											<Button
+												appearance='link'
+												style={{ margin: 0, padding: 0 }}
+												onClick={handleDownloadTemplateClick}
+											>
+												Click to download template
+											</Button>
+										</Whisper>
 									</Grid>
 								</Grid>
 							}
