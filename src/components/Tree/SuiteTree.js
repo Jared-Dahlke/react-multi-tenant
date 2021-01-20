@@ -12,6 +12,8 @@ const useStyles = makeStyles(styles)
 export default function SuiteTree(props) {
 	const classes = useStyles()
 	const handleChange = (val) => {
+		console.log('add account')
+		console.log(val)
 		props.onChange('accounts', val)
 	}
 

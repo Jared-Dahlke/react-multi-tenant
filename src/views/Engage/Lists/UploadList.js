@@ -24,7 +24,7 @@ import {
 import { uploadedListObjValidation } from '../../../schemas/Engage/Lists/schemas'
 import config from '../../../config'
 const parseExcelUrl = config.api.listBuilderUrl + '/parse-excel'
-const token = localStorage.getItem('token')
+
 const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
@@ -54,6 +54,7 @@ const objectives = [
 ]
 
 function UploadList(props) {
+	const [token, setToken] = React.useState(localStorage.getItem('token'))
 	let fetchLists = props.fetchLists
 	let accounts = props.accounts.data
 

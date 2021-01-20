@@ -16,6 +16,8 @@ import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
 import FiltersLabel from './components/FiltersLabel'
 import Panel from 'rsuite/lib/Panel'
+import SuiteTree from '../../../../components/Tree/SuiteTree'
+import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 
 import {
 	fetchVideos,
@@ -30,7 +32,8 @@ import {
 import {
 	fetchFilterCategories,
 	fetchFilterCountries,
-	fetchFilterLanguages
+	fetchFilterLanguages,
+	fetchFilterIabCategories
 } from '../../../../redux/actions/engage/filters'
 
 import {
@@ -62,6 +65,7 @@ const mapStateToProps = (state) => {
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
 		filterCategories: state.engage.filterCategories,
+		filterIabCategories: state.engage.filterIabCategories,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
 		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess,
@@ -85,6 +89,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
+		fetchFilterIabCategories: () => dispatch(fetchFilterIabCategories()),
 		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
@@ -135,6 +140,7 @@ function ListBuilder(props) {
 		props.fetchFilterCategories()
 		props.fetchFilterCountries()
 		props.fetchFilterLanguages()
+		props.fetchFilterIabCategories()
 		setCurrentPage(1)
 	}, [])
 
@@ -431,6 +437,10 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 	}
 
+	const [iabCategoriesOnEnter, setIabCategoriesOnEnter] = React.useState([])
+
+	const filterSpacing = 1
+
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical />
 	} else {
@@ -497,8 +507,36 @@ function ListBuilder(props) {
 									/>
 								</CustomPanel>
 
+								<CustomPanel header='SmartList Filters'>
+									<Grid container spacing={filterSpacing}>
+										<Grid item xs={12}>
+											<CheckTreePicker
+												onEnter={() => {
+													//	setIabCategoriesOnEnter(true)
+													//	console.log('on enter')
+												}}
+												onEntered={() => {
+													//	setIabCategoriesOnEnter(props.filterIabCategories)
+													//	console.log('on enter')
+												}}
+												size={'xs'}
+												defaultExpandAll={false}
+												data={props.filterIabCategories}
+												labelKey={'name'}
+												valueKey={'id'}
+												//	value={[453]}
+												defaultValue={['453']}
+												//	onChange={handleChange}
+												cascade={true}
+												block
+												disabled={true}
+											/>
+										</Grid>
+									</Grid>
+								</CustomPanel>
+
 								<CustomPanel header='YouTube Filters'>
-									<Grid container spacing={3}>
+									<Grid container spacing={filterSpacing}>
 										<Grid item xs={12}>
 											<TagPicker
 												block
@@ -557,7 +595,7 @@ function ListBuilder(props) {
 									</Grid>
 								</CustomPanel>
 								<CustomPanel header='Video Filters'>
-									<Grid container spacing={3}>
+									<Grid container spacing={filterSpacing}>
 										<Grid item xs={12}>
 											<FiltersLabel text='Views' />
 											<InputGroup size='xs'>
