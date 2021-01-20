@@ -153,6 +153,7 @@ function ListBuilder(props) {
 				versionId: parsedVersionId,
 				pageNumber: currentPage,
 				filters: {
+					iabCategories: filterState.iabCategories,
 					countries: filterState.countries,
 					kids: filterState.kids,
 					actionIds: filterState.actionIds,
@@ -185,6 +186,7 @@ function ListBuilder(props) {
 				versionId: parsedVersionId,
 				pageNumber: currentVideoPage,
 				filters: {
+					iabCategories: filterState.iabCategories,
 					channelId: viewingVideosForChannel.id,
 					kids: filterState.kids,
 					languages: filterState.languages,
@@ -217,7 +219,8 @@ function ListBuilder(props) {
 		actionIds: 'actionIds',
 		views: 'views',
 		videoDurationSeconds: 'videoDurationSeconds',
-		uploadDate: 'uploadDate'
+		uploadDate: 'uploadDate',
+		iabCategories: 'iabCategories'
 	}
 
 	const actionIdOptions = [
@@ -272,6 +275,7 @@ function ListBuilder(props) {
 
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
+		iabCategories: [],
 		countries: [{ countryCode: 'US' }],
 		actionIds: [],
 		languages: [{ languageCode: 'en' }],
@@ -337,6 +341,22 @@ function ListBuilder(props) {
 					return {
 						...prevState,
 						categories
+					}
+				})
+				break
+
+			case filters.iabCategories:
+				let iabCategories = []
+				if (!value) {
+					value = []
+				}
+				for (const iabCategory of value) {
+					iabCategories.push(iabCategory)
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						iabCategories
 					}
 				})
 				break
@@ -437,7 +457,7 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 	}
 
-	const [iabCategoriesOnEnter, setIabCategoriesOnEnter] = React.useState([])
+	//const [iabCategoriesIsOpen, setIabCategoriesIsOpen] = React.useState(false)
 
 	const filterSpacing = 1
 
@@ -510,26 +530,22 @@ function ListBuilder(props) {
 								<CustomPanel header='SmartList Filters'>
 									<Grid container spacing={filterSpacing}>
 										<Grid item xs={12}>
+											<FiltersLabel text='IAB Categories' />
 											<CheckTreePicker
-												onEnter={() => {
-													//	setIabCategoriesOnEnter(true)
-													//	console.log('on enter')
-												}}
-												onEntered={() => {
-													//	setIabCategoriesOnEnter(props.filterIabCategories)
-													//	console.log('on enter')
-												}}
+												placement='topStart'
 												size={'xs'}
 												defaultExpandAll={false}
 												data={props.filterIabCategories}
 												labelKey={'name'}
 												valueKey={'id'}
 												//	value={[453]}
-												defaultValue={['453']}
-												//	onChange={handleChange}
+												//defaultValue={['453']}
+												onChange={(val) => {
+													console.log(val)
+													handleFilterChange(filters.iabCategories, val)
+												}}
 												cascade={true}
 												block
-												disabled={true}
 											/>
 										</Grid>
 									</Grid>
