@@ -184,6 +184,9 @@ export const scenariosObjValidation = Yup.array()
 				.strict(true)
 				.required(),
 			scenarioName: Yup.string().required(),
+			scenarioType: Yup.string().required(
+				'in fetch scenarios, scenarioType is a required field'
+			),
 			brandProfileId: Yup.mixed().test(
 				'defined',
 				'brandProfileId must be defined',

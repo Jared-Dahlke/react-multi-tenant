@@ -538,10 +538,7 @@ function ListBuilder(props) {
 												data={props.filterIabCategories}
 												labelKey={'name'}
 												valueKey={'id'}
-												//	value={[453]}
-												//defaultValue={['453']}
 												onChange={(val) => {
-													console.log(val)
 													handleFilterChange(filters.iabCategories, val)
 												}}
 												cascade={true}
