@@ -44,7 +44,7 @@ export const basicInfoObjValidation = Yup.object().shape({
 		'my test',
 		'api sent different data than expected for primaryKPI',
 		(text) => {
-			if (typeof text === 'string') {
+			if (typeof text === 'string' || !text) {
 				return true
 			} else {
 				return false
@@ -55,7 +55,7 @@ export const basicInfoObjValidation = Yup.object().shape({
 		'my test',
 		'api sent different data than expected for secondaryKPI',
 		(text) => {
-			if (typeof text === 'string') {
+			if (typeof text === 'string' || !text) {
 				return true
 			} else {
 				return false
@@ -66,7 +66,7 @@ export const basicInfoObjValidation = Yup.object().shape({
 		'my test',
 		'api sent different data than expected for tertiaryKPI',
 		(text) => {
-			if (typeof text === 'string') {
+			if (typeof text === 'string' || !text) {
 				return true
 			} else {
 				return false
