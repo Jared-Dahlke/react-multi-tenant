@@ -34,7 +34,11 @@ export function fetchVideos(args) {
 			const result = await defaultAxios({
 				method: 'POST',
 				url: url,
-				data: args.filters
+				data: {
+					...args.filters, //TODO: remove this after api expects a filters object
+					filters: args.filters,
+					sort: args.sort
+				}
 			})
 
 			if (result.status === 200) {

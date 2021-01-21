@@ -133,6 +133,11 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
+					sortColumn={props.currentVideosSort.sortColumn}
+					sortType={props.currentVideosSort.sortType}
+					onSortColumn={(sortColumn, sortType) => {
+						props.setCurrentVideosSort({ sortColumn, sortType })
+					}}
 					loading={props.videos.length < 1 && props.videosIsLoading}
 					virtualized
 					height={500}
@@ -148,65 +153,72 @@ const VideoModal = (props) => {
 						<ImageCell />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'}>
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Name</Table.HeaderCell>
 						<TooltipCell
 							displayProp='nameDisplay'
 							tooltipProp='nameTooltip'
 							tooltipPlacement='bottomLeft'
+							dataKey='name'
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'}>
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Date</Table.HeaderCell>
 						<TooltipCell
 							displayProp='createDateDisplay'
 							tooltipProp='createDateTooltip'
+							dataKey='published'
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'}>
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Id</Table.HeaderCell>
 						<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'}>
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Category</Table.HeaderCell>
 						<TooltipCell
 							displayProp='categoryDisplay'
 							tooltipProp='categoryTooltip'
+							dataKey='categoryName'
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} align='center'>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Likes</Table.HeaderCell>
 						<TooltipCell
 							displayProp='likesDisplay'
 							tooltipProp='likesTooltip'
+							dataKey='likes'
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} align='center'>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Dislikes</Table.HeaderCell>
 						<TooltipCell
 							displayProp='dislikesDisplay'
 							tooltipProp='dislikesTooltip'
+							dataKey='dislikes'
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} align='center'>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Views</Table.HeaderCell>
 						<TooltipCell
 							displayProp='viewsDisplay'
 							tooltipProp='viewsTooltip'
+							dataKey='views'
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} align='center'>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Comments</Table.HeaderCell>
 						<TooltipCell
 							displayProp='commentsDisplay'
 							tooltipProp='commentsTooltip'
+							dataKey='comments'
 						/>
 					</Table.Column>
 

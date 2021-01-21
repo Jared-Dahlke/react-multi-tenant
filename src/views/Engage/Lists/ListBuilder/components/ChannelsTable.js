@@ -19,8 +19,8 @@ export default function ChannelsTable({
 	incrementPage,
 	handleActionButtonClick,
 	handleVideosClick,
-	currentSort,
-	setCurrentSort
+	currentChannelsSort,
+	setCurrentChannelsSort
 }) {
 	const hasMountedRef = React.useRef(false)
 
@@ -112,10 +112,10 @@ export default function ChannelsTable({
 
 	return (
 		<Table
-			sortColumn={currentSort.sortColumn}
-			sortType={currentSort.sortType}
+			sortColumn={currentChannelsSort.sortColumn}
+			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {
-				setCurrentSort({ sortColumn, sortType })
+				setCurrentChannelsSort({ sortColumn, sortType })
 			}}
 			loading={items.length < 1 && channelsIsLoading}
 			virtualized
