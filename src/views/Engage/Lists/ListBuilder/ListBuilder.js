@@ -178,7 +178,10 @@ function ListBuilder(props) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentVideoPage,
-				filters: filterState
+				filters: {
+					...filterState,
+					channelId: viewingVideosForChannel.id
+				}
 			}
 			props.fetchVideos(params)
 		}
