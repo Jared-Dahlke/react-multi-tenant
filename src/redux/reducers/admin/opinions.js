@@ -53,28 +53,10 @@ export function opinionSaving(state = false, action) {
 	}
 }
 
-export function opinionCreated(state = false, action) {
-	switch (action.type) {
-		case OPINION_CREATED:
-			return action.opinionCreated
-		default:
-			return state
-	}
-}
-
 export function opinionArchiving(state = '', action) {
 	switch (action.type) {
 		case OPINION_ARCHIVING:
 			return action.opinionArchiving
-		default:
-			return state
-	}
-}
-
-export function opinionArchived(state = false, action) {
-	switch (action.type) {
-		case OPINION_ARCHIVED:
-			return action.opinionArchived
 		default:
 			return state
 	}

@@ -6,30 +6,22 @@ import Button from 'rsuite/lib/Button'
 import Card from '../../../components/Card/Card.js'
 import CardBody from '../../../components/Card/CardBody.js'
 import CardFooter from '../../../components/Card/CardFooter.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
-
 import { connect } from 'react-redux'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import * as Yup from 'yup'
-import {
-	createOpinion,
-	setOpinionCreated
-} from '../../../redux/actions/admin/opinions'
+import { createOpinion } from '../../../redux/actions/admin/opinions'
 
 const mapStateToProps = (state) => {
 	return {
-		opinionCreated: state.admin.opinionCreated,
 		opinionSaving: state.admin.opinionSaving
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		createOpinion: (opinion) => dispatch(createOpinion(opinion)),
-		setOpinionCreated: (val) => dispatch(setOpinionCreated(val))
+		createOpinion: (opinion) => dispatch(createOpinion(opinion))
 	}
 }
 
@@ -104,19 +96,6 @@ function Opinion(props) {
 							>
 								Save
 							</Button>
-							<Snackbar
-								autoHideDuration={2000}
-								place='bc'
-								open={props.opinionCreated}
-								onClose={() => props.setOpinionCreated(false)}
-							>
-								<Alert
-									onClose={() => props.setOpinionCreated(false)}
-									severity='success'
-								>
-									Opinion created
-								</Alert>
-							</Snackbar>
 						</CardFooter>
 					</Form>
 				</Card>

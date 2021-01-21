@@ -13,8 +13,6 @@ import Radio from 'rsuite/lib/Radio'
 import RadioGroup from 'rsuite/lib/RadioGroup'
 import Button from 'rsuite/lib/Button'
 import { getCurrentAccount } from '../../../utils'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import Icon from 'rsuite/lib/Icon'
@@ -319,19 +317,6 @@ function UploadList(props) {
 					</Form>
 				</Grid>
 			</Grid>
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.postListSuccess}
-				onClose={() => props.setPostListSuccess(false)}
-			>
-				<Alert
-					onClose={() => props.setPostListSuccess(false)}
-					severity='success'
-				>
-					Success
-				</Alert>
-			</Snackbar>
 		</div>
 	)
 }
