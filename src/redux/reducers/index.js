@@ -17,7 +17,6 @@ import {
 } from './auth'
 import {
 	users,
-	usersHasErrored,
 	userAdding,
 	usersIsLoading,
 	editUserUserAccountsLoading,
@@ -60,7 +59,6 @@ export default combineReducers({
 	loggingIn,
 	alert,
 	users,
-	usersHasErrored,
 	user,
 	usersIsLoading,
 	brandProfiles,

@@ -1,5 +1,4 @@
 import {
-	USERS_HAS_ERRORED,
 	SET_USERS,
 	USERS_REMOVE_USER,
 	USERS_ADD_USER,
@@ -10,15 +9,6 @@ import {
 	USER_ADDING,
 	USER_EDIT_SAVING
 } from '../action-types/users'
-
-export function usersHasErrored(state = false, action) {
-	switch (action.type) {
-		case USERS_HAS_ERRORED:
-			return action.hasErrored
-		default:
-			return state
-	}
-}
 
 export function usersIsLoading(state = true, action) {
 	switch (action.type) {

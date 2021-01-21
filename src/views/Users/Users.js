@@ -38,7 +38,6 @@ const useStyles = makeStyles(styles)
 const mapStateToProps = (state) => {
 	return {
 		users: state.users.data,
-		hasErrored: state.usersHasErrored,
 		currentAccount: state.currentAccount,
 		usersIsLoading: state.usersIsLoading
 	}

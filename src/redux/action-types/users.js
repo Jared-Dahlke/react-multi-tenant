@@ -1,4 +1,3 @@
-export const USERS_HAS_ERRORED = 'USERS_HAS_ERRORED'
 export const SET_USERS = 'SET_USERS'
 export const FETCH_USER_DATA = 'FETCH_USER_DATA'
 export const USERS_REMOVE_USER = 'USERS_REMOVE_USER'

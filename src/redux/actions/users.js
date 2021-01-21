@@ -1,5 +1,4 @@
 import {
-	USERS_HAS_ERRORED,
 	SET_USERS,
 	USERS_REMOVE_USER,
 	USERS_ADD_USER,
@@ -17,13 +16,6 @@ import { accountsObjValidation, userObjValidation } from '../../schemas/schemas'
 import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
-
-export function usersHasErrored(bool) {
-	return {
-		type: USERS_HAS_ERRORED,
-		hasErrored: bool
-	}
-}
 
 export function setUsers(users) {
 	return {

@@ -4,9 +4,7 @@ import {
 	OPINION_TO_ARCHIVE,
 	ADD_OPINION,
 	OPINION_SAVING,
-	OPINION_CREATED,
-	OPINION_ARCHIVING,
-	OPINION_ARCHIVED
+	OPINION_ARCHIVING
 } from '../../action-types/admin/opinions'
 
 export function opinions(state = [], action) {
