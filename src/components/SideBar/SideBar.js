@@ -132,6 +132,13 @@ export default function Sidebar(props) {
 
 								{userCan(perms.ADMIN_READ) && (
 									<NavLink
+										href={routes.admin.questions.path}
+										label='Configure Questions'
+									/>
+								)}
+
+								{userCan(perms.ADMIN_READ) && (
+									<NavLink
 										href={routes.admin.permissions.path}
 										label='Configure Permissions'
 									/>

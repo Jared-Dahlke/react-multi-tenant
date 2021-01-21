@@ -19,6 +19,7 @@ import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
 import Labels from './views/BrandProfiles/Admin/Labels.js'
 import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
+import Questions from './views/BrandProfiles/Admin/Questions.js'
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
@@ -153,6 +154,11 @@ export const routes = {
 				name: 'Create',
 				component: CreateOpinion
 			}
+		},
+		questions: {
+			path: '/admin/questions',
+			name: 'Brand Profiles Questions',
+			component: Questions
 		},
 		permissions: {
 			path: '/admin/permissions',
@@ -299,6 +305,11 @@ export const modifiedRoutes = {
 						component: CreateOpinion
 					}
 				]
+			},
+			questions: {
+				path: '/admin/questions',
+				name: 'Questions',
+				component: Questions
 			},
 			permissions: {
 				path: '/admin/permissions',

@@ -25,6 +25,14 @@ import {
 } from './opinions'
 // import { brandProfileAdminOpinions } from './opinions'
 
+import {
+	questions,
+	questionArchiving,
+	questionsIsLoading,
+	questionSaving,
+	initQuestionAdd
+} from './questions'
+
 
 import {
 	permissions,
@@ -58,6 +66,11 @@ export default combineReducers({
 	opinionArchiving,
 	opinionArchived,
 	// brandProfileAdminOpinions
+	questions,
+	questionArchiving,
+	questionsIsLoading,
+	questionSaving,
+	initQuestionAdd,
 	permissions,
 	permissions_list,
 	permissionsIsLoading,
