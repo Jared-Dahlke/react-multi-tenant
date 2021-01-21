@@ -12,9 +12,7 @@ import {
 	SET_ADMIN_LABELS,
 	SET_LABELS_IS_LOADING,
 	SET_LABEL_DELETING,
-	SET_LABEL_DELETED,
 	SET_LABEL_TO_DELETE,
-	SET_LABEL_CREATED,
 	SET_LABEL_SAVING,
 	SET_ADD_LABEL,
 	SET_LABEL_TO_CREATE
@@ -22,6 +20,7 @@ import {
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import { brandScenarioObjValidation } from '../../../schemas/schemas'
+import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
 
@@ -185,13 +184,6 @@ export function setLabelDeleting(labelId) {
 	}
 }
 
-export function setLabelDeleted(bool) {
-	return {
-		type: SET_LABEL_DELETED,
-		labelDeleted: bool
-	}
-}
-
 export function setLabelToDeleted(labelId) {
 	return {
 		type: SET_LABEL_TO_DELETE,
@@ -203,13 +195,6 @@ export function setInitLabelAdd(bool) {
 	return {
 		type: SET_LABEL_TO_CREATE,
 		initLabelAdd: bool
-	}
-}
-
-export function setLabelCreated(bool) {
-	return {
-		type: SET_LABEL_CREATED,
-		labelCreated: bool
 	}
 }
 
@@ -267,11 +252,11 @@ export const createLabel = (label) => {
 			.then((response) => {
 				dispatch(addLabel(response.data[0]))
 				dispatch(setLabelSaving(false))
-				dispatch(setLabelCreated(true))
+				toast.success('Label Created')
 				dispatch(setInitLabelAdd(false))
 			})
 			.catch((error) => {
-				//error
+				toast.error(error.response.data.message)
 			})
 	}
 }
@@ -285,9 +270,10 @@ export const deleteLabel = (labelId) => {
 			.then((response) => {
 				dispatch(setLabelToDeleted(labelId))
 				dispatch(setLabelDeleting(''))
-				dispatch(setLabelDeleted(true))
+				toast.success('Label Deleted')
 			})
 			.catch((error) => {
+				toast.error(error.response.data.message)
 				console.error(error)
 			})
 	}

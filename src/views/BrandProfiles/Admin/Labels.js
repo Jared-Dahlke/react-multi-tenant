@@ -9,41 +9,21 @@ import FormControl from 'rsuite/lib/FormControl'
 import ControlLabel from 'rsuite/lib/ControlLabel'
 import HelpBlock from 'rsuite/lib/HelpBlock'
 import Schema from 'rsuite/lib/Schema'
-import Table from '@material-ui/core/Table'
-import TableCell from '@material-ui/core/TableCell'
-import TableBody from '@material-ui/core/TableBody'
-import TableRow from '@material-ui/core/TableRow'
-import TableHead from '@material-ui/core/TableHead'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import classnames from 'classnames'
-import { useHistory } from 'react-router-dom'
+import Table from 'rsuite/lib/Table'
 import {
   fetchAdminLabels,
   createLabel,
   deleteLabel,
-  setLabelDeleted,
-  setLabelCreated,
   setInitLabelAdd
 } from '../../../redux/actions/admin/scenarios'
 import { connect } from 'react-redux'
-import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
-import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
 import { FormLoader } from '../../../components/SkeletonLoader'
-// import { routes } from '../../../routes'
-
-const useTableStyles = makeStyles(tableStyles)
-
-const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
   return {
     labelsIsLoading: state.admin.labelsIsLoading,
     initLabelAdd: state.admin.initLabelAdd,
     labelSaving: state.admin.labelSaving,
-    labelCreated: state.admin.labelCreated,
-    labelDeleted: state.admin.labelDeleted,
     labelDeleting: state.admin.labelDeleting,
     adminLabels: state.admin.labels
   }
@@ -54,18 +34,13 @@ const mapDispatchToProps = (dispatch) => {
     fetchAdminLabels: () => dispatch(fetchAdminLabels()),
     createLabel: (label) => dispatch(createLabel(label)),
     deleteLabel: (labelId) => dispatch(deleteLabel(labelId)),
-    setLabelDeleted: (bool) => dispatch(setLabelDeleted(bool)),
-    setLabelCreated: (bool) => dispatch(setLabelCreated(bool)),
     setInitLabelAdd: (bool) => dispatch(setInitLabelAdd(bool))
   }
 }
 
 function Labels(props) {
-  let history = useHistory()
   let form;
 
-  const classes = useStyles()
-  const tableClasses = useTableStyles()
   const [formValues, setFormValues] = useState();
 
   const { StringType } = Schema.Types;
@@ -73,6 +48,23 @@ function Labels(props) {
     labelName: StringType().isRequired('Label Name is required.')
   });
 
+  const ActionCell = ({ rowData, dataKey, ...props }) => {
+    return (
+      <Table.Cell {...props} style={{ padding: 1 }}>
+        <Button
+          appearance='link'
+          loading={
+            props.labelDeleting === rowData.labelId
+          }
+          onClick={() => {
+            handleDeleteLabelClick(rowData.labelId)
+          }}
+        >
+          Delete
+        </Button>
+      </Table.Cell>
+    )
+  }
 
   const handleSubmit = () => {
     if (!form.check()) {
@@ -91,52 +83,12 @@ function Labels(props) {
     }
   })
 
-  const tableCellClasses = classnames(classes.tableCell, {
-    [classes.tableCellRTL]: false
-  })
-
-  const userHeaders = ['Label Name', '']
-
   const handleDeleteLabelClick = (labelId) => {
     props.deleteLabel(labelId)
   }
 
-  const handleCreateLabelClick = () => {
-    alert('create Label')
-  }
-
   return (
     <Grid container justify='center'>
-      <Snackbar
-        autoHideDuration={2000}
-        place='bc'
-        open={props.labelDeleted}
-        onClose={() => props.setLabelDeleted(false)}
-        color='success'
-      >
-        <Alert
-          onClose={() => props.setLabelDeleted(false)}
-          severity='success'
-        >
-          Label Deleted
-				</Alert>
-      </Snackbar>
-
-      <Snackbar
-        autoHideDuration={2000}
-        place='bc'
-        open={props.labelCreated}
-        onClose={() => props.setLabelCreated(false)}
-        color='success'
-      >
-        <Alert
-          onClose={() => props.setLabelCreated(false)}
-          severity='success'
-        >
-          Label Saved
-				</Alert>
-      </Snackbar>
-
       <GridItem xs={12} sm={12} md={10}>
         {adminLabels && adminLabels.length > 0 ? (
           <div>
@@ -179,53 +131,21 @@ function Labels(props) {
               </Form>
             </Modal>
 
-            <Table className={classes.table}>
-              <TableHead className={tableClasses['primaryTableHeader']}>
-                <TableRow className={tableClasses.tableHeadRow}>
-                  {userHeaders.map((prop, key) => {
-                    return (
-                      <TableCell
-                        className={
-                          tableClasses.tableCell +
-                          ' ' +
-                          tableClasses.tableHeadCell
-                        }
-                        key={key}
-                      >
-                        {prop}
-                      </TableCell>
-                    )
-                  })}
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {adminLabels &&
-                  adminLabels.map((label) => (
-                    <TableRow
-                      key={label.labelId || 'placeholder'}
-                      className={classes.tableRow}
-                    >
-                      <TableCell className={tableCellClasses}>
-                        {label.labelName}
-                      </TableCell>
-
-                      <TableCell className={classes.tableActions}>
-                        <Button
-                          appearance='link'
-                          loading={
-                            props.labelDeleting === label.labelId
-                          }
-                          onClick={() => {
-                            handleDeleteLabelClick(label.labelId)
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
+            <Table
+              virtualized
+              height={500}
+              rowHeight={50}
+              data={adminLabels}
+              shouldUpdateScroll={false}
+            >
+              <Table.Column verticalAlign={'middle'} width={500}>
+                <Table.HeaderCell>Label Name</Table.HeaderCell>
+                <Table.Cell dataKey='labelName' style={{ color: 'grey' }} />
+              </Table.Column>
+              <Table.Column verticalAlign={'middle'} width={60}>
+                <Table.HeaderCell>Actions</Table.HeaderCell>
+                <ActionCell />
+              </Table.Column>
             </Table>
           </div>
         ) : props.labelsIsLoading ? (
@@ -241,7 +161,7 @@ function Labels(props) {
                   color: 'white'
                 }}
               >
-                <Button appearance='primary' onClick={handleCreateLabelClick}>
+                <Button appearance='primary' onClick={() => props.setInitLabelAdd(true)}>
                   Create Label
 						</Button>
               </div>

@@ -12,11 +12,9 @@ import {
 	SET_ADMIN_LABELS,
 	SET_LABELS_IS_LOADING,
 	SET_LABEL_DELETING,
-	SET_LABEL_DELETED,
 	SET_LABEL_TO_DELETE,
 	SET_ADD_LABEL,
 	SET_LABEL_SAVING,
-	SET_LABEL_CREATED,
 	SET_LABEL_TO_CREATE
 } from '../../action-types/admin/scenarios'
 
@@ -142,15 +140,6 @@ export function labelDeleting(state = '', action) {
 	}
 }
 
-export function labelDeleted(state = false, action) {
-	switch (action.type) {
-		case SET_LABEL_DELETED:
-			return action.labelDeleted
-		default:
-			return state
-	}
-}
-
 export function labelsIsLoading(state = false, action) {
 	switch (action.type) {
 		case SET_LABELS_IS_LOADING:
@@ -164,15 +153,6 @@ export function labelSaving(state = false, action) {
 	switch (action.type) {
 		case SET_LABEL_SAVING:
 			return action.labelSaving
-		default:
-			return state
-	}
-}
-
-export function labelCreated(state = false, action) {
-	switch (action.type) {
-		case SET_LABEL_CREATED:
-			return action.labelCreated
 		default:
 			return state
 	}
