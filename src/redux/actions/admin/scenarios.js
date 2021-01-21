@@ -4,9 +4,7 @@ import {
 	SET_SCENARIO_LABELS,
 	SET_SCENARIO_LABELS_IS_LOADING,
 	SET_SCENARIO_ARCHIVING,
-	SET_SCENARIO_ARCHIVED,
 	SET_SCENARIO_TO_ARCHIVE,
-	SET_SCENARIO_CREATED,
 	SET_SCENARIO_SAVING,
 	SET_ADD_SCENARIO,
 	SET_ADMIN_LABELS,
@@ -66,13 +64,6 @@ export function setScenarioToArchived(scenarioId) {
 	}
 }
 
-export function setScenarioCreated(bool) {
-	return {
-		type: SET_SCENARIO_CREATED,
-		scenarioCreated: bool
-	}
-}
-
 export function setScenarioSaving(bool) {
 	return {
 		type: SET_SCENARIO_SAVING,
@@ -113,7 +104,7 @@ export const createScenario = (scenario) => {
 			.then((response) => {
 				dispatch(addScenario(response.data[0]))
 				dispatch(setScenarioSaving(false))
-				dispatch(setScenarioCreated(true))
+				toast.success('Scenario created!')
 			})
 			.catch((error) => {
 				//error

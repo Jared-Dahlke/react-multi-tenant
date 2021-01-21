@@ -6,9 +6,7 @@ import {
 	SET_SCENARIO_TO_ARCHIVE,
 	SET_ADD_SCENARIO,
 	SET_SCENARIO_SAVING,
-	SET_SCENARIO_CREATED,
 	SET_SCENARIO_ARCHIVING,
-	SET_SCENARIO_ARCHIVED,
 	SET_ADMIN_LABELS,
 	SET_LABELS_IS_LOADING,
 	SET_LABEL_DELETING,
@@ -75,15 +73,6 @@ export function scenarioSaving(state = false, action) {
 	switch (action.type) {
 		case SET_SCENARIO_SAVING:
 			return action.scenarioSaving
-		default:
-			return state
-	}
-}
-
-export function scenarioCreated(state = false, action) {
-	switch (action.type) {
-		case SET_SCENARIO_CREATED:
-			return action.scenarioCreated
 		default:
 			return state
 	}
