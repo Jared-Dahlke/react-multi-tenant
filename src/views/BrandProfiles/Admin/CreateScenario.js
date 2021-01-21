@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../../components/CustomInput/FormikInput'
 import * as Yup from 'yup'
-import { debounce } from 'lodash'
+import debounce from 'just-debounce-it'
 import {
 	createScenario,
 	fetchAdminBrandScenarioLabels,

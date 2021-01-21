@@ -6,15 +6,12 @@ import Button from 'rsuite/lib/Button'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
 import {
 	updateUserData,
 	updateUserAccounts,
-	fetchUserAccounts,
-	setUserEditSaved
+	fetchUserAccounts
 } from '../../redux/actions/users'
-import { FormLoader } from '../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import { Formik } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
@@ -61,7 +58,6 @@ const mapStateToProps = (state) => {
 		users: state.users,
 		editUserUserAccountsLoading: state.editUserUserAccountsLoading,
 		userEditSaving: state.userEditSaving,
-		userEditSaved: state.userEditSaved,
 		userProfile: state.user.userProfile
 	}
 }
@@ -71,8 +67,7 @@ const mapDispatchToProps = (dispatch) => {
 		updateUserData: (userData) => dispatch(updateUserData(userData)),
 		fetchUserAccounts: (userId) => dispatch(fetchUserAccounts(userId)),
 		updateUserAccounts: (user, accounts) =>
-			dispatch(updateUserAccounts(user, accounts)),
-		setUserEditSaved: (bool) => dispatch(setUserEditSaved(bool))
+			dispatch(updateUserAccounts(user, accounts))
 	}
 }
 
@@ -223,7 +218,7 @@ export function EditUser(props) {
 							<GridItem xs={12} sm={12} md={8}>
 								<Card>
 									{props.editUserUserAccountsLoading ? (
-										<FormLoader />
+										<Loader center size='lg' content='Loading...' vertical />
 									) : (
 										<div>
 											<CardBody>
@@ -365,20 +360,6 @@ export function EditUser(props) {
 								</Card>
 							</GridItem>
 						</GridContainer>
-
-						<Snackbar
-							autoHideDuration={2000}
-							place='bc'
-							open={props.userEditSaved}
-							onClose={() => props.setUserEditSaved(false)}
-						>
-							<Alert
-								onClose={() => props.setUserEditSaved(false)}
-								severity='success'
-							>
-								User info saved
-							</Alert>
-						</Snackbar>
 					</div>
 				)}
 			/>

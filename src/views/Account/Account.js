@@ -11,7 +11,7 @@ import Panel from '../../components/CustomPanel'
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../redux/actions/users.js'
-import { FormLoader } from '../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
@@ -196,13 +196,7 @@ function Account(props) {
 		props.isSwitchingAccounts ||
 		values.accountTypeName.length < 1
 	) {
-		return (
-			<GridContainer>
-				<GridItem xs={12} sm={12} md={6}>
-					<FormLoader />
-				</GridItem>
-			</GridContainer>
-		)
+		return <Loader center size='lg' content='Loading...' vertical />
 	} else {
 		return (
 			<GridContainer>

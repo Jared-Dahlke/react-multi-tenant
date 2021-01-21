@@ -1,7 +1,11 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
-import { TagPicker, Modal, Button, Icon } from 'rsuite'
+//import { TagPicker, Modal, Button, Icon } from 'rsuite'
+import TagPicker from 'rsuite/lib/TagPicker'
+import Modal from 'rsuite/lib/Modal'
+import Button from 'rsuite/lib/Button'
+import Icon from 'rsuite/lib/Icon'
 import Loader from 'rsuite/lib/Loader'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
@@ -21,8 +25,6 @@ import {
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-
-import { FormLoader } from '../../../components/SkeletonLoader'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -244,7 +246,7 @@ function Permissions(props) {
 						</Table>
 					</div>
 				) : props.permissionsIsLoading ? (
-					<FormLoader />
+					<Loader center size='lg' content='Loading...' vertical />
 				) : (
 					''
 				)}

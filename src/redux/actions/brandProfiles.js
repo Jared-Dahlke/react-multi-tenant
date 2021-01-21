@@ -6,7 +6,6 @@ import {
 	HAS_BRAND_PROFILES,
 	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_CREATED,
-	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	BRAND_PROFILE_CREATING,
 	SET_BRAND_PROFILE_LOADING,
@@ -24,6 +23,7 @@ import {
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
+import toast from 'react-hot-toast'
 
 import {
 	brandProfilesObjValidation,
@@ -492,7 +492,7 @@ export const deleteBrandProfile = (brandProfileId) => {
 			.delete(url)
 			.then((response) => {
 				dispatch(setBrandProfileDeleting(false))
-				dispatch(setBrandProfileDeleted(true))
+				toast.success('Brand profile deleted!')
 			})
 			.catch((error) => {
 				console.error(error)
@@ -567,12 +567,7 @@ export function setBrandProfileCreating(bool) {
 		brandProfileCreating: bool
 	}
 }
-export function setBrandProfileDeleted(bool) {
-	return {
-		type: BRAND_PROFILE_DELETED,
-		brandProfileDeleted: bool
-	}
-}
+
 export function setBrandProfileDeleting(bool) {
 	return {
 		type: BRAND_PROFILE_DELETING,
