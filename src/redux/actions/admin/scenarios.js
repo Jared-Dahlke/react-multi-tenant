@@ -13,7 +13,14 @@ import {
 	SET_LABEL_TO_DELETE,
 	SET_LABEL_SAVING,
 	SET_ADD_LABEL,
-	SET_LABEL_TO_CREATE
+	SET_LABEL_TO_CREATE,
+	SET_ADMIN_TYPES,
+	SET_TYPES_IS_LOADING,
+	SET_TYPE_ARCHIVING,
+	SET_TYPE_TO_ARCHIVE,
+	SET_TYPE_SAVING,
+	SET_ADD_TYPE,
+	SET_TYPE_TO_CREATE
 } from '../../action-types/admin/scenarios'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
@@ -121,7 +128,7 @@ export function fetchAdminBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'
@@ -210,6 +217,62 @@ export function setLabels(labels) {
 	}
 }
 
+export function setAdminTypes(types) {
+	return {
+		type: SET_ADMIN_TYPES,
+		types
+	}
+}
+
+export function setTypeArchiving(typeId) {
+	return {
+		type: SET_TYPE_ARCHIVING,
+		typeArchiving: typeId
+	}
+}
+
+export function setTypeToArchived(typeId) {
+	return {
+		type: SET_TYPE_TO_ARCHIVE,
+		typeId
+	}
+}
+
+export function setInitTypeAdd(bool) {
+	return {
+		type: SET_TYPE_TO_CREATE,
+		initTypeAdd: bool
+	}
+}
+
+export function setTypeSaving(bool) {
+	return {
+		type: SET_TYPE_SAVING,
+		typeSaving: bool
+	}
+}
+
+export function addType(scenarioType) {
+	return {
+		type: SET_ADD_TYPE,
+		scenarioType
+	}
+}
+
+export function setTypesIsLoading(bool) {
+	return {
+		type: SET_TYPES_IS_LOADING,
+		typesIsLoading: bool
+	}
+}
+
+export function setTypes(types) {
+	return {
+		type: SET_ADMIN_TYPES,
+		types
+	}
+}
+
 export function fetchAdminLabels() {
 	let url = apiBase + `/scenarios/labels`
 	return async (dispatch) => {
@@ -255,6 +318,59 @@ export const deleteLabel = (labelId) => {
 				dispatch(setLabelToDeleted(labelId))
 				dispatch(setLabelDeleting(''))
 				toast.success('Label Deleted')
+			})
+			.catch((error) => {
+				toast.error(error.response.data.message)
+				console.error(error)
+			})
+	}
+}
+
+export function fetchAdminTypes() {
+	let url = apiBase + `/scenarios/types`
+	return async (dispatch) => {
+		dispatch(setTypesIsLoading(true))
+		try {
+			const result = await axios.get(url)
+			if (result.status === 200) {
+				let types = result.data
+				dispatch(setTypes(types))
+				dispatch(setTypesIsLoading(false))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export const createType = (type) => {
+	let url = apiBase + `/scenarios/types`
+	return (dispatch, getState) => {
+		dispatch(setTypeSaving(true))
+		axios
+			.post(url, type)
+			.then((response) => {
+				dispatch(addType(response.data[0]))
+				dispatch(setTypeSaving(false))
+				toast.success('Scenario Type Created')
+				dispatch(setInitTypeAdd(false))
+			})
+			.catch((error) => {
+				toast.error(error.response.data.message)
+			})
+	}
+}
+
+export const archiveType = (typeId) => {
+	let url = apiBase + `/scenarios/types/${typeId}`
+	return (dispatch) => {
+		dispatch(setTypeArchiving(typeId))
+		axios
+			.delete(url)
+			.then((response) => {
+				dispatch(setTypeToArchived(typeId))
+				dispatch(setTypeArchiving(''))
+				toast.success('Scenario Type Archived')
 			})
 			.catch((error) => {
 				toast.error(error.response.data.message)

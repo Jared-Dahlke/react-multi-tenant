@@ -73,6 +73,11 @@ function Scenarios(props) {
 		history.push(url)
 	}
 
+	const handleConfigureTypesClick = () => {
+		let url = routes.admin.scenarios.types.path
+		history.push(url)
+	}
+
 	return (
 		<Grid container justify='center'>
 			<GridItem xs={12} sm={12} md={10}>
@@ -84,6 +89,9 @@ function Scenarios(props) {
 							</Button>
 							<Button appearance='primary' onClick={handleConfigureLabelsClick}>
 								Configure Labels
+							</Button>
+							<Button appearance='primary' onClick={handleConfigureTypesClick}>
+								Configure Scenario Types
 							</Button>
 						</ButtonToolbar>
 
@@ -144,21 +152,21 @@ function Scenarios(props) {
 				) : props.scenariosIsLoading ? (
 					<Loader center size='lg' content='Loading...' vertical />
 				) : (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
 
-							height: 'calc(100vh - 200px)',
-							color: 'white'
-						}}
-					>
-						<Button appearance='primary' onClick={handleCreateScenarioClick}>
-							Create Scenario
+									height: 'calc(100vh - 200px)',
+									color: 'white'
+								}}
+							>
+								<Button appearance='primary' onClick={handleCreateScenarioClick}>
+									Create Scenario
 						</Button>
-					</div>
-				)}
+							</div>
+						)}
 			</GridItem>
 		</Grid>
 	)
