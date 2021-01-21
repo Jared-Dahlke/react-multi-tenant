@@ -5,7 +5,6 @@ import {
 	USER_DELETED_ERROR,
 	USERS_REMOVE_USER,
 	USERS_ADD_USER,
-	USER_ADDED,
 	USERS_IS_LOADING,
 	USERS_SET_USER_ACCOUNTS,
 	EDIT_USER_USER_ACCOUNTS_LOADING,
@@ -21,6 +20,7 @@ import axios from '../../axiosConfig'
 import config from '../../config.js'
 import { accountsObjValidation, userObjValidation } from '../../schemas/schemas'
 import { setUser } from './auth'
+import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
 
@@ -37,12 +37,7 @@ export function userDeleted(bool) {
 		userDeleted: bool
 	}
 }
-export function setUserAdded(bool) {
-	return {
-		type: USER_ADDED,
-		userAdded: bool
-	}
-}
+
 export function userDeletedError(bool) {
 	return {
 		type: USER_DELETED_ERROR,
@@ -82,13 +77,6 @@ export function setUserAdding(bool) {
 	return {
 		type: USER_ADDING,
 		userAdding: bool
-	}
-}
-
-export function setUserAddError(bool) {
-	return {
-		type: SET_USER_ADD_ERROR,
-		userAddError: bool
 	}
 }
 
@@ -282,11 +270,11 @@ export const createUser = (user) => {
 		let response = ''
 		response = await axios.post(url, user)
 		if (response.status === 200) {
-			dispatch(setUserAdded(true))
+			toast.success('User invite sent!')
 		} else if (response.response.status === 403) {
-			dispatch(setUserAddError(403))
+			toast.error('This user already exists')
 		} else {
-			dispatch(setUserAddError(1))
+			toast.error('An unhandled error occurred')
 		}
 		dispatch(setUserAdding(false))
 	}

@@ -16,15 +16,12 @@ import {
 	setAdminRolePermissions,
 	insertPermissions,
 	removePermissions,
-	setPermissionsAdded,
-	setPermissionSureToRemove,
-	setPermissionsRemoved
+	setPermissionSureToRemove
 } from '../../../redux/actions/admin/permissions'
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
+
 import { FormLoader } from '../../../components/SkeletonLoader'
 
 const useTableStyles = makeStyles(tableStyles)
@@ -34,9 +31,8 @@ const useStyles = makeStyles(styles)
 const mapStateToProps = (state) => {
 	return {
 		permissionsIsLoading: state.admin.permissionsIsLoading,
-		permissionsAdded: state.admin.permissionsAdded,
+
 		permissionSureToRemove: state.admin.permissionSureToRemove,
-		permissionsRemoved: state.admin.permissionsRemoved,
 		permissionsUpdating: state.admin.permissionsUpdating,
 		adminPermissions: state.admin.permissions,
 		allPermissions: state.admin.permissions_list
@@ -53,10 +49,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(insertPermissions(roleId, p, adminPermissions)),
 		removePermissions: (roleId, p, adminPermissions) =>
 			dispatch(removePermissions(roleId, p, adminPermissions)),
-		setPermissionsAdded: (bol) => dispatch(setPermissionsAdded(bol)),
 		setPermissionSureToRemove: (pData) =>
-			dispatch(setPermissionSureToRemove(pData)),
-		setPermissionsRemoved: (bol) => dispatch(setPermissionsRemoved(bol))
+			dispatch(setPermissionSureToRemove(pData))
 	}
 }
 
@@ -164,34 +158,6 @@ function Permissions(props) {
 				/>
 			</div>
 
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.permissionsAdded}
-				onClose={() => props.setPermissionsAdded(false)}
-				color='success'
-			>
-				<Alert
-					onClose={() => props.setPermissionsAdded(false)}
-					severity='success'
-				>
-					Permissions Archived
-				</Alert>
-			</Snackbar>
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.permissionsRemoved}
-				onClose={() => props.setPermissionsRemoved(false)}
-				color='success'
-			>
-				<Alert
-					onClose={() => props.setPermissionsRemoved(false)}
-					severity='success'
-				>
-					Permissions Removed
-				</Alert>
-			</Snackbar>
 			<Modal
 				backdrop='static'
 				show={props.permissionSureToRemove.show}

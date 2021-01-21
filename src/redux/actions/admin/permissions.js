@@ -3,9 +3,7 @@ import {
 	SET_ADMIN_ROLE_PERMISSIONS,
 	SET_ALL_PERMISSIONS,
 	SET_PERMISSIONS_UPDATING,
-	SET_PERMISSIONS_ADDED,
-	SET_PERMISSIONS_TO_REMOVE,
-	SET_PERMISSIONS_REMOVED
+	SET_PERMISSIONS_TO_REMOVE
 } from '../../action-types/admin/permissions'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
@@ -41,24 +39,10 @@ export function setPermissionsUpdating(bool) {
 	}
 }
 
-export function setPermissionsAdded(bool) {
-	return {
-		type: SET_PERMISSIONS_ADDED,
-		permissionsAdded: bool
-	}
-}
-
 export function setPermissionSureToRemove(pData) {
 	return {
 		type: SET_PERMISSIONS_TO_REMOVE,
 		permissionSureToRemove: pData
-	}
-}
-
-export function setPermissionsRemoved(bool) {
-	return {
-		type: SET_PERMISSIONS_REMOVED,
-		permissionsRemoved: bool
 	}
 }
 
@@ -70,7 +54,7 @@ export const removePermissions = (roleId, permissionId, permissions) => {
 			.delete(url)
 			.then((response) => {
 				dispatch(setAdminRolePermissions(permissions))
-				dispatch(setPermissionsRemoved(true))
+				toast.success('Permissions removed!')
 				dispatch(setPermissionsUpdating(false))
 			})
 			.catch((error) => {
@@ -87,7 +71,7 @@ export const insertPermissions = (roleId, permissionId, permissions) => {
 			.post(url, { permissionId: permissionId })
 			.then((response) => {
 				dispatch(setAdminRolePermissions(permissions))
-				dispatch(setPermissionsAdded(true))
+				toast.success('Permissions added!')
 				dispatch(setPermissionsUpdating(false))
 			})
 			.catch((error) => {

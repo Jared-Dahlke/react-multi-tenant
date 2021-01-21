@@ -20,15 +20,13 @@ import {
 	usersHasErrored,
 	userDeleted,
 	userDeletedError,
-	userAdded,
 	userAdding,
 	usersIsLoading,
 	editUserUserAccountsLoading,
 	userProfileSaving,
 	userProfileSaved,
 	userEditSaving,
-	userEditSaved,
-	userAddError
+	userEditSaved
 } from './users'
 import {
 	accounts,
@@ -77,7 +75,6 @@ export default combineReducers({
 	brandProfileCreating,
 	brandProfileDeleted,
 	brandProfileDeleting,
-	userAdded,
 	userAdding,
 	userEditSaving,
 	userEditSaved,
@@ -98,7 +95,6 @@ export default combineReducers({
 	accountSaving,
 	brandProfileSaving,
 	brandProfileSaved,
-	userAddError,
 	updatingPassword,
 	loggedInUserPermissions,
 	resettingPassword,

@@ -5,7 +5,6 @@ import {
 	scenarioLabels,
 	scenariosLabelsIsLoading,
 	scenarioSaving,
-	scenarioCreated,
 	scenarioArchiving,
 	labels,
 	labelDeleting,
@@ -20,18 +19,14 @@ import {
 	opinionSaving,
 	opinionArchiving
 } from './opinions'
-// import { brandProfileAdminOpinions } from './opinions'
 
 import {
 	permissions,
 	permissions_list,
 	permissionsIsLoading,
 	permissionsUpdating,
-	permissionsAdded,
-	permissionSureToRemove,
-	permissionsRemoved
+	permissionSureToRemove
 } from './permissions'
-// import { brandProfileAdminPermissions } from './permissions'
 
 export default combineReducers({
 	scenarios,
@@ -39,7 +34,6 @@ export default combineReducers({
 	scenarioLabels,
 	scenariosLabelsIsLoading,
 	scenarioSaving,
-	scenarioCreated,
 	scenarioArchiving,
 	labels,
 	labelDeleting,
@@ -55,7 +49,5 @@ export default combineReducers({
 	permissions_list,
 	permissionsIsLoading,
 	permissionsUpdating,
-	permissionsAdded,
-	permissionSureToRemove,
-	permissionsRemoved
+	permissionSureToRemove
 })

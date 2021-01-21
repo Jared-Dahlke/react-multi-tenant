@@ -5,7 +5,6 @@ import {
 	USER_DELETED_ERROR,
 	USERS_REMOVE_USER,
 	USERS_ADD_USER,
-	USER_ADDED,
 	USERS_IS_LOADING,
 	USERS_SET_USER_ACCOUNTS,
 	EDIT_USER_USER_ACCOUNTS_LOADING,
@@ -65,24 +64,6 @@ export function userDeleted(state = false, action) {
 	switch (action.type) {
 		case USER_DELETED:
 			return action.userDeleted
-		default:
-			return state
-	}
-}
-
-export function userAdded(state = false, action) {
-	switch (action.type) {
-		case USER_ADDED:
-			return action.userAdded
-		default:
-			return state
-	}
-}
-
-export function userAddError(state = 0, action) {
-	switch (action.type) {
-		case SET_USER_ADD_ERROR:
-			return action.userAddError
 		default:
 			return state
 	}
