@@ -8,7 +8,8 @@ import {
 } from '../../../../../redux/actions/brandProfiles'
 import Panel from '../../../../../components/CustomPanel'
 import Grid from '@material-ui/core/Grid'
-import { Divider } from 'rsuite'
+//import { Divider } from 'rsuite'
+import Divider from 'rsuite/lib/Divider'
 
 const mapStateToProps = (state) => {
 	return {
