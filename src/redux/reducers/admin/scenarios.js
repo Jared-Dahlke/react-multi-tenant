@@ -13,7 +13,14 @@ import {
 	SET_LABEL_TO_DELETE,
 	SET_ADD_LABEL,
 	SET_LABEL_SAVING,
-	SET_LABEL_TO_CREATE
+	SET_LABEL_TO_CREATE,
+	SET_ADMIN_TYPES,
+	SET_TYPES_IS_LOADING,
+	SET_TYPE_ARCHIVING,
+	SET_TYPE_TO_ARCHIVE,
+	SET_ADD_TYPE,
+	SET_TYPE_SAVING,
+	SET_TYPE_TO_CREATE
 } from '../../action-types/admin/scenarios'
 
 export function scenarios(state = [], action) {
@@ -140,6 +147,68 @@ export function initLabelAdd(state = false, action) {
 	switch (action.type) {
 		case SET_LABEL_TO_CREATE:
 			return action.initLabelAdd
+		default:
+			return state
+	}
+}
+
+export function types(state = [], action) {
+	switch (action.type) {
+		case SET_ADMIN_TYPES:
+			return action.types
+		case SET_TYPE_TO_ARCHIVE:
+			let newState = [
+				...state.map((type) =>
+					type.typeId === action.typeId
+						? { ...type, archived: true }
+						: type
+				)
+			]
+			return newState
+		case SET_ADD_TYPE:
+			let stateData = []
+			if (state && state.length > 0) {
+				stateData = JSON.parse(JSON.stringify(state))
+			}
+			stateData.push(action.scenarioType)
+
+			return stateData
+		default:
+			return state
+	}
+}
+
+export function typeArchiving(state = '', action) {
+	switch (action.type) {
+		case SET_TYPE_ARCHIVING:
+			return action.typeArchiving
+		default:
+			return state
+	}
+}
+
+export function typesIsLoading(state = false, action) {
+	switch (action.type) {
+		case SET_TYPES_IS_LOADING:
+			return action.typesIsLoading
+		default:
+			return state
+	}
+}
+
+export function typeSaving(state = false, action) {
+	switch (action.type) {
+		case SET_TYPE_SAVING:
+			return action.typeSaving
+		default:
+			return state
+	}
+}
+
+export function initTypeAdd(state = false, action) {
+	switch (action.type) {
+		case SET_TYPE_TO_CREATE:
+			return action.initTypeAdd
 		default:
 			return state
 	}

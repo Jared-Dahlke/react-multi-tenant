@@ -30,6 +30,11 @@ const AdminLayoutRoutes = () => {
                                     component={routes.admin.scenarios.labels.component}
                                     canView={userCan(perms.ADMIN_READ)}
                                 />
+                                <ProtectedRoute
+                                    path={routes.admin.scenarios.types.path}
+                                    component={routes.admin.scenarios.types.component}
+                                    canView={userCan(perms.ADMIN_READ)}
+                                />
                             </>
                         )}
                     />

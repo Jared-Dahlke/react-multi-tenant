@@ -17,6 +17,7 @@ import Login from './pages/Login'
 import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
 import Labels from './views/BrandProfiles/Admin/Labels.js'
+import Types from './views/BrandProfiles/Admin/Types.js'
 import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import Questions from './views/BrandProfiles/Admin/Questions.js'
@@ -143,6 +144,11 @@ export const routes = {
 				path: '/admin/scenarios/labels',
 				name: 'Labels',
 				component: Labels
+			},
+			types: {
+				path: '/admin/scenarios/types',
+				name: 'Types',
+				component: Types
 			}
 		},
 		opinions: {
@@ -291,6 +297,11 @@ export const modifiedRoutes = {
 						path: '/admin/scenarios/labels',
 						name: 'Labels',
 						component: Labels
+					},
+					{
+						path: '/admin/scenarios/types',
+						name: 'Types',
+						component: Types
 					}
 				]
 			},

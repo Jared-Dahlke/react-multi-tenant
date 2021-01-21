@@ -10,7 +10,12 @@ import {
 	labelDeleting,
 	labelsIsLoading,
 	labelSaving,
-	initLabelAdd
+	initLabelAdd,
+	types,
+	typeArchiving,
+	typesIsLoading,
+	typeSaving,
+	initTypeAdd
 } from './scenarios'
 
 import {
@@ -49,6 +54,11 @@ export default combineReducers({
 	labelsIsLoading,
 	labelSaving,
 	initLabelAdd,
+	types,
+	typeArchiving,
+	typesIsLoading,
+	typeSaving,
+	initTypeAdd,
 	opinions,
 	opinionsIsLoading,
 	opinionSaving,
