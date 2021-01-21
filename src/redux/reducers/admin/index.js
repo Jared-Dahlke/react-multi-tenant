@@ -7,7 +7,6 @@ import {
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
-	scenarioArchived,
 	labels,
 	labelDeleting,
 	labelsIsLoading,
@@ -19,9 +18,7 @@ import {
 	opinions,
 	opinionsIsLoading,
 	opinionSaving,
-	opinionCreated,
-	opinionArchiving,
-	opinionArchived
+	opinionArchiving
 } from './opinions'
 // import { brandProfileAdminOpinions } from './opinions'
 
@@ -53,7 +50,6 @@ export default combineReducers({
 	scenarioSaving,
 	scenarioCreated,
 	scenarioArchiving,
-	scenarioArchived,
 	labels,
 	labelDeleting,
 	labelsIsLoading,
@@ -62,10 +58,7 @@ export default combineReducers({
 	opinions,
 	opinionsIsLoading,
 	opinionSaving,
-	opinionCreated,
 	opinionArchiving,
-	opinionArchived,
-	// brandProfileAdminOpinions
 	questions,
 	questionArchiving,
 	questionsIsLoading,

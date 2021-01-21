@@ -59,13 +59,6 @@ export function setScenarioArchiving(scenarioId) {
 	}
 }
 
-export function setScenarioArchived(bool) {
-	return {
-		type: SET_SCENARIO_ARCHIVED,
-		scenarioArchived: bool
-	}
-}
-
 export function setScenarioToArchived(scenarioId) {
 	return {
 		type: SET_SCENARIO_TO_ARCHIVE,
@@ -103,7 +96,7 @@ export const archiveScenario = (scenarioId) => {
 			.then((response) => {
 				dispatch(setScenarioToArchived(scenarioId))
 				dispatch(setScenarioArchiving(''))
-				dispatch(setScenarioArchived(true))
+				toast.success('Scenario archived!')
 			})
 			.catch((error) => {
 				console.error(error)
@@ -137,7 +130,7 @@ export function fetchAdminBrandScenarios() {
 			if (result.status === 200) {
 				let scenarios = result.data
 
-				brandScenarioObjValidation.validate(scenarios).catch(function (err) {
+				brandScenarioObjValidation.validate(scenarios).catch(function(err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'

@@ -5,8 +5,6 @@ import GridContainer from '../../components/Grid/GridContainer.js'
 import Button from 'rsuite/lib/Button'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
 import AccountDropdown from '../../components/AccountDropdown'
 import Panel from '../../components/CustomPanel'
@@ -27,9 +25,7 @@ import config from '../../config'
 import {
 	updateAccount,
 	deleteAccount,
-	createAccount,
-	accountCreated,
-	setAccountSaved
+	createAccount
 } from '../../redux/actions/accounts'
 
 import { setFromGoogleAuthCallback } from '../../redux/actions/ThirdParty/Google/google'
@@ -51,8 +47,6 @@ const mapStateToProps = (state) => {
 		accounts: state.accounts,
 		accountTypes: state.accountTypes,
 		isSwitchingAccounts: state.isSwitchingAccounts,
-		accountCreated: state.accountCreated,
-		accountSaved: state.accountSaved,
 		accountSaving: state.accountSaving,
 		rolesPermissionsIsLoading: state.rolesPermissionsIsLoading,
 		user: state.user,
@@ -71,8 +65,6 @@ const mapDispatchToProps = (dispatch) => {
 		updateAccount: (account) => dispatch(updateAccount(account)),
 		deleteAccount: (accountId) => dispatch(deleteAccount(accountId)),
 		createAccount: (account) => dispatch(createAccount(account)),
-		setAccountCreated: (val) => dispatch(accountCreated(val)),
-		setAccountSaved: (bool) => dispatch(setAccountSaved(bool)),
 		handleGoogleAdsApiConsent: (params) =>
 			dispatch(handleGoogleAdsApiConsent(params)),
 		setAccountHasValidGoogleRefreshToken: (bool) =>
@@ -375,33 +367,6 @@ function Account(props) {
 										Save
 									</Button>
 								</UserCan>
-								<Snackbar
-									autoHideDuration={2000}
-									place='bc'
-									open={props.accountCreated}
-									onClose={() => props.setAccountCreated(false)}
-								>
-									<Alert
-										onClose={() => props.setAccountCreated(false)}
-										severity='success'
-									>
-										Account created
-									</Alert>
-								</Snackbar>
-
-								<Snackbar
-									autoHideDuration={2000}
-									place='bc'
-									open={props.accountSaved}
-									onClose={() => props.setAccountSaved(false)}
-								>
-									<Alert
-										onClose={() => props.setAccountSaved(false)}
-										severity='success'
-									>
-										Account saved
-									</Alert>
-								</Snackbar>
 							</CardFooter>
 						</Form>
 					</Panel>

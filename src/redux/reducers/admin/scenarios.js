@@ -98,24 +98,13 @@ export function scenarioArchiving(state = '', action) {
 	}
 }
 
-export function scenarioArchived(state = false, action) {
-	switch (action.type) {
-		case SET_SCENARIO_ARCHIVED:
-			return action.scenarioArchived
-		default:
-			return state
-	}
-}
-
 export function labels(state = [], action) {
 	switch (action.type) {
 		case SET_ADMIN_LABELS:
 			return action.labels
 		case SET_LABEL_TO_DELETE:
 			let newState = [
-				...state.filter(
-					({ labelId }) => labelId !== action.labelId
-				)
+				...state.filter(({ labelId }) => labelId !== action.labelId)
 			]
 			return newState
 		case SET_ADD_LABEL:
