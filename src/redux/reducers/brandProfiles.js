@@ -6,7 +6,6 @@ import {
 	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_CREATING,
-	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	SET_BRAND_PROFILES,
 	SET_BRAND_PROFILE_LOADING,
@@ -157,15 +156,6 @@ export function brandProfileLoading(state = true, action) {
 	switch (action.type) {
 		case SET_BRAND_PROFILE_LOADING:
 			return action.brandProfileLoading
-		default:
-			return state
-	}
-}
-
-export function brandProfileDeleted(state = false, action) {
-	switch (action.type) {
-		case BRAND_PROFILE_DELETED:
-			return action.brandProfileDeleted
 		default:
 			return state
 	}

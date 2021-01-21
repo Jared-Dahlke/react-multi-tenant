@@ -26,9 +26,6 @@ import styles from '../../assets/jss/material-dashboard-react/components/tasksSt
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import { useHistory } from 'react-router-dom'
 import CustomAlert from '../../components/CustomAlert.js'
-import Snackbar from '../../components/Snackbar/Snackbar'
-import Success from '@material-ui/icons/Check'
-import Error from '@material-ui/icons/Error'
 import { Link } from 'react-router-dom'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
 import { FormLoader } from '../../components/SkeletonLoader'
@@ -42,8 +39,6 @@ const mapStateToProps = (state) => {
 	return {
 		users: state.users.data,
 		hasErrored: state.usersHasErrored,
-		userDeleted: state.userDeleted,
-		userDeletedError: state.userDeletedError,
 		currentAccount: state.currentAccount,
 		usersIsLoading: state.usersIsLoading
 	}
@@ -118,24 +113,6 @@ function Users(props) {
 				handleConfirm={() => {
 					handleDeleteUser()
 				}}
-			/>
-
-			<Snackbar
-				place='bc'
-				color='success'
-				icon={Success}
-				message={'User succesfully deleted'}
-				open={props.userDeleted}
-			/>
-
-			<Snackbar
-				place='bc'
-				color='danger'
-				icon={Error}
-				message={
-					'There was an error deleting this user. Please try again later.'
-				}
-				open={props.userDeletedError}
 			/>
 
 			<Grid container justify='flex-end'>

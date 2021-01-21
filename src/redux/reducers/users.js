@@ -1,19 +1,14 @@
 import {
 	USERS_HAS_ERRORED,
 	SET_USERS,
-	USER_DELETED,
-	USER_DELETED_ERROR,
 	USERS_REMOVE_USER,
 	USERS_ADD_USER,
 	USERS_IS_LOADING,
 	USERS_SET_USER_ACCOUNTS,
 	EDIT_USER_USER_ACCOUNTS_LOADING,
-	USER_PROFILE_SAVED,
 	USER_PROFILE_SAVING,
 	USER_ADDING,
-	USER_EDIT_SAVING,
-	USER_EDIT_SAVED,
-	SET_USER_ADD_ERROR
+	USER_EDIT_SAVING
 } from '../action-types/users'
 
 export function usersHasErrored(state = false, action) {
@@ -42,28 +37,11 @@ export function userProfileSaving(state = false, action) {
 			return state
 	}
 }
-export function userProfileSaved(state = false, action) {
-	switch (action.type) {
-		case USER_PROFILE_SAVED:
-			return action.userProfileSaved
-		default:
-			return state
-	}
-}
 
 export function editUserUserAccountsLoading(state = true, action) {
 	switch (action.type) {
 		case EDIT_USER_USER_ACCOUNTS_LOADING:
 			return action.editUserUserAccountsLoading
-		default:
-			return state
-	}
-}
-
-export function userDeleted(state = false, action) {
-	switch (action.type) {
-		case USER_DELETED:
-			return action.userDeleted
 		default:
 			return state
 	}
@@ -82,23 +60,6 @@ export function userEditSaving(state = false, action) {
 	switch (action.type) {
 		case USER_EDIT_SAVING:
 			return action.userEditSaving
-		default:
-			return state
-	}
-}
-export function userEditSaved(state = false, action) {
-	switch (action.type) {
-		case USER_EDIT_SAVED:
-			return action.userEditSaved
-		default:
-			return state
-	}
-}
-
-export function userDeletedError(state = false, action) {
-	switch (action.type) {
-		case USER_DELETED_ERROR:
-			return action.userDeleted
 		default:
 			return state
 	}
