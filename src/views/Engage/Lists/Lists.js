@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Button from 'rsuite/lib/Button'
 import { connect } from 'react-redux'
-import { FormLoader } from '../../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../routes'
 import numeral from 'numeral'
@@ -386,7 +386,7 @@ function Lists(props) {
 	}
 
 	if (props.isFetchingLists) {
-		return <FormLoader />
+		return <Loader center size='lg' content='Loading...' vertical />
 	}
 
 	return (

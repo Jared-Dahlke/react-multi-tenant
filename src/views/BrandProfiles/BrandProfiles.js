@@ -23,7 +23,7 @@ import {
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import { FormLoader } from '../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import Edit from '@material-ui/icons/Edit'
 import { UserCan, perms, userCan } from '../../Can'
 
@@ -202,7 +202,7 @@ function BrandProfiles(props) {
 						</Table>
 					</div>
 				) : props.brandProfilesIsLoading ? (
-					<FormLoader />
+					<Loader center size='lg' content='Loading...' vertical />
 				) : (
 					<div
 						style={{

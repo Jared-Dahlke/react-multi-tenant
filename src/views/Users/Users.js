@@ -28,7 +28,7 @@ import { useHistory } from 'react-router-dom'
 import CustomAlert from '../../components/CustomAlert.js'
 import { Link } from 'react-router-dom'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
-import { FormLoader } from '../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import { UserCan, perms } from '../../Can'
 
 const useTableStyles = makeStyles(tableStyles)
@@ -223,7 +223,7 @@ function Users(props) {
 								</TableBody>
 							</Table>
 						) : props.usersIsLoading ? (
-							<FormLoader />
+							<Loader center size='lg' content='Loading...' vertical />
 						) : (
 							<h2 style={{ color: whiteColor }}>
 								{'This account'} has no users directly linked to it; however,

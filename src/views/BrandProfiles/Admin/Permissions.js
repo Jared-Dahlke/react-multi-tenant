@@ -26,8 +26,6 @@ import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
 
-import { FormLoader } from '../../../components/SkeletonLoader'
-
 const useTableStyles = makeStyles(tableStyles)
 
 const useStyles = makeStyles(styles)
@@ -248,7 +246,7 @@ function Permissions(props) {
 						</Table>
 					</div>
 				) : props.permissionsIsLoading ? (
-					<FormLoader />
+					<Loader center size='lg' content='Loading...' vertical />
 				) : (
 					''
 				)}

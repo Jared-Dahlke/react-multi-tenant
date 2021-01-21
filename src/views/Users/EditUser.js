@@ -11,7 +11,7 @@ import {
 	updateUserAccounts,
 	fetchUserAccounts
 } from '../../redux/actions/users'
-import { FormLoader } from '../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import { Formik } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
 import FormikSelect from '../../components/CustomSelect/FormikSelect'
@@ -218,7 +218,7 @@ export function EditUser(props) {
 							<GridItem xs={12} sm={12} md={8}>
 								<Card>
 									{props.editUserUserAccountsLoading ? (
-										<FormLoader />
+										<Loader center size='lg' content='Loading...' vertical />
 									) : (
 										<div>
 											<CardBody>
