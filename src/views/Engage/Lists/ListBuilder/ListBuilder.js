@@ -16,7 +16,6 @@ import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
 import FiltersLabel from './components/FiltersLabel'
 import Panel from 'rsuite/lib/Panel'
-import SuiteTree from '../../../../components/Tree/SuiteTree'
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 
 import {
@@ -122,6 +121,11 @@ function ListBuilder(props) {
 		history.push(routes.app.engage.lists.lists.path)
 	}
 
+	const [currentSort, setCurrentSort] = React.useState({
+		sortColumn: 'views',
+		sortType: 'desc'
+	})
+
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
@@ -152,31 +156,20 @@ function ListBuilder(props) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentPage,
-				filters: {
-					iabCategories: filterState.iabCategories,
-					countries: filterState.countries,
-					kids: filterState.kids,
-					actionIds: filterState.actionIds,
-					uploadDate: filterState.uploadDate,
-					languages: filterState.languages,
-					categories: filterState.categories,
-					views: {
-						min: filterState.views.min,
-						max: filterState.views.max
-					},
-					videoDurationSeconds: {
-						min: filterState.videoDurationSeconds.min
-							? filterState.videoDurationSeconds.min * 60
-							: null,
-						max: filterState.videoDurationSeconds.max
-							? filterState.videoDurationSeconds.max * 60
-							: null
-					}
-				}
+				filters: filterState,
+				sort: currentSort
 			}
 			props.fetchChannels(params)
 		}
 	}, [currentPage, channelsFetchTrigger])
+
+	const [mounted, setMounted] = React.useState(false)
+	React.useEffect(() => {
+		if (mounted) {
+			handleApplyFiltersButtonClick()
+		}
+		setMounted(true)
+	}, [currentSort])
 
 	let videosHasNextPage = props.videosHasNextPage
 
@@ -185,27 +178,7 @@ function ListBuilder(props) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentVideoPage,
-				filters: {
-					iabCategories: filterState.iabCategories,
-					channelId: viewingVideosForChannel.id,
-					kids: filterState.kids,
-					languages: filterState.languages,
-					views: {
-						min: filterState.views.min,
-						max: filterState.views.max
-					},
-					videoDurationSeconds: {
-						min: filterState.videoDurationSeconds.min
-							? filterState.videoDurationSeconds.min * 60
-							: null,
-						max: filterState.videoDurationSeconds.max
-							? filterState.videoDurationSeconds.max * 60
-							: null
-					},
-					uploadDate: filterState.uploadDate,
-					actionIds: filterState.actionIds,
-					categories: filterState.categories
-				}
+				filters: filterState
 			}
 			props.fetchVideos(params)
 		}
@@ -278,6 +251,8 @@ function ListBuilder(props) {
 		iabCategories: [],
 		countries: [{ countryCode: 'US' }],
 		actionIds: [],
+		uploadDate: null,
+		categories: [],
 		languages: [{ languageCode: 'en' }],
 		views: {
 			min: null,
@@ -763,6 +738,8 @@ function ListBuilder(props) {
 
 					<Grid item xs={12}>
 						<ChannelsTable
+							setCurrentSort={setCurrentSort}
+							currentSort={currentSort}
 							channelsHasNextPage={props.channelsHasNextPage}
 							channelsIsLoading={props.channelsIsLoading}
 							items={props.channels}
