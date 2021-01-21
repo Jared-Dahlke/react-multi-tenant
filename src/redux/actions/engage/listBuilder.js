@@ -117,7 +117,11 @@ export function fetchChannels(args) {
 		const result = await axios({
 			method: 'POST',
 			url: url,
-			data: args.filters
+			data: {
+				...args.filters, //TODO: remove this after API expects a filters object
+				filters: args.filters,
+				sort: args.sort
+			}
 		})
 
 		if (result.status === 200) {

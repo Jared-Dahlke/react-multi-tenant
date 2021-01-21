@@ -3,7 +3,7 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Table from 'rsuite/lib/Table'
-
+import Loader from 'rsuite/lib/Loader'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
@@ -18,7 +18,9 @@ export default function ChannelsTable({
 	items,
 	incrementPage,
 	handleActionButtonClick,
-	handleVideosClick
+	handleVideosClick,
+	currentSort,
+	setCurrentSort
 }) {
 	const hasMountedRef = React.useRef(false)
 
@@ -110,9 +112,14 @@ export default function ChannelsTable({
 
 	return (
 		<Table
+			sortColumn={currentSort.sortColumn}
+			sortType={currentSort.sortType}
+			onSortColumn={(sortColumn, sortType) => {
+				setCurrentSort({ sortColumn, sortType })
+			}}
 			loading={items.length < 1 && channelsIsLoading}
 			virtualized
-			height={500}
+			height={650}
 			rowHeight={80}
 			data={items}
 			shouldUpdateScroll={false}
@@ -125,54 +132,74 @@ export default function ChannelsTable({
 				<ImageCell />
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} width={60} align='center'>
-				<Table.HeaderCell></Table.HeaderCell>
+			<Table.Column
+				verticalAlign={'middle'}
+				width={60}
+				align='center'
+				sortable
+				flexGrow={1}
+			>
+				<Table.HeaderCell>Country</Table.HeaderCell>
 				<TooltipCell
 					displayProp='countryDisplay'
 					tooltipProp='countryTooltip'
+					dataKey='countryCode'
 				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} flexGrow={2} fixed>
+			<Table.Column verticalAlign={'middle'} flexGrow={2} fixed sortable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
 				<TooltipCell
 					displayProp='nameDisplay'
 					tooltipProp='nameTooltip'
 					tooltipPlacement='topLeft'
+					dataKey='name'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center'>
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Date</Table.HeaderCell>
 				<TooltipCell
 					displayProp='createDateDisplay'
 					tooltipProp='createDateTooltip'
+					dataKey='created'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center'>
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1} align='center'>
+			<Table.Column
+				verticalAlign={'middle'}
+				flexGrow={1}
+				align='center'
+				sortable
+			>
 				<Table.HeaderCell>Video Categories</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
 					tooltipProp='categoryTooltip'
+					dataKey='categoryName'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center'>
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Subscribers</Table.HeaderCell>
 				<TooltipCell
 					displayProp='subscribersDisplay'
 					tooltipProp='subscribersTooltip'
+					dataKey='subscribers'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center'>
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Videos</Table.HeaderCell>
-				<VideoCountCell />
+				<VideoCountCell dataKey='filteredVideoCount' />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center'>
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Views</Table.HeaderCell>
-				<TooltipCell displayProp='viewsDisplay' tooltipProp='viewsTooltip' />
+				<TooltipCell
+					dataKey='views'
+					displayProp='viewsDisplay'
+					tooltipProp='viewsTooltip'
+				/>
 			</Table.Column>
 			<Table.Column width={180} verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>
