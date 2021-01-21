@@ -3,6 +3,7 @@ import {
 	SET_ADMIN_BRAND_SCENARIOS,
 	SET_SCENARIO_LABELS,
 	SET_SCENARIO_LABELS_IS_LOADING,
+	SET_SCENARIO_TYPES,
 	SET_SCENARIO_TO_ARCHIVE,
 	SET_ADD_SCENARIO,
 	SET_SCENARIO_SAVING,
@@ -44,6 +45,15 @@ export function scenarios(state = [], action) {
 			stateData.push(action.scenario)
 
 			return stateData
+		default:
+			return state
+	}
+}
+
+export function scenarioTypes(state = [], action) {
+	switch (action.type) {
+		case SET_SCENARIO_TYPES:
+			return action.scenarioTypes
 		default:
 			return state
 	}

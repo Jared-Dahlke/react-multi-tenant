@@ -5,6 +5,7 @@ import GridContainer from '../../../components/Grid/GridContainer.js'
 import Button from 'rsuite/lib/Button'
 import TagPicker from 'rsuite/lib/TagPicker'
 import Loader from 'rsuite/lib/Loader'
+import FormikSelect from '../../../components/CustomSelect/FormikSelect'
 import Card from '../../../components/Card/Card.js'
 import CardBody from '../../../components/Card/CardBody.js'
 import CardFooter from '../../../components/Card/CardFooter.js'
@@ -15,13 +16,15 @@ import * as Yup from 'yup'
 import debounce from 'just-debounce-it'
 import {
 	createScenario,
-	fetchAdminBrandScenarioLabels
+	fetchAdminBrandScenarioLabels,
+	fetchScenarioTypes
 } from '../../../redux/actions/admin/scenarios'
 
 const mapStateToProps = (state) => {
 	return {
 		scenarioSaving: state.admin.scenarioSaving,
 		scenarioLabels: state.admin.scenarioLabels,
+		scenarioTypes: state.admin.scenarioTypes,
 		scenariosLabelsIsLoading: state.admin.scenariosLabelsIsLoading
 	}
 }
@@ -30,7 +33,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		createScenario: (scenario) => dispatch(createScenario(scenario)),
 		fetchAdminBrandScenarioLabels: (text) =>
-			dispatch(fetchAdminBrandScenarioLabels(text))
+			dispatch(fetchAdminBrandScenarioLabels(text)),
+		fetchScenarioTypes: () =>
+			dispatch(fetchScenarioTypes())
 	}
 }
 
@@ -38,11 +43,32 @@ const schemaValidation = Yup.object().shape({
 	scenarioName: Yup.string()
 		.required('Required')
 		.min(2, 'Must be greater than 1 character')
-		.max(120, 'Must be less than 120 characters')
+		.max(120, 'Must be less than 120 characters'),
+	scenarioTypeId: Yup.number()
+		.typeError('Required')
+		.required('Required')
 })
 
 function Scenario(props) {
-	const { values, isValid, dirty } = props
+
+	const {
+		values,
+		errors,
+		touched,
+		setFieldValue,
+		setFieldTouched,
+		validateField,
+		validateForm,
+		isValid,
+		dirty
+	} = props
+
+	const { fetchScenarioTypes, scenarioTypes } = props
+	React.useEffect(() => {
+		if (scenarioTypes.length === 0) {
+			fetchScenarioTypes()
+		}
+	})
 
 	const { fetchAdminBrandScenarioLabels, scenarioLabels } = props
 	const handleKeyPress = debounce((text) => {
@@ -90,7 +116,23 @@ function Scenario(props) {
 											}}
 										/>
 									</div>
-
+									<FormikSelect
+										id='scenarioType'
+										name='scenarioTypeId'
+										label='Scenario Type'
+										placeholder='Scenario Type'
+										optionLabel='typeName'
+										optionValue='typeId'
+										options={scenarioTypes}
+										value={values.scenarioTypeId}
+										onChange={setFieldValue}
+										onBlur={setFieldTouched}
+										validateField={validateField}
+										validateForm={validateForm}
+										touched={touched.scenarioTypeId}
+										error={errors.scenarioTypeId}
+										hideSearch
+									/>
 									<TagPicker
 										id={'scenario category'}
 										block
@@ -131,7 +173,8 @@ const FormikForm = withFormik({
 	mapPropsToValues: (props) => {
 		return {
 			scenarioName: '',
-			scenarioLabelsSelected: []
+			scenarioLabelsSelected: [],
+			scenarioTypeId: ''
 		}
 	},
 	enableReinitialize: true,
@@ -142,7 +185,8 @@ const FormikForm = withFormik({
 	handleSubmit: (values, { props }) => {
 		let scenario = {
 			scenarioName: values.scenarioName,
-			scenarioLabelIds: values.scenarioLabelsSelected
+			scenarioLabelIds: values.scenarioLabelsSelected,
+			scenarioTypeId: values.scenarioTypeId
 		}
 		props.createScenario(scenario)
 	}

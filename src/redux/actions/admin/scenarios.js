@@ -3,6 +3,7 @@ import {
 	SET_ADMIN_BRAND_SCENARIOS,
 	SET_SCENARIO_LABELS,
 	SET_SCENARIO_LABELS_IS_LOADING,
+	SET_SCENARIO_TYPES,
 	SET_SCENARIO_ARCHIVING,
 	SET_SCENARIO_TO_ARCHIVE,
 	SET_SCENARIO_SAVING,
@@ -54,6 +55,13 @@ export function setScenarioLabels(scenarioLabels) {
 	return {
 		type: SET_SCENARIO_LABELS,
 		scenarioLabels
+	}
+}
+
+export function setScenarioTypes(scenarioTypes) {
+	return {
+		type: SET_SCENARIO_TYPES,
+		scenarioTypes
 	}
 }
 
@@ -154,6 +162,23 @@ export function fetchAdminBrandScenarioLabels(text) {
 				let scenarioLabels = result.data
 				dispatch(setScenarioLabels(scenarioLabels))
 				dispatch(setScenariosLabelsIsLoading(false))
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function fetchScenarioTypes() {
+	let url = apiBase + `/scenarios/types`
+	return async (dispatch) => {
+		// dispatch(setScenariosLabelsIsLoading(true))
+		try {
+			const result = await axios.get(url)
+			if (result.status === 200) {
+				let scenarioTypes = result.data
+				dispatch(setScenarioTypes(scenarioTypes))
+				// dispatch(setScenariosLabelsIsLoading(false))
 			}
 		} catch (error) {
 			alert(error)
