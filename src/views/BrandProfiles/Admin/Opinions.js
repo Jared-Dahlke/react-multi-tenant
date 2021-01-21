@@ -17,7 +17,8 @@ import {
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import { FormLoader } from '../../../components/SkeletonLoader'
+
+import Loader from 'rsuite/lib/Loader'
 import { routes } from '../../../routes'
 
 const useTableStyles = makeStyles(tableStyles)
@@ -134,7 +135,7 @@ function Opinions(props) {
 						</Table>
 					</div>
 				) : props.opinionsIsLoading ? (
-					<FormLoader />
+					<Loader center size='lg' content='Loading...' vertical />
 				) : (
 					<div
 						style={{

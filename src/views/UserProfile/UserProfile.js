@@ -14,7 +14,7 @@ import { useHistory } from 'react-router-dom'
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../redux/actions/users.js'
-import { FormLoader } from '../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 
 const mapStateToProps = (state) => {
 	return {
@@ -128,7 +128,7 @@ function UserProfile(props) {
 								</Form>
 							</div>
 						) : (
-							<FormLoader />
+							<Loader center size='lg' content='Loading...' vertical />
 						)}
 					</Card>
 				</GridItem>
