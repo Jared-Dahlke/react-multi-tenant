@@ -64,12 +64,22 @@ export function fetchBrandProfileBasic(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile basic info, see console log for more details'
 					)
 				})
+
 				let brandProfile = getState().brandProfileUnderEdit
 				brandProfile.brandProfileId = result.data.brandProfileId
 				brandProfile.brandName = result.data.brandName
 				brandProfile.websiteUrl = result.data.websiteUrl
 				brandProfile.industryVerticalId = result.data.industryVerticalId
 				brandProfile.twitterProfileUrl = result.data.twitterProfileUrl
+				brandProfile.primaryKPI = result.data.primaryKPI
+					? result.data.primaryKPI
+					: ''
+				brandProfile.secondaryKPI = result.data.secondaryKPI
+					? result.data.secondaryKPI
+					: ''
+				brandProfile.tertiaryKPI = result.data.tertiaryKPI
+					? result.data.tertiaryKPI
+					: ''
 				dispatch(setBrandProfileUnderEdit(brandProfile))
 			}
 		} catch (error) {
@@ -143,6 +153,14 @@ export function fetchBrandProfileTopics(brandProfileId) {
 	}
 }
 
+function getScenarioTypeById(scenarioTypes, scenarioType) {
+	for (const scenType of scenarioTypes) {
+		if (scenarioType === scenType) {
+			return scenType
+		}
+	}
+}
+
 export function fetchBrandProfileScenarios(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/scenarios`
 	return async (dispatch, getState) => {
@@ -156,7 +174,28 @@ export function fetchBrandProfileScenarios(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile scenarios, see console log for more details'
 					)
 				})
-				dispatch(setBrandProfileScenarios(result.data))
+
+				let scenarioTypes = []
+				let scenTypesShort = []
+				for (const scenarioType of JSON.parse(JSON.stringify(result.data))) {
+					if (!scenTypesShort.includes(scenarioType.scenarioType)) {
+						scenarioTypes.push({
+							scenarioTypeName: scenarioType.scenarioType,
+							scenarios: []
+						})
+						scenTypesShort.push(scenarioType.scenarioType)
+					}
+				}
+
+				for (const scenarioType of scenarioTypes) {
+					for (const scenario of result.data) {
+						if (scenario.scenarioType === scenarioType.scenarioTypeName) {
+							scenarioType.scenarios.push(scenario)
+						}
+					}
+				}
+
+				dispatch(setBrandProfileScenarios(scenarioTypes))
 			}
 		} catch (error) {
 			alert(error)
@@ -209,10 +248,14 @@ export function fetchBrandProfileQuestions(brandProfileId) {
 export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
+		let initialName =
+			getState().brandProfiles.length > 0
+				? 'UNTITLED_BRAND_PROFILE'
+				: 'My first brand profile'
 		dispatch(setBrandProfileCreating(true))
 		let brandProfile = {
 			accountId: getState().currentAccountId,
-			brandName: 'My first brand profile'
+			brandName: initialName
 		}
 
 		axios
@@ -307,6 +350,9 @@ export const patchBrandProfileBasicInfo = (brandProfile) => {
 				profile.twitterProfileUrl = brandProfile.twitterProfileUrl
 				profile.industryVerticalId = brandProfile.industryVerticalId
 				profile.websiteUrl = brandProfile.websiteUrl
+				profile.primaryKPI = brandProfile.primaryKPI
+				profile.secondaryKPI = brandProfile.secondaryKPI
+				profile.tertiaryKPI = brandProfile.tertiaryKPI
 			}
 		}
 		dispatch(setBrandProfiles(profiles))

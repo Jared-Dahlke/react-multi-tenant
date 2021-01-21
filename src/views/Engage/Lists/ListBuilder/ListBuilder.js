@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
-import Toggle from 'rsuite/lib/Toggle'
 import Grid from '@material-ui/core/Grid'
 import TagPicker from 'rsuite/lib/TagPicker'
 import PanelGroup from 'rsuite/lib/PanelGroup'
@@ -15,9 +14,10 @@ import VideoModal from './components/VideoModal'
 import InputGroup from 'rsuite/lib/InputGroup'
 import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
-import Input from 'rsuite/lib/Input'
 import FiltersLabel from './components/FiltersLabel'
 import Panel from 'rsuite/lib/Panel'
+import SuiteTree from '../../../../components/Tree/SuiteTree'
+import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 
 import {
 	fetchVideos,
@@ -25,14 +25,15 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setHasNextPage,
+	setChannelsHasNextPage,
 	setVideosHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
 
 import {
 	fetchFilterCategories,
 	fetchFilterCountries,
-	fetchFilterLanguages
+	fetchFilterLanguages,
+	fetchFilterIabCategories
 } from '../../../../redux/actions/engage/filters'
 
 import {
@@ -58,12 +59,13 @@ const mapStateToProps = (state) => {
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
 		videosIsLoading: state.engage.videosIsLoading,
-		hasNextPage: state.engage.hasNextPage,
+		channelsHasNextPage: state.engage.channelsHasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
 		filterCountries: state.engage.filterCountries,
 		filterLanguages: state.engage.filterLanguages,
 		filterCategories: state.engage.filterCategories,
+		filterIabCategories: state.engage.filterIabCategories,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
 		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess,
@@ -87,7 +89,8 @@ const mapDispatchToProps = (dispatch) => {
 		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
 		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
 		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
-		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
+		fetchFilterIabCategories: () => dispatch(fetchFilterIabCategories()),
+		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
 			dispatch(deleteAllVersionData(versionId)),
@@ -119,12 +122,10 @@ function ListBuilder(props) {
 		history.push(routes.app.engage.lists.lists.path)
 	}
 
-	const hasMountedRef = React.useRef(false)
-
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
-			props.setHasNextPage(true)
+			props.setChannelsHasNextPage(true)
 			props.setVideosHasNextPage(true)
 		}
 	}, [])
@@ -139,6 +140,7 @@ function ListBuilder(props) {
 		props.fetchFilterCategories()
 		props.fetchFilterCountries()
 		props.fetchFilterLanguages()
+		props.fetchFilterIabCategories()
 		setCurrentPage(1)
 	}, [])
 
@@ -146,28 +148,29 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
-		if (props.hasNextPage) {
+		if (props.channelsHasNextPage) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentPage,
 				filters: {
-					channelFilters: {
-						countries: filterState.countries,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: filterState.views,
-						videoDurationSeconds: filterState.videoDurationSeconds,
-						uploadDate: filterState.uploadDate
+					iabCategories: filterState.iabCategories,
+					countries: filterState.countries,
+					kids: filterState.kids,
+					actionIds: filterState.actionIds,
+					uploadDate: filterState.uploadDate,
+					languages: filterState.languages,
+					categories: filterState.categories,
+					views: {
+						min: filterState.views.min,
+						max: filterState.views.max
 					},
-					videoFilters: {
-						languages: filterState.languages,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: filterState.views,
-						videoDurationSeconds: filterState.videoDurationSeconds,
-						uploadDate: filterState.uploadDate
+					videoDurationSeconds: {
+						min: filterState.videoDurationSeconds.min
+							? filterState.videoDurationSeconds.min * 60
+							: null,
+						max: filterState.videoDurationSeconds.max
+							? filterState.videoDurationSeconds.max * 60
+							: null
 					}
 				}
 			}
@@ -183,10 +186,22 @@ function ListBuilder(props) {
 				versionId: parsedVersionId,
 				pageNumber: currentVideoPage,
 				filters: {
+					iabCategories: filterState.iabCategories,
 					channelId: viewingVideosForChannel.id,
 					kids: filterState.kids,
-					views: filterState.views,
-					videoDurationSeconds: filterState.videoDurationSeconds,
+					languages: filterState.languages,
+					views: {
+						min: filterState.views.min,
+						max: filterState.views.max
+					},
+					videoDurationSeconds: {
+						min: filterState.videoDurationSeconds.min
+							? filterState.videoDurationSeconds.min * 60
+							: null,
+						max: filterState.videoDurationSeconds.max
+							? filterState.videoDurationSeconds.max * 60
+							: null
+					},
 					uploadDate: filterState.uploadDate,
 					actionIds: filterState.actionIds,
 					categories: filterState.categories
@@ -204,7 +219,8 @@ function ListBuilder(props) {
 		actionIds: 'actionIds',
 		views: 'views',
 		videoDurationSeconds: 'videoDurationSeconds',
-		uploadDate: 'uploadDate'
+		uploadDate: 'uploadDate',
+		iabCategories: 'iabCategories'
 	}
 
 	const actionIdOptions = [
@@ -259,15 +275,17 @@ function ListBuilder(props) {
 
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
+		iabCategories: [],
 		countries: [{ countryCode: 'US' }],
 		actionIds: [],
+		languages: [{ languageCode: 'en' }],
 		views: {
-			min: 0,
-			max: 100000000000000
+			min: null,
+			max: null
 		},
 		videoDurationSeconds: {
-			min: 0,
-			max: 100000000000000
+			min: null,
+			max: null
 		}
 	})
 
@@ -323,6 +341,22 @@ function ListBuilder(props) {
 					return {
 						...prevState,
 						categories
+					}
+				})
+				break
+
+			case filters.iabCategories:
+				let iabCategories = []
+				if (!value) {
+					value = []
+				}
+				for (const iabCategory of value) {
+					iabCategories.push(iabCategory)
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						iabCategories
 					}
 				})
 				break
@@ -403,7 +437,7 @@ function ListBuilder(props) {
 	const handleApplyFiltersButtonClick = () => {
 		props.removeAllChannels()
 		props.removeAllVideos()
-		props.setHasNextPage(true)
+		props.setChannelsHasNextPage(true)
 		setCurrentPage(1)
 		setChannelsFetchTrigger((prevState) => prevState + 1)
 	}
@@ -423,6 +457,10 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 	}
 
+	//const [iabCategoriesIsOpen, setIabCategoriesIsOpen] = React.useState(false)
+
+	const filterSpacing = 1
+
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical />
 	} else {
@@ -432,9 +470,11 @@ function ListBuilder(props) {
 					show={showVideoModal}
 					close={handleVideoModalClose}
 					videos={props.videos}
-					incrementPage={() =>
-						setCurrentVideoPage((prevState) => prevState + 1)
-					}
+					incrementPage={() => {
+						if (!props.videosIsLoading) {
+							setCurrentVideoPage((prevState) => prevState + 1)
+						}
+					}}
 					handleActionButtonClick={handleActionButtonClick}
 					channel={viewingVideosForChannel}
 					videosIsLoading={props.videosIsLoading}
@@ -487,8 +527,29 @@ function ListBuilder(props) {
 									/>
 								</CustomPanel>
 
+								<CustomPanel header='SmartList Filters'>
+									<Grid container spacing={filterSpacing}>
+										<Grid item xs={12}>
+											<FiltersLabel text='IAB Categories' />
+											<CheckTreePicker
+												placement='topStart'
+												size={'xs'}
+												defaultExpandAll={false}
+												data={props.filterIabCategories}
+												labelKey={'name'}
+												valueKey={'id'}
+												onChange={(val) => {
+													handleFilterChange(filters.iabCategories, val)
+												}}
+												cascade={true}
+												block
+											/>
+										</Grid>
+									</Grid>
+								</CustomPanel>
+
 								<CustomPanel header='YouTube Filters'>
-									<Grid container spacing={3}>
+									<Grid container spacing={filterSpacing}>
 										<Grid item xs={12}>
 											<TagPicker
 												block
@@ -527,7 +588,7 @@ function ListBuilder(props) {
 												labelKey={'categoryName'}
 												valueKey={'categoryId'}
 												virtualized={true}
-												placeholder='Categories'
+												placeholder='Youtube Categories'
 												onChange={(val) => {
 													handleFilterChange(filters.categories, val)
 												}}
@@ -547,21 +608,18 @@ function ListBuilder(props) {
 									</Grid>
 								</CustomPanel>
 								<CustomPanel header='Video Filters'>
-									<Grid container spacing={3}>
+									<Grid container spacing={filterSpacing}>
 										<Grid item xs={12}>
 											<FiltersLabel text='Views' />
 											<InputGroup size='xs'>
-												<Input
+												<InputNumber
+													step={10000}
 													size='xs'
+													value={filterState.views.min}
 													onFocus={(event) => event.target.select()}
-													defaultValue={'No Min'}
+													placeholder={'Min'}
 													min={0}
-													max={1000000000000000000}
 													onChange={(nextValue) => {
-														let maximum = filters.views.max
-														if (nextValue > maximum) {
-															return
-														}
 														let value = {
 															min: Number(nextValue),
 															max: filterState.views.max
@@ -569,19 +627,16 @@ function ListBuilder(props) {
 														handleFilterChange(filters.views, value)
 													}}
 												/>
+
 												<InputGroup.Addon>to</InputGroup.Addon>
-												<Input
+												<InputNumber
+													step={10000}
 													onFocus={(event) => event.target.select()}
 													size='xs'
 													min={0}
-													max={1000000000000000000}
-													defaultValue={'No Max'}
+													placeholder={'Max'}
+													value={filterState.views.max}
 													onChange={(nextValue) => {
-														let minimum = filters.views.minimum
-
-														if (minimum > nextValue) {
-															return
-														}
 														let value = {
 															min: filterState.views.min,
 															max: Number(nextValue)
@@ -590,21 +645,32 @@ function ListBuilder(props) {
 													}}
 												/>
 											</InputGroup>
+											<Button
+												size='xs'
+												appearance='link'
+												onClick={() =>
+													handleFilterChange(filters.views, {
+														min: null,
+														max: null
+													})
+												}
+											>
+												Clear
+											</Button>
 										</Grid>
 
 										<Grid item xs={12}>
 											<FiltersLabel text='Duration (minutes)' />
 											<InputGroup size='xs'>
-												<Input
+												<InputNumber
+													value={filterState.videoDurationSeconds.min}
 													size='xs'
 													onFocus={(event) => event.target.select()}
-													defaultValue={'No Min'}
-													min={0}
-													max={1000000000000000000}
+													placeholder={'Min'}
 													onChange={(nextValue) => {
 														let value = {
-															min: Number(nextValue) * 60,
-															max: filterState.views.max
+															min: Number(nextValue),
+															max: filterState.videoDurationSeconds.max
 														}
 														handleFilterChange(
 															filters.videoDurationSeconds,
@@ -614,16 +680,16 @@ function ListBuilder(props) {
 												/>
 
 												<InputGroup.Addon>to</InputGroup.Addon>
-												<Input
+												<InputNumber
+													value={filterState.videoDurationSeconds.max}
 													onFocus={(event) => event.target.select()}
 													size='xs'
 													min={0}
-													max={1000000000000000000}
-													defaultValue={'No Max'}
+													placeholder={'Max'}
 													onChange={(nextValue) => {
 														let value = {
-															min: filterState.views.min,
-															max: Number(nextValue) * 60
+															min: filterState.videoDurationSeconds.min,
+															max: Number(nextValue)
 														}
 														handleFilterChange(
 															filters.videoDurationSeconds,
@@ -632,6 +698,18 @@ function ListBuilder(props) {
 													}}
 												/>
 											</InputGroup>
+											<Button
+												size='xs'
+												appearance='link'
+												onClick={() =>
+													handleFilterChange(filters.videoDurationSeconds, {
+														min: null,
+														max: null
+													})
+												}
+											>
+												Clear
+											</Button>
 										</Grid>
 
 										<Grid item xs={12}>
@@ -685,10 +763,14 @@ function ListBuilder(props) {
 
 					<Grid item xs={12}>
 						<ChannelsTable
-							hasNextPage={props.hasNextPage}
+							channelsHasNextPage={props.channelsHasNextPage}
 							channelsIsLoading={props.channelsIsLoading}
 							items={props.channels}
-							incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
+							incrementPage={() => {
+								if (!props.channelsIsLoading) {
+									setCurrentPage((prevState) => prevState + 1)
+								}
+							}}
 							handleActionButtonClick={handleActionButtonClick}
 							handleVideosClick={handleVideosClick}
 						/>

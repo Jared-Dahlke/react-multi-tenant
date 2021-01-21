@@ -15,6 +15,9 @@ import Button from 'rsuite/lib/Button'
 import { getCurrentAccount } from '../../../utils'
 import Snackbar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert'
+import Whisper from 'rsuite/lib/Whisper'
+import Tooltip from 'rsuite/lib/Tooltip'
+import Icon from 'rsuite/lib/Icon'
 import {
 	fetchLists,
 	setUploadedList,
@@ -24,7 +27,7 @@ import {
 import { uploadedListObjValidation } from '../../../schemas/Engage/Lists/schemas'
 import config from '../../../config'
 const parseExcelUrl = config.api.listBuilderUrl + '/parse-excel'
-const token = localStorage.getItem('token')
+
 const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
@@ -121,12 +124,63 @@ function UploadList(props) {
 		setUploadedCount(uploadedCount - 1)
 	}
 
+	const handleDownloadTemplateClick = () => {
+		window.location.href =
+			'https://storage.googleapis.com/sightlyoutcomeintelligence_templates/SmartList_Upload_Template.xlsx'
+	}
+
 	return (
 		<div>
 			<Grid container spacing={3} justify='center'>
 				<Grid item xs={12} sm={6} md={10}>
 					<Form>
-						<Panel header='Upload a list' bordered>
+						<Panel
+							header={
+								<Grid container>
+									<Grid item xs={6}>
+										Upload a list
+										<Whisper
+											placement='bottom'
+											trigger='hover'
+											speaker={
+												<Tooltip>
+													The list can be either channels or videos, but not
+													both.
+												</Tooltip>
+											}
+										>
+											<Icon
+												size='lg'
+												icon='question2'
+												style={{ marginLeft: 20 }}
+											/>
+										</Whisper>
+									</Grid>
+
+									<Grid item xs={6} align='right'>
+										<Whisper
+											placement='bottom'
+											trigger='hover'
+											speaker={
+												<Tooltip>
+													The list can be either channels or videos, but not
+													both.
+												</Tooltip>
+											}
+										>
+											<Button
+												appearance='link'
+												style={{ margin: 0, padding: 0 }}
+												onClick={handleDownloadTemplateClick}
+											>
+												Click to download template
+											</Button>
+										</Whisper>
+									</Grid>
+								</Grid>
+							}
+							bordered
+						>
 							<Grid container>
 								<RadioGroup
 									inline
@@ -219,7 +273,7 @@ function UploadList(props) {
 										listType='text'
 										accept='.xlsx, .xls, .csv'
 										action={parseExcelUrl}
-										headers={{ Authorization: token }}
+										headers={{ Authorization: localStorage.getItem('token') }}
 										multiple={false}
 										draggable
 										onError={(err) => console.log('err consolelog:', err)}

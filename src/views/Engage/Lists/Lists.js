@@ -14,12 +14,7 @@ import Dropdown from 'rsuite/lib/Dropdown'
 import Popover from 'rsuite/lib/Popover'
 import orderBy from 'lodash/orderBy'
 import { getCurrentAccount } from '../../../utils'
-import {
-	objectives,
-	dataTypes,
-	activeStatuses,
-	archivedStatuses
-} from './constants'
+import { objectives, activeStatuses, archivedStatuses } from './constants'
 import {
 	fetchLists,
 	archiveList,
@@ -73,7 +68,6 @@ function Lists(props) {
 		objectiveId: null,
 		brandProfileId: null,
 		smartListId: null,
-		dataTypeId: null,
 		activeStatusId: 1,
 		archivedStatusId: 2
 	})
@@ -134,10 +128,6 @@ function Lists(props) {
 	}, [props.lists])
 
 	const handleFilter = (list) => {
-		if (filterState.dataTypeId && list.dataTypeId != filterState.dataTypeId) {
-			return false
-		}
-
 		if (
 			filterState.objectiveId &&
 			list.objectiveId != filterState.objectiveId
@@ -529,30 +519,6 @@ function Lists(props) {
 									return {
 										...prevState,
 										objectiveId: val
-									}
-								})
-							}
-						/>
-					</Grid>
-
-					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
-						<div style={{ position: 'absolute', top: -20, left: 0 }}>
-							<p>Type</p>
-						</div>
-						<InputPicker
-							size={'sm'}
-							id='dataTypeId'
-							label='Type'
-							placeholder='Select a Type'
-							labelKey='dataTypeName'
-							valueKey='dataTypeId'
-							data={dataTypes}
-							value={filterState.dataTypeId}
-							onChange={(val) =>
-								setFilterState((prevState) => {
-									return {
-										...prevState,
-										dataTypeId: val
 									}
 								})
 							}

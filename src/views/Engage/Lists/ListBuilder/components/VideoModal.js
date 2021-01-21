@@ -5,9 +5,7 @@ import Table from 'rsuite/lib/Table'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
 import { accentColor } from '../../../../../assets/jss/colorContants'
-import Whisper from 'rsuite/lib/Whisper'
-import Tooltip from 'rsuite/lib/Tooltip'
-import numeral from 'numeral'
+import { TooltipCell } from './TooltipCell'
 
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
@@ -30,9 +28,23 @@ const VideoModal = (props) => {
 		hasMountedRef.current = true
 	}, [actionsTaken])
 
+	function secondsToTime(e) {
+		var h = Math.floor(e / 3600)
+				.toString()
+				.padStart(2, '0'),
+			m = Math.floor((e % 3600) / 60)
+				.toString()
+				.padStart(2, '0'),
+			s = Math.floor(e % 60)
+				.toString()
+				.padStart(2, '0')
+		if (h == '00') {
+			return m + ':' + s
+		}
+		return h + ':' + m + ':' + s
+	}
+
 	const Duration = ({ seconds }) => {
-		let minutes = Math.floor(seconds / 60)
-		let remainingSeconds = Math.floor(seconds - minutes * 60) - 1
 		return (
 			<div
 				style={{
@@ -44,7 +56,7 @@ const VideoModal = (props) => {
 					letterSpacing: 0.5
 				}}
 			>
-				{`${minutes}:${remainingSeconds}`}
+				{`${secondsToTime(seconds)}`}
 			</div>
 		)
 	}
@@ -110,76 +122,6 @@ const VideoModal = (props) => {
 		)
 	}
 
-	const NameCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{rowData.description}</Tooltip>}
-				>
-					<div>{rowData.name}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const DislikesCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.dislikes).format('0,0')}</Tooltip>}
-				>
-					<div>{rowData.dislikesCount}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const LikesCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.likes).format('0,0')}</Tooltip>}
-				>
-					<div>{rowData.likesCount}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const ViewsCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.views).format('0,0')}</Tooltip>}
-				>
-					<div>{numeral(rowData.views).format('0a')}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const CommentsCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.comments).format('0,0')}</Tooltip>}
-				>
-					<div>{rowData.commentsCount}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
 	const handleVideoScroll = debounce(() => {
 		props.incrementPage()
 	}, 1200)
@@ -206,44 +148,69 @@ const VideoModal = (props) => {
 						<ImageCell />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} resizable>
+					<Table.Column verticalAlign={'middle'}>
 						<Table.HeaderCell>Name</Table.HeaderCell>
-						<NameCell />
+						<TooltipCell
+							displayProp='nameDisplay'
+							tooltipProp='nameTooltip'
+							tooltipPlacement='bottomLeft'
+						/>
 					</Table.Column>
+
 					<Table.Column verticalAlign={'middle'}>
 						<Table.HeaderCell>Date</Table.HeaderCell>
-						<Table.Cell dataKey='createDate' style={{ color: 'grey' }} />
+						<TooltipCell
+							displayProp='createDateDisplay'
+							tooltipProp='createDateTooltip'
+						/>
 					</Table.Column>
+
 					<Table.Column verticalAlign={'middle'}>
 						<Table.HeaderCell>Id</Table.HeaderCell>
 						<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 					</Table.Column>
+
 					<Table.Column verticalAlign={'middle'}>
 						<Table.HeaderCell>Category</Table.HeaderCell>
-						<Table.Cell dataKey='categoryName' />
+						<TooltipCell
+							displayProp='categoryDisplay'
+							tooltipProp='categoryTooltip'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center'>
 						<Table.HeaderCell>Likes</Table.HeaderCell>
-						<LikesCell />
+						<TooltipCell
+							displayProp='likesDisplay'
+							tooltipProp='likesTooltip'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center'>
 						<Table.HeaderCell>Dislikes</Table.HeaderCell>
-						<DislikesCell />
+						<TooltipCell
+							displayProp='dislikesDisplay'
+							tooltipProp='dislikesTooltip'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center'>
 						<Table.HeaderCell>Views</Table.HeaderCell>
-						<ViewsCell />
+						<TooltipCell
+							displayProp='viewsDisplay'
+							tooltipProp='viewsTooltip'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center'>
 						<Table.HeaderCell>Comments</Table.HeaderCell>
-						<CommentsCell />
+						<TooltipCell
+							displayProp='commentsDisplay'
+							tooltipProp='commentsTooltip'
+						/>
 					</Table.Column>
 
-					<Table.Column width={200} verticalAlign={'middle'}>
+					<Table.Column verticalAlign={'middle'} width={200}>
 						<Table.HeaderCell></Table.HeaderCell>
 						<ActionCell />
 					</Table.Column>

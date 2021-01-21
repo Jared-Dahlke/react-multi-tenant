@@ -16,13 +16,18 @@ import {
 import {
 	videos,
 	channels,
-	hasNextPage,
+	channelsHasNextPage,
 	videosHasNextPage,
 	videosIsLoading,
 	channelsIsLoading
 } from './listBuilder'
 
-import { filterCountries, filterCategories, filterLanguages } from './filters'
+import {
+	filterCountries,
+	filterCategories,
+	filterIabCategories,
+	filterLanguages
+} from './filters'
 
 export default combineReducers({
 	lists,
@@ -38,9 +43,10 @@ export default combineReducers({
 	filterCountries,
 	filterCategories,
 	filterLanguages,
+	filterIabCategories,
 	videos,
 	channels,
-	hasNextPage,
+	channelsHasNextPage,
 	videosHasNextPage,
 	deleteAllVersionDataSuccess,
 	videosIsLoading,

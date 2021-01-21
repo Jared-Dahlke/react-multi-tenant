@@ -61,7 +61,10 @@ export function brandProfileUnderEdit(
 		websiteUrl: '',
 		industryVerticalId: -1,
 		twitterProfileUrl: '',
-		brandProfileId: ''
+		brandProfileId: '',
+		primaryKPI: '',
+		secondaryKPI: '',
+		tertiaryKPI: ''
 	},
 	action
 ) {
@@ -74,8 +77,12 @@ export function brandProfileUnderEdit(
 				brandName: action.basicInfo.brandName,
 				industryVerticalId: action.basicInfo.industryVerticalId,
 				websiteUrl: action.basicInfo.websiteUrl,
-				twitterProfileUrl: action.basicInfo.twitterProfileUrl
+				twitterProfileUrl: action.basicInfo.twitterProfileUrl,
+				primaryKPI: action.basicInfo.primaryKPI,
+				secondaryKPI: action.basicInfo.secondaryKPI,
+				tertiaryKPI: action.basicInfo.tertiaryKPI
 			}
+
 		case SET_BRAND_PROFILE_COMPETITORS:
 			return {
 				...state,

@@ -4,11 +4,6 @@ export const objectives = [
 	{ objectiveId: 3, objectiveName: 'Conversions' }
 ]
 
-export const dataTypes = [
-	{ dataTypeId: 1, dataTypeName: 'Channels' },
-	{ dataTypeId: 2, dataTypeName: 'Videos' }
-]
-
 export const activeStatuses = [
 	{ activeStatusId: 1, activeStatusName: 'Active' },
 	{ activeStatusId: 2, activeStatusName: 'Not Active' }
