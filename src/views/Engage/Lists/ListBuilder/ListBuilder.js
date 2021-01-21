@@ -46,7 +46,7 @@ import {
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
-import { Checkbox } from 'rsuite'
+import Checkbox from 'rsuite/lib/Checkbox'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
 var dayjs = require('dayjs')
 
