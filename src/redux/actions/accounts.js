@@ -167,7 +167,7 @@ export function fetchSiteData(accountId) {
 			let accountsUrl = apiBase + `/user/${userId}/accounts`
 			let result = await axios.get(accountsUrl)
 
-			accountsObjValidation.validate(result.data).catch(function(err) {
+			accountsObjValidation.validate(result.data).catch(function (err) {
 				console.log(err.name, err.errors)
 				alert('Could not validate accounts data')
 			})
@@ -217,7 +217,7 @@ export function fetchSiteData(accountId) {
 			}
 
 			dispatch(usersFetchData(accountId))
-			dispatch(rolesPermissionsFetchData(accountId))
+			dispatch(rolesPermissionsFetchData())
 			dispatch(fetchBrandProfiles(accountId))
 			dispatch(fetchLists(accountId))
 			dispatch(fetchBrandIndustryVerticals())
@@ -309,7 +309,7 @@ export function fetchAccountUsers(accountId) {
 			}
 
 			if (result.status === 200) {
-				usersWithRolesObjValidation.validate(result.data).catch(function(err) {
+				usersWithRolesObjValidation.validate(result.data).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate account users data')
 				})
@@ -334,7 +334,7 @@ export function fetchAccountTypes() {
 			}
 
 			if (result.status === 200) {
-				accountTypesObjValidation.validate(result.data).catch(function(err) {
+				accountTypesObjValidation.validate(result.data).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert('Could not validate account types data')
 				})

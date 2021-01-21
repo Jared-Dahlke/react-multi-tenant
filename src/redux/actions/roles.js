@@ -22,12 +22,12 @@ export function setRolesPermissions(rolesPermissions) {
 	}
 }
 
-export function rolesPermissionsFetchData(accountId) {
+export function rolesPermissionsFetchData() {
 	return async (dispatch) => {
 		dispatch(rolesPermissionsIsLoading(true))
 
 		try {
-			let url = apiBase + `/account/${accountId}/roles?permissions=true`
+			let url = apiBase + `/role?permissions=true`
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
@@ -38,7 +38,7 @@ export function rolesPermissionsFetchData(accountId) {
 				}
 				rolesAndPermissionsObjValidation
 					.validate(result.data)
-					.catch(function(err) {
+					.catch(function (err) {
 						console.log(err.name, err.errors)
 						alert('Could not validate roles Permissions data')
 					})

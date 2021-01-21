@@ -56,7 +56,7 @@ export function addOpinion(opinion) {
 }
 
 export const archiveOpinion = (opinionId) => {
-	let url = apiBase + `/brand-profile/opinions/${opinionId}`
+	let url = apiBase + `/opinions/${opinionId}`
 	return (dispatch) => {
 		dispatch(setOpinionArchiving(opinionId))
 		axios
@@ -73,7 +73,7 @@ export const archiveOpinion = (opinionId) => {
 }
 
 export const createOpinion = (opinion) => {
-	let url = apiBase + `/brand-profile/opinions`
+	let url = apiBase + `/opinions`
 	return (dispatch, getState) => {
 		dispatch(setOpinionSaving(true))
 		axios
@@ -90,7 +90,7 @@ export const createOpinion = (opinion) => {
 }
 
 export function fetchAdminBrandOpinions() {
-	let url = apiBase + `/brand-profile/opinions`
+	let url = apiBase + `/opinions`
 	return async (dispatch) => {
 		dispatch(setAdminOpinionsIsLoading(true))
 		try {
@@ -98,7 +98,7 @@ export function fetchAdminBrandOpinions() {
 			if (result.status === 200) {
 				let opinions = result.data
 
-				brandOpinionObjValidation.validate(opinions).catch(function(err) {
+				brandOpinionObjValidation.validate(opinions).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'

@@ -8,6 +8,7 @@ import {
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import { adminPermissionsObjValidation } from '../../../schemas/schemas'
+import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
 
@@ -81,7 +82,7 @@ export const insertPermissions = (roleId, permissionId, permissions) => {
 }
 
 export function fetchAdminRolePermissions() {
-	let url = apiBase + `/account/1/roles?permissions=true`
+	let url = apiBase + `/role?permissions=true`
 	return async (dispatch) => {
 		dispatch(setAdminPermissionsIsLoading(true))
 		try {
@@ -91,7 +92,7 @@ export function fetchAdminRolePermissions() {
 
 				adminPermissionsObjValidation
 					.validate(permissions)
-					.catch(function(err) {
+					.catch(function (err) {
 						console.log(err.name, err.errors)
 						alert(
 							'We received different API data than expected, see the console log for more details.'

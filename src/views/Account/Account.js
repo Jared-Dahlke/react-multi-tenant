@@ -116,7 +116,7 @@ const getAccountTypeNameById = (accountTypeId, accountTypes) => {
 		if (accountTypeId === accountType.accountTypeId)
 			return accountType.accountTypeName
 	}
-	throw new error('Cannot find accountTypeId in the accountTypes object')
+	throw new Error('Cannot find accountTypeId in the accountTypes object')
 }
 
 function Account(props) {
@@ -335,17 +335,17 @@ function Account(props) {
 
 							<CardFooter>
 								{current.accountName === 'Sightly' ||
-								current.accountId === 1 ||
-								(current.children && current.children.length > 0) ? null : (
-									<UserCan do={perms.ACCOUNT_DELETE}>
-										<Button
-											color='red'
-											onClick={() => handleDeleteAccount(current)}
-										>
-											Delete
+									current.accountId === 1 ||
+									(current.children && current.children.length > 0) ? null : (
+										<UserCan do={perms.ACCOUNT_DELETE}>
+											<Button
+												color='red'
+												onClick={() => handleDeleteAccount(current)}
+											>
+												Delete
 										</Button>
-									</UserCan>
-								)}
+										</UserCan>
+									)}
 
 								<UserCan do={perms.ACCOUNT_UPDATE}>
 									<Button
