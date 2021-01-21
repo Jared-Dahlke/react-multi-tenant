@@ -1,9 +1,5 @@
 import { combineReducers } from 'redux'
-import {
-	rolesPermissionsIsLoading,
-	rolesPermissions,
-	rolesPermissionsHasErrored
-} from './roles'
+import { rolesPermissionsIsLoading, rolesPermissions } from './roles'
 import {
 	authToken,
 	isLoggedIn,
@@ -53,7 +49,6 @@ import thirdParty from './ThirdParty/index'
 export default combineReducers({
 	authToken,
 	rolesPermissions,
-	rolesPermissionsHasErrored,
 	rolesPermissionsIsLoading,
 	isLoggedIn,
 	loggingIn,
