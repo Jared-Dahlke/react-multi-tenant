@@ -2,7 +2,6 @@ import {
 	ADMIN_OPINIONS_IS_LOADING,
 	SET_ADMIN_BRAND_OPINIONS,
 	OPINION_ARCHIVING,
-	OPINION_ARCHIVED,
 	OPINION_TO_ARCHIVE,
 	OPINION_CREATED,
 	OPINION_SAVING,
@@ -11,6 +10,7 @@ import {
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import { brandOpinionObjValidation } from '../../../schemas/schemas'
+import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
 
@@ -35,24 +35,10 @@ export function setOpinionArchiving(opinionId) {
 	}
 }
 
-export function setOpinionArchived(bool) {
-	return {
-		type: OPINION_ARCHIVED,
-		opinionArchived: bool
-	}
-}
-
 export function setOpinionToArchived(opinionId) {
 	return {
 		type: OPINION_TO_ARCHIVE,
 		opinionId
-	}
-}
-
-export function setOpinionCreated(bool) {
-	return {
-		type: OPINION_CREATED,
-		opinionCreated: bool
 	}
 }
 
@@ -79,7 +65,7 @@ export const archiveOpinion = (opinionId) => {
 			.then((response) => {
 				dispatch(setOpinionToArchived(opinionId))
 				dispatch(setOpinionArchiving(''))
-				dispatch(setOpinionArchived(true))
+				toast.success('Opinion archived!')
 			})
 			.catch((error) => {
 				console.error(error)
@@ -96,7 +82,7 @@ export const createOpinion = (opinion) => {
 			.then((response) => {
 				dispatch(addOpinion(response.data[0]))
 				dispatch(setOpinionSaving(false))
-				dispatch(setOpinionCreated(true))
+				toast.success('Opinion created!')
 			})
 			.catch((error) => {
 				//error

@@ -1,5 +1,4 @@
 import {
-	SET_ACCOUNT_CREATED,
 	ACCOUNTS_UPDATE_ACCOUNT,
 	SET_ACCOUNT_TYPES,
 	SET_ACCOUNTS,
@@ -8,8 +7,7 @@ import {
 	SET_IS_SWITCHING_ACCOUNTS,
 	SET_CURRENT_ACCOUNT,
 	EDIT_ACCOUNT_ACCOUNT_USERS_LOADING,
-	SET_ACCOUNT_SAVING,
-	SET_ACCOUNT_SAVED
+	SET_ACCOUNT_SAVING
 } from '../action-types/accounts'
 import {
 	findAccountNodeByAccountId,
@@ -105,24 +103,6 @@ export function accountSaving(state = false, action) {
 	switch (action.type) {
 		case SET_ACCOUNT_SAVING:
 			return action.accountSaving
-		default:
-			return state
-	}
-}
-
-export function accountSaved(state = false, action) {
-	switch (action.type) {
-		case SET_ACCOUNT_SAVED:
-			return action.accountSaved
-		default:
-			return state
-	}
-}
-
-export function accountCreated(state = false, action) {
-	switch (action.type) {
-		case SET_ACCOUNT_CREATED:
-			return action.accountCreated
 		default:
 			return state
 	}

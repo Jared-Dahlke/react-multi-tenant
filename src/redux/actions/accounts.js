@@ -7,8 +7,6 @@ import {
 	SET_ACCOUNT_TYPES,
 	ACCOUNTS_UPDATE_ACCOUNT,
 	SET_IS_SWITCHING_ACCOUNTS,
-	SET_ACCOUNT_CREATED,
-	SET_ACCOUNT_SAVED,
 	SET_ACCOUNT_SAVING
 } from '../action-types/accounts'
 import axios from '../../axiosConfig'
@@ -43,6 +41,7 @@ import {
 } from '../actions/brandProfiles'
 import { findAccountNodeByAccountId } from '../../utils'
 import { setLists, fetchLists } from './engage/lists'
+import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
 
@@ -81,13 +80,6 @@ export function setCurrentAccount(accountId) {
 	}
 }
 
-export function setAccountSaved(accountSaved) {
-	return {
-		type: SET_ACCOUNT_SAVED,
-		accountSaved
-	}
-}
-
 export function setAccountSaving(accountSaving) {
 	return {
 		type: SET_ACCOUNT_SAVING,
@@ -102,13 +94,6 @@ export function isSwitchingAccounts(bool) {
 	}
 }
 
-export function accountCreated(bool) {
-	return {
-		type: SET_ACCOUNT_CREATED,
-		accountCreated: bool
-	}
-}
-
 export function updateAccount(account) {
 	let accountId = account.accountId
 	let url = apiBase + `/account/${accountId}`
@@ -119,7 +104,7 @@ export function updateAccount(account) {
 			const result = await axios.patch(url, account)
 			if (result.status === 200) {
 				dispatch(setAccountSaving(false))
-				dispatch(setAccountSaved(true))
+				toast.success('Account saved!')
 			}
 		} catch (error) {
 			alert(error)
@@ -150,7 +135,7 @@ export const createAccount = (account) => {
 		axios
 			.post(url, account)
 			.then((response) => {
-				dispatch(accountCreated(true))
+				toast.success('Account created!')
 				dispatch(fetchSiteData(response.data.accountId))
 			})
 			.catch((error) => {

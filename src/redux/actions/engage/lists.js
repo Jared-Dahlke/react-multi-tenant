@@ -20,6 +20,7 @@ import {
 	uploadedListObjValidation,
 	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
+import toast from 'react-hot-toast'
 import numeral from 'numeral'
 var fileDownload = require('js-file-download')
 var cwait = require('cwait')
@@ -132,6 +133,7 @@ export const postList = (data) => {
 					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
+					toast.success('List created!')
 				}
 			})
 			.catch((error) => {
@@ -292,8 +294,6 @@ export function archiveList(payload) {
 		try {
 			const result = await axios.patch(url)
 			if (result.status === 200) {
-				//	dispatch(setAccountSaving(false))
-				//	dispatch(setAccountSaved(true))
 			}
 		} catch (error) {
 			alert(error)
@@ -311,8 +311,6 @@ export function activateListVersion(payload) {
 		try {
 			const result = await axios.patch(url)
 			if (result.status === 200) {
-				//	dispatch(setAccountSaving(false))
-				//	dispatch(setAccountSaved(true))
 			}
 		} catch (error) {
 			alert(error)
