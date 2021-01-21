@@ -16,6 +16,7 @@ import ChangePassword from './pages/ChangePassword'
 import Login from './pages/Login'
 import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
+import Labels from './views/BrandProfiles/Admin/Labels.js'
 import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
 import { userCan, perms } from './Can'
@@ -136,6 +137,11 @@ export const routes = {
 				path: '/admin/scenarios/create',
 				name: 'Create',
 				component: CreateScenario
+			},
+			labels: {
+				path: '/admin/scenarios/labels',
+				name: 'Labels',
+				component: Labels
 			}
 		},
 		opinions: {
@@ -274,6 +280,11 @@ export const modifiedRoutes = {
 						path: '/admin/scenarios/create',
 						name: 'Create',
 						component: CreateScenario
+					},
+					{
+						path: '/admin/scenarios/labels',
+						name: 'Labels',
+						component: Labels
 					}
 				]
 			},
