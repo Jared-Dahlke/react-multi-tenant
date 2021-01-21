@@ -114,6 +114,7 @@ function ListBuilder(props) {
 	const [pageIsLoading, setPageIsLoading] = React.useState(true)
 
 	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
+	const [videosFetchTrigger, setVideosFetchTrigger] = React.useState(0)
 
 	let [parsedVersionId] = React.useState(props.match.params.versionId)
 
@@ -121,7 +122,12 @@ function ListBuilder(props) {
 		history.push(routes.app.engage.lists.lists.path)
 	}
 
-	const [currentSort, setCurrentSort] = React.useState({
+	const [currentChannelsSort, setCurrentChannelsSort] = React.useState({
+		sortColumn: 'views',
+		sortType: 'desc'
+	})
+
+	const [currentVideosSort, setCurrentVideosSort] = React.useState({
 		sortColumn: 'views',
 		sortType: 'desc'
 	})
@@ -152,15 +158,13 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
-		if (props.channelsHasNextPage) {
-			let params = {
-				versionId: parsedVersionId,
-				pageNumber: currentPage,
-				filters: filterState,
-				sort: currentSort
-			}
-			props.fetchChannels(params)
+		let params = {
+			versionId: parsedVersionId,
+			pageNumber: currentPage,
+			filters: filterState,
+			sort: currentChannelsSort
 		}
+		props.fetchChannels(params)
 	}, [currentPage, channelsFetchTrigger])
 
 	const [mounted, setMounted] = React.useState(false)
@@ -169,23 +173,34 @@ function ListBuilder(props) {
 			handleApplyFiltersButtonClick()
 		}
 		setMounted(true)
-	}, [currentSort])
+	}, [currentChannelsSort])
 
-	let videosHasNextPage = props.videosHasNextPage
+	const [mountedForVideos, setMountedForVideos] = React.useState(false)
+	React.useEffect(() => {
+		if (mountedForVideos) {
+			if (currentVideoPage === 1) {
+				setVideosFetchTrigger((prevState) => prevState + 1)
+			} else {
+				setCurrentVideoPage(1)
+			}
+		}
+		setMountedForVideos(true)
+	}, [currentVideosSort])
 
 	React.useEffect(() => {
-		if (currentVideoPage > 0 && viewingVideosForChannel && videosHasNextPage) {
+		if (currentVideoPage > 0 && viewingVideosForChannel) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentVideoPage,
 				filters: {
 					...filterState,
 					channelId: viewingVideosForChannel.id
-				}
+				},
+				sort: currentVideosSort
 			}
 			props.fetchVideos(params)
 		}
-	}, [currentVideoPage, viewingVideosForChannel])
+	}, [currentVideoPage, viewingVideosForChannel, videosFetchTrigger])
 
 	const filters = {
 		kids: 'kids',
@@ -435,16 +450,16 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 	}
 
-	//const [iabCategoriesIsOpen, setIabCategoriesIsOpen] = React.useState(false)
-
 	const filterSpacing = 1
 
 	if (pageIsLoading) {
-		return <Loader center content='Loading...' vertical />
+		return <Loader center content='Loading...' vertical size='lg' />
 	} else {
 		return (
 			<Grid container spacing={2}>
 				<VideoModal
+					currentVideosSort={currentVideosSort}
+					setCurrentVideosSort={setCurrentVideosSort}
 					show={showVideoModal}
 					close={handleVideoModalClose}
 					videos={props.videos}
@@ -741,8 +756,8 @@ function ListBuilder(props) {
 
 					<Grid item xs={12}>
 						<ChannelsTable
-							setCurrentSort={setCurrentSort}
-							currentSort={currentSort}
+							setCurrentChannelsSort={setCurrentChannelsSort}
+							currentChannelsSort={currentChannelsSort}
 							channelsHasNextPage={props.channelsHasNextPage}
 							channelsIsLoading={props.channelsIsLoading}
 							items={props.channels}
