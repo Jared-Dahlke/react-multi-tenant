@@ -54,6 +54,20 @@ const AdminLayoutRoutes = () => {
                     />
 
                     <Route
+                        path={routes.admin.questions.path}
+                        render={({ match: { url } }) => (
+                            <>
+                                <ProtectedRoute
+                                    path={routes.admin.questions.path}
+                                    component={routes.admin.questions.component}
+                                    canView={userCan(perms.ADMIN_READ)}
+                                    exact
+                                />
+                            </>
+                        )}
+                    />
+
+                    <Route
                         path={routes.admin.permissions.path}
                         render={({ match: { url } }) => (
                             <>
