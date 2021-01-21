@@ -3,7 +3,6 @@ import {
 	SET_ADMIN_BRAND_OPINIONS,
 	OPINION_ARCHIVING,
 	OPINION_TO_ARCHIVE,
-	OPINION_CREATED,
 	OPINION_SAVING,
 	ADD_OPINION
 } from '../../action-types/admin/opinions'

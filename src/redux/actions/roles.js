@@ -1,5 +1,4 @@
 import {
-	ROLES_PERMISSIONS_HAS_ERRORED,
 	ROLES_PERMISSIONS_IS_LOADING,
 	SET_ROLES_PERMISSIONS
 } from '../action-types/roles'
@@ -8,13 +7,6 @@ import config from '../../config'
 import { rolesAndPermissionsObjValidation } from '../../schemas/schemas'
 
 const apiBase = config.api.userAccountUrl
-
-export function rolesPermissionsHasErrored(bool) {
-	return {
-		type: ROLES_PERMISSIONS_HAS_ERRORED,
-		hasErrored: bool
-	}
-}
 
 export function rolesPermissionsIsLoading(bool) {
 	return {
@@ -55,7 +47,6 @@ export function rolesPermissionsFetchData(accountId) {
 			}
 		} catch (error) {
 			alert(error)
-			dispatch(rolesPermissionsHasErrored(true))
 		}
 	}
 }

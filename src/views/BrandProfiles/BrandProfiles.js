@@ -16,7 +16,6 @@ import { useHistory } from 'react-router-dom'
 import {
 	fetchBrandProfiles,
 	deleteBrandProfile,
-	setBrandProfileDeleted,
 	removeBrandProfile,
 	createBrandProfile,
 	setBrandProfileCreated
@@ -24,12 +23,9 @@ import {
 import { connect } from 'react-redux'
 import styles from '../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
 import { FormLoader } from '../../components/SkeletonLoader'
 import Edit from '@material-ui/icons/Edit'
 import { UserCan, perms, userCan } from '../../Can'
-import { useSpring, animated } from 'react-spring'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -40,7 +36,7 @@ const mapStateToProps = (state) => {
 		brandProfiles: state.brandProfiles,
 		currentAccountId: state.currentAccountId,
 		brandProfilesIsLoading: state.brandProfilesIsLoading,
-		brandProfileDeleted: state.brandProfileDeleted,
+
 		scenarios: state.scenarios,
 		categories: state.brandCategories,
 		topics: state.topics,
@@ -57,7 +53,6 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(deleteBrandProfile(brandProfileId)),
 		removeBrandProfile: (brandProfileId) =>
 			dispatch(removeBrandProfile(brandProfileId)),
-		setBrandProfileDeleted: (bool) => dispatch(setBrandProfileDeleted(bool)),
 		createBrandProfile: () => dispatch(createBrandProfile()),
 		setBrandProfileCreated: (bool) => dispatch(setBrandProfileCreated(bool))
 	}
@@ -104,21 +99,6 @@ function BrandProfiles(props) {
 
 	return (
 		<Grid container justify='center'>
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.brandProfileDeleted}
-				onClose={() => props.setBrandProfileDeleted(false)}
-				color='success'
-			>
-				<Alert
-					onClose={() => props.setBrandProfileDeleted(false)}
-					severity='success'
-				>
-					Brand profile deleted
-				</Alert>
-			</Snackbar>
-
 			<GridItem xs={12} sm={12} md={8}>
 				{props.brandProfiles && props.brandProfiles.length > 0 ? (
 					<div>
