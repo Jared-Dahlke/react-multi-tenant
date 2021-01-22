@@ -9,13 +9,6 @@ export const iabCategoriesObjValidation = Yup.array().of(
 	})
 )
 
-export const youtubeCategoriesObjValidation = Yup.array().of(
-	Yup.object().shape({
-		categoryId: Yup.number().required(),
-		categoryName: Yup.string().required()
-	})
-)
-
 export const countriesObjValidation = Yup.array().of(
 	Yup.object().shape({
 		countryCode: Yup.string().required(),
