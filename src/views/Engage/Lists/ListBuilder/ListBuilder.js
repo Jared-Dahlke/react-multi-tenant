@@ -28,12 +28,7 @@ import {
 	setVideosHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
 
-import {
-	fetchFilterCategories,
-	fetchFilterCountries,
-	fetchFilterLanguages,
-	fetchFilterIabCategories
-} from '../../../../redux/actions/engage/filters'
+import { fetchFilterIabCategories } from '../../../../redux/actions/engage/filters'
 
 import {
 	patchVersionData,
@@ -47,6 +42,11 @@ import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
 import Checkbox from 'rsuite/lib/Checkbox'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
+import {
+	youtubeCategories,
+	countries,
+	languages
+} from '../../../../staticData/data'
 var dayjs = require('dayjs')
 
 const mapStateToProps = (state) => {
@@ -61,9 +61,6 @@ const mapStateToProps = (state) => {
 		channelsHasNextPage: state.engage.channelsHasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
-		filterCountries: state.engage.filterCountries,
-		filterLanguages: state.engage.filterLanguages,
-		filterCategories: state.engage.filterCategories,
 		filterIabCategories: state.engage.filterIabCategories,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
@@ -85,9 +82,6 @@ const mapDispatchToProps = (dispatch) => {
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
 		removeAllVideos: () => dispatch(removeAllVideos()),
 		removeAllChannels: () => dispatch(removeAllChannels()),
-		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
-		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
-		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
 		fetchFilterIabCategories: () => dispatch(fetchFilterIabCategories()),
 		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
@@ -147,9 +141,6 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		props.removeAllChannels()
 		props.removeAllVideos()
-		props.fetchFilterCategories()
-		props.fetchFilterCountries()
-		props.fetchFilterLanguages()
 		props.fetchFilterIabCategories()
 		setCurrentPage(1)
 	}, [])
@@ -547,7 +538,7 @@ function ListBuilder(props) {
 											<TagPicker
 												block
 												size={'xs'}
-												data={props.filterCountries}
+												data={countries}
 												labelKey={'countryName'}
 												valueKey={'countryCode'}
 												defaultValue={['US']}
@@ -562,7 +553,7 @@ function ListBuilder(props) {
 											<TagPicker
 												block
 												size={'xs'}
-												data={props.filterLanguages}
+												data={languages}
 												labelKey={'languageName'}
 												valueKey={'languageCode'}
 												defaultValue={['en']}
@@ -577,7 +568,7 @@ function ListBuilder(props) {
 											<TagPicker
 												block
 												size={'xs'}
-												data={props.filterCategories}
+												data={youtubeCategories}
 												labelKey={'categoryName'}
 												valueKey={'categoryId'}
 												virtualized={true}

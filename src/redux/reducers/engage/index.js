@@ -22,12 +22,7 @@ import {
 	channelsIsLoading
 } from './listBuilder'
 
-import {
-	filterCountries,
-	filterCategories,
-	filterIabCategories,
-	filterLanguages
-} from './filters'
+import { filterIabCategories } from './filters'
 
 export default combineReducers({
 	lists,
@@ -40,9 +35,6 @@ export default combineReducers({
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
 	smartListVersionUnderEdit,
-	filterCountries,
-	filterCategories,
-	filterLanguages,
 	filterIabCategories,
 	videos,
 	channels,

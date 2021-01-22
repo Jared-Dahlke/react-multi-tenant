@@ -107,15 +107,6 @@ export const userObjValidation = Yup.object().shape({
 	accounts: Yup.array()
 })
 
-export const accountTypesObjValidation = Yup.array()
-	.min(1, 'No Account types available')
-	.of(
-		Yup.object().shape({
-			accountTypeId: Yup.number().required(),
-			accountTypeName: Yup.string().required()
-		})
-	)
-
 export const brandScenarioObjValidation = Yup.array().of(
 	Yup.object().shape({
 		archived: Yup.bool().required(),
