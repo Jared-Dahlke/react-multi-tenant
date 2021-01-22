@@ -132,13 +132,7 @@ export default function ChannelsTable({
 				<ImageCell />
 			</Table.Column>
 
-			<Table.Column
-				verticalAlign={'middle'}
-				width={60}
-				align='center'
-				sortable
-				flexGrow={1}
-			>
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Country</Table.HeaderCell>
 				<TooltipCell
 					displayProp='countryDisplay'
