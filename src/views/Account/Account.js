@@ -29,7 +29,7 @@ import {
 } from '../../redux/actions/accounts'
 
 import { setFromGoogleAuthCallback } from '../../redux/actions/ThirdParty/Google/google'
-
+import { accountTypes } from '../../staticData/data'
 import queryString from 'query-string'
 
 import {
@@ -45,7 +45,6 @@ const mapStateToProps = (state) => {
 	return {
 		currentAccountId: state.currentAccountId,
 		accounts: state.accounts,
-		accountTypes: state.accountTypes,
 		isSwitchingAccounts: state.isSwitchingAccounts,
 		accountSaving: state.accountSaving,
 		rolesPermissionsIsLoading: state.rolesPermissionsIsLoading,
@@ -150,7 +149,7 @@ function Account(props) {
 		}
 		let childAccount = {
 			accountName: 'New Child',
-			accountTypeId: props.accountTypes[0].accountTypeId,
+			accountTypeId: accountTypes[0].accountTypeId,
 			accountLevelId: levelId,
 			accountMargin: 0,
 			contactName: 'placeholder',
@@ -315,7 +314,7 @@ function Account(props) {
 											placeholder='Select an Account Type'
 											optionLabel='accountTypeName'
 											optionValue='accountTypeId'
-											options={props.accountTypes}
+											options={accountTypes}
 											value={values.accountTypeId}
 											onChange={setFieldValue}
 											onBlur={setFieldTouched}
@@ -335,17 +334,17 @@ function Account(props) {
 
 							<CardFooter>
 								{current.accountName === 'Sightly' ||
-									current.accountId === 1 ||
-									(current.children && current.children.length > 0) ? null : (
-										<UserCan do={perms.ACCOUNT_DELETE}>
-											<Button
-												color='red'
-												onClick={() => handleDeleteAccount(current)}
-											>
-												Delete
+								current.accountId === 1 ||
+								(current.children && current.children.length > 0) ? null : (
+									<UserCan do={perms.ACCOUNT_DELETE}>
+										<Button
+											color='red'
+											onClick={() => handleDeleteAccount(current)}
+										>
+											Delete
 										</Button>
-										</UserCan>
-									)}
+									</UserCan>
+								)}
 
 								<UserCan do={perms.ACCOUNT_UPDATE}>
 									<Button
@@ -412,7 +411,7 @@ const FormikForm = withFormik({
 			accountTypeId: values.accountTypeId,
 			accountTypeName: getAccountTypeNameById(
 				values.accountTypeId,
-				props.accountTypes
+				accountTypes
 			)
 		}
 		props.updateAccount(account)

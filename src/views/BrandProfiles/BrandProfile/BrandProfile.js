@@ -20,7 +20,6 @@ import Loader from 'rsuite/lib/Loader'
 
 const mapStateToProps = (state) => {
 	return {
-		industryVerticals: state.industryVerticals,
 		brandProfileCreated: state.brandProfileCreated,
 		brandProfileCreating: state.brandProfileCreating,
 		brandProfileSaved: state.brandProfileSaved,
@@ -283,7 +282,6 @@ function BrandProfile(props) {
 								<div ref={brandInformationRef} />
 								<animated.div style={brandInfoProps}>
 									<BasicInfo
-										industryVerticals={props.industryVerticals}
 										brandProfileId={props.match.params.brandProfileId}
 									/>
 								</animated.div>

@@ -588,24 +588,3 @@ export function hasBrandProfiles(bool) {
 		hasBrandProfiles: bool
 	}
 }
-
-export function fetchBrandIndustryVerticals() {
-	let url = apiBase + `/brand-profile/industry-verticals`
-	return async (dispatch) => {
-		try {
-			const result = await axios.get(url)
-			if (result.status === 200) {
-				dispatch(setBrandIndustryVerticals(result.data))
-			}
-		} catch (error) {
-			alert(error)
-		}
-	}
-}
-
-export function setBrandIndustryVerticals(industryVerticals) {
-	return {
-		type: SET_BRAND_INDUSTRY_VERTICALS,
-		industryVerticals
-	}
-}

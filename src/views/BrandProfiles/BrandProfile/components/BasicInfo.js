@@ -14,6 +14,7 @@ import { connect } from 'react-redux'
 import * as Yup from 'yup'
 import { perms, userCan } from '../../../../Can'
 import Panel from '../../../../components/CustomPanel'
+import { industryVerticals } from '../../../../staticData/data'
 const urlRegex = require('url-regex')
 
 export const schemaValidation = Yup.object().shape({
@@ -127,16 +128,7 @@ function BasicInfo(props) {
 										placeholder={''}
 										optionLabel='industryVerticalName'
 										optionValue='industryVerticalId'
-										options={
-											props.industryVerticals.length < 1
-												? [
-														{
-															industryVerticalId: 0,
-															industryVerticalName: 'Loading...'
-														}
-												  ]
-												: props.industryVerticals
-										}
+										options={industryVerticals}
 										value={props.values.industryVerticalId}
 										onChange={props.setFieldValue}
 										onBlur={props.setFieldTouched}

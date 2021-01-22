@@ -187,12 +187,3 @@ export function scenariosIsLoading(state = true, action) {
 			return state
 	}
 }
-
-export function industryVerticals(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_INDUSTRY_VERTICALS:
-			return action.industryVerticals
-		default:
-			return state
-	}
-}

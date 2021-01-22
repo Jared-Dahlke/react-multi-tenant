@@ -63,15 +63,6 @@ export function accounts(state = [], action) {
 	}
 }
 
-export function accountTypes(state = [], action) {
-	switch (action.type) {
-		case SET_ACCOUNT_TYPES:
-			return action.accountTypes
-		default:
-			return state
-	}
-}
-
 export function editAccountAccountUsersLoading(state = true, action) {
 	switch (action.type) {
 		case EDIT_ACCOUNT_ACCOUNT_USERS_LOADING:

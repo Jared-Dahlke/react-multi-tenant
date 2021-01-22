@@ -24,14 +24,12 @@ import {
 	currentAccountId,
 	isSwitchingAccounts,
 	editAccountAccountUsersLoading,
-	accountTypes,
 	accountSaving
 } from './accounts'
 import {
 	brandProfiles,
 	brandProfilesIsLoading,
 	hasBrandProfiles,
-	industryVerticals,
 	brandProfileCreated,
 	brandProfileCreating,
 	brandProfileDeleting,
@@ -69,12 +67,10 @@ export default combineReducers({
 	userProfileSaving,
 	editUserUserAccountsLoading,
 	editAccountAccountUsersLoading,
-	accountTypes,
 	brandProfilesIsLoading,
 	brandProfileUnderEdit,
 	brandProfileLoading,
 	hasBrandProfiles,
-	industryVerticals,
 	accountSaving,
 	brandProfileSaving,
 	brandProfileSaved,

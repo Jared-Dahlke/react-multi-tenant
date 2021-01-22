@@ -473,3 +473,749 @@ export const languages = [
 	{ languageCode: 'za', languageName: 'Zhuang' },
 	{ languageCode: 'zu', languageName: 'Zulu' }
 ]
+
+export const industryVerticals = [
+	{
+		industryVerticalId: 47,
+		industryVerticalName: 'Accounting',
+		industryVerticalGroup: 'corp, fin'
+	},
+	{
+		industryVerticalId: 94,
+		industryVerticalName: 'Airlines/Aviation',
+		industryVerticalGroup: 'man, tech, tran'
+	},
+	{
+		industryVerticalId: 120,
+		industryVerticalName: 'Alternative Dispute Resolution',
+		industryVerticalGroup: 'leg, org'
+	},
+	{
+		industryVerticalId: 125,
+		industryVerticalName: 'Alternative Medicine',
+		industryVerticalGroup: 'hlth'
+	},
+	{
+		industryVerticalId: 127,
+		industryVerticalName: 'Animation',
+		industryVerticalGroup: 'art, med'
+	},
+	{
+		industryVerticalId: 19,
+		industryVerticalName: 'Apparel & Fashion',
+		industryVerticalGroup: 'good'
+	},
+	{
+		industryVerticalId: 50,
+		industryVerticalName: 'Architecture & Planning',
+		industryVerticalGroup: 'cons'
+	},
+	{
+		industryVerticalId: 111,
+		industryVerticalName: 'Arts and Crafts',
+		industryVerticalGroup: 'art, med, rec'
+	},
+	{
+		industryVerticalId: 53,
+		industryVerticalName: 'Automotive',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 52,
+		industryVerticalName: 'Aviation & Aerospace',
+		industryVerticalGroup: 'gov, man'
+	},
+	{
+		industryVerticalId: 41,
+		industryVerticalName: 'Banking',
+		industryVerticalGroup: 'fin'
+	},
+	{
+		industryVerticalId: 12,
+		industryVerticalName: 'Biotechnology',
+		industryVerticalGroup: 'gov, hlth, tech'
+	},
+	{
+		industryVerticalId: 36,
+		industryVerticalName: 'Broadcast Media',
+		industryVerticalGroup: 'med, rec'
+	},
+	{
+		industryVerticalId: 49,
+		industryVerticalName: 'Building Materials',
+		industryVerticalGroup: 'cons'
+	},
+	{
+		industryVerticalId: 138,
+		industryVerticalName: 'Business Supplies and Equipment',
+		industryVerticalGroup: 'corp, man'
+	},
+	{
+		industryVerticalId: 129,
+		industryVerticalName: 'Capital Markets',
+		industryVerticalGroup: 'fin'
+	},
+	{
+		industryVerticalId: 54,
+		industryVerticalName: 'Chemicals',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 90,
+		industryVerticalName: 'Civic & Social Organization',
+		industryVerticalGroup: 'org, serv'
+	},
+	{
+		industryVerticalId: 51,
+		industryVerticalName: 'Civil Engineering',
+		industryVerticalGroup: 'cons, gov'
+	},
+	{
+		industryVerticalId: 128,
+		industryVerticalName: 'Commercial Real Estate',
+		industryVerticalGroup: 'cons, corp, fin'
+	},
+	{
+		industryVerticalId: 118,
+		industryVerticalName: 'Computer & Network Security',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 109,
+		industryVerticalName: 'Computer Games',
+		industryVerticalGroup: 'med, rec'
+	},
+	{
+		industryVerticalId: 3,
+		industryVerticalName: 'Computer Hardware',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 5,
+		industryVerticalName: 'Computer Networking',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 4,
+		industryVerticalName: 'Computer Software',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 48,
+		industryVerticalName: 'Construction',
+		industryVerticalGroup: 'cons'
+	},
+	{
+		industryVerticalId: 24,
+		industryVerticalName: 'Consumer Electronics',
+		industryVerticalGroup: 'good, man'
+	},
+	{
+		industryVerticalId: 25,
+		industryVerticalName: 'Consumer Goods',
+		industryVerticalGroup: 'good, man'
+	},
+	{
+		industryVerticalId: 91,
+		industryVerticalName: 'Consumer Services',
+		industryVerticalGroup: 'org, serv'
+	},
+	{
+		industryVerticalId: 18,
+		industryVerticalName: 'Cosmetics',
+		industryVerticalGroup: 'good'
+	},
+	{
+		industryVerticalId: 65,
+		industryVerticalName: 'Dairy',
+		industryVerticalGroup: 'agr'
+	},
+	{
+		industryVerticalId: 1,
+		industryVerticalName: 'Defense & Space',
+		industryVerticalGroup: 'gov, tech'
+	},
+	{
+		industryVerticalId: 99,
+		industryVerticalName: 'Design',
+		industryVerticalGroup: 'art, med'
+	},
+	{
+		industryVerticalId: 69,
+		industryVerticalName: 'Education Management',
+		industryVerticalGroup: 'edu'
+	},
+	{
+		industryVerticalId: 132,
+		industryVerticalName: 'E-Learning',
+		industryVerticalGroup: 'edu, org'
+	},
+	{
+		industryVerticalId: 112,
+		industryVerticalName: 'Electrical/Electronic Manufacturing',
+		industryVerticalGroup: 'good, man'
+	},
+	{
+		industryVerticalId: 28,
+		industryVerticalName: 'Entertainment',
+		industryVerticalGroup: 'med, rec'
+	},
+	{
+		industryVerticalId: 86,
+		industryVerticalName: 'Environmental Services',
+		industryVerticalGroup: 'org, serv'
+	},
+	{
+		industryVerticalId: 110,
+		industryVerticalName: 'Events Services',
+		industryVerticalGroup: 'corp, rec, serv'
+	},
+	{
+		industryVerticalId: 76,
+		industryVerticalName: 'Executive Office',
+		industryVerticalGroup: 'gov'
+	},
+	{
+		industryVerticalId: 122,
+		industryVerticalName: 'Facilities Services',
+		industryVerticalGroup: 'corp, serv'
+	},
+	{
+		industryVerticalId: 63,
+		industryVerticalName: 'Farming',
+		industryVerticalGroup: 'agr'
+	},
+	{
+		industryVerticalId: 43,
+		industryVerticalName: 'Financial Services',
+		industryVerticalGroup: 'fin'
+	},
+	{
+		industryVerticalId: 38,
+		industryVerticalName: 'Fine Art',
+		industryVerticalGroup: 'art, med, rec'
+	},
+	{
+		industryVerticalId: 66,
+		industryVerticalName: 'Fishery',
+		industryVerticalGroup: 'agr'
+	},
+	{
+		industryVerticalId: 34,
+		industryVerticalName: 'Food & Beverages',
+		industryVerticalGroup: 'rec, serv'
+	},
+	{
+		industryVerticalId: 23,
+		industryVerticalName: 'Food Production',
+		industryVerticalGroup: 'good, man, serv'
+	},
+	{
+		industryVerticalId: 101,
+		industryVerticalName: 'Fund-Raising',
+		industryVerticalGroup: 'org'
+	},
+	{
+		industryVerticalId: 26,
+		industryVerticalName: 'Furniture',
+		industryVerticalGroup: 'good, man'
+	},
+	{
+		industryVerticalId: 29,
+		industryVerticalName: 'Gambling & Casinos',
+		industryVerticalGroup: 'rec'
+	},
+	{
+		industryVerticalId: 145,
+		industryVerticalName: 'Glass, Ceramics & Concrete',
+		industryVerticalGroup: 'cons, man'
+	},
+	{
+		industryVerticalId: 75,
+		industryVerticalName: 'Government Administration',
+		industryVerticalGroup: 'gov'
+	},
+	{
+		industryVerticalId: 148,
+		industryVerticalName: 'Government Relations',
+		industryVerticalGroup: 'gov'
+	},
+	{
+		industryVerticalId: 140,
+		industryVerticalName: 'Graphic Design',
+		industryVerticalGroup: 'art, med'
+	},
+	{
+		industryVerticalId: 124,
+		industryVerticalName: 'Health, Wellness and Fitness',
+		industryVerticalGroup: 'hlth, rec'
+	},
+	{
+		industryVerticalId: 68,
+		industryVerticalName: 'Higher Education',
+		industryVerticalGroup: 'edu'
+	},
+	{
+		industryVerticalId: 14,
+		industryVerticalName: 'Hospital & Health Care',
+		industryVerticalGroup: 'hlth'
+	},
+	{
+		industryVerticalId: 31,
+		industryVerticalName: 'Hospitality',
+		industryVerticalGroup: 'rec, serv, tran'
+	},
+	{
+		industryVerticalId: 137,
+		industryVerticalName: 'Human Resources',
+		industryVerticalGroup: 'corp'
+	},
+	{
+		industryVerticalId: 134,
+		industryVerticalName: 'Import and Export',
+		industryVerticalGroup: 'corp, good, tran'
+	},
+	{
+		industryVerticalId: 88,
+		industryVerticalName: 'Individual & Family Services',
+		industryVerticalGroup: 'org, serv'
+	},
+	{
+		industryVerticalId: 147,
+		industryVerticalName: 'Industrial Automation',
+		industryVerticalGroup: 'cons, man'
+	},
+	{
+		industryVerticalId: 84,
+		industryVerticalName: 'Information Services',
+		industryVerticalGroup: 'med, serv'
+	},
+	{
+		industryVerticalId: 96,
+		industryVerticalName: 'Information Technology and Services',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 42,
+		industryVerticalName: 'Insurance',
+		industryVerticalGroup: 'fin'
+	},
+	{
+		industryVerticalId: 74,
+		industryVerticalName: 'International Affairs',
+		industryVerticalGroup: 'gov'
+	},
+	{
+		industryVerticalId: 141,
+		industryVerticalName: 'International Trade and Development',
+		industryVerticalGroup: 'gov, org, tran'
+	},
+	{
+		industryVerticalId: 6,
+		industryVerticalName: 'Internet',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 45,
+		industryVerticalName: 'Investment Banking',
+		industryVerticalGroup: 'fin'
+	},
+	{
+		industryVerticalId: 46,
+		industryVerticalName: 'Investment Management',
+		industryVerticalGroup: 'fin'
+	},
+	{
+		industryVerticalId: 73,
+		industryVerticalName: 'Judiciary',
+		industryVerticalGroup: 'gov, leg'
+	},
+	{
+		industryVerticalId: 77,
+		industryVerticalName: 'Law Enforcement',
+		industryVerticalGroup: 'gov, leg'
+	},
+	{
+		industryVerticalId: 9,
+		industryVerticalName: 'Law Practice',
+		industryVerticalGroup: 'leg'
+	},
+	{
+		industryVerticalId: 10,
+		industryVerticalName: 'Legal Services',
+		industryVerticalGroup: 'leg'
+	},
+	{
+		industryVerticalId: 72,
+		industryVerticalName: 'Legislative Office',
+		industryVerticalGroup: 'gov, leg'
+	},
+	{
+		industryVerticalId: 30,
+		industryVerticalName: 'Leisure, Travel & Tourism',
+		industryVerticalGroup: 'rec, serv, tran'
+	},
+	{
+		industryVerticalId: 85,
+		industryVerticalName: 'Libraries',
+		industryVerticalGroup: 'med, rec, serv'
+	},
+	{
+		industryVerticalId: 116,
+		industryVerticalName: 'Logistics and Supply Chain',
+		industryVerticalGroup: 'corp, tran'
+	},
+	{
+		industryVerticalId: 143,
+		industryVerticalName: 'Luxury Goods & Jewelry',
+		industryVerticalGroup: 'good'
+	},
+	{
+		industryVerticalId: 55,
+		industryVerticalName: 'Machinery',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 11,
+		industryVerticalName: 'Management Consulting',
+		industryVerticalGroup: 'corp'
+	},
+	{
+		industryVerticalId: 95,
+		industryVerticalName: 'Maritime',
+		industryVerticalGroup: 'tran'
+	},
+	{
+		industryVerticalId: 97,
+		industryVerticalName: 'Market Research',
+		industryVerticalGroup: 'corp'
+	},
+	{
+		industryVerticalId: 80,
+		industryVerticalName: 'Marketing and Advertising',
+		industryVerticalGroup: 'corp, med'
+	},
+	{
+		industryVerticalId: 135,
+		industryVerticalName: 'Mechanical or Industrial Engineering',
+		industryVerticalGroup: 'cons, gov, man'
+	},
+	{
+		industryVerticalId: 126,
+		industryVerticalName: 'Media Production',
+		industryVerticalGroup: 'med, rec'
+	},
+	{
+		industryVerticalId: 17,
+		industryVerticalName: 'Medical Devices',
+		industryVerticalGroup: 'hlth'
+	},
+	{
+		industryVerticalId: 13,
+		industryVerticalName: 'Medical Practice',
+		industryVerticalGroup: 'hlth'
+	},
+	{
+		industryVerticalId: 139,
+		industryVerticalName: 'Mental Health Care',
+		industryVerticalGroup: 'hlth'
+	},
+	{
+		industryVerticalId: 71,
+		industryVerticalName: 'Military',
+		industryVerticalGroup: 'gov'
+	},
+	{
+		industryVerticalId: 56,
+		industryVerticalName: 'Mining & Metals',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 35,
+		industryVerticalName: 'Motion Pictures and Film',
+		industryVerticalGroup: 'art, med, rec'
+	},
+	{
+		industryVerticalId: 37,
+		industryVerticalName: 'Museums and Institutions',
+		industryVerticalGroup: 'art, med, rec'
+	},
+	{
+		industryVerticalId: 115,
+		industryVerticalName: 'Music',
+		industryVerticalGroup: 'art, rec'
+	},
+	{
+		industryVerticalId: 114,
+		industryVerticalName: 'Nanotechnology',
+		industryVerticalGroup: 'gov, man, tech'
+	},
+	{
+		industryVerticalId: 81,
+		industryVerticalName: 'Newspapers',
+		industryVerticalGroup: 'med, rec'
+	},
+	{
+		industryVerticalId: 100,
+		industryVerticalName: 'Non-Profit Organization Management',
+		industryVerticalGroup: 'org'
+	},
+	{
+		industryVerticalId: 57,
+		industryVerticalName: 'Oil & Energy',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 113,
+		industryVerticalName: 'Online Media',
+		industryVerticalGroup: 'med'
+	},
+	{
+		industryVerticalId: 123,
+		industryVerticalName: 'Outsourcing/Offshoring',
+		industryVerticalGroup: 'corp'
+	},
+	{
+		industryVerticalId: 87,
+		industryVerticalName: 'Package/Freight Delivery',
+		industryVerticalGroup: 'serv, tran'
+	},
+	{
+		industryVerticalId: 146,
+		industryVerticalName: 'Packaging and Containers',
+		industryVerticalGroup: 'good, man'
+	},
+	{
+		industryVerticalId: 61,
+		industryVerticalName: 'Paper & Forest Products',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 39,
+		industryVerticalName: 'Performing Arts',
+		industryVerticalGroup: 'art, med, rec'
+	},
+	{
+		industryVerticalId: 15,
+		industryVerticalName: 'Pharmaceuticals',
+		industryVerticalGroup: 'hlth, tech'
+	},
+	{
+		industryVerticalId: 131,
+		industryVerticalName: 'Philanthropy',
+		industryVerticalGroup: 'org'
+	},
+	{
+		industryVerticalId: 136,
+		industryVerticalName: 'Photography',
+		industryVerticalGroup: 'art, med, rec'
+	},
+	{
+		industryVerticalId: 117,
+		industryVerticalName: 'Plastics',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 107,
+		industryVerticalName: 'Political Organization',
+		industryVerticalGroup: 'gov, org'
+	},
+	{
+		industryVerticalId: 67,
+		industryVerticalName: 'Primary/Secondary Education',
+		industryVerticalGroup: 'edu'
+	},
+	{
+		industryVerticalId: 83,
+		industryVerticalName: 'Printing',
+		industryVerticalGroup: 'med, rec'
+	},
+	{
+		industryVerticalId: 105,
+		industryVerticalName: 'Professional Training & Coaching',
+		industryVerticalGroup: 'corp'
+	},
+	{
+		industryVerticalId: 102,
+		industryVerticalName: 'Program Development',
+		industryVerticalGroup: 'corp, org'
+	},
+	{
+		industryVerticalId: 79,
+		industryVerticalName: 'Public Policy',
+		industryVerticalGroup: 'gov'
+	},
+	{
+		industryVerticalId: 98,
+		industryVerticalName: 'Public Relations and Communications',
+		industryVerticalGroup: 'corp'
+	},
+	{
+		industryVerticalId: 78,
+		industryVerticalName: 'Public Safety',
+		industryVerticalGroup: 'gov'
+	},
+	{
+		industryVerticalId: 82,
+		industryVerticalName: 'Publishing',
+		industryVerticalGroup: 'med, rec'
+	},
+	{
+		industryVerticalId: 62,
+		industryVerticalName: 'Railroad Manufacture',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 64,
+		industryVerticalName: 'Ranching',
+		industryVerticalGroup: 'agr'
+	},
+	{
+		industryVerticalId: 44,
+		industryVerticalName: 'Real Estate',
+		industryVerticalGroup: 'cons, fin, good'
+	},
+	{
+		industryVerticalId: 40,
+		industryVerticalName: 'Recreational Facilities and Services',
+		industryVerticalGroup: 'rec, serv'
+	},
+	{
+		industryVerticalId: 89,
+		industryVerticalName: 'Religious Institutions',
+		industryVerticalGroup: 'org, serv'
+	},
+	{
+		industryVerticalId: 144,
+		industryVerticalName: 'Renewables & Environment',
+		industryVerticalGroup: 'gov, man, org'
+	},
+	{
+		industryVerticalId: 70,
+		industryVerticalName: 'Research',
+		industryVerticalGroup: 'edu, gov'
+	},
+	{
+		industryVerticalId: 32,
+		industryVerticalName: 'Restaurants',
+		industryVerticalGroup: 'rec, serv'
+	},
+	{
+		industryVerticalId: 27,
+		industryVerticalName: 'Retail',
+		industryVerticalGroup: 'good, man'
+	},
+	{
+		industryVerticalId: 121,
+		industryVerticalName: 'Security and Investigations',
+		industryVerticalGroup: 'corp, org, serv'
+	},
+	{
+		industryVerticalId: 7,
+		industryVerticalName: 'Semiconductors',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 58,
+		industryVerticalName: 'Shipbuilding',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 20,
+		industryVerticalName: 'Sporting Goods',
+		industryVerticalGroup: 'good, rec'
+	},
+	{
+		industryVerticalId: 33,
+		industryVerticalName: 'Sports',
+		industryVerticalGroup: 'rec'
+	},
+	{
+		industryVerticalId: 104,
+		industryVerticalName: 'Staffing and Recruiting',
+		industryVerticalGroup: 'corp'
+	},
+	{
+		industryVerticalId: 22,
+		industryVerticalName: 'Supermarkets',
+		industryVerticalGroup: 'good'
+	},
+	{
+		industryVerticalId: 8,
+		industryVerticalName: 'Telecommunications',
+		industryVerticalGroup: 'gov, tech'
+	},
+	{
+		industryVerticalId: 60,
+		industryVerticalName: 'Textiles',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 130,
+		industryVerticalName: 'Think Tanks',
+		industryVerticalGroup: 'gov, org'
+	},
+	{
+		industryVerticalId: 21,
+		industryVerticalName: 'Tobacco',
+		industryVerticalGroup: 'good'
+	},
+	{
+		industryVerticalId: 108,
+		industryVerticalName: 'Translation and Localization',
+		industryVerticalGroup: 'corp, gov, serv'
+	},
+	{
+		industryVerticalId: 92,
+		industryVerticalName: 'Transportation/Trucking/Railroad',
+		industryVerticalGroup: 'tran'
+	},
+	{
+		industryVerticalId: 59,
+		industryVerticalName: 'Utilities',
+		industryVerticalGroup: 'man'
+	},
+	{
+		industryVerticalId: 106,
+		industryVerticalName: 'Venture Capital & Private Equity',
+		industryVerticalGroup: 'fin, tech'
+	},
+	{
+		industryVerticalId: 16,
+		industryVerticalName: 'Veterinary',
+		industryVerticalGroup: 'hlth'
+	},
+	{
+		industryVerticalId: 93,
+		industryVerticalName: 'Warehousing',
+		industryVerticalGroup: 'tran'
+	},
+	{
+		industryVerticalId: 133,
+		industryVerticalName: 'Wholesale',
+		industryVerticalGroup: 'good'
+	},
+	{
+		industryVerticalId: 142,
+		industryVerticalName: 'Wine and Spirits',
+		industryVerticalGroup: 'good, man, rec'
+	},
+	{
+		industryVerticalId: 119,
+		industryVerticalName: 'Wireless',
+		industryVerticalGroup: 'tech'
+	},
+	{
+		industryVerticalId: 103,
+		industryVerticalName: 'Writing and Editing',
+		industryVerticalGroup: 'art, med, rec'
+	}
+]
+
+export const accountTypes = [
+	{ accountTypeId: 1, accountTypeName: 'Brand' },
+	{ accountTypeId: 2, accountTypeName: 'Agency' },
+	{ accountTypeId: 3, accountTypeName: 'Reseller' },
+	{ accountTypeId: 4, accountTypeName: 'Publisher' },
+	{ accountTypeId: 5, accountTypeName: 'Researcher' }
+]
