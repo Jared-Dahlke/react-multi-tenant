@@ -17,6 +17,7 @@ import DateRangePicker from 'rsuite/lib/DateRangePicker'
 import FiltersLabel from './components/FiltersLabel'
 import Panel from 'rsuite/lib/Panel'
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
+import { iabCategoriesFilter } from '../../../../staticData/iabCategories'
 
 import {
 	fetchVideos,
@@ -27,8 +28,6 @@ import {
 	setChannelsHasNextPage,
 	setVideosHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
-
-import { fetchFilterIabCategories } from '../../../../redux/actions/engage/filters'
 
 import {
 	patchVersionData,
@@ -61,7 +60,6 @@ const mapStateToProps = (state) => {
 		channelsHasNextPage: state.engage.channelsHasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
-		filterIabCategories: state.engage.filterIabCategories,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
 		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess,
@@ -82,7 +80,6 @@ const mapDispatchToProps = (dispatch) => {
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
 		removeAllVideos: () => dispatch(removeAllVideos()),
 		removeAllChannels: () => dispatch(removeAllChannels()),
-		fetchFilterIabCategories: () => dispatch(fetchFilterIabCategories()),
 		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
@@ -141,7 +138,6 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		props.removeAllChannels()
 		props.removeAllVideos()
-		props.fetchFilterIabCategories()
 		setCurrentPage(1)
 	}, [])
 
@@ -519,7 +515,7 @@ function ListBuilder(props) {
 												placement='topStart'
 												size={'xs'}
 												defaultExpandAll={false}
-												data={props.filterIabCategories}
+												data={iabCategoriesFilter}
 												labelKey={'name'}
 												valueKey={'id'}
 												onChange={(val) => {
