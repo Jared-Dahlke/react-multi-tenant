@@ -98,7 +98,7 @@ export const archiveScenario = (scenarioId) => {
 	return (dispatch) => {
 		dispatch(setScenarioArchiving(scenarioId))
 		axios
-			.patch(url)
+			.delete(url)
 			.then((response) => {
 				dispatch(setScenarioToArchived(scenarioId))
 				dispatch(setScenarioArchiving(''))
