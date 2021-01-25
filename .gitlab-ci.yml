@@ -9,7 +9,7 @@ jira:
   except:
     refs:
       - master
-      - sprint-*
+      - /^sprint-.*$/
 
   before_script:
     - git config --global user.email "WHOCARES"
