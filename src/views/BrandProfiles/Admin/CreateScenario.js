@@ -63,18 +63,17 @@ function Scenario(props) {
 		dirty
 	} = props
 
-	const { fetchScenarioTypes, scenarioTypes } = props
+	const { fetchScenarioTypes, scenarioTypes, fetchAdminBrandScenarioLabels, scenarioLabels } = props
 	React.useEffect(() => {
 		if (scenarioTypes.length === 0) {
 			fetchScenarioTypes()
+			fetchAdminBrandScenarioLabels()
 		}
 	})
 
-	const { fetchAdminBrandScenarioLabels, scenarioLabels } = props
+	let filteredScenarioLabels = scenarioLabels;
 	const handleKeyPress = debounce((text) => {
-		if (text !== '') {
-			fetchAdminBrandScenarioLabels(text)
-		}
+		filteredScenarioLabels = scenarioLabels.filter(label => label.labelName.includes(text))
 	}, 700)
 
 	const [cachedData, setCacheData] = useState([])
@@ -137,7 +136,7 @@ function Scenario(props) {
 										id={'scenario category'}
 										block
 										cleanable={false}
-										data={scenarioLabels}
+										data={filteredScenarioLabels}
 										cacheData={cachedData}
 										labelKey='labelName'
 										valueKey='labelId'
@@ -146,7 +145,8 @@ function Scenario(props) {
 										onSelect={(v, i) => handleSelect(v, i)}
 										onSearch={(text) => handleKeyPress(text)}
 										style={{
-											marginTop: 25
+											marginTop: 25,
+											color: 'grey'
 										}}
 									/>
 								</GridItem>
