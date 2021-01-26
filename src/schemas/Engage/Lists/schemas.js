@@ -3,6 +3,8 @@ import * as Yup from 'yup'
 export const listsObjValidation = Yup.array()
 	.of(
 		Yup.object().shape({
+			targetType: Yup.string().nullable(),
+			targetTypeId: Yup.number().nullable(),
 			createdDate: Yup.date().required(),
 			objectiveId: Yup.number().required(),
 			objectiveName: Yup.string().required(),
@@ -116,8 +118,21 @@ export const postListVersionResult = Yup.object().shape({
 	brandProfileName: Yup.string().required()
 })
 
+const iabTaxonomySchema = Yup.object().shape({
+	iiabCategoryId: Yup.number().strict(true),
+	iabCategoryName: Yup.string().required(),
+	iabSubCategoryId: Yup.number().strict(true),
+	iabSubCategoryName: Yup.string().required(),
+	iabSubTopicId: Yup.mixed().required(),
+	iabSubTopicName: Yup.mixed().required(),
+	iabTopicId: Yup.number().strict(true),
+	iabTopicName: Yup.string().required()
+})
+
 export const channelsSchema = Yup.array().of(
 	Yup.object().shape({
+		//	iabTaxonomy: iabTaxonomySchema.nullable(),
+
 		actionId: Yup.number()
 			.strict(true)
 			.nullable(),
@@ -159,6 +174,7 @@ export const channelsSchema = Yup.array().of(
 
 export const videosSchema = Yup.array().of(
 	Yup.object().shape({
+		//	iabTaxonomy: iabTaxonomySchema,
 		actionId: Yup.number()
 			.strict(true)
 			.nullable(),

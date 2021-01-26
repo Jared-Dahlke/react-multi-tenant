@@ -153,14 +153,6 @@ export function fetchBrandProfileTopics(brandProfileId) {
 	}
 }
 
-function getScenarioTypeById(scenarioTypes, scenarioType) {
-	for (const scenType of scenarioTypes) {
-		if (scenarioType === scenType) {
-			return scenType
-		}
-	}
-}
-
 export function fetchBrandProfileScenarios(brandProfileId) {
 	let url = apiBase + `/brand-profile/${brandProfileId}/scenarios`
 	return async (dispatch, getState) => {

@@ -43,8 +43,8 @@ import Checkbox from 'rsuite/lib/Checkbox'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
 import {
 	youtubeCategories,
-	countries,
-	languages
+	countriesOptions,
+	languagesOptions
 } from '../../../../staticData/data'
 var dayjs = require('dayjs')
 
@@ -270,6 +270,7 @@ function ListBuilder(props) {
 	})
 
 	const handleFilterChange = (filter, value) => {
+		console.log(value)
 		switch (filter) {
 			case filters.kids:
 				setFilterState((prevState) => {
@@ -534,7 +535,7 @@ function ListBuilder(props) {
 											<TagPicker
 												block
 												size={'xs'}
-												data={countries}
+												data={countriesOptions}
 												labelKey={'countryName'}
 												valueKey={'countryCode'}
 												defaultValue={['US']}
@@ -549,7 +550,7 @@ function ListBuilder(props) {
 											<TagPicker
 												block
 												size={'xs'}
-												data={languages}
+												data={languagesOptions}
 												labelKey={'languageName'}
 												valueKey={'languageCode'}
 												defaultValue={['en']}

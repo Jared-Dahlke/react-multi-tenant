@@ -16,6 +16,7 @@ import { getCurrentAccount } from '../../../utils'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import Icon from 'rsuite/lib/Icon'
+import { targetTypes } from './constants'
 import {
 	fetchLists,
 	setUploadedList,
@@ -244,6 +245,25 @@ function UploadList(props) {
 
 								{uploadType === 'new' && (
 									<FormikSelect
+										id='targetTypeId'
+										name='targetTypeId'
+										label='Target Type'
+										optionLabel='targetTypeName'
+										optionValue='targetTypeId'
+										options={targetTypes}
+										value={values.targetTypeId}
+										onChange={setFieldValue}
+										onBlur={setFieldTouched}
+										validateField={validateField}
+										validateForm={validateForm}
+										touched={touched.targetTypeId}
+										error={errors.targetTypeId}
+										hideSearch
+									/>
+								)}
+
+								{uploadType === 'new' && (
+									<FormikSelect
 										id='brandProfileId'
 										name='brandProfileId'
 										label='Brand Profile'
@@ -357,10 +377,10 @@ const validateExisting = (values, errors) => {
 const MyEnhancedForm = withFormik({
 	mapPropsToValues: (props) => {
 		return {
-			// userId: props.user.userProfile.userId,
 			uploadType: 'new',
 			name: '',
 			objectiveId: 1,
+			targetTypeId: 1,
 			smartListId: '',
 			uploadedList: [],
 			smartLists: props.lists,
@@ -395,7 +415,8 @@ const MyEnhancedForm = withFormik({
 			list = {
 				smartListName: values.name,
 				objectiveId: values.objectiveId,
-				smartListData: values.uploadedList
+				smartListData: values.uploadedList,
+				targetTypeId: values.targetTypeId
 			}
 		}
 		if (values.uploadType === 'existing') {
@@ -403,8 +424,9 @@ const MyEnhancedForm = withFormik({
 			list = {
 				smartListName: smartListName,
 				smartListId: values.smartListId,
-				objectiveId: values.objectiveId,
+				//	objectiveId: values.objectiveId,
 				smartListData: values.uploadedList
+				//	targetTypeId: values.targetTypeId
 			}
 		}
 		let data = {
