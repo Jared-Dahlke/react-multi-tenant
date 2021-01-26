@@ -15,7 +15,8 @@ export const archivedStatuses = [
 ]
 
 export const targetTypes = [
-	{ targetTypeId: 1, targetTypeName: 'Content' },
-	{ targetTypeId: 2, targetTypeName: 'Audience' },
-	{ targetTypeId: 3, targetTypeName: 'Influencer' }
+	{ targetTypeId: 1, targetTypeName: 'Trend' },
+	{ targetTypeId: 2, targetTypeName: 'Persona' },
+	{ targetTypeId: 3, targetTypeName: 'Influencer' },
+	{ targetTypeId: 4, targetTypeName: 'Other' }
 ]
