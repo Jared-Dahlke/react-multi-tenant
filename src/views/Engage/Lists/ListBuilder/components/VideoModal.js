@@ -222,6 +222,41 @@ const VideoModal = (props) => {
 						/>
 					</Table.Column>
 
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB Category</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabCategoryId'
+							displayProp='iabCategoryName'
+							tooltipProp='iabCategoryName'
+						/>
+					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabSubCategoryId'
+							displayProp='iabSubCategoryName'
+							tooltipProp='iabSubCategoryName'
+						/>
+					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB Topic</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabTopicId'
+							displayProp='iabTopicName'
+							tooltipProp='iabTopicName'
+						/>
+					</Table.Column>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB SupTopic</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabSubTopicId'
+							displayProp='iabSubTopicName'
+							tooltipProp='iabSubTopicName'
+						/>
+					</Table.Column>
+
 					<Table.Column verticalAlign={'middle'} width={200}>
 						<Table.HeaderCell></Table.HeaderCell>
 						<ActionCell />
