@@ -3,6 +3,24 @@ stages:
   - build
   - deploy-to-google
 
+jira:
+  # Fail the build if a ticket ID is not refrenced in the merge request
+  stage: build
+  except:
+    refs:
+      - master
+      - /^sprint-.*$/
+
+  before_script:
+    - git config --global user.email "WHOCARES"
+    - git config --global user.name "WHOCARES"
+    - git fetch origin master
+    - git fetch origin ${CI_COMMIT_REF_NAME}
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/sightly-engineering/sightly-ops.git ops
+
+  script:
+    - ops/utils/validate_jira_link.sh
+
 build-staging:
   # Official docker image.
   image: docker:latest
