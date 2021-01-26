@@ -3,7 +3,8 @@ import * as Yup from 'yup'
 export const listsObjValidation = Yup.array()
 	.of(
 		Yup.object().shape({
-			targetType: Yup.mixed().nullable(),
+			targetType: Yup.string().nullable(),
+			targetTypeId: Yup.number().nullable(),
 			createdDate: Yup.date().required(),
 			objectiveId: Yup.number().required(),
 			objectiveName: Yup.string().required(),
