@@ -32,12 +32,12 @@ var deleteQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.listBuilderUrl
 
-let fetchVideosRequest = null
+let fetchListsRequest = null
 export function fetchLists(accountId) {
-	if (fetchVideosRequest) {
-		fetchVideosRequest.cancel()
+	if (fetchListsRequest) {
+		fetchListsRequest.cancel()
 	}
-	fetchVideosRequest = axios.CancelToken.source()
+	fetchListsRequest = axios.CancelToken.source()
 
 	let url = apiBase + `/account/${accountId}/smart-list`
 	return async (dispatch) => {
@@ -49,7 +49,7 @@ export function fetchLists(accountId) {
 			result = await defaultAxios({
 				method: 'GET',
 				url: url,
-				cancelToken: fetchVideosRequest.token
+				cancelToken: fetchListsRequest.token
 			})
 		} catch (error) {
 			console.log(error)
