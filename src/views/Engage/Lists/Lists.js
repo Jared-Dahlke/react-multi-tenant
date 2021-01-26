@@ -91,7 +91,6 @@ function Lists(props) {
 	let postListSuccess = props.postListSuccess
 	React.useEffect(() => {
 		if (postListSuccess) {
-			console.log('pushing to listbuilder from lists page')
 			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
 			history.push(url)
 		}
@@ -102,7 +101,6 @@ function Lists(props) {
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
-			console.log('cleaning up on unmount')
 			setPostListSuccess(false)
 		}
 	}, [])

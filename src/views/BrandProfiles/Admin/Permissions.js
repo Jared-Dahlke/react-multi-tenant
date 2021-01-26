@@ -87,11 +87,9 @@ function Permissions(props) {
 		var insert = v.filter((x) => !p.includes(x))
 		var remove = p.filter((x) => !v.includes(x))
 		if (insert[0]) {
-			console.log('permission is inserted', insert[0])
 			adminPermissions[index].captured_permissions = v
 			props.insertPermissions(roleId, insert[0], adminPermissions)
 		} else if (remove[0]) {
-			console.log('permission is removed', remove[0])
 			permissionToRemove = {
 				show: true,
 				roleId: roleId,
@@ -101,7 +99,6 @@ function Permissions(props) {
 			}
 			props.setPermissionSureToRemove(permissionToRemove)
 		} else {
-			console.log('no change')
 		}
 	}
 
@@ -117,7 +114,6 @@ function Permissions(props) {
 			)
 			props.setPermissionSureToRemove({ show: false })
 		} else {
-			console.log('something wrong with', props.permissionSureToRemove)
 			props.setPermissionSureToRemove({ show: false })
 		}
 	}
@@ -134,7 +130,6 @@ function Permissions(props) {
 			props.setAdminRolePermissions(adminPermissions)
 			props.setPermissionSureToRemove({ show: false })
 		} else {
-			console.log('something wrong with', props.permissionSureToRemove)
 			props.setPermissionSureToRemove({ show: false })
 		}
 	}

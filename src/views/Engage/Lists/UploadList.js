@@ -17,8 +17,8 @@ import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import Icon from 'rsuite/lib/Icon'
 import { targetTypes } from './constants'
+import { useHistory } from 'react-router-dom'
 import {
-	fetchLists,
 	setUploadedList,
 	postList,
 	setPostListSuccess
@@ -36,13 +36,13 @@ const mapStateToProps = (state) => {
 		accounts: state.accounts,
 		isPostingList: state.engage.isPostingList,
 		postListSuccess: state.engage.postListSuccess,
-		brandProfiles: state.brandProfiles
+		brandProfiles: state.brandProfiles,
+		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 		setUploadedList: (list) => dispatch(setUploadedList(list)),
 		postList: (data) => dispatch(postList(data)),
 		setPostListSuccess: (bool) => dispatch(setPostListSuccess(bool))
@@ -56,22 +56,22 @@ const objectives = [
 ]
 
 function UploadList(props) {
-	let fetchLists = props.fetchLists
-	let accounts = props.accounts.data
+	let history = useHistory()
 
+	let setPostListSuccess = props.setPostListSuccess
 	React.useEffect(() => {
-		let currentAccount = getCurrentAccount(props.accounts.data)
-		if (currentAccount) {
-			fetchLists(currentAccount.accountId)
+		return () => {
+			//clean up on unmount
+			setPostListSuccess(false)
 		}
-	}, [fetchLists, accounts])
+	}, [])
 
 	let postListSuccess = props.postListSuccess
 
 	React.useEffect(() => {
 		if (postListSuccess) {
-			let currentAccount = getCurrentAccount(props.accounts.data)
-			fetchLists(currentAccount.accountId)
+			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
+			history.push(url)
 		}
 	}, [postListSuccess])
 
