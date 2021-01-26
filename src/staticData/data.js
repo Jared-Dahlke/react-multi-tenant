@@ -33,7 +33,7 @@ export const youtubeCategories = [
 	{ categoryId: '21', categoryName: 'Videoblogging' }
 ]
 
-export const countries = [
+export const countriesOptions = [
 	{ countryCode: 'AF', countryName: 'Afghanistan' },
 	{ countryCode: 'AL', countryName: 'Albania' },
 	{ countryCode: 'DZ', countryName: 'Algeria' },
@@ -284,7 +284,7 @@ export const countries = [
 	{ countryCode: 'ZW', countryName: 'Zimbabwe' }
 ]
 
-export const languages = [
+export const languagesOptions = [
 	{ languageCode: 'ab', languageName: 'Abkhazian' },
 	{ languageCode: 'aa', languageName: 'Afar' },
 	{ languageCode: 'af', languageName: 'Afrikaans' },

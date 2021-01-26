@@ -35,7 +35,6 @@ export function fetchVideos(args) {
 				method: 'POST',
 				url: url,
 				data: {
-					...args.filters, //TODO: remove this after api expects a filters object
 					filters: args.filters,
 					sort: args.sort
 				}
@@ -122,7 +121,6 @@ export function fetchChannels(args) {
 			method: 'POST',
 			url: url,
 			data: {
-				...args.filters, //TODO: remove this after API expects a filters object
 				filters: args.filters,
 				sort: args.sort
 			}
@@ -147,6 +145,30 @@ export function fetchChannels(args) {
 
 const formatChannels = (channels) => {
 	for (const item of channels) {
+		/*	if(item.iabTaxonomy) {
+
+			item.iabCategoryId = item.iabTaxonomy.iabCategoryId
+			item.iabCategoryName = item.iabTaxonomy.iabCategoryName
+			item.iabSubCategoryId = item.iabTaxonomy.iabSubCategoryId
+			item.iabSubCategoryName = item.iabTaxonomy.iabSubCategoryName
+			item.iabSubTopicId = item.iabTaxonomy.iabSubTopicId
+			item.iabSubTopicName = item.iabTaxonomy.iabSubTopicName
+			item.iabTopicId = item.iabTaxonomy.iabTopicId
+			item.iabTopicName = item.iabTaxonomy.iabTopicName
+
+		} else {
+
+			item.iabCategoryId = null
+			item.iabCategoryName = null
+			item.iabSubCategoryId = null
+			item.iabSubCategoryName = null
+			item.iabSubTopicId = null
+			item.iabSubTopicName = null
+			item.iabTopicId = null
+			item.iabTopicName = null
+
+		} */
+
 		item.createDateDisplay = dayjs(item.created).calendar()
 		item.createDateTooltip = dayjs(item.created).calendar()
 
@@ -190,6 +212,15 @@ const formatChannels = (channels) => {
 
 const formatVideos = (videos) => {
 	for (const item of videos) {
+		/*item.iabCategoryId = item.iabTaxonomy.iabCategoryId
+		item.iabCategoryName = item.iabTaxonomy.iabCategoryName
+		item.iabSubCategoryId = item.iabTaxonomy.iabSubCategoryId
+		item.iabSubCategoryName = item.iabTaxonomy.iabSubCategoryName
+		item.iabSubTopicId = item.iabTaxonomy.iabSubTopicId
+		item.iabSubTopicName = item.iabTaxonomy.iabSubTopicName
+		item.iabTopicId = item.iabTaxonomy.iabTopicId
+		item.iabTopicName = item.iabTaxonomy.iabTopicName */
+
 		item.createDateDisplay = dayjs(item.published).calendar()
 		item.createDateTooltip = dayjs(item.published).calendar()
 

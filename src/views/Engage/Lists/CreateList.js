@@ -10,6 +10,7 @@ import { objectives } from './constants'
 import { connect } from 'react-redux'
 import { postListObjValidation } from '../../../schemas/Engage/Lists/schemas'
 import { getCurrentAccount } from '../../../utils'
+import { targetTypes } from './constants'
 import {
 	postList,
 	setPostListSuccess
@@ -70,7 +71,8 @@ function CreateNewListModal(props) {
 	const handleCreateClick = (values) => {
 		let list = {
 			smartListName: values.smartListName,
-			objectiveId: values.objectiveId
+			objectiveId: values.objectiveId,
+			targetTypeId: values.targetTypeId
 		}
 
 		let data = {
@@ -118,6 +120,26 @@ function CreateNewListModal(props) {
 									hideSearch
 								/>
 							</Grid>
+
+							<Grid item xs={12}>
+								<FormikSelect
+									id='targetTypeId'
+									name='targetTypeId'
+									label='Target Type'
+									optionLabel='targetTypeName'
+									optionValue='targetTypeId'
+									options={targetTypes}
+									value={values.targetTypeId}
+									onChange={setFieldValue}
+									onBlur={setFieldTouched}
+									validateField={validateField}
+									validateForm={validateForm}
+									touched={touched.targetTypeId}
+									error={errors.targetTypeId}
+									hideSearch
+								/>
+							</Grid>
+
 							<Grid item xs={12}>
 								<FormikSelect
 									id='brandProfileId'
@@ -172,6 +194,7 @@ const MyEnhancedForm = withFormik({
 		return {
 			smartLists: props.lists,
 			smartListName: '',
+			targetTypeId: 1,
 			objectiveId: 1,
 			brandProfileId: props.brandProfiles[0]
 				? props.brandProfiles[0].brandProfileId

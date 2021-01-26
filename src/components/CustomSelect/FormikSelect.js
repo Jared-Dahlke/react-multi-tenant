@@ -33,6 +33,9 @@ export default function SelectField(props) {
 				placeholder={placeholder}
 				data={options}
 				value={value}
+				renderMenuItem={(label, item) => {
+					return <div>{label}</div>
+				}}
 				onChange={handleChange}
 				disabled={isDisabled}
 				cleanable={false}

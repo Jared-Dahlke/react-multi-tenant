@@ -14,7 +14,12 @@ import Dropdown from 'rsuite/lib/Dropdown'
 import Popover from 'rsuite/lib/Popover'
 import orderBy from 'lodash/orderBy'
 import { getCurrentAccount } from '../../../utils'
-import { objectives, activeStatuses, archivedStatuses } from './constants'
+import {
+	objectives,
+	activeStatuses,
+	archivedStatuses,
+	targetTypes
+} from './constants'
 import {
 	fetchLists,
 	archiveList,
@@ -67,6 +72,7 @@ function Lists(props) {
 	const [filterState, setFilterState] = React.useState({
 		objectiveId: null,
 		brandProfileId: null,
+		targetTypeId: null,
 		smartListId: null,
 		activeStatusId: 1,
 		archivedStatusId: 2
@@ -85,15 +91,19 @@ function Lists(props) {
 	let postListSuccess = props.postListSuccess
 	React.useEffect(() => {
 		if (postListSuccess) {
+			console.log('pushing to listbuilder from lists page')
 			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
 			history.push(url)
 		}
 	}, [postListSuccess])
 
+	let setPostListSuccess = props.setPostListSuccess
+
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
-			props.setPostListSuccess(false)
+			console.log('cleaning up on unmount')
+			setPostListSuccess(false)
 		}
 	}, [])
 
@@ -131,6 +141,13 @@ function Lists(props) {
 		if (
 			filterState.objectiveId &&
 			list.objectiveId != filterState.objectiveId
+		) {
+			return false
+		}
+
+		if (
+			filterState.targetTypeId &&
+			list.targetTypeId != filterState.targetTypeId
 		) {
 			return false
 		}
@@ -527,6 +544,30 @@ function Lists(props) {
 
 					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
 						<div style={{ position: 'absolute', top: -20, left: 0 }}>
+							<p>Target Type</p>
+						</div>
+						<InputPicker
+							size={'sm'}
+							id='targetTypeId'
+							label='Target Type'
+							placeholder='Filter by Target Type'
+							labelKey='targetTypeName'
+							valueKey='targetTypeId'
+							data={targetTypes}
+							value={filterState.targetTypeId}
+							onChange={(val) =>
+								setFilterState((prevState) => {
+									return {
+										...prevState,
+										targetTypeId: val
+									}
+								})
+							}
+						/>
+					</Grid>
+
+					<Grid item xs={12} md={2} style={{ position: 'relative' }}>
+						<div style={{ position: 'absolute', top: -20, left: 0 }}>
 							<p>Status</p>
 						</div>
 						<InputPicker
@@ -602,6 +643,10 @@ function Lists(props) {
 					<Table.Column flexGrow={1} sortable>
 						<Table.HeaderCell>Objective</Table.HeaderCell>
 						<Table.Cell dataKey='objectiveName' />
+					</Table.Column>
+					<Table.Column flexGrow={1} sortable>
+						<Table.HeaderCell>Target Type</Table.HeaderCell>
+						<Table.Cell dataKey='targetType' />
 					</Table.Column>
 
 					<Table.Column sortable>
