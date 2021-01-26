@@ -13,8 +13,10 @@ import {
 	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
+
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
+import defaultAxios from 'axios'
 import {
 	listsObjValidation,
 	uploadedListObjValidation,
@@ -30,7 +32,13 @@ var deleteQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.listBuilderUrl
 
+let fetchVideosRequest = null
 export function fetchLists(accountId) {
+	if (fetchVideosRequest) {
+		fetchVideosRequest.cancel()
+	}
+	fetchVideosRequest = axios.CancelToken.source()
+
 	let url = apiBase + `/account/${accountId}/smart-list`
 	return async (dispatch) => {
 		dispatch(setIsFetchingLists(true))
@@ -38,7 +46,11 @@ export function fetchLists(accountId) {
 		let result = []
 
 		try {
-			result = await axios.get(url)
+			result = await defaultAxios({
+				method: 'GET',
+				url: url,
+				cancelToken: fetchVideosRequest.token
+			})
 		} catch (error) {
 			console.log(error)
 		}
