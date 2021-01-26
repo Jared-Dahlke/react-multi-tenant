@@ -141,7 +141,7 @@ function Scenario(props) {
 										cacheData={cachedData}
 										labelKey='labelName'
 										valueKey='labelId'
-										placeholder='Scenario label'
+										placeholder='Scenario Label'
 										onChange={(v) => (values.scenarioLabelsSelected = v)}
 										onSelect={(v, i) => handleSelect(v, i)}
 										onSearch={(text) => handleKeyPress(text)}
