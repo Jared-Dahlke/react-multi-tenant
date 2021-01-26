@@ -270,7 +270,6 @@ function ListBuilder(props) {
 	})
 
 	const handleFilterChange = (filter, value) => {
-		console.log(value)
 		switch (filter) {
 			case filters.kids:
 				setFilterState((prevState) => {
