@@ -152,8 +152,8 @@ export function fetchAdminBrandScenarios() {
 	}
 }
 
-export function fetchAdminBrandScenarioLabels(text) {
-	let url = apiBase + `/scenarios/labels?name=${text}`
+export function fetchAdminBrandScenarioLabels() {
+	let url = apiBase + `/scenarios/labels`
 	return async (dispatch) => {
 		dispatch(setScenariosLabelsIsLoading(true))
 		try {
@@ -172,13 +172,11 @@ export function fetchAdminBrandScenarioLabels(text) {
 export function fetchScenarioTypes() {
 	let url = apiBase + `/scenarios/types`
 	return async (dispatch) => {
-		// dispatch(setScenariosLabelsIsLoading(true))
 		try {
 			const result = await axios.get(url)
 			if (result.status === 200) {
 				let scenarioTypes = result.data
 				dispatch(setScenarioTypes(scenarioTypes))
-				// dispatch(setScenariosLabelsIsLoading(false))
 			}
 		} catch (error) {
 			alert(error)
