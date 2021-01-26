@@ -95,7 +95,7 @@ function Types(props) {
               appearance='primary'
               onClick={() => props.setInitTypeAdd(true)}
             >
-              Create Type
+              Create Scenario Type
 						</Button>
 
             <Modal
@@ -111,7 +111,7 @@ function Types(props) {
                 }}
               >
                 <Modal.Header>
-                  <Modal.Title>Add Type</Modal.Title>
+                  <Modal.Title>Add Scenario Type</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <FormGroup>
@@ -185,7 +185,7 @@ function Types(props) {
                   appearance='primary'
                   onClick={() => props.setInitTypeAdd(true)}
                 >
-                  Create Type
+                  Create Scenario Type
 						</Button>
               </div>
             )}
