@@ -118,20 +118,22 @@ export const postListVersionResult = Yup.object().shape({
 	brandProfileName: Yup.string().required()
 })
 
-const iabTaxonomySchema = Yup.object().shape({
-	iiabCategoryId: Yup.number().strict(true),
-	iabCategoryName: Yup.string().required(),
-	iabSubCategoryId: Yup.number().strict(true),
-	iabSubCategoryName: Yup.string().required(),
-	iabSubTopicId: Yup.mixed().required(),
-	iabSubTopicName: Yup.mixed().required(),
-	iabTopicId: Yup.number().strict(true),
-	iabTopicName: Yup.string().required()
-})
-
 export const channelsSchema = Yup.array().of(
 	Yup.object().shape({
-		//	iabTaxonomy: iabTaxonomySchema.nullable(),
+		iabCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabCategoryName: Yup.string().nullable(),
+		iabSubCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabSubCategoryName: Yup.string().nullable(),
+		iabSubTopicId: Yup.mixed().nullable(),
+		iabSubTopicName: Yup.mixed().nullable(),
+		iabTopicId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabTopicName: Yup.string().nullable(),
 
 		actionId: Yup.number()
 			.strict(true)
@@ -174,7 +176,21 @@ export const channelsSchema = Yup.array().of(
 
 export const videosSchema = Yup.array().of(
 	Yup.object().shape({
-		//	iabTaxonomy: iabTaxonomySchema,
+		iabCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabCategoryName: Yup.string().nullable(),
+		iabSubCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabSubCategoryName: Yup.string().nullable(),
+		iabSubTopicId: Yup.mixed().nullable(),
+		iabSubTopicName: Yup.mixed().nullable(),
+		iabTopicId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabTopicName: Yup.string().nullable(),
+
 		actionId: Yup.number()
 			.strict(true)
 			.nullable(),

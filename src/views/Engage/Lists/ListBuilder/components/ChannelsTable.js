@@ -162,12 +162,7 @@ export default function ChannelsTable({
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column>
-			<Table.Column
-				verticalAlign={'middle'}
-				flexGrow={1}
-				align='center'
-				sortable
-			>
+			<Table.Column verticalAlign={'middle'} flexGrow={1} align='center'>
 				<Table.HeaderCell>Video Categories</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
@@ -185,7 +180,8 @@ export default function ChannelsTable({
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Videos</Table.HeaderCell>
-				<VideoCountCell dataKey='filteredVideoCount' />
+
+				<VideoCountCell dataKey='allVideoCount' />
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Views</Table.HeaderCell>
@@ -193,6 +189,41 @@ export default function ChannelsTable({
 					dataKey='views'
 					displayProp='viewsDisplay'
 					tooltipProp='viewsTooltip'
+				/>
+			</Table.Column>
+
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
+				<Table.HeaderCell>IAB Category</Table.HeaderCell>
+				<TooltipCell
+					dataKey='iabCategoryId'
+					displayProp='iabCategoryName'
+					tooltipProp='iabCategoryName'
+				/>
+			</Table.Column>
+
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
+				<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
+				<TooltipCell
+					dataKey='iabSubCategoryId'
+					displayProp='iabSubCategoryName'
+					tooltipProp='iabSubCategoryName'
+				/>
+			</Table.Column>
+
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
+				<Table.HeaderCell>IAB Topic</Table.HeaderCell>
+				<TooltipCell
+					dataKey='iabTopicId'
+					displayProp='iabTopicName'
+					tooltipProp='iabTopicName'
+				/>
+			</Table.Column>
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
+				<Table.HeaderCell>IAB SupTopic</Table.HeaderCell>
+				<TooltipCell
+					dataKey='iabSubTopicId'
+					displayProp='iabSubTopicName'
+					tooltipProp='iabSubTopicName'
 				/>
 			</Table.Column>
 			<Table.Column width={180} verticalAlign={'middle'}>
