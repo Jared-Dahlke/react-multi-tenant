@@ -145,6 +145,9 @@ export const postList = (data) => {
 					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
+					setTimeout(() => {
+						dispatch(setPostListSuccess(false))
+					}, 100)
 					toast.success('List created!')
 				}
 			})

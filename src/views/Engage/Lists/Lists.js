@@ -102,7 +102,6 @@ function Lists(props) {
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
-			console.log('cleaning up on unmount')
 			setPostListSuccess(false)
 		}
 	}, [])
