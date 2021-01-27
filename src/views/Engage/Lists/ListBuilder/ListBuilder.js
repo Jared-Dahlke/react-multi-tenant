@@ -165,11 +165,9 @@ function ListBuilder(props) {
 	const [mountedForVideos, setMountedForVideos] = React.useState(false)
 	React.useEffect(() => {
 		if (mountedForVideos) {
-			if (currentVideoPage === 1) {
-				setVideosFetchTrigger((prevState) => prevState + 1)
-			} else {
-				setCurrentVideoPage(1)
-			}
+			props.removeAllVideos()
+			setCurrentVideoPage(1)
+			setVideosFetchTrigger((prevState) => prevState + 1)
 		}
 		setMountedForVideos(true)
 	}, [currentVideosSort])
