@@ -219,7 +219,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>IAB SupTopic</Table.HeaderCell>
+				<Table.HeaderCell>IAB SubTopic</Table.HeaderCell>
 				<TooltipCell
 					dataKey='iabSubTopicId'
 					displayProp='iabSubTopicName'
