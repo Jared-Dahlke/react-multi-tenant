@@ -170,11 +170,8 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		if (mountedForVideos) {
 			props.removeAllVideos()
-			if (currentVideoPage === 1) {
-				setVideosFetchTrigger((prevState) => prevState + 1)
-			} else {
-				setCurrentVideoPage(1)
-			}
+			setCurrentVideoPage(1)
+			setVideosFetchTrigger((prevState) => prevState + 1)
 		}
 		setMountedForVideos(true)
 	}, [currentVideosSort])
@@ -450,21 +447,8 @@ function ListBuilder(props) {
 		return <Loader center content='Loading...' vertical size='lg' />
 	} else {
 		return (
-			<Grid container>
-				<Grid item xs={12}>
-					<CustomPanel header={props.smartListVersionUnderEdit.smartListName}>
-						<b>Brand Profile:</b>
-						<p style={{ color: 'grey' }}>
-							{props.smartListVersionUnderEdit.brandName}
-						</p>
-						<b>Objective:</b>
-						<p style={{ color: 'grey' }}>
-							{props.smartListVersionUnderEdit.objectiveName}
-						</p>
-					</CustomPanel>
-				</Grid>
-
-				<Grid item xs={12}>
+			<>
+				<Container>
 					<FiltersSideBar
 						expand={filtersExpanded}
 						handleToggle={() => setFiltersExpanded((prevState) => !prevState)}
@@ -472,38 +456,56 @@ function ListBuilder(props) {
 						handleApplyFiltersButtonClick={handleApplyFiltersButtonClick}
 					/>
 
-					<VideoModal
-						currentVideosSort={currentVideosSort}
-						setCurrentVideosSort={setCurrentVideosSort}
-						show={showVideoModal}
-						close={handleVideoModalClose}
-						videos={props.videos}
-						incrementPage={() => {
-							if (!props.videosIsLoading) {
-								setCurrentVideoPage((prevState) => prevState + 1)
-							}
-						}}
-						handleActionButtonClick={handleActionButtonClick}
-						channel={viewingVideosForChannel}
-						videosIsLoading={props.videosIsLoading}
-					/>
+					<Container>
+						<Header>
+							<CustomPanel
+								header={props.smartListVersionUnderEdit.smartListName}
+							>
+								<b>Brand Profile:</b>
+								<p style={{ color: 'grey' }}>
+									{props.smartListVersionUnderEdit.brandName}
+								</p>
+								<b>Objective:</b>
+								<p style={{ color: 'grey' }}>
+									{props.smartListVersionUnderEdit.objectiveName}
+								</p>
+							</CustomPanel>
+						</Header>
+						<Content>
+							<ChannelsTable
+								setCurrentChannelsSort={setCurrentChannelsSort}
+								currentChannelsSort={currentChannelsSort}
+								channelsHasNextPage={props.channelsHasNextPage}
+								channelsIsLoading={props.channelsIsLoading}
+								items={props.channels}
+								incrementPage={() => {
+									if (!props.channelsIsLoading) {
+										setCurrentPage((prevState) => prevState + 1)
+									}
+								}}
+								handleActionButtonClick={handleActionButtonClick}
+								handleVideosClick={handleVideosClick}
+							/>
+						</Content>
+					</Container>
+				</Container>
 
-					<ChannelsTable
-						setCurrentChannelsSort={setCurrentChannelsSort}
-						currentChannelsSort={currentChannelsSort}
-						channelsHasNextPage={props.channelsHasNextPage}
-						channelsIsLoading={props.channelsIsLoading}
-						items={props.channels}
-						incrementPage={() => {
-							if (!props.channelsIsLoading) {
-								setCurrentPage((prevState) => prevState + 1)
-							}
-						}}
-						handleActionButtonClick={handleActionButtonClick}
-						handleVideosClick={handleVideosClick}
-					/>
-				</Grid>
-			</Grid>
+				<VideoModal
+					currentVideosSort={currentVideosSort}
+					setCurrentVideosSort={setCurrentVideosSort}
+					show={showVideoModal}
+					close={handleVideoModalClose}
+					videos={props.videos}
+					incrementPage={() => {
+						if (!props.videosIsLoading) {
+							setCurrentVideoPage((prevState) => prevState + 1)
+						}
+					}}
+					handleActionButtonClick={handleActionButtonClick}
+					channel={viewingVideosForChannel}
+					videosIsLoading={props.videosIsLoading}
+				/>
+			</>
 		)
 	}
 }

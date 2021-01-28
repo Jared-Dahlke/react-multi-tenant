@@ -63,275 +63,281 @@ const actionIdOptions = [
 	{ label: 'View All Items', actionIds: [], id: 5 }
 ]
 
-const NavToggle = ({ expand, onChange }) => {
-	return (
-		<Navbar appearance='subtle' className='nav-toggle'>
-			<Navbar.Body>
-				<Nav pullRight>
-					<Nav.Item
-						onClick={onChange}
-						style={{ width: 56, textAlign: 'center' }}
-					>
-						<Icon icon={expand ? 'angle-left' : 'angle-right'} />
-					</Nav.Item>
-				</Nav>
-			</Navbar.Body>
-		</Navbar>
-	)
-}
-
 export const FiltersSideBar = ({
 	expand,
 	handleToggle,
 	filterState,
 	handleApplyFiltersButtonClick
 }) => {
-	const brandInfoProps = useSpring({
+	const sidebarProps = useSpring({
 		width: expand ? 450 : 60
 	})
 
+	const contentProps = useSpring({
+		opacity: expand ? 1 : 0
+	})
+
 	return (
-		<div>
-			<animated.div style={brandInfoProps}>
+		<animated.div style={sidebarProps}>
+			<Sidebar style={sidebarProps}>
 				<Panel
-					header={
-						<IconButton
-							icon={<Icon icon='filters' />}
-							onClick={handleToggle}
-						></IconButton>
-					}
 					bodyFill
 					style={{
 						background: neutralLightColor
 					}}
+					header={
+						<Grid container>
+							<Grid item xs={12} align='right'>
+								<IconButton
+									appearance='link'
+									size='lg'
+									icon={
+										<Icon
+											size='lg'
+											icon={expand ? 'angle-left' : 'angle-right'}
+										/>
+									}
+									onClick={handleToggle}
+								/>
+							</Grid>
+						</Grid>
+					}
 				>
-					<PanelGroup>
-						<CustomPanel header='Actions Taken'>
-							<SelectPicker
-								size='xs'
-								labelKey={'label'}
-								valueKey={'actionIds'}
-								placeholder={'Select'}
-								data={actionIdOptions}
-								defaultValue={[]}
-								onChange={(val) => {
-									handleFilterChange(filters.actionIds, val)
-								}}
-								cleanable={false}
-								block
-								preventOverflow={true}
-								searchable={false}
-							/>
-						</CustomPanel>
+					<animated.div style={contentProps}>
+						<PanelGroup>
+							<CustomPanel header='Actions Taken'>
+								<SelectPicker
+									size='xs'
+									labelKey={'label'}
+									valueKey={'actionIds'}
+									placeholder={'Select'}
+									data={actionIdOptions}
+									defaultValue={[]}
+									onChange={(val) => {
+										handleFilterChange(filters.actionIds, val)
+									}}
+									cleanable={false}
+									block
+									preventOverflow={true}
+									searchable={false}
+								/>
+							</CustomPanel>
 
-						<CustomPanel header='SmartList Filters'>
-							<Grid container spacing={filterSpacing}>
-								<Grid item xs={12}>
-									<FiltersLabel text='IAB Categories' />
-									<CheckTreePicker
-										placement='topStart'
-										size={'xs'}
-										defaultExpandAll={false}
-										data={iabCategoriesFilter}
-										labelKey={'name'}
-										valueKey={'id'}
-										onChange={(val) => {
-											handleFilterChange(filters.iabCategories, val)
-										}}
-										cascade={true}
-										block
-									/>
+							<CustomPanel header='SmartList Filters'>
+								<Grid container spacing={filterSpacing}>
+									<Grid item xs={12}>
+										<FiltersLabel text='IAB Categories' />
+										<CheckTreePicker
+											placement='topStart'
+											size={'xs'}
+											defaultExpandAll={false}
+											data={iabCategoriesFilter}
+											labelKey={'name'}
+											valueKey={'id'}
+											onChange={(val) => {
+												handleFilterChange(filters.iabCategories, val)
+											}}
+											cascade={true}
+											block
+										/>
+									</Grid>
 								</Grid>
-							</Grid>
-						</CustomPanel>
+							</CustomPanel>
 
-						<CustomPanel header='YouTube Filters'>
-							<Grid container spacing={filterSpacing}>
-								<Grid item xs={12}>
-									<TagPicker
-										block
-										size={'xs'}
-										data={countriesOptions}
-										labelKey={'countryName'}
-										valueKey={'countryCode'}
-										defaultValue={['US']}
-										placeholder='Countries'
-										onChange={(val) => {
-											handleFilterChange(filters.countries, val)
-										}}
-									/>
-								</Grid>
-
-								<Grid item xs={12}>
-									<TagPicker
-										block
-										size={'xs'}
-										data={languagesOptions}
-										labelKey={'languageName'}
-										valueKey={'languageCode'}
-										defaultValue={['en']}
-										virtualized={true}
-										placeholder='Languages'
-										onChange={(val) => {
-											handleFilterChange(filters.languages, val)
-										}}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TagPicker
-										block
-										size={'xs'}
-										data={youtubeCategories}
-										labelKey={'categoryName'}
-										valueKey={'categoryId'}
-										virtualized={true}
-										placeholder='Youtube Categories'
-										onChange={(val) => {
-											handleFilterChange(filters.categories, val)
-										}}
-									/>
-								</Grid>
-
-								<Grid item xs={12}>
-									<Checkbox
-										size={'xs'}
-										onChange={(na, bool) => {
-											handleFilterChange(filters.kids, bool)
-										}}
-									>
-										Kids Only
-									</Checkbox>
-								</Grid>
-							</Grid>
-						</CustomPanel>
-						<CustomPanel header='Video Filters'>
-							<Grid container spacing={filterSpacing}>
-								<Grid item xs={12}>
-									<FiltersLabel text='Views' />
-									<InputGroup size='xs'>
-										<InputNumber
-											step={10000}
-											size='xs'
-											value={filterState.views.min}
-											onFocus={(event) => event.target.select()}
-											placeholder={'Min'}
-											min={0}
-											onChange={(nextValue) => {
-												let value = {
-													min: Number(nextValue),
-													max: filterState.views.max
-												}
-												handleFilterChange(filters.views, value)
+							<CustomPanel header='YouTube Filters'>
+								<Grid container spacing={filterSpacing}>
+									<Grid item xs={12}>
+										<TagPicker
+											block
+											size={'xs'}
+											data={countriesOptions}
+											labelKey={'countryName'}
+											valueKey={'countryCode'}
+											defaultValue={['US']}
+											placeholder='Countries'
+											onChange={(val) => {
+												handleFilterChange(filters.countries, val)
 											}}
 										/>
+									</Grid>
 
-										<InputGroup.Addon>to</InputGroup.Addon>
-										<InputNumber
-											step={10000}
-											onFocus={(event) => event.target.select()}
-											size='xs'
-											min={0}
-											placeholder={'Max'}
-											value={filterState.views.max}
-											onChange={(nextValue) => {
-												let value = {
-													min: filterState.views.min,
-													max: Number(nextValue)
-												}
-												handleFilterChange(filters.views, value)
+									<Grid item xs={12}>
+										<TagPicker
+											block
+											size={'xs'}
+											data={languagesOptions}
+											labelKey={'languageName'}
+											valueKey={'languageCode'}
+											defaultValue={['en']}
+											virtualized={true}
+											placeholder='Languages'
+											onChange={(val) => {
+												handleFilterChange(filters.languages, val)
 											}}
 										/>
-									</InputGroup>
-									<Button
-										size='xs'
-										appearance='link'
-										onClick={() =>
-											handleFilterChange(filters.views, {
-												min: null,
-												max: null
-											})
-										}
-									>
-										Clear
-									</Button>
+									</Grid>
+									<Grid item xs={12}>
+										<TagPicker
+											block
+											size={'xs'}
+											data={youtubeCategories}
+											labelKey={'categoryName'}
+											valueKey={'categoryId'}
+											virtualized={true}
+											placeholder='Youtube Categories'
+											onChange={(val) => {
+												handleFilterChange(filters.categories, val)
+											}}
+										/>
+									</Grid>
+
+									<Grid item xs={12}>
+										<Checkbox
+											size={'xs'}
+											onChange={(na, bool) => {
+												handleFilterChange(filters.kids, bool)
+											}}
+										>
+											Kids Only
+										</Checkbox>
+									</Grid>
 								</Grid>
+							</CustomPanel>
+							<CustomPanel header='Video Filters'>
+								<Grid container spacing={filterSpacing}>
+									<Grid item xs={12}>
+										<FiltersLabel text='Views' />
+										<InputGroup size='xs'>
+											<InputNumber
+												step={10000}
+												size='xs'
+												value={filterState.views.min}
+												onFocus={(event) => event.target.select()}
+												placeholder={'Min'}
+												min={0}
+												onChange={(nextValue) => {
+													let value = {
+														min: Number(nextValue),
+														max: filterState.views.max
+													}
+													handleFilterChange(filters.views, value)
+												}}
+											/>
 
-								<Grid item xs={12}>
-									<FiltersLabel text='Duration (minutes)' />
-									<InputGroup size='xs'>
-										<InputNumber
-											value={filterState.videoDurationSeconds.min}
+											<InputGroup.Addon>to</InputGroup.Addon>
+											<InputNumber
+												step={10000}
+												onFocus={(event) => event.target.select()}
+												size='xs'
+												min={0}
+												placeholder={'Max'}
+												value={filterState.views.max}
+												onChange={(nextValue) => {
+													let value = {
+														min: filterState.views.min,
+														max: Number(nextValue)
+													}
+													handleFilterChange(filters.views, value)
+												}}
+											/>
+										</InputGroup>
+										<Button
 											size='xs'
-											onFocus={(event) => event.target.select()}
-											placeholder={'Min'}
-											onChange={(nextValue) => {
-												let value = {
-													min: Number(nextValue),
-													max: filterState.videoDurationSeconds.max
-												}
-												handleFilterChange(filters.videoDurationSeconds, value)
-											}}
-										/>
-
-										<InputGroup.Addon>to</InputGroup.Addon>
-										<InputNumber
-											value={filterState.videoDurationSeconds.max}
-											onFocus={(event) => event.target.select()}
-											size='xs'
-											min={0}
-											placeholder={'Max'}
-											onChange={(nextValue) => {
-												let value = {
-													min: filterState.videoDurationSeconds.min,
-													max: Number(nextValue)
-												}
-												handleFilterChange(filters.videoDurationSeconds, value)
-											}}
-										/>
-									</InputGroup>
-									<Button
-										size='xs'
-										appearance='link'
-										onClick={() =>
-											handleFilterChange(filters.videoDurationSeconds, {
-												min: null,
-												max: null
-											})
-										}
-									>
-										Clear
-									</Button>
-								</Grid>
-
-								<Grid item xs={12}>
-									<FiltersLabel text='Upload Date' />
-									<DateRangePicker
-										block
-										size='xs'
-										showOneCalendar
-										placement='topStart'
-										onChange={(val) => {
-											let value = {}
-											if (val.length > 0) {
-												value = {
-													min: dayjs(val[0]).format('YYYY-MM-DD'),
-													max: dayjs(val[1]).format('YYYY-MM-DD')
-												}
+											appearance='link'
+											onClick={() =>
+												handleFilterChange(filters.views, {
+													min: null,
+													max: null
+												})
 											}
-											handleFilterChange(filters.uploadDate, value)
-										}}
-									/>
+										>
+											Clear
+										</Button>
+									</Grid>
+
+									<Grid item xs={12}>
+										<FiltersLabel text='Duration (minutes)' />
+										<InputGroup size='xs'>
+											<InputNumber
+												value={filterState.videoDurationSeconds.min}
+												size='xs'
+												onFocus={(event) => event.target.select()}
+												placeholder={'Min'}
+												onChange={(nextValue) => {
+													let value = {
+														min: Number(nextValue),
+														max: filterState.videoDurationSeconds.max
+													}
+													handleFilterChange(
+														filters.videoDurationSeconds,
+														value
+													)
+												}}
+											/>
+
+											<InputGroup.Addon>to</InputGroup.Addon>
+											<InputNumber
+												value={filterState.videoDurationSeconds.max}
+												onFocus={(event) => event.target.select()}
+												size='xs'
+												min={0}
+												placeholder={'Max'}
+												onChange={(nextValue) => {
+													let value = {
+														min: filterState.videoDurationSeconds.min,
+														max: Number(nextValue)
+													}
+													handleFilterChange(
+														filters.videoDurationSeconds,
+														value
+													)
+												}}
+											/>
+										</InputGroup>
+										<Button
+											size='xs'
+											appearance='link'
+											onClick={() =>
+												handleFilterChange(filters.videoDurationSeconds, {
+													min: null,
+													max: null
+												})
+											}
+										>
+											Clear
+										</Button>
+									</Grid>
+
+									<Grid item xs={12}>
+										<FiltersLabel text='Upload Date' />
+										<DateRangePicker
+											block
+											size='xs'
+											showOneCalendar
+											placement='topStart'
+											onChange={(val) => {
+												let value = {}
+												if (val.length > 0) {
+													value = {
+														min: dayjs(val[0]).format('YYYY-MM-DD'),
+														max: dayjs(val[1]).format('YYYY-MM-DD')
+													}
+												}
+												handleFilterChange(filters.uploadDate, value)
+											}}
+										/>
+									</Grid>
 								</Grid>
-							</Grid>
-						</CustomPanel>
-						<CustomPanel>
-							<Button block size='xs' onClick={handleApplyFiltersButtonClick}>
-								Apply Filters
-							</Button>
-						</CustomPanel>
-					</PanelGroup>
+							</CustomPanel>
+							<CustomPanel>
+								<Button block size='xs' onClick={handleApplyFiltersButtonClick}>
+									Apply Filters
+								</Button>
+							</CustomPanel>
+						</PanelGroup>
+					</animated.div>
 				</Panel>
-			</animated.div>
-		</div>
+			</Sidebar>
+		</animated.div>
 	)
 }
