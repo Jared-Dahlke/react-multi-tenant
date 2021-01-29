@@ -133,6 +133,7 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
+					showHeader={!props.videosIsLoading}
 					sortColumn={props.currentVideosSort.sortColumn}
 					sortType={props.currentVideosSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {

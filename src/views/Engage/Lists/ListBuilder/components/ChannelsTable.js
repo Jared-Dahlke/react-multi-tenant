@@ -113,6 +113,7 @@ export default function ChannelsTable({
 
 	return (
 		<Table
+			showHeader={!channelsIsLoading}
 			style={{ display: 'flex', flexDirection: 'column', paddingLeft: 20 }}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
