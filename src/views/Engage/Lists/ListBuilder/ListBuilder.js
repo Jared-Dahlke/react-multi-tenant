@@ -472,6 +472,7 @@ function ListBuilder(props) {
 							</CustomPanel>
 						</Header>
 						<Content>
+							{props.channels.length}
 							<ChannelsTable
 								setCurrentChannelsSort={setCurrentChannelsSort}
 								currentChannelsSort={currentChannelsSort}
