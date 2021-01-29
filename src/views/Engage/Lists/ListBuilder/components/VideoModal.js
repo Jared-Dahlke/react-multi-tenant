@@ -133,11 +133,12 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
-					showHeader={!props.videosIsLoading}
 					sortColumn={props.currentVideosSort.sortColumn}
 					sortType={props.currentVideosSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {
-						props.setCurrentVideosSort({ sortColumn, sortType })
+						if (!props.videosIsLoading) {
+							props.setCurrentVideosSort({ sortColumn, sortType })
+						}
 					}}
 					loading={props.videos.length < 1 && props.videosIsLoading}
 					virtualized

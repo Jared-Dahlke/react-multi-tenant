@@ -112,11 +112,12 @@ export default function ChannelsTable({
 
 	return (
 		<Table
-			showHeader={!channelsIsLoading}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {
-				setCurrentChannelsSort({ sortColumn, sortType })
+				if (!channelsIsLoading) {
+					setCurrentChannelsSort({ sortColumn, sortType })
+				}
 			}}
 			loading={items.length < 1 && channelsIsLoading}
 			virtualized
