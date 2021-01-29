@@ -112,6 +112,7 @@ export default function ChannelsTable({
 
 	return (
 		<Table
+			showHeader={!channelsIsLoading}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {

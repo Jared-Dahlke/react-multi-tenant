@@ -740,6 +740,7 @@ function ListBuilder(props) {
 					</Grid>
 
 					<Grid item xs={12}>
+						{props.channels.length}
 						<ChannelsTable
 							setCurrentChannelsSort={setCurrentChannelsSort}
 							currentChannelsSort={currentChannelsSort}
