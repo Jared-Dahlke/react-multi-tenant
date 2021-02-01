@@ -460,7 +460,7 @@ function ListBuilder(props) {
 							<CustomPanel
 								header={
 									<Grid container>
-										<Grid item xs={3}>
+										<Grid item xs={6}>
 											<p>SmartList Name</p>
 											<InputGroup
 												style={{
@@ -489,7 +489,7 @@ function ListBuilder(props) {
 												/>
 											</InputGroup>
 										</Grid>
-										<Grid item xs={9} align='right'>
+										<Grid item xs={6} align='right'>
 											<ButtonToolbar>
 												<Button
 													style={{ marginLeft: 20 }}
