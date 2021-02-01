@@ -13,7 +13,8 @@ import SelectPicker from 'rsuite/lib/SelectPicker'
 import IconButton from 'rsuite/lib/IconButton'
 import CustomPanel from '../../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
-
+import ArrowLeft from '@material-ui/icons/ArrowLeftSharp'
+import ArrowRight from '@material-ui/icons/ArrowRightSharp'
 import InputGroup from 'rsuite/lib/InputGroup'
 import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
@@ -60,21 +61,16 @@ export const FiltersSideBar = ({
 						background: neutralLightColor
 					}}
 					header={
-						<Grid container>
-							<Grid item xs={12} align='right'>
-								<IconButton
-									appearance='link'
-									size='lg'
-									icon={
-										<Icon
-											size='lg'
-											icon={expand ? 'angle-left' : 'angle-right'}
-										/>
-									}
-									onClick={handleToggle}
-								/>
-							</Grid>
-						</Grid>
+						<div
+							onClick={handleToggle}
+							style={{ marginLeft: -10, textAlign: 'right', cursor: 'pointer' }}
+						>
+							{expand ? (
+								<ArrowLeft style={{ fontSize: 45, color: '#0092d1' }} />
+							) : (
+								<ArrowRight style={{ fontSize: 45, color: '#0092d1' }} />
+							)}
+						</div>
 					}
 				>
 					<animated.div style={contentProps}>

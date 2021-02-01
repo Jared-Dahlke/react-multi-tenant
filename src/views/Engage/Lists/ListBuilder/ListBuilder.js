@@ -3,25 +3,13 @@ import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
-import Grid from '@material-ui/core/Grid'
-import TagPicker from 'rsuite/lib/TagPicker'
-import PanelGroup from 'rsuite/lib/PanelGroup'
-import SelectPicker from 'rsuite/lib/SelectPicker'
-import Icon from 'rsuite/lib/Icon'
 import CustomPanel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
-import InputGroup from 'rsuite/lib/InputGroup'
-import InputNumber from 'rsuite/lib/InputNumber'
-import DateRangePicker from 'rsuite/lib/DateRangePicker'
-import FiltersLabel from './components/FiltersLabel'
-import Panel from 'rsuite/lib/Panel'
 import Container from 'rsuite/lib/Container'
-import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
-import { iabCategoriesFilter } from '../../../../staticData/iabCategories'
 import Header from 'rsuite/lib/Header'
 import Content from 'rsuite/lib/Content'
-
+import Grid from '@material-ui/core/Grid'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -42,14 +30,8 @@ import {
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
-import Checkbox from 'rsuite/lib/Checkbox'
-import { neutralLightColor } from '../../../../assets/jss/colorContants'
-import {
-	youtubeCategories,
-	countriesOptions,
-	languagesOptions
-} from '../../../../staticData/data'
 import { FiltersSideBar } from './components/FiltersSideBar'
+import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 
 const mapStateToProps = (state) => {
 	return {
@@ -461,7 +443,34 @@ function ListBuilder(props) {
 					<Container>
 						<Header>
 							<CustomPanel
-								header={props.smartListVersionUnderEdit.smartListName}
+								header={
+									<Grid container>
+										<Grid item xs={6}>
+											{props.smartListVersionUnderEdit.smartListName}
+										</Grid>
+										<Grid item xs={6} align='right'>
+											<ButtonToolbar>
+												<Button
+													style={{ marginLeft: 20 }}
+													size='xs'
+													loading={
+														props.isDownloadingExcel &&
+														props.isDownloadingExcelVersionId ===
+															parsedVersionId
+													}
+													onClick={() =>
+														handleDownloadClick(
+															parsedVersionId,
+															props.smartListVersionUnderEdit.smartListName
+														)
+													}
+												>
+													Download
+												</Button>
+											</ButtonToolbar>
+										</Grid>
+									</Grid>
+								}
 							>
 								<b>Brand Profile:</b>
 								<p style={{ color: 'grey' }}>
@@ -474,7 +483,6 @@ function ListBuilder(props) {
 							</CustomPanel>
 						</Header>
 						<Content>
-							<Button> Target All</Button> <Button> Block All </Button>
 							<ChannelsTable
 								setCurrentChannelsSort={setCurrentChannelsSort}
 								currentChannelsSort={currentChannelsSort}
