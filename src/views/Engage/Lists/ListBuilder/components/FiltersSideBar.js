@@ -31,44 +31,17 @@ import {
 	languagesOptions
 } from '../../../../../staticData/data'
 import { neutralLightColor } from '../../../../../assets/jss/colorContants'
-
-const headerStyles = {
-	padding: 18,
-	fontSize: 16,
-	height: 56,
-	background: '#34c3ff',
-	color: ' #fff',
-	whiteSpace: 'nowrap',
-	overflow: 'hidden'
-}
-
-const iconStyles = {
-	width: 56,
-	height: 56,
-	lineHeight: '56px',
-	textAlign: 'center'
-}
-
+var dayjs = require('dayjs')
 const filterSpacing = 1
-
-const actionIdOptions = [
-	{ label: 'View Targeted Items', actionIds: [1], id: 1 },
-	{ label: 'View Blocked Items', actionIds: [2], id: 2 },
-	{ label: 'View Watched Items', actionIds: [3], id: 3 },
-	{
-		label: 'View Targeted, Watched, and Blocked Items',
-		actionIds: [1, 2, 3],
-		id: 4
-	},
-	{ label: 'View All Items', actionIds: [], id: 5 }
-]
 
 export const FiltersSideBar = ({
 	expand,
 	handleToggle,
 	filterState,
 	handleApplyFiltersButtonClick,
-	handleFilterChange
+	handleFilterChange,
+	filters,
+	actionIdOptions
 }) => {
 	const sidebarProps = useSpring({
 		width: expand ? 450 : 60

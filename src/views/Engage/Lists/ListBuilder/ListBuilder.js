@@ -50,7 +50,6 @@ import {
 	languagesOptions
 } from '../../../../staticData/data'
 import { FiltersSideBar } from './components/FiltersSideBar'
-var dayjs = require('dayjs')
 
 const mapStateToProps = (state) => {
 	return {
@@ -450,6 +449,8 @@ function ListBuilder(props) {
 			<>
 				<Container>
 					<FiltersSideBar
+						filters={filters}
+						actionIdOptions={actionIdOptions}
 						handleFilterChange={handleFilterChange}
 						expand={filtersExpanded}
 						handleToggle={() => setFiltersExpanded((prevState) => !prevState)}
