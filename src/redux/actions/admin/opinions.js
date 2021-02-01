@@ -60,7 +60,7 @@ export const archiveOpinion = (opinionId) => {
 	return (dispatch) => {
 		dispatch(setOpinionArchiving(opinionId))
 		axios
-			.patch(url)
+			.delete(url)
 			.then((response) => {
 				dispatch(setOpinionToArchived(opinionId))
 				dispatch(setOpinionArchiving(''))
