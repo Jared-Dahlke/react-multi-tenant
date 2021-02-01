@@ -8,6 +8,7 @@ import { accentColor } from '../../../../../assets/jss/colorContants'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
+import Grid from '@material-ui/core/Grid'
 
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
@@ -112,6 +113,8 @@ export default function ChannelsTable({
 
 	return (
 		<Table
+			//	showHeader={!channelsIsLoading}
+			style={{ display: 'flex', flexDirection: 'column', paddingLeft: 20 }}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {
@@ -143,7 +146,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} flexGrow={2} fixed sortable>
+			<Table.Column verticalAlign={'middle'} sortable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
 				<TooltipCell
 					displayProp='nameDisplay'
@@ -164,7 +167,7 @@ export default function ChannelsTable({
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1} align='center'>
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Video Categories</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
