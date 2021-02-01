@@ -60,6 +60,7 @@ export const FiltersSideBar = ({
 	})
 
 	const contentProps = useSpring({
+		width: expand ? 450 : 0,
 		opacity: expand ? 1 : 0
 	})
 
