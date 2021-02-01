@@ -10,6 +10,7 @@ import Container from 'rsuite/lib/Container'
 import Header from 'rsuite/lib/Header'
 import Content from 'rsuite/lib/Content'
 import Grid from '@material-ui/core/Grid'
+import Icon from 'rsuite/lib/Icon'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -22,33 +23,35 @@ import {
 
 import {
 	patchVersionData,
-	deleteAllVersionData,
 	deleteVersionDataItem,
 	downloadExcelList,
 	setSmartListVersionUnderEdit,
-	fetchLists
+	fetchLists,
+	patchListName
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
 import { FiltersSideBar } from './components/FiltersSideBar'
 import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
+import Input from 'rsuite/lib/Input'
+import InputGroup from 'rsuite/lib/InputGroup'
+import {
+	accentColor,
+	neutralLightColor
+} from '../../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
 	return {
 		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit,
 		lists: state.engage.lists,
-		fetchListsSuccess: state.engage.fetchListsSuccess,
 		videos: state.engage.videos,
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
 		videosIsLoading: state.engage.videosIsLoading,
 		channelsHasNextPage: state.engage.channelsHasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
-		brandProfiles: state.brandProfiles,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
-		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess,
-		isPostingList: state.engage.isPostingList,
 		currentAccountId: state.currentAccountId
 	}
 }
@@ -57,7 +60,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		setVideos: (videos) => dispatch(setVideos(videos)),
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
-
+		patchListName: (payload) => dispatch(patchListName(payload)),
 		setSmartListVersionUnderEdit: (version) =>
 			dispatch(setSmartListVersionUnderEdit(version)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
@@ -67,8 +70,6 @@ const mapDispatchToProps = (dispatch) => {
 		removeAllChannels: () => dispatch(removeAllChannels()),
 		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
-		deleteAllVersionData: (versionId) =>
-			dispatch(deleteAllVersionData(versionId)),
 		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params)),
 		downloadExcelList: (payload) => dispatch(downloadExcelList(payload))
 	}
@@ -183,18 +184,6 @@ function ListBuilder(props) {
 		uploadDate: 'uploadDate',
 		iabCategories: 'iabCategories'
 	}
-
-	const actionIdOptions = [
-		{ label: 'View Targeted Items', actionIds: [1], id: 1 },
-		{ label: 'View Blocked Items', actionIds: [2], id: 2 },
-		{ label: 'View Watched Items', actionIds: [3], id: 3 },
-		{
-			label: 'View Targeted, Watched, and Blocked Items',
-			actionIds: [1, 2, 3],
-			id: 4
-		},
-		{ label: 'View All Items', actionIds: [], id: 5 }
-	]
 
 	const handleActionButtonClick = (actionId, item) => {
 		let unSelecting = item.actionId === actionId
@@ -420,9 +409,36 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 	}
 
-	const filterSpacing = 1
+	const [isEditingName, setIsEditingName] = React.useState(false)
+	const [smartListName, setSmartListName] = React.useState(
+		props.smartListVersionUnderEdit.smartListName
+	)
+
+	React.useEffect(() => {
+		setSmartListName(props.smartListVersionUnderEdit.smartListName)
+	}, [props.smartListVersionUnderEdit.smartListName])
 
 	const [filtersExpanded, setFiltersExpanded] = React.useState(true)
+
+	const handleNameChange = (e) => {
+		e.preventDefault()
+		setIsEditingName(false)
+		if (smartListName === e.target.value) {
+			return
+		}
+		setSmartListName(e.target.value)
+
+		let payload = {
+			smartListName: e.target.value,
+			smartListId: props.smartListVersionUnderEdit.smartListId
+		}
+
+		toast.promise(props.patchListName(payload), {
+			loading: 'Saving...',
+			success: 'Saved!   ',
+			error: <b>Could not delete.</b>
+		})
+	}
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -432,7 +448,6 @@ function ListBuilder(props) {
 				<Container>
 					<FiltersSideBar
 						filters={filters}
-						actionIdOptions={actionIdOptions}
 						handleFilterChange={handleFilterChange}
 						expand={filtersExpanded}
 						handleToggle={() => setFiltersExpanded((prevState) => !prevState)}
@@ -446,7 +461,33 @@ function ListBuilder(props) {
 								header={
 									<Grid container>
 										<Grid item xs={6}>
-											{props.smartListVersionUnderEdit.smartListName}
+											<p>SmartList Name</p>
+											<InputGroup
+												style={{
+													borderColor: isEditingName
+														? accentColor
+														: neutralLightColor
+												}}
+											>
+												<InputGroup.Button
+													onClick={() => {
+														setIsEditingName(true)
+													}}
+													style={{ backgroundColor: 'transparent' }}
+												>
+													<Icon style={{ color: '#0092d1' }} icon='pencil' />
+												</InputGroup.Button>
+												<Input
+													onPressEnter={(e) => handleNameChange(e)}
+													onBlur={(e) => {
+														handleNameChange(e)
+													}}
+													disabled={!isEditingName}
+													defaultValue={
+														props.smartListVersionUnderEdit.smartListName
+													}
+												/>
+											</InputGroup>
 										</Grid>
 										<Grid item xs={6} align='right'>
 											<ButtonToolbar>

@@ -35,20 +35,32 @@ import { neutralLightColor } from '../../../../../assets/jss/colorContants'
 var dayjs = require('dayjs')
 const filterSpacing = 1
 
+const actionIdOptions = [
+	{ label: 'View Targeted Items', actionIds: [1], id: 1 },
+	{ label: 'View Blocked Items', actionIds: [2], id: 2 },
+	{ label: 'View Watched Items', actionIds: [3], id: 3 },
+	{
+		label: 'View Targeted, Watched, and Blocked Items',
+		actionIds: [1, 2, 3],
+		id: 4
+	},
+	{ label: 'View All Items', actionIds: [], id: 5 }
+]
+
 export const FiltersSideBar = ({
 	expand,
 	handleToggle,
 	filterState,
 	handleApplyFiltersButtonClick,
 	handleFilterChange,
-	filters,
-	actionIdOptions
+	filters
 }) => {
 	const sidebarProps = useSpring({
 		width: expand ? 450 : 60
 	})
 
 	const contentProps = useSpring({
+		width: expand ? 450 : 0,
 		opacity: expand ? 1 : 0
 	})
 
@@ -77,6 +89,7 @@ export const FiltersSideBar = ({
 						<PanelGroup>
 							<CustomPanel header='Actions Taken'>
 								<SelectPicker
+									disabled={!expand}
 									size='xs'
 									labelKey={'label'}
 									valueKey={'actionIds'}
@@ -109,6 +122,7 @@ export const FiltersSideBar = ({
 											}}
 											cascade={true}
 											block
+											disabled={!expand}
 										/>
 									</Grid>
 								</Grid>
@@ -118,6 +132,7 @@ export const FiltersSideBar = ({
 								<Grid container spacing={filterSpacing}>
 									<Grid item xs={12}>
 										<TagPicker
+											disabled={!expand}
 											block
 											size={'xs'}
 											data={countriesOptions}
@@ -134,6 +149,7 @@ export const FiltersSideBar = ({
 									<Grid item xs={12}>
 										<TagPicker
 											block
+											disabled={!expand}
 											size={'xs'}
 											data={languagesOptions}
 											labelKey={'languageName'}
@@ -150,6 +166,7 @@ export const FiltersSideBar = ({
 										<TagPicker
 											block
 											size={'xs'}
+											disabled={!expand}
 											data={youtubeCategories}
 											labelKey={'categoryName'}
 											valueKey={'categoryId'}
@@ -163,6 +180,7 @@ export const FiltersSideBar = ({
 
 									<Grid item xs={12}>
 										<Checkbox
+											disabled={!expand}
 											size={'xs'}
 											onChange={(na, bool) => {
 												handleFilterChange(filters.kids, bool)
@@ -181,6 +199,7 @@ export const FiltersSideBar = ({
 											<InputNumber
 												step={10000}
 												size='xs'
+												disabled={!expand}
 												value={filterState.views.min}
 												onFocus={(event) => event.target.select()}
 												placeholder={'Min'}
@@ -196,6 +215,7 @@ export const FiltersSideBar = ({
 
 											<InputGroup.Addon>to</InputGroup.Addon>
 											<InputNumber
+												disabled={!expand}
 												step={10000}
 												onFocus={(event) => event.target.select()}
 												size='xs'
@@ -212,6 +232,7 @@ export const FiltersSideBar = ({
 											/>
 										</InputGroup>
 										<Button
+											disabled={!expand}
 											size='xs'
 											appearance='link'
 											onClick={() =>
@@ -229,6 +250,7 @@ export const FiltersSideBar = ({
 										<FiltersLabel text='Duration (minutes)' />
 										<InputGroup size='xs'>
 											<InputNumber
+												disabled={!expand}
 												value={filterState.videoDurationSeconds.min}
 												size='xs'
 												onFocus={(event) => event.target.select()}
@@ -247,6 +269,7 @@ export const FiltersSideBar = ({
 
 											<InputGroup.Addon>to</InputGroup.Addon>
 											<InputNumber
+												disabled={!expand}
 												value={filterState.videoDurationSeconds.max}
 												onFocus={(event) => event.target.select()}
 												size='xs'
@@ -265,6 +288,7 @@ export const FiltersSideBar = ({
 											/>
 										</InputGroup>
 										<Button
+											disabled={!expand}
 											size='xs'
 											appearance='link'
 											onClick={() =>
@@ -281,6 +305,7 @@ export const FiltersSideBar = ({
 									<Grid item xs={12}>
 										<FiltersLabel text='Upload Date' />
 										<DateRangePicker
+											disabled={!expand}
 											block
 											size='xs'
 											showOneCalendar
@@ -300,7 +325,12 @@ export const FiltersSideBar = ({
 								</Grid>
 							</CustomPanel>
 							<CustomPanel>
-								<Button block size='xs' onClick={handleApplyFiltersButtonClick}>
+								<Button
+									disabled={!expand}
+									block
+									size='xs'
+									onClick={handleApplyFiltersButtonClick}
+								>
 									Apply Filters
 								</Button>
 							</CustomPanel>

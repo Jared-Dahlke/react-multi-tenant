@@ -301,13 +301,27 @@ export function setUploadedList(uploadedList) {
 }
 
 export function archiveList(payload) {
-	//	let accountId = account.accountId
 	let url =
 		apiBase + `/smart-list/${payload.smartListId}?archive=${payload.archive}`
 	return async (dispatch) => {
 		dispatch(setListArchived(payload))
 		try {
 			const result = await axios.patch(url)
+			if (result.status === 200) {
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function patchListName(payload) {
+	let url = apiBase + `/smart-list/${payload.smartListId}`
+	return async (dispatch) => {
+		try {
+			const result = await axios.patch(url, {
+				smartListName: payload.smartListName
+			})
 			if (result.status === 200) {
 			}
 		} catch (error) {
