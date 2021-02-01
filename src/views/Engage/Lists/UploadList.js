@@ -13,10 +13,12 @@ import Radio from 'rsuite/lib/Radio'
 import RadioGroup from 'rsuite/lib/RadioGroup'
 import Button from 'rsuite/lib/Button'
 import { getCurrentAccount } from '../../../utils'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
+import Whisper from 'rsuite/lib/Whisper'
+import Tooltip from 'rsuite/lib/Tooltip'
+import Icon from 'rsuite/lib/Icon'
+import { targetTypes } from './constants'
+import { useHistory } from 'react-router-dom'
 import {
-	fetchLists,
 	setUploadedList,
 	postList,
 	setPostListSuccess
@@ -24,7 +26,7 @@ import {
 import { uploadedListObjValidation } from '../../../schemas/Engage/Lists/schemas'
 import config from '../../../config'
 const parseExcelUrl = config.api.listBuilderUrl + '/parse-excel'
-const token = localStorage.getItem('token')
+
 const useStyles = makeStyles(styles)
 
 const mapStateToProps = (state) => {
@@ -34,13 +36,13 @@ const mapStateToProps = (state) => {
 		accounts: state.accounts,
 		isPostingList: state.engage.isPostingList,
 		postListSuccess: state.engage.postListSuccess,
-		brandProfiles: state.brandProfiles
+		brandProfiles: state.brandProfiles,
+		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 		setUploadedList: (list) => dispatch(setUploadedList(list)),
 		postList: (data) => dispatch(postList(data)),
 		setPostListSuccess: (bool) => dispatch(setPostListSuccess(bool))
@@ -54,22 +56,22 @@ const objectives = [
 ]
 
 function UploadList(props) {
-	let fetchLists = props.fetchLists
-	let accounts = props.accounts.data
+	let history = useHistory()
 
+	let setPostListSuccess = props.setPostListSuccess
 	React.useEffect(() => {
-		let currentAccount = getCurrentAccount(props.accounts.data)
-		if (currentAccount) {
-			fetchLists(currentAccount.accountId)
+		return () => {
+			//clean up on unmount
+			setPostListSuccess(false)
 		}
-	}, [fetchLists, accounts])
+	}, [])
 
 	let postListSuccess = props.postListSuccess
 
 	React.useEffect(() => {
 		if (postListSuccess) {
-			let currentAccount = getCurrentAccount(props.accounts.data)
-			fetchLists(currentAccount.accountId)
+			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
+			history.push(url)
 		}
 	}, [postListSuccess])
 
@@ -121,12 +123,63 @@ function UploadList(props) {
 		setUploadedCount(uploadedCount - 1)
 	}
 
+	const handleDownloadTemplateClick = () => {
+		window.location.href =
+			'https://storage.googleapis.com/sightlyoutcomeintelligence_templates/SmartList_Upload_Template.xlsx'
+	}
+
 	return (
 		<div>
 			<Grid container spacing={3} justify='center'>
 				<Grid item xs={12} sm={6} md={10}>
 					<Form>
-						<Panel header='Upload a list' bordered>
+						<Panel
+							header={
+								<Grid container>
+									<Grid item xs={6}>
+										Upload a list
+										<Whisper
+											placement='bottom'
+											trigger='hover'
+											speaker={
+												<Tooltip>
+													The list can be either channels or videos, but not
+													both.
+												</Tooltip>
+											}
+										>
+											<Icon
+												size='lg'
+												icon='question2'
+												style={{ marginLeft: 20 }}
+											/>
+										</Whisper>
+									</Grid>
+
+									<Grid item xs={6} align='right'>
+										<Whisper
+											placement='bottom'
+											trigger='hover'
+											speaker={
+												<Tooltip>
+													The list can be either channels or videos, but not
+													both.
+												</Tooltip>
+											}
+										>
+											<Button
+												appearance='link'
+												style={{ margin: 0, padding: 0 }}
+												onClick={handleDownloadTemplateClick}
+											>
+												Click to download template
+											</Button>
+										</Whisper>
+									</Grid>
+								</Grid>
+							}
+							bordered
+						>
 							<Grid container>
 								<RadioGroup
 									inline
@@ -192,6 +245,25 @@ function UploadList(props) {
 
 								{uploadType === 'new' && (
 									<FormikSelect
+										id='targetTypeId'
+										name='targetTypeId'
+										label='Target Type'
+										optionLabel='targetTypeName'
+										optionValue='targetTypeId'
+										options={targetTypes}
+										value={values.targetTypeId}
+										onChange={setFieldValue}
+										onBlur={setFieldTouched}
+										validateField={validateField}
+										validateForm={validateForm}
+										touched={touched.targetTypeId}
+										error={errors.targetTypeId}
+										hideSearch
+									/>
+								)}
+
+								{uploadType === 'new' && (
+									<FormikSelect
 										id='brandProfileId'
 										name='brandProfileId'
 										label='Brand Profile'
@@ -219,7 +291,7 @@ function UploadList(props) {
 										listType='text'
 										accept='.xlsx, .xls, .csv'
 										action={parseExcelUrl}
-										headers={{ Authorization: token }}
+										headers={{ Authorization: localStorage.getItem('token') }}
 										multiple={false}
 										draggable
 										onError={(err) => console.log('err consolelog:', err)}
@@ -265,19 +337,6 @@ function UploadList(props) {
 					</Form>
 				</Grid>
 			</Grid>
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.postListSuccess}
-				onClose={() => props.setPostListSuccess(false)}
-			>
-				<Alert
-					onClose={() => props.setPostListSuccess(false)}
-					severity='success'
-				>
-					Success
-				</Alert>
-			</Snackbar>
 		</div>
 	)
 }
@@ -318,10 +377,10 @@ const validateExisting = (values, errors) => {
 const MyEnhancedForm = withFormik({
 	mapPropsToValues: (props) => {
 		return {
-			// userId: props.user.userProfile.userId,
 			uploadType: 'new',
 			name: '',
 			objectiveId: 1,
+			targetTypeId: 1,
 			smartListId: '',
 			uploadedList: [],
 			smartLists: props.lists,
@@ -356,7 +415,8 @@ const MyEnhancedForm = withFormik({
 			list = {
 				smartListName: values.name,
 				objectiveId: values.objectiveId,
-				smartListData: values.uploadedList
+				smartListData: values.uploadedList,
+				targetTypeId: values.targetTypeId
 			}
 		}
 		if (values.uploadType === 'existing') {
@@ -364,8 +424,9 @@ const MyEnhancedForm = withFormik({
 			list = {
 				smartListName: smartListName,
 				smartListId: values.smartListId,
-				objectiveId: values.objectiveId,
+				//	objectiveId: values.objectiveId,
 				smartListData: values.uploadedList
+				//	targetTypeId: values.targetTypeId
 			}
 		}
 		let data = {

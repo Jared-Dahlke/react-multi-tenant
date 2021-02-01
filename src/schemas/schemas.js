@@ -38,13 +38,14 @@ export const accountsObjValidation = Yup.array()
 		'The api sent accounts that have duplicate accountIds. Please address in api or database as this breaks the UI.',
 		(accounts) => {
 			let seen = new Set()
-			var hasDuplicates = accounts.some(function (currentObject) {
+			var hasDuplicates = accounts.some(function(currentObject) {
 				return seen.size === seen.add(currentObject.accountId).size
 			})
 
 			return !hasDuplicates
 		}
 	)
+
 //	.nullable()
 
 export const usersWithRolesObjValidation = Yup.array()
@@ -105,15 +106,6 @@ export const userObjValidation = Yup.object().shape({
 	roles: Yup.array(),
 	accounts: Yup.array()
 })
-
-export const accountTypesObjValidation = Yup.array()
-	.min(1, 'No Account types available')
-	.of(
-		Yup.object().shape({
-			accountTypeId: Yup.number().required(),
-			accountTypeName: Yup.string().required()
-		})
-	)
 
 export const brandScenarioObjValidation = Yup.array().of(
 	Yup.object().shape({

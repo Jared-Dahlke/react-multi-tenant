@@ -7,14 +7,11 @@ import {
 	SET_ACCOUNT_TYPES,
 	ACCOUNTS_UPDATE_ACCOUNT,
 	SET_IS_SWITCHING_ACCOUNTS,
-	SET_ACCOUNT_CREATED,
-	SET_ACCOUNT_SAVED,
 	SET_ACCOUNT_SAVING
 } from '../action-types/accounts'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
 import {
-	accountTypesObjValidation,
 	usersWithRolesObjValidation,
 	accountsObjValidation
 } from '../../schemas/schemas'
@@ -38,11 +35,11 @@ import {
 import {
 	setBrandProfiles,
 	fetchBrandProfiles,
-	brandProfilesIsLoading,
-	fetchBrandIndustryVerticals
+	brandProfilesIsLoading
 } from '../actions/brandProfiles'
 import { findAccountNodeByAccountId } from '../../utils'
 import { setLists, fetchLists } from './engage/lists'
+import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
 
@@ -50,13 +47,6 @@ export function setAccounts(accounts) {
 	return {
 		type: SET_ACCOUNTS,
 		accounts
-	}
-}
-
-export function setAccountTypes(accountTypes) {
-	return {
-		type: SET_ACCOUNT_TYPES,
-		accountTypes
 	}
 }
 
@@ -81,13 +71,6 @@ export function setCurrentAccount(accountId) {
 	}
 }
 
-export function setAccountSaved(accountSaved) {
-	return {
-		type: SET_ACCOUNT_SAVED,
-		accountSaved
-	}
-}
-
 export function setAccountSaving(accountSaving) {
 	return {
 		type: SET_ACCOUNT_SAVING,
@@ -102,13 +85,6 @@ export function isSwitchingAccounts(bool) {
 	}
 }
 
-export function accountCreated(bool) {
-	return {
-		type: SET_ACCOUNT_CREATED,
-		accountCreated: bool
-	}
-}
-
 export function updateAccount(account) {
 	let accountId = account.accountId
 	let url = apiBase + `/account/${accountId}`
@@ -119,7 +95,7 @@ export function updateAccount(account) {
 			const result = await axios.patch(url, account)
 			if (result.status === 200) {
 				dispatch(setAccountSaving(false))
-				dispatch(setAccountSaved(true))
+				toast.success('Account saved!')
 			}
 		} catch (error) {
 			alert(error)
@@ -150,7 +126,7 @@ export const createAccount = (account) => {
 		axios
 			.post(url, account)
 			.then((response) => {
-				dispatch(accountCreated(true))
+				toast.success('Account created!')
 				dispatch(fetchSiteData(response.data.accountId))
 			})
 			.catch((error) => {
@@ -170,7 +146,6 @@ export function clearSiteData() {
 		dispatch(setUsers([]))
 		dispatch(setRolesPermissions([]))
 		dispatch(setBrandProfiles([]))
-		dispatch(setAccountTypes([]))
 		dispatch(setLists([]))
 	}
 }
@@ -223,7 +198,6 @@ export function fetchSiteData(accountId) {
 			}
 
 			localStorage.setItem('currentAccountId', accountId)
-			dispatch(fetchAccountTypes())
 			dispatch(userProfileFetchData())
 			dispatch(setCurrentAccount(accountId))
 			dispatch(setCurrentAccountId(accountId))
@@ -232,10 +206,9 @@ export function fetchSiteData(accountId) {
 			}
 
 			dispatch(usersFetchData(accountId))
-			dispatch(rolesPermissionsFetchData(accountId))
+			dispatch(rolesPermissionsFetchData())
 			dispatch(fetchBrandProfiles(accountId))
 			dispatch(fetchLists(accountId))
-			dispatch(fetchBrandIndustryVerticals())
 
 			if (config.googleAuth) {
 				dispatch(fetchGoogleLoginUrl())
@@ -333,30 +306,6 @@ export function fetchAccountUsers(accountId) {
 			}
 		} catch (error) {
 			alert('Error on fetch account users: ' + JSON.stringify(error, null, 2))
-		}
-	}
-}
-
-export function fetchAccountTypes() {
-	let url = apiBase + `/account/types`
-	return async (dispatch) => {
-		try {
-			let result = []
-			try {
-				result = await axios.get(url)
-			} catch (error) {
-				console.log(error)
-			}
-
-			if (result.status === 200) {
-				accountTypesObjValidation.validate(result.data).catch(function(err) {
-					console.log(err.name, err.errors)
-					alert('Could not validate account types data')
-				})
-				dispatch(setAccountTypes(result.data))
-			}
-		} catch (error) {
-			alert('Error on fetch account types: ' + JSON.stringify(error, null, 2))
 		}
 	}
 }

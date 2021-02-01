@@ -16,6 +16,8 @@ import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
 import FiltersLabel from './components/FiltersLabel'
 import Panel from 'rsuite/lib/Panel'
+import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
+import { iabCategoriesFilter } from '../../../../staticData/iabCategories'
 
 import {
 	fetchVideos,
@@ -23,15 +25,9 @@ import {
 	setVideos,
 	removeAllVideos,
 	removeAllChannels,
-	setHasNextPage,
+	setChannelsHasNextPage,
 	setVideosHasNextPage
 } from '../../../../redux/actions/engage/listBuilder'
-
-import {
-	fetchFilterCategories,
-	fetchFilterCountries,
-	fetchFilterLanguages
-} from '../../../../redux/actions/engage/filters'
 
 import {
 	patchVersionData,
@@ -43,8 +39,13 @@ import {
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
-import { Checkbox } from 'rsuite'
+import Checkbox from 'rsuite/lib/Checkbox'
 import { neutralLightColor } from '../../../../assets/jss/colorContants'
+import {
+	youtubeCategories,
+	countriesOptions,
+	languagesOptions
+} from '../../../../staticData/data'
 var dayjs = require('dayjs')
 
 const mapStateToProps = (state) => {
@@ -56,12 +57,9 @@ const mapStateToProps = (state) => {
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
 		videosIsLoading: state.engage.videosIsLoading,
-		hasNextPage: state.engage.hasNextPage,
+		channelsHasNextPage: state.engage.channelsHasNextPage,
 		videosHasNextPage: state.engage.videosHasNextPage,
 		brandProfiles: state.brandProfiles,
-		filterCountries: state.engage.filterCountries,
-		filterLanguages: state.engage.filterLanguages,
-		filterCategories: state.engage.filterCategories,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
 		deleteAllVersionDataSuccess: state.engage.deleteAllVersionDataSuccess,
@@ -82,10 +80,7 @@ const mapDispatchToProps = (dispatch) => {
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
 		removeAllVideos: () => dispatch(removeAllVideos()),
 		removeAllChannels: () => dispatch(removeAllChannels()),
-		fetchFilterCategories: () => dispatch(fetchFilterCategories()),
-		fetchFilterCountries: () => dispatch(fetchFilterCountries()),
-		fetchFilterLanguages: () => dispatch(fetchFilterLanguages()),
-		setHasNextPage: (bool) => dispatch(setHasNextPage(bool)),
+		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteAllVersionData: (versionId) =>
 			dispatch(deleteAllVersionData(versionId)),
@@ -110,6 +105,7 @@ function ListBuilder(props) {
 	const [pageIsLoading, setPageIsLoading] = React.useState(true)
 
 	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
+	const [videosFetchTrigger, setVideosFetchTrigger] = React.useState(0)
 
 	let [parsedVersionId] = React.useState(props.match.params.versionId)
 
@@ -117,10 +113,20 @@ function ListBuilder(props) {
 		history.push(routes.app.engage.lists.lists.path)
 	}
 
+	const [currentChannelsSort, setCurrentChannelsSort] = React.useState({
+		sortColumn: 'views',
+		sortType: 'desc'
+	})
+
+	const [currentVideosSort, setCurrentVideosSort] = React.useState({
+		sortColumn: 'views',
+		sortType: 'desc'
+	})
+
 	React.useEffect(() => {
 		return () => {
 			//clean up on unmount
-			props.setHasNextPage(true)
+			props.setChannelsHasNextPage(true)
 			props.setVideosHasNextPage(true)
 		}
 	}, [])
@@ -132,9 +138,6 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		props.removeAllChannels()
 		props.removeAllVideos()
-		props.fetchFilterCategories()
-		props.fetchFilterCountries()
-		props.fetchFilterLanguages()
 		setCurrentPage(1)
 	}, [])
 
@@ -142,92 +145,47 @@ function ListBuilder(props) {
 	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
 
 	React.useEffect(() => {
-		if (props.hasNextPage) {
-			let params = {
-				versionId: parsedVersionId,
-				pageNumber: currentPage,
-				filters: {
-					channelFilters: {
-						countries: filterState.countries,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: {
-							min: filterState.views.min ? filterState.views.min : 0,
-							max: filterState.views.max
-								? filterState.views.max
-								: 1000000000000000
-						},
-						videoDurationSeconds: {
-							min: filterState.videoDurationSeconds.min
-								? filterState.videoDurationSeconds.min * 60
-								: 0,
-							max: filterState.videoDurationSeconds.max
-								? filterState.videoDurationSeconds.max * 60
-								: 1000000000000000
-						},
-						uploadDate: filterState.uploadDate
-					},
-					videoFilters: {
-						languages: filterState.languages,
-						categories: filterState.categories,
-						kids: filterState.kids,
-						actionIds: filterState.actionIds,
-						views: {
-							min: filterState.views.min ? filterState.views.min : 0,
-							max: filterState.views.max
-								? filterState.views.max
-								: 1000000000000000
-						},
-						videoDurationSeconds: {
-							min: filterState.videoDurationSeconds.min
-								? filterState.videoDurationSeconds.min * 60
-								: 0,
-							max: filterState.videoDurationSeconds.max
-								? filterState.videoDurationSeconds.max * 60
-								: 1000000000000000
-						},
-						uploadDate: filterState.uploadDate
-					}
-				}
-			}
-			props.fetchChannels(params)
+		let params = {
+			versionId: parsedVersionId,
+			pageNumber: currentPage,
+			filters: filterState,
+			sort: currentChannelsSort
 		}
+		props.fetchChannels(params)
 	}, [currentPage, channelsFetchTrigger])
 
-	let videosHasNextPage = props.videosHasNextPage
+	const [mounted, setMounted] = React.useState(false)
+	React.useEffect(() => {
+		if (mounted) {
+			handleApplyFiltersButtonClick()
+		}
+		setMounted(true)
+	}, [currentChannelsSort])
+
+	const [mountedForVideos, setMountedForVideos] = React.useState(false)
+	React.useEffect(() => {
+		if (mountedForVideos) {
+			props.removeAllVideos()
+			setCurrentVideoPage(1)
+			setVideosFetchTrigger((prevState) => prevState + 1)
+		}
+		setMountedForVideos(true)
+	}, [currentVideosSort])
 
 	React.useEffect(() => {
-		if (currentVideoPage > 0 && viewingVideosForChannel && videosHasNextPage) {
+		if (currentVideoPage > 0 && viewingVideosForChannel) {
 			let params = {
 				versionId: parsedVersionId,
 				pageNumber: currentVideoPage,
 				filters: {
-					channelId: viewingVideosForChannel.id,
-					kids: filterState.kids,
-					languages: filterState.languages,
-					views: {
-						min: filterState.views.min ? filterState.views.min : 0,
-						max: filterState.views.max
-							? filterState.views.max
-							: 1000000000000000
-					},
-					videoDurationSeconds: {
-						min: filterState.videoDurationSeconds.min
-							? filterState.videoDurationSeconds.min * 60
-							: 0,
-						max: filterState.videoDurationSeconds.max
-							? filterState.videoDurationSeconds.max * 60
-							: 1000000000000000
-					},
-					uploadDate: filterState.uploadDate,
-					actionIds: filterState.actionIds,
-					categories: filterState.categories
-				}
+					...filterState,
+					channelId: viewingVideosForChannel.id
+				},
+				sort: currentVideosSort
 			}
 			props.fetchVideos(params)
 		}
-	}, [currentVideoPage, viewingVideosForChannel])
+	}, [currentVideoPage, viewingVideosForChannel, videosFetchTrigger])
 
 	const filters = {
 		kids: 'kids',
@@ -237,7 +195,8 @@ function ListBuilder(props) {
 		actionIds: 'actionIds',
 		views: 'views',
 		videoDurationSeconds: 'videoDurationSeconds',
-		uploadDate: 'uploadDate'
+		uploadDate: 'uploadDate',
+		iabCategories: 'iabCategories'
 	}
 
 	const actionIdOptions = [
@@ -292,8 +251,11 @@ function ListBuilder(props) {
 
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
+		iabCategories: [],
 		countries: [{ countryCode: 'US' }],
 		actionIds: [],
+		uploadDate: null,
+		categories: [],
 		languages: [{ languageCode: 'en' }],
 		views: {
 			min: null,
@@ -357,6 +319,22 @@ function ListBuilder(props) {
 					return {
 						...prevState,
 						categories
+					}
+				})
+				break
+
+			case filters.iabCategories:
+				let iabCategories = []
+				if (!value) {
+					value = []
+				}
+				for (const iabCategory of value) {
+					iabCategories.push(iabCategory)
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						iabCategories
 					}
 				})
 				break
@@ -437,7 +415,7 @@ function ListBuilder(props) {
 	const handleApplyFiltersButtonClick = () => {
 		props.removeAllChannels()
 		props.removeAllVideos()
-		props.setHasNextPage(true)
+		props.setChannelsHasNextPage(true)
 		setCurrentPage(1)
 		setChannelsFetchTrigger((prevState) => prevState + 1)
 	}
@@ -457,18 +435,24 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 	}
 
+	const filterSpacing = 1
+
 	if (pageIsLoading) {
-		return <Loader center content='Loading...' vertical />
+		return <Loader center content='Loading...' vertical size='lg' />
 	} else {
 		return (
 			<Grid container spacing={2}>
 				<VideoModal
+					currentVideosSort={currentVideosSort}
+					setCurrentVideosSort={setCurrentVideosSort}
 					show={showVideoModal}
 					close={handleVideoModalClose}
 					videos={props.videos}
-					incrementPage={() =>
-						setCurrentVideoPage((prevState) => prevState + 1)
-					}
+					incrementPage={() => {
+						if (!props.videosIsLoading) {
+							setCurrentVideoPage((prevState) => prevState + 1)
+						}
+					}}
 					handleActionButtonClick={handleActionButtonClick}
 					channel={viewingVideosForChannel}
 					videosIsLoading={props.videosIsLoading}
@@ -521,13 +505,34 @@ function ListBuilder(props) {
 									/>
 								</CustomPanel>
 
+								<CustomPanel header='SmartList Filters'>
+									<Grid container spacing={filterSpacing}>
+										<Grid item xs={12}>
+											<FiltersLabel text='IAB Categories' />
+											<CheckTreePicker
+												placement='topStart'
+												size={'xs'}
+												defaultExpandAll={false}
+												data={iabCategoriesFilter}
+												labelKey={'name'}
+												valueKey={'id'}
+												onChange={(val) => {
+													handleFilterChange(filters.iabCategories, val)
+												}}
+												cascade={true}
+												block
+											/>
+										</Grid>
+									</Grid>
+								</CustomPanel>
+
 								<CustomPanel header='YouTube Filters'>
-									<Grid container spacing={3}>
+									<Grid container spacing={filterSpacing}>
 										<Grid item xs={12}>
 											<TagPicker
 												block
 												size={'xs'}
-												data={props.filterCountries}
+												data={countriesOptions}
 												labelKey={'countryName'}
 												valueKey={'countryCode'}
 												defaultValue={['US']}
@@ -542,7 +547,7 @@ function ListBuilder(props) {
 											<TagPicker
 												block
 												size={'xs'}
-												data={props.filterLanguages}
+												data={languagesOptions}
 												labelKey={'languageName'}
 												valueKey={'languageCode'}
 												defaultValue={['en']}
@@ -557,11 +562,11 @@ function ListBuilder(props) {
 											<TagPicker
 												block
 												size={'xs'}
-												data={props.filterCategories}
+												data={youtubeCategories}
 												labelKey={'categoryName'}
 												valueKey={'categoryId'}
 												virtualized={true}
-												placeholder='Categories'
+												placeholder='Youtube Categories'
 												onChange={(val) => {
 													handleFilterChange(filters.categories, val)
 												}}
@@ -581,7 +586,7 @@ function ListBuilder(props) {
 									</Grid>
 								</CustomPanel>
 								<CustomPanel header='Video Filters'>
-									<Grid container spacing={3}>
+									<Grid container spacing={filterSpacing}>
 										<Grid item xs={12}>
 											<FiltersLabel text='Views' />
 											<InputGroup size='xs'>
@@ -736,10 +741,16 @@ function ListBuilder(props) {
 
 					<Grid item xs={12}>
 						<ChannelsTable
-							hasNextPage={props.hasNextPage}
+							setCurrentChannelsSort={setCurrentChannelsSort}
+							currentChannelsSort={currentChannelsSort}
+							channelsHasNextPage={props.channelsHasNextPage}
 							channelsIsLoading={props.channelsIsLoading}
 							items={props.channels}
-							incrementPage={() => setCurrentPage((prevState) => prevState + 1)}
+							incrementPage={() => {
+								if (!props.channelsIsLoading) {
+									setCurrentPage((prevState) => prevState + 1)
+								}
+							}}
 							handleActionButtonClick={handleActionButtonClick}
 							handleVideosClick={handleVideosClick}
 						/>

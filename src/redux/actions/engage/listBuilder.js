@@ -6,7 +6,7 @@ import {
 	SET_VIDEOS,
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
-	SET_HAS_NEXT_PAGE,
+	SET_CHANNELS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_CHANNELS_IS_LOADING,
 	SET_VIDEOS_IS_LOADING
@@ -17,20 +17,14 @@ import {
 	videosSchema
 } from '../../../schemas/Engage/Lists/schemas'
 import numeral from 'numeral'
+import countryCodeToFlagEmoji from 'country-code-to-flag-emoji'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
 
 const apiBase = config.api.listBuilderUrl
 
-let fetchVideosRequest = null
-
 export function fetchVideos(args) {
-	if (fetchVideosRequest) {
-		fetchVideosRequest.cancel()
-	}
-	fetchVideosRequest = axios.CancelToken.source()
-
 	let url =
 		apiBase +
 		`/smart-list/video?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
@@ -40,10 +34,11 @@ export function fetchVideos(args) {
 			const result = await defaultAxios({
 				method: 'POST',
 				url: url,
-				data: args.filters,
-				cancelToken: fetchVideosRequest.token
+				data: {
+					filters: args.filters,
+					sort: args.sort
+				}
 			})
-			//	const result = await defaultAxios.get(url, {)
 
 			if (result.status === 200) {
 				videosSchema.validate(result.data).catch((err) => {
@@ -74,10 +69,10 @@ export function setVideos(videos) {
 	}
 }
 
-export function setHasNextPage(hasNextPage) {
+export function setChannelsHasNextPage(channelsHasNextPage) {
 	return {
-		type: SET_HAS_NEXT_PAGE,
-		hasNextPage
+		type: SET_CHANNELS_HAS_NEXT_PAGE,
+		channelsHasNextPage
 	}
 }
 
@@ -116,14 +111,7 @@ export function removeAllChannels() {
 	}
 }
 
-let fetchChannelsRequest = null
-
 export function fetchChannels(args) {
-	if (fetchChannelsRequest) {
-		fetchChannelsRequest.cancel()
-	}
-	fetchChannelsRequest = axios.CancelToken.source()
-
 	let url =
 		apiBase +
 		`/smart-list/channel?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
@@ -132,8 +120,10 @@ export function fetchChannels(args) {
 		const result = await axios({
 			method: 'POST',
 			url: url,
-			data: args.filters,
-			cancelToken: fetchChannelsRequest.token
+			data: {
+				filters: args.filters,
+				sort: args.sort
+			}
 		})
 
 		if (result.status === 200) {
@@ -144,7 +134,7 @@ export function fetchChannels(args) {
 				)
 			})
 			if (result.data.length < 100) {
-				dispatch(setHasNextPage(false))
+				dispatch(setChannelsHasNextPage(false))
 			}
 			let formattedChannels = formatChannels(result.data)
 			dispatch(setChannels(formattedChannels))
@@ -155,24 +145,18 @@ export function fetchChannels(args) {
 
 const formatChannels = (channels) => {
 	for (const item of channels) {
-		let abbreviatedDescription
-		if (!item.description) {
-			abbreviatedDescription = '[No description]'
-		} else if (item.description.length > 40) {
-			abbreviatedDescription = item.description.substring(0, 40) + '...'
-		} else if (!item.description.replace(/\s/g, '').length) {
-			abbreviatedDescription = '[No description]'
-		} else {
-			abbreviatedDescription = item.description
-		}
-		item.abbreviatedDescription = abbreviatedDescription
+		item.createDateDisplay = dayjs(item.created).calendar()
+		item.createDateTooltip = dayjs(item.created).calendar()
 
-		let createDate = item.created
-			? dayjs(item.created).calendar()
-			: dayjs(item.published).calendar()
-		item.createDate = createDate
+		item.countryDisplay = countryCodeToFlagEmoji(item.countryCode)
+		item.countryTooltip = item.countryName
+
+		item.categoryDisplay = item.categoryName
+		item.categoryTooltip = item.categoryName
+
 		let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
-		item.name = name
+		item.nameDisplay = name
+
 		let description
 		if (!item.description) {
 			description = '[No description]'
@@ -181,37 +165,36 @@ const formatChannels = (channels) => {
 		} else {
 			description = item.description.substring(0, 500)
 		}
-		item.description = description
-		item.subscribersCount = numeral(item.subscribers).format('0a')
-		item.videosCount =
+		item.nameTooltip = item.nameDisplay + ' - ' + description
+
+		item.subscribersDisplay = numeral(item.subscribers).format('0a')
+		item.subscribersTooltip = numeral(item.subscribers).format('0,0')
+
+		item.videosDisplay =
 			numeral(item.filteredVideoCount).format('0a') +
 			'/' +
 			numeral(item.allVideoCount).format('0a')
-		item.viewsCount = numeral(item.views).format('0a')
+		item.videosTooltip = `Based off of your filters there are ${numeral(
+			item.filteredVideoCount
+		).format('0,0')} videos you can see, out of the ${numeral(
+			item.allVideoCount
+		).format('0,0')} videos in our database for this channel.`
+
+		item.viewsDisplay = numeral(item.views).format('0a')
+		item.viewsTooltip = numeral(item.views).format('0,0')
 	}
 	return channels
 }
 
 const formatVideos = (videos) => {
 	for (const item of videos) {
-		let abbreviatedDescription
-		if (!item.description) {
-			abbreviatedDescription = '[No description]'
-		} else if (item.description.length > 40) {
-			abbreviatedDescription = item.description.substring(0, 40) + '...'
-		} else if (!item.description.replace(/\s/g, '').length) {
-			abbreviatedDescription = '[No description]'
-		} else {
-			abbreviatedDescription = item.description
-		}
-		item.abbreviatedDescription = abbreviatedDescription
+		item.createDateDisplay = dayjs(item.published).calendar()
+		item.createDateTooltip = dayjs(item.published).calendar()
 
-		let createDate = item.created
-			? dayjs(item.created).calendar()
-			: dayjs(item.published).calendar()
-		item.createDate = createDate
-		let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
-		item.name = name
+		item.nameDisplay = item.name.replace(/\s/g, '').length
+			? item.name
+			: '[No name]'
+
 		let description
 		if (!item.description) {
 			description = '[No description]'
@@ -220,22 +203,35 @@ const formatVideos = (videos) => {
 		} else {
 			description = item.description.substring(0, 500)
 		}
-		item.description = description
-		item.subscribersCount = numeral(item.subscribers).format('0a')
-		item.videosCount =
+		item.nameTooltip = description
+
+		item.categoryDisplay = item.categoryName
+		item.categoryTooltip = item.categoryName
+
+		item.subscribersDisplay = numeral(item.subscribers).format('0a')
+		item.subscribersTooltip = numeral(item.subscribers).format('0,0')
+
+		item.videosDisplay =
 			numeral(item.filteredVideoCount).format('0a') +
 			'/' +
 			numeral(item.allVideoCount).format('0a')
-		item.viewsCount = numeral(item.views).format('0a')
-		item.commentsCount = numeral(item.comments).format('0a')
 
-		item.dislikesCount = numeral(item.dislikes).format('0a')
-		item.likesCount = numeral(item.likes).format('0a')
+		item.videosTooltip =
+			numeral(item.filteredVideoCount).format('0,0') +
+			'/' +
+			numeral(item.allVideoCount).format('0,0')
 
-		let language = item.languageName?.replace(/\s/g, '').length
-			? item.languageName
-			: '[No language]'
-		item.language = language
+		item.viewsDisplay = numeral(item.views).format('0a')
+		item.viewsTooltip = numeral(item.views).format('0,0')
+
+		item.commentsDisplay = numeral(item.comments).format('0a')
+		item.commentsTooltip = numeral(item.comments).format('0,0')
+
+		item.dislikesDisplay = numeral(item.dislikes).format('0a')
+		item.dislikesTooltip = numeral(item.dislikes).format('0,0')
+
+		item.likesDisplay = numeral(item.likes).format('0a')
+		item.likesTooltip = numeral(item.likes).format('0,0')
 	}
 	return videos
 }

@@ -6,7 +6,6 @@ import {
 	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_CREATED,
 	BRAND_PROFILE_CREATING,
-	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	SET_BRAND_PROFILES,
 	SET_BRAND_PROFILE_LOADING,
@@ -61,7 +60,10 @@ export function brandProfileUnderEdit(
 		websiteUrl: '',
 		industryVerticalId: -1,
 		twitterProfileUrl: '',
-		brandProfileId: ''
+		brandProfileId: '',
+		primaryKPI: '',
+		secondaryKPI: '',
+		tertiaryKPI: ''
 	},
 	action
 ) {
@@ -74,8 +76,12 @@ export function brandProfileUnderEdit(
 				brandName: action.basicInfo.brandName,
 				industryVerticalId: action.basicInfo.industryVerticalId,
 				websiteUrl: action.basicInfo.websiteUrl,
-				twitterProfileUrl: action.basicInfo.twitterProfileUrl
+				twitterProfileUrl: action.basicInfo.twitterProfileUrl,
+				primaryKPI: action.basicInfo.primaryKPI,
+				secondaryKPI: action.basicInfo.secondaryKPI,
+				tertiaryKPI: action.basicInfo.tertiaryKPI
 			}
+
 		case SET_BRAND_PROFILE_COMPETITORS:
 			return {
 				...state,
@@ -155,15 +161,6 @@ export function brandProfileLoading(state = true, action) {
 	}
 }
 
-export function brandProfileDeleted(state = false, action) {
-	switch (action.type) {
-		case BRAND_PROFILE_DELETED:
-			return action.brandProfileDeleted
-		default:
-			return state
-	}
-}
-
 export function brandProfileDeleting(state = false, action) {
 	switch (action.type) {
 		case BRAND_PROFILE_DELETING:
@@ -186,15 +183,6 @@ export function scenariosIsLoading(state = true, action) {
 	switch (action.type) {
 		case SCENARIOS_IS_LOADING:
 			return action.scenariosIsLoading
-		default:
-			return state
-	}
-}
-
-export function industryVerticals(state = [], action) {
-	switch (action.type) {
-		case SET_BRAND_INDUSTRY_VERTICALS:
-			return action.industryVerticals
 		default:
 			return state
 	}

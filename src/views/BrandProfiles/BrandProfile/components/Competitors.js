@@ -46,7 +46,6 @@ function TopCompetitors(props) {
 	}, [])
 
 	const handleSaveNew = (values) => {
-		props.setCompetitorsValid(true)
 		let newComps = []
 		let newCompsWithoutId = []
 		for (const competitor of values.competitors) {

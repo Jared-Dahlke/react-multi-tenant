@@ -1,9 +1,5 @@
 import { combineReducers } from 'redux'
-import {
-	rolesPermissionsIsLoading,
-	rolesPermissions,
-	rolesPermissionsHasErrored
-} from './roles'
+import { rolesPermissionsIsLoading, rolesPermissions } from './roles'
 import {
 	authToken,
 	isLoggedIn,
@@ -17,37 +13,25 @@ import {
 } from './auth'
 import {
 	users,
-	usersHasErrored,
-	userDeleted,
-	userDeletedError,
-	userAdded,
 	userAdding,
 	usersIsLoading,
 	editUserUserAccountsLoading,
 	userProfileSaving,
-	userProfileSaved,
-	userEditSaving,
-	userEditSaved,
-	userAddError
+	userEditSaving
 } from './users'
 import {
 	accounts,
 	currentAccountId,
 	isSwitchingAccounts,
 	editAccountAccountUsersLoading,
-	accountTypes,
-	accountCreated,
-	accountSaving,
-	accountSaved
+	accountSaving
 } from './accounts'
 import {
 	brandProfiles,
 	brandProfilesIsLoading,
 	hasBrandProfiles,
-	industryVerticals,
 	brandProfileCreated,
 	brandProfileCreating,
-	brandProfileDeleted,
 	brandProfileDeleting,
 	brandProfileLoading,
 	brandProfileSaving,
@@ -63,46 +47,33 @@ import thirdParty from './ThirdParty/index'
 export default combineReducers({
 	authToken,
 	rolesPermissions,
-	rolesPermissionsHasErrored,
 	rolesPermissionsIsLoading,
 	isLoggedIn,
 	loggingIn,
 	alert,
 	users,
-	usersHasErrored,
 	user,
-	userDeleted,
-	userDeletedError,
 	usersIsLoading,
 	brandProfiles,
 	brandProfileCreated,
 	brandProfileCreating,
-	brandProfileDeleted,
 	brandProfileDeleting,
-	userAdded,
 	userAdding,
 	userEditSaving,
-	userEditSaved,
 	accounts,
 	currentAccountId,
 	isSwitchingAccounts,
 	userProfileIsLoading,
 	userProfileSaving,
-	userProfileSaved,
 	editUserUserAccountsLoading,
 	editAccountAccountUsersLoading,
-	accountTypes,
 	brandProfilesIsLoading,
 	brandProfileUnderEdit,
 	brandProfileLoading,
-	accountCreated,
 	hasBrandProfiles,
-	industryVerticals,
 	accountSaving,
-	accountSaved,
 	brandProfileSaving,
 	brandProfileSaved,
-	userAddError,
 	updatingPassword,
 	loggedInUserPermissions,
 	resettingPassword,

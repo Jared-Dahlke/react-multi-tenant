@@ -1,5 +1,4 @@
 import {
-	ROLES_PERMISSIONS_HAS_ERRORED,
 	ROLES_PERMISSIONS_IS_LOADING,
 	SET_ROLES_PERMISSIONS
 } from '../action-types/roles'
@@ -8,13 +7,6 @@ import config from '../../config'
 import { rolesAndPermissionsObjValidation } from '../../schemas/schemas'
 
 const apiBase = config.api.userAccountUrl
-
-export function rolesPermissionsHasErrored(bool) {
-	return {
-		type: ROLES_PERMISSIONS_HAS_ERRORED,
-		hasErrored: bool
-	}
-}
 
 export function rolesPermissionsIsLoading(bool) {
 	return {
@@ -30,12 +22,12 @@ export function setRolesPermissions(rolesPermissions) {
 	}
 }
 
-export function rolesPermissionsFetchData(accountId) {
+export function rolesPermissionsFetchData() {
 	return async (dispatch) => {
 		dispatch(rolesPermissionsIsLoading(true))
 
 		try {
-			let url = apiBase + `/account/${accountId}/roles?permissions=true`
+			let url = apiBase + `/role?permissions=true`
 			const result = await axios.get(url)
 
 			if (result.status === 200) {
@@ -46,7 +38,7 @@ export function rolesPermissionsFetchData(accountId) {
 				}
 				rolesAndPermissionsObjValidation
 					.validate(result.data)
-					.catch(function(err) {
+					.catch(function (err) {
 						console.log(err.name, err.errors)
 						alert('Could not validate roles Permissions data')
 					})
@@ -55,7 +47,6 @@ export function rolesPermissionsFetchData(accountId) {
 			}
 		} catch (error) {
 			alert(error)
-			dispatch(rolesPermissionsHasErrored(true))
 		}
 	}
 }

@@ -12,15 +12,13 @@ import classnames from 'classnames'
 import { useHistory } from 'react-router-dom'
 import {
 	fetchAdminBrandOpinions,
-	archiveOpinion,
-	setOpinionArchived
+	archiveOpinion
 } from '../../../redux/actions/admin/opinions'
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
-import { FormLoader } from '../../../components/SkeletonLoader'
+
+import Loader from 'rsuite/lib/Loader'
 import { routes } from '../../../routes'
 
 const useTableStyles = makeStyles(tableStyles)
@@ -30,7 +28,6 @@ const useStyles = makeStyles(styles)
 const mapStateToProps = (state) => {
 	return {
 		opinionsIsLoading: state.admin.opinionsIsLoading,
-		opinionArchived: state.admin.opinionArchived,
 		opinionArchiving: state.admin.opinionArchiving,
 		adminOpinions: state.admin.opinions
 	}
@@ -39,8 +36,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchAdminBrandOpinions: () => dispatch(fetchAdminBrandOpinions()),
-		archiveOpinion: (opinionId) => dispatch(archiveOpinion(opinionId)),
-		setOpinionArchived: (bool) => dispatch(setOpinionArchived(bool))
+		archiveOpinion: (opinionId) => dispatch(archiveOpinion(opinionId))
 	}
 }
 
@@ -74,21 +70,6 @@ function Opinions(props) {
 
 	return (
 		<Grid container justify='center'>
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.opinionArchived}
-				onClose={() => props.setOpinionArchived(false)}
-				color='success'
-			>
-				<Alert
-					onClose={() => props.setOpinionArchived(false)}
-					severity='success'
-				>
-					Opinion Archived
-				</Alert>
-			</Snackbar>
-
 			<GridItem xs={12} sm={12} md={6}>
 				{adminOpinions && adminOpinions.length > 0 ? (
 					<div>
@@ -154,7 +135,7 @@ function Opinions(props) {
 						</Table>
 					</div>
 				) : props.opinionsIsLoading ? (
-					<FormLoader />
+					<Loader center size='lg' content='Loading...' vertical />
 				) : (
 					<div
 						style={{

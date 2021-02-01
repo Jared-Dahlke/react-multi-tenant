@@ -2,15 +2,14 @@ import {
 	ADMIN_OPINIONS_IS_LOADING,
 	SET_ADMIN_BRAND_OPINIONS,
 	OPINION_ARCHIVING,
-	OPINION_ARCHIVED,
 	OPINION_TO_ARCHIVE,
-	OPINION_CREATED,
 	OPINION_SAVING,
 	ADD_OPINION
 } from '../../action-types/admin/opinions'
 import axios from '../../../axiosConfig'
 import config from '../../../config.js'
 import { brandOpinionObjValidation } from '../../../schemas/schemas'
+import toast from 'react-hot-toast'
 
 const apiBase = config.api.userAccountUrl
 
@@ -35,24 +34,10 @@ export function setOpinionArchiving(opinionId) {
 	}
 }
 
-export function setOpinionArchived(bool) {
-	return {
-		type: OPINION_ARCHIVED,
-		opinionArchived: bool
-	}
-}
-
 export function setOpinionToArchived(opinionId) {
 	return {
 		type: OPINION_TO_ARCHIVE,
 		opinionId
-	}
-}
-
-export function setOpinionCreated(bool) {
-	return {
-		type: OPINION_CREATED,
-		opinionCreated: bool
 	}
 }
 
@@ -71,7 +56,7 @@ export function addOpinion(opinion) {
 }
 
 export const archiveOpinion = (opinionId) => {
-	let url = apiBase + `/brand-profile/opinions/${opinionId}`
+	let url = apiBase + `/opinions/${opinionId}`
 	return (dispatch) => {
 		dispatch(setOpinionArchiving(opinionId))
 		axios
@@ -79,7 +64,7 @@ export const archiveOpinion = (opinionId) => {
 			.then((response) => {
 				dispatch(setOpinionToArchived(opinionId))
 				dispatch(setOpinionArchiving(''))
-				dispatch(setOpinionArchived(true))
+				toast.success('Opinion archived!')
 			})
 			.catch((error) => {
 				console.error(error)
@@ -88,7 +73,7 @@ export const archiveOpinion = (opinionId) => {
 }
 
 export const createOpinion = (opinion) => {
-	let url = apiBase + `/brand-profile/opinions`
+	let url = apiBase + `/opinions`
 	return (dispatch, getState) => {
 		dispatch(setOpinionSaving(true))
 		axios
@@ -96,7 +81,7 @@ export const createOpinion = (opinion) => {
 			.then((response) => {
 				dispatch(addOpinion(response.data[0]))
 				dispatch(setOpinionSaving(false))
-				dispatch(setOpinionCreated(true))
+				toast.success('Opinion created!')
 			})
 			.catch((error) => {
 				//error
@@ -105,7 +90,7 @@ export const createOpinion = (opinion) => {
 }
 
 export function fetchAdminBrandOpinions() {
-	let url = apiBase + `/brand-profile/opinions`
+	let url = apiBase + `/opinions`
 	return async (dispatch) => {
 		dispatch(setAdminOpinionsIsLoading(true))
 		try {
@@ -113,7 +98,7 @@ export function fetchAdminBrandOpinions() {
 			if (result.status === 200) {
 				let opinions = result.data
 
-				brandOpinionObjValidation.validate(opinions).catch(function(err) {
+				brandOpinionObjValidation.validate(opinions).catch(function (err) {
 					console.log(err.name, err.errors)
 					alert(
 						'We received different API data than expected, see the console log for more details.'

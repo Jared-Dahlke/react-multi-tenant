@@ -3,6 +3,8 @@ import * as Yup from 'yup'
 export const listsObjValidation = Yup.array()
 	.of(
 		Yup.object().shape({
+			targetType: Yup.string().nullable(),
+			targetTypeId: Yup.number().nullable(),
 			createdDate: Yup.date().required(),
 			objectiveId: Yup.number().required(),
 			objectiveName: Yup.string().required(),
@@ -118,6 +120,21 @@ export const postListVersionResult = Yup.object().shape({
 
 export const channelsSchema = Yup.array().of(
 	Yup.object().shape({
+		iabCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabCategoryName: Yup.string().nullable(),
+		iabSubCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabSubCategoryName: Yup.string().nullable(),
+		iabSubTopicId: Yup.mixed().nullable(),
+		iabSubTopicName: Yup.mixed().nullable(),
+		iabTopicId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabTopicName: Yup.string().nullable(),
+
 		actionId: Yup.number()
 			.strict(true)
 			.nullable(),
@@ -159,6 +176,21 @@ export const channelsSchema = Yup.array().of(
 
 export const videosSchema = Yup.array().of(
 	Yup.object().shape({
+		iabCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabCategoryName: Yup.string().nullable(),
+		iabSubCategoryId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabSubCategoryName: Yup.string().nullable(),
+		iabSubTopicId: Yup.mixed().nullable(),
+		iabSubTopicName: Yup.mixed().nullable(),
+		iabTopicId: Yup.number()
+			.strict(true)
+			.nullable(),
+		iabTopicName: Yup.string().nullable(),
+
 		actionId: Yup.number()
 			.strict(true)
 			.nullable(),

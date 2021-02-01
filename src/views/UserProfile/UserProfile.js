@@ -5,8 +5,6 @@ import FormikInput from '../../components/CustomInput/FormikInput.js'
 import Card from '../../components/Card/Card.js'
 import CardBody from '../../components/Card/CardBody.js'
 import CardFooter from '../../components/Card/CardFooter.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
 import { Form, withFormik } from 'formik'
 import Button from 'rsuite/lib/Button'
 import * as Yup from 'yup'
@@ -15,24 +13,22 @@ import { useHistory } from 'react-router-dom'
 // Redux
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
-import { updateUserData, userProfileSaved } from '../../redux/actions/users.js'
-import { FormLoader } from '../../components/SkeletonLoader'
+import { updateUserData } from '../../redux/actions/users.js'
+import Loader from 'rsuite/lib/Loader'
 
 const mapStateToProps = (state) => {
 	return {
 		user: state.user,
 		token: state.authToken,
 		userProfileIsLoading: state.userProfileIsLoading,
-		userProfileSaving: state.userProfileSaving,
-		userProfileSaved: state.userProfileSaved
+		userProfileSaving: state.userProfileSaving
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchUserProfile: () => dispatch(userProfileFetchData()),
-		updateUserData: (userData) => dispatch(updateUserData(userData)),
-		setUserProfileSaved: (bool) => dispatch(userProfileSaved(bool))
+		updateUserData: (userData) => dispatch(updateUserData(userData))
 	}
 }
 
@@ -128,29 +124,11 @@ function UserProfile(props) {
 										>
 											Change my password
 										</Button>
-
-										<Snackbar
-											open={props.userProfileSaved}
-											autoHideDuration={6000}
-											onClose={() => props.setUserProfileSaved(false)}
-											anchorOrigin={{
-												vertical: 'bottom',
-												horizontal: 'center'
-											}}
-										>
-											<Alert
-												color='success'
-												severity='success'
-												onClose={() => props.setUserProfileSaved(false)}
-											>
-												User Profile Saved
-											</Alert>
-										</Snackbar>
 									</CardFooter>
 								</Form>
 							</div>
 						) : (
-							<FormLoader />
+							<Loader center size='lg' content='Loading...' vertical />
 						)}
 					</Card>
 				</GridItem>

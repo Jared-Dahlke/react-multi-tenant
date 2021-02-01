@@ -5,9 +5,7 @@ import Table from 'rsuite/lib/Table'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
 import { accentColor } from '../../../../../assets/jss/colorContants'
-import Whisper from 'rsuite/lib/Whisper'
-import Tooltip from 'rsuite/lib/Tooltip'
-import numeral from 'numeral'
+import { TooltipCell } from './TooltipCell'
 
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
@@ -124,76 +122,6 @@ const VideoModal = (props) => {
 		)
 	}
 
-	const NameCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{rowData.description}</Tooltip>}
-				>
-					<div>{rowData.name}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const DislikesCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.dislikes).format('0,0')}</Tooltip>}
-				>
-					<div>{rowData.dislikesCount}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const LikesCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.likes).format('0,0')}</Tooltip>}
-				>
-					<div>{rowData.likesCount}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const ViewsCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.views).format('0,0')}</Tooltip>}
-				>
-					<div>{numeral(rowData.views).format('0a')}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
-	const CommentsCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<Whisper
-					placement='bottomStart'
-					trigger='hover'
-					speaker={<Tooltip>{numeral(rowData.comments).format('0,0')}</Tooltip>}
-				>
-					<div>{rowData.commentsCount}</div>
-				</Whisper>
-			</Table.Cell>
-		)
-	}
-
 	const handleVideoScroll = debounce(() => {
 		props.incrementPage()
 	}, 1200)
@@ -205,6 +133,13 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
+					sortColumn={props.currentVideosSort.sortColumn}
+					sortType={props.currentVideosSort.sortType}
+					onSortColumn={(sortColumn, sortType) => {
+						if (!props.videosIsLoading) {
+							props.setCurrentVideosSort({ sortColumn, sortType })
+						}
+					}}
 					loading={props.videos.length < 1 && props.videosIsLoading}
 					virtualized
 					height={500}
@@ -220,44 +155,111 @@ const VideoModal = (props) => {
 						<ImageCell />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} resizable>
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Name</Table.HeaderCell>
-						<NameCell />
+						<TooltipCell
+							displayProp='nameDisplay'
+							tooltipProp='nameTooltip'
+							tooltipPlacement='bottomLeft'
+							dataKey='name'
+						/>
 					</Table.Column>
-					<Table.Column verticalAlign={'middle'}>
+
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Date</Table.HeaderCell>
-						<Table.Cell dataKey='createDate' style={{ color: 'grey' }} />
+						<TooltipCell
+							displayProp='createDateDisplay'
+							tooltipProp='createDateTooltip'
+							dataKey='published'
+						/>
 					</Table.Column>
-					<Table.Column verticalAlign={'middle'}>
+
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Id</Table.HeaderCell>
 						<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 					</Table.Column>
-					<Table.Column verticalAlign={'middle'}>
+
+					<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Category</Table.HeaderCell>
-						<Table.Cell dataKey='categoryName' />
+						<TooltipCell
+							displayProp='categoryDisplay'
+							tooltipProp='categoryTooltip'
+							dataKey='categoryName'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Likes</Table.HeaderCell>
-						<LikesCell />
+						<TooltipCell
+							displayProp='likesDisplay'
+							tooltipProp='likesTooltip'
+							dataKey='likes'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Dislikes</Table.HeaderCell>
-						<DislikesCell />
+						<TooltipCell
+							displayProp='dislikesDisplay'
+							tooltipProp='dislikesTooltip'
+							dataKey='dislikes'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Views</Table.HeaderCell>
-						<ViewsCell />
+						<TooltipCell
+							displayProp='viewsDisplay'
+							tooltipProp='viewsTooltip'
+							dataKey='views'
+						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} flexGrow={1}>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>Comments</Table.HeaderCell>
-						<CommentsCell />
+						<TooltipCell
+							displayProp='commentsDisplay'
+							tooltipProp='commentsTooltip'
+							dataKey='comments'
+						/>
 					</Table.Column>
 
-					<Table.Column width={200} verticalAlign={'middle'}>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB Category</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabCategoryId'
+							displayProp='iabCategoryName'
+							tooltipProp='iabCategoryName'
+						/>
+					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabSubCategoryId'
+							displayProp='iabSubCategoryName'
+							tooltipProp='iabSubCategoryName'
+						/>
+					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB Topic</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabTopicId'
+							displayProp='iabTopicName'
+							tooltipProp='iabTopicName'
+						/>
+					</Table.Column>
+					<Table.Column verticalAlign={'middle'} align='center' sortable>
+						<Table.HeaderCell>IAB SubTopic</Table.HeaderCell>
+						<TooltipCell
+							dataKey='iabSubTopicId'
+							displayProp='iabSubTopicName'
+							tooltipProp='iabSubTopicName'
+						/>
+					</Table.Column>
+
+					<Table.Column verticalAlign={'middle'} width={200}>
 						<Table.HeaderCell></Table.HeaderCell>
 						<ActionCell />
 					</Table.Column>

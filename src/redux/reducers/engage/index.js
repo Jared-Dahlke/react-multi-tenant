@@ -16,13 +16,11 @@ import {
 import {
 	videos,
 	channels,
-	hasNextPage,
+	channelsHasNextPage,
 	videosHasNextPage,
 	videosIsLoading,
 	channelsIsLoading
 } from './listBuilder'
-
-import { filterCountries, filterCategories, filterLanguages } from './filters'
 
 export default combineReducers({
 	lists,
@@ -35,12 +33,9 @@ export default combineReducers({
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
 	smartListVersionUnderEdit,
-	filterCountries,
-	filterCategories,
-	filterLanguages,
 	videos,
 	channels,
-	hasNextPage,
+	channelsHasNextPage,
 	videosHasNextPage,
 	deleteAllVersionDataSuccess,
 	videosIsLoading,

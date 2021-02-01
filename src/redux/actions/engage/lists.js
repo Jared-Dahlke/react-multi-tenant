@@ -13,13 +13,16 @@ import {
 	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
+
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
+import defaultAxios from 'axios'
 import {
 	listsObjValidation,
 	uploadedListObjValidation,
 	postListVersionResult
 } from '../../../schemas/Engage/Lists/schemas'
+import toast from 'react-hot-toast'
 import numeral from 'numeral'
 var fileDownload = require('js-file-download')
 var cwait = require('cwait')
@@ -29,7 +32,13 @@ var deleteQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.listBuilderUrl
 
+let fetchListsRequest = null
 export function fetchLists(accountId) {
+	if (fetchListsRequest) {
+		fetchListsRequest.cancel()
+	}
+	fetchListsRequest = axios.CancelToken.source()
+
 	let url = apiBase + `/account/${accountId}/smart-list`
 	return async (dispatch) => {
 		dispatch(setIsFetchingLists(true))
@@ -37,7 +46,11 @@ export function fetchLists(accountId) {
 		let result = []
 
 		try {
-			result = await axios.get(url)
+			result = await defaultAxios({
+				method: 'GET',
+				url: url,
+				cancelToken: fetchListsRequest.token
+			})
 		} catch (error) {
 			console.log(error)
 		}
@@ -132,6 +145,10 @@ export const postList = (data) => {
 					dispatch(setSmartListVersionUnderEdit(response.data))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
+					setTimeout(() => {
+						dispatch(setPostListSuccess(false))
+					}, 100)
+					toast.success('List created!')
 				}
 			})
 			.catch((error) => {
@@ -292,8 +309,6 @@ export function archiveList(payload) {
 		try {
 			const result = await axios.patch(url)
 			if (result.status === 200) {
-				//	dispatch(setAccountSaving(false))
-				//	dispatch(setAccountSaved(true))
 			}
 		} catch (error) {
 			alert(error)
@@ -311,8 +326,6 @@ export function activateListVersion(payload) {
 		try {
 			const result = await axios.patch(url)
 			if (result.status === 200) {
-				//	dispatch(setAccountSaving(false))
-				//	dispatch(setAccountSaved(true))
 			}
 		} catch (error) {
 			alert(error)

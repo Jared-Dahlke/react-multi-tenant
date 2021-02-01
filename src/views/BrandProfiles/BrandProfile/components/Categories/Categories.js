@@ -63,7 +63,6 @@ function Categories(props) {
 		contentCategoryId,
 		contentCategoryResponseId
 	) => {
-		props.setCategoriesValid(true)
 		let data = {
 			contentCategoryId: contentCategoryId,
 			contentCategoryResponseId: contentCategoryResponseId

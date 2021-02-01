@@ -6,7 +6,6 @@ import {
 	HAS_BRAND_PROFILES,
 	SET_BRAND_INDUSTRY_VERTICALS,
 	BRAND_PROFILE_CREATED,
-	BRAND_PROFILE_DELETED,
 	BRAND_PROFILE_DELETING,
 	BRAND_PROFILE_CREATING,
 	SET_BRAND_PROFILE_LOADING,
@@ -24,6 +23,7 @@ import {
 } from '../action-types/brandProfiles'
 import axios from '../../axiosConfig'
 import config from '../../config.js'
+import toast from 'react-hot-toast'
 
 import {
 	brandProfilesObjValidation,
@@ -64,12 +64,22 @@ export function fetchBrandProfileBasic(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile basic info, see console log for more details'
 					)
 				})
+
 				let brandProfile = getState().brandProfileUnderEdit
 				brandProfile.brandProfileId = result.data.brandProfileId
 				brandProfile.brandName = result.data.brandName
 				brandProfile.websiteUrl = result.data.websiteUrl
 				brandProfile.industryVerticalId = result.data.industryVerticalId
 				brandProfile.twitterProfileUrl = result.data.twitterProfileUrl
+				brandProfile.primaryKPI = result.data.primaryKPI
+					? result.data.primaryKPI
+					: ''
+				brandProfile.secondaryKPI = result.data.secondaryKPI
+					? result.data.secondaryKPI
+					: ''
+				brandProfile.tertiaryKPI = result.data.tertiaryKPI
+					? result.data.tertiaryKPI
+					: ''
 				dispatch(setBrandProfileUnderEdit(brandProfile))
 			}
 		} catch (error) {
@@ -156,7 +166,28 @@ export function fetchBrandProfileScenarios(brandProfileId) {
 						' we received different data from the api than expected while fetching brand profile scenarios, see console log for more details'
 					)
 				})
-				dispatch(setBrandProfileScenarios(result.data))
+
+				let scenarioTypes = []
+				let scenTypesShort = []
+				for (const scenarioType of JSON.parse(JSON.stringify(result.data))) {
+					if (!scenTypesShort.includes(scenarioType.scenarioType)) {
+						scenarioTypes.push({
+							scenarioTypeName: scenarioType.scenarioType,
+							scenarios: []
+						})
+						scenTypesShort.push(scenarioType.scenarioType)
+					}
+				}
+
+				for (const scenarioType of scenarioTypes) {
+					for (const scenario of result.data) {
+						if (scenario.scenarioType === scenarioType.scenarioTypeName) {
+							scenarioType.scenarios.push(scenario)
+						}
+					}
+				}
+
+				dispatch(setBrandProfileScenarios(scenarioTypes))
 			}
 		} catch (error) {
 			alert(error)
@@ -209,10 +240,14 @@ export function fetchBrandProfileQuestions(brandProfileId) {
 export const createBrandProfile = () => {
 	let url = apiBase + `/brand-profile`
 	return (dispatch, getState) => {
+		let initialName =
+			getState().brandProfiles.length > 0
+				? 'UNTITLED_BRAND_PROFILE'
+				: 'My first brand profile'
 		dispatch(setBrandProfileCreating(true))
 		let brandProfile = {
 			accountId: getState().currentAccountId,
-			brandName: 'My first brand profile'
+			brandName: initialName
 		}
 
 		axios
@@ -307,6 +342,9 @@ export const patchBrandProfileBasicInfo = (brandProfile) => {
 				profile.twitterProfileUrl = brandProfile.twitterProfileUrl
 				profile.industryVerticalId = brandProfile.industryVerticalId
 				profile.websiteUrl = brandProfile.websiteUrl
+				profile.primaryKPI = brandProfile.primaryKPI
+				profile.secondaryKPI = brandProfile.secondaryKPI
+				profile.tertiaryKPI = brandProfile.tertiaryKPI
 			}
 		}
 		dispatch(setBrandProfiles(profiles))
@@ -446,7 +484,7 @@ export const deleteBrandProfile = (brandProfileId) => {
 			.delete(url)
 			.then((response) => {
 				dispatch(setBrandProfileDeleting(false))
-				dispatch(setBrandProfileDeleted(true))
+				toast.success('Brand profile deleted!')
 			})
 			.catch((error) => {
 				console.error(error)
@@ -521,12 +559,7 @@ export function setBrandProfileCreating(bool) {
 		brandProfileCreating: bool
 	}
 }
-export function setBrandProfileDeleted(bool) {
-	return {
-		type: BRAND_PROFILE_DELETED,
-		brandProfileDeleted: bool
-	}
-}
+
 export function setBrandProfileDeleting(bool) {
 	return {
 		type: BRAND_PROFILE_DELETING,
@@ -545,26 +578,5 @@ export function hasBrandProfiles(bool) {
 	return {
 		type: HAS_BRAND_PROFILES,
 		hasBrandProfiles: bool
-	}
-}
-
-export function fetchBrandIndustryVerticals() {
-	let url = apiBase + `/brand-profile/industry-verticals`
-	return async (dispatch) => {
-		try {
-			const result = await axios.get(url)
-			if (result.status === 200) {
-				dispatch(setBrandIndustryVerticals(result.data))
-			}
-		} catch (error) {
-			alert(error)
-		}
-	}
-}
-
-export function setBrandIndustryVerticals(industryVerticals) {
-	return {
-		type: SET_BRAND_INDUSTRY_VERTICALS,
-		industryVerticals
 	}
 }

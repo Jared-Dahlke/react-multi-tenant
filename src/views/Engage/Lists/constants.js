@@ -13,3 +13,10 @@ export const archivedStatuses = [
 	{ archivedStatusId: 1, archivedStatusName: 'Archived' },
 	{ archivedStatusId: 2, archivedStatusName: 'Not Archived' }
 ]
+
+export const targetTypes = [
+	{ targetTypeId: 1, targetTypeName: 'Trend' },
+	{ targetTypeId: 2, targetTypeName: 'Persona' },
+	{ targetTypeId: 3, targetTypeName: 'Influencer' },
+	{ targetTypeId: 4, targetTypeName: 'Other' }
+]

@@ -7,6 +7,9 @@ import {
 	setBrandProfileScenarios
 } from '../../../../../redux/actions/brandProfiles'
 import Panel from '../../../../../components/CustomPanel'
+import Grid from '@material-ui/core/Grid'
+//import { Divider } from 'rsuite'
+import Divider from 'rsuite/lib/Divider'
 
 const mapStateToProps = (state) => {
 	return {
@@ -30,14 +33,12 @@ function setScenarioAction(data, scenarios) {
 	const value = Number(data.scenarioResponseId)
 
 	for (const scenario of scenarios) {
-		if (scenario.scenarioId === scenarioId) {
-			scenario.scenarioResponseId = value
+		for (const scenFromArray of scenario.scenarios) {
+			if (scenFromArray.scenarioId === scenarioId) {
+				scenFromArray.scenarioResponseId = value
+			}
 		}
 	}
-}
-
-function checkResponse(scenario) {
-	return scenario.scenarioResponseId > 0
 }
 
 function Scenarios(props) {
@@ -74,14 +75,6 @@ function Scenarios(props) {
 			brandProfileId: props.brandProfile.brandProfileId
 		}
 		props.patchBrandProfileScenarios(params)
-
-		let valid = true
-		for (const scen of props.brandProfile.scenarios) {
-			if (scen.scenarioResponseId === '') {
-				valid = false
-			}
-		}
-		props.setScenariosValid(valid)
 	}
 
 	return (
@@ -89,13 +82,26 @@ function Scenarios(props) {
 			<div>
 				{props.brandProfile.scenarios &&
 					props.brandProfile.scenarios.length > 0 &&
-					props.brandProfile.scenarios.map((scenario, index) => {
+					props.brandProfile.scenarios.map((scenarioType, index) => {
 						return (
-							<CustomRadio
-								key={index}
-								handleScenarioSelect={handleScenarioSelect}
-								scenario={scenario}
-							/>
+							<div key={index}>
+								<Grid item xs={12} align='left'>
+									<p style={{ color: 'grey' }}>
+										{scenarioType.scenarioTypeName}
+									</p>
+								</Grid>
+								<br />
+								{scenarioType.scenarios.map((scenario, scenIndex) => {
+									return (
+										<CustomRadio
+											key={scenIndex}
+											handleScenarioSelect={handleScenarioSelect}
+											scenario={scenario}
+										/>
+									)
+								})}
+								<Divider />
+							</div>
 						)
 					})}
 			</div>

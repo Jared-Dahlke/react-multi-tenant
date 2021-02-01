@@ -1,7 +1,11 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
-import { TagPicker, Modal, Button, Icon } from 'rsuite'
+//import { TagPicker, Modal, Button, Icon } from 'rsuite'
+import TagPicker from 'rsuite/lib/TagPicker'
+import Modal from 'rsuite/lib/Modal'
+import Button from 'rsuite/lib/Button'
+import Icon from 'rsuite/lib/Icon'
 import Loader from 'rsuite/lib/Loader'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
@@ -16,16 +20,11 @@ import {
 	setAdminRolePermissions,
 	insertPermissions,
 	removePermissions,
-	setPermissionsAdded,
-	setPermissionSureToRemove,
-	setPermissionsRemoved
+	setPermissionSureToRemove
 } from '../../../redux/actions/admin/permissions'
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
-import { FormLoader } from '../../../components/SkeletonLoader'
 
 const useTableStyles = makeStyles(tableStyles)
 
@@ -34,9 +33,8 @@ const useStyles = makeStyles(styles)
 const mapStateToProps = (state) => {
 	return {
 		permissionsIsLoading: state.admin.permissionsIsLoading,
-		permissionsAdded: state.admin.permissionsAdded,
+
 		permissionSureToRemove: state.admin.permissionSureToRemove,
-		permissionsRemoved: state.admin.permissionsRemoved,
 		permissionsUpdating: state.admin.permissionsUpdating,
 		adminPermissions: state.admin.permissions,
 		allPermissions: state.admin.permissions_list
@@ -53,10 +51,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(insertPermissions(roleId, p, adminPermissions)),
 		removePermissions: (roleId, p, adminPermissions) =>
 			dispatch(removePermissions(roleId, p, adminPermissions)),
-		setPermissionsAdded: (bol) => dispatch(setPermissionsAdded(bol)),
 		setPermissionSureToRemove: (pData) =>
-			dispatch(setPermissionSureToRemove(pData)),
-		setPermissionsRemoved: (bol) => dispatch(setPermissionsRemoved(bol))
+			dispatch(setPermissionSureToRemove(pData))
 	}
 }
 
@@ -91,11 +87,9 @@ function Permissions(props) {
 		var insert = v.filter((x) => !p.includes(x))
 		var remove = p.filter((x) => !v.includes(x))
 		if (insert[0]) {
-			console.log('permission is inserted', insert[0])
 			adminPermissions[index].captured_permissions = v
 			props.insertPermissions(roleId, insert[0], adminPermissions)
 		} else if (remove[0]) {
-			console.log('permission is removed', remove[0])
 			permissionToRemove = {
 				show: true,
 				roleId: roleId,
@@ -105,7 +99,6 @@ function Permissions(props) {
 			}
 			props.setPermissionSureToRemove(permissionToRemove)
 		} else {
-			console.log('no change')
 		}
 	}
 
@@ -121,7 +114,6 @@ function Permissions(props) {
 			)
 			props.setPermissionSureToRemove({ show: false })
 		} else {
-			console.log('something wrong with', props.permissionSureToRemove)
 			props.setPermissionSureToRemove({ show: false })
 		}
 	}
@@ -138,7 +130,6 @@ function Permissions(props) {
 			props.setAdminRolePermissions(adminPermissions)
 			props.setPermissionSureToRemove({ show: false })
 		} else {
-			console.log('something wrong with', props.permissionSureToRemove)
 			props.setPermissionSureToRemove({ show: false })
 		}
 	}
@@ -164,34 +155,6 @@ function Permissions(props) {
 				/>
 			</div>
 
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.permissionsAdded}
-				onClose={() => props.setPermissionsAdded(false)}
-				color='success'
-			>
-				<Alert
-					onClose={() => props.setPermissionsAdded(false)}
-					severity='success'
-				>
-					Permissions Archived
-				</Alert>
-			</Snackbar>
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.permissionsRemoved}
-				onClose={() => props.setPermissionsRemoved(false)}
-				color='success'
-			>
-				<Alert
-					onClose={() => props.setPermissionsRemoved(false)}
-					severity='success'
-				>
-					Permissions Removed
-				</Alert>
-			</Snackbar>
 			<Modal
 				backdrop='static'
 				show={props.permissionSureToRemove.show}
@@ -278,7 +241,7 @@ function Permissions(props) {
 						</Table>
 					</div>
 				) : props.permissionsIsLoading ? (
-					<FormLoader />
+					<Loader center size='lg' content='Loading...' vertical />
 				) : (
 					''
 				)}

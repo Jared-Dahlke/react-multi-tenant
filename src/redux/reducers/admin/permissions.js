@@ -3,9 +3,7 @@ import {
 	SET_ADMIN_ROLE_PERMISSIONS,
 	SET_ALL_PERMISSIONS,
 	SET_PERMISSIONS_UPDATING,
-	SET_PERMISSIONS_ADDED,
-	SET_PERMISSIONS_TO_REMOVE,
-	SET_PERMISSIONS_REMOVED
+	SET_PERMISSIONS_TO_REMOVE
 } from '../../action-types/admin/permissions'
 
 export function permissions(state = [], action) {
@@ -44,28 +42,10 @@ export function permissionsUpdating(state = false, action) {
 	}
 }
 
-export function permissionsAdded(state = false, action) {
-	switch (action.type) {
-		case SET_PERMISSIONS_ADDED:
-			return action.permissionsAdded
-		default:
-			return state
-	}
-}
-
 export function permissionSureToRemove(state = { show: false }, action) {
 	switch (action.type) {
 		case SET_PERMISSIONS_TO_REMOVE:
 			return action.permissionSureToRemove
-		default:
-			return state
-	}
-}
-
-export function permissionsRemoved(state = false, action) {
-	switch (action.type) {
-		case SET_PERMISSIONS_REMOVED:
-			return action.permissionsRemoved
 		default:
 			return state
 	}

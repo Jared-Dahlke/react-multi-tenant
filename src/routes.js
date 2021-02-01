@@ -16,8 +16,11 @@ import ChangePassword from './pages/ChangePassword'
 import Login from './pages/Login'
 import Scenarios from './views/BrandProfiles/Admin/Scenarios.js'
 import CreateScenario from './views/BrandProfiles/Admin/CreateScenario.js'
+import Labels from './views/BrandProfiles/Admin/Labels.js'
+import Types from './views/BrandProfiles/Admin/Types.js'
 import Opinions from './views/BrandProfiles/Admin/Opinions.js'
 import CreateOpinion from './views/BrandProfiles/Admin/CreateOpinion.js'
+import Questions from './views/BrandProfiles/Admin/Questions.js'
 import { userCan, perms } from './Can'
 import HomePage from './views/HomePage'
 import MeasurePage from './views/MeasurePage'
@@ -136,6 +139,16 @@ export const routes = {
 				path: '/admin/scenarios/create',
 				name: 'Create',
 				component: CreateScenario
+			},
+			labels: {
+				path: '/admin/scenarios/labels',
+				name: 'Labels',
+				component: Labels
+			},
+			types: {
+				path: '/admin/scenarios/types',
+				name: 'Types',
+				component: Types
 			}
 		},
 		opinions: {
@@ -147,6 +160,11 @@ export const routes = {
 				name: 'Create',
 				component: CreateOpinion
 			}
+		},
+		questions: {
+			path: '/admin/questions',
+			name: 'Brand Profiles Questions',
+			component: Questions
 		},
 		permissions: {
 			path: '/admin/permissions',
@@ -274,6 +292,16 @@ export const modifiedRoutes = {
 						path: '/admin/scenarios/create',
 						name: 'Create',
 						component: CreateScenario
+					},
+					{
+						path: '/admin/scenarios/labels',
+						name: 'Labels',
+						component: Labels
+					},
+					{
+						path: '/admin/scenarios/types',
+						name: 'Types',
+						component: Types
 					}
 				]
 			},
@@ -288,6 +316,11 @@ export const modifiedRoutes = {
 						component: CreateOpinion
 					}
 				]
+			},
+			questions: {
+				path: '/admin/questions',
+				name: 'Questions',
+				component: Questions
 			},
 			permissions: {
 				path: '/admin/permissions',

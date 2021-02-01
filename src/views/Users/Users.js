@@ -26,12 +26,9 @@ import styles from '../../assets/jss/material-dashboard-react/components/tasksSt
 import tableStyles from '../../assets/jss/material-dashboard-react/components/tableStyle.js'
 import { useHistory } from 'react-router-dom'
 import CustomAlert from '../../components/CustomAlert.js'
-import Snackbar from '../../components/Snackbar/Snackbar'
-import Success from '@material-ui/icons/Check'
-import Error from '@material-ui/icons/Error'
 import { Link } from 'react-router-dom'
 import { whiteColor } from '../../assets/jss/material-dashboard-react.js'
-import { FormLoader } from '../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import { UserCan, perms } from '../../Can'
 
 const useTableStyles = makeStyles(tableStyles)
@@ -41,9 +38,6 @@ const useStyles = makeStyles(styles)
 const mapStateToProps = (state) => {
 	return {
 		users: state.users.data,
-		hasErrored: state.usersHasErrored,
-		userDeleted: state.userDeleted,
-		userDeletedError: state.userDeletedError,
 		currentAccount: state.currentAccount,
 		usersIsLoading: state.usersIsLoading
 	}
@@ -120,24 +114,6 @@ function Users(props) {
 				}}
 			/>
 
-			<Snackbar
-				place='bc'
-				color='success'
-				icon={Success}
-				message={'User succesfully deleted'}
-				open={props.userDeleted}
-			/>
-
-			<Snackbar
-				place='bc'
-				color='danger'
-				icon={Error}
-				message={
-					'There was an error deleting this user. Please try again later.'
-				}
-				open={props.userDeletedError}
-			/>
-
 			<Grid container justify='flex-end'>
 				<GridItem>
 					<UserCan do={perms.USER_CREATE}>
@@ -152,111 +128,105 @@ function Users(props) {
 			</Grid>
 
 			<GridItem xs={12} sm={12} md={12}>
-				<Card>
-					<CardBody>
-						{props.users && props.users.length > 0 && !props.usersIsLoading ? (
-							<Table className={classes.table}>
-								<TableHead className={tableClasses['primaryTableHeader']}>
-									<TableRow className={tableClasses.tableHeadRow}>
-										{userHeaders.map((prop, key) => {
-											return (
-												<TableCell
-													className={
-														tableClasses.tableCell +
-														' ' +
-														tableClasses.tableHeadCell
-													}
-													key={key}
+				{props.users && props.users.length > 0 && !props.usersIsLoading ? (
+					<Table className={classes.table}>
+						<TableHead className={tableClasses['primaryTableHeader']}>
+							<TableRow className={tableClasses.tableHeadRow}>
+								{userHeaders.map((prop, key) => {
+									return (
+										<TableCell
+											className={
+												tableClasses.tableCell +
+												' ' +
+												tableClasses.tableHeadCell
+											}
+											key={key}
+										>
+											{prop}
+										</TableCell>
+									)
+								})}
+							</TableRow>
+						</TableHead>
+
+						<TableBody>
+							{props.users &&
+								props.users.length > 0 &&
+								props.users.map((user) => (
+									<TableRow key={user.userId} className={classes.tableRow}>
+										<TableCell className={tableCellClasses}>
+											{user.firstName}
+										</TableCell>
+										<TableCell className={tableCellClasses}>
+											{user.lastName}
+										</TableCell>
+										<TableCell className={tableCellClasses}>
+											{user.company}
+										</TableCell>
+										<TableCell className={tableCellClasses}>
+											{user.email}
+										</TableCell>
+
+										<TableCell className={classes.tableActions}>
+											<Tooltip
+												id='tooltip-top'
+												title='Edit User'
+												placement='top'
+												classes={{ tooltip: classes.tooltip }}
+												onMouseEnter={() =>
+													props.fetchUserAccounts(user.userId)
+												}
+											>
+												<IconButton
+													aria-label='Edit'
+													className={classes.tableActionButton}
+													onClick={() => handleEditUserClick(user)}
 												>
-													{prop}
-												</TableCell>
-											)
-										})}
-									</TableRow>
-								</TableHead>
-
-								<TableBody>
-									{props.users &&
-										props.users.length > 0 &&
-										props.users.map((user) => (
-											<TableRow key={user.userId} className={classes.tableRow}>
-												<TableCell className={tableCellClasses}>
-													{user.firstName}
-												</TableCell>
-												<TableCell className={tableCellClasses}>
-													{user.lastName}
-												</TableCell>
-												<TableCell className={tableCellClasses}>
-													{user.company}
-												</TableCell>
-												<TableCell className={tableCellClasses}>
-													{user.email}
-												</TableCell>
-
-												<TableCell className={classes.tableActions}>
-													<Tooltip
-														id='tooltip-top'
-														title='Edit User'
-														placement='top'
-														classes={{ tooltip: classes.tooltip }}
-														onMouseEnter={() =>
-															props.fetchUserAccounts(user.userId)
+													<Edit
+														className={
+															classes.tableActionButtonIcon + ' ' + classes.edit
 														}
+													/>
+												</IconButton>
+											</Tooltip>
+											<UserCan do={perms.USER_DELETE}>
+												<Tooltip
+													id='tooltip-top-start'
+													title='Remove'
+													placement='top'
+													classes={{ tooltip: classes.tooltip }}
+												>
+													<IconButton
+														aria-label='Close'
+														className={classes.tableActionButton}
+														onClick={() => {
+															handleDeleteUserClick(user)
+														}}
 													>
-														<IconButton
-															aria-label='Edit'
-															className={classes.tableActionButton}
-															onClick={() => handleEditUserClick(user)}
-														>
-															<Edit
-																className={
-																	classes.tableActionButtonIcon +
-																	' ' +
-																	classes.edit
-																}
-															/>
-														</IconButton>
-													</Tooltip>
-													<UserCan do={perms.USER_DELETE}>
-														<Tooltip
-															id='tooltip-top-start'
-															title='Remove'
-															placement='top'
-															classes={{ tooltip: classes.tooltip }}
-														>
-															<IconButton
-																aria-label='Close'
-																className={classes.tableActionButton}
-																onClick={() => {
-																	handleDeleteUserClick(user)
-																}}
-															>
-																<Close
-																	className={
-																		classes.tableActionButtonIcon +
-																		' ' +
-																		classes.close
-																	}
-																/>
-															</IconButton>
-														</Tooltip>
-													</UserCan>
-												</TableCell>
-											</TableRow>
-										))}
-								</TableBody>
-							</Table>
-						) : props.usersIsLoading ? (
-							<FormLoader />
-						) : (
-							<h2 style={{ color: whiteColor }}>
-								{'This account'} has no users directly linked to it; however,
-								users linked to any of its parent accounts will have access to
-								this account.
-							</h2>
-						)}
-					</CardBody>
-				</Card>
+														<Close
+															className={
+																classes.tableActionButtonIcon +
+																' ' +
+																classes.close
+															}
+														/>
+													</IconButton>
+												</Tooltip>
+											</UserCan>
+										</TableCell>
+									</TableRow>
+								))}
+						</TableBody>
+					</Table>
+				) : props.usersIsLoading ? (
+					<Loader center size='lg' content='Loading...' vertical />
+				) : (
+					<h2 style={{ color: whiteColor }}>
+						{'This account'} has no users directly linked to it; however, users
+						linked to any of its parent accounts will have access to this
+						account.
+					</h2>
+				)}
 			</GridItem>
 		</GridContainer>
 	)

@@ -1,6 +1,6 @@
 import React from 'react'
 import CardBody from '../../components/Card/CardBody.js'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import Hidden from '@material-ui/core/Hidden'
 import styles from '../../assets/jss/material-dashboard-react/views/iconsStyle.js'
 

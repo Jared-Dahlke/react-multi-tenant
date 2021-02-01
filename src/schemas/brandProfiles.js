@@ -40,6 +40,39 @@ export const basicInfoObjValidation = Yup.object().shape({
 	brandName: Yup.string().required(),
 	brandProfileId: Yup.number().required(),
 	industryVerticalId: Yup.number().required(),
+	primaryKPI: Yup.mixed().test(
+		'my test',
+		'api sent different data than expected for primaryKPI',
+		(text) => {
+			if (typeof text === 'string' || !text) {
+				return true
+			} else {
+				return false
+			}
+		}
+	),
+	secondaryKPI: Yup.mixed().test(
+		'my test',
+		'api sent different data than expected for secondaryKPI',
+		(text) => {
+			if (typeof text === 'string' || !text) {
+				return true
+			} else {
+				return false
+			}
+		}
+	),
+	tertiaryKPI: Yup.mixed().test(
+		'my test',
+		'api sent different data than expected for tertiaryKPI',
+		(text) => {
+			if (typeof text === 'string' || !text) {
+				return true
+			} else {
+				return false
+			}
+		}
+	),
 	twitterProfileUrl: Yup.mixed().test(
 		'my test',
 		'api sent different data than expected for twitterprofileUrl',
@@ -151,6 +184,9 @@ export const scenariosObjValidation = Yup.array()
 				.strict(true)
 				.required(),
 			scenarioName: Yup.string().required(),
+			scenarioType: Yup.string().required(
+				'in fetch scenarios, scenarioType is a required field'
+			),
 			brandProfileId: Yup.mixed().test(
 				'defined',
 				'brandProfileId must be defined',

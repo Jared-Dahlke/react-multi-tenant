@@ -73,7 +73,6 @@ const FormikForm = withFormik({
 	validateOnMount: false,
 
 	handleSubmit: (values, { props }) => {
-		console.log(values)
 		props.handleQuestionResponse(values.questionId, values.questionResponse)
 	}
 })(Question)

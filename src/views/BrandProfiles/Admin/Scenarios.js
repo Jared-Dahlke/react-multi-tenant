@@ -2,6 +2,7 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import GridItem from '../../../components/Grid/GridItem.js'
 import Button from 'rsuite/lib/Button'
+import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import Table from '@material-ui/core/Table'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
@@ -12,15 +13,12 @@ import classnames from 'classnames'
 import { useHistory } from 'react-router-dom'
 import {
 	fetchAdminBrandScenarios,
-	archiveScenario,
-	setScenarioArchived
+	archiveScenario
 } from '../../../redux/actions/admin/scenarios'
 import { connect } from 'react-redux'
 import styles from '../../../assets/jss/material-dashboard-react/components/tasksStyle.js'
 import tableStyles from '../../../assets/jss/material-dashboard-react/components/tableStyle.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
-import { FormLoader } from '../../../components/SkeletonLoader'
+import Loader from 'rsuite/lib/Loader'
 import { routes } from '../../../routes'
 
 const useTableStyles = makeStyles(tableStyles)
@@ -30,7 +28,6 @@ const useStyles = makeStyles(styles)
 const mapStateToProps = (state) => {
 	return {
 		scenariosIsLoading: state.admin.scenariosIsLoading,
-		scenarioArchived: state.admin.scenarioArchived,
 		scenarioArchiving: state.admin.scenarioArchiving,
 		adminScenarios: state.admin.scenarios
 	}
@@ -39,8 +36,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchAdminBrandScenarios: () => dispatch(fetchAdminBrandScenarios()),
-		archiveScenario: (scenarioId) => dispatch(archiveScenario(scenarioId)),
-		setScenarioArchived: (bool) => dispatch(setScenarioArchived(bool))
+		archiveScenario: (scenarioId) => dispatch(archiveScenario(scenarioId))
 	}
 }
 
@@ -72,29 +68,32 @@ function Scenarios(props) {
 		history.push(url)
 	}
 
+	const handleConfigureLabelsClick = () => {
+		let url = routes.admin.scenarios.labels.path
+		history.push(url)
+	}
+
+	const handleConfigureTypesClick = () => {
+		let url = routes.admin.scenarios.types.path
+		history.push(url)
+	}
+
 	return (
 		<Grid container justify='center'>
-			<Snackbar
-				autoHideDuration={2000}
-				place='bc'
-				open={props.scenarioArchived}
-				onClose={() => props.setScenarioArchived(false)}
-				color='success'
-			>
-				<Alert
-					onClose={() => props.setScenarioArchived(false)}
-					severity='success'
-				>
-					Scenario Archived
-				</Alert>
-			</Snackbar>
-
 			<GridItem xs={12} sm={12} md={10}>
 				{adminScenarios && adminScenarios.length > 0 ? (
 					<div>
-						<Button appearance='primary' onClick={handleCreateScenarioClick}>
-							Create Scenario
-						</Button>
+						<ButtonToolbar>
+							<Button appearance='primary' onClick={handleCreateScenarioClick}>
+								Create Scenario
+							</Button>
+							<Button appearance='primary' onClick={handleConfigureLabelsClick}>
+								Configure Labels
+							</Button>
+							<Button appearance='primary' onClick={handleConfigureTypesClick}>
+								Configure Scenario Types
+							</Button>
+						</ButtonToolbar>
 
 						<Table className={classes.table}>
 							<TableHead className={tableClasses['primaryTableHeader']}>
@@ -151,23 +150,23 @@ function Scenarios(props) {
 						</Table>
 					</div>
 				) : props.scenariosIsLoading ? (
-					<FormLoader />
+					<Loader center size='lg' content='Loading...' vertical />
 				) : (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
 
-							height: 'calc(100vh - 200px)',
-							color: 'white'
-						}}
-					>
-						<Button appearance='primary' onClick={handleCreateScenarioClick}>
-							Create Scenario
+									height: 'calc(100vh - 200px)',
+									color: 'white'
+								}}
+							>
+								<Button appearance='primary' onClick={handleCreateScenarioClick}>
+									Create Scenario
 						</Button>
-					</div>
-				)}
+							</div>
+						)}
 			</GridItem>
 		</Grid>
 	)

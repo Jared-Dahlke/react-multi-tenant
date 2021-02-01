@@ -25,6 +25,16 @@ const AdminLayoutRoutes = () => {
                                     component={routes.admin.scenarios.create.component}
                                     canView={userCan(perms.ADMIN_READ)}
                                 />
+                                <ProtectedRoute
+                                    path={routes.admin.scenarios.labels.path}
+                                    component={routes.admin.scenarios.labels.component}
+                                    canView={userCan(perms.ADMIN_READ)}
+                                />
+                                <ProtectedRoute
+                                    path={routes.admin.scenarios.types.path}
+                                    component={routes.admin.scenarios.types.component}
+                                    canView={userCan(perms.ADMIN_READ)}
+                                />
                             </>
                         )}
                     />
@@ -43,6 +53,20 @@ const AdminLayoutRoutes = () => {
                                     path={routes.admin.opinions.create.path}
                                     component={routes.admin.opinions.create.component}
                                     canView={userCan(perms.ADMIN_READ)}
+                                />
+                            </>
+                        )}
+                    />
+
+                    <Route
+                        path={routes.admin.questions.path}
+                        render={({ match: { url } }) => (
+                            <>
+                                <ProtectedRoute
+                                    path={routes.admin.questions.path}
+                                    component={routes.admin.questions.component}
+                                    canView={userCan(perms.ADMIN_READ)}
+                                    exact
                                 />
                             </>
                         )}
