@@ -450,6 +450,7 @@ function ListBuilder(props) {
 			<>
 				<Container>
 					<FiltersSideBar
+						handleFilterChange={handleFilterChange}
 						expand={filtersExpanded}
 						handleToggle={() => setFiltersExpanded((prevState) => !prevState)}
 						filterState={filterState}
@@ -472,7 +473,7 @@ function ListBuilder(props) {
 							</CustomPanel>
 						</Header>
 						<Content>
-							{props.channels.length}
+							<Button> Target All</Button> <Button> Block All </Button>
 							<ChannelsTable
 								setCurrentChannelsSort={setCurrentChannelsSort}
 								currentChannelsSort={currentChannelsSort}

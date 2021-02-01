@@ -67,7 +67,8 @@ export const FiltersSideBar = ({
 	expand,
 	handleToggle,
 	filterState,
-	handleApplyFiltersButtonClick
+	handleApplyFiltersButtonClick,
+	handleFilterChange
 }) => {
 	const sidebarProps = useSpring({
 		width: expand ? 450 : 60
