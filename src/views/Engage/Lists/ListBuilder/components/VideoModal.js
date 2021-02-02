@@ -6,6 +6,7 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import { TooltipCell } from './TooltipCell'
+import { NameCell } from './NameCell'
 import './listbuilder.css'
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
@@ -158,11 +159,12 @@ const VideoModal = (props) => {
 
 					<Table.Column verticalAlign={'middle'} sortable resizable>
 						<Table.HeaderCell>Name</Table.HeaderCell>
-						<TooltipCell
+						<NameCell
 							displayProp='nameDisplay'
 							tooltipProp='nameTooltip'
-							tooltipPlacement='bottomLeft'
+							tooltipPlacement='topLeft'
 							dataKey='name'
+							urlPrefix='https://www.youtube.com/watch?v='
 						/>
 					</Table.Column>
 

@@ -7,6 +7,7 @@ import { accentColor } from '../../../../../assets/jss/colorContants'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
+import { NameCell } from './NameCell'
 import './listbuilder.css'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
@@ -146,11 +147,12 @@ export default function ChannelsTable({
 
 			<Table.Column verticalAlign={'middle'} sortable resizable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
-				<TooltipCell
+				<NameCell
 					displayProp='nameDisplay'
 					tooltipProp='nameTooltip'
 					tooltipPlacement='topLeft'
 					dataKey='name'
+					urlPrefix='https://www.youtube.com/channel/'
 				/>
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
