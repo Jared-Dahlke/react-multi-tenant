@@ -9,7 +9,7 @@ import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
 import Grid from '@material-ui/core/Grid'
-
+import '../../ListBuilder/components/listBuilder.css'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -35,6 +35,7 @@ export default function ChannelsTable({
 		incrementPage()
 	}, 1200)
 
+	const testClass = { height: 300 }
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
@@ -114,6 +115,7 @@ export default function ChannelsTable({
 	return (
 		<Table
 			style={{ flex: 1, marginLeft: 15 }}
+			rowClassName={'test-class'}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {
@@ -145,7 +147,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column> */}
 
-			<Table.Column verticalAlign={'middle'} sortable>
+			<Table.Column verticalAlign={'middle'} sortable resizable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
 				<TooltipCell
 					displayProp='nameDisplay'
@@ -168,7 +170,7 @@ export default function ChannelsTable({
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column> */}
 
-			<Table.Column verticalAlign={'middle'} align='center'>
+			<Table.Column verticalAlign={'middle'} align='center' resizable>
 				<Table.HeaderCell>YT Category</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
@@ -178,7 +180,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+			<Table.Column verticalAlign={'middle'} align='center' sortable resizable>
 				<Table.HeaderCell>IAB Category</Table.HeaderCell>
 				<TooltipCell
 					dataKey='iabCategoryId'
