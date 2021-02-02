@@ -6,7 +6,7 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import { TooltipCell } from './TooltipCell'
-
+import './listbuilder.css'
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
 
@@ -133,6 +133,7 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
+					rowClassName={'lbtable'}
 					sortColumn={props.currentVideosSort.sortColumn}
 					sortType={props.currentVideosSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {
@@ -155,7 +156,7 @@ const VideoModal = (props) => {
 						<ImageCell />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} sortable>
+					<Table.Column verticalAlign={'middle'} sortable resizable>
 						<Table.HeaderCell>Name</Table.HeaderCell>
 						<TooltipCell
 							displayProp='nameDisplay'
@@ -166,7 +167,7 @@ const VideoModal = (props) => {
 					</Table.Column>
 
 					<Table.Column verticalAlign={'middle'} sortable>
-						<Table.HeaderCell>Date</Table.HeaderCell>
+						<Table.HeaderCell>Uploaded</Table.HeaderCell>
 						<TooltipCell
 							displayProp='createDateDisplay'
 							tooltipProp='createDateTooltip'
@@ -174,12 +175,12 @@ const VideoModal = (props) => {
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} sortable>
+					{/**	<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Id</Table.HeaderCell>
 						<Table.Cell dataKey='id' style={{ color: 'grey' }} />
-					</Table.Column>
+					</Table.Column> */}
 
-					<Table.Column verticalAlign={'middle'} sortable>
+					<Table.Column verticalAlign={'middle'} sortable resizable>
 						<Table.HeaderCell>Category</Table.HeaderCell>
 						<TooltipCell
 							displayProp='categoryDisplay'
@@ -233,7 +234,7 @@ const VideoModal = (props) => {
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} align='center' sortable>
+					{/** <Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
 						<TooltipCell
 							dataKey='iabSubCategoryId'
@@ -257,7 +258,7 @@ const VideoModal = (props) => {
 							displayProp='iabSubTopicName'
 							tooltipProp='iabSubTopicName'
 						/>
-					</Table.Column>
+					</Table.Column>*/}
 
 					<Table.Column verticalAlign={'middle'} width={200}>
 						<Table.HeaderCell></Table.HeaderCell>

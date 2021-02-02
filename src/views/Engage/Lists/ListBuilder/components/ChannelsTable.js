@@ -3,13 +3,11 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Table from 'rsuite/lib/Table'
-import Loader from 'rsuite/lib/Loader'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
-import Grid from '@material-ui/core/Grid'
-
+import './listbuilder.css'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -113,8 +111,8 @@ export default function ChannelsTable({
 
 	return (
 		<Table
-			//	showHeader={!channelsIsLoading}
-			style={{ display: 'flex', flexDirection: 'column', paddingLeft: 20 }}
+			style={{ flex: 1, marginLeft: 15 }}
+			rowClassName={'lbtable'}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {
@@ -124,7 +122,7 @@ export default function ChannelsTable({
 			}}
 			loading={items.length < 1 && channelsIsLoading}
 			virtualized
-			height={650}
+			height={890}
 			rowHeight={80}
 			data={items}
 			shouldUpdateScroll={false}
@@ -137,16 +135,16 @@ export default function ChannelsTable({
 				<ImageCell />
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+			{/**<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Country</Table.HeaderCell>
 				<TooltipCell
 					displayProp='countryDisplay'
 					tooltipProp='countryTooltip'
 					dataKey='countryCode'
 				/>
-			</Table.Column>
+			</Table.Column> */}
 
-			<Table.Column verticalAlign={'middle'} sortable>
+			<Table.Column verticalAlign={'middle'} sortable resizable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
 				<TooltipCell
 					displayProp='nameDisplay'
@@ -156,38 +154,44 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Date</Table.HeaderCell>
+				<Table.HeaderCell>Uploaded</Table.HeaderCell>
 				<TooltipCell
 					displayProp='createDateDisplay'
 					tooltipProp='createDateTooltip'
 					dataKey='created'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+
+			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
-			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center'>
-				<Table.HeaderCell>Video Categories</Table.HeaderCell>
+			</Table.Column> */}
+
+			<Table.Column verticalAlign={'middle'} align='center' resizable>
+				<Table.HeaderCell>YT Category</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
 					tooltipProp='categoryTooltip'
 					dataKey='categoryName'
+					tooltipPlacement='topLeft'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Subscribers</Table.HeaderCell>
+
+			<Table.Column verticalAlign={'middle'} align='center' sortable resizable>
+				<Table.HeaderCell>IAB Category</Table.HeaderCell>
 				<TooltipCell
-					displayProp='subscribersDisplay'
-					tooltipProp='subscribersTooltip'
-					dataKey='subscribers'
+					dataKey='iabCategoryId'
+					displayProp='iabCategoryName'
+					tooltipProp='iabCategoryName'
 				/>
 			</Table.Column>
+
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Videos</Table.HeaderCell>
 
 				<VideoCountCell dataKey='allVideoCount' />
 			</Table.Column>
+
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Views</Table.HeaderCell>
 				<TooltipCell
@@ -198,15 +202,15 @@ export default function ChannelsTable({
 			</Table.Column>
 
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>IAB Category</Table.HeaderCell>
+				<Table.HeaderCell>Subscribers</Table.HeaderCell>
 				<TooltipCell
-					dataKey='iabCategoryId'
-					displayProp='iabCategoryName'
-					tooltipProp='iabCategoryName'
+					displayProp='subscribersDisplay'
+					tooltipProp='subscribersTooltip'
+					dataKey='subscribers'
 				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
 				<TooltipCell
 					dataKey='iabSubCategoryId'
@@ -230,7 +234,8 @@ export default function ChannelsTable({
 					displayProp='iabSubTopicName'
 					tooltipProp='iabSubTopicName'
 				/>
-			</Table.Column>
+			</Table.Column> */}
+
 			<Table.Column width={180} verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ActionCell />

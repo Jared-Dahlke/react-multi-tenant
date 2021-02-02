@@ -1,16 +1,10 @@
 import React from 'react'
-import Dropdown from 'rsuite/lib/Dropdown'
-import Sidenav from 'rsuite/lib/Sidenav'
 import Sidebar from 'rsuite/lib/Sidebar'
-import Navbar from 'rsuite/lib/Navbar'
 import Icon from 'rsuite/lib/Icon'
-import Nav from 'rsuite/lib/Nav'
 import Grid from '@material-ui/core/Grid'
-import { useHistory } from 'react-router-dom'
 import { useSpring, animated } from 'react-spring'
 import PanelGroup from 'rsuite/lib/PanelGroup'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import IconButton from 'rsuite/lib/IconButton'
 import CustomPanel from '../../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import ArrowLeft from '@material-ui/icons/ArrowLeftSharp'
@@ -20,12 +14,10 @@ import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
 import FiltersLabel from './FiltersLabel'
 import Panel from 'rsuite/lib/Panel'
-
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 import { iabCategoriesFilter } from '../../../../../staticData/iabCategories'
 import TagPicker from 'rsuite/lib/TagPicker'
 import Checkbox from 'rsuite/lib/Checkbox'
-
 import {
 	youtubeCategories,
 	countriesOptions,
@@ -56,7 +48,7 @@ export const FiltersSideBar = ({
 	filters
 }) => {
 	const sidebarProps = useSpring({
-		width: expand ? 450 : 60
+		width: expand ? 450 : 40
 	})
 
 	const contentProps = useSpring({
@@ -65,7 +57,7 @@ export const FiltersSideBar = ({
 	})
 
 	return (
-		<animated.div style={sidebarProps}>
+		<div>
 			<Sidebar style={sidebarProps}>
 				<Panel
 					bodyFill
@@ -74,14 +66,31 @@ export const FiltersSideBar = ({
 					}}
 					header={
 						<div
+							style={{ display: 'flex', cursor: 'pointer' }}
 							onClick={handleToggle}
-							style={{ marginLeft: -10, textAlign: 'right', cursor: 'pointer' }}
 						>
-							{expand ? (
-								<ArrowLeft style={{ fontSize: 45, color: '#0092d1' }} />
-							) : (
-								<ArrowRight style={{ fontSize: 45, color: '#0092d1' }} />
-							)}
+							<div style={{ textAlign: 'left', flex: 1, marginTop: 11 }}>
+								<Icon size='lg' icon='filter' />
+							</div>
+							<div
+								style={{
+									marginLeft: -10,
+									textAlign: 'right',
+
+									flex: 1
+								}}
+							>
+								{expand ? (
+									<ArrowLeft
+										style={{
+											fontSize: 45,
+											color: '#0092d1'
+										}}
+									/>
+								) : (
+									<ArrowRight style={{ fontSize: 45, color: '#0092d1' }} />
+								)}
+							</div>
 						</div>
 					}
 				>
@@ -338,6 +347,6 @@ export const FiltersSideBar = ({
 					</animated.div>
 				</Panel>
 			</Sidebar>
-		</animated.div>
+		</div>
 	)
 }
