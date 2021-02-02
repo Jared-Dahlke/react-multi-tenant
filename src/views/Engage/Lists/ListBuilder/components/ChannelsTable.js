@@ -3,13 +3,11 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Table from 'rsuite/lib/Table'
-import Loader from 'rsuite/lib/Loader'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
-import Grid from '@material-ui/core/Grid'
-import '../../ListBuilder/components/listBuilder.css'
+import './listbuilder.css'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -35,7 +33,6 @@ export default function ChannelsTable({
 		incrementPage()
 	}, 1200)
 
-	const testClass = { height: 300 }
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
@@ -115,7 +112,7 @@ export default function ChannelsTable({
 	return (
 		<Table
 			style={{ flex: 1, marginLeft: 15 }}
-			rowClassName={'test-class'}
+			rowClassName={'lbtable'}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {

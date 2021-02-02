@@ -6,7 +6,7 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import { TooltipCell } from './TooltipCell'
-
+import './listbuilder.css'
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
 
@@ -133,6 +133,7 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
+					rowClassName={'lbtable'}
 					sortColumn={props.currentVideosSort.sortColumn}
 					sortType={props.currentVideosSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {
