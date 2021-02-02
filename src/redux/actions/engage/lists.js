@@ -301,12 +301,11 @@ export function setUploadedList(uploadedList) {
 }
 
 export function archiveList(payload) {
-	let url =
-		apiBase + `/smart-list/${payload.smartListId}?archive=${payload.archive}`
+	let url = apiBase + `/smart-list/${payload.smartListId}`
 	return async (dispatch) => {
 		dispatch(setListArchived(payload))
 		try {
-			const result = await axios.patch(url)
+			const result = await axios.patch(url, { archive: payload.archive })
 			if (result.status === 200) {
 			}
 		} catch (error) {
