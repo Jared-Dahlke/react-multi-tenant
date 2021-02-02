@@ -113,8 +113,7 @@ export default function ChannelsTable({
 
 	return (
 		<Table
-			//	showHeader={!channelsIsLoading}
-			style={{ display: 'flex', flexDirection: 'column', paddingLeft: 20 }}
+			style={{ flex: 1, marginLeft: 15 }}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {
@@ -124,7 +123,7 @@ export default function ChannelsTable({
 			}}
 			loading={items.length < 1 && channelsIsLoading}
 			virtualized
-			height={650}
+			height={890}
 			rowHeight={80}
 			data={items}
 			shouldUpdateScroll={false}
@@ -137,14 +136,14 @@ export default function ChannelsTable({
 				<ImageCell />
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+			{/**<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Country</Table.HeaderCell>
 				<TooltipCell
 					displayProp='countryDisplay'
 					tooltipProp='countryTooltip'
 					dataKey='countryCode'
 				/>
-			</Table.Column>
+			</Table.Column> */}
 
 			<Table.Column verticalAlign={'middle'} sortable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
@@ -156,44 +155,26 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Date</Table.HeaderCell>
+				<Table.HeaderCell>Uploaded</Table.HeaderCell>
 				<TooltipCell
 					displayProp='createDateDisplay'
 					tooltipProp='createDateTooltip'
 					dataKey='created'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+
+			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
-			</Table.Column>
+			</Table.Column> */}
+
 			<Table.Column verticalAlign={'middle'} align='center'>
-				<Table.HeaderCell>Video Categories</Table.HeaderCell>
+				<Table.HeaderCell>YT Category</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
 					tooltipProp='categoryTooltip'
 					dataKey='categoryName'
-				/>
-			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Subscribers</Table.HeaderCell>
-				<TooltipCell
-					displayProp='subscribersDisplay'
-					tooltipProp='subscribersTooltip'
-					dataKey='subscribers'
-				/>
-			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Videos</Table.HeaderCell>
-
-				<VideoCountCell dataKey='allVideoCount' />
-			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Views</Table.HeaderCell>
-				<TooltipCell
-					dataKey='views'
-					displayProp='viewsDisplay'
-					tooltipProp='viewsTooltip'
+					tooltipPlacement='topLeft'
 				/>
 			</Table.Column>
 
@@ -207,6 +188,30 @@ export default function ChannelsTable({
 			</Table.Column>
 
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
+				<Table.HeaderCell>Videos</Table.HeaderCell>
+
+				<VideoCountCell dataKey='allVideoCount' />
+			</Table.Column>
+
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
+				<Table.HeaderCell>Views</Table.HeaderCell>
+				<TooltipCell
+					dataKey='views'
+					displayProp='viewsDisplay'
+					tooltipProp='viewsTooltip'
+				/>
+			</Table.Column>
+
+			<Table.Column verticalAlign={'middle'} align='center' sortable>
+				<Table.HeaderCell>Subscribers</Table.HeaderCell>
+				<TooltipCell
+					displayProp='subscribersDisplay'
+					tooltipProp='subscribersTooltip'
+					dataKey='subscribers'
+				/>
+			</Table.Column>
+
+			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
 				<TooltipCell
 					dataKey='iabSubCategoryId'
@@ -230,7 +235,8 @@ export default function ChannelsTable({
 					displayProp='iabSubTopicName'
 					tooltipProp='iabSubTopicName'
 				/>
-			</Table.Column>
+			</Table.Column> */}
+
 			<Table.Column width={180} verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ActionCell />

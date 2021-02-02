@@ -39,6 +39,7 @@ import {
 	accentColor,
 	neutralLightColor
 } from '../../../../assets/jss/colorContants'
+import Panel from 'rsuite/lib/Panel'
 
 const mapStateToProps = (state) => {
 	return {
@@ -445,7 +446,78 @@ function ListBuilder(props) {
 	} else {
 		return (
 			<>
-				<Container>
+				<div style={{ display: 'flex' }}>
+					<Panel
+						style={{
+							flex: 1,
+							backgroundColor: neutralLightColor,
+							marginBottom: 15
+						}}
+						header={
+							<Grid container>
+								<Grid item xs={6}>
+									<p>SmartList Name</p>
+									<InputGroup
+										style={{
+											borderColor: isEditingName
+												? accentColor
+												: neutralLightColor
+										}}
+									>
+										<InputGroup.Button
+											onClick={() => {
+												setIsEditingName(true)
+											}}
+											style={{ backgroundColor: 'transparent' }}
+										>
+											<Icon style={{ color: '#0092d1' }} icon='pencil' />
+										</InputGroup.Button>
+										<Input
+											onPressEnter={(e) => handleNameChange(e)}
+											onBlur={(e) => {
+												handleNameChange(e)
+											}}
+											disabled={!isEditingName}
+											defaultValue={
+												props.smartListVersionUnderEdit.smartListName
+											}
+										/>
+									</InputGroup>
+								</Grid>
+								<Grid item xs={6} align='right'>
+									<ButtonToolbar>
+										<Button
+											style={{ marginLeft: 20 }}
+											size='xs'
+											loading={
+												props.isDownloadingExcel &&
+												props.isDownloadingExcelVersionId === parsedVersionId
+											}
+											onClick={() =>
+												handleDownloadClick(
+													parsedVersionId,
+													props.smartListVersionUnderEdit.smartListName
+												)
+											}
+										>
+											Download
+										</Button>
+									</ButtonToolbar>
+								</Grid>
+							</Grid>
+						}
+					>
+						<b>Brand Profile:</b>
+						<p style={{ color: 'grey' }}>
+							{props.smartListVersionUnderEdit.brandName}
+						</p>
+						<b>Objective:</b>
+						<p style={{ color: 'grey' }}>
+							{props.smartListVersionUnderEdit.objectiveName}
+						</p>
+					</Panel>
+				</div>
+				<div style={{ display: 'flex' }}>
 					<FiltersSideBar
 						filters={filters}
 						handleFilterChange={handleFilterChange}
@@ -455,108 +527,37 @@ function ListBuilder(props) {
 						handleApplyFiltersButtonClick={handleApplyFiltersButtonClick}
 					/>
 
-					<Container>
-						<Header>
-							<CustomPanel
-								header={
-									<Grid container>
-										<Grid item xs={6}>
-											<p>SmartList Name</p>
-											<InputGroup
-												style={{
-													borderColor: isEditingName
-														? accentColor
-														: neutralLightColor
-												}}
-											>
-												<InputGroup.Button
-													onClick={() => {
-														setIsEditingName(true)
-													}}
-													style={{ backgroundColor: 'transparent' }}
-												>
-													<Icon style={{ color: '#0092d1' }} icon='pencil' />
-												</InputGroup.Button>
-												<Input
-													onPressEnter={(e) => handleNameChange(e)}
-													onBlur={(e) => {
-														handleNameChange(e)
-													}}
-													disabled={!isEditingName}
-													defaultValue={
-														props.smartListVersionUnderEdit.smartListName
-													}
-												/>
-											</InputGroup>
-										</Grid>
-										<Grid item xs={6} align='right'>
-											<ButtonToolbar>
-												<Button
-													style={{ marginLeft: 20 }}
-													size='xs'
-													loading={
-														props.isDownloadingExcel &&
-														props.isDownloadingExcelVersionId ===
-															parsedVersionId
-													}
-													onClick={() =>
-														handleDownloadClick(
-															parsedVersionId,
-															props.smartListVersionUnderEdit.smartListName
-														)
-													}
-												>
-													Download
-												</Button>
-											</ButtonToolbar>
-										</Grid>
-									</Grid>
-								}
-							>
-								<b>Brand Profile:</b>
-								<p style={{ color: 'grey' }}>
-									{props.smartListVersionUnderEdit.brandName}
-								</p>
-								<b>Objective:</b>
-								<p style={{ color: 'grey' }}>
-									{props.smartListVersionUnderEdit.objectiveName}
-								</p>
-							</CustomPanel>
-						</Header>
-						<Content>
-							<ChannelsTable
-								setCurrentChannelsSort={setCurrentChannelsSort}
-								currentChannelsSort={currentChannelsSort}
-								channelsHasNextPage={props.channelsHasNextPage}
-								channelsIsLoading={props.channelsIsLoading}
-								items={props.channels}
-								incrementPage={() => {
-									if (!props.channelsIsLoading) {
-										setCurrentPage((prevState) => prevState + 1)
-									}
-								}}
-								handleActionButtonClick={handleActionButtonClick}
-								handleVideosClick={handleVideosClick}
-							/>
-						</Content>
-					</Container>
-				</Container>
+					<ChannelsTable
+						setCurrentChannelsSort={setCurrentChannelsSort}
+						currentChannelsSort={currentChannelsSort}
+						channelsHasNextPage={props.channelsHasNextPage}
+						channelsIsLoading={props.channelsIsLoading}
+						items={props.channels}
+						incrementPage={() => {
+							if (!props.channelsIsLoading) {
+								setCurrentPage((prevState) => prevState + 1)
+							}
+						}}
+						handleActionButtonClick={handleActionButtonClick}
+						handleVideosClick={handleVideosClick}
+					/>
 
-				<VideoModal
-					currentVideosSort={currentVideosSort}
-					setCurrentVideosSort={setCurrentVideosSort}
-					show={showVideoModal}
-					close={handleVideoModalClose}
-					videos={props.videos}
-					incrementPage={() => {
-						if (!props.videosIsLoading) {
-							setCurrentVideoPage((prevState) => prevState + 1)
-						}
-					}}
-					handleActionButtonClick={handleActionButtonClick}
-					channel={viewingVideosForChannel}
-					videosIsLoading={props.videosIsLoading}
-				/>
+					<VideoModal
+						currentVideosSort={currentVideosSort}
+						setCurrentVideosSort={setCurrentVideosSort}
+						show={showVideoModal}
+						close={handleVideoModalClose}
+						videos={props.videos}
+						incrementPage={() => {
+							if (!props.videosIsLoading) {
+								setCurrentVideoPage((prevState) => prevState + 1)
+							}
+						}}
+						handleActionButtonClick={handleActionButtonClick}
+						channel={viewingVideosForChannel}
+						videosIsLoading={props.videosIsLoading}
+					/>
+				</div>
 			</>
 		)
 	}
