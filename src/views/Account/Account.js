@@ -10,7 +10,7 @@ import AccountDropdown from '../../components/AccountDropdown'
 import Panel from '../../components/CustomPanel'
 import { userProfileFetchData } from '../../redux/actions/auth.js'
 import { connect } from 'react-redux'
-import { updateUserData } from '../../redux/actions/users.js'
+
 import Loader from 'rsuite/lib/Loader'
 import { withFormik, Form } from 'formik'
 import FormikInput from '../../components/CustomInput/FormikInput'
@@ -60,7 +60,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchUserProfile: () => dispatch(userProfileFetchData()),
-		updateUserData: (userData) => dispatch(updateUserData(userData)),
 		updateAccount: (account) => dispatch(updateAccount(account)),
 		deleteAccount: (accountId) => dispatch(deleteAccount(accountId)),
 		createAccount: (account) => dispatch(createAccount(account)),

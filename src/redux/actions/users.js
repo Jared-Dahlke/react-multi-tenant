@@ -142,7 +142,6 @@ export function updateUserData(user) {
 			const result = await axios.patch(url, myUser)
 			if (result.status === 200) {
 				dispatch(userProfileSaving(false))
-				toast.success('User profile saved!')
 				dispatch(setUserEditSaving(false))
 				toast.success('User saved!')
 			}
