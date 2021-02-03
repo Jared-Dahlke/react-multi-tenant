@@ -109,8 +109,6 @@ function UserProfile(props) {
 
 									<CardFooter>
 										<Button
-											//	color='primary'
-											//	loading={props.userProfileSaving}
 											disabled={!isValid || !dirty || props.userProfileSaving}
 											type='submit'
 										>

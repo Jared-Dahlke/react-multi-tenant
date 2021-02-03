@@ -54,7 +54,7 @@ export function fetchLists(accountId) {
 		} catch (error) {
 			console.log(error)
 		}
-		dispatch(setIsFetchingLists(false))
+
 		if (result.status === 200) {
 			dispatch(setFetchListsSuccess(true))
 			listsObjValidation.validate(result.data).catch(function(err) {
@@ -106,6 +106,7 @@ export function fetchLists(accountId) {
 				versions.push(version)
 			}
 			dispatch(setLists(versions))
+			dispatch(setIsFetchingLists(false))
 		}
 	}
 }
