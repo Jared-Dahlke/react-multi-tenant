@@ -36,7 +36,11 @@ export default function ChannelsTable({
 
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ padding: 1, textAlign: 'center' }}
+			>
 				<ButtonGroup vertical={false} size='xs'>
 					<Button
 						appearance={'ghost'}
@@ -247,7 +251,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column> */}
 
-			<Table.Column width={180} verticalAlign={'middle'}>
+			<Table.Column minWidth={180} flexGrow={1} verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ActionCell />
 			</Table.Column>
