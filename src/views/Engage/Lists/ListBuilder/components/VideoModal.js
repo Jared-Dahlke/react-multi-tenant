@@ -64,7 +64,11 @@ const VideoModal = (props) => {
 
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ padding: 1, textAlign: 'center' }}
+			>
 				<ButtonGroup vertical={false} size='xs'>
 					<Button
 						appearance={'ghost'}
@@ -264,7 +268,7 @@ const VideoModal = (props) => {
 						/>
 					</Table.Column>*/}
 
-					<Table.Column verticalAlign={'middle'} width={200}>
+					<Table.Column verticalAlign={'middle'} minWidth={180} flexGrow={1}>
 						<Table.HeaderCell></Table.HeaderCell>
 						<ActionCell />
 					</Table.Column>
