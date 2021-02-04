@@ -204,9 +204,13 @@ const formatVideos = (videos) => {
 		item.createDateDisplay = dayjs(item.published).format('MM/DD/YYYY')
 		item.createDateTooltip = dayjs(item.published).format('MM/DD/YYYY')
 
-		item.nameDisplay = item.name.replace(/\s/g, '').length
-			? item.name
-			: '[No name]'
+		let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
+
+		let maxNameChars = 40
+		item.nameDisplay =
+			name.length > maxNameChars
+				? `${name.substring(0, maxNameChars)}...`
+				: name
 
 		let description
 		if (!item.description) {
