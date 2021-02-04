@@ -102,7 +102,11 @@ export default function ChannelsTable({
 					trigger='hover'
 					speaker={<Tooltip>{rowData.videosTooltip}</Tooltip>}
 				>
-					<Button appearance='link' onClick={() => handleVideosClick(rowData)}>
+					<Button
+						appearance='link'
+						onClick={() => handleVideosClick(rowData)}
+						className={'lbTableFont'}
+					>
 						{rowData.videosDisplay}
 					</Button>
 				</Whisper>
@@ -131,7 +135,7 @@ export default function ChannelsTable({
 				handleScroll()
 			}}
 		>
-			<Table.Column verticalAlign={'middle'} width={80}>
+			<Table.Column verticalAlign={'middle'} width={60}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ImageCell />
 			</Table.Column>
@@ -145,7 +149,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column> */}
 
-			<Table.Column verticalAlign={'middle'} sortable resizable>
+			<Table.Column verticalAlign={'middle'} sortable width={280} resizable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
 				<NameCell
 					displayProp='nameDisplay'
@@ -156,7 +160,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Uploaded</Table.HeaderCell>
+				<Table.HeaderCell>Create Date</Table.HeaderCell>
 				<TooltipCell
 					displayProp='createDateDisplay'
 					tooltipProp='createDateTooltip'
@@ -169,13 +173,18 @@ export default function ChannelsTable({
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column> */}
 
-			<Table.Column verticalAlign={'middle'} align='center' resizable>
+			<Table.Column
+				verticalAlign={'middle'}
+				align='center'
+				width={180}
+				resizable
+			>
 				<Table.HeaderCell>YT Category</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
 					tooltipProp='categoryTooltip'
 					dataKey='categoryName'
-					tooltipPlacement='topLeft'
+					//	tooltipPlacement='topLeft'
 				/>
 			</Table.Column>
 

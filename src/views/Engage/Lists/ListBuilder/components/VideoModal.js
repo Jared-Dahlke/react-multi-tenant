@@ -112,12 +112,14 @@ const VideoModal = (props) => {
 
 	const ImageCell = ({ rowData, dataKey, ...props }) => {
 		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<div style={{ position: 'relative' }}>
-					<img src={rowData.thumbnail} width={'100%'} />
-					<div style={{ position: 'absolute', left: 0, bottom: 5 }}>
-						<Duration seconds={rowData.duration} />
-					</div>
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ padding: 1, margin: 0, position: 'relative' }}
+			>
+				<img src={rowData.thumbnail} width={'80%'} />
+				<div style={{ position: 'absolute', right: 0, bottom: 0 }}>
+					<Duration seconds={rowData.duration} />
 				</div>
 			</Table.Cell>
 		)
@@ -157,7 +159,7 @@ const VideoModal = (props) => {
 						<ImageCell />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} sortable resizable>
+					<Table.Column verticalAlign={'middle'} sortable resizable width={300}>
 						<Table.HeaderCell>Name</Table.HeaderCell>
 						<NameCell
 							displayProp='nameDisplay'
@@ -182,7 +184,7 @@ const VideoModal = (props) => {
 						<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 					</Table.Column> */}
 
-					<Table.Column verticalAlign={'middle'} sortable resizable>
+					<Table.Column verticalAlign={'middle'} sortable resizable width={130}>
 						<Table.HeaderCell>Category</Table.HeaderCell>
 						<TooltipCell
 							displayProp='categoryDisplay'
