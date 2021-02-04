@@ -3,7 +3,7 @@ import Table from 'rsuite/lib/Table'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import Button from 'rsuite/lib/Button'
-
+import './listbuilder.css'
 const openInNewTab = (url) => {
 	const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
 	if (newWindow) newWindow.opener = null
@@ -32,6 +32,7 @@ export const NameCell = ({
 				<Button
 					appearance='link'
 					onClick={() => openInNewTab(`${urlPrefix}${rowData.id}`)}
+					className={'lbTableFont'}
 				>
 					{rowData.nameDisplay}
 				</Button>

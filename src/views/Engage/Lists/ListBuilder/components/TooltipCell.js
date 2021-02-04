@@ -2,6 +2,7 @@ import React from 'react'
 import Table from 'rsuite/lib/Table'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
+import './listbuilder.css'
 
 export const TooltipCell = ({
 	rowData,
@@ -18,7 +19,7 @@ export const TooltipCell = ({
 				trigger='hover'
 				speaker={<Tooltip>{rowData[tooltipProp]}</Tooltip>}
 			>
-				<div>{rowData[displayProp]}</div>
+				<div className={'lbTableFont'}>{rowData[displayProp]}</div>
 			</Whisper>
 		</Table.Cell>
 	)
