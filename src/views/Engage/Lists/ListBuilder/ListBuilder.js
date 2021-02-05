@@ -183,7 +183,9 @@ function ListBuilder(props) {
 		views: 'views',
 		videoDurationSeconds: 'videoDurationSeconds',
 		uploadDate: 'uploadDate',
-		iabCategories: 'iabCategories'
+		iabCategoriesTarget: 'iabCategoriesTarget',
+		iabCategoriesWatch: 'iabCategoriesWatch',
+		iabCategoriesBlock: 'iabCategoriesBlock'
 	}
 
 	const handleActionButtonClick = (actionId, item) => {
@@ -226,6 +228,9 @@ function ListBuilder(props) {
 
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
+		iabCategoriesTarget: [],
+		iabCategoriesWatch: [],
+		iabCategoriesBlock: [],
 		iabCategories: [],
 		countries: [{ countryCode: 'US' }],
 		actionIds: [],
@@ -298,18 +303,65 @@ function ListBuilder(props) {
 				})
 				break
 
-			case filters.iabCategories:
-				let iabCategories = []
+			case filters.iabCategoriesTarget:
+				let iabCategoriesTarget = []
 				if (!value) {
 					value = []
 				}
 				for (const iabCategory of value) {
-					iabCategories.push(iabCategory)
+					iabCategoriesTarget.push(iabCategory)
 				}
 				setFilterState((prevState) => {
 					return {
 						...prevState,
-						iabCategories
+						iabCategoriesTarget,
+						iabCategories: [
+							...prevState.iabCategoriesWatch,
+							...prevState.iabCategoriesBlock,
+							...iabCategoriesTarget
+						]
+					}
+				})
+				break
+
+			case filters.iabCategoriesWatch:
+				let iabCategoriesWatch = []
+				if (!value) {
+					value = []
+				}
+				for (const iabCategory of value) {
+					iabCategoriesWatch.push(iabCategory)
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						iabCategoriesWatch,
+						iabCategories: [
+							...prevState.iabCategoriesTarget,
+							...prevState.iabCategoriesBlock,
+							...iabCategoriesWatch
+						]
+					}
+				})
+				break
+
+			case filters.iabCategoriesBlock:
+				let iabCategoriesBlock = []
+				if (!value) {
+					value = []
+				}
+				for (const iabCategory of value) {
+					iabCategoriesBlock.push(iabCategory)
+				}
+				setFilterState((prevState) => {
+					return {
+						...prevState,
+						iabCategoriesBlock,
+						iabCategories: [
+							...prevState.iabCategoriesTarget,
+							...prevState.iabCategoriesWatch,
+							...iabCategoriesBlock
+						]
 					}
 				})
 				break
@@ -441,6 +493,8 @@ function ListBuilder(props) {
 		})
 	}
 
+	const [isSaving, setIsSaving] = React.useState(false)
+
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
 	} else {
@@ -501,6 +555,21 @@ function ListBuilder(props) {
 											}
 										>
 											Download
+										</Button>
+
+										<Button
+											size='xs'
+											loading={isSaving}
+											onClick={() => {
+												setIsSaving(true)
+
+												setTimeout(() => {
+													toast.success('Bulk actions saved!')
+													setIsSaving(false)
+												}, 2000)
+											}}
+										>
+											Save
 										</Button>
 									</ButtonToolbar>
 								</Grid>

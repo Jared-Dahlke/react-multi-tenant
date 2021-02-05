@@ -24,6 +24,7 @@ import {
 	languagesOptions
 } from '../../../../../staticData/data'
 import { neutralLightColor } from '../../../../../assets/jss/colorContants'
+import ButtonGroup from 'rsuite/lib/ButtonGroup'
 var dayjs = require('dayjs')
 const filterSpacing = 1
 
@@ -118,8 +119,9 @@ export const FiltersSideBar = ({
 							<CustomPanel header='SmartList Filters'>
 								<Grid container spacing={filterSpacing}>
 									<Grid item xs={12}>
-										<FiltersLabel text='IAB Categories' />
+										<FiltersLabel color='green' text='IAB Categories, Target' />
 										<CheckTreePicker
+											style={{ borderColor: 'green' }}
 											placement='topStart'
 											size={'xs'}
 											defaultExpandAll={false}
@@ -127,7 +129,45 @@ export const FiltersSideBar = ({
 											labelKey={'name'}
 											valueKey={'id'}
 											onChange={(val) => {
-												handleFilterChange(filters.iabCategories, val)
+												handleFilterChange(filters.iabCategoriesTarget, val)
+											}}
+											cascade={true}
+											block
+											disabled={!expand}
+										/>
+									</Grid>
+
+									<Grid item xs={12}>
+										<FiltersLabel color='orange' text='IAB Categories, Watch' />
+										<CheckTreePicker
+											style={{ borderColor: 'green' }}
+											placement='topStart'
+											size={'xs'}
+											defaultExpandAll={false}
+											data={iabCategoriesFilter}
+											labelKey={'name'}
+											valueKey={'id'}
+											onChange={(val) => {
+												handleFilterChange(filters.iabCategoriesWatch, val)
+											}}
+											cascade={true}
+											block
+											disabled={!expand}
+										/>
+									</Grid>
+
+									<Grid item xs={12}>
+										<FiltersLabel color='red' text='IAB Categories, Block' />
+										<CheckTreePicker
+											style={{ borderColor: 'green' }}
+											placement='topStart'
+											size={'xs'}
+											defaultExpandAll={false}
+											data={iabCategoriesFilter}
+											labelKey={'name'}
+											valueKey={'id'}
+											onChange={(val) => {
+												handleFilterChange(filters.iabCategoriesBlock, val)
 											}}
 											cascade={true}
 											block
