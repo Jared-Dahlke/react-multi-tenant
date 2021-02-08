@@ -137,7 +137,7 @@ export function fetchChannels(args) {
 				dispatch(setChannelsHasNextPage(false))
 			}
 			let formattedChannels = formatChannels(result.data)
-			addPendingActions(formattedChannels, args.filters)
+			//	addPendingActions(formattedChannels, args.filters)
 			dispatch(setChannels(formattedChannels))
 			dispatch(setChannelsIsLoading(false))
 		}

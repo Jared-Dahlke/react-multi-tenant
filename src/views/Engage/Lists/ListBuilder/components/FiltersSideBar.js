@@ -119,55 +119,17 @@ export const FiltersSideBar = ({
 							<CustomPanel header='SmartList Filters'>
 								<Grid container spacing={filterSpacing}>
 									<Grid item xs={12}>
-										<FiltersLabel color='green' text='IAB Categories, Target' />
+										<FiltersLabel text='IAB Categories' />
 										<CheckTreePicker
-											style={{ borderColor: 'green' }}
-											placement='topStart'
-											size={'xs'}
-											defaultExpandAll={false}
-											data={iabCategoriesFilter}
-											labelKey={'name'}
-											valueKey={'id'}
-											onChange={(val) => {
-												handleFilterChange(filters.iabCategoriesTarget, val)
-											}}
-											cascade={true}
-											block
-											disabled={!expand}
-										/>
-									</Grid>
+											//		placement='topStart'
 
-									<Grid item xs={12}>
-										<FiltersLabel color='orange' text='IAB Categories, Watch' />
-										<CheckTreePicker
-											style={{ borderColor: 'green' }}
-											placement='topStart'
 											size={'xs'}
 											defaultExpandAll={false}
 											data={iabCategoriesFilter}
 											labelKey={'name'}
 											valueKey={'id'}
 											onChange={(val) => {
-												handleFilterChange(filters.iabCategoriesWatch, val)
-											}}
-											cascade={true}
-											block
-											disabled={!expand}
-										/>
-									</Grid>
-
-									<Grid item xs={12}>
-										<FiltersLabel color='red' text='IAB Categories, Block' />
-										<CheckTreePicker
-											style={{ borderColor: 'green' }}
-											placement='topStart'
-											size={'xs'}
-											defaultExpandAll={false}
-											data={iabCategoriesFilter}
-											labelKey={'name'}
-											valueKey={'id'}
-											onChange={(val) => {
-												handleFilterChange(filters.iabCategoriesBlock, val)
+												handleFilterChange(filters.iabCategories, val)
 											}}
 											cascade={true}
 											block

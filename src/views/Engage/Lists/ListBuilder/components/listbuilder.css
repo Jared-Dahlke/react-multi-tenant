@@ -5,3 +5,14 @@
 .lbTableFont {
 	font-size: 14px;
 }
+
+.rs-tree-node > .rs-tree-node-label {
+	width: 100%;
+}
+
+.rs-tree-node-disabled > .rs-tree-node-label > .rs-tree-node-label-content,
+.rs-tree-node-disabled
+	> .rs-tree-node-label
+	> .rs-tree-node-label-content:hover {
+	width: 100%;
+}

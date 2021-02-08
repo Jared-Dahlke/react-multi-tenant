@@ -11,6 +11,8 @@ import Header from 'rsuite/lib/Header'
 import Content from 'rsuite/lib/Content'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
+import Modal from 'rsuite/lib/Modal'
+import { BulkOperations } from './components/BulkOperations'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -228,9 +230,6 @@ function ListBuilder(props) {
 
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
-		iabCategoriesTarget: [],
-		iabCategoriesWatch: [],
-		iabCategoriesBlock: [],
 		iabCategories: [],
 		countries: [{ countryCode: 'US' }],
 		actionIds: [],
@@ -303,65 +302,18 @@ function ListBuilder(props) {
 				})
 				break
 
-			case filters.iabCategoriesTarget:
-				let iabCategoriesTarget = []
+			case filters.iabCategories:
+				let iabCategories = []
 				if (!value) {
 					value = []
 				}
 				for (const iabCategory of value) {
-					iabCategoriesTarget.push(iabCategory)
+					iabCategories.push(iabCategory)
 				}
 				setFilterState((prevState) => {
 					return {
 						...prevState,
-						iabCategoriesTarget,
-						iabCategories: [
-							...prevState.iabCategoriesWatch,
-							...prevState.iabCategoriesBlock,
-							...iabCategoriesTarget
-						]
-					}
-				})
-				break
-
-			case filters.iabCategoriesWatch:
-				let iabCategoriesWatch = []
-				if (!value) {
-					value = []
-				}
-				for (const iabCategory of value) {
-					iabCategoriesWatch.push(iabCategory)
-				}
-				setFilterState((prevState) => {
-					return {
-						...prevState,
-						iabCategoriesWatch,
-						iabCategories: [
-							...prevState.iabCategoriesTarget,
-							...prevState.iabCategoriesBlock,
-							...iabCategoriesWatch
-						]
-					}
-				})
-				break
-
-			case filters.iabCategoriesBlock:
-				let iabCategoriesBlock = []
-				if (!value) {
-					value = []
-				}
-				for (const iabCategory of value) {
-					iabCategoriesBlock.push(iabCategory)
-				}
-				setFilterState((prevState) => {
-					return {
-						...prevState,
-						iabCategoriesBlock,
-						iabCategories: [
-							...prevState.iabCategoriesTarget,
-							...prevState.iabCategoriesWatch,
-							...iabCategoriesBlock
-						]
+						iabCategories
 					}
 				})
 				break
@@ -493,13 +445,45 @@ function ListBuilder(props) {
 		})
 	}
 
-	const [isSaving, setIsSaving] = React.useState(false)
+	const [bulk, setBulk] = React.useState(true)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
 	} else {
 		return (
 			<>
+				<Modal
+					backdrop='static'
+					show={bulk}
+					size='sm'
+					style={{ height: '80%' }}
+					onHide={() => setBulk(false)}
+					//	size='xs'
+				>
+					<Modal.Header>Bulk Operations</Modal.Header>
+					<Modal.Body>
+						<BulkOperations
+							filters={filters}
+							handleFilterChange={handleFilterChange}
+							expand={filtersExpanded}
+							handleToggle={() => setFiltersExpanded((prevState) => !prevState)}
+							filterState={filterState}
+							handleApplyFiltersButtonClick={handleApplyFiltersButtonClick}
+						/>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							onClick={() => toast.success('Bulk operations applied!')}
+							appearance='primary'
+						>
+							Apply
+						</Button>
+						<Button onClick={() => setBulk(false)} appearance='subtle'>
+							Cancel
+						</Button>
+					</Modal.Footer>
+				</Modal>
+
 				<div style={{ display: 'flex' }}>
 					<Panel
 						style={{
@@ -559,6 +543,16 @@ function ListBuilder(props) {
 
 										<Button
 											size='xs'
+											//	loading={isSaving}
+											onClick={() => {
+												setBulk(true)
+											}}
+										>
+											Bulk Operations
+										</Button>
+
+										{/**	<Button
+											size='xs'
 											loading={isSaving}
 											onClick={() => {
 												setIsSaving(true)
@@ -570,7 +564,7 @@ function ListBuilder(props) {
 											}}
 										>
 											Save
-										</Button>
+										</Button> */}
 									</ButtonToolbar>
 								</Grid>
 							</Grid>
