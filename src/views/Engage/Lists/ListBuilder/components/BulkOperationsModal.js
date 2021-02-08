@@ -12,6 +12,7 @@ import lodashIncludes from 'lodash/includes'
 import lodashToLower from 'lodash/toLower'
 import lodashIsEmpty from 'lodash/isEmpty'
 import { listActions } from '../../constants'
+import Modal from 'rsuite/lib/Modal'
 import {
 	iabCategoriesFilter,
 	iabIds
@@ -23,14 +24,7 @@ import {
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 const filterSpacing = 1
 
-export const BulkOperations = ({
-	expand,
-	handleToggle,
-	filterState,
-	handleApplyFiltersButtonClick,
-	handleFilterChange,
-	filters
-}) => {
+export const BulkOperationsModal = (props) => {
 	const [search, setSearch] = React.useState('')
 	const [iabTaxonomy, setIabTaxonomy] = React.useState(iabCategoriesFilter)
 	const filterTree = (filter, list) => {
@@ -183,122 +177,153 @@ export const BulkOperations = ({
 		}
 	}, [search, iabTaxonomy])
 
+	const handleApplyBulkActionClick = () => {
+		let params = {
+			versionId: parsedVersionId,
+			iabCategoriesActions: {}
+		}
+
+		props.postVersionBulkAction(params)
+	}
+
 	return (
-		<CustomPanel header='IAB Categories'>
-			<Grid container spacing={filterSpacing}>
-				<Grid item xs={12}>
-					<InputGroup>
-						<Input value={search} onChange={(val) => setSearch(val)} />
+		<Modal
+			backdrop='static'
+			show={props.bulk}
+			overflow={false}
+			onHide={() => props.setBulk(false)}
+		>
+			<Modal.Header>Bulk Operations</Modal.Header>
+			<Modal.Body>
+				<CustomPanel header='IAB Categories'>
+					<Grid container spacing={filterSpacing}>
+						<Grid item xs={12}>
+							<InputGroup>
+								<Input value={search} onChange={(val) => setSearch(val)} />
 
-						<InputGroup.Button
-							onClick={() => {}}
-							style={{ backgroundColor: 'transparent' }}
-						>
-							<Icon style={{ color: '#0092d1' }} icon='search' />
-						</InputGroup.Button>
-					</InputGroup>
+								<InputGroup.Button
+									onClick={() => {}}
+									style={{ backgroundColor: 'transparent' }}
+								>
+									<Icon style={{ color: '#0092d1' }} icon='search' />
+								</InputGroup.Button>
+							</InputGroup>
 
-					<Tree
-						height={500}
-						expandAll={expandAll}
-						placement='bottomStart'
-						virtualized={true}
-						defaultExpandAll={false}
-						data={fin}
-						labelKey={'name'}
-						valueKey={'id'}
-						block
-						disabledItemValues={iabIds}
-						renderTreeNode={(item) => {
-							return (
-								<div style={{ display: 'flex', width: '100%' }}>
-									<div style={{ textAlign: 'left', flex: 1 }}>
-										{item.name + ' ' + item.id}
-									</div>
+							<Tree
+								height={500}
+								expandAll={expandAll}
+								placement='bottomStart'
+								virtualized={true}
+								defaultExpandAll={false}
+								data={fin}
+								labelKey={'name'}
+								valueKey={'id'}
+								block
+								disabledItemValues={iabIds}
+								renderTreeNode={(item) => {
+									return (
+										<div style={{ display: 'flex', width: '100%' }}>
+											<div style={{ textAlign: 'left', flex: 1 }}>
+												{item.name + ' ' + item.id}
+											</div>
 
-									<div
-										style={{
-											textAlign: 'right',
-											dispay: 'flex',
-											alignItems: 'right',
-											alignContent: 'right'
-										}}
-									>
-										<ButtonGroup vertical={false} size='xs'>
-											<Button
-												appearance={'ghost'}
-												//	active={rowData.actionId === 1}
+											<div
 												style={{
-													backgroundColor:
-														item.actionId === listActions.target.actionId
-															? accentColor
-															: '',
-													color:
-														item.actionId === listActions.target.actionId
-															? neutralColor
-															: ''
-												}}
-												onClick={() => {
-													handleActionButtonClick(
-														listActions.target.actionId,
-														item
-													)
+													textAlign: 'right',
+													dispay: 'flex',
+													alignItems: 'right',
+													alignContent: 'right'
 												}}
 											>
-												Target
-											</Button>
-											<Button
-												appearance={'ghost'}
-												//	active={rowData.actionId === 3}
-												style={{
-													backgroundColor:
-														item.actionId === listActions.watch.actionId
-															? accentColor
-															: '',
-													color:
-														item.actionId === listActions.watch.actionId
-															? neutralColor
-															: ''
-												}}
-												onClick={() => {
-													handleActionButtonClick(
-														listActions.watch.actionId,
-														item
-													)
-												}}
-											>
-												Watch
-											</Button>
-											<Button
-												appearance={'ghost'}
-												//active={rowData.actionId === 2}
-												style={{
-													backgroundColor:
-														item.actionId === listActions.block.actionId
-															? accentColor
-															: '',
-													color:
-														item.actionId === listActions.block.actionId
-															? neutralColor
-															: ''
-												}}
-												onClick={() => {
-													handleActionButtonClick(
-														listActions.block.actionId,
-														item
-													)
-												}}
-											>
-												Block
-											</Button>
-										</ButtonGroup>
-									</div>
-								</div>
-							)
-						}}
-					/>
-				</Grid>
-			</Grid>
-		</CustomPanel>
+												<ButtonGroup vertical={false} size='xs'>
+													<Button
+														appearance={'ghost'}
+														//	active={rowData.actionId === 1}
+														style={{
+															backgroundColor:
+																item.actionId === listActions.target.actionId
+																	? accentColor
+																	: '',
+															color:
+																item.actionId === listActions.target.actionId
+																	? neutralColor
+																	: ''
+														}}
+														onClick={() => {
+															handleActionButtonClick(
+																listActions.target.actionId,
+																item
+															)
+														}}
+													>
+														Target
+													</Button>
+													<Button
+														appearance={'ghost'}
+														//	active={rowData.actionId === 3}
+														style={{
+															backgroundColor:
+																item.actionId === listActions.watch.actionId
+																	? accentColor
+																	: '',
+															color:
+																item.actionId === listActions.watch.actionId
+																	? neutralColor
+																	: ''
+														}}
+														onClick={() => {
+															handleActionButtonClick(
+																listActions.watch.actionId,
+																item
+															)
+														}}
+													>
+														Watch
+													</Button>
+													<Button
+														appearance={'ghost'}
+														//active={rowData.actionId === 2}
+														style={{
+															backgroundColor:
+																item.actionId === listActions.block.actionId
+																	? accentColor
+																	: '',
+															color:
+																item.actionId === listActions.block.actionId
+																	? neutralColor
+																	: ''
+														}}
+														onClick={() => {
+															handleActionButtonClick(
+																listActions.block.actionId,
+																item
+															)
+														}}
+													>
+														Block
+													</Button>
+												</ButtonGroup>
+											</div>
+										</div>
+									)
+								}}
+							/>
+						</Grid>
+					</Grid>
+				</CustomPanel>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button
+					disabled
+					onClick={handleApplyBulkActionClick}
+					appearance='primary'
+				>
+					Apply
+				</Button>
+				<Button onClick={() => props.setBulk(false)} appearance='subtle'>
+					Cancel
+				</Button>
+			</Modal.Footer>
+		</Modal>
 	)
 }

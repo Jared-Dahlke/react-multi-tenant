@@ -7,8 +7,7 @@ import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
-import Modal from 'rsuite/lib/Modal'
-import { BulkOperations } from './components/BulkOperations'
+import { BulkOperationsModal } from './components/BulkOperationsModal'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -21,6 +20,7 @@ import {
 
 import {
 	patchVersionData,
+	postVersionBulkAction,
 	deleteVersionDataItem,
 	downloadExcelList,
 	setSmartListVersionUnderEdit,
@@ -65,6 +65,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
+		postVersionBulkAction: (params) => dispatch(postVersionBulkAction(params)),
 		removeAllVideos: () => dispatch(removeAllVideos()),
 		removeAllChannels: () => dispatch(removeAllChannels()),
 		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
@@ -180,10 +181,7 @@ function ListBuilder(props) {
 		actionIds: 'actionIds',
 		views: 'views',
 		videoDurationSeconds: 'videoDurationSeconds',
-		uploadDate: 'uploadDate',
-		iabCategoriesTarget: 'iabCategoriesTarget',
-		iabCategoriesWatch: 'iabCategoriesWatch',
-		iabCategoriesBlock: 'iabCategoriesBlock'
+		uploadDate: 'uploadDate'
 	}
 
 	const handleActionButtonClick = (actionId, item) => {
@@ -448,36 +446,7 @@ function ListBuilder(props) {
 	} else {
 		return (
 			<>
-				<Modal
-					backdrop='static'
-					show={bulk}
-					overflow={false}
-					onHide={() => setBulk(false)}
-				>
-					<Modal.Header>Bulk Operations</Modal.Header>
-					<Modal.Body>
-						<BulkOperations
-							filters={filters}
-							handleFilterChange={handleFilterChange}
-							expand={filtersExpanded}
-							handleToggle={() => setFiltersExpanded((prevState) => !prevState)}
-							filterState={filterState}
-							handleApplyFiltersButtonClick={handleApplyFiltersButtonClick}
-						/>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button
-							disabled
-							onClick={() => toast.success('Bulk operations applied!')}
-							appearance='primary'
-						>
-							Apply
-						</Button>
-						<Button onClick={() => setBulk(false)} appearance='subtle'>
-							Cancel
-						</Button>
-					</Modal.Footer>
-				</Modal>
+				<BulkOperationsModal bulk={bulk} setBulk={setBulk} />
 
 				<div style={{ display: 'flex' }}>
 					<Panel
