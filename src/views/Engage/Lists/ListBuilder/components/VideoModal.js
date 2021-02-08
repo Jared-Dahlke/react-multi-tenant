@@ -8,6 +8,7 @@ import { accentColor } from '../../../../../assets/jss/colorContants'
 import { TooltipCell } from './TooltipCell'
 import { NameCell } from './NameCell'
 import './listbuilder.css'
+import { listActions } from '../../constants'
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
 
@@ -72,42 +73,51 @@ const VideoModal = (props) => {
 				<ButtonGroup vertical={false} size='xs'>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 1}
+						active={rowData.actionId === listActions.target.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 1 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.target.actionId
+									? accentColor
+									: ''
 						}}
 						onClick={() => {
-							handleActionButtonClick(1, rowData)
+							handleActionButtonClick(listActions.target.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
-						Target
+						{listActions.target.text}
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 3}
+						active={rowData.actionId === listActions.watch.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 3 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.watch.actionId
+									? accentColor
+									: ''
 						}}
 						onClick={() => {
-							handleActionButtonClick(3, rowData)
+							handleActionButtonClick(listActions.watch.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
-						Watch
+						{listActions.watch.text}
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 2}
+						active={rowData.actionId === listActions.block.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 2 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.block.actionId
+									? accentColor
+									: ''
 						}}
 						onClick={() => {
-							handleActionButtonClick(2, rowData)
+							handleActionButtonClick(listActions.block.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
-						Block
+						{listActions.block.text}
 					</Button>
 				</ButtonGroup>
 			</Table.Cell>

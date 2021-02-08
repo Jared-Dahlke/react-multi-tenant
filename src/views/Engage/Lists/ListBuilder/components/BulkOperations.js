@@ -11,7 +11,7 @@ import lodashFilter from 'lodash/filter'
 import lodashIncludes from 'lodash/includes'
 import lodashToLower from 'lodash/toLower'
 import lodashIsEmpty from 'lodash/isEmpty'
-
+import { listActions } from '../../constants'
 import {
 	iabCategoriesFilter,
 	iabIds
@@ -230,11 +230,19 @@ export const BulkOperations = ({
 												//	active={rowData.actionId === 1}
 												style={{
 													backgroundColor:
-														item.actionId === 1 ? accentColor : '',
-													color: item.actionId === 1 ? neutralColor : ''
+														item.actionId === listActions.target.actionId
+															? accentColor
+															: '',
+													color:
+														item.actionId === listActions.target.actionId
+															? neutralColor
+															: ''
 												}}
 												onClick={() => {
-													handleActionButtonClick(1, item)
+													handleActionButtonClick(
+														listActions.target.actionId,
+														item
+													)
 												}}
 											>
 												Target
@@ -244,11 +252,19 @@ export const BulkOperations = ({
 												//	active={rowData.actionId === 3}
 												style={{
 													backgroundColor:
-														item.actionId === 3 ? accentColor : '',
-													color: item.actionId === 3 ? neutralColor : ''
+														item.actionId === listActions.watch.actionId
+															? accentColor
+															: '',
+													color:
+														item.actionId === listActions.watch.actionId
+															? neutralColor
+															: ''
 												}}
 												onClick={() => {
-													handleActionButtonClick(3, item)
+													handleActionButtonClick(
+														listActions.watch.actionId,
+														item
+													)
 												}}
 											>
 												Watch
@@ -258,11 +274,19 @@ export const BulkOperations = ({
 												//active={rowData.actionId === 2}
 												style={{
 													backgroundColor:
-														item.actionId === 2 ? accentColor : '',
-													color: item.actionId === 2 ? neutralColor : ''
+														item.actionId === listActions.block.actionId
+															? accentColor
+															: '',
+													color:
+														item.actionId === listActions.block.actionId
+															? neutralColor
+															: ''
 												}}
 												onClick={() => {
-													handleActionButtonClick(2, item)
+													handleActionButtonClick(
+														listActions.block.actionId,
+														item
+													)
 												}}
 											>
 												Block

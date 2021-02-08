@@ -8,6 +8,7 @@ import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
 import { NameCell } from './NameCell'
+import { listActions } from '../../constants'
 import './listbuilder.css'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
@@ -44,18 +45,18 @@ export default function ChannelsTable({
 				<ButtonGroup vertical={false} size='xs'>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 1}
+						active={rowData.actionId === listActions.target.actionId}
 						style={{
 							boxShadow: rowData.pendingActionId ? '5px 5px 5px grey' : '',
 							backgroundColor:
-								rowData.actionId === 1
+								rowData.actionId === listActions.target.actionId
 									? accentColor
-									: rowData.pendingActionId === 1
+									: rowData.pendingActionId === listActions.target.actionId
 									? 'white'
 									: 'transparent'
 						}}
 						onClick={() => {
-							handleActionButtonClick(1, rowData)
+							handleActionButtonClick(listActions.target.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
@@ -63,18 +64,18 @@ export default function ChannelsTable({
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 3}
+						active={rowData.actionId === listActions.watch.actionId}
 						style={{
 							boxShadow: rowData.pendingActionId ? '5px 5px 5px grey' : '',
 							backgroundColor:
-								rowData.actionId === 3
+								rowData.actionId === listActions.watch.actionId
 									? accentColor
-									: rowData.pendingActionId === 3
+									: rowData.pendingActionId === listActions.watch.actionId
 									? 'white'
 									: 'transparent'
 						}}
 						onClick={() => {
-							handleActionButtonClick(3, rowData)
+							handleActionButtonClick(listActions.watch.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
@@ -82,18 +83,18 @@ export default function ChannelsTable({
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 2}
+						active={rowData.actionId === listActions.block.actionId}
 						style={{
 							boxShadow: rowData.pendingActionId ? '5px 5px 5px grey' : '',
 							backgroundColor:
-								rowData.actionId === 2
+								rowData.actionId === listActions.block.actionId
 									? accentColor
-									: rowData.pendingActionId === 2
+									: rowData.pendingActionId === listActions.block.actionId
 									? 'white'
 									: 'transparent'
 						}}
 						onClick={() => {
-							handleActionButtonClick(2, rowData)
+							handleActionButtonClick(listActions.block.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>

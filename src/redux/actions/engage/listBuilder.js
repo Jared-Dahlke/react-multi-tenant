@@ -137,14 +137,14 @@ export function fetchChannels(args) {
 				dispatch(setChannelsHasNextPage(false))
 			}
 			let formattedChannels = formatChannels(result.data)
-			//	addPendingActions(formattedChannels, args.filters)
 			dispatch(setChannels(formattedChannels))
 			dispatch(setChannelsIsLoading(false))
 		}
 	}
 }
 
-const addPendingActions = (channels, filters) => {
+/**
+ * const addPendingActions = (channels, filters) => {
 	for (const item of channels) {
 		for (const targetId of filters.iabCategoriesTarget) {
 			let channelPendingTarget =
@@ -180,6 +180,7 @@ const addPendingActions = (channels, filters) => {
 		}
 	}
 }
+ */
 
 const formatChannels = (channels) => {
 	for (const item of channels) {

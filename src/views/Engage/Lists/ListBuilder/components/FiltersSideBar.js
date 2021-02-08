@@ -18,23 +18,39 @@ import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 import { iabCategoriesFilter } from '../../../../../staticData/iabCategories'
 import TagPicker from 'rsuite/lib/TagPicker'
 import Checkbox from 'rsuite/lib/Checkbox'
+import { listActions } from '../../constants'
 import {
 	youtubeCategories,
 	countriesOptions,
 	languagesOptions
 } from '../../../../../staticData/data'
 import { neutralLightColor } from '../../../../../assets/jss/colorContants'
-import ButtonGroup from 'rsuite/lib/ButtonGroup'
 var dayjs = require('dayjs')
 const filterSpacing = 1
 
 const actionIdOptions = [
-	{ label: 'View Targeted Items', actionIds: [1], id: 1 },
-	{ label: 'View Blocked Items', actionIds: [2], id: 2 },
-	{ label: 'View Watched Items', actionIds: [3], id: 3 },
+	{
+		label: 'View Targeted Items',
+		actionIds: [listActions.target.actionId],
+		id: listActions.target.actionId
+	},
+	{
+		label: 'View Blocked Items',
+		actionIds: [listActions.block.actionId],
+		id: listActions.block.actionId
+	},
+	{
+		label: 'View Watched Items',
+		actionIds: [listActions.watch.actionId],
+		id: listActions.watch.actionId
+	},
 	{
 		label: 'View Targeted, Watched, and Blocked Items',
-		actionIds: [1, 2, 3],
+		actionIds: [
+			listActions.target.actionId,
+			listActions.block.actionId,
+			listActions.watch.actionId
+		],
 		id: 4
 	},
 	{ label: 'View All Items', actionIds: [], id: 5 }

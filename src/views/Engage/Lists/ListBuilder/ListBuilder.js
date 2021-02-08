@@ -3,12 +3,8 @@ import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
-import CustomPanel from '../../../../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
-import Container from 'rsuite/lib/Container'
-import Header from 'rsuite/lib/Header'
-import Content from 'rsuite/lib/Content'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
 import Modal from 'rsuite/lib/Modal'
@@ -445,7 +441,7 @@ function ListBuilder(props) {
 		})
 	}
 
-	const [bulk, setBulk] = React.useState(true)
+	const [bulk, setBulk] = React.useState(false)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -456,9 +452,7 @@ function ListBuilder(props) {
 					backdrop='static'
 					show={bulk}
 					overflow={false}
-					//	size='sm'
 					onHide={() => setBulk(false)}
-					//	size='xs'
 				>
 					<Modal.Header>Bulk Operations</Modal.Header>
 					<Modal.Body>
@@ -473,6 +467,7 @@ function ListBuilder(props) {
 					</Modal.Body>
 					<Modal.Footer>
 						<Button
+							disabled
 							onClick={() => toast.success('Bulk operations applied!')}
 							appearance='primary'
 						>
@@ -543,7 +538,6 @@ function ListBuilder(props) {
 
 										<Button
 											size='xs'
-											//	loading={isSaving}
 											onClick={() => {
 												setBulk(true)
 											}}
