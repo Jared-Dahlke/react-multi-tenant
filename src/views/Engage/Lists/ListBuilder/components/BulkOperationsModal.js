@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import './listbuilder.css'
 import Icon from 'rsuite/lib/Icon'
 import Input from 'rsuite/lib/Input'
@@ -22,9 +23,16 @@ import {
 	neutralColor
 } from '../../../../../assets/jss/colorContants'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
+import { postVersionBulkAction } from '../../../../../redux/actions/engage/lists'
 const filterSpacing = 1
 
-export const BulkOperationsModal = (props) => {
+const mapDispatchToProps = (dispatch) => {
+	return {
+		postVersionBulkAction: (params) => dispatch(postVersionBulkAction(params))
+	}
+}
+
+function BulkOperationsModal(props) {
 	const [search, setSearch] = React.useState('')
 	const [iabTaxonomy, setIabTaxonomy] = React.useState(iabCategoriesFilter)
 	const filterTree = (filter, list) => {
@@ -177,10 +185,61 @@ export const BulkOperationsModal = (props) => {
 		}
 	}, [search, iabTaxonomy])
 
+	const getActionsForEndpoint = () => {
+		let iabTaxonomyCopy = JSON.parse(JSON.stringify(iabTaxonomy))
+		let actions = []
+		for (const item of iabTaxonomyCopy) {
+			if (item.actionId) {
+				actions.push({ taxonomyId: item.id, actionId: item.actionId })
+				if (item.children) {
+					delete item.children
+				}
+			}
+			if (item.children) {
+				for (const child of item.children) {
+					if (child.actionId) {
+						actions.push({ taxonomyId: child.id, actionId: child.actionId })
+						if (child.children) {
+							delete child.children
+						}
+					}
+					if (child.children) {
+						for (const gChild of child.children) {
+							if (gChild.actionId) {
+								actions.push({
+									taxonomyId: gChild.id,
+									actionId: gChild.actionId
+								})
+								if (gChild.children) {
+									delete gChild.children
+								}
+							}
+							if (gChild.children) {
+								for (const ggChild of gChild.children) {
+									if (ggChild.actionId) {
+										actions.push({
+											taxonomyId: ggChild.id,
+											actionId: ggChild.actionId
+										})
+										if (ggChild.children) {
+											delete ggChild.children
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return actions
+	}
+
 	const handleApplyBulkActionClick = () => {
+		let actions = getActionsForEndpoint()
 		let params = {
-			versionId: parsedVersionId,
-			iabCategoriesActions: {}
+			versionId: props.parsedVersionId,
+			iabCategoriesActions: actions
 		}
 
 		props.postVersionBulkAction(params)
@@ -313,11 +372,7 @@ export const BulkOperationsModal = (props) => {
 				</CustomPanel>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button
-					disabled
-					onClick={handleApplyBulkActionClick}
-					appearance='primary'
-				>
+				<Button onClick={handleApplyBulkActionClick} appearance='primary'>
 					Apply
 				</Button>
 				<Button onClick={() => props.setBulk(false)} appearance='subtle'>
@@ -327,3 +382,5 @@ export const BulkOperationsModal = (props) => {
 		</Modal>
 	)
 }
+
+export default connect(null, mapDispatchToProps)(BulkOperationsModal)

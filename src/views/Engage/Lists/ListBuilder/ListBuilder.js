@@ -7,7 +7,7 @@ import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
-import { BulkOperationsModal } from './components/BulkOperationsModal'
+import BulkOperationsModal from './components/BulkOperationsModal'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -446,7 +446,11 @@ function ListBuilder(props) {
 	} else {
 		return (
 			<>
-				<BulkOperationsModal bulk={bulk} setBulk={setBulk} />
+				<BulkOperationsModal
+					bulk={bulk}
+					setBulk={setBulk}
+					parsedVersionId={parsedVersionId}
+				/>
 
 				<div style={{ display: 'flex' }}>
 					<Panel
