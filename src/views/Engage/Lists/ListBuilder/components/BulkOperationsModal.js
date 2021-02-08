@@ -13,6 +13,7 @@ import lodashIncludes from 'lodash/includes'
 import lodashToLower from 'lodash/toLower'
 import lodashIsEmpty from 'lodash/isEmpty'
 import { listActions } from '../../constants'
+import toast from 'react-hot-toast'
 import Modal from 'rsuite/lib/Modal'
 import {
 	iabCategoriesFilter,
@@ -242,7 +243,11 @@ function BulkOperationsModal(props) {
 			iabCategoriesActions: actions
 		}
 
-		props.postVersionBulkAction(params)
+		toast.promise(props.postVersionBulkAction(params), {
+			loading: 'Saving...',
+			success: <b>Settings saved!</b>,
+			error: <b>Could not save.</b>
+		})
 	}
 
 	return (

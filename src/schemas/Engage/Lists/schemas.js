@@ -120,19 +120,13 @@ export const postListVersionResult = Yup.object().shape({
 
 export const channelsSchema = Yup.array().of(
 	Yup.object().shape({
-		iabCategoryId: Yup.number()
-			.strict(true)
-			.nullable(),
+		iabCategoryId: Yup.mixed().nullable(),
 		iabCategoryName: Yup.string().nullable(),
-		iabSubCategoryId: Yup.number()
-			.strict(true)
-			.nullable(),
+		iabSubCategoryId: Yup.mixed().nullable(),
 		iabSubCategoryName: Yup.string().nullable(),
 		iabSubTopicId: Yup.mixed().nullable(),
 		iabSubTopicName: Yup.mixed().nullable(),
-		iabTopicId: Yup.number()
-			.strict(true)
-			.nullable(),
+		iabTopicId: Yup.mixed().nullable(),
 		iabTopicName: Yup.string().nullable(),
 
 		actionId: Yup.number()
@@ -176,19 +170,14 @@ export const channelsSchema = Yup.array().of(
 
 export const videosSchema = Yup.array().of(
 	Yup.object().shape({
-		iabCategoryId: Yup.number()
-			.strict(true)
-			.nullable(),
+		iabCategoryId: Yup.mixed()
+		.nullable(),
 		iabCategoryName: Yup.string().nullable(),
-		iabSubCategoryId: Yup.number()
-			.strict(true)
-			.nullable(),
+		iabSubCategoryId: Yup.mixed().nullable(),
 		iabSubCategoryName: Yup.string().nullable(),
 		iabSubTopicId: Yup.mixed().nullable(),
 		iabSubTopicName: Yup.mixed().nullable(),
-		iabTopicId: Yup.number()
-			.strict(true)
-			.nullable(),
+		iabTopicId: Yup.mixed().nullable(),
 		iabTopicName: Yup.string().nullable(),
 
 		actionId: Yup.number()
