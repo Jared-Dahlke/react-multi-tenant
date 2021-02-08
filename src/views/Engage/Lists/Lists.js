@@ -34,6 +34,7 @@ import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import InputPicker from 'rsuite/lib/InputPicker'
 import Table from 'rsuite/lib/Table'
 import { useDispatch } from 'react-redux'
+import { neutralColor } from '../../../assets/jss/colorContants'
 
 const mapStateToProps = (state) => {
 	return {

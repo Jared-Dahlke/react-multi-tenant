@@ -143,6 +143,45 @@ export function fetchChannels(args) {
 	}
 }
 
+/**
+ * const addPendingActions = (channels, filters) => {
+	for (const item of channels) {
+		for (const targetId of filters.iabCategoriesTarget) {
+			let channelPendingTarget =
+				item.iabCategoryId == targetId ||
+				item.iabSubCategoryId == targetId ||
+				item.iabTopicId == targetId ||
+				item.iabSubTopicId == targetId
+			if (channelPendingTarget && item.actionId != 1) {
+				item.pendingActionId = 1
+			}
+		}
+
+		for (const watchId of filters.iabCategoriesWatch) {
+			let channelPendingWatch =
+				item.iabCategoryId == watchId ||
+				item.iabSubCategoryId == watchId ||
+				item.iabTopicId == watchId ||
+				item.iabSubTopicId == watchId
+			if (channelPendingWatch && item.actionId != 3) {
+				item.pendingActionId = 3
+			}
+		}
+
+		for (const blockId of filters.iabCategoriesBlock) {
+			let channelPendingBlock =
+				item.iabCategoryId == blockId ||
+				item.iabSubCategoryId == blockId ||
+				item.iabTopicId == blockId ||
+				item.iabSubTopicId == blockId
+			if (channelPendingBlock && item.actionId != 2) {
+				item.pendingActionId = 2
+			}
+		}
+	}
+}
+ */
+
 const formatChannels = (channels) => {
 	for (const item of channels) {
 		item.createDateDisplay = dayjs(item.created).format('MM/DD/YYYY')
