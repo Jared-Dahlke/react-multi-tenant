@@ -66,13 +66,13 @@ export const BulkOperations = ({
 }) => {
 	const [search, setSearch] = React.useState('')
 	const [iabTaxonomy, setIabTaxonomy] = React.useState(iabCategoriesFilter)
-	const [iabTaxonomyOrig, setIabTaxonomyOrig] = React.useState(
-		iabCategoriesFilter
-	)
+	//const [iabTaxonomyOrig, setIabTaxonomyOrig] = React.useState(
+	//	iabCategoriesFilter
+	//)
 
 	const filterTree = (filter, list) => {
 		if (search.length < 1) {
-			return iabTaxonomyOrig
+			return iabTaxonomy
 		}
 		return lodashFilter(list, (item) => {
 			if (lodashIncludes(lodashToLower(item.name), lodashToLower(filter))) {
@@ -134,16 +134,8 @@ export const BulkOperations = ({
 		//	let parent = getTreeNodeById()
 	}
 
-	React.useEffect(() => {
-		if (search.length < 1) {
-			//	setExpandAll(false)
-		} else {
-			//	setExpandAll(true)
-		}
-	}, [search])
-
 	const handleActionButtonClick = (actionId, item) => {
-		let copy = JSON.parse(JSON.stringify(iabTaxonomyOrig))
+		let copy = JSON.parse(JSON.stringify(iabTaxonomy))
 		let node = getTreeNodeById(copy, item.id)
 		if (node.actionId == actionId) {
 			actionId = null
@@ -152,7 +144,7 @@ export const BulkOperations = ({
 		markAllChildren(node, actionId)
 		addressParent(node, actionId)
 		setIabTaxonomy(copy)
-		setIabTaxonomyOrig(copy)
+		//	setIabTaxonomyOrig(copy)
 	}
 
 	let fin = React.useMemo(() => {
