@@ -455,8 +455,8 @@ function ListBuilder(props) {
 				<Modal
 					backdrop='static'
 					show={bulk}
-					size='sm'
-					style={{ height: '80%' }}
+					overflow={false}
+					//	size='sm'
 					onHide={() => setBulk(false)}
 					//	size='xs'
 				>

@@ -6,6 +6,11 @@
 	font-size: 14px;
 }
 
+.rs-tree {
+	overflow-y: inherit;
+	max-height: 500px;
+}
+
 .rs-tree-node > .rs-tree-node-label {
 	width: 100%;
 }

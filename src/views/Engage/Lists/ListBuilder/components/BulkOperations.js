@@ -38,7 +38,11 @@ import {
 	countriesOptions,
 	languagesOptions
 } from '../../../../../staticData/data'
-import { neutralLightColor } from '../../../../../assets/jss/colorContants'
+import {
+	neutralLightColor,
+	accentColor,
+	neutralColor
+} from '../../../../../assets/jss/colorContants'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { getNodeText } from '@testing-library/react'
 var dayjs = require('dayjs')
@@ -130,8 +134,73 @@ export const BulkOperations = ({
 		}
 	}
 
-	const addressParent = (node, actionId) => {
-		//	let parent = getTreeNodeById()
+	const addressParent = (node, actionId, tree) => {
+		let parent = getTreeNodeById(tree, node.parentId)
+		if (parent) {
+			if (parent.actionId != actionId) {
+				parent.actionId = null
+			}
+			let sibActionId = parent.children[0].actionId
+			let childrenAllSame = true
+			for (const sib of parent.children) {
+				// if all children are the same then mark parent
+				if (sib.actionId != sibActionId) {
+					childrenAllSame = false
+				}
+			}
+			if (childrenAllSame) {
+				parent.actionId = sibActionId
+			}
+		}
+	}
+
+	const addressGrandParent = (node, actionId, tree) => {
+		let parent = getTreeNodeById(tree, node.parentId)
+		if (parent) {
+			let grandParent = getTreeNodeById(tree, parent.parentId)
+			if (grandParent) {
+				if (grandParent.actionId != actionId) {
+					grandParent.actionId = null
+				}
+				let sibActionId = grandParent.children[0].actionId
+				let childrenAllSame = true
+				for (const sib of grandParent.children) {
+					// if all children are the same then mark parent
+					if (sib.actionId != sibActionId) {
+						childrenAllSame = false
+					}
+				}
+				if (childrenAllSame) {
+					grandParent.actionId = sibActionId
+				}
+			}
+		}
+	}
+
+	const addressGreatGrandParent = (node, actionId, tree) => {
+		let parent = getTreeNodeById(tree, node.parentId)
+		if (parent) {
+			let grandParent = getTreeNodeById(tree, parent.parentId)
+			if (grandParent) {
+				let greatGrandParent = getTreeNodeById(tree, grandParent.parentId)
+				if (greatGrandParent) {
+					if (greatGrandParent.actionId != actionId) {
+						greatGrandParent.actionId = null
+					}
+					let sibActionId = greatGrandParent.children[0].actionId
+					let childrenAllSame = true
+					for (const sib of greatGrandParent.children) {
+						// if all children are the same then mark parent
+						if (sib.actionId != sibActionId) {
+							childrenAllSame = false
+						}
+					}
+					if (childrenAllSame) {
+						greatGrandParent.actionId = sibActionId
+					}
+				}
+			}
+		}
 	}
 
 	const handleActionButtonClick = (actionId, item) => {
@@ -142,9 +211,10 @@ export const BulkOperations = ({
 		}
 		node.actionId = actionId
 		markAllChildren(node, actionId)
-		addressParent(node, actionId)
+		addressParent(node, actionId, copy)
+		addressGrandParent(node, actionId, copy)
+		addressGreatGrandParent(node, actionId, copy)
 		setIabTaxonomy(copy)
-		//	setIabTaxonomyOrig(copy)
 	}
 
 	let fin = React.useMemo(() => {
@@ -159,101 +229,102 @@ export const BulkOperations = ({
 	}, [search, iabTaxonomy])
 
 	return (
-		<PanelGroup>
-			<CustomPanel header='IAB Categories'>
-				<Grid container spacing={filterSpacing}>
-					<Grid item xs={12}>
-						<InputGroup>
-							<Input
-								value={search}
-								onChange={(val) => setSearch(val)}
-								//	onFocus={() => setInSearch(true)}
-								onBlur={() => setInSearch(false)}
-								//	onMouseOut={() => setInSearch(false)}
-								onMouseOver={() => setInSearch(true)}
-							/>
-
-							<InputGroup.Button
-								onClick={() => {}}
-								style={{ backgroundColor: 'transparent' }}
-							>
-								<Icon style={{ color: '#0092d1' }} icon='search' />
-							</InputGroup.Button>
-						</InputGroup>
-
-						<Tree
-							expandAll={expandAll}
-							placement='bottomStart'
-							size={'xs'}
-							virtualized={true}
-							defaultExpandAll={false}
-							data={fin}
-							labelKey={'name'}
-							valueKey={'id'}
-							block
-							disabledItemValues={iabIds}
-							//	searchKeyword={search}
-							renderTreeNode={(item) => {
-								return (
-									<div style={{ display: 'flex', width: '100%' }}>
-										<div style={{ textAlign: 'left', flex: 1 }}>
-											{item.name + ' ' + item.id}
-										</div>
-
-										<div
-											style={{
-												textAlign: 'right',
-												dispay: 'flex',
-												alignItems: 'right',
-												alignContent: 'right'
-											}}
-										>
-											<ButtonGroup vertical={false} size='xs'>
-												<Button
-													appearance={'ghost'}
-													//	active={rowData.actionId === 1}
-													style={{
-														backgroundColor: item.actionId === 1 ? 'blue' : ''
-													}}
-													onClick={() => {
-														handleActionButtonClick(1, item)
-													}}
-												>
-													Target
-												</Button>
-												<Button
-													appearance={'ghost'}
-													//	active={rowData.actionId === 3}
-													style={{
-														backgroundColor: item.actionId === 3 ? 'blue' : ''
-													}}
-													onClick={() => {
-														handleActionButtonClick(3, item)
-													}}
-												>
-													Watch
-												</Button>
-												<Button
-													appearance={'ghost'}
-													//active={rowData.actionId === 2}
-													style={{
-														backgroundColor: item.actionId === 2 ? 'blue' : ''
-													}}
-													onClick={() => {
-														handleActionButtonClick(2, item)
-													}}
-												>
-													Block
-												</Button>
-											</ButtonGroup>
-										</div>
-									</div>
-								)
-							}}
+		<CustomPanel header='IAB Categories'>
+			<Grid container spacing={filterSpacing}>
+				<Grid item xs={12}>
+					<InputGroup>
+						<Input
+							value={search}
+							onChange={(val) => setSearch(val)}
+							onBlur={() => setInSearch(false)}
+							onMouseOver={() => setInSearch(true)}
 						/>
-					</Grid>
+
+						<InputGroup.Button
+							onClick={() => {}}
+							style={{ backgroundColor: 'transparent' }}
+						>
+							<Icon style={{ color: '#0092d1' }} icon='search' />
+						</InputGroup.Button>
+					</InputGroup>
+
+					<Tree
+						height={500}
+						expandAll={expandAll}
+						placement='bottomStart'
+						virtualized={true}
+						defaultExpandAll={false}
+						data={fin}
+						labelKey={'name'}
+						valueKey={'id'}
+						block
+						disabledItemValues={iabIds}
+						renderTreeNode={(item) => {
+							return (
+								<div style={{ display: 'flex', width: '100%' }}>
+									<div style={{ textAlign: 'left', flex: 1 }}>
+										{item.name + ' ' + item.id}
+									</div>
+
+									<div
+										style={{
+											textAlign: 'right',
+											dispay: 'flex',
+											alignItems: 'right',
+											alignContent: 'right'
+										}}
+									>
+										<ButtonGroup vertical={false} size='xs'>
+											<Button
+												appearance={'ghost'}
+												//	active={rowData.actionId === 1}
+												style={{
+													backgroundColor:
+														item.actionId === 1 ? accentColor : '',
+													color: item.actionId === 1 ? neutralColor : ''
+												}}
+												onClick={() => {
+													handleActionButtonClick(1, item)
+												}}
+											>
+												Target
+											</Button>
+											<Button
+												appearance={'ghost'}
+												//	active={rowData.actionId === 3}
+												style={{
+													backgroundColor:
+														item.actionId === 3 ? accentColor : '',
+													color: item.actionId === 3 ? neutralColor : ''
+												}}
+												onClick={() => {
+													handleActionButtonClick(3, item)
+												}}
+											>
+												Watch
+											</Button>
+											<Button
+												appearance={'ghost'}
+												//active={rowData.actionId === 2}
+												style={{
+													backgroundColor:
+														item.actionId === 2 ? accentColor : '',
+													color: item.actionId === 2 ? neutralColor : ''
+												}}
+												onClick={() => {
+													handleActionButtonClick(2, item)
+												}}
+											>
+												Block
+											</Button>
+										</ButtonGroup>
+									</div>
+								</div>
+							)
+						}}
+					/>
 				</Grid>
-			</CustomPanel>
-		</PanelGroup>
+			</Grid>
+		</CustomPanel>
 	)
 }
