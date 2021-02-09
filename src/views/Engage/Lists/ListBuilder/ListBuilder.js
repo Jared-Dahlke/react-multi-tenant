@@ -8,6 +8,7 @@ import VideoModal from './components/VideoModal'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
 import BulkOperationsModal from './components/BulkOperationsModal'
+import Stats from './components/Stats'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -108,6 +109,10 @@ function ListBuilder(props) {
 		sortColumn: 'views',
 		sortType: 'desc'
 	})
+
+	const goToListsPage = () => {
+		history.push(routes.app.engage.lists.lists.path)
+	}
 
 	React.useEffect(() => {
 		return () => {
@@ -517,6 +522,9 @@ function ListBuilder(props) {
 										>
 											Bulk Operations
 										</Button>
+										<Button size='xs' onClick={goToListsPage}>
+											Done
+										</Button>
 
 										{/**	<Button
 											size='xs'
@@ -534,6 +542,7 @@ function ListBuilder(props) {
 										</Button> */}
 									</ButtonToolbar>
 								</Grid>
+								<Stats parsedVersionId={parsedVersionId} />
 							</Grid>
 						}
 					>

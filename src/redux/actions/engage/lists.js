@@ -277,6 +277,13 @@ export const postVersionBulkAction = (args) => {
 	}
 }
 
+export const fetchVersionStats = (versionId) => {
+	let url = `${apiBase}/smart-list/version/${versionId}/stats`
+	return async (dispatch) => {
+		const result = await axios.get(url)
+	}
+}
+
 export const deleteAllVersionData = (versionId) => {
 	let url = `${apiBase}/smart-list/version/${versionId}/data`
 	return (dispatch) => {
