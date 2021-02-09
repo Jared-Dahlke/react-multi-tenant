@@ -16,7 +16,7 @@ const store = configureStore()
 function App() {
 	return (
 		<Provider store={store}>
-			<Toaster position={'bottom-left'} toastOptions={{ duration: 2000 }} />
+			<Toaster position={'bottom-left'} toastOptions={{ duration: 5000 }} />
 			<Router>
 				<div>
 					<Route exact path='/' component={routes.login.component} />

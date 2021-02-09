@@ -248,11 +248,7 @@ function BulkOperationsModal(props) {
 			iabCategoriesActions: actions
 		}
 
-		toast.promise(props.postVersionBulkAction(params), {
-			loading: 'Saving...',
-			success: <b>saved!</b>,
-			error: <b>Could not apply.</b>
-		})
+		props.postVersionBulkAction(params)
 	}
 
 	return (
