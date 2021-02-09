@@ -204,6 +204,20 @@ export const patchVersionData = (args) => {
 	})
 }
 
+export const postVersionBulkAction = (args) => {
+	let url = `${apiBase}/smart-list/version/${args.versionId}/action`
+	return queue.wrap(async (dispatch) => {
+		try {
+			let params = args.iabCategoriesActions
+			const result = await axios.patch(url, params)
+			if (result.status === 200) {
+			}
+		} catch (error) {
+			alert(error)
+		}
+	})
+}
+
 export const deleteAllVersionData = (versionId) => {
 	let url = `${apiBase}/smart-list/version/${versionId}/data`
 	return (dispatch) => {
