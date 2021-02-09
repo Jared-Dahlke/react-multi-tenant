@@ -238,6 +238,11 @@ function BulkOperationsModal(props) {
 
 	const handleApplyBulkActionClick = () => {
 		let actions = getActionsForEndpoint()
+
+		if (actions.length < 1) {
+			toast.error('Please make at least one selection and try again.')
+			return
+		}
 		let params = {
 			versionId: props.parsedVersionId,
 			iabCategoriesActions: actions
@@ -245,8 +250,8 @@ function BulkOperationsModal(props) {
 
 		toast.promise(props.postVersionBulkAction(params), {
 			loading: 'Saving...',
-			success: <b>Settings saved!</b>,
-			error: <b>Could not save.</b>
+			success: <b>saved!</b>,
+			error: <b>Could not apply.</b>
 		})
 	}
 
