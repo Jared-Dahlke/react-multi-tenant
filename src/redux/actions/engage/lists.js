@@ -13,7 +13,7 @@ import {
 	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS
 } from '../../action-types/engage/lists'
-
+import React from 'react'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
 import defaultAxios from 'axios'
@@ -204,18 +204,77 @@ export const patchVersionData = (args) => {
 	})
 }
 
+const Counts = ({ counts }) => {
+	return (
+		<>
+			{counts.videosTargeted && (
+				<>
+					Videos targeted: {numeral(counts.videosTargeted).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.videosBlocked && (
+				<>
+					Videos blocked: {numeral(counts.videosBlocked).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.videosWatched && (
+				<>
+					Videos watched: {numeral(counts.videosWatched).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.channelsTargeted && (
+				<>
+					Channels targeted: {numeral(counts.channelsTargeted).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.channelsBlocked && (
+				<>
+					Channels blocked: {numeral(counts.channelsBlocked).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.channelsWatched && (
+				<>
+					Channels watched: {numeral(counts.channelsWatched).format('0,0')}{' '}
+					<br />
+				</>
+			)}
+		</>
+	)
+}
+
 export const postVersionBulkAction = (args) => {
 	let url = `${apiBase}/smart-list/version/${args.versionId}/action`
-	return queue.wrap(async (dispatch) => {
-		try {
-			let params = args.iabCategoriesActions
-			const result = await axios.patch(url, params)
-			if (result.status === 200) {
+	return async (dispatch) => {
+		let params = { iabCategoriesActions: args.iabCategoriesActions }
+		const promise = axios.patch(url, params)
+
+		toast.promise(
+			promise,
+			{
+				loading: 'Saving...',
+				success: (data) => {
+					let counts = data.data
+					return <Counts counts={counts} />
+				},
+				error: 'error'
+			},
+			{
+				success: {
+					duration: 6000
+				},
+				loading: {
+					duration: 60000
+				}
 			}
-		} catch (error) {
-			alert(error)
-		}
-	})
+		)
+
+		const result = await promise
+	}
 }
 
 export const deleteAllVersionData = (versionId) => {
