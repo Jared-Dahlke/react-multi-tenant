@@ -11,7 +11,9 @@ import {
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
 	SET_SMARTLIST_VERSION_UNDER_EDIT,
-	SET_DELETE_ALL_VERSION_DATA_SUCCESS
+	SET_DELETE_ALL_VERSION_DATA_SUCCESS,
+	SET_SMARTLIST_STATS,
+	SET_SMARTLIST_STATS_LOADING
 } from '../../action-types/engage/lists'
 import React from 'react'
 import config from '../../../config.js'
@@ -274,6 +276,31 @@ export const postVersionBulkAction = (args) => {
 		)
 
 		const result = await promise
+		dispatch(fetchVersionStats(args.versionId))
+	}
+}
+
+export const fetchVersionStats = (versionId) => {
+	let url = `${apiBase}/smart-list/version/${versionId}/stats`
+	return async (dispatch) => {
+		dispatch(setSmartListStatsLoading(true))
+		const result = await axios.get(url)
+		dispatch(setSmartListStats(result.data))
+		dispatch(setSmartListStatsLoading(false))
+	}
+}
+
+export function setSmartListStats(smartListStats) {
+	return {
+		type: SET_SMARTLIST_STATS,
+		smartListStats
+	}
+}
+
+export function setSmartListStatsLoading(smartListStatsLoading) {
+	return {
+		type: SET_SMARTLIST_STATS_LOADING,
+		smartListStatsLoading
 	}
 }
 

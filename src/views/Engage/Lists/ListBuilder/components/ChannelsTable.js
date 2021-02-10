@@ -220,7 +220,7 @@ export default function ChannelsTable({
 				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Videos</Table.HeaderCell>
 
 				<VideoCountCell dataKey='allVideoCount' />

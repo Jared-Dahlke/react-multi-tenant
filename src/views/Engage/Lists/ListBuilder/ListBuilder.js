@@ -8,6 +8,7 @@ import VideoModal from './components/VideoModal'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
 import BulkOperationsModal from './components/BulkOperationsModal'
+import Stats from './components/Stats'
 import {
 	fetchVideos,
 	fetchChannels,
@@ -25,7 +26,8 @@ import {
 	downloadExcelList,
 	setSmartListVersionUnderEdit,
 	fetchLists,
-	patchListName
+	patchListName,
+	setSmartListStats
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
@@ -41,6 +43,7 @@ import Panel from 'rsuite/lib/Panel'
 
 const mapStateToProps = (state) => {
 	return {
+		smartListStats: state.engage.smartListStats,
 		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit,
 		lists: state.engage.lists,
 		videos: state.engage.videos,
@@ -58,6 +61,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setVideos: (videos) => dispatch(setVideos(videos)),
+		setSmartListStats: (params) => dispatch(setSmartListStats(params)),
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 		patchListName: (payload) => dispatch(patchListName(payload)),
 		setSmartListVersionUnderEdit: (version) =>
@@ -108,6 +112,10 @@ function ListBuilder(props) {
 		sortColumn: 'views',
 		sortType: 'desc'
 	})
+
+	const goToListsPage = () => {
+		history.push(routes.app.engage.lists.lists.path)
+	}
 
 	React.useEffect(() => {
 		return () => {
@@ -184,11 +192,137 @@ function ListBuilder(props) {
 		uploadDate: 'uploadDate'
 	}
 
+	const updateStats = (actionId, add, item, oldActionId) => {
+		let id = item.id
+		let type = id.length === 24 ? 'channel' : 'video'
+		let newStats = JSON.parse(JSON.stringify(props.smartListStats))
+
+		if (oldActionId === 1) {
+			newStats.targetSubscriberCount =
+				newStats.targetSubscriberCount - item.subscribers
+		}
+		if (oldActionId === 2) {
+			newStats.blockSubscriberCount =
+				newStats.blockSubscriberCount - item.subscribers
+		}
+		if (oldActionId === 3) {
+			newStats.watchSubscriberCount =
+				newStats.watchSubscriberCount - item.subscribers
+		}
+
+		if (add) {
+			newStats.subscriberCount = newStats.subscriberCount + item.subscribers
+			if (actionId === 1) {
+				newStats.targetSubscriberCount =
+					newStats.targetSubscriberCount + item.subscribers
+			}
+			if (actionId === 2) {
+				newStats.blockSubscriberCount =
+					newStats.blockSubscriberCount + item.subscribers
+			}
+			if (actionId === 3) {
+				newStats.watchSubscriberCount =
+					newStats.watchSubscriberCount + item.subscribers
+			}
+		} else {
+			newStats.subscriberCount = newStats.subscriberCount - item.subscribers
+			if (actionId === 1) {
+				newStats.targetSubscriberCount =
+					newStats.targetSubscriberCount - item.subscribers
+			}
+			if (actionId === 2) {
+				newStats.blockSubscriberCount =
+					newStats.blockSubscriberCount - item.subscribers
+			}
+			if (actionId === 3) {
+				newStats.watchSubscriberCount =
+					newStats.watchSubscriberCount - item.subscribers
+			}
+		}
+
+		if (type === 'channel') {
+			if (oldActionId === 1) {
+				newStats.targetChannelCount = newStats.targetChannelCount - 1
+			}
+			if (oldActionId === 2) {
+				newStats.blockChannelCount = newStats.blockChannelCount - 1
+			}
+			if (oldActionId === 3) {
+				newStats.watchChannelCount = newStats.watchChannelCount - 1
+			}
+
+			if (add) {
+				newStats.channelCount = newStats.channelCount + 1
+				if (actionId === 1) {
+					newStats.targetChannelCount = newStats.targetChannelCount + 1
+				}
+				if (actionId === 2) {
+					newStats.blockChannelCount = newStats.blockChannelCount + 1
+				}
+				if (actionId === 3) {
+					newStats.watchChannelCount = newStats.watchChannelCount + 1
+				}
+			} else {
+				newStats.channelCount = newStats.channelCount - 1
+				if (actionId === 1) {
+					newStats.targetChannelCount = newStats.targetChannelCount - 1
+				}
+				if (actionId === 2) {
+					newStats.blockChannelCount = newStats.blockChannelCount - 1
+				}
+				if (actionId === 3) {
+					newStats.watchChannelCount = newStats.watchChannelCount - 1
+				}
+			}
+		}
+
+		if (type === 'video') {
+			if (oldActionId === 1) {
+				newStats.targetVideoCount = newStats.targetVideoCount - 1
+			}
+			if (oldActionId === 2) {
+				newStats.blockVideoCount = newStats.blockVideoCount - 1
+			}
+			if (oldActionId === 3) {
+				newStats.watchVideoCount = newStats.watchVideoCount - 1
+			}
+
+			if (add) {
+				newStats.videoCount = newStats.videoCount + 1
+				if (actionId === 1) {
+					newStats.targetVideoCount = newStats.targetVideoCount + 1
+				}
+				if (actionId === 2) {
+					newStats.blockVideoCount = newStats.blockVideoCount + 1
+				}
+				if (actionId === 3) {
+					newStats.watchVideoCount = newStats.watchVideoCount + 1
+				}
+			} else {
+				newStats.videoCount = newStats.videoCount - 1
+				if (actionId === 1) {
+					newStats.targetVideoCount = newStats.targetVideoCount - 1
+				}
+				if (actionId === 2) {
+					newStats.blockVideoCount = newStats.blockVideoCount - 1
+				}
+				if (actionId === 3) {
+					newStats.watchVideoCount = newStats.watchVideoCount - 1
+				}
+			}
+		}
+
+		props.setSmartListStats(newStats)
+	}
+
 	const handleActionButtonClick = (actionId, item) => {
 		let unSelecting = item.actionId === actionId
 		let versionId = parsedVersionId
+		let oldItem = JSON.parse(JSON.stringify(item))
+
 		if (unSelecting) {
 			delete item.actionId
+			updateStats(actionId, false, item, oldItem.actionId)
 			let _args = {
 				versionId: versionId,
 				id: item.id
@@ -201,6 +335,7 @@ function ListBuilder(props) {
 			})
 		} else {
 			item.actionId = actionId
+			updateStats(actionId, true, item, oldItem.actionId)
 			let args = {
 				versionId: versionId,
 				data: [{ actionId: actionId, id: item.id }]
@@ -517,6 +652,9 @@ function ListBuilder(props) {
 										>
 											Bulk Operations
 										</Button>
+										<Button size='xs' onClick={goToListsPage}>
+											Done
+										</Button>
 
 										{/**	<Button
 											size='xs'
@@ -537,14 +675,24 @@ function ListBuilder(props) {
 							</Grid>
 						}
 					>
-						<b>Brand Profile:</b>
-						<p style={{ color: 'grey' }}>
-							{props.smartListVersionUnderEdit.brandName}
-						</p>
-						<b>Objective:</b>
-						<p style={{ color: 'grey' }}>
-							{props.smartListVersionUnderEdit.objectiveName}
-						</p>
+						<div style={{ display: 'flex' }}>
+							<div style={{ flex: 1 }}>
+								<p>Brand Profile:</p>
+								<p style={{ color: 'grey' }}>
+									{props.smartListVersionUnderEdit.brandName}
+								</p>
+								<p>Objective:</p>
+								<p style={{ color: 'grey' }}>
+									{props.smartListVersionUnderEdit.objectiveName}
+								</p>
+							</div>
+							<div style={{ flex: 1 }}>
+								<Stats
+									parsedVersionId={parsedVersionId}
+									smartListStats={props.smartListStats}
+								/>
+							</div>
+						</div>
 					</Panel>
 				</div>
 				<div style={{ display: 'flex' }}>
