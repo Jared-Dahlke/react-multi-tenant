@@ -71,15 +71,10 @@ const generateBreadCrumbs = (routes) => {
 		const disabledLinkStyle = {
 			fontSize: crumbSize,
 			cursor: 'not-allowed',
-			color: 'white',
 			pointerEvents: 'none'
 		}
 		return (
-			<Breadcrumbs
-				aria-label='breadcrumb'
-				style={{ color: whiteColor }}
-				separator='>'
-			>
+			<Breadcrumbs aria-label='breadcrumb' separator='>'>
 				{routeHierarchy.reverse().map((curr, index, array) => {
 					if (index === array.length - 1)
 						return (
