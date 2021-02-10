@@ -3,11 +3,7 @@ import { connect } from 'react-redux'
 import { fetchVersionStats } from '../../../../../redux/actions/engage/lists'
 import '../components/listbuilder.css'
 import numeral from 'numeral'
-import ChartistGraph from 'react-chartist'
 import Panel from 'rsuite/lib/Panel'
-import CustomPanel from '../../../../../components/CustomPanel'
-import { neutralColor } from '../../../../../assets/jss/colorContants'
-import Loader from 'rsuite/lib/Loader'
 
 const mapStateToProps = (state) => {
 	return {
@@ -28,28 +24,6 @@ const Stats = (props) => {
 	}, [])
 
 	let stats = props.smartListStats
-
-	const getData = (args) => {
-		var data = {
-			labels: ['Target', 'Watch', 'Block'],
-			series: [
-				{
-					value: args.target,
-					className: 'pie-target'
-				},
-				{
-					value: args.watch,
-					className: 'pie-watch'
-				},
-				{
-					value: args.block,
-					className: 'pie-block'
-				}
-			]
-		}
-
-		return data
-	}
 
 	return (
 		<div style={{ display: 'flex', justifyContent: 'space-between', flex: 1 }}>

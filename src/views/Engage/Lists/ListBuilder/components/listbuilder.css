@@ -21,15 +21,3 @@
 	> .rs-tree-node-label-content:hover {
 	width: 100%;
 }
-
-.pie-target {
-	fill: #aeef00;
-	color: 'red';
-}
-
-.pie-watch {
-	fill: #efb900;
-}
-.pie-block {
-	fill: #ef0037;
-}
