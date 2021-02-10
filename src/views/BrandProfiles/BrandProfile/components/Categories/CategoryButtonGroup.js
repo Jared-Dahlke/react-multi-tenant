@@ -25,9 +25,7 @@ export default function CategoryButtonGroup(props) {
 			<GridItem xs={6} sm={6} md={6}>
 				<div
 					style={{
-						color: 'white',
 						fontSize: '16px',
-						//	marginTop: '11px',
 						float: 'right'
 					}}
 				>

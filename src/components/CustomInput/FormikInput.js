@@ -42,9 +42,7 @@ export default function CustomInput(props) {
 
 					<InputGroup>
 						{props.startAdornmentText && (
-							<InputGroup.Addon style={{ color: '#AAAAAA' }}>
-								{props.startAdornmentText}
-							</InputGroup.Addon>
+							<InputGroup.Addon>{props.startAdornmentText}</InputGroup.Addon>
 						)}
 
 						<Input

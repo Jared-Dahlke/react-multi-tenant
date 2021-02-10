@@ -61,7 +61,6 @@ export default function CustomInput(props) {
 				}}
 				id={id}
 				{...inputProps}
-				style={{ color: props.valueColor ? props.valueColor : whiteColor }}
 				autoComplete='adf'
 			/>
 			{error ? (

@@ -64,71 +64,65 @@ function UserProfile(props) {
 		<div>
 			<GridContainer>
 				<GridItem xs={12} sm={12} md={8}>
-					<Card>
-						{!props.userProfileIsLoading ? (
-							<div>
-								<Form>
-									<CardBody>
-										<GridContainer>
-											<GridItem xs={12} sm={12} md={5}>
-												<FormikInput
-													name='company'
-													formikValue={values.company}
-													labelText='Company'
-													id='company'
-												/>
-											</GridItem>
-											<GridItem xs={12} sm={12} md={4}>
-												<FormikInput
-													name='email'
-													formikValue={values.email}
-													labelText='Email'
-													id='email'
-												/>
-											</GridItem>
-										</GridContainer>
-										<GridContainer>
-											<GridItem xs={12} sm={12} md={6}>
-												<FormikInput
-													name='firstName'
-													formikValue={values.firstName}
-													labelText='First Name'
-													id='firstName'
-												/>
-											</GridItem>
-											<GridItem xs={12} sm={12} md={6}>
-												<FormikInput
-													name='lastName'
-													formikValue={values.lastName}
-													labelText='Last Name'
-													id='lastName'
-												/>
-											</GridItem>
-										</GridContainer>
-									</CardBody>
+					{!props.userProfileIsLoading ? (
+						<div>
+							<Form>
+								<GridContainer>
+									<GridItem xs={12} sm={12} md={5}>
+										<FormikInput
+											name='company'
+											formikValue={values.company}
+											labelText='Company'
+											id='company'
+										/>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={4}>
+										<FormikInput
+											name='email'
+											formikValue={values.email}
+											labelText='Email'
+											id='email'
+										/>
+									</GridItem>
+								</GridContainer>
+								<GridContainer>
+									<GridItem xs={12} sm={12} md={6}>
+										<FormikInput
+											name='firstName'
+											formikValue={values.firstName}
+											labelText='First Name'
+											id='firstName'
+										/>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={6}>
+										<FormikInput
+											name='lastName'
+											formikValue={values.lastName}
+											labelText='Last Name'
+											id='lastName'
+										/>
+									</GridItem>
+								</GridContainer>
 
-									<CardFooter>
-										<Button
-											disabled={!isValid || !dirty || props.userProfileSaving}
-											type='submit'
-										>
-											Save
-										</Button>
+								<Button
+									disabled={!isValid || !dirty || props.userProfileSaving}
+									type='submit'
+								>
+									Save
+								</Button>
 
-										<Button
-											size={'sm'}
-											appearance='link'
-											onClick={handleResetPassword}
-										>
-											Change my password
-										</Button>
-									</CardFooter>
-								</Form>
-							</div>
-						) : (
-							<Loader center size='lg' content='Loading...' vertical />
-						)}
-					</Card>
+								<Button
+									size={'sm'}
+									appearance='link'
+									onClick={handleResetPassword}
+								>
+									Change my password
+								</Button>
+							</Form>
+						</div>
+					) : (
+						<Loader center size='lg' content='Loading...' vertical />
+					)}
 				</GridItem>
 			</GridContainer>
 		</div>
