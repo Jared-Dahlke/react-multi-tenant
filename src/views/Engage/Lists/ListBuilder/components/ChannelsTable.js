@@ -47,12 +47,9 @@ export default function ChannelsTable({
 						appearance={'ghost'}
 						active={rowData.actionId === listActions.target.actionId}
 						style={{
-							boxShadow: rowData.pendingActionId ? '5px 5px 5px grey' : '',
 							backgroundColor:
 								rowData.actionId === listActions.target.actionId
 									? accentColor
-									: rowData.pendingActionId === listActions.target.actionId
-									? 'white'
 									: 'transparent'
 						}}
 						onClick={() => {
@@ -66,12 +63,9 @@ export default function ChannelsTable({
 						appearance={'ghost'}
 						active={rowData.actionId === listActions.watch.actionId}
 						style={{
-							boxShadow: rowData.pendingActionId ? '5px 5px 5px grey' : '',
 							backgroundColor:
 								rowData.actionId === listActions.watch.actionId
 									? accentColor
-									: rowData.pendingActionId === listActions.watch.actionId
-									? 'white'
 									: 'transparent'
 						}}
 						onClick={() => {
@@ -85,12 +79,9 @@ export default function ChannelsTable({
 						appearance={'ghost'}
 						active={rowData.actionId === listActions.block.actionId}
 						style={{
-							boxShadow: rowData.pendingActionId ? '5px 5px 5px grey' : '',
 							backgroundColor:
 								rowData.actionId === listActions.block.actionId
 									? accentColor
-									: rowData.pendingActionId === listActions.block.actionId
-									? 'white'
 									: 'transparent'
 						}}
 						onClick={() => {

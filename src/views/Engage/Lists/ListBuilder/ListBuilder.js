@@ -37,9 +37,11 @@ import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
 import {
 	accentColor,
-	neutralLightColor
+	neutralLightColor,
+	neutralColor
 } from '../../../../assets/jss/colorContants'
 import Panel from 'rsuite/lib/Panel'
+import ControlLabel from 'rsuite/lib/ControlLabel'
 
 const mapStateToProps = (state) => {
 	return {
@@ -591,18 +593,15 @@ function ListBuilder(props) {
 					<Panel
 						style={{
 							flex: 1,
-							backgroundColor: neutralLightColor,
 							marginBottom: 15
 						}}
 						header={
 							<Grid container>
 								<Grid item xs={6}>
-									<p>SmartList Name</p>
+									<ControlLabel>SmartList Name</ControlLabel>
 									<InputGroup
 										style={{
-											borderColor: isEditingName
-												? accentColor
-												: neutralLightColor
+											borderColor: isEditingName ? accentColor : neutralColor
 										}}
 									>
 										<InputGroup.Button
@@ -614,6 +613,7 @@ function ListBuilder(props) {
 											<Icon style={{ color: '#0092d1' }} icon='pencil' />
 										</InputGroup.Button>
 										<Input
+											style={{ backgroundColor: 'transparent' }}
 											onPressEnter={(e) => handleNameChange(e)}
 											onBlur={(e) => {
 												handleNameChange(e)
