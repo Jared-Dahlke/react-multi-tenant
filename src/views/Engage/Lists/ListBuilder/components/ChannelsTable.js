@@ -205,7 +205,7 @@ export default function ChannelsTable({
 			<Table.Column verticalAlign={'middle'} align='center' sortable resizable>
 				<Table.HeaderCell>IAB Category</Table.HeaderCell>
 				<TooltipCell
-					dataKey='iabCategoryId'
+					dataKey='iabCategoryName'
 					displayProp='iabCategoryName'
 					tooltipProp='iabCategoryName'
 				/>
