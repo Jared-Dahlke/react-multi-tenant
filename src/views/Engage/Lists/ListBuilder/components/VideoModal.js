@@ -246,7 +246,7 @@ const VideoModal = (props) => {
 					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>IAB Category</Table.HeaderCell>
 						<TooltipCell
-							dataKey='iabCategoryId'
+							dataKey='iabCategoryName'
 							displayProp='iabCategoryName'
 							tooltipProp='iabCategoryName'
 						/>
