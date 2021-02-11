@@ -13,7 +13,8 @@ import {
 	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS,
 	SET_SMARTLIST_STATS,
-	SET_SMARTLIST_STATS_LOADING
+	SET_SMARTLIST_STATS_LOADING,
+	SET_POST_VERSION_BULK_ACTION_LOADING
 } from '../../action-types/engage/lists'
 
 export function lists(state = [], action) {
@@ -71,6 +72,15 @@ export function smartListStatsLoading(state = false, action) {
 	switch (action.type) {
 		case SET_SMARTLIST_STATS_LOADING:
 			return action.smartListStatsLoading
+		default:
+			return state
+	}
+}
+
+export function postVersionBulkActionLoading(state = false, action) {
+	switch (action.type) {
+		case SET_POST_VERSION_BULK_ACTION_LOADING:
+			return action.postVersionBulkActionLoading
 		default:
 			return state
 	}

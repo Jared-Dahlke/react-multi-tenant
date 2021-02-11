@@ -27,6 +27,12 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import { postVersionBulkAction } from '../../../../../redux/actions/engage/lists'
 const filterSpacing = 1
 
+const mapStateToProps = (state) => {
+	return {
+		postVersionBulkActionLoading: state.engage.postVersionBulkActionLoading
+	}
+}
+
 const mapDispatchToProps = (dispatch) => {
 	return {
 		postVersionBulkAction: (params) => dispatch(postVersionBulkAction(params))
@@ -288,7 +294,9 @@ function BulkOperationsModal(props) {
 								renderTreeNode={(item) => {
 									return (
 										<div style={{ display: 'flex', width: '100%' }}>
-											<div style={{ textAlign: 'left', flex: 1 }}>
+											<div
+												style={{ textAlign: 'left', flex: 1, color: 'black' }}
+											>
 												{item.name + ' ' + item.id}
 											</div>
 
@@ -378,7 +386,11 @@ function BulkOperationsModal(props) {
 				</CustomPanel>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button onClick={handleApplyBulkActionClick} appearance='primary'>
+				<Button
+					onClick={handleApplyBulkActionClick}
+					loading={props.postVersionBulkActionLoading}
+					appearance='primary'
+				>
 					Apply
 				</Button>
 				<Button onClick={() => props.setBulk(false)} appearance='subtle'>
@@ -389,4 +401,4 @@ function BulkOperationsModal(props) {
 	)
 }
 
-export default connect(null, mapDispatchToProps)(BulkOperationsModal)
+export default connect(mapStateToProps, mapDispatchToProps)(BulkOperationsModal)

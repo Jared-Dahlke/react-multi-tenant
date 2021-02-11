@@ -13,7 +13,8 @@ import {
 	SET_SMARTLIST_VERSION_UNDER_EDIT,
 	SET_DELETE_ALL_VERSION_DATA_SUCCESS,
 	SET_SMARTLIST_STATS,
-	SET_SMARTLIST_STATS_LOADING
+	SET_SMARTLIST_STATS_LOADING,
+	SET_POST_VERSION_BULK_ACTION_LOADING
 } from '../../action-types/engage/lists'
 import React from 'react'
 import config from '../../../config.js'
@@ -198,8 +199,7 @@ export const patchVersionData = (args) => {
 		try {
 			let params = args.data
 			const result = await axios.patch(url, params)
-			if (result.status === 200) {
-			}
+			dispatch(fetchVersionStats(args.versionId))
 		} catch (error) {
 			alert(error)
 		}
@@ -252,6 +252,7 @@ const Counts = ({ counts }) => {
 export const postVersionBulkAction = (args) => {
 	let url = `${apiBase}/smart-list/version/${args.versionId}/action`
 	return async (dispatch) => {
+		dispatch(setPostVersionBulkActionLoading(true))
 		let params = { iabCategoriesActions: args.iabCategoriesActions }
 		const promise = axios.patch(url, params)
 
@@ -277,6 +278,7 @@ export const postVersionBulkAction = (args) => {
 
 		const result = await promise
 		dispatch(fetchVersionStats(args.versionId))
+		dispatch(setPostVersionBulkActionLoading(false))
 	}
 }
 
@@ -294,6 +296,13 @@ export function setSmartListStats(smartListStats) {
 	return {
 		type: SET_SMARTLIST_STATS,
 		smartListStats
+	}
+}
+
+export function setPostVersionBulkActionLoading(postVersionBulkActionLoading) {
+	return {
+		type: SET_POST_VERSION_BULK_ACTION_LOADING,
+		postVersionBulkActionLoading
 	}
 }
 
@@ -333,6 +342,7 @@ export const deleteVersionDataItem = (args) => {
 	let url = `${apiBase}/smart-list/version/${versionId}/data/${id}`
 	return deleteQueue.wrap(async (dispatch) => {
 		const result = await axios.delete(url)
+		dispatch(fetchVersionStats(versionId))
 	})
 }
 
