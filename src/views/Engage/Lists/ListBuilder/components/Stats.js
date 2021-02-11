@@ -27,47 +27,48 @@ const Stats = (props) => {
 
 	return (
 		<div style={{ display: 'flex', justifyContent: 'space-between', flex: 1 }}>
-			{props.smartListStatsLoading ? (
-				<Panel>Loading stats...</Panel>
-			) : (
-				<Panel>
-					<p>
-						Channels {numeral(stats.channelCount).format('0,0')}/
-						{numeral(stats.totalChannelCount).format('0a')}
-					</p>
-					<p>Targeted: {numeral(stats.targetChannelCount).format('0,0')}</p>
-					<p>Watched: {numeral(stats.watchChannelCount).format('0,0')}</p>
-					<p>Blocked: {numeral(stats.blockChannelCount).format('0,0')}</p>
-				</Panel>
-			)}
+			<Panel>
+				<div style={{ position: 'relative' }}>
+					<div
+						style={{
+							position: 'absolute',
+							bottom: 0,
+							left: 0,
+							color: 'grey'
+						}}
+					>
+						{' '}
+						{props.smartListStatsLoading ? 'Loading...' : ''}
+					</div>
+				</div>
+				<p>
+					Channels {numeral(stats.channelCount).format('0,0')}/
+					{numeral(stats.totalChannelCount).format('0a')}
+				</p>
+				<p>Targeted: {numeral(stats.targetChannelCount).format('0,0')}</p>
+				<p>Watched: {numeral(stats.watchChannelCount).format('0,0')}</p>
+				<p>Blocked: {numeral(stats.blockChannelCount).format('0,0')}</p>
+			</Panel>
 
-			{props.smartListStatsLoading ? (
-				<Panel>Loading stats...</Panel>
-			) : (
-				<Panel>
-					<p>
-						Videos {numeral(stats.videoCount).format('0,0')}/
-						{numeral(stats.totalVideoCount).format('0a')}
-					</p>
-					<p>Targeted: {numeral(stats.targetVideoCount).format('0,0')}</p>
-					<p>Watched: {numeral(stats.watchVideoCount).format('0,0')}</p>
-					<p>Blocked: {numeral(stats.blockVideoCount).format('0,0')}</p>
-				</Panel>
-			)}
+			<Panel>
+				<p>
+					Videos {numeral(stats.videoCount).format('0,0')}/
+					{numeral(stats.totalVideoCount).format('0a')}
+				</p>
+				<p>Targeted: {numeral(stats.targetVideoCount).format('0,0')}</p>
+				<p>Watched: {numeral(stats.watchVideoCount).format('0,0')}</p>
+				<p>Blocked: {numeral(stats.blockVideoCount).format('0,0')}</p>
+			</Panel>
 
-			{props.smartListStatsLoading ? (
-				<Panel>Loading stats...</Panel>
-			) : (
-				<Panel>
-					<p>
-						Subscribers {numeral(stats.subscriberCount).format('0a')}/
-						{numeral(stats.totalSubscriberCount).format('0a')}
-					</p>
-					<p>Targeted: {numeral(stats.targetSubscriberCount).format('0a')}</p>
-					<p>Watched: {numeral(stats.watchSubscriberCount).format('0a')}</p>
-					<p>Blocked: {numeral(stats.blockSubscriberCount).format('0a')}</p>
-				</Panel>
-			)}
+			<Panel>
+				<p>
+					Subscribers {numeral(stats.subscriberCount).format('0a')}/
+					{numeral(stats.totalSubscriberCount).format('0a')}
+				</p>
+				<p>Targeted: {numeral(stats.targetSubscriberCount).format('0a')}</p>
+				<p>Watched: {numeral(stats.watchSubscriberCount).format('0a')}</p>
+				<p>Blocked: {numeral(stats.blockSubscriberCount).format('0a')}</p>
+			</Panel>
 		</div>
 	)
 }

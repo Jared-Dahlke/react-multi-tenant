@@ -18,141 +18,142 @@ import { neutralColor } from '../../assets/jss/colorContants'
 import { whiteColor } from '../../assets/jss/material-dashboard-react'
 
 const useStyles = makeStyles((theme) => ({
-  appBar: {
-    backgroundColor: neutralColor
-  },
-  title: {
-    marginLeft: theme.spacing(2),
-    flex: 1,
-  },
-  root: {
-    width: '100%',
-    color: 'white !important'
-  },
-  container: {
-    position: 'relative',
-    height: '100vh',
-    marginTop:'60px',
-    backgroundColor: neutralColor,
-  },
-  header: {
-    backgroundColor:theme.palette.background.default,
-    textTransform:'uppercase'
-  },
-  cell:{
-    color: whiteColor
-  }
+	appBar: {
+		backgroundColor: neutralColor,
+		color: 'black'
+	},
+	title: {
+		marginLeft: theme.spacing(2),
+		flex: 1
+	},
+	root: {
+		width: '100%',
+		color: 'white !important'
+	},
+	container: {
+		position: 'relative',
+		height: '100vh',
+		marginTop: '60px',
+		backgroundColor: neutralColor
+	},
+	header: {
+		backgroundColor: theme.palette.background.default,
+		textTransform: 'uppercase'
+	},
+	cell: {
+		color: 'black'
+	}
 }))
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction='up' ref={ref} {...props} />
+	return <Slide direction='up' ref={ref} {...props} />
 })
 
 const RolesInfoFullScreen = (props) => {
-  let { show, handleDialog, title, data: rolesData, userType } = props
-  let columns = [
-    { id: 'roleName', label: 'Role Name', minWidth: 170 },
-    {
-      id: 'roleDescription',
-      label: 'Description',
-      minWidth: 170,
-    },
-    {
-      id: 'permissions',
-      label: 'Permissions',
-      minWidth: 200,
-    },
-  ]
-  if(userType==='Internal') columns.push({ id: 'userType', label: 'User Type', minWidth: 170 })
-  const classes = useStyles()
+	let { show, handleDialog, title, data: rolesData, userType } = props
+	let columns = [
+		{ id: 'roleName', label: 'Role Name', minWidth: 170 },
+		{
+			id: 'roleDescription',
+			label: 'Description',
+			minWidth: 170
+		},
+		{
+			id: 'permissions',
+			label: 'Permissions',
+			minWidth: 200
+		}
+	]
+	if (userType === 'Internal')
+		columns.push({ id: 'userType', label: 'User Type', minWidth: 170 })
+	const classes = useStyles()
 
-  return (
-    <div>
-      <Dialog
-        fullScreen
-        open={show}
-        onClose={() => {
-          handleDialog(false)
-        }}
-        TransitionComponent={Transition}
-
-      >
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              edge='start'
-              color='inherit'
-              onClick={() => {
-                handleDialog(false)
-              }}
-              aria-label='close'
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography variant='h6' className={classes.title}>
-              {title}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Paper className={classes.root}>
-          <TableContainer className={classes.container}>
-            <Table stickyHeader aria-label='sticky table'>
-              <TableHead className={classes.header}>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      <strong key={column.id}>{column.label}</strong>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rolesData.map((row) => {
-                  return (
-                    <TableRow
-                      hover
-                      role='checkbox'
-                      tabIndex={-1}
-                      key={row.roleId}
-                    >
-                      {columns.map((column) => {
-                        const value = row[column.id]
-                        if (column.id === 'permissions') {
-                          return (
-                            <TableCell key={column.id} className={classes.cell}>
-                              {value.map(
-                                (perm) =>
-                                  perm.permissionId && (
-                                    <div key={perm.permissionId}>
-                                      <strong key={perm.permissionId}>
-                                        {perm.permissionName}{' '}
-                                      </strong>
-                                      : {perm.permissionDescription}
-                                    </div>
-                                  )
-                              )}
-                            </TableCell>
-                          )
-                        }
-                        return (
-                          <TableCell key={column.id} className={classes.cell}>
-                            {value}
-                          </TableCell>
-                        )
-                      })}
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      </Dialog>
-    </div>
-  )
+	return (
+		<div>
+			<Dialog
+				fullScreen
+				open={show}
+				onClose={() => {
+					handleDialog(false)
+				}}
+				TransitionComponent={Transition}
+			>
+				<AppBar className={classes.appBar}>
+					<Toolbar>
+						<IconButton
+							edge='start'
+							color='inherit'
+							onClick={() => {
+								handleDialog(false)
+							}}
+							aria-label='close'
+						>
+							<CloseIcon />
+						</IconButton>
+						<Typography variant='h6' className={classes.title}>
+							{title}
+						</Typography>
+					</Toolbar>
+				</AppBar>
+				<Paper className={classes.root}>
+					<TableContainer className={classes.container}>
+						<Table stickyHeader aria-label='sticky table'>
+							<TableHead className={classes.header}>
+								<TableRow>
+									{columns.map((column) => (
+										<TableCell
+											key={column.id}
+											style={{ minWidth: column.minWidth }}
+										>
+											<strong key={column.id}>{column.label}</strong>
+										</TableCell>
+									))}
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{rolesData.map((row) => {
+									return (
+										<TableRow
+											hover
+											role='checkbox'
+											tabIndex={-1}
+											key={row.roleId}
+										>
+											{columns.map((column) => {
+												const value = row[column.id]
+												if (column.id === 'permissions') {
+													return (
+														<TableCell key={column.id} className={classes.cell}>
+															{value.map(
+																(perm) =>
+																	perm.permissionId && (
+																		<div key={perm.permissionId}>
+																			<strong key={perm.permissionId}>
+																				{perm.permissionName}{' '}
+																			</strong>
+																			: {perm.permissionDescription}
+																		</div>
+																	)
+															)}
+														</TableCell>
+													)
+												}
+												return (
+													<TableCell key={column.id} className={classes.cell}>
+														{value}
+													</TableCell>
+												)
+											})}
+										</TableRow>
+									)
+								})}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</Paper>
+			</Dialog>
+		</div>
+	)
 }
 
 export default RolesInfoFullScreen

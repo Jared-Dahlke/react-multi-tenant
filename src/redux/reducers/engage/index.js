@@ -12,7 +12,8 @@ import {
 	smartListVersionUnderEdit,
 	deleteAllVersionDataSuccess,
 	smartListStats,
-	smartListStatsLoading
+	smartListStatsLoading,
+	postVersionBulkActionLoading
 } from './lists'
 
 import {
@@ -43,5 +44,6 @@ export default combineReducers({
 	videosIsLoading,
 	channelsIsLoading,
 	smartListStats,
-	smartListStatsLoading
+	smartListStatsLoading,
+	postVersionBulkActionLoading
 })

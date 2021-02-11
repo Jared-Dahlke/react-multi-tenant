@@ -144,9 +144,7 @@ function Login(props) {
 
 						<Grid style={{ marginTop: '10px' }} container>
 							<Grid item xs>
-								<Link to='/resetPassword' style={{ color: whiteColor }}>
-									Forgot password?
-								</Link>
+								<Link to='/resetPassword'>Forgot password?</Link>
 							</Grid>
 						</Grid>
 					</form>

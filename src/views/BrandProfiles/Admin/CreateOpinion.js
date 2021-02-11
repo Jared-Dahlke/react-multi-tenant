@@ -54,51 +54,47 @@ function Opinion(props) {
 	return (
 		<GridContainer>
 			<GridItem xs={12} sm={12} md={6}>
-				<Card>
-					<Form>
-						<CardBody>
-							<GridContainer>
-								<GridItem xs={12} sm={12} md={12}>
-									<FormikInput
-										name='question'
-										formikValue={values.question}
-										labelText='Question'
-										id='question'
-									/>
+				<Form>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={12}>
+							<FormikInput
+								name='question'
+								formikValue={values.question}
+								labelText='Question'
+								id='question'
+							/>
 
-									<FormikSelect
-										id='opinionType'
-										name='opinionType'
-										data-qa='opinionType'
-										label='Opinion Type'
-										placeholder='Opinion Type'
-										optionLabel='name'
-										optionValue='id'
-										options={opinionTypeOptions}
-										value={values.opinionType}
-										onChange={setFieldValue}
-										onBlur={setFieldTouched}
-										validateField={validateField}
-										validateForm={validateForm}
-										touched={touched.opinionType}
-										error={errors.opinionType}
-										hideSearch
-									/>
-								</GridItem>
-							</GridContainer>
-						</CardBody>
+							<FormikSelect
+								id='opinionType'
+								name='opinionType'
+								data-qa='opinionType'
+								label='Opinion Type'
+								placeholder='Opinion Type'
+								optionLabel='name'
+								optionValue='id'
+								options={opinionTypeOptions}
+								value={values.opinionType}
+								onChange={setFieldValue}
+								onBlur={setFieldTouched}
+								validateField={validateField}
+								validateForm={validateForm}
+								touched={touched.opinionType}
+								error={errors.opinionType}
+								hideSearch
+							/>
+						</GridItem>
+					</GridContainer>
 
-						<CardFooter>
-							<Button
-								loading={props.opinionSaving}
-								disabled={!isValid || !dirty || props.opinionSaving}
-								type='submit'
-							>
-								Save
-							</Button>
-						</CardFooter>
-					</Form>
-				</Card>
+					<div style={{ height: 20 }} />
+
+					<Button
+						loading={props.opinionSaving}
+						disabled={!isValid || !dirty || props.opinionSaving}
+						type='submit'
+					>
+						Save
+					</Button>
+				</Form>
 			</GridItem>
 		</GridContainer>
 	)

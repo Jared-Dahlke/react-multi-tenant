@@ -33,7 +33,6 @@ function Question(props) {
 			<GridItem xs={12}>
 				<div
 					style={{
-						color: grayColor[4],
 						fontSize: '16px',
 						marginTop: '11px'
 					}}

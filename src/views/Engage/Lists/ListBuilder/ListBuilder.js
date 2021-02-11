@@ -27,7 +27,8 @@ import {
 	setSmartListVersionUnderEdit,
 	fetchLists,
 	patchListName,
-	setSmartListStats
+	setSmartListStats,
+	setSmartListStatsLoading
 } from '../../../../redux/actions/engage/lists'
 import toast from 'react-hot-toast'
 import Loader from 'rsuite/lib/Loader'
@@ -35,11 +36,9 @@ import { FiltersSideBar } from './components/FiltersSideBar'
 import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
-import {
-	accentColor,
-	neutralLightColor
-} from '../../../../assets/jss/colorContants'
+import { accentColor, neutralColor } from '../../../../assets/jss/colorContants'
 import Panel from 'rsuite/lib/Panel'
+import ControlLabel from 'rsuite/lib/ControlLabel'
 
 const mapStateToProps = (state) => {
 	return {
@@ -60,6 +59,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		setSmartListStatsLoading: (bool) =>
+			dispatch(setSmartListStatsLoading(bool)),
 		setVideos: (videos) => dispatch(setVideos(videos)),
 		setSmartListStats: (params) => dispatch(setSmartListStats(params)),
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
@@ -316,13 +317,14 @@ function ListBuilder(props) {
 	}
 
 	const handleActionButtonClick = (actionId, item) => {
+		props.setSmartListStatsLoading(true)
 		let unSelecting = item.actionId === actionId
 		let versionId = parsedVersionId
 		let oldItem = JSON.parse(JSON.stringify(item))
 
 		if (unSelecting) {
 			delete item.actionId
-			updateStats(actionId, false, item, oldItem.actionId)
+			//	updateStats(actionId, false, item, oldItem.actionId)
 			let _args = {
 				versionId: versionId,
 				id: item.id
@@ -335,7 +337,7 @@ function ListBuilder(props) {
 			})
 		} else {
 			item.actionId = actionId
-			updateStats(actionId, true, item, oldItem.actionId)
+			//updateStats(actionId, true, item, oldItem.actionId)
 			let args = {
 				versionId: versionId,
 				data: [{ actionId: actionId, id: item.id }]
@@ -591,18 +593,16 @@ function ListBuilder(props) {
 					<Panel
 						style={{
 							flex: 1,
-							backgroundColor: neutralLightColor,
-							marginBottom: 15
+							marginBottom: 15,
+							backgroundColor: '#F7F7FA'
 						}}
 						header={
 							<Grid container>
 								<Grid item xs={6}>
-									<p>SmartList Name</p>
+									<ControlLabel>SmartList Name</ControlLabel>
 									<InputGroup
 										style={{
-											borderColor: isEditingName
-												? accentColor
-												: neutralLightColor
+											borderColor: isEditingName ? accentColor : '#F7F7FA'
 										}}
 									>
 										<InputGroup.Button
@@ -614,6 +614,7 @@ function ListBuilder(props) {
 											<Icon style={{ color: '#0092d1' }} icon='pencil' />
 										</InputGroup.Button>
 										<Input
+											style={{ backgroundColor: 'transparent', color: 'grey' }}
 											onPressEnter={(e) => handleNameChange(e)}
 											onBlur={(e) => {
 												handleNameChange(e)

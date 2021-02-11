@@ -24,7 +24,6 @@ import {
 	countriesOptions,
 	languagesOptions
 } from '../../../../../staticData/data'
-import { neutralLightColor } from '../../../../../assets/jss/colorContants'
 var dayjs = require('dayjs')
 const filterSpacing = 1
 
@@ -76,11 +75,8 @@ export const FiltersSideBar = ({
 	return (
 		<div>
 			<Sidebar style={sidebarProps}>
-				<Panel
+				<CustomPanel
 					bodyFill
-					style={{
-						background: neutralLightColor
-					}}
 					header={
 						<div
 							style={{ display: 'flex', cursor: 'pointer' }}
@@ -93,7 +89,6 @@ export const FiltersSideBar = ({
 								style={{
 									marginLeft: -10,
 									textAlign: 'right',
-
 									flex: 1
 								}}
 							>
@@ -137,8 +132,6 @@ export const FiltersSideBar = ({
 									<Grid item xs={12}>
 										<FiltersLabel text='IAB Categories' />
 										<CheckTreePicker
-											//		placement='topStart'
-
 											size={'xs'}
 											defaultExpandAll={false}
 											data={iabCategoriesFilter}
@@ -363,7 +356,7 @@ export const FiltersSideBar = ({
 							</CustomPanel>
 						</PanelGroup>
 					</animated.div>
-				</Panel>
+				</CustomPanel>
 			</Sidebar>
 		</div>
 	)

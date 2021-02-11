@@ -164,7 +164,6 @@ function TopCompetitors(props) {
 			enableReinitialize={true}
 			validateOnMount={true}
 			validationSchema={schema}
-			//	validateOnBlur={false}
 			onSubmit={(values, formik) => handleSaveNew(values)}
 			initialValues={{
 				competitors: props.brandProfile.competitors
@@ -219,7 +218,6 @@ function TopCompetitors(props) {
 																	formik.errors.competitors[index]
 																		.twitterProfileUrl
 																}
-																//	error={competitor}
 															/>
 														</Grid>
 														<Grid item xs={12} sm={12} md={3}>
@@ -236,9 +234,11 @@ function TopCompetitors(props) {
 															/>
 														</Grid>
 														<Grid item xs={12} sm={12} md={2}>
-															<p style={{ color: neutralLightColor }}>
-																{index === 0 ? 'a' : ' '}
-															</p>
+															{index === 0 ? (
+																<div style={{ height: 20 }}></div>
+															) : (
+																''
+															)}
 
 															<UserCan do={perms.BRAND_PROFILE_UPDATE}>
 																<Button

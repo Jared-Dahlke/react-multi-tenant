@@ -220,139 +220,134 @@ export function EditUser(props) {
 					<div>
 						<GridContainer>
 							<GridItem xs={12} sm={12} md={8}>
-								<Card>
-									<div>
-										<CardBody>
-											<GridContainer>
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='company'
-														formikValue={values.company}
-														labelText='Company'
-														id='company'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
+								<GridContainer>
+									<GridItem xs={12} sm={12} md={6}>
+										<FormikInput
+											name='company'
+											formikValue={values.company}
+											labelText='Company'
+											id='company'
+											disabled={!userCan(perms.USER_UPDATE)}
+										/>
+									</GridItem>
 
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='email'
-														formikValue={values.email}
-														labelText='Email'
-														id='email'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
+									<GridItem xs={12} sm={12} md={6}>
+										<FormikInput
+											name='email'
+											formikValue={values.email}
+											labelText='Email'
+											id='email'
+											disabled={!userCan(perms.USER_UPDATE)}
+										/>
+									</GridItem>
 
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='firstName'
-														formikValue={values.firstName}
-														labelText='First Name'
-														id='firstName'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
+									<GridItem xs={12} sm={12} md={6}>
+										<FormikInput
+											name='firstName'
+											formikValue={values.firstName}
+											labelText='First Name'
+											id='firstName'
+											disabled={!userCan(perms.USER_UPDATE)}
+										/>
+									</GridItem>
 
-												<GridItem xs={12} sm={12} md={6}>
-													<FormikInput
-														name='lastName'
-														formikValue={values.lastName}
-														labelText='Last Name'
-														id='lastName'
-														disabled={!userCan(perms.USER_UPDATE)}
-													/>
-												</GridItem>
+									<GridItem xs={12} sm={12} md={6}>
+										<FormikInput
+											name='lastName'
+											formikValue={values.lastName}
+											labelText='Last Name'
+											id='lastName'
+											disabled={!userCan(perms.USER_UPDATE)}
+										/>
+									</GridItem>
 
-												<GridItem xs={12} sm={12} md={6}>
-													{props.accounts.data &&
-													props.accounts.data.length > 0 &&
-													!props.editUserUserAccountsLoading ? (
-														<SuiteTree
-															label='Account Access'
-															name='accounts'
-															data-qa='accounts'
-															data={treeAccounts}
-															labelKey='accountName'
-															valueKey='accountId'
-															value={values.accounts}
-															onChange={setFieldValue}
-															cascade={true}
-															error={errors.accounts}
-															//	disabled={
+									<GridItem xs={12} sm={12} md={6}>
+										{props.accounts.data &&
+										props.accounts.data.length > 0 &&
+										!props.editUserUserAccountsLoading ? (
+											<SuiteTree
+												label='Account Access'
+												name='accounts'
+												data-qa='accounts'
+												data={treeAccounts}
+												labelKey='accountName'
+												valueKey='accountId'
+												value={values.accounts}
+												onChange={setFieldValue}
+												cascade={true}
+												error={errors.accounts}
+												//	disabled={
 
-															//	!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)
+												//	!userCan(perms.ASSIGNED_ACCOUNT_UPDATE)
 
-															//		}
-														/>
-													) : null}
-												</GridItem>
-												<GridItem xs={12} sm={12} md={6}></GridItem>
+												//		}
+											/>
+										) : null}
+									</GridItem>
+									<GridItem xs={12} sm={12} md={6}></GridItem>
 
-												<GridItem xs={10} sm={10} md={6}>
-													<div
-														style={{
-															display: 'flex',
-															alignItems: 'flex-end'
-														}}
-													>
-														<FormikSelect
-															id='role'
-															name='roleId'
-															data-qa='roleId'
-															label='Role'
-															placeholder='Role'
-															optionLabel='roleName'
-															optionValue='roleId'
-															options={filteredRolesPermissions(
-																props.userProfile && props.userProfile.userType,
-																values.email,
-																props.roles
-															)}
-															value={values.roleId}
-															onChange={setFieldValue}
-															onBlur={setFieldTouched}
-															validateField={validateField}
-															validateForm={validateForm}
-															touched={touched.roleId}
-															error={errors.roleId}
-															isDisabled={!userCan(perms.USER_UPDATE)}
-														/>
-														<Whisper
-															placement='right'
-															trigger='hover'
-															speaker={
-																<Tooltip>More about Roles/Permissions</Tooltip>
-															}
-														>
-															<IconButton
-																icon={<Icon icon='info' />}
-																circle
-																size='md'
-																appearance='ghost'
-																onClick={() => {
-																	handleDialog(true)
-																}}
-																style={{ margin: '10px' }}
-															/>
-														</Whisper>
-													</div>
-												</GridItem>
-											</GridContainer>
-										</CardBody>
-										<CardFooter>
-											<UserCan do={perms.USER_UPDATE}>
-												<Button
-													disabled={!isValid || !dirty}
-													onClick={() => handleSaveClick(values, setFieldValue)}
-													loading={props.userEditSaving}
-												>
-													Save
-												</Button>
-											</UserCan>
-										</CardFooter>
-									</div>
-								</Card>
+									<GridItem xs={10} sm={10} md={6}>
+										<div
+											style={{
+												display: 'flex',
+												alignItems: 'flex-end'
+											}}
+										>
+											<FormikSelect
+												id='role'
+												name='roleId'
+												data-qa='roleId'
+												label='Role'
+												placeholder='Role'
+												optionLabel='roleName'
+												optionValue='roleId'
+												options={filteredRolesPermissions(
+													props.userProfile && props.userProfile.userType,
+													values.email,
+													props.roles
+												)}
+												value={values.roleId}
+												onChange={setFieldValue}
+												onBlur={setFieldTouched}
+												validateField={validateField}
+												validateForm={validateForm}
+												touched={touched.roleId}
+												error={errors.roleId}
+												isDisabled={!userCan(perms.USER_UPDATE)}
+											/>
+											<Whisper
+												placement='right'
+												trigger='hover'
+												speaker={
+													<Tooltip>More about Roles/Permissions</Tooltip>
+												}
+											>
+												<IconButton
+													icon={<Icon icon='info' />}
+													circle
+													size='md'
+													appearance='ghost'
+													onClick={() => {
+														handleDialog(true)
+													}}
+													style={{ margin: '10px' }}
+												/>
+											</Whisper>
+										</div>
+									</GridItem>
+								</GridContainer>
+
+								<CardFooter>
+									<UserCan do={perms.USER_UPDATE}>
+										<Button
+											disabled={!isValid || !dirty}
+											onClick={() => handleSaveClick(values, setFieldValue)}
+											loading={props.userEditSaving}
+										>
+											Save
+										</Button>
+									</UserCan>
+								</CardFooter>
 							</GridItem>
 						</GridContainer>
 					</div>

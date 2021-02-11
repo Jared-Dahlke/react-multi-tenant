@@ -38,7 +38,7 @@ export default function CustomPasswordMatchChecker({
 				)}
 			</ListItemIcon>
 			{password === password_confirmation ? (
-				<div style={{ color: whiteColor }}>Passwords Match</div>
+				<div>Passwords Match</div>
 			) : (
 				<div style={{ color: 'red' }}>Passwords Must Match</div>
 			)}
