@@ -13,6 +13,11 @@ import Button from 'rsuite/lib/Button'
 import { useHistory } from 'react-router-dom'
 import { setAuthToken, setLoggedIn } from '../redux/actions/auth'
 import { clearSiteData } from '../redux/actions/accounts'
+import { channelColumns, videoColumns } from '../views/Engage/Lists/constants'
+import {
+	setVisibleChannelColumns,
+	setVisibleVideoColumns
+} from '../redux/actions/engage/listBuilder'
 
 const mapStateToProps = (state) => {
 	return { user: state.user, accounts: state.accounts }
@@ -20,6 +25,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		setVisibleChannelColumns: (arr) => dispatch(setVisibleChannelColumns(arr)),
+		setVisibleVideoColumns: (arr) => dispatch(setVisibleVideoColumns(arr)),
 		fetchSiteData: (accountId) => dispatch(fetchSiteData(accountId)),
 		clearSiteData: () => dispatch(clearSiteData()),
 		setAuthToken: (val) => dispatch(setAuthToken(val)),
@@ -29,9 +36,15 @@ const mapDispatchToProps = (dispatch) => {
 
 function ProfileDropdown(props) {
 	const history = useHistory()
+
+	const [videoColumnsState] = React.useState(videoColumns)
+	const [channelColumnsState] = React.useState(channelColumns)
+
 	const handleLogOut = (props) => {
 		localStorage.removeItem('token')
 		localStorage.removeItem('userId')
+		props.setVisibleChannelColumns(channelColumnsState)
+		props.setVisibleVideoColumns(videoColumnsState)
 		props.setAuthToken(null)
 		props.setLoggedIn(false)
 		props.clearSiteData()
