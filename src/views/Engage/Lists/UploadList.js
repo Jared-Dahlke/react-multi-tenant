@@ -315,7 +315,6 @@ function UploadList(props) {
 											style={{
 												height: 200,
 												width: '100%',
-												backgroundColor: 'black',
 												display: 'flex',
 												justifyContent: 'center',
 												alignItems: 'center'
@@ -424,9 +423,7 @@ const MyEnhancedForm = withFormik({
 			list = {
 				smartListName: smartListName,
 				smartListId: values.smartListId,
-				//	objectiveId: values.objectiveId,
 				smartListData: values.uploadedList
-				//	targetTypeId: values.targetTypeId
 			}
 		}
 		let data = {

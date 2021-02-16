@@ -29,6 +29,7 @@ import {
 	canAccessRoleId
 } from './userUtils'
 import RolesInfoFullScreen from './RolesInfoFullScreen.js'
+import ControlLabel from 'rsuite/lib/ControlLabel'
 
 const schemaValidation = Yup.object().shape({
 	roleId: Yup.number()
@@ -148,118 +149,113 @@ function CreateUser(props) {
 					<div>
 						<GridContainer>
 							<GridItem xs={12} sm={12} md={8}>
-								<Card>
-									<CardBody>
-										<GridContainer>
-											<GridItem xs={12} sm={12} md={5}>
-												<FormikInput
-													name='company'
-													formikValue={values.company}
-													labelText='Company'
-													id='company'
-												/>
-											</GridItem>
-											<GridItem xs={12} sm={12} md={7}>
-												<FormikInput
-													name='email'
-													formikValue={values.email}
-													labelText='Email'
-													id='email'
-												/>
-											</GridItem>
-											<GridItem xs={12} sm={12} md={5}>
-												<FormikInput
-													name='firstName'
-													formikValue={values.firstName}
-													labelText='First Name'
-													id='firstName'
-												/>
-											</GridItem>
-											<GridItem xs={12} sm={12} md={7}>
-												<FormikInput
-													name='lastName'
-													formikValue={values.lastName}
-													labelText='Last Name'
-													id='lastName'
-												/>
-											</GridItem>
+								<GridContainer>
+									<GridItem xs={12} sm={12} md={5}>
+										<FormikInput
+											name='company'
+											formikValue={values.company}
+											labelText='Company'
+											id='company'
+										/>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={7}>
+										<FormikInput
+											name='email'
+											formikValue={values.email}
+											labelText='Email'
+											id='email'
+										/>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={5}>
+										<FormikInput
+											name='firstName'
+											formikValue={values.firstName}
+											labelText='First Name'
+											id='firstName'
+										/>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={7}>
+										<FormikInput
+											name='lastName'
+											formikValue={values.lastName}
+											labelText='Last Name'
+											id='lastName'
+										/>
+									</GridItem>
 
-											<GridItem xs={12} sm={12} md={12}>
-												<SuiteTree
-													label='Account Access'
-													name='accounts'
-													data={props.accounts.data}
-													labelKey='accountName'
-													valueKey='accountId'
-													value={values.accounts}
-													onChange={setFieldValue}
-													cascade={true}
-													error={errors.accounts}
-													touched={touched.accounts}
-												/>
-											</GridItem>
+									<GridItem xs={12} sm={12} md={12}>
+										<SuiteTree
+											label='Account Access'
+											name='accounts'
+											data={props.accounts.data}
+											labelKey='accountName'
+											valueKey='accountId'
+											value={values.accounts}
+											onChange={setFieldValue}
+											cascade={true}
+											error={errors.accounts}
+											touched={touched.accounts}
+										/>
+									</GridItem>
 
-											<GridItem xs={10} sm={10} md={12}>
-												<div
-													style={{
-														display: 'flex',
-														alignItems: 'flex-end'
-													}}
-												>
-													<FormikSelect
-														id='role'
-														name='roleId'
-														label='Role'
-														placeholder='Role'
-														optionLabel='roleName'
-														optionValue='roleId'
-														options={filteredRolesPermissions(
-															props.userProfile && props.userProfile.userType,
-															values.email,
-															props.roles
-														)}
-														value={values.roleId}
-														onChange={setFieldValue}
-														onBlur={setFieldTouched}
-														validateField={validateField}
-														validateForm={validateForm}
-														touched={touched.roleId}
-														error={errors.roleId}
-													/>
-													<Whisper
-														placement='right'
-														trigger='hover'
-														speaker={
-															<Tooltip>More about Roles/Permissions</Tooltip>
-														}
-													>
-														<IconButton
-															icon={<Icon icon='info' />}
-															circle
-															size='md'
-															appearance='ghost'
-															onClick={() => {
-																handleDialog(true)
-															}}
-															style={{ margin: '10px' }}
-														/>
-													</Whisper>
-												</div>
-											</GridItem>
-										</GridContainer>
-									</CardBody>
-									<CardFooter>
-										<Button
-											disabled={!isValid || !dirty}
-											onClick={() =>
-												handleInviteUserClick(values, setFieldValue)
-											}
-											loading={props.userAdding}
+									<GridItem xs={10} sm={10} md={12}>
+										<div
+											style={{
+												display: 'flex',
+												alignItems: 'flex-end'
+											}}
 										>
-											Invite User
-										</Button>
-									</CardFooter>
-								</Card>
+											<FormikSelect
+												id='role'
+												name='roleId'
+												label='Role'
+												placeholder='Role'
+												optionLabel='roleName'
+												optionValue='roleId'
+												options={filteredRolesPermissions(
+													props.userProfile && props.userProfile.userType,
+													values.email,
+													props.roles
+												)}
+												value={values.roleId}
+												onChange={setFieldValue}
+												onBlur={setFieldTouched}
+												validateField={validateField}
+												validateForm={validateForm}
+												touched={touched.roleId}
+												error={errors.roleId}
+											/>
+											<Whisper
+												placement='right'
+												trigger='hover'
+												speaker={
+													<Tooltip>More about Roles/Permissions</Tooltip>
+												}
+											>
+												<IconButton
+													icon={<Icon icon='info' />}
+													circle
+													size='md'
+													appearance='ghost'
+													onClick={() => {
+														handleDialog(true)
+													}}
+													style={{ margin: '10px' }}
+												/>
+											</Whisper>
+										</div>
+									</GridItem>
+								</GridContainer>
+
+								<CardFooter>
+									<Button
+										disabled={!isValid || !dirty}
+										onClick={() => handleInviteUserClick(values, setFieldValue)}
+										loading={props.userAdding}
+									>
+										Invite User
+									</Button>
+								</CardFooter>
 							</GridItem>
 						</GridContainer>
 					</div>

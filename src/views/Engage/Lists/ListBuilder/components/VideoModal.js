@@ -6,7 +6,9 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import { TooltipCell } from './TooltipCell'
-
+import { NameCell } from './NameCell'
+import './listbuilder.css'
+import { listActions } from '../../constants'
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
 
@@ -63,46 +65,59 @@ const VideoModal = (props) => {
 
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ padding: 1, textAlign: 'center' }}
+			>
 				<ButtonGroup vertical={false} size='xs'>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 1}
+						active={rowData.actionId === listActions.target.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 1 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.target.actionId
+									? accentColor
+									: ''
 						}}
 						onClick={() => {
-							handleActionButtonClick(1, rowData)
+							handleActionButtonClick(listActions.target.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
-						Target
+						{listActions.target.text}
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 3}
+						active={rowData.actionId === listActions.watch.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 3 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.watch.actionId
+									? accentColor
+									: ''
 						}}
 						onClick={() => {
-							handleActionButtonClick(3, rowData)
+							handleActionButtonClick(listActions.watch.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
-						Watch
+						{listActions.watch.text}
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 2}
+						active={rowData.actionId === listActions.block.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 2 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.block.actionId
+									? accentColor
+									: ''
 						}}
 						onClick={() => {
-							handleActionButtonClick(2, rowData)
+							handleActionButtonClick(listActions.block.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
-						Block
+						{listActions.block.text}
 					</Button>
 				</ButtonGroup>
 			</Table.Cell>
@@ -111,12 +126,14 @@ const VideoModal = (props) => {
 
 	const ImageCell = ({ rowData, dataKey, ...props }) => {
 		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
-				<div style={{ position: 'relative' }}>
-					<img src={rowData.thumbnail} width={'100%'} />
-					<div style={{ position: 'absolute', left: 0, bottom: 5 }}>
-						<Duration seconds={rowData.duration} />
-					</div>
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ padding: 1, margin: 0, position: 'relative' }}
+			>
+				<img src={rowData.thumbnail} width={'80%'} />
+				<div style={{ position: 'absolute', right: 0, bottom: 0 }}>
+					<Duration seconds={rowData.duration} />
 				</div>
 			</Table.Cell>
 		)
@@ -133,6 +150,7 @@ const VideoModal = (props) => {
 			</Modal.Header>
 			<Modal.Body>
 				<Table
+					rowClassName={'lbtable'}
 					sortColumn={props.currentVideosSort.sortColumn}
 					sortType={props.currentVideosSort.sortType}
 					onSortColumn={(sortColumn, sortType) => {
@@ -155,18 +173,19 @@ const VideoModal = (props) => {
 						<ImageCell />
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} sortable>
+					<Table.Column verticalAlign={'middle'} sortable resizable width={300}>
 						<Table.HeaderCell>Name</Table.HeaderCell>
-						<TooltipCell
+						<NameCell
 							displayProp='nameDisplay'
 							tooltipProp='nameTooltip'
-							tooltipPlacement='bottomLeft'
+							tooltipPlacement='topLeft'
 							dataKey='name'
+							urlPrefix='https://www.youtube.com/watch?v='
 						/>
 					</Table.Column>
 
 					<Table.Column verticalAlign={'middle'} sortable>
-						<Table.HeaderCell>Date</Table.HeaderCell>
+						<Table.HeaderCell>Uploaded</Table.HeaderCell>
 						<TooltipCell
 							displayProp='createDateDisplay'
 							tooltipProp='createDateTooltip'
@@ -174,12 +193,12 @@ const VideoModal = (props) => {
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} sortable>
+					{/**	<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Id</Table.HeaderCell>
 						<Table.Cell dataKey='id' style={{ color: 'grey' }} />
-					</Table.Column>
+					</Table.Column> */}
 
-					<Table.Column verticalAlign={'middle'} sortable>
+					<Table.Column verticalAlign={'middle'} sortable resizable width={130}>
 						<Table.HeaderCell>Category</Table.HeaderCell>
 						<TooltipCell
 							displayProp='categoryDisplay'
@@ -227,13 +246,13 @@ const VideoModal = (props) => {
 					<Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>IAB Category</Table.HeaderCell>
 						<TooltipCell
-							dataKey='iabCategoryId'
+							dataKey='iabCategoryName'
 							displayProp='iabCategoryName'
 							tooltipProp='iabCategoryName'
 						/>
 					</Table.Column>
 
-					<Table.Column verticalAlign={'middle'} align='center' sortable>
+					{/** <Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
 						<TooltipCell
 							dataKey='iabSubCategoryId'
@@ -257,9 +276,9 @@ const VideoModal = (props) => {
 							displayProp='iabSubTopicName'
 							tooltipProp='iabSubTopicName'
 						/>
-					</Table.Column>
+					</Table.Column>*/}
 
-					<Table.Column verticalAlign={'middle'} width={200}>
+					<Table.Column verticalAlign={'middle'} minWidth={180} flexGrow={1}>
 						<Table.HeaderCell></Table.HeaderCell>
 						<ActionCell />
 					</Table.Column>

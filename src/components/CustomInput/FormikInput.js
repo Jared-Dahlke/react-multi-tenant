@@ -4,16 +4,16 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import FormControl from '@material-ui/core/FormControl'
 import styles from '../../assets/jss/material-dashboard-react/components/customInputStyle.js'
 import {
-	whiteColor,
 	dangerColor,
 	successColor
 } from '../../assets/jss/material-dashboard-react'
+import ControlLabel from 'rsuite/lib/ControlLabel'
 import { Field } from 'formik'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
 import Icon from 'rsuite/lib/Icon'
-import { neutralLightColor } from '../../assets/jss/colorContants.js'
+import { neutralColor } from '../../assets/jss/colorContants.js'
 const useStyles = makeStyles(styles)
 
 export default function CustomInput(props) {
@@ -37,15 +37,12 @@ export default function CustomInput(props) {
 					className={
 						props.simple ? classes.formControlSlim : classes.formControl
 					}
-					style={{ color: '#FFF' }}
 				>
-					{labelText && <p>{labelText}</p>}
+					{labelText && <ControlLabel>{labelText}</ControlLabel>}
 
 					<InputGroup>
 						{props.startAdornmentText && (
-							<InputGroup.Addon style={{ color: '#AAAAAA' }}>
-								{props.startAdornmentText}
-							</InputGroup.Addon>
+							<InputGroup.Addon>{props.startAdornmentText}</InputGroup.Addon>
 						)}
 
 						<Input
@@ -57,12 +54,12 @@ export default function CustomInput(props) {
 							disabled={props.disabled}
 							style={{
 								borderColor: 'white',
-								color: props.inputColor ? props.inputColor : whiteColor
+								color: props.inputColor ? props.inputColor : 'black'
 							}}
 						/>
 
 						{!props.simple && (
-							<InputGroup.Addon>
+							<InputGroup.Addon style={{ backgroundColor: 'white' }}>
 								<Icon
 									icon='check'
 									style={{
@@ -71,7 +68,7 @@ export default function CustomInput(props) {
 											field.value.length > 0 &&
 											!props.specialError
 												? successColor[0]
-												: neutralLightColor
+												: neutralColor
 									}}
 								/>
 							</InputGroup.Addon>

@@ -7,6 +7,7 @@ import { dangerColor } from '../../assets/jss/material-dashboard-react'
 import Label from '../CustomInputLabel/CustomInputLabel'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import styles from '../../assets/jss/material-dashboard-react/components/customInputStyle.js'
+import ControlLabel from 'rsuite/lib/ControlLabel'
 const useStyles = makeStyles(styles)
 
 export default function SuiteTree(props) {
@@ -16,12 +17,8 @@ export default function SuiteTree(props) {
 	}
 
 	return (
-		<FormControl
-			fullWidth={true}
-			className={classes.formControl}
-			style={{ color: '#FFF' }}
-		>
-			{props.label && <p>{props.label} </p>}
+		<FormControl fullWidth={true} className={classes.formControl}>
+			{props.label && <ControlLabel>{props.label} </ControlLabel>}
 			<CheckTreePicker
 				defaultExpandAll
 				data={props.data}

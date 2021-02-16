@@ -3,12 +3,13 @@ import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Table from 'rsuite/lib/Table'
-import Loader from 'rsuite/lib/Loader'
 import { accentColor } from '../../../../../assets/jss/colorContants'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
-
+import { NameCell } from './NameCell'
+import { listActions } from '../../constants'
+import './listbuilder.css'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
 dayjs.extend(calendar)
@@ -36,16 +37,23 @@ export default function ChannelsTable({
 
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
-			<Table.Cell {...props} className='link-group' style={{ padding: 1 }}>
+			<Table.Cell
+				{...props}
+				className='link-group'
+				style={{ padding: 1, textAlign: 'center' }}
+			>
 				<ButtonGroup vertical={false} size='xs'>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 1}
+						active={rowData.actionId === listActions.target.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 1 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.target.actionId
+									? accentColor
+									: 'transparent'
 						}}
 						onClick={() => {
-							handleActionButtonClick(1, rowData)
+							handleActionButtonClick(listActions.target.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
@@ -53,12 +61,15 @@ export default function ChannelsTable({
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 3}
+						active={rowData.actionId === listActions.watch.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 3 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.watch.actionId
+									? accentColor
+									: 'transparent'
 						}}
 						onClick={() => {
-							handleActionButtonClick(3, rowData)
+							handleActionButtonClick(listActions.watch.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
@@ -66,12 +77,15 @@ export default function ChannelsTable({
 					</Button>
 					<Button
 						appearance={'ghost'}
-						active={rowData.actionId === 2}
+						active={rowData.actionId === listActions.block.actionId}
 						style={{
-							backgroundColor: rowData.actionId === 2 ? accentColor : ''
+							backgroundColor:
+								rowData.actionId === listActions.block.actionId
+									? accentColor
+									: 'transparent'
 						}}
 						onClick={() => {
-							handleActionButtonClick(2, rowData)
+							handleActionButtonClick(listActions.block.actionId, rowData)
 							setActionsTaken((prevState) => prevState + 1)
 						}}
 					>
@@ -102,7 +116,11 @@ export default function ChannelsTable({
 					trigger='hover'
 					speaker={<Tooltip>{rowData.videosTooltip}</Tooltip>}
 				>
-					<Button appearance='link' onClick={() => handleVideosClick(rowData)}>
+					<Button
+						appearance='link'
+						onClick={() => handleVideosClick(rowData)}
+						className={'lbTableFont'}
+					>
 						{rowData.videosDisplay}
 					</Button>
 				</Whisper>
@@ -112,6 +130,8 @@ export default function ChannelsTable({
 
 	return (
 		<Table
+			style={{ flex: 1, marginLeft: 15 }}
+			rowClassName={'lbtable'}
 			sortColumn={currentChannelsSort.sortColumn}
 			sortType={currentChannelsSort.sortType}
 			onSortColumn={(sortColumn, sortType) => {
@@ -121,7 +141,7 @@ export default function ChannelsTable({
 			}}
 			loading={items.length < 1 && channelsIsLoading}
 			virtualized
-			height={650}
+			height={890}
 			rowHeight={80}
 			data={items}
 			shouldUpdateScroll={false}
@@ -129,62 +149,74 @@ export default function ChannelsTable({
 				handleScroll()
 			}}
 		>
-			<Table.Column verticalAlign={'middle'} width={80}>
+			<Table.Column verticalAlign={'middle'} width={60}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ImageCell />
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+			{/**<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Country</Table.HeaderCell>
 				<TooltipCell
 					displayProp='countryDisplay'
 					tooltipProp='countryTooltip'
 					dataKey='countryCode'
 				/>
-			</Table.Column>
+			</Table.Column> */}
 
-			<Table.Column verticalAlign={'middle'} flexGrow={2} fixed sortable>
+			<Table.Column verticalAlign={'middle'} sortable width={280} resizable>
 				<Table.HeaderCell>Name</Table.HeaderCell>
-				<TooltipCell
+				<NameCell
 					displayProp='nameDisplay'
 					tooltipProp='nameTooltip'
 					tooltipPlacement='topLeft'
 					dataKey='name'
+					urlPrefix='https://www.youtube.com/channel/'
 				/>
 			</Table.Column>
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Date</Table.HeaderCell>
+				<Table.HeaderCell>Create Date</Table.HeaderCell>
 				<TooltipCell
 					displayProp='createDateDisplay'
 					tooltipProp='createDateTooltip'
 					dataKey='created'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+
+			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
-			</Table.Column>
-			<Table.Column verticalAlign={'middle'} flexGrow={1} align='center'>
-				<Table.HeaderCell>Video Categories</Table.HeaderCell>
+			</Table.Column> */}
+
+			<Table.Column
+				verticalAlign={'middle'}
+				align='center'
+				width={180}
+				resizable
+			>
+				<Table.HeaderCell>YT Category</Table.HeaderCell>
 				<TooltipCell
 					displayProp='categoryDisplay'
 					tooltipProp='categoryTooltip'
 					dataKey='categoryName'
+					//	tooltipPlacement='topLeft'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Subscribers</Table.HeaderCell>
+
+			<Table.Column verticalAlign={'middle'} align='center' sortable resizable>
+				<Table.HeaderCell>IAB Category</Table.HeaderCell>
 				<TooltipCell
-					displayProp='subscribersDisplay'
-					tooltipProp='subscribersTooltip'
-					dataKey='subscribers'
+					dataKey='iabCategoryName'
+					displayProp='iabCategoryName'
+					tooltipProp='iabCategoryName'
 				/>
 			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+
+			<Table.Column verticalAlign={'middle'} align='center'>
 				<Table.HeaderCell>Videos</Table.HeaderCell>
 
 				<VideoCountCell dataKey='allVideoCount' />
 			</Table.Column>
+
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Views</Table.HeaderCell>
 				<TooltipCell
@@ -195,15 +227,15 @@ export default function ChannelsTable({
 			</Table.Column>
 
 			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>IAB Category</Table.HeaderCell>
+				<Table.HeaderCell>Subscribers</Table.HeaderCell>
 				<TooltipCell
-					dataKey='iabCategoryId'
-					displayProp='iabCategoryName'
-					tooltipProp='iabCategoryName'
+					displayProp='subscribersDisplay'
+					tooltipProp='subscribersTooltip'
+					dataKey='subscribers'
 				/>
 			</Table.Column>
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
+			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
 				<TooltipCell
 					dataKey='iabSubCategoryId'
@@ -227,8 +259,9 @@ export default function ChannelsTable({
 					displayProp='iabSubTopicName'
 					tooltipProp='iabSubTopicName'
 				/>
-			</Table.Column>
-			<Table.Column width={180} verticalAlign={'middle'}>
+			</Table.Column> */}
+
+			<Table.Column minWidth={180} flexGrow={1} verticalAlign={'middle'}>
 				<Table.HeaderCell></Table.HeaderCell>
 				<ActionCell />
 			</Table.Column>

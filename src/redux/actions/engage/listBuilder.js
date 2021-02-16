@@ -143,19 +143,71 @@ export function fetchChannels(args) {
 	}
 }
 
+/**
+ * const addPendingActions = (channels, filters) => {
+	for (const item of channels) {
+		for (const targetId of filters.iabCategoriesTarget) {
+			let channelPendingTarget =
+				item.iabCategoryId == targetId ||
+				item.iabSubCategoryId == targetId ||
+				item.iabTopicId == targetId ||
+				item.iabSubTopicId == targetId
+			if (channelPendingTarget && item.actionId != 1) {
+				item.pendingActionId = 1
+			}
+		}
+
+		for (const watchId of filters.iabCategoriesWatch) {
+			let channelPendingWatch =
+				item.iabCategoryId == watchId ||
+				item.iabSubCategoryId == watchId ||
+				item.iabTopicId == watchId ||
+				item.iabSubTopicId == watchId
+			if (channelPendingWatch && item.actionId != 3) {
+				item.pendingActionId = 3
+			}
+		}
+
+		for (const blockId of filters.iabCategoriesBlock) {
+			let channelPendingBlock =
+				item.iabCategoryId == blockId ||
+				item.iabSubCategoryId == blockId ||
+				item.iabTopicId == blockId ||
+				item.iabSubTopicId == blockId
+			if (channelPendingBlock && item.actionId != 2) {
+				item.pendingActionId = 2
+			}
+		}
+	}
+}
+ */
+
 const formatChannels = (channels) => {
 	for (const item of channels) {
-		item.createDateDisplay = dayjs(item.created).calendar()
-		item.createDateTooltip = dayjs(item.created).calendar()
+		item.createDateDisplay = dayjs(item.created).format('MM/DD/YYYY')
+		item.createDateTooltip = dayjs(item.created).format('MM/DD/YYYY')
 
 		item.countryDisplay = countryCodeToFlagEmoji(item.countryCode)
 		item.countryTooltip = item.countryName
 
-		item.categoryDisplay = item.categoryName
+		let categoryArray = item.categoryName.split(',')
+		let firstCategory = categoryArray[0]
+		let categoriesLength = categoryArray.length
+
+		let catDisplay =
+			categoriesLength < 2
+				? firstCategory
+				: `${firstCategory} + ${categoriesLength - 1}`
+
+		item.categoryDisplay = catDisplay
 		item.categoryTooltip = item.categoryName
 
 		let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
-		item.nameDisplay = name
+		let maxNameChars = 40
+		item.nameDisplay =
+			name.length > maxNameChars
+				? `${name.substring(0, maxNameChars)}...`
+				: name
 
 		let description
 		if (!item.description) {
@@ -165,7 +217,7 @@ const formatChannels = (channels) => {
 		} else {
 			description = item.description.substring(0, 500)
 		}
-		item.nameTooltip = item.nameDisplay + ' - ' + description
+		item.nameTooltip = item.name + ' - ' + description
 
 		item.subscribersDisplay = numeral(item.subscribers).format('0a')
 		item.subscribersTooltip = numeral(item.subscribers).format('0,0')
@@ -188,12 +240,16 @@ const formatChannels = (channels) => {
 
 const formatVideos = (videos) => {
 	for (const item of videos) {
-		item.createDateDisplay = dayjs(item.published).calendar()
-		item.createDateTooltip = dayjs(item.published).calendar()
+		item.createDateDisplay = dayjs(item.published).format('MM/DD/YYYY')
+		item.createDateTooltip = dayjs(item.published).format('MM/DD/YYYY')
 
-		item.nameDisplay = item.name.replace(/\s/g, '').length
-			? item.name
-			: '[No name]'
+		let name = item.name.replace(/\s/g, '').length ? item.name : '[No name]'
+
+		let maxNameChars = 40
+		item.nameDisplay =
+			name.length > maxNameChars
+				? `${name.substring(0, maxNameChars)}...`
+				: name
 
 		let description
 		if (!item.description) {

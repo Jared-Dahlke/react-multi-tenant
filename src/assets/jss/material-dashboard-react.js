@@ -51,7 +51,7 @@ const defaultFont = {
 	fontWeight: '300',
 	lineHeight: 1.6,
 	fontSize: 18,
-	color: whiteColor
+	color: 'black'
 }
 
 const sightlyColor = '#00aeef'

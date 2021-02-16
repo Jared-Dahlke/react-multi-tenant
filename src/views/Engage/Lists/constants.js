@@ -20,3 +20,18 @@ export const targetTypes = [
 	{ targetTypeId: 3, targetTypeName: 'Influencer' },
 	{ targetTypeId: 4, targetTypeName: 'Other' }
 ]
+
+export const listActions = {
+	target: {
+		actionId: 1,
+		text: 'Target'
+	},
+	block: {
+		actionId: 2,
+		text: 'Block'
+	},
+	watch: {
+		actionId: 3,
+		text: 'Watch'
+	}
+}

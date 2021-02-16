@@ -18,7 +18,7 @@ const styles = (theme) => ({
 		'&$checked': {
 			color: primaryColor[0]
 		},
-		color: whiteColor
+		color: 'grey'
 	},
 	checked: {}
 })
@@ -38,7 +38,6 @@ export default function CustomRadio(props) {
 			<GridItem xs={12}>
 				<div
 					style={{
-						color: grayColor[4],
 						fontSize: '16px',
 						marginTop: '11px'
 					}}
@@ -63,7 +62,6 @@ export default function CustomRadio(props) {
 							/>
 						}
 						label='Strongly Disagree'
-						style={{ color: whiteColor }}
 					/>
 					<FormControlLabel
 						value={2}
@@ -74,7 +72,6 @@ export default function CustomRadio(props) {
 							/>
 						}
 						label='Disagree'
-						style={{ color: whiteColor }}
 					/>
 					<FormControlLabel
 						value={3}
@@ -85,7 +82,6 @@ export default function CustomRadio(props) {
 							/>
 						}
 						label='Unsure'
-						style={{ color: whiteColor }}
 					/>
 
 					<FormControlLabel
@@ -97,7 +93,6 @@ export default function CustomRadio(props) {
 							/>
 						}
 						label='Agree'
-						style={{ color: whiteColor }}
 					/>
 
 					<FormControlLabel
@@ -109,7 +104,6 @@ export default function CustomRadio(props) {
 							/>
 						}
 						label='Strongly Agree'
-						style={{ color: whiteColor }}
 					/>
 				</RadioGroup>
 				<div style={{ color: neutralColor, height: 15 }} />

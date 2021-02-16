@@ -6,6 +6,7 @@ import Label from '../CustomInputLabel/CustomInputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import styles from '../../assets/jss/material-dashboard-react/components/customInputStyle.js'
+import ControlLabel from 'rsuite/lib/ControlLabel'
 const useStyles = makeStyles(styles)
 
 export default function SelectField(props) {
@@ -19,12 +20,8 @@ export default function SelectField(props) {
 	const { id, label, placeholder, options, value, isDisabled, error } = props
 
 	return (
-		<FormControl
-			fullWidth={true}
-			className={classes.formControl}
-			style={{ color: '#FFF' }}
-		>
-			{label && <p>{label}</p>}
+		<FormControl fullWidth={true} className={classes.formControl}>
+			{label && <ControlLabel>{label}</ControlLabel>}
 
 			<SelectPicker
 				id={id}

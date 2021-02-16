@@ -11,9 +11,12 @@ import {
 	SET_IS_DOWNLOADING_EXCEL_VERSION_ID,
 	SET_LIST_VERSION_ACTIVE,
 	SET_SMARTLIST_VERSION_UNDER_EDIT,
-	SET_DELETE_ALL_VERSION_DATA_SUCCESS
+	SET_DELETE_ALL_VERSION_DATA_SUCCESS,
+	SET_SMARTLIST_STATS,
+	SET_SMARTLIST_STATS_LOADING,
+	SET_POST_VERSION_BULK_ACTION_LOADING
 } from '../../action-types/engage/lists'
-
+import React from 'react'
 import config from '../../../config.js'
 import axios from '../../../axiosConfig'
 import defaultAxios from 'axios'
@@ -54,7 +57,7 @@ export function fetchLists(accountId) {
 		} catch (error) {
 			console.log(error)
 		}
-		dispatch(setIsFetchingLists(false))
+
 		if (result.status === 200) {
 			dispatch(setFetchListsSuccess(true))
 			listsObjValidation.validate(result.data).catch(function(err) {
@@ -106,6 +109,7 @@ export function fetchLists(accountId) {
 				versions.push(version)
 			}
 			dispatch(setLists(versions))
+			dispatch(setIsFetchingLists(false))
 		}
 	}
 }
@@ -195,12 +199,118 @@ export const patchVersionData = (args) => {
 		try {
 			let params = args.data
 			const result = await axios.patch(url, params)
-			if (result.status === 200) {
-			}
+			dispatch(fetchVersionStats(args.versionId))
 		} catch (error) {
 			alert(error)
 		}
 	})
+}
+
+const Counts = ({ counts }) => {
+	return (
+		<>
+			{counts.videosTargeted && (
+				<>
+					Videos targeted: {numeral(counts.videosTargeted).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.videosBlocked && (
+				<>
+					Videos blocked: {numeral(counts.videosBlocked).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.videosWatched && (
+				<>
+					Videos watched: {numeral(counts.videosWatched).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.channelsTargeted && (
+				<>
+					Channels targeted: {numeral(counts.channelsTargeted).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.channelsBlocked && (
+				<>
+					Channels blocked: {numeral(counts.channelsBlocked).format('0,0')}
+					<br />
+				</>
+			)}
+			{counts.channelsWatched && (
+				<>
+					Channels watched: {numeral(counts.channelsWatched).format('0,0')}{' '}
+					<br />
+				</>
+			)}
+		</>
+	)
+}
+
+export const postVersionBulkAction = (args) => {
+	let url = `${apiBase}/smart-list/version/${args.versionId}/action`
+	return async (dispatch) => {
+		dispatch(setPostVersionBulkActionLoading(true))
+		let params = { iabCategoriesActions: args.iabCategoriesActions }
+		const promise = axios.patch(url, params)
+
+		toast.promise(
+			promise,
+			{
+				loading: 'Saving...',
+				success: (data) => {
+					let counts = data.data
+					return <Counts counts={counts} />
+				},
+				error: 'error'
+			},
+			{
+				success: {
+					duration: 6000
+				},
+				loading: {
+					duration: 60000
+				}
+			}
+		)
+
+		const result = await promise
+		dispatch(fetchVersionStats(args.versionId))
+		dispatch(setPostVersionBulkActionLoading(false))
+	}
+}
+
+export const fetchVersionStats = (versionId) => {
+	let url = `${apiBase}/smart-list/version/${versionId}/stats`
+	return async (dispatch) => {
+		dispatch(setSmartListStatsLoading(true))
+		const result = await axios.get(url)
+		dispatch(setSmartListStats(result.data))
+		dispatch(setSmartListStatsLoading(false))
+	}
+}
+
+export function setSmartListStats(smartListStats) {
+	return {
+		type: SET_SMARTLIST_STATS,
+		smartListStats
+	}
+}
+
+export function setPostVersionBulkActionLoading(postVersionBulkActionLoading) {
+	return {
+		type: SET_POST_VERSION_BULK_ACTION_LOADING,
+		postVersionBulkActionLoading
+	}
+}
+
+export function setSmartListStatsLoading(smartListStatsLoading) {
+	return {
+		type: SET_SMARTLIST_STATS_LOADING,
+		smartListStatsLoading
+	}
 }
 
 export const deleteAllVersionData = (versionId) => {
@@ -232,6 +342,7 @@ export const deleteVersionDataItem = (args) => {
 	let url = `${apiBase}/smart-list/version/${versionId}/data/${id}`
 	return deleteQueue.wrap(async (dispatch) => {
 		const result = await axios.delete(url)
+		dispatch(fetchVersionStats(versionId))
 	})
 }
 
@@ -301,13 +412,26 @@ export function setUploadedList(uploadedList) {
 }
 
 export function archiveList(payload) {
-	//	let accountId = account.accountId
-	let url =
-		apiBase + `/smart-list/${payload.smartListId}?archive=${payload.archive}`
+	let url = apiBase + `/smart-list/${payload.smartListId}`
 	return async (dispatch) => {
 		dispatch(setListArchived(payload))
 		try {
-			const result = await axios.patch(url)
+			const result = await axios.patch(url, { archive: payload.archive })
+			if (result.status === 200) {
+			}
+		} catch (error) {
+			alert(error)
+		}
+	}
+}
+
+export function patchListName(payload) {
+	let url = apiBase + `/smart-list/${payload.smartListId}`
+	return async (dispatch) => {
+		try {
+			const result = await axios.patch(url, {
+				smartListName: payload.smartListName
+			})
 			if (result.status === 200) {
 			}
 		} catch (error) {

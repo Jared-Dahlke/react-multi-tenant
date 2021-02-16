@@ -166,7 +166,6 @@ function CreateNewListModal(props) {
 							<ButtonToolbar>
 								<Button
 									disabled={!dirty || !isValid || props.isPostingList}
-									//	type='submit'
 									onClick={() => handleCreateClick(values)}
 									loading={props.isPostingList}
 								>

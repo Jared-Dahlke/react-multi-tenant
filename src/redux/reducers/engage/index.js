@@ -10,7 +10,10 @@ import {
 	isDownloadingExcel,
 	isDownloadingExcelVersionId,
 	smartListVersionUnderEdit,
-	deleteAllVersionDataSuccess
+	deleteAllVersionDataSuccess,
+	smartListStats,
+	smartListStatsLoading,
+	postVersionBulkActionLoading
 } from './lists'
 
 import {
@@ -39,5 +42,8 @@ export default combineReducers({
 	videosHasNextPage,
 	deleteAllVersionDataSuccess,
 	videosIsLoading,
-	channelsIsLoading
+	channelsIsLoading,
+	smartListStats,
+	smartListStatsLoading,
+	postVersionBulkActionLoading
 })
