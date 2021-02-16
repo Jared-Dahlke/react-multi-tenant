@@ -656,38 +656,34 @@ function ListBuilder(props) {
 										<Button size='xs' onClick={goToListsPage}>
 											Done
 										</Button>
-
-										{/**	<Button
-											size='xs'
-											loading={isSaving}
-											onClick={() => {
-												setIsSaving(true)
-
-												setTimeout(() => {
-													toast.success('Bulk actions saved!')
-													setIsSaving(false)
-												}, 2000)
-											}}
-										>
-											Save
-										</Button> */}
 									</ButtonToolbar>
 								</Grid>
 							</Grid>
 						}
 					>
 						<div style={{ display: 'flex' }}>
-							<div style={{ flex: 1 }}>
-								<p>Brand Profile:</p>
-								<p style={{ color: 'grey' }}>
-									{props.smartListVersionUnderEdit.brandName}
-								</p>
-								<p>Objective:</p>
-								<p style={{ color: 'grey' }}>
-									{props.smartListVersionUnderEdit.objectiveName}
-								</p>
+							<div
+								style={{
+									display: 'flex',
+									minWidth: 430
+								}}
+							>
+								<div style={{ flex: 1 }}>
+									<p>Brand Profile:</p>
+									<p style={{ color: 'grey' }}>
+										{props.smartListVersionUnderEdit.brandName}
+									</p>
+									<p>Objective:</p>
+									<p style={{ color: 'grey' }}>
+										{props.smartListVersionUnderEdit.objectiveName}
+									</p>
+								</div>
 							</div>
-							<div style={{ flex: 1 }}>
+							<div
+								style={{
+									width: '100%'
+								}}
+							>
 								<Stats
 									parsedVersionId={parsedVersionId}
 									smartListStats={props.smartListStats}
