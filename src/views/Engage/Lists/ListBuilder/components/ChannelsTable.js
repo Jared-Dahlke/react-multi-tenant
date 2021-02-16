@@ -3,13 +3,13 @@ import React from 'react'
 import Button from 'rsuite/lib/Button'
 import debounce from 'just-debounce-it'
 import Table from 'rsuite/lib/Table'
-import { accentColor } from '../../../../../assets/jss/colorContants'
+import Dropdown from 'rsuite/lib/Dropdown'
 import Whisper from 'rsuite/lib/Whisper'
 import Tooltip from 'rsuite/lib/Tooltip'
 import { TooltipCell } from './TooltipCell'
 import { NameCell } from './NameCell'
 import { ActionCell } from './ActionCell'
-import { listActions } from '../../constants'
+import Icon from 'rsuite/lib/Icon'
 import './listbuilder.css'
 var dayjs = require('dayjs')
 var calendar = require('dayjs/plugin/calendar')
@@ -22,7 +22,8 @@ export default function ChannelsTable({
 	handleActionButtonClick,
 	handleVideosClick,
 	currentChannelsSort,
-	setCurrentChannelsSort
+	setCurrentChannelsSort,
+	visibleChannelColumns
 }) {
 	const hasMountedRef = React.useRef(false)
 
@@ -89,10 +90,12 @@ export default function ChannelsTable({
 				handleScroll()
 			}}
 		>
-			<Table.Column verticalAlign={'middle'} width={60}>
-				<Table.HeaderCell></Table.HeaderCell>
-				<ImageCell />
-			</Table.Column>
+			{visibleChannelColumns.includes('image') && (
+				<Table.Column verticalAlign={'middle'} width={60}>
+					<Table.HeaderCell></Table.HeaderCell>
+					<ImageCell />
+				</Table.Column>
+			)}
 
 			{/**<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Country</Table.HeaderCell>
@@ -103,77 +106,97 @@ export default function ChannelsTable({
 				/>
 			</Table.Column> */}
 
-			<Table.Column verticalAlign={'middle'} sortable width={280} resizable>
-				<Table.HeaderCell>Name</Table.HeaderCell>
-				<NameCell
-					displayProp='nameDisplay'
-					tooltipProp='nameTooltip'
-					tooltipPlacement='topLeft'
-					dataKey='name'
-					urlPrefix='https://www.youtube.com/channel/'
-				/>
-			</Table.Column>
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Create Date</Table.HeaderCell>
-				<TooltipCell
-					displayProp='createDateDisplay'
-					tooltipProp='createDateTooltip'
-					dataKey='created'
-				/>
-			</Table.Column>
+			{visibleChannelColumns.includes('name') && (
+				<Table.Column verticalAlign={'middle'} sortable width={280} resizable>
+					<Table.HeaderCell>Name</Table.HeaderCell>
+					<NameCell
+						displayProp='nameDisplay'
+						tooltipProp='nameTooltip'
+						tooltipPlacement='topLeft'
+						dataKey='name'
+						urlPrefix='https://www.youtube.com/channel/'
+					/>
+				</Table.Column>
+			)}
+
+			{visibleChannelColumns.includes('createDate') && (
+				<Table.Column verticalAlign={'middle'} align='center' sortable>
+					<Table.HeaderCell>Create Date</Table.HeaderCell>
+					<TooltipCell
+						displayProp='createDateDisplay'
+						tooltipProp='createDateTooltip'
+						dataKey='created'
+					/>
+				</Table.Column>
+			)}
 
 			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>Id</Table.HeaderCell>
 				<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 			</Table.Column> */}
 
-			<Table.Column
-				verticalAlign={'middle'}
-				align='center'
-				width={180}
-				resizable
-			>
-				<Table.HeaderCell>YT Category</Table.HeaderCell>
-				<TooltipCell
-					displayProp='categoryDisplay'
-					tooltipProp='categoryTooltip'
-					dataKey='categoryName'
-					//	tooltipPlacement='topLeft'
-				/>
-			</Table.Column>
+			{visibleChannelColumns.includes('ytCategory') && (
+				<Table.Column
+					verticalAlign={'middle'}
+					align='center'
+					width={180}
+					resizable
+				>
+					<Table.HeaderCell>YT Category</Table.HeaderCell>
+					<TooltipCell
+						displayProp='categoryDisplay'
+						tooltipProp='categoryTooltip'
+						dataKey='categoryName'
+						//	tooltipPlacement='topLeft'
+					/>
+				</Table.Column>
+			)}
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable resizable>
-				<Table.HeaderCell>IAB Category</Table.HeaderCell>
-				<TooltipCell
-					dataKey='iabCategoryName'
-					displayProp='iabCategoryName'
-					tooltipProp='iabCategoryName'
-				/>
-			</Table.Column>
+			{visibleChannelColumns.includes('iabCategory') && (
+				<Table.Column
+					verticalAlign={'middle'}
+					align='center'
+					sortable
+					resizable
+				>
+					<Table.HeaderCell>IAB Category</Table.HeaderCell>
+					<TooltipCell
+						dataKey='iabCategoryName'
+						displayProp='iabCategoryName'
+						tooltipProp='iabCategoryName'
+					/>
+				</Table.Column>
+			)}
 
-			<Table.Column verticalAlign={'middle'} align='center'>
-				<Table.HeaderCell>Videos</Table.HeaderCell>
+			{visibleChannelColumns.includes('videos') && (
+				<Table.Column verticalAlign={'middle'} align='center'>
+					<Table.HeaderCell>Videos</Table.HeaderCell>
 
-				<VideoCountCell dataKey='allVideoCount' />
-			</Table.Column>
+					<VideoCountCell dataKey='allVideoCount' />
+				</Table.Column>
+			)}
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Views</Table.HeaderCell>
-				<TooltipCell
-					dataKey='views'
-					displayProp='viewsDisplay'
-					tooltipProp='viewsTooltip'
-				/>
-			</Table.Column>
+			{visibleChannelColumns.includes('views') && (
+				<Table.Column verticalAlign={'middle'} align='center' sortable>
+					<Table.HeaderCell>Views</Table.HeaderCell>
+					<TooltipCell
+						dataKey='views'
+						displayProp='viewsDisplay'
+						tooltipProp='viewsTooltip'
+					/>
+				</Table.Column>
+			)}
 
-			<Table.Column verticalAlign={'middle'} align='center' sortable>
-				<Table.HeaderCell>Subscribers</Table.HeaderCell>
-				<TooltipCell
-					displayProp='subscribersDisplay'
-					tooltipProp='subscribersTooltip'
-					dataKey='subscribers'
-				/>
-			</Table.Column>
+			{visibleChannelColumns.includes('subscribers') && (
+				<Table.Column verticalAlign={'middle'} align='center' sortable>
+					<Table.HeaderCell>Subscribers</Table.HeaderCell>
+					<TooltipCell
+						displayProp='subscribersDisplay'
+						tooltipProp='subscribersTooltip'
+						dataKey='subscribers'
+					/>
+				</Table.Column>
+			)}
 
 			{/**	<Table.Column verticalAlign={'middle'} align='center' sortable>
 				<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
@@ -201,13 +224,15 @@ export default function ChannelsTable({
 				/>
 			</Table.Column> */}
 
-			<Table.Column minWidth={180} flexGrow={1} verticalAlign={'middle'}>
-				<Table.HeaderCell></Table.HeaderCell>
-				<ActionCell
-					handleActionButtonClick={handleActionButtonClick}
-					setActionsTaken={setActionsTaken}
-				/>
-			</Table.Column>
+			{visibleChannelColumns.includes('actions') && (
+				<Table.Column minWidth={180} flexGrow={1} verticalAlign={'middle'}>
+					<Table.HeaderCell></Table.HeaderCell>
+					<ActionCell
+						handleActionButtonClick={handleActionButtonClick}
+						setActionsTaken={setActionsTaken}
+					/>
+				</Table.Column>
+			)}
 		</Table>
 	)
 }

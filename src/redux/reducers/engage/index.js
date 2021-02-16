@@ -22,7 +22,9 @@ import {
 	channelsHasNextPage,
 	videosHasNextPage,
 	videosIsLoading,
-	channelsIsLoading
+	channelsIsLoading,
+	visibleChannelColumns,
+	visibleVideoColumns
 } from './listBuilder'
 
 export default combineReducers({
@@ -45,5 +47,7 @@ export default combineReducers({
 	channelsIsLoading,
 	smartListStats,
 	smartListStatsLoading,
-	postVersionBulkActionLoading
+	postVersionBulkActionLoading,
+	visibleChannelColumns,
+	visibleVideoColumns
 })

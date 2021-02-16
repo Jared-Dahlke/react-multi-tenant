@@ -13,7 +13,7 @@ const CustomPie = ({ data, title }) => {
 			{
 				data: data.data,
 				//	backgroundColor: ['#aeef00', 'yellow', '#ef4100']
-				backgroundColor: [accentColor, 'white', 'grey']
+				backgroundColor: [accentColor, 'white', 'lightgrey']
 				//	hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
 			}
 		]

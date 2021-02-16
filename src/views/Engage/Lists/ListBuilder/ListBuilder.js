@@ -16,7 +16,9 @@ import {
 	removeAllVideos,
 	removeAllChannels,
 	setChannelsHasNextPage,
-	setVideosHasNextPage
+	setVideosHasNextPage,
+	setVisibleChannelColumns,
+	setVisibleVideoColumns
 } from '../../../../redux/actions/engage/listBuilder'
 
 import {
@@ -36,12 +38,15 @@ import { FiltersSideBar } from './components/FiltersSideBar'
 import ButtonToolbar from 'rsuite/lib/ButtonToolbar'
 import Input from 'rsuite/lib/Input'
 import InputGroup from 'rsuite/lib/InputGroup'
-import { accentColor, neutralColor } from '../../../../assets/jss/colorContants'
+import { accentColor } from '../../../../assets/jss/colorContants'
 import Panel from 'rsuite/lib/Panel'
 import ControlLabel from 'rsuite/lib/ControlLabel'
+import ColumnPicker from './components/ColumnPicker'
 
 const mapStateToProps = (state) => {
 	return {
+		visibleVideoColumns: state.engage.visibleVideoColumns,
+		visibleChannelColumns: state.engage.visibleChannelColumns,
 		smartListStats: state.engage.smartListStats,
 		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit,
 		lists: state.engage.lists,
@@ -59,6 +64,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		setVisibleChannelColumns: (arr) => dispatch(setVisibleChannelColumns(arr)),
+		setVisibleVideoColumns: (arr) => dispatch(setVisibleVideoColumns(arr)),
 		setSmartListStatsLoading: (bool) =>
 			dispatch(setSmartListStatsLoading(bool)),
 		setVideos: (videos) => dispatch(setVideos(videos)),
@@ -191,129 +198,6 @@ function ListBuilder(props) {
 		views: 'views',
 		videoDurationSeconds: 'videoDurationSeconds',
 		uploadDate: 'uploadDate'
-	}
-
-	const updateStats = (actionId, add, item, oldActionId) => {
-		let id = item.id
-		let type = id.length === 24 ? 'channel' : 'video'
-		let newStats = JSON.parse(JSON.stringify(props.smartListStats))
-
-		if (oldActionId === 1) {
-			newStats.targetSubscriberCount =
-				newStats.targetSubscriberCount - item.subscribers
-		}
-		if (oldActionId === 2) {
-			newStats.blockSubscriberCount =
-				newStats.blockSubscriberCount - item.subscribers
-		}
-		if (oldActionId === 3) {
-			newStats.watchSubscriberCount =
-				newStats.watchSubscriberCount - item.subscribers
-		}
-
-		if (add) {
-			newStats.subscriberCount = newStats.subscriberCount + item.subscribers
-			if (actionId === 1) {
-				newStats.targetSubscriberCount =
-					newStats.targetSubscriberCount + item.subscribers
-			}
-			if (actionId === 2) {
-				newStats.blockSubscriberCount =
-					newStats.blockSubscriberCount + item.subscribers
-			}
-			if (actionId === 3) {
-				newStats.watchSubscriberCount =
-					newStats.watchSubscriberCount + item.subscribers
-			}
-		} else {
-			newStats.subscriberCount = newStats.subscriberCount - item.subscribers
-			if (actionId === 1) {
-				newStats.targetSubscriberCount =
-					newStats.targetSubscriberCount - item.subscribers
-			}
-			if (actionId === 2) {
-				newStats.blockSubscriberCount =
-					newStats.blockSubscriberCount - item.subscribers
-			}
-			if (actionId === 3) {
-				newStats.watchSubscriberCount =
-					newStats.watchSubscriberCount - item.subscribers
-			}
-		}
-
-		if (type === 'channel') {
-			if (oldActionId === 1) {
-				newStats.targetChannelCount = newStats.targetChannelCount - 1
-			}
-			if (oldActionId === 2) {
-				newStats.blockChannelCount = newStats.blockChannelCount - 1
-			}
-			if (oldActionId === 3) {
-				newStats.watchChannelCount = newStats.watchChannelCount - 1
-			}
-
-			if (add) {
-				newStats.channelCount = newStats.channelCount + 1
-				if (actionId === 1) {
-					newStats.targetChannelCount = newStats.targetChannelCount + 1
-				}
-				if (actionId === 2) {
-					newStats.blockChannelCount = newStats.blockChannelCount + 1
-				}
-				if (actionId === 3) {
-					newStats.watchChannelCount = newStats.watchChannelCount + 1
-				}
-			} else {
-				newStats.channelCount = newStats.channelCount - 1
-				if (actionId === 1) {
-					newStats.targetChannelCount = newStats.targetChannelCount - 1
-				}
-				if (actionId === 2) {
-					newStats.blockChannelCount = newStats.blockChannelCount - 1
-				}
-				if (actionId === 3) {
-					newStats.watchChannelCount = newStats.watchChannelCount - 1
-				}
-			}
-		}
-
-		if (type === 'video') {
-			if (oldActionId === 1) {
-				newStats.targetVideoCount = newStats.targetVideoCount - 1
-			}
-			if (oldActionId === 2) {
-				newStats.blockVideoCount = newStats.blockVideoCount - 1
-			}
-			if (oldActionId === 3) {
-				newStats.watchVideoCount = newStats.watchVideoCount - 1
-			}
-
-			if (add) {
-				newStats.videoCount = newStats.videoCount + 1
-				if (actionId === 1) {
-					newStats.targetVideoCount = newStats.targetVideoCount + 1
-				}
-				if (actionId === 2) {
-					newStats.blockVideoCount = newStats.blockVideoCount + 1
-				}
-				if (actionId === 3) {
-					newStats.watchVideoCount = newStats.watchVideoCount + 1
-				}
-			} else {
-				newStats.videoCount = newStats.videoCount - 1
-				if (actionId === 1) {
-					newStats.targetVideoCount = newStats.targetVideoCount - 1
-				}
-				if (actionId === 2) {
-					newStats.blockVideoCount = newStats.blockVideoCount - 1
-				}
-				if (actionId === 3) {
-					newStats.watchVideoCount = newStats.watchVideoCount - 1
-				}
-			}
-		}
-
-		props.setSmartListStats(newStats)
 	}
 
 	const handleActionButtonClick = (actionId, item) => {
@@ -577,6 +461,19 @@ function ListBuilder(props) {
 	}
 
 	const [bulk, setBulk] = React.useState(false)
+	const [columnPickerShowing, setColumnPickerShowing] = React.useState(false)
+
+	const [allChannelColumns] = React.useState([
+		{ label: 'Image', id: 'image' },
+		{ label: 'Name', id: 'name' },
+		{ label: 'Create Date', id: 'createDate' },
+		{ label: 'YT Category', id: 'ytCategory' },
+		{ label: 'IAB Category', id: 'iabCategory' },
+		{ label: 'Videos', id: 'videos' },
+		{ label: 'Views', id: 'views' },
+		{ label: 'Subscribers', id: 'subscribers' },
+		{ label: 'Actions', id: 'actions' }
+	])
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -629,7 +526,13 @@ function ListBuilder(props) {
 								<Grid item xs={6} align='right'>
 									<ButtonToolbar>
 										<Button
-											style={{ marginLeft: 20 }}
+											size='xs'
+											onClick={() => setColumnPickerShowing(true)}
+										>
+											Visible Columns
+										</Button>
+
+										<Button
 											size='xs'
 											loading={
 												props.isDownloadingExcel &&
@@ -715,9 +618,13 @@ function ListBuilder(props) {
 						}}
 						handleActionButtonClick={handleActionButtonClick}
 						handleVideosClick={handleVideosClick}
+						visibleChannelColumns={props.visibleChannelColumns}
 					/>
 
 					<VideoModal
+						visibleVideoColumns={props.visibleVideoColumns}
+						setVisibleVideoColumns={props.setVisibleVideoColumns}
+						setColumnPickerShowing={setColumnPickerShowing}
 						currentVideosSort={currentVideosSort}
 						setCurrentVideosSort={setCurrentVideosSort}
 						show={showVideoModal}
@@ -731,6 +638,13 @@ function ListBuilder(props) {
 						handleActionButtonClick={handleActionButtonClick}
 						channel={viewingVideosForChannel}
 						videosIsLoading={props.videosIsLoading}
+					/>
+					<ColumnPicker
+						show={columnPickerShowing}
+						close={() => setColumnPickerShowing(false)}
+						visibleColumns={props.visibleChannelColumns}
+						allColumns={allChannelColumns}
+						setVisibleColumns={props.setVisibleChannelColumns}
 					/>
 				</div>
 			</>

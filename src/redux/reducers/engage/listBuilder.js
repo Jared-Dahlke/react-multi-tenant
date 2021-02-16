@@ -6,7 +6,9 @@ import {
 	SET_CHANNELS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_VIDEOS_IS_LOADING,
-	SET_CHANNELS_IS_LOADING
+	SET_CHANNELS_IS_LOADING,
+	SET_VISIBLE_CHANNEL_COLUMNS,
+	SET_VISIBLE_VIDEO_COLUMNS
 } from '../../action-types/engage/listBuilder'
 
 export function videos(state = [], action) {
@@ -64,6 +66,66 @@ export function channelsIsLoading(state = true, action) {
 	switch (action.type) {
 		case SET_CHANNELS_IS_LOADING:
 			return action.channelsIsLoading
+		default:
+			return state
+	}
+}
+
+export function visibleChannelColumns(
+	state = [
+		'image',
+		'name',
+		'createDate',
+		'ytCategory',
+		'iabCategory',
+		'videos',
+		'views',
+		'subscribers',
+		'actions'
+	],
+	action
+) {
+	switch (action.type) {
+		case SET_VISIBLE_CHANNEL_COLUMNS:
+			return action.visibleChannelColumns
+		default:
+			return state
+	}
+}
+
+/**	const [allVideoColumns] = React.useState([
+		{ label: 'Image', id: 'image' },
+		{ label: 'Name', id: 'name' },
+		{ label: 'Uploaded', id: 'uploaded' },
+		{ label: 'Category', id: 'category' },
+		{ label: 'Likes', id: 'likes' },
+		{ label: 'Dislikes', id: 'dislikes' },
+		{ label: 'Views', id: 'views' },
+		{ label: 'Comments', id: 'comments' },
+		{ label: 'IAB Category', id: 'iabCategory' },
+		{ label: 'Actions', id: 'actions' }
+	])
+ */
+
+export function visibleVideoColumns(
+	state = [
+		'image',
+		'name',
+		'uploaded',
+		'category',
+		'likes',
+		'dislikes',
+		'views',
+		'subscribers',
+		'comments',
+		'iabCategory',
+		'actions'
+	],
+	action
+) {
+	switch (action.type) {
+		case SET_VISIBLE_VIDEO_COLUMNS:
+			return action.visibleVideoColumns
 		default:
 			return state
 	}

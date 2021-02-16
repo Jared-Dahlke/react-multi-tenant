@@ -24,12 +24,15 @@ export const ActionCell = ({
 					appearance={'ghost'}
 					active={rowData.actionId === listActions.target.actionId}
 					style={{
+						borderColor: accentColor,
 						backgroundColor:
 							rowData.actionId === listActions.target.actionId
 								? accentColor
 								: 'transparent',
 						color:
-							rowData.actionId === listActions.target.actionId ? 'white' : ''
+							rowData.actionId === listActions.target.actionId
+								? 'white'
+								: accentColor
 					}}
 					onClick={() => {
 						handleActionButtonClick(listActions.target.actionId, rowData)
@@ -42,12 +45,15 @@ export const ActionCell = ({
 					appearance={'ghost'}
 					active={rowData.actionId === listActions.watch.actionId}
 					style={{
+						borderColor: accentColor,
 						backgroundColor:
 							rowData.actionId === listActions.watch.actionId
 								? accentColor
 								: 'transparent',
 						color:
-							rowData.actionId === listActions.watch.actionId ? 'white' : ''
+							rowData.actionId === listActions.watch.actionId
+								? 'white'
+								: accentColor
 					}}
 					onClick={() => {
 						handleActionButtonClick(listActions.watch.actionId, rowData)
@@ -60,12 +66,15 @@ export const ActionCell = ({
 					appearance={'ghost'}
 					active={rowData.actionId === listActions.block.actionId}
 					style={{
+						borderColor: accentColor,
 						backgroundColor:
 							rowData.actionId === listActions.block.actionId
 								? accentColor
 								: 'transparent',
 						color:
-							rowData.actionId === listActions.block.actionId ? 'white' : ''
+							rowData.actionId === listActions.block.actionId
+								? 'white'
+								: accentColor
 					}}
 					onClick={() => {
 						handleActionButtonClick(listActions.block.actionId, rowData)
