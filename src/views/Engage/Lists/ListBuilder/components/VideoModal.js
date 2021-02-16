@@ -2,13 +2,11 @@ import React from 'react'
 import Modal from 'rsuite/lib/Modal'
 import Button from 'rsuite/lib/Button'
 import Table from 'rsuite/lib/Table'
-import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
-import { accentColor } from '../../../../../assets/jss/colorContants'
 import { TooltipCell } from './TooltipCell'
 import { NameCell } from './NameCell'
 import './listbuilder.css'
-import { listActions } from '../../constants'
+import { ActionCell } from './ActionCell'
 const VideoModal = (props) => {
 	let handleActionButtonClick = props.handleActionButtonClick
 
@@ -60,67 +58,6 @@ const VideoModal = (props) => {
 			>
 				{`${secondsToTime(seconds)}`}
 			</div>
-		)
-	}
-
-	const ActionCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell
-				{...props}
-				className='link-group'
-				style={{ padding: 1, textAlign: 'center' }}
-			>
-				<ButtonGroup vertical={false} size='xs'>
-					<Button
-						appearance={'ghost'}
-						active={rowData.actionId === listActions.target.actionId}
-						style={{
-							backgroundColor:
-								rowData.actionId === listActions.target.actionId
-									? accentColor
-									: ''
-						}}
-						onClick={() => {
-							handleActionButtonClick(listActions.target.actionId, rowData)
-							setActionsTaken((prevState) => prevState + 1)
-						}}
-					>
-						{listActions.target.text}
-					</Button>
-					<Button
-						appearance={'ghost'}
-						active={rowData.actionId === listActions.watch.actionId}
-						style={{
-							backgroundColor:
-								rowData.actionId === listActions.watch.actionId
-									? accentColor
-									: ''
-						}}
-						onClick={() => {
-							handleActionButtonClick(listActions.watch.actionId, rowData)
-							setActionsTaken((prevState) => prevState + 1)
-						}}
-					>
-						{listActions.watch.text}
-					</Button>
-					<Button
-						appearance={'ghost'}
-						active={rowData.actionId === listActions.block.actionId}
-						style={{
-							backgroundColor:
-								rowData.actionId === listActions.block.actionId
-									? accentColor
-									: ''
-						}}
-						onClick={() => {
-							handleActionButtonClick(listActions.block.actionId, rowData)
-							setActionsTaken((prevState) => prevState + 1)
-						}}
-					>
-						{listActions.block.text}
-					</Button>
-				</ButtonGroup>
-			</Table.Cell>
 		)
 	}
 
@@ -280,7 +217,10 @@ const VideoModal = (props) => {
 
 					<Table.Column verticalAlign={'middle'} minWidth={180} flexGrow={1}>
 						<Table.HeaderCell></Table.HeaderCell>
-						<ActionCell />
+						<ActionCell
+							handleActionButtonClick={handleActionButtonClick}
+							setActionsTaken={setActionsTaken}
+						/>
 					</Table.Column>
 				</Table>
 			</Modal.Body>
