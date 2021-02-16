@@ -109,7 +109,6 @@ export function fetchGoogleLoginUrl() {
 }
 
 export function handleGoogleAdsApiConsent(params) {
-	console.log('handle consent params')
 	console.log(params)
 	let { code, accountId } = params
 	return async (dispatch, getState) => {
