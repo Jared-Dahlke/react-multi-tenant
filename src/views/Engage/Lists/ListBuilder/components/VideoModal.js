@@ -2,14 +2,14 @@ import React from 'react'
 import Modal from 'rsuite/lib/Modal'
 import Button from 'rsuite/lib/Button'
 import Table from 'rsuite/lib/Table'
-import ButtonGroup from 'rsuite/lib/ButtonGroup'
 import debounce from 'just-debounce-it'
-import { accentColor } from '../../../../../assets/jss/colorContants'
 import { TooltipCell } from './TooltipCell'
 import { NameCell } from './NameCell'
 import './listbuilder.css'
-import { listActions } from '../../constants'
+import { ActionCell } from './ActionCell'
+import ColumnPicker from '../components/ColumnPicker'
 const VideoModal = (props) => {
+	let visibleVideoColumns = props.visibleVideoColumns
 	let handleActionButtonClick = props.handleActionButtonClick
 
 	// We create a reference for the InfiniteLoader
@@ -63,67 +63,6 @@ const VideoModal = (props) => {
 		)
 	}
 
-	const ActionCell = ({ rowData, dataKey, ...props }) => {
-		return (
-			<Table.Cell
-				{...props}
-				className='link-group'
-				style={{ padding: 1, textAlign: 'center' }}
-			>
-				<ButtonGroup vertical={false} size='xs'>
-					<Button
-						appearance={'ghost'}
-						active={rowData.actionId === listActions.target.actionId}
-						style={{
-							backgroundColor:
-								rowData.actionId === listActions.target.actionId
-									? accentColor
-									: ''
-						}}
-						onClick={() => {
-							handleActionButtonClick(listActions.target.actionId, rowData)
-							setActionsTaken((prevState) => prevState + 1)
-						}}
-					>
-						{listActions.target.text}
-					</Button>
-					<Button
-						appearance={'ghost'}
-						active={rowData.actionId === listActions.watch.actionId}
-						style={{
-							backgroundColor:
-								rowData.actionId === listActions.watch.actionId
-									? accentColor
-									: ''
-						}}
-						onClick={() => {
-							handleActionButtonClick(listActions.watch.actionId, rowData)
-							setActionsTaken((prevState) => prevState + 1)
-						}}
-					>
-						{listActions.watch.text}
-					</Button>
-					<Button
-						appearance={'ghost'}
-						active={rowData.actionId === listActions.block.actionId}
-						style={{
-							backgroundColor:
-								rowData.actionId === listActions.block.actionId
-									? accentColor
-									: ''
-						}}
-						onClick={() => {
-							handleActionButtonClick(listActions.block.actionId, rowData)
-							setActionsTaken((prevState) => prevState + 1)
-						}}
-					>
-						{listActions.block.text}
-					</Button>
-				</ButtonGroup>
-			</Table.Cell>
-		)
-	}
-
 	const ImageCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell
@@ -143,12 +82,38 @@ const VideoModal = (props) => {
 		props.incrementPage()
 	}, 1200)
 
+	const [columnPickerShowing, setColumnPickerShowing] = React.useState(false)
+
+	const [allVideoColumns] = React.useState([
+		{ label: 'Image', id: 'image' },
+		{ label: 'Name', id: 'name' },
+		{ label: 'Uploaded', id: 'uploaded' },
+		{ label: 'Category', id: 'category' },
+		{ label: 'Likes', id: 'likes' },
+		{ label: 'Dislikes', id: 'dislikes' },
+		{ label: 'Views', id: 'views' },
+		{ label: 'Comments', id: 'comments' },
+		{ label: 'IAB Category', id: 'iabCategory' },
+		{ label: 'Actions', id: 'actions' }
+	])
+
 	return (
 		<Modal full show={props.show} onHide={props.close}>
+			<ColumnPicker
+				show={columnPickerShowing}
+				close={() => setColumnPickerShowing(false)}
+				visibleColumns={props.visibleVideoColumns}
+				allColumns={allVideoColumns}
+				setVisibleColumns={props.setVisibleVideoColumns}
+			/>
+
 			<Modal.Header>
 				<Modal.Title>Videos for {props?.channel?.name}</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
+				<Button size='xs' onClick={() => setColumnPickerShowing(true)}>
+					Visible Columns
+				</Button>
 				<Table
 					rowClassName={'lbtable'}
 					sortColumn={props.currentVideosSort.sortColumn}
@@ -168,89 +133,117 @@ const VideoModal = (props) => {
 						handleVideoScroll()
 					}}
 				>
-					<Table.Column verticalAlign={'middle'}>
-						<Table.HeaderCell></Table.HeaderCell>
-						<ImageCell />
-					</Table.Column>
+					{visibleVideoColumns.includes('image') && (
+						<Table.Column verticalAlign={'middle'}>
+							<Table.HeaderCell></Table.HeaderCell>
+							<ImageCell />
+						</Table.Column>
+					)}
 
-					<Table.Column verticalAlign={'middle'} sortable resizable width={300}>
-						<Table.HeaderCell>Name</Table.HeaderCell>
-						<NameCell
-							displayProp='nameDisplay'
-							tooltipProp='nameTooltip'
-							tooltipPlacement='topLeft'
-							dataKey='name'
-							urlPrefix='https://www.youtube.com/watch?v='
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('name') && (
+						<Table.Column
+							verticalAlign={'middle'}
+							sortable
+							resizable
+							width={300}
+						>
+							<Table.HeaderCell>Name</Table.HeaderCell>
+							<NameCell
+								displayProp='nameDisplay'
+								tooltipProp='nameTooltip'
+								tooltipPlacement='topLeft'
+								dataKey='name'
+								urlPrefix='https://www.youtube.com/watch?v='
+							/>
+						</Table.Column>
+					)}
 
-					<Table.Column verticalAlign={'middle'} sortable>
-						<Table.HeaderCell>Uploaded</Table.HeaderCell>
-						<TooltipCell
-							displayProp='createDateDisplay'
-							tooltipProp='createDateTooltip'
-							dataKey='published'
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('uploaded') && (
+						<Table.Column verticalAlign={'middle'} sortable>
+							<Table.HeaderCell>Uploaded</Table.HeaderCell>
+							<TooltipCell
+								displayProp='createDateDisplay'
+								tooltipProp='createDateTooltip'
+								dataKey='published'
+							/>
+						</Table.Column>
+					)}
 
 					{/**	<Table.Column verticalAlign={'middle'} sortable>
 						<Table.HeaderCell>Id</Table.HeaderCell>
 						<Table.Cell dataKey='id' style={{ color: 'grey' }} />
 					</Table.Column> */}
 
-					<Table.Column verticalAlign={'middle'} sortable resizable width={130}>
-						<Table.HeaderCell>Category</Table.HeaderCell>
-						<TooltipCell
-							displayProp='categoryDisplay'
-							tooltipProp='categoryTooltip'
-							dataKey='categoryName'
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('category') && (
+						<Table.Column
+							verticalAlign={'middle'}
+							sortable
+							resizable
+							width={130}
+						>
+							<Table.HeaderCell>Category</Table.HeaderCell>
+							<TooltipCell
+								displayProp='categoryDisplay'
+								tooltipProp='categoryTooltip'
+								dataKey='categoryName'
+							/>
+						</Table.Column>
+					)}
 
-					<Table.Column verticalAlign={'middle'} align='center' sortable>
-						<Table.HeaderCell>Likes</Table.HeaderCell>
-						<TooltipCell
-							displayProp='likesDisplay'
-							tooltipProp='likesTooltip'
-							dataKey='likes'
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('likes') && (
+						<Table.Column verticalAlign={'middle'} align='center' sortable>
+							<Table.HeaderCell>Likes</Table.HeaderCell>
+							<TooltipCell
+								displayProp='likesDisplay'
+								tooltipProp='likesTooltip'
+								dataKey='likes'
+							/>
+						</Table.Column>
+					)}
 
-					<Table.Column verticalAlign={'middle'} align='center' sortable>
-						<Table.HeaderCell>Dislikes</Table.HeaderCell>
-						<TooltipCell
-							displayProp='dislikesDisplay'
-							tooltipProp='dislikesTooltip'
-							dataKey='dislikes'
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('dislikes') && (
+						<Table.Column verticalAlign={'middle'} align='center' sortable>
+							<Table.HeaderCell>Dislikes</Table.HeaderCell>
+							<TooltipCell
+								displayProp='dislikesDisplay'
+								tooltipProp='dislikesTooltip'
+								dataKey='dislikes'
+							/>
+						</Table.Column>
+					)}
 
-					<Table.Column verticalAlign={'middle'} align='center' sortable>
-						<Table.HeaderCell>Views</Table.HeaderCell>
-						<TooltipCell
-							displayProp='viewsDisplay'
-							tooltipProp='viewsTooltip'
-							dataKey='views'
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('views') && (
+						<Table.Column verticalAlign={'middle'} align='center' sortable>
+							<Table.HeaderCell>Views</Table.HeaderCell>
+							<TooltipCell
+								displayProp='viewsDisplay'
+								tooltipProp='viewsTooltip'
+								dataKey='views'
+							/>
+						</Table.Column>
+					)}
 
-					<Table.Column verticalAlign={'middle'} align='center' sortable>
-						<Table.HeaderCell>Comments</Table.HeaderCell>
-						<TooltipCell
-							displayProp='commentsDisplay'
-							tooltipProp='commentsTooltip'
-							dataKey='comments'
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('comments') && (
+						<Table.Column verticalAlign={'middle'} align='center' sortable>
+							<Table.HeaderCell>Comments</Table.HeaderCell>
+							<TooltipCell
+								displayProp='commentsDisplay'
+								tooltipProp='commentsTooltip'
+								dataKey='comments'
+							/>
+						</Table.Column>
+					)}
 
-					<Table.Column verticalAlign={'middle'} align='center' sortable>
-						<Table.HeaderCell>IAB Category</Table.HeaderCell>
-						<TooltipCell
-							dataKey='iabCategoryName'
-							displayProp='iabCategoryName'
-							tooltipProp='iabCategoryName'
-						/>
-					</Table.Column>
+					{visibleVideoColumns.includes('iabCategory') && (
+						<Table.Column verticalAlign={'middle'} align='center' sortable>
+							<Table.HeaderCell>IAB Category</Table.HeaderCell>
+							<TooltipCell
+								dataKey='iabCategoryName'
+								displayProp='iabCategoryName'
+								tooltipProp='iabCategoryName'
+							/>
+						</Table.Column>
+					)}
 
 					{/** <Table.Column verticalAlign={'middle'} align='center' sortable>
 						<Table.HeaderCell>IAB SubCategory</Table.HeaderCell>
@@ -278,10 +271,15 @@ const VideoModal = (props) => {
 						/>
 					</Table.Column>*/}
 
-					<Table.Column verticalAlign={'middle'} minWidth={180} flexGrow={1}>
-						<Table.HeaderCell></Table.HeaderCell>
-						<ActionCell />
-					</Table.Column>
+					{visibleVideoColumns.includes('actions') && (
+						<Table.Column verticalAlign={'middle'} minWidth={180} flexGrow={1}>
+							<Table.HeaderCell></Table.HeaderCell>
+							<ActionCell
+								handleActionButtonClick={handleActionButtonClick}
+								setActionsTaken={setActionsTaken}
+							/>
+						</Table.Column>
+					)}
 				</Table>
 			</Modal.Body>
 			<Modal.Footer>

@@ -1,9 +1,8 @@
 import React from 'react'
 import { Pie } from 'react-chartjs-2'
+import { accentColor } from '../../../../../assets/jss/colorContants'
 
 const CustomPie = ({ data, title }) => {
-	let size = 300
-
 	const chartData = {
 		labels: [
 			`Target (${data.legendData[0]})`,
@@ -14,7 +13,7 @@ const CustomPie = ({ data, title }) => {
 			{
 				data: data.data,
 				//	backgroundColor: ['#aeef00', 'yellow', '#ef4100']
-				backgroundColor: ['#aeef00', 'white', '#ef00ae']
+				backgroundColor: [accentColor, 'white', 'lightgrey']
 				//	hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
 			}
 		]

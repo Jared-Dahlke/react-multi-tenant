@@ -9,7 +9,9 @@ import {
 	SET_CHANNELS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_CHANNELS_IS_LOADING,
-	SET_VIDEOS_IS_LOADING
+	SET_VIDEOS_IS_LOADING,
+	SET_VISIBLE_CHANNEL_COLUMNS,
+	SET_VISIBLE_VIDEO_COLUMNS
 } from '../../action-types/engage/listBuilder'
 
 import {
@@ -66,6 +68,20 @@ export function setVideos(videos) {
 	return {
 		type: SET_VIDEOS,
 		videos
+	}
+}
+
+export function setVisibleChannelColumns(visibleChannelColumns) {
+	return {
+		type: SET_VISIBLE_CHANNEL_COLUMNS,
+		visibleChannelColumns
+	}
+}
+
+export function setVisibleVideoColumns(visibleVideoColumns) {
+	return {
+		type: SET_VISIBLE_VIDEO_COLUMNS,
+		visibleVideoColumns
 	}
 }
 

@@ -35,3 +35,29 @@ export const listActions = {
 		text: 'Watch'
 	}
 }
+
+export const channelColumns = [
+	'image',
+	'name',
+	'createDate',
+	'ytCategory',
+	'iabCategory',
+	'videos',
+	'views',
+	'subscribers',
+	'actions'
+]
+
+export const videoColumns = [
+	'image',
+	'name',
+	'uploaded',
+	'category',
+	'likes',
+	'dislikes',
+	'views',
+	'subscribers',
+	'comments',
+	'iabCategory',
+	'actions'
+]

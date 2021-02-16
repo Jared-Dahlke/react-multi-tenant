@@ -6,8 +6,14 @@ import {
 	SET_CHANNELS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_VIDEOS_IS_LOADING,
-	SET_CHANNELS_IS_LOADING
+	SET_CHANNELS_IS_LOADING,
+	SET_VISIBLE_CHANNEL_COLUMNS,
+	SET_VISIBLE_VIDEO_COLUMNS
 } from '../../action-types/engage/listBuilder'
+import {
+	channelColumns,
+	videoColumns
+} from '../../../views/Engage/Lists/constants'
 
 export function videos(state = [], action) {
 	switch (action.type) {
@@ -64,6 +70,24 @@ export function channelsIsLoading(state = true, action) {
 	switch (action.type) {
 		case SET_CHANNELS_IS_LOADING:
 			return action.channelsIsLoading
+		default:
+			return state
+	}
+}
+
+export function visibleChannelColumns(state = channelColumns, action) {
+	switch (action.type) {
+		case SET_VISIBLE_CHANNEL_COLUMNS:
+			return action.visibleChannelColumns
+		default:
+			return state
+	}
+}
+
+export function visibleVideoColumns(state = videoColumns, action) {
+	switch (action.type) {
+		case SET_VISIBLE_VIDEO_COLUMNS:
+			return action.visibleVideoColumns
 		default:
 			return state
 	}
