@@ -8,6 +8,7 @@ import VideoModal from './components/VideoModal'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
 import BulkOperationsModal from './components/BulkOperationsModal'
+import Toggle from 'rsuite/lib/Toggle'
 import Stats from './components/Stats'
 import {
 	fetchVideos,
@@ -462,6 +463,7 @@ function ListBuilder(props) {
 
 	const [bulk, setBulk] = React.useState(false)
 	const [columnPickerShowing, setColumnPickerShowing] = React.useState(false)
+	const [viewingChannels, setViewingChannels] = React.useState(true)
 
 	const [allChannelColumns] = React.useState([
 		{ label: 'Image', id: 'image' },
@@ -525,6 +527,13 @@ function ListBuilder(props) {
 								</Grid>
 								<Grid item xs={6} align='right'>
 									<ButtonToolbar>
+										<Toggle
+											onChange={(val) => setViewingChannels(!val)}
+											size='xs'
+											checkedChildren='Videos'
+											unCheckedChildren='Channels'
+										/>
+
 										<Button
 											size='xs'
 											onClick={() => setColumnPickerShowing(true)}
@@ -605,21 +614,23 @@ function ListBuilder(props) {
 						handleApplyFiltersButtonClick={handleApplyFiltersButtonClick}
 					/>
 
-					<ChannelsTable
-						setCurrentChannelsSort={setCurrentChannelsSort}
-						currentChannelsSort={currentChannelsSort}
-						channelsHasNextPage={props.channelsHasNextPage}
-						channelsIsLoading={props.channelsIsLoading}
-						items={props.channels}
-						incrementPage={() => {
-							if (!props.channelsIsLoading) {
-								setCurrentPage((prevState) => prevState + 1)
-							}
-						}}
-						handleActionButtonClick={handleActionButtonClick}
-						handleVideosClick={handleVideosClick}
-						visibleChannelColumns={props.visibleChannelColumns}
-					/>
+					{viewingChannels && (
+						<ChannelsTable
+							setCurrentChannelsSort={setCurrentChannelsSort}
+							currentChannelsSort={currentChannelsSort}
+							channelsHasNextPage={props.channelsHasNextPage}
+							channelsIsLoading={props.channelsIsLoading}
+							items={props.channels}
+							incrementPage={() => {
+								if (!props.channelsIsLoading) {
+									setCurrentPage((prevState) => prevState + 1)
+								}
+							}}
+							handleActionButtonClick={handleActionButtonClick}
+							handleVideosClick={handleVideosClick}
+							visibleChannelColumns={props.visibleChannelColumns}
+						/>
+					)}
 
 					<VideoModal
 						visibleVideoColumns={props.visibleVideoColumns}
