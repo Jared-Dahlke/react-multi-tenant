@@ -33,4 +33,4 @@ steps:
       - 'managed'
       - '--allow-unauthenticated'
 # max timeout per Google is 24h
-timeout: 1h
+timeout: 3600s
