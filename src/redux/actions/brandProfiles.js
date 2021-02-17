@@ -261,7 +261,7 @@ export const createBrandProfile = () => {
 						)
 					})
 
-					response.data.industryVerticalId = -1
+					response.data.industryVerticalId = null
 					let copy = JSON.parse(JSON.stringify(response.data))
 					dispatch(addBrandProfile(copy))
 					dispatch(setBrandProfileCreating(false))
@@ -350,6 +350,9 @@ export const patchBrandProfileBasicInfo = (brandProfile) => {
 		dispatch(setBrandProfiles(profiles))
 
 		brandProfile.accountId = getState().currentAccountId
+		if (!brandProfile.industryVerticalId) {
+			delete brandProfile.industryVerticalId
+		}
 		let url = apiBase + `/brand-profile/${brandProfile.brandProfileId}`
 		const result = await axios.patch(url, brandProfile)
 		if (result.status === 200) {
@@ -384,15 +387,15 @@ export const patchBrandProfileCategories = (data) => {
 		delete category.contentCategory
 		delete category.contentCategoryResponseName
 		delete category.brandProfileId
-		if (!category.contentCategoryResponseId) {
-			category.contentCategoryResponseId = -1
-		}
 	}
 
 	let url = apiBase + `/brand-profile/${brandProfileId}/categories`
 	return categoriesQueue.wrap(async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
-		const result = await axios.patch(url, categories)
+		const result = await axios.patch(
+			url,
+			categories.filter((cat) => cat.contentCategoryResponseId)
+		)
 		if (result.status === 201 || result.status === 200) {
 			dispatch(setBrandProfileSaving(false))
 			dispatch(setBrandProfileSaved(true))

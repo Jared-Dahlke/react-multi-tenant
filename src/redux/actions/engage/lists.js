@@ -43,15 +43,20 @@ export function fetchLists(accountId) {
 	fetchListsRequest = axios.CancelToken.source()
 
 	let url = apiBase + `/account/${accountId}/smart-list`
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		dispatch(setIsFetchingLists(true))
 
 		let result = []
 
+		let brandProfiles = getState().brandProfiles.map(
+			(brandProfile) => brandProfile.brandProfileId
+		)
+
 		try {
 			result = await defaultAxios({
-				method: 'GET',
+				method: 'POST',
 				url: url,
+				data: brandProfiles,
 				cancelToken: fetchListsRequest.token
 			})
 		} catch (error) {

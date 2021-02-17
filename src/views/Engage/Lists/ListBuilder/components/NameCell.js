@@ -25,7 +25,7 @@ export const NameCell = ({
 			style={{ align: 'center', padding: 5 }}
 		>
 			<Whisper
-				placement={'bottom'}
+				placement={'top'}
 				trigger='hover'
 				speaker={<Tooltip>{rowData.nameTooltip}</Tooltip>}
 			>

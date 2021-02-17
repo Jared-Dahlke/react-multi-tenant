@@ -207,7 +207,7 @@ export function fetchSiteData(accountId) {
 
 			dispatch(usersFetchData(accountId))
 			dispatch(rolesPermissionsFetchData())
-			dispatch(fetchBrandProfiles(accountId))
+			await dispatch(fetchBrandProfiles(accountId))
 			dispatch(fetchLists(accountId))
 
 			if (config.googleAuth) {

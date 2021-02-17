@@ -140,7 +140,7 @@ export const brandProfileObjValidation = Yup.object().shape({
 	brandName: Yup.string().required(),
 	brandProfileId: Yup.number().required(),
 	twitterProfileUrl: Yup.string().required(),
-	industryVerticalId: Yup.number().required(),
+	industryVerticalId: Yup.mixed().nullable(),
 	websiteUrl: Yup.string().required(),
 	categories: Yup.array()
 		.min(1, 'each brand profile should have at least one category object')

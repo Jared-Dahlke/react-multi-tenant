@@ -6,12 +6,15 @@ import {
 	SET_VIDEOS,
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
+	REMOVE_ALL_CHANNEL_VIDEOS,
 	SET_CHANNELS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_CHANNELS_IS_LOADING,
 	SET_VIDEOS_IS_LOADING,
 	SET_VISIBLE_CHANNEL_COLUMNS,
-	SET_VISIBLE_VIDEO_COLUMNS
+	SET_VISIBLE_VIDEO_COLUMNS,
+	SET_CHANNEL_VIDEOS,
+	SET_CHANNEL_VIDEOS_HAS_NEXT_PAGE
 } from '../../action-types/engage/listBuilder'
 
 import {
@@ -64,10 +67,55 @@ export function fetchVideos(args) {
 	}
 }
 
+export function fetchChannelVideos(args) {
+	let url =
+		apiBase +
+		`/smart-list/video?size=100&page=${args.pageNumber}&versionId=${args.versionId}`
+	return async (dispatch) => {
+		dispatch(setVideosIsLoading(true))
+		try {
+			const result = await defaultAxios({
+				method: 'POST',
+				url: url,
+				data: {
+					filters: args.filters,
+					sort: args.sort
+				}
+			})
+
+			if (result.status === 200) {
+				videosSchema.validate(result.data).catch((err) => {
+					console.log(err.name, err.errors)
+					alert(
+						'we received different data from the api than expected from fetchVideos, see console log for more details'
+					)
+				})
+
+				if (result.data.length < 100) {
+					dispatch(setChannelVideosHasNextPage(false))
+				}
+				let formattedVideos = formatVideos(result.data)
+				dispatch(setChannelVideos(formattedVideos))
+				dispatch(setVideosIsLoading(false))
+			}
+		} catch (error) {
+			alert(error)
+			console.log(error)
+		}
+	}
+}
+
 export function setVideos(videos) {
 	return {
 		type: SET_VIDEOS,
 		videos
+	}
+}
+
+export function setChannelVideos(channelVideos) {
+	return {
+		type: SET_CHANNEL_VIDEOS,
+		channelVideos
 	}
 }
 
@@ -89,6 +137,13 @@ export function setChannelsHasNextPage(channelsHasNextPage) {
 	return {
 		type: SET_CHANNELS_HAS_NEXT_PAGE,
 		channelsHasNextPage
+	}
+}
+
+export function setChannelVideosHasNextPage(channelVideosHasNextPage) {
+	return {
+		type: SET_CHANNEL_VIDEOS_HAS_NEXT_PAGE,
+		channelVideosHasNextPage
 	}
 }
 
@@ -117,6 +172,13 @@ export function removeAllVideos() {
 	return {
 		type: REMOVE_ALL_VIDEOS,
 		videos: []
+	}
+}
+
+export function removeAllChannelVideos() {
+	return {
+		type: REMOVE_ALL_CHANNEL_VIDEOS,
+		channelVideos: []
 	}
 }
 

@@ -7,29 +7,31 @@ export const brandProfilesObjValidation = Yup.array().of(
 			.required(),
 		brandName: Yup.string().required(),
 		brandProfileId: Yup.number().required(),
-		industryVerticalId: Yup.number().required(),
+		industryVerticalId: Yup.mixed().nullable(),
 		twitterProfileUrl: Yup.mixed().test(
 			'my test',
 			'api sent different data than expected for twitterprofileUrl',
 			(text) => {
-				if (typeof text === 'string') {
+				if (typeof text === 'string' || !text) {
 					return true
 				} else {
 					return false
 				}
 			}
 		),
-		websiteUrl: Yup.mixed().test(
-			'my test',
-			'api sent different data than expected for websiteUrl',
-			(text) => {
-				if (typeof text === 'string') {
-					return true
-				} else {
-					return false
+		websiteUrl: Yup.mixed()
+			.test(
+				'my test',
+				'api sent different data than expected for websiteUrl',
+				(text) => {
+					if (typeof text === 'string' || !text) {
+						return true
+					} else {
+						return false
+					}
 				}
-			}
-		)
+			)
+			.nullable()
 	})
 )
 
@@ -39,7 +41,7 @@ export const basicInfoObjValidation = Yup.object().shape({
 		.required(),
 	brandName: Yup.string().required(),
 	brandProfileId: Yup.number().required(),
-	industryVerticalId: Yup.number().required(),
+	industryVerticalId: Yup.mixed().nullable(),
 	primaryKPI: Yup.mixed().test(
 		'my test',
 		'api sent different data than expected for primaryKPI',

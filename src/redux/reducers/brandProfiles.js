@@ -58,7 +58,7 @@ export function brandProfileUnderEdit(
 	state = {
 		brandName: '',
 		websiteUrl: '',
-		industryVerticalId: -1,
+		industryVerticalId: null,
 		twitterProfileUrl: '',
 		brandProfileId: '',
 		primaryKPI: '',

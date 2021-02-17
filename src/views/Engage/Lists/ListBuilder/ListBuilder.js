@@ -14,10 +14,13 @@ import Stats from './components/Stats'
 import {
 	fetchVideos,
 	fetchChannels,
+	fetchChannelVideos,
 	setVideos,
 	removeAllVideos,
+	removeAllChannelVideos,
 	removeAllChannels,
 	setChannelsHasNextPage,
+	setChannelVideosHasNextPage,
 	setVideosHasNextPage,
 	setVisibleChannelColumns,
 	setVisibleVideoColumns
@@ -52,6 +55,7 @@ const mapStateToProps = (state) => {
 		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit,
 		lists: state.engage.lists,
 		videos: state.engage.videos,
+		channelVideos: state.engage.channelVideos,
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
 		videosIsLoading: state.engage.videosIsLoading,
@@ -76,12 +80,16 @@ const mapDispatchToProps = (dispatch) => {
 		setSmartListVersionUnderEdit: (version) =>
 			dispatch(setSmartListVersionUnderEdit(version)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
+		fetchChannelVideos: (params) => dispatch(fetchChannelVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
 		postVersionBulkAction: (params) => dispatch(postVersionBulkAction(params)),
 		removeAllVideos: () => dispatch(removeAllVideos()),
 		removeAllChannels: () => dispatch(removeAllChannels()),
+		removeAllChannelVideos: () => dispatch(removeAllChannelVideos()),
 		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
+		setChannelVideosHasNextPage: (bool) =>
+			dispatch(setChannelVideosHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params)),
 		downloadExcelList: (payload) => dispatch(downloadExcelList(payload))
@@ -105,6 +113,10 @@ function ListBuilder(props) {
 
 	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
 	const [videosFetchTrigger, setVideosFetchTrigger] = React.useState(0)
+	const [
+		channelVideosFetchTrigger,
+		setChannelVideosFetchTrigger
+	] = React.useState(0)
 
 	let [parsedVersionId] = React.useState(props.match.params.versionId)
 
@@ -141,11 +153,16 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		props.removeAllChannels()
 		props.removeAllVideos()
+		props.removeAllChannelVideos()
 		setCurrentPage(1)
+		setCurrentVideoPage(1)
 	}, [])
 
 	const [currentPage, setCurrentPage] = React.useState(1)
-	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
+	const [currentVideoPage, setCurrentVideoPage] = React.useState(1)
+	const [currentChannelVideoPage, setCurrentChannelVideoPage] = React.useState(
+		1
+	)
 
 	React.useEffect(() => {
 		let params = {
@@ -176,35 +193,34 @@ function ListBuilder(props) {
 	}, [currentVideosSort])
 
 	React.useEffect(() => {
-		if (currentVideoPage > 0 && viewingVideosForChannel) {
+		console.log('firing fetchChannelVideos effect')
+		if (viewingVideosForChannel) {
 			let params = {
 				versionId: parsedVersionId,
-				pageNumber: currentVideoPage,
+				pageNumber: currentChannelVideoPage,
 				filters: {
 					...filterState,
 					channelId: viewingVideosForChannel.id
 				},
 				sort: currentVideosSort
 			}
-			props.fetchVideos(params)
+			props.fetchChannelVideos(params)
 		}
-	}, [currentVideoPage, viewingVideosForChannel, videosFetchTrigger])
+	}, [currentChannelVideoPage, channelVideosFetchTrigger])
 
 	const [viewingChannels, setViewingChannels] = React.useState(true)
 
 	React.useEffect(() => {
-		if (!viewingChannels) {
-			let params = {
-				versionId: parsedVersionId,
-				pageNumber: currentVideoPage,
-				filters: {
-					...filterState
-					//channelId: viewingVideosForChannel.id
-				},
-				sort: currentVideosSort
-			}
-			props.fetchVideos(params)
+		console.log('firing fetchVideos effect')
+		let params = {
+			versionId: parsedVersionId,
+			pageNumber: currentVideoPage,
+			filters: {
+				...filterState
+			},
+			sort: currentVideosSort
 		}
+		props.fetchVideos(params)
 	}, [currentVideoPage, videosFetchTrigger])
 
 	const filters = {
@@ -222,11 +238,9 @@ function ListBuilder(props) {
 		props.setSmartListStatsLoading(true)
 		let unSelecting = item.actionId === actionId
 		let versionId = parsedVersionId
-		let oldItem = JSON.parse(JSON.stringify(item))
 
 		if (unSelecting) {
 			delete item.actionId
-			//	updateStats(actionId, false, item, oldItem.actionId)
 			let _args = {
 				versionId: versionId,
 				id: item.id
@@ -427,9 +441,12 @@ function ListBuilder(props) {
 	const handleApplyFiltersButtonClick = () => {
 		props.removeAllChannels()
 		props.removeAllVideos()
+		props.removeAllChannelVideos()
 		props.setChannelsHasNextPage(true)
+		props.setVideosHasNextPage(true)
 		setCurrentPage(1)
 		setCurrentVideoPage(1)
+		setCurrentChannelVideoPage(1)
 		setChannelsFetchTrigger((prevState) => prevState + 1)
 		setVideosFetchTrigger((prevState) => prevState + 1)
 	}
@@ -438,22 +455,23 @@ function ListBuilder(props) {
 
 	const handleVideosClick = (channel) => {
 		setViewingVideosForChannel(channel)
-		props.removeAllVideos()
-		setCurrentVideoPage(1)
+		props.removeAllChannelVideos()
+		setChannelVideosFetchTrigger((prevState) => prevState + 1)
 		setShowVideoModal(true)
 	}
 
 	const handleChannelsToggle = (viewingVideos) => {
-		console.log(viewingVideos)
 		setViewingChannels(!viewingVideos)
-		setCurrentVideoPage(1)
+		// setCurrentVideoPage(1)
+		// setVideosFetchTrigger((prevState) => prevState + 1)
 	}
 
 	const handleVideoModalClose = () => {
 		setShowVideoModal(false)
-		props.setVideosHasNextPage(true)
+		props.setChannelVideosHasNextPage(true)
+		setCurrentChannelVideoPage(1)
 		setViewingVideosForChannel(null)
-		props.removeAllVideos()
+		props.removeAllChannelVideos()
 	}
 
 	const [isEditingName, setIsEditingName] = React.useState(false)
@@ -490,9 +508,6 @@ function ListBuilder(props) {
 	const [bulk, setBulk] = React.useState(false)
 
 	const tableHeight = 890
-
-	console.log('videos')
-	console.log(props.videos)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -670,10 +685,10 @@ function ListBuilder(props) {
 						setCurrentVideosSort={setCurrentVideosSort}
 						show={showVideoModal}
 						close={handleVideoModalClose}
-						videos={props.videos}
+						videos={props.channelVideos}
 						incrementPage={() => {
 							if (!props.videosIsLoading) {
-								setCurrentVideoPage((prevState) => prevState + 1)
+								setCurrentChannelVideoPage((prevState) => prevState + 1)
 							}
 						}}
 						handleActionButtonClick={handleActionButtonClick}
