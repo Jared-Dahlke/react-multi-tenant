@@ -42,7 +42,6 @@ import InputGroup from 'rsuite/lib/InputGroup'
 import { accentColor } from '../../../../assets/jss/colorContants'
 import Panel from 'rsuite/lib/Panel'
 import ControlLabel from 'rsuite/lib/ControlLabel'
-import ColumnPicker from './components/ColumnPicker'
 
 const mapStateToProps = (state) => {
 	return {
@@ -462,20 +461,8 @@ function ListBuilder(props) {
 	}
 
 	const [bulk, setBulk] = React.useState(false)
-	const [columnPickerShowing, setColumnPickerShowing] = React.useState(false)
-	const [viewingChannels, setViewingChannels] = React.useState(true)
 
-	const [allChannelColumns] = React.useState([
-		{ label: 'Image', id: 'image' },
-		{ label: 'Name', id: 'name' },
-		{ label: 'Create Date', id: 'createDate' },
-		{ label: 'YT Category', id: 'ytCategory' },
-		{ label: 'IAB Category', id: 'iabCategory' },
-		{ label: 'Videos', id: 'videos' },
-		{ label: 'Views', id: 'views' },
-		{ label: 'Subscribers', id: 'subscribers' },
-		{ label: 'Actions', id: 'actions' }
-	])
+	const [viewingChannels, setViewingChannels] = React.useState(true)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -533,13 +520,6 @@ function ListBuilder(props) {
 											checkedChildren='Videos'
 											unCheckedChildren='Channels'
 										/>
-
-										<Button
-											size='xs'
-											onClick={() => setColumnPickerShowing(true)}
-										>
-											Visible Columns
-										</Button>
 
 										<Button
 											size='xs'
@@ -629,13 +609,14 @@ function ListBuilder(props) {
 							handleActionButtonClick={handleActionButtonClick}
 							handleVideosClick={handleVideosClick}
 							visibleChannelColumns={props.visibleChannelColumns}
+							setVisibleChannelColumns={props.setVisibleChannelColumns}
 						/>
 					)}
 
 					<VideoModal
 						visibleVideoColumns={props.visibleVideoColumns}
 						setVisibleVideoColumns={props.setVisibleVideoColumns}
-						setColumnPickerShowing={setColumnPickerShowing}
+						//	setColumnPickerShowing={setColumnPickerShowing}
 						currentVideosSort={currentVideosSort}
 						setCurrentVideosSort={setCurrentVideosSort}
 						show={showVideoModal}
@@ -649,13 +630,6 @@ function ListBuilder(props) {
 						handleActionButtonClick={handleActionButtonClick}
 						channel={viewingVideosForChannel}
 						videosIsLoading={props.videosIsLoading}
-					/>
-					<ColumnPicker
-						show={columnPickerShowing}
-						close={() => setColumnPickerShowing(false)}
-						visibleColumns={props.visibleChannelColumns}
-						allColumns={allChannelColumns}
-						setVisibleColumns={props.setVisibleChannelColumns}
 					/>
 				</div>
 			</>
