@@ -25,7 +25,8 @@ export default function ChannelsTable({
 	currentChannelsSort,
 	setCurrentChannelsSort,
 	visibleChannelColumns,
-	setVisibleChannelColumns
+	setVisibleChannelColumns,
+	tableHeight
 }) {
 	const hasMountedRef = React.useRef(false)
 
@@ -114,7 +115,7 @@ export default function ChannelsTable({
 					}}
 					loading={items.length < 1 && channelsIsLoading}
 					virtualized
-					height={890}
+					height={tableHeight}
 					rowHeight={80}
 					data={items}
 					shouldUpdateScroll={false}

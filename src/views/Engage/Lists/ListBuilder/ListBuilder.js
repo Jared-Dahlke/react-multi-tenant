@@ -5,6 +5,7 @@ import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
 import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
+import VideosTable from './components/VideosTable'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
 import BulkOperationsModal from './components/BulkOperationsModal'
@@ -188,6 +189,23 @@ function ListBuilder(props) {
 			props.fetchVideos(params)
 		}
 	}, [currentVideoPage, viewingVideosForChannel, videosFetchTrigger])
+
+	const [viewingChannels, setViewingChannels] = React.useState(true)
+
+	React.useEffect(() => {
+		if (!viewingChannels) {
+			let params = {
+				versionId: parsedVersionId,
+				pageNumber: currentVideoPage,
+				filters: {
+					...filterState
+					//channelId: viewingVideosForChannel.id
+				},
+				sort: currentVideosSort
+			}
+			props.fetchVideos(params)
+		}
+	}, [currentVideoPage, videosFetchTrigger])
 
 	const filters = {
 		kids: 'kids',
@@ -411,15 +429,24 @@ function ListBuilder(props) {
 		props.removeAllVideos()
 		props.setChannelsHasNextPage(true)
 		setCurrentPage(1)
+		setCurrentVideoPage(1)
 		setChannelsFetchTrigger((prevState) => prevState + 1)
+		setVideosFetchTrigger((prevState) => prevState + 1)
 	}
 
 	const [showVideoModal, setShowVideoModal] = React.useState(false)
 
 	const handleVideosClick = (channel) => {
 		setViewingVideosForChannel(channel)
+		props.removeAllVideos()
 		setCurrentVideoPage(1)
 		setShowVideoModal(true)
+	}
+
+	const handleChannelsToggle = (viewingVideos) => {
+		console.log(viewingVideos)
+		setViewingChannels(!viewingVideos)
+		setCurrentVideoPage(1)
 	}
 
 	const handleVideoModalClose = () => {
@@ -462,7 +489,10 @@ function ListBuilder(props) {
 
 	const [bulk, setBulk] = React.useState(false)
 
-	const [viewingChannels, setViewingChannels] = React.useState(true)
+	const tableHeight = 890
+
+	console.log('videos')
+	console.log(props.videos)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -515,7 +545,7 @@ function ListBuilder(props) {
 								<Grid item xs={6} align='right'>
 									<ButtonToolbar>
 										<Toggle
-											onChange={(val) => setViewingChannels(!val)}
+											onChange={handleChannelsToggle}
 											size='xs'
 											checkedChildren='Videos'
 											unCheckedChildren='Channels'
@@ -596,6 +626,7 @@ function ListBuilder(props) {
 
 					{viewingChannels && (
 						<ChannelsTable
+							tableHeight={tableHeight}
 							setCurrentChannelsSort={setCurrentChannelsSort}
 							currentChannelsSort={currentChannelsSort}
 							channelsHasNextPage={props.channelsHasNextPage}
@@ -612,8 +643,26 @@ function ListBuilder(props) {
 							setVisibleChannelColumns={props.setVisibleChannelColumns}
 						/>
 					)}
+					{!viewingChannels && (
+						<VideosTable
+							tableHeight={tableHeight}
+							setVisibleVideoColumns={props.setVisibleVideoColumns}
+							currentVideosSort={currentVideosSort}
+							setCurrentVideosSort={setCurrentVideosSort}
+							videos={props.videos}
+							videosIsLoading={props.videosIsLoading}
+							visibleVideoColumns={props.visibleVideoColumns}
+							handleActionButtonClick={handleActionButtonClick}
+							incrementPage={() => {
+								if (!props.videosIsLoading) {
+									setCurrentVideoPage((prevState) => prevState + 1)
+								}
+							}}
+						/>
+					)}
 
 					<VideoModal
+						tableHeight={tableHeight - 400}
 						visibleVideoColumns={props.visibleVideoColumns}
 						setVisibleVideoColumns={props.setVisibleVideoColumns}
 						//	setColumnPickerShowing={setColumnPickerShowing}

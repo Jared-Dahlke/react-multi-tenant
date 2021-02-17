@@ -1,14 +1,8 @@
 import React from 'react'
 import Modal from 'rsuite/lib/Modal'
 import Button from 'rsuite/lib/Button'
-
 import VideosTable from './VideosTable'
 const VideoModal = (props) => {
-	//	let visibleVideoColumns = props.visibleVideoColumns
-	//let handleActionButtonClick = props.handleActionButtonClick
-
-	// We create a reference for the InfiniteLoader
-
 	return (
 		<Modal full show={props.show} onHide={props.close}>
 			<Modal.Header>
@@ -23,6 +17,7 @@ const VideoModal = (props) => {
 					visibleVideoColumns={props.visibleVideoColumns}
 					handleActionButtonClick={props.handleActionButtonClick}
 					incrementPage={props.incrementPage}
+					tableHeight={props.tableHeight}
 				/>
 			</Modal.Body>
 			<Modal.Footer>
