@@ -34,8 +34,14 @@ var queue = new cwait.TaskQueue(Promise, 1)
 var deleteQueue = new cwait.TaskQueue(Promise, 1)
 
 const apiBase = config.api.listBuilderUrl
-
 let fetchListsRequest = null
+
+const getBrandProfileNameById = (brandProfiles, brandProfileId) => {
+	let bps = JSON.parse(JSON.stringify(brandProfiles))
+	let bp = bps.filter((p) => p.brandProfileId === brandProfileId)
+	return bp[0].brandName
+}
+
 export function fetchLists(accountId) {
 	if (fetchListsRequest) {
 		fetchListsRequest.cancel()
@@ -44,13 +50,15 @@ export function fetchLists(accountId) {
 
 	let url = apiBase + `/account/${accountId}/smart-list`
 	return async (dispatch, getState) => {
-		dispatch(setIsFetchingLists(true))
-
 		let result = []
-
 		let brandProfiles = getState().brandProfiles.map(
 			(brandProfile) => brandProfile.brandProfileId
 		)
+		if (brandProfiles.length < 1) {
+			return
+		}
+
+		dispatch(setIsFetchingLists(true))
 
 		try {
 			result = await defaultAxios({
@@ -74,7 +82,12 @@ export function fetchLists(accountId) {
 
 			let versions = []
 			for (const version of result.data) {
-				//	for (const version of list.versions) {
+				version.brandProfileName = getBrandProfileNameById(
+					getState().brandProfiles,
+					version.brandProfileId
+				)
+				console.log('bp name')
+				console.log(version.brandProfileName)
 				if (version.active) {
 					version.activeText = 'Active'
 				} else {
@@ -137,7 +150,7 @@ export const postList = (data) => {
 	const list = data.list
 	const brandProfileId = data.brandProfileId
 	let url = apiBase + `/brand-profile/${brandProfileId}/smart-list`
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		dispatch(setIsPostingList(true))
 		axios
 			.post(url, list)
@@ -149,9 +162,13 @@ export const postList = (data) => {
 							'after posting this list version, we received different data from the api than expected, see console log for more details'
 						)
 					})
-
 					response.data.smartListName = list.smartListName
+					response.data.brandName = data.brandProfileName
+					response.data.brandProfileName = data.brandProfileName
+					let listsCopy = JSON.parse(JSON.stringify(getState().engage.lists))
+					listsCopy.push(response.data)
 					dispatch(setSmartListVersionUnderEdit(response.data))
+					dispatch(setLists(listsCopy))
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 					setTimeout(() => {

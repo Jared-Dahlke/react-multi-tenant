@@ -63,7 +63,8 @@ const mapStateToProps = (state) => {
 		videosHasNextPage: state.engage.videosHasNextPage,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
-		currentAccountId: state.currentAccountId
+		currentAccountId: state.currentAccountId,
+		brandProfiles: state.brandProfiles
 	}
 }
 
@@ -100,10 +101,16 @@ function ListBuilder(props) {
 	const history = useHistory()
 
 	let fetchLists = props.fetchLists
+	let brandProfiles = props.brandProfiles
 	let currentAccountId = props.currentAccountId
 	let [listsFetched, setListsFetched] = React.useState(false)
 	React.useEffect(() => {
-		if (!listsFetched && currentAccountId) {
+		if (
+			!listsFetched &&
+			currentAccountId &&
+			brandProfiles &&
+			brandProfiles.length > 0
+		) {
 			fetchLists(currentAccountId)
 			setListsFetched(true)
 		}
@@ -120,7 +127,7 @@ function ListBuilder(props) {
 
 	let [parsedVersionId] = React.useState(props.match.params.versionId)
 
-	if (!parsedVersionId || isNaN(parsedVersionId)) {
+	if (!props.match.params.versionId) {
 		history.push(routes.app.engage.lists.lists.path)
 	}
 
@@ -448,6 +455,8 @@ function ListBuilder(props) {
 		}
 	}
 
+	const [currentVersion, setCurrentVersion] = React.useState({})
+
 	let lists = props.lists
 	React.useEffect(() => {
 		for (const version of props.lists) {
@@ -455,11 +464,12 @@ function ListBuilder(props) {
 				version.versionId == parsedVersionId ||
 				version.versionId === parsedVersionId
 			) {
-				props.setSmartListVersionUnderEdit(version)
+				//	props.setSmartListVersionUnderEdit(version)
+				setCurrentVersion(version)
 				setPageIsLoading(false)
 			}
 		}
-	}, [lists])
+	}, [lists, parsedVersionId])
 
 	const handleApplyFiltersButtonClick = () => {
 		props.removeAllChannels()
@@ -497,7 +507,7 @@ function ListBuilder(props) {
 
 	const [isEditingName, setIsEditingName] = React.useState(false)
 	const [smartListName, setSmartListName] = React.useState(
-		props.smartListVersionUnderEdit.smartListName
+		currentVersion.smartListName
 	)
 
 	React.useEffect(() => {
@@ -529,6 +539,9 @@ function ListBuilder(props) {
 	const [bulk, setBulk] = React.useState(false)
 
 	const tableHeight = 890
+
+	console.log('props.smartprops.smartListVersionUnderEdit')
+	console.log(props.smartListVersionUnderEdit)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -572,9 +585,7 @@ function ListBuilder(props) {
 												handleNameChange(e)
 											}}
 											disabled={!isEditingName}
-											defaultValue={
-												props.smartListVersionUnderEdit.smartListName
-											}
+											defaultValue={currentVersion?.smartListName}
 										/>
 									</InputGroup>
 								</Grid>
@@ -596,7 +607,7 @@ function ListBuilder(props) {
 											onClick={() =>
 												handleDownloadClick(
 													parsedVersionId,
-													props.smartListVersionUnderEdit.smartListName
+													currentVersion.smartListName
 												)
 											}
 										>
@@ -629,11 +640,11 @@ function ListBuilder(props) {
 								<div style={{ flex: 1 }}>
 									<p>Brand Profile:</p>
 									<p style={{ color: 'grey' }}>
-										{props.smartListVersionUnderEdit.brandName}
+										{currentVersion.brandProfileName}
 									</p>
 									<p>Objective:</p>
 									<p style={{ color: 'grey' }}>
-										{props.smartListVersionUnderEdit.objectiveName}
+										{currentVersion.objectiveName}
 									</p>
 								</div>
 							</div>
