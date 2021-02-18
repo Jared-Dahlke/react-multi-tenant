@@ -114,7 +114,7 @@ const VideosTable = (props) => {
 				>
 					Visible Columns
 				</Button>
-				{props.videos.length}
+
 				<Table
 					rowClassName={'lbtable'}
 					sortColumn={props.currentVideosSort.sortColumn}

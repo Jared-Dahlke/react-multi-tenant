@@ -8,6 +8,9 @@ export default function useOnScreen(ref) {
 	)
 
 	React.useEffect(() => {
+		if (!ref.current) {
+			return
+		}
 		observer.observe(ref.current)
 		// Remove the observer as soon as the component is unmounted
 		return () => {
