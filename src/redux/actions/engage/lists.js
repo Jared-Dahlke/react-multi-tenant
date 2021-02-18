@@ -86,8 +86,6 @@ export function fetchLists(accountId) {
 					getState().brandProfiles,
 					version.brandProfileId
 				)
-				console.log('bp name')
-				console.log(version.brandProfileName)
 				if (version.active) {
 					version.activeText = 'Active'
 				} else {

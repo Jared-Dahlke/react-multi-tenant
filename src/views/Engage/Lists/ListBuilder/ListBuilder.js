@@ -223,7 +223,6 @@ function ListBuilder(props) {
 	}, [currentChannelVideosSort])
 
 	React.useEffect(() => {
-		console.log('firing fetchChannelVideos effect')
 		if (viewingVideosForChannel) {
 			let params = {
 				versionId: parsedVersionId,
@@ -241,7 +240,6 @@ function ListBuilder(props) {
 	const [viewingChannels, setViewingChannels] = React.useState(true)
 
 	React.useEffect(() => {
-		console.log('firing fetchVideos effect')
 		let params = {
 			versionId: parsedVersionId,
 			pageNumber: currentVideoPage,
@@ -539,9 +537,6 @@ function ListBuilder(props) {
 	const [bulk, setBulk] = React.useState(false)
 
 	const tableHeight = 890
-
-	console.log('props.smartprops.smartListVersionUnderEdit')
-	console.log(props.smartListVersionUnderEdit)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
