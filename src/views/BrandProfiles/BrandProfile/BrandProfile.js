@@ -17,6 +17,7 @@ import { useScroll } from 'react-scroll-hooks'
 import Steps from 'rsuite/lib/Steps'
 import useOnScreen from './useOnScreen'
 import Loader from 'rsuite/lib/Loader'
+import { perms, userCan, UserCan } from '../../../Can'
 
 const mapStateToProps = (state) => {
 	return {
@@ -197,28 +198,37 @@ function BrandProfile(props) {
 										: 'wait'
 								}
 							/>
-							<Steps.Item
-								title='Categories'
-								onClick={() =>
-									handleStepsClick(brandProfileSteps.categories, categoriesRef)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.categories
-										? 'process'
-										: 'wait'
-								}
-							/>
-							<Steps.Item
-								title='Topics'
-								onClick={() =>
-									handleStepsClick(brandProfileSteps.topics, topicsRef)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.topics ? 'process' : 'wait'
-								}
-							/>
+
+							{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
+								<Steps.Item
+									title='Categories'
+									onClick={() =>
+										handleStepsClick(
+											brandProfileSteps.categories,
+											categoriesRef
+										)
+									}
+									style={{ cursor: 'pointer' }}
+									status={
+										activeStep === brandProfileSteps.categories
+											? 'process'
+											: 'wait'
+									}
+								/>
+							)}
+
+							{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
+								<Steps.Item
+									title='Topics'
+									onClick={() =>
+										handleStepsClick(brandProfileSteps.topics, topicsRef)
+									}
+									style={{ cursor: 'pointer' }}
+									status={
+										activeStep === brandProfileSteps.topics ? 'process' : 'wait'
+									}
+								/>
+							)}
 							<Steps.Item
 								title='Questions'
 								onClick={() =>
@@ -301,20 +311,27 @@ function BrandProfile(props) {
 										/>
 									</animated.div>
 								</div>
-								<div ref={categoriesRef} style={{ marginTop: 60 }}>
-									<animated.div style={categoriesProps}>
-										<Categories
-											brandProfileId={props.match.params.brandProfileId}
-										/>
-									</animated.div>
-								</div>
-								<div ref={topicsRef} style={{ marginTop: 60 }}>
-									<animated.div style={topicsProps}>
-										<Topics
-											brandProfileId={props.match.params.brandProfileId}
-										/>
-									</animated.div>
-								</div>
+
+								{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
+									<div ref={categoriesRef} style={{ marginTop: 60 }}>
+										<animated.div style={categoriesProps}>
+											<Categories
+												brandProfileId={props.match.params.brandProfileId}
+											/>
+										</animated.div>
+									</div>
+								)}
+
+								{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
+									<div ref={topicsRef} style={{ marginTop: 60 }}>
+										<animated.div style={topicsProps}>
+											<Topics
+												brandProfileId={props.match.params.brandProfileId}
+											/>
+										</animated.div>
+									</div>
+								)}
+
 								<div ref={questionsRef} style={{ marginTop: 60 }}>
 									<animated.div style={questionsProps}>
 										<Questions
