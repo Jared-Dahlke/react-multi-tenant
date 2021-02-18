@@ -14,7 +14,7 @@ function ChannelResearchTemp(props) {
 			<Hidden only={['sm', 'xs']}>
 				<iframe
 					className={classes.iframe}
-					src='https://datastudio.google.com/embed/reporting/1c7y-ayVXrgmrkfPEe1bw2kJDmRKxnc5b/page/Fs5KB'
+					src='https://platform.datorama.com/external/dashboard?embedpage=ea166473-1999-44cf-934c-bbcccca4ee9d'
 					title='Brand Mentality'
 				>
 					<p>Your browser does not support iframes.</p>

@@ -5,17 +5,22 @@ import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
 import Button from 'rsuite/lib/Button'
 import VideoModal from './components/VideoModal'
+import VideosTable from './components/VideosTable'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
 import BulkOperationsModal from './components/BulkOperationsModal'
+import Toggle from 'rsuite/lib/Toggle'
 import Stats from './components/Stats'
 import {
 	fetchVideos,
 	fetchChannels,
+	fetchChannelVideos,
 	setVideos,
 	removeAllVideos,
+	removeAllChannelVideos,
 	removeAllChannels,
 	setChannelsHasNextPage,
+	setChannelVideosHasNextPage,
 	setVideosHasNextPage,
 	setVisibleChannelColumns,
 	setVisibleVideoColumns
@@ -41,7 +46,6 @@ import InputGroup from 'rsuite/lib/InputGroup'
 import { accentColor } from '../../../../assets/jss/colorContants'
 import Panel from 'rsuite/lib/Panel'
 import ControlLabel from 'rsuite/lib/ControlLabel'
-import ColumnPicker from './components/ColumnPicker'
 
 const mapStateToProps = (state) => {
 	return {
@@ -51,6 +55,7 @@ const mapStateToProps = (state) => {
 		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit,
 		lists: state.engage.lists,
 		videos: state.engage.videos,
+		channelVideos: state.engage.channelVideos,
 		channels: state.engage.channels,
 		channelsIsLoading: state.engage.channelsIsLoading,
 		videosIsLoading: state.engage.videosIsLoading,
@@ -58,7 +63,8 @@ const mapStateToProps = (state) => {
 		videosHasNextPage: state.engage.videosHasNextPage,
 		isDownloadingExcel: state.engage.isDownloadingExcel,
 		isDownloadingExcelVersionId: state.engage.isDownloadingExcelVersionId,
-		currentAccountId: state.currentAccountId
+		currentAccountId: state.currentAccountId,
+		brandProfiles: state.brandProfiles
 	}
 }
 
@@ -75,12 +81,16 @@ const mapDispatchToProps = (dispatch) => {
 		setSmartListVersionUnderEdit: (version) =>
 			dispatch(setSmartListVersionUnderEdit(version)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
+		fetchChannelVideos: (params) => dispatch(fetchChannelVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
 		patchVersionData: (params) => dispatch(patchVersionData(params)),
 		postVersionBulkAction: (params) => dispatch(postVersionBulkAction(params)),
 		removeAllVideos: () => dispatch(removeAllVideos()),
 		removeAllChannels: () => dispatch(removeAllChannels()),
+		removeAllChannelVideos: () => dispatch(removeAllChannelVideos()),
 		setChannelsHasNextPage: (bool) => dispatch(setChannelsHasNextPage(bool)),
+		setChannelVideosHasNextPage: (bool) =>
+			dispatch(setChannelVideosHasNextPage(bool)),
 		setVideosHasNextPage: (bool) => dispatch(setVideosHasNextPage(bool)),
 		deleteVersionDataItem: (params) => dispatch(deleteVersionDataItem(params)),
 		downloadExcelList: (payload) => dispatch(downloadExcelList(payload))
@@ -91,10 +101,16 @@ function ListBuilder(props) {
 	const history = useHistory()
 
 	let fetchLists = props.fetchLists
+	let brandProfiles = props.brandProfiles
 	let currentAccountId = props.currentAccountId
 	let [listsFetched, setListsFetched] = React.useState(false)
 	React.useEffect(() => {
-		if (!listsFetched && currentAccountId) {
+		if (
+			!listsFetched &&
+			currentAccountId &&
+			brandProfiles &&
+			brandProfiles.length > 0
+		) {
 			fetchLists(currentAccountId)
 			setListsFetched(true)
 		}
@@ -104,10 +120,14 @@ function ListBuilder(props) {
 
 	const [channelsFetchTrigger, setChannelsFetchTrigger] = React.useState(0)
 	const [videosFetchTrigger, setVideosFetchTrigger] = React.useState(0)
+	const [
+		channelVideosFetchTrigger,
+		setChannelVideosFetchTrigger
+	] = React.useState(0)
 
 	let [parsedVersionId] = React.useState(props.match.params.versionId)
 
-	if (!parsedVersionId || isNaN(parsedVersionId)) {
+	if (!props.match.params.versionId) {
 		history.push(routes.app.engage.lists.lists.path)
 	}
 
@@ -117,6 +137,14 @@ function ListBuilder(props) {
 	})
 
 	const [currentVideosSort, setCurrentVideosSort] = React.useState({
+		sortColumn: 'views',
+		sortType: 'desc'
+	})
+
+	const [
+		currentChannelVideosSort,
+		setCurrentChannelVideosSort
+	] = React.useState({
 		sortColumn: 'views',
 		sortType: 'desc'
 	})
@@ -140,11 +168,16 @@ function ListBuilder(props) {
 	React.useEffect(() => {
 		props.removeAllChannels()
 		props.removeAllVideos()
+		props.removeAllChannelVideos()
 		setCurrentPage(1)
+		setCurrentVideoPage(1)
 	}, [])
 
 	const [currentPage, setCurrentPage] = React.useState(1)
-	const [currentVideoPage, setCurrentVideoPage] = React.useState(0)
+	const [currentVideoPage, setCurrentVideoPage] = React.useState(1)
+	const [currentChannelVideoPage, setCurrentChannelVideoPage] = React.useState(
+		1
+	)
 
 	React.useEffect(() => {
 		let params = {
@@ -159,12 +192,18 @@ function ListBuilder(props) {
 	const [mounted, setMounted] = React.useState(false)
 	React.useEffect(() => {
 		if (mounted) {
-			handleApplyFiltersButtonClick()
+			props.removeAllChannels()
+			props.setChannelsHasNextPage(true)
+			setCurrentPage(1)
+			setChannelsFetchTrigger((prevState) => prevState + 1)
 		}
 		setMounted(true)
 	}, [currentChannelsSort])
 
 	const [mountedForVideos, setMountedForVideos] = React.useState(false)
+	const [mountedForChannelVideos, setMountedForChannelVideos] = React.useState(
+		false
+	)
 	React.useEffect(() => {
 		if (mountedForVideos) {
 			props.removeAllVideos()
@@ -175,19 +214,44 @@ function ListBuilder(props) {
 	}, [currentVideosSort])
 
 	React.useEffect(() => {
-		if (currentVideoPage > 0 && viewingVideosForChannel) {
+		if (mountedForChannelVideos) {
+			props.removeAllChannelVideos()
+			setCurrentChannelVideoPage(1)
+			setChannelVideosFetchTrigger((prevState) => prevState + 1)
+		}
+		setMountedForChannelVideos(true)
+	}, [currentChannelVideosSort])
+
+	React.useEffect(() => {
+		console.log('firing fetchChannelVideos effect')
+		if (viewingVideosForChannel) {
 			let params = {
 				versionId: parsedVersionId,
-				pageNumber: currentVideoPage,
+				pageNumber: currentChannelVideoPage,
 				filters: {
 					...filterState,
 					channelId: viewingVideosForChannel.id
 				},
-				sort: currentVideosSort
+				sort: currentChannelVideosSort
 			}
-			props.fetchVideos(params)
+			props.fetchChannelVideos(params)
 		}
-	}, [currentVideoPage, viewingVideosForChannel, videosFetchTrigger])
+	}, [currentChannelVideoPage, channelVideosFetchTrigger])
+
+	const [viewingChannels, setViewingChannels] = React.useState(true)
+
+	React.useEffect(() => {
+		console.log('firing fetchVideos effect')
+		let params = {
+			versionId: parsedVersionId,
+			pageNumber: currentVideoPage,
+			filters: {
+				...filterState
+			},
+			sort: currentVideosSort
+		}
+		props.fetchVideos(params)
+	}, [currentVideoPage, videosFetchTrigger])
 
 	const filters = {
 		kids: 'kids',
@@ -204,11 +268,9 @@ function ListBuilder(props) {
 		props.setSmartListStatsLoading(true)
 		let unSelecting = item.actionId === actionId
 		let versionId = parsedVersionId
-		let oldItem = JSON.parse(JSON.stringify(item))
 
 		if (unSelecting) {
 			delete item.actionId
-			//	updateStats(actionId, false, item, oldItem.actionId)
 			let _args = {
 				versionId: versionId,
 				id: item.id
@@ -393,6 +455,8 @@ function ListBuilder(props) {
 		}
 	}
 
+	const [currentVersion, setCurrentVersion] = React.useState({})
+
 	let lists = props.lists
 	React.useEffect(() => {
 		for (const version of props.lists) {
@@ -400,38 +464,50 @@ function ListBuilder(props) {
 				version.versionId == parsedVersionId ||
 				version.versionId === parsedVersionId
 			) {
-				props.setSmartListVersionUnderEdit(version)
+				//	props.setSmartListVersionUnderEdit(version)
+				setCurrentVersion(version)
 				setPageIsLoading(false)
 			}
 		}
-	}, [lists])
+	}, [lists, parsedVersionId])
 
 	const handleApplyFiltersButtonClick = () => {
 		props.removeAllChannels()
 		props.removeAllVideos()
+		props.removeAllChannelVideos()
 		props.setChannelsHasNextPage(true)
+		props.setVideosHasNextPage(true)
 		setCurrentPage(1)
+		setCurrentVideoPage(1)
+		setCurrentChannelVideoPage(1)
 		setChannelsFetchTrigger((prevState) => prevState + 1)
+		setVideosFetchTrigger((prevState) => prevState + 1)
 	}
 
 	const [showVideoModal, setShowVideoModal] = React.useState(false)
 
 	const handleVideosClick = (channel) => {
 		setViewingVideosForChannel(channel)
-		setCurrentVideoPage(1)
+		props.removeAllChannelVideos()
+		setChannelVideosFetchTrigger((prevState) => prevState + 1)
 		setShowVideoModal(true)
+	}
+
+	const handleChannelsToggle = (viewingVideos) => {
+		setViewingChannels(!viewingVideos)
 	}
 
 	const handleVideoModalClose = () => {
 		setShowVideoModal(false)
-		props.setVideosHasNextPage(true)
+		props.setChannelVideosHasNextPage(true)
+		setCurrentChannelVideoPage(1)
 		setViewingVideosForChannel(null)
-		props.removeAllVideos()
+		props.removeAllChannelVideos()
 	}
 
 	const [isEditingName, setIsEditingName] = React.useState(false)
 	const [smartListName, setSmartListName] = React.useState(
-		props.smartListVersionUnderEdit.smartListName
+		currentVersion.smartListName
 	)
 
 	React.useEffect(() => {
@@ -461,19 +537,11 @@ function ListBuilder(props) {
 	}
 
 	const [bulk, setBulk] = React.useState(false)
-	const [columnPickerShowing, setColumnPickerShowing] = React.useState(false)
 
-	const [allChannelColumns] = React.useState([
-		{ label: 'Image', id: 'image' },
-		{ label: 'Name', id: 'name' },
-		{ label: 'Create Date', id: 'createDate' },
-		{ label: 'YT Category', id: 'ytCategory' },
-		{ label: 'IAB Category', id: 'iabCategory' },
-		{ label: 'Videos', id: 'videos' },
-		{ label: 'Views', id: 'views' },
-		{ label: 'Subscribers', id: 'subscribers' },
-		{ label: 'Actions', id: 'actions' }
-	])
+	const tableHeight = 890
+
+	console.log('props.smartprops.smartListVersionUnderEdit')
+	console.log(props.smartListVersionUnderEdit)
 
 	if (pageIsLoading) {
 		return <Loader center content='Loading...' vertical size='lg' />
@@ -517,20 +585,18 @@ function ListBuilder(props) {
 												handleNameChange(e)
 											}}
 											disabled={!isEditingName}
-											defaultValue={
-												props.smartListVersionUnderEdit.smartListName
-											}
+											defaultValue={currentVersion?.smartListName}
 										/>
 									</InputGroup>
 								</Grid>
 								<Grid item xs={6} align='right'>
 									<ButtonToolbar>
-										<Button
+										<Toggle
+											onChange={handleChannelsToggle}
 											size='xs'
-											onClick={() => setColumnPickerShowing(true)}
-										>
-											Visible Columns
-										</Button>
+											checkedChildren='Videos'
+											unCheckedChildren='Channels'
+										/>
 
 										<Button
 											size='xs'
@@ -541,7 +607,7 @@ function ListBuilder(props) {
 											onClick={() =>
 												handleDownloadClick(
 													parsedVersionId,
-													props.smartListVersionUnderEdit.smartListName
+													currentVersion.smartListName
 												)
 											}
 										>
@@ -574,11 +640,11 @@ function ListBuilder(props) {
 								<div style={{ flex: 1 }}>
 									<p>Brand Profile:</p>
 									<p style={{ color: 'grey' }}>
-										{props.smartListVersionUnderEdit.brandName}
+										{currentVersion.brandProfileName}
 									</p>
 									<p>Objective:</p>
 									<p style={{ color: 'grey' }}>
-										{props.smartListVersionUnderEdit.objectiveName}
+										{currentVersion.objectiveName}
 									</p>
 								</div>
 							</div>
@@ -605,46 +671,61 @@ function ListBuilder(props) {
 						handleApplyFiltersButtonClick={handleApplyFiltersButtonClick}
 					/>
 
-					<ChannelsTable
-						setCurrentChannelsSort={setCurrentChannelsSort}
-						currentChannelsSort={currentChannelsSort}
-						channelsHasNextPage={props.channelsHasNextPage}
-						channelsIsLoading={props.channelsIsLoading}
-						items={props.channels}
-						incrementPage={() => {
-							if (!props.channelsIsLoading) {
-								setCurrentPage((prevState) => prevState + 1)
-							}
-						}}
-						handleActionButtonClick={handleActionButtonClick}
-						handleVideosClick={handleVideosClick}
-						visibleChannelColumns={props.visibleChannelColumns}
-					/>
+					{viewingChannels && (
+						<ChannelsTable
+							tableHeight={tableHeight}
+							setCurrentChannelsSort={setCurrentChannelsSort}
+							currentChannelsSort={currentChannelsSort}
+							channelsHasNextPage={props.channelsHasNextPage}
+							channelsIsLoading={props.channelsIsLoading}
+							items={props.channels}
+							incrementPage={() => {
+								if (!props.channelsIsLoading) {
+									setCurrentPage((prevState) => prevState + 1)
+								}
+							}}
+							handleActionButtonClick={handleActionButtonClick}
+							handleVideosClick={handleVideosClick}
+							visibleChannelColumns={props.visibleChannelColumns}
+							setVisibleChannelColumns={props.setVisibleChannelColumns}
+						/>
+					)}
+					{!viewingChannels && (
+						<VideosTable
+							tableHeight={tableHeight}
+							setVisibleVideoColumns={props.setVisibleVideoColumns}
+							currentVideosSort={currentVideosSort}
+							setCurrentVideosSort={setCurrentVideosSort}
+							videos={props.videos}
+							videosIsLoading={props.videosIsLoading}
+							visibleVideoColumns={props.visibleVideoColumns}
+							handleActionButtonClick={handleActionButtonClick}
+							incrementPage={() => {
+								if (!props.videosIsLoading) {
+									setCurrentVideoPage((prevState) => prevState + 1)
+								}
+							}}
+						/>
+					)}
 
 					<VideoModal
+						tableHeight={tableHeight - 400}
 						visibleVideoColumns={props.visibleVideoColumns}
 						setVisibleVideoColumns={props.setVisibleVideoColumns}
-						setColumnPickerShowing={setColumnPickerShowing}
-						currentVideosSort={currentVideosSort}
-						setCurrentVideosSort={setCurrentVideosSort}
+						//	setColumnPickerShowing={setColumnPickerShowing}
+						currentVideosSort={currentChannelVideosSort}
+						setCurrentVideosSort={setCurrentChannelVideosSort}
 						show={showVideoModal}
 						close={handleVideoModalClose}
-						videos={props.videos}
+						videos={props.channelVideos}
 						incrementPage={() => {
 							if (!props.videosIsLoading) {
-								setCurrentVideoPage((prevState) => prevState + 1)
+								setCurrentChannelVideoPage((prevState) => prevState + 1)
 							}
 						}}
 						handleActionButtonClick={handleActionButtonClick}
 						channel={viewingVideosForChannel}
 						videosIsLoading={props.videosIsLoading}
-					/>
-					<ColumnPicker
-						show={columnPickerShowing}
-						close={() => setColumnPickerShowing(false)}
-						visibleColumns={props.visibleChannelColumns}
-						allColumns={allChannelColumns}
-						setVisibleColumns={props.setVisibleChannelColumns}
 					/>
 				</div>
 			</>

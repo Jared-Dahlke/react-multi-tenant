@@ -64,7 +64,7 @@ const Node = (props) => {
 		props.setDisplayedTopics(copiedTopics)
 	}
 	function getNewTopicsVal(newValProposed, oldVal) {
-		if (newValProposed == oldVal) return -1
+		if (newValProposed == oldVal) return null
 		return newValProposed
 	}
 
@@ -77,7 +77,7 @@ const Node = (props) => {
 	function markSelected(topicId, value, topic) {
 		if (topic.topicId == topicId) {
 			if (topic.topicResponseId === value) {
-				value = -1
+				value = null
 			}
 			topic.topicResponseId = value
 		} else {
@@ -240,7 +240,7 @@ function TopicsTree(props) {
 
 	function unselectAll(topics) {
 		for (const topic of topics) {
-			topic.topicResponseId = -1
+			topic.topicResponseId = null
 			if (topic.children && topic.children.length > 0) {
 				unselectAll(topic.children)
 			}

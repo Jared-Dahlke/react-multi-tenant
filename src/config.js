@@ -1,7 +1,9 @@
 const development = {
 	environment: 'development',
 	api: {
-		userAccountUrl: 'http://localhost:4000',
+		//	userAccountUrl: 'http://localhost:4000',
+		userAccountUrl:
+			'https://api-cont-intell-user-account-staging-zu7blp7gxa-uw.a.run.app',
 		listBuilderUrl: 'http://localhost:4200'
 	}
 }

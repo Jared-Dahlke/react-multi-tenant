@@ -3,12 +3,15 @@ import {
 	SET_VIDEOS,
 	REMOVE_ALL_VIDEOS,
 	REMOVE_ALL_CHANNELS,
+	REMOVE_ALL_CHANNEL_VIDEOS,
 	SET_CHANNELS_HAS_NEXT_PAGE,
+	SET_CHANNEL_VIDEOS_HAS_NEXT_PAGE,
 	SET_VIDEOS_HAS_NEXT_PAGE,
 	SET_VIDEOS_IS_LOADING,
 	SET_CHANNELS_IS_LOADING,
 	SET_VISIBLE_CHANNEL_COLUMNS,
-	SET_VISIBLE_VIDEO_COLUMNS
+	SET_VISIBLE_VIDEO_COLUMNS,
+	SET_CHANNEL_VIDEOS
 } from '../../action-types/engage/listBuilder'
 import {
 	channelColumns,
@@ -21,6 +24,18 @@ export function videos(state = [], action) {
 			let currentVideos = [...state].concat(action.videos)
 			return currentVideos
 		case REMOVE_ALL_VIDEOS:
+			return []
+		default:
+			return state
+	}
+}
+
+export function channelVideos(state = [], action) {
+	switch (action.type) {
+		case SET_CHANNEL_VIDEOS:
+			let currentVideos = [...state].concat(action.channelVideos)
+			return currentVideos
+		case REMOVE_ALL_CHANNEL_VIDEOS:
 			return []
 		default:
 			return state
@@ -43,6 +58,15 @@ export function channelsHasNextPage(state = true, action) {
 	switch (action.type) {
 		case SET_CHANNELS_HAS_NEXT_PAGE:
 			return action.channelsHasNextPage
+		default:
+			return state
+	}
+}
+
+export function channelVideosHasNextPage(state = true, action) {
+	switch (action.type) {
+		case SET_CHANNEL_VIDEOS_HAS_NEXT_PAGE:
+			return action.channelVideosHasNextPage
 		default:
 			return state
 	}

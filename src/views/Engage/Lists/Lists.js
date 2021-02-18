@@ -92,6 +92,7 @@ function Lists(props) {
 	let postListSuccess = props.postListSuccess
 	React.useEffect(() => {
 		if (postListSuccess) {
+			console.log('pushing to list builder from lists')
 			let url = `/app/engage/lists/listBuilder/${props.smartListVersionUnderEdit.versionId}`
 			history.push(url)
 		}
@@ -107,9 +108,11 @@ function Lists(props) {
 	}, [])
 
 	const handleUploadNewList = () => {
+		console.log('about to push')
 		history.push(routes.app.engage.lists.uploadList.path)
 	}
 	const handleCreateNewList = () => {
+		console.log('about to push')
 		history.push(`${routes.app.engage.lists.createList.path}`, {
 			from: 'lists'
 		})

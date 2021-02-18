@@ -114,8 +114,7 @@ export const postListVersionResult = Yup.object().shape({
 		.strict(true)
 		.required(),
 	smartListName: Yup.string(),
-	objectiveName: Yup.string().required(),
-	brandProfileName: Yup.string().required()
+	objectiveName: Yup.string().required()
 })
 
 export const channelsSchema = Yup.array().of(
@@ -170,8 +169,7 @@ export const channelsSchema = Yup.array().of(
 
 export const videosSchema = Yup.array().of(
 	Yup.object().shape({
-		iabCategoryId: Yup.mixed()
-		.nullable(),
+		iabCategoryId: Yup.mixed().nullable(),
 		iabCategoryName: Yup.string().nullable(),
 		iabSubCategoryId: Yup.mixed().nullable(),
 		iabSubCategoryName: Yup.string().nullable(),
