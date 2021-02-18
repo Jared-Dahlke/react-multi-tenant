@@ -134,6 +134,14 @@ function ListBuilder(props) {
 		sortType: 'desc'
 	})
 
+	const [
+		currentChannelVideosSort,
+		setCurrentChannelVideosSort
+	] = React.useState({
+		sortColumn: 'views',
+		sortType: 'desc'
+	})
+
 	const goToListsPage = () => {
 		history.push(routes.app.engage.lists.lists.path)
 	}
@@ -177,12 +185,18 @@ function ListBuilder(props) {
 	const [mounted, setMounted] = React.useState(false)
 	React.useEffect(() => {
 		if (mounted) {
-			handleApplyFiltersButtonClick()
+			props.removeAllChannels()
+			props.setChannelsHasNextPage(true)
+			setCurrentPage(1)
+			setChannelsFetchTrigger((prevState) => prevState + 1)
 		}
 		setMounted(true)
 	}, [currentChannelsSort])
 
 	const [mountedForVideos, setMountedForVideos] = React.useState(false)
+	const [mountedForChannelVideos, setMountedForChannelVideos] = React.useState(
+		false
+	)
 	React.useEffect(() => {
 		if (mountedForVideos) {
 			props.removeAllVideos()
@@ -191,6 +205,15 @@ function ListBuilder(props) {
 		}
 		setMountedForVideos(true)
 	}, [currentVideosSort])
+
+	React.useEffect(() => {
+		if (mountedForChannelVideos) {
+			props.removeAllChannelVideos()
+			setCurrentChannelVideoPage(1)
+			setChannelVideosFetchTrigger((prevState) => prevState + 1)
+		}
+		setMountedForChannelVideos(true)
+	}, [currentChannelVideosSort])
 
 	React.useEffect(() => {
 		console.log('firing fetchChannelVideos effect')
@@ -202,7 +225,7 @@ function ListBuilder(props) {
 					...filterState,
 					channelId: viewingVideosForChannel.id
 				},
-				sort: currentVideosSort
+				sort: currentChannelVideosSort
 			}
 			props.fetchChannelVideos(params)
 		}
@@ -462,8 +485,6 @@ function ListBuilder(props) {
 
 	const handleChannelsToggle = (viewingVideos) => {
 		setViewingChannels(!viewingVideos)
-		// setCurrentVideoPage(1)
-		// setVideosFetchTrigger((prevState) => prevState + 1)
 	}
 
 	const handleVideoModalClose = () => {
@@ -681,8 +702,8 @@ function ListBuilder(props) {
 						visibleVideoColumns={props.visibleVideoColumns}
 						setVisibleVideoColumns={props.setVisibleVideoColumns}
 						//	setColumnPickerShowing={setColumnPickerShowing}
-						currentVideosSort={currentVideosSort}
-						setCurrentVideosSort={setCurrentVideosSort}
+						currentVideosSort={currentChannelVideosSort}
+						setCurrentVideosSort={setCurrentChannelVideosSort}
 						show={showVideoModal}
 						close={handleVideoModalClose}
 						videos={props.channelVideos}

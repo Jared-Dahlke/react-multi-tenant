@@ -12,6 +12,7 @@ const VideoModal = (props) => {
 				<VideosTable
 					setVisibleVideoColumns={props.setVisibleVideoColumns}
 					currentVideosSort={props.currentVideosSort}
+					setCurrentVideosSort={props.setCurrentVideosSort}
 					videos={props.videos}
 					videosIsLoading={props.videosIsLoading}
 					visibleVideoColumns={props.visibleVideoColumns}
