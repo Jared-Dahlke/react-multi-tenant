@@ -35,8 +35,8 @@ const brandProfileSteps = {
 	categories: 'categories',
 	topics: 'topics',
 	questions: 'questions',
-	scenarios: 'scenarios',
-	opinions: 'opinions'
+	opinions: 'opinions',
+	scenarios: 'scenarios'
 }
 
 function BrandProfile(props) {
@@ -231,6 +231,18 @@ function BrandProfile(props) {
 										: 'wait'
 								}
 							/>
+
+							<Steps.Item
+								title='Opinions'
+								onClick={() =>
+									handleStepsClick(brandProfileSteps.opinions, opinionsRef)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.opinions ? 'process' : 'wait'
+								}
+							/>
+
 							<Steps.Item
 								title='Scenarios'
 								onClick={() =>
@@ -241,16 +253,6 @@ function BrandProfile(props) {
 									activeStep === brandProfileSteps.scenarios
 										? 'process'
 										: 'wait'
-								}
-							/>
-							<Steps.Item
-								title='Opinions'
-								onClick={() =>
-									handleStepsClick(brandProfileSteps.opinions, opinionsRef)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.opinions ? 'process' : 'wait'
 								}
 							/>
 						</Steps>
@@ -320,16 +322,18 @@ function BrandProfile(props) {
 										/>
 									</animated.div>
 								</div>
-								<div ref={scenariosRef} style={{ marginTop: 60 }}>
-									<animated.div style={scenariosProps}>
-										<Scenarios
+
+								<div ref={opinionsRef} style={{ marginTop: 60 }}>
+									<animated.div style={opinionsProps}>
+										<Opinions
 											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
 								</div>
-								<div ref={opinionsRef} style={{ marginTop: 60 }}>
-									<animated.div style={opinionsProps}>
-										<Opinions
+
+								<div ref={scenariosRef} style={{ marginTop: 60 }}>
+									<animated.div style={scenariosProps}>
+										<Scenarios
 											brandProfileId={props.match.params.brandProfileId}
 										/>
 									</animated.div>
