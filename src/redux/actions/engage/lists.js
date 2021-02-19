@@ -55,6 +55,7 @@ export function fetchLists(accountId) {
 			(brandProfile) => brandProfile.brandProfileId
 		)
 		if (brandProfiles.length < 1) {
+			dispatch(setIsFetchingLists(false))
 			return
 		}
 
