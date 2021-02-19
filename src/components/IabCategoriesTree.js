@@ -173,15 +173,56 @@ function IabCategoriesTree(props) {
 		setIabTaxonomy(copy)
 		let newCopy = JSON.parse(JSON.stringify(copy))
 		let formatted = formatForApi(newCopy)
+		let finalFormat = flatten(formatted)
 		let params = {
-			iabCategories: formatted,
+			iabCategories: finalFormat,
 			brandProfileId: props.brandProfile.brandProfileId
 		}
 		props.patchBrandProfileIabCategories(params)
 	}
 
+	const flatten = (tree) => {
+		let arr = []
+		for (const row of tree) {
+			if (row.actionId) {
+				arr.push({ iabCategoryId: row.id, iabCategoryResponseId: row.actionId })
+			}
+			for (const child of row.children) {
+				if (child.actionId) {
+					arr.push({
+						iabCategoryId: child.id,
+						iabCategoryResponseId: child.actionId
+					})
+				}
+				if (child.children) {
+					for (const gChild of child.children) {
+						if (gChild.actionId) {
+							arr.push({
+								iabCategoryId: gChild.id,
+								iabCategoryResponseId: gChild.actionId
+							})
+						}
+						if (gChild.children) {
+							for (const ggChild of gChild.children) {
+								if (ggChild.actionId) {
+									arr.push({
+										iabCategoryId: ggChild.id,
+										iabCategoryResponseId: ggChild.actionId
+									})
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return arr
+	}
+
 	const formatForApi = (tree) => {
 		//look through each item and if marked and has children then remove actionIds from all children
+
 		for (const row of tree) {
 			if (row.actionId && row.children) {
 				for (const child of row.children) {
