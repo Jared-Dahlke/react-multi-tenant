@@ -4,6 +4,7 @@ import GridContainer from '../../../components/Grid/GridContainer'
 import GridItem from '../../../components/Grid/GridItem'
 import Topics from './components/Topics'
 import Categories from './components/Categories/Categories'
+import IabCategories from './components/IabCategories/IabCategories'
 import Scenarios from './components/Scenarios/Scenarios'
 import Opinions from './components/Opinions/Opinions'
 import Questions from './components/Questions/Questions'
@@ -34,6 +35,7 @@ const brandProfileSteps = {
 	outcomes: 'outcomes',
 	competitors: 'competitors',
 	categories: 'categories',
+	iabCategories: 'iabCategories',
 	topics: 'topics',
 	questions: 'questions',
 	opinions: 'opinions',
@@ -45,6 +47,7 @@ function BrandProfile(props) {
 	const brandInformationRef = React.useRef()
 	const outcomesRef = React.useRef()
 	const categoriesRef = React.useRef()
+	const iabCategoriesRef = React.useRef()
 	const topicsRef = React.useRef()
 	const scenariosRef = React.useRef()
 	const opinionsRef = React.useRef()
@@ -54,6 +57,7 @@ function BrandProfile(props) {
 	const outcomesVisible = useOnScreen(outcomesRef)
 	const competitorsVisible = useOnScreen(competitorsRef)
 	const categoriesVisible = useOnScreen(categoriesRef)
+	const iabCategoriesVisible = useOnScreen(iabCategoriesRef)
 	const topicsVisible = useOnScreen(topicsRef)
 	const scenariosVisible = useOnScreen(scenariosRef)
 	const opinionsVisible = useOnScreen(opinionsRef)
@@ -74,6 +78,10 @@ function BrandProfile(props) {
 		}
 		if (categoriesVisible) {
 			setActiveStep(brandProfileSteps.categories)
+			return
+		}
+		if (iabCategoriesVisible) {
+			setActiveStep(brandProfileSteps.iabCategories)
 			return
 		}
 		if (topicsVisible) {
@@ -97,13 +105,14 @@ function BrandProfile(props) {
 		outcomesVisible,
 		competitorsVisible,
 		categoriesVisible,
+		iabCategoriesVisible,
 		topicsVisible,
 		questionsVisible,
 		opinionsVisible,
 		scenariosVisible
 	])
 
-	const scrollSpeed = 90
+	const scrollSpeed = 95
 	const { scrollToElement } = useScroll({
 		scrollSpeed,
 		containerRef,
@@ -132,6 +141,10 @@ function BrandProfile(props) {
 
 	const categoriesProps = useSpring({
 		opacity: props.brandProfile.categories ? 1 : 0
+	})
+
+	const iabCategoriesProps = useSpring({
+		opacity: props.brandProfile.iabCategories ? 1 : 0
 	})
 
 	const topicsProps = useSpring({
@@ -216,6 +229,22 @@ function BrandProfile(props) {
 									}
 								/>
 							)}
+
+							<Steps.Item
+								title='IAB Categories'
+								onClick={() =>
+									handleStepsClick(
+										brandProfileSteps.iabCategories,
+										iabCategoriesRef
+									)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.iabCategories
+										? 'process'
+										: 'wait'
+								}
+							/>
 
 							{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
 								<Steps.Item
@@ -321,6 +350,14 @@ function BrandProfile(props) {
 										</animated.div>
 									</div>
 								)}
+
+								<div ref={iabCategoriesRef} style={{ marginTop: 60 }}>
+									<animated.div style={iabCategoriesProps}>
+										<IabCategories
+											brandProfileId={props.match.params.brandProfileId}
+										/>
+									</animated.div>
+								</div>
 
 								{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
 									<div ref={topicsRef} style={{ marginTop: 60 }}>

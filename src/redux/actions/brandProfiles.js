@@ -14,6 +14,7 @@ import {
 	SCENARIOS_IS_LOADING,
 	SET_BRAND_PROFILE_UNDER_EDIT,
 	SET_BRAND_PROFILE_CATEGORIES,
+	SET_BRAND_PROFILE_IAB_CATEGORIES,
 	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_TOPICS,
 	SET_BRAND_PROFILE_SCENARIOS,
@@ -130,6 +131,38 @@ export function fetchBrandProfileCategories(brandProfileId) {
 			alert(error)
 		}
 	}
+}
+
+export function fetchBrandProfileIabCategories(args) {
+	let brandProfileId = args.brandProfileId
+	let iabCategories = args.iabCategories
+	let url = apiBase + `/brand-profile/${brandProfileId}/iabCategories`
+	return async (dispatch, getState) => {
+		/*try {
+			const result = await axios.get(url)
+
+			if (result.status === 200) {
+				categoriesObjValidation.validate(result.data).catch(function(err) {
+					console.log(err.name, err.errors)
+					alert(
+						' we received different data from the api than expected while fetching brand profile categories, see console log for more details'
+					)
+				})
+				dispatch(setBrandProfileCategories(result.data))
+			}
+		} catch (error) {
+			alert(error)
+		}*/
+		const result = []
+
+		let processedIabCategories = processIabCategories(iabCategories, result)
+		dispatch(setBrandProfileIabCategories(processedIabCategories))
+	}
+}
+
+const processIabCategories = (iabCats, bpIabCats) => {
+	//loop through api results and assign to iabCategories
+	return iabCats
 }
 
 export function fetchBrandProfileTopics(brandProfileId) {
@@ -293,6 +326,13 @@ export function setBrandProfileCategories(categories) {
 	return {
 		type: SET_BRAND_PROFILE_CATEGORIES,
 		categories
+	}
+}
+
+export function setBrandProfileIabCategories(iabCategories) {
+	return {
+		type: SET_BRAND_PROFILE_IAB_CATEGORIES,
+		iabCategories
 	}
 }
 
