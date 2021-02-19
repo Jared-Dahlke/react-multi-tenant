@@ -12,7 +12,6 @@ import lodashIncludes from 'lodash/includes'
 import lodashToLower from 'lodash/toLower'
 import lodashIsEmpty from 'lodash/isEmpty'
 import { listActions } from '../views/Engage/Lists/constants'
-import toast from 'react-hot-toast'
 import { iabCategoriesFilter, iabIds } from '../staticData/iabCategories'
 import { accentColor, neutralColor } from '../assets/jss/colorContants'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
@@ -228,76 +227,6 @@ function IabCategoriesTree(props) {
 			return filterTree(search, iabTaxCopy)
 		}
 	}, [search, iabTaxonomy])
-
-	const getActionsForEndpoint = () => {
-		let iabTaxonomyCopy = JSON.parse(JSON.stringify(iabTaxonomy))
-		let actions = []
-		for (const item of iabTaxonomyCopy) {
-			if (item.actionId) {
-				//actions.push({ taxonomyId: item.id, actionId: item.actionId })
-				if (item.children) {
-					for (const child of item.children) {
-						child.actionId = null
-						if (child.children) {
-						}
-					}
-				}
-			}
-			if (item.children) {
-				for (const child of item.children) {
-					if (child.actionId) {
-						actions.push({ taxonomyId: child.id, actionId: child.actionId })
-						if (child.children) {
-							delete child.children
-						}
-					}
-					if (child.children) {
-						for (const gChild of child.children) {
-							if (gChild.actionId) {
-								actions.push({
-									taxonomyId: gChild.id,
-									actionId: gChild.actionId
-								})
-								if (gChild.children) {
-									delete gChild.children
-								}
-							}
-							if (gChild.children) {
-								for (const ggChild of gChild.children) {
-									if (ggChild.actionId) {
-										actions.push({
-											taxonomyId: ggChild.id,
-											actionId: ggChild.actionId
-										})
-										if (ggChild.children) {
-											delete ggChild.children
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return actions
-	}
-
-	const handleApplyBulkActionClick = () => {
-		let actions = getActionsForEndpoint()
-
-		if (actions.length < 1) {
-			toast.error('Please make at least one selection and try again.')
-			return
-		}
-		let params = {
-			brandProfileId: props.brandProfileId,
-			iabCategories: actions
-		}
-
-		console.log('starting save')
-		//props.postVersionBulkAction(params)
-	}
 
 	return (
 		<Grid container spacing={filterSpacing}>

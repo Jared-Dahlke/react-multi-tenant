@@ -13,7 +13,6 @@ import InputGroup from 'rsuite/lib/InputGroup'
 import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
 import FiltersLabel from './FiltersLabel'
-import Panel from 'rsuite/lib/Panel'
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 import { iabCategoriesFilter } from '../../../../../staticData/iabCategories'
 import TagPicker from 'rsuite/lib/TagPicker'
@@ -158,7 +157,7 @@ export const FiltersSideBar = ({
 											data={countriesOptions}
 											labelKey={'countryName'}
 											valueKey={'countryCode'}
-											defaultValue={['US']}
+											//defaultValue={['US']}
 											placeholder='Countries'
 											onChange={(val) => {
 												handleFilterChange(filters.countries, val)
@@ -174,7 +173,7 @@ export const FiltersSideBar = ({
 											data={languagesOptions}
 											labelKey={'languageName'}
 											valueKey={'languageCode'}
-											defaultValue={['en']}
+											//defaultValue={['en']}
 											virtualized={true}
 											placeholder='Languages'
 											onChange={(val) => {

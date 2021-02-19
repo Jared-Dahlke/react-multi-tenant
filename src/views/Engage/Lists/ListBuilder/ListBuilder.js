@@ -306,11 +306,11 @@ function ListBuilder(props) {
 	const [filterState, setFilterState] = React.useState({
 		kids: false,
 		iabCategories: [],
-		countries: [{ countryCode: 'US' }],
+		countries: [],
 		actionIds: [],
 		uploadDate: null,
 		categories: [],
-		languages: [{ languageCode: 'en' }],
+		languages: [],
 		views: {
 			min: null,
 			max: null
