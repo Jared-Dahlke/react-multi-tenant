@@ -443,6 +443,21 @@ export const patchBrandProfileCategories = (data) => {
 	})
 }
 
+export const patchBrandProfileIabCategories = (data) => {
+	let brandProfileId = data.brandProfileId
+	let iabCategories = data.iabCategories
+
+	let url = apiBase + `/brand-profile/${brandProfileId}/iabCategories`
+	return async (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
+		const result = await axios.patch(url, iabCategories)
+		if (result.status === 201 || result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
+		}
+	}
+}
+
 export const patchBrandProfileTopics = (data) => {
 	let brandProfileId = data.brandProfileId
 	let topics = data.topics

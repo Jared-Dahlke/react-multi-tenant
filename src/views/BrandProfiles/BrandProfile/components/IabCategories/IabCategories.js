@@ -37,33 +37,6 @@ function IabCategories(props) {
 		}
 	}, [])
 
-	const handleSetBrandProfiles = (categories) => {
-		let categoriesCopy = JSON.parse(JSON.stringify(categories))
-		//	brandProfile.categories = categories
-		props.setBrandProfileCategories(categoriesCopy)
-	}
-
-	const handleCategorySelect = (
-		contentCategoryId,
-		contentCategoryResponseId
-	) => {
-		let data = {
-			contentCategoryId: contentCategoryId,
-			contentCategoryResponseId: contentCategoryResponseId
-		}
-		let newCategories = JSON.parse(
-			JSON.stringify(props.brandProfile.categories)
-		)
-		setCategoryAction(data, newCategories)
-		handleSetBrandProfiles(newCategories)
-		let newFinalCategories = JSON.parse(JSON.stringify(newCategories))
-		let params = {
-			categories: newFinalCategories,
-			brandProfileId: props.brandProfile.brandProfileId
-		}
-		props.patchBrandProfileCategories(params)
-	}
-
 	return (
 		<Panel header='IAB Categories' bordered>
 			<IabCategoriesTree />

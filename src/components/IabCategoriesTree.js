@@ -5,7 +5,6 @@ import Icon from 'rsuite/lib/Icon'
 import Input from 'rsuite/lib/Input'
 import Tree from 'rsuite/lib/Tree'
 import Grid from '@material-ui/core/Grid'
-import CustomPanel from '../components/CustomPanel'
 import Button from 'rsuite/lib/Button'
 import InputGroup from 'rsuite/lib/InputGroup'
 import lodashFilter from 'lodash/filter'
@@ -17,18 +16,19 @@ import toast from 'react-hot-toast'
 import { iabCategoriesFilter, iabIds } from '../staticData/iabCategories'
 import { accentColor, neutralColor } from '../assets/jss/colorContants'
 import ButtonGroup from 'rsuite/lib/ButtonGroup'
-import { postVersionBulkAction } from '../redux/actions/engage/lists'
+import { patchBrandProfileIabCategories } from '../redux/actions/brandProfiles'
 const filterSpacing = 1
 
 const mapStateToProps = (state) => {
 	return {
-		postVersionBulkActionLoading: state.engage.postVersionBulkActionLoading
+		brandProfile: state.brandProfileUnderEdit
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		postVersionBulkAction: (params) => dispatch(postVersionBulkAction(params))
+		patchBrandProfileIabCategories: (params) =>
+			dispatch(patchBrandProfileIabCategories(params))
 	}
 }
 
@@ -174,8 +174,11 @@ function IabCategoriesTree(props) {
 		setIabTaxonomy(copy)
 		let newCopy = JSON.parse(JSON.stringify(copy))
 		let formatted = formatForApi(newCopy)
-		console.log('tree:')
-		console.log(formatted)
+		let params = {
+			iabCategories: formatted,
+			brandProfileId: props.brandProfile.brandProfileId
+		}
+		props.patchBrandProfileIabCategories(params)
 	}
 
 	const formatForApi = (tree) => {
