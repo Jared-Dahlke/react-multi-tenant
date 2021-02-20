@@ -156,12 +156,53 @@ export function fetchBrandProfileIabCategories(args) {
 					iabCategories,
 					result.data
 				)
-				dispatch(setBrandProfileIabCategories(processedIabCategories))
+				let cascaded = cascadeCats(processedIabCategories)
+				dispatch(setBrandProfileIabCategories(cascaded))
 			} else {
 				dispatch(setBrandProfileIabCategories(iabCategories))
 			}
 		}
 	}
+}
+
+const cascadeCats = (cats) => {
+	for (const row of cats) {
+		if (row.actionId && row.children) {
+			for (const child of row.children) {
+				child.actionId = row.actionId
+			}
+		}
+	}
+
+	for (const row of cats) {
+		if (row.children) {
+			for (const child of row.children) {
+				if (child.children && child.actionId) {
+					for (const gChild of child.children) {
+						gChild.actionId = child.actionId
+					}
+				}
+			}
+		}
+	}
+
+	for (const row of cats) {
+		if (row.children) {
+			for (const child of row.children) {
+				if (child.children) {
+					for (const gChild of child.children) {
+						if (gChild.children && gChild.actionId) {
+							for (const ggChild of gChild.children) {
+								ggChild.actionId = gChild.actionId
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return cats
 }
 
 const processIabCategories = (iabCats, bpIabCats) => {
