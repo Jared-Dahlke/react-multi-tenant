@@ -193,21 +193,23 @@ function BrandProfile(props) {
 							/>
 						)}
 
-						<Steps.Item
-							title='IAB Categories'
-							onClick={() =>
-								handleStepsClick(
-									brandProfileSteps.iabCategories,
-									iabCategoriesRef
-								)
-							}
-							style={{ cursor: 'pointer' }}
-							status={
-								activeStep === brandProfileSteps.iabCategories
-									? 'process'
-									: 'wait'
-							}
-						/>
+						{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
+							<Steps.Item
+								title='IAB Categories'
+								onClick={() =>
+									handleStepsClick(
+										brandProfileSteps.iabCategories,
+										iabCategoriesRef
+									)
+								}
+								style={{ cursor: 'pointer' }}
+								status={
+									activeStep === brandProfileSteps.iabCategories
+										? 'process'
+										: 'wait'
+								}
+							/>
+						)}
 
 						{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
 							<Steps.Item
@@ -309,11 +311,13 @@ function BrandProfile(props) {
 										</div>
 									)}
 
-									<div ref={iabCategoriesRef} style={{ marginTop: 60 }}>
-										<IabCategories
-											brandProfileId={props.match.params.brandProfileId}
-										/>
-									</div>
+									{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
+										<div ref={iabCategoriesRef} style={{ marginTop: 60 }}>
+											<IabCategories
+												brandProfileId={props.match.params.brandProfileId}
+											/>
+										</div>
+									)}
 
 									{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
 										<div ref={topicsRef} style={{ marginTop: 60 }}>
