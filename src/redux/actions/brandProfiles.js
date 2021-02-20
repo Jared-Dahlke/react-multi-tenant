@@ -14,6 +14,7 @@ import {
 	SCENARIOS_IS_LOADING,
 	SET_BRAND_PROFILE_UNDER_EDIT,
 	SET_BRAND_PROFILE_CATEGORIES,
+	SET_BRAND_PROFILE_IAB_CATEGORIES,
 	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_TOPICS,
 	SET_BRAND_PROFILE_SCENARIOS,
@@ -65,7 +66,9 @@ export function fetchBrandProfileBasic(brandProfileId) {
 					)
 				})
 
-				let brandProfile = getState().brandProfileUnderEdit
+				let brandProfile = JSON.parse(
+					JSON.stringify(getState().brandProfileUnderEdit)
+				)
 				brandProfile.brandProfileId = result.data.brandProfileId
 				brandProfile.brandName = result.data.brandName
 				brandProfile.websiteUrl = result.data.websiteUrl
@@ -80,6 +83,7 @@ export function fetchBrandProfileBasic(brandProfileId) {
 				brandProfile.tertiaryKPI = result.data.tertiaryKPI
 					? result.data.tertiaryKPI
 					: ''
+
 				dispatch(setBrandProfileUnderEdit(brandProfile))
 			}
 		} catch (error) {
@@ -130,6 +134,112 @@ export function fetchBrandProfileCategories(brandProfileId) {
 			alert(error)
 		}
 	}
+}
+
+export function fetchBrandProfileIabCategories(args) {
+	let brandProfileId = args.brandProfileId
+	let iabCategories = args.iabCategories
+	let url = apiBase + `/brand-profile/${brandProfileId}/iab-categories`
+	return async (dispatch, getState) => {
+		const result = await axios.get(url)
+
+		if (result.status === 200) {
+			// categoriesObjValidation.validate(result.data).catch(function(err) {
+			// 	console.log(err.name, err.errors)
+			// 	alert(
+			// 		' we received different data from the api than expected while fetching brand profile categories, see console log for more details'
+			// 	)
+			// })
+
+			if (result.data.length > 0) {
+				let processedIabCategories = processIabCategories(
+					iabCategories,
+					result.data
+				)
+				let cascaded = cascadeCats(processedIabCategories)
+				dispatch(setBrandProfileIabCategories(cascaded))
+			} else {
+				dispatch(setBrandProfileIabCategories(iabCategories))
+			}
+		}
+	}
+}
+
+const cascadeCats = (cats) => {
+	for (const row of cats) {
+		if (row.actionId && row.children) {
+			for (const child of row.children) {
+				child.actionId = row.actionId
+			}
+		}
+	}
+
+	for (const row of cats) {
+		if (row.children) {
+			for (const child of row.children) {
+				if (child.children && child.actionId) {
+					for (const gChild of child.children) {
+						gChild.actionId = child.actionId
+					}
+				}
+			}
+		}
+	}
+
+	for (const row of cats) {
+		if (row.children) {
+			for (const child of row.children) {
+				if (child.children) {
+					for (const gChild of child.children) {
+						if (gChild.children && gChild.actionId) {
+							for (const ggChild of gChild.children) {
+								ggChild.actionId = gChild.actionId
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return cats
+}
+
+const processIabCategories = (iabCats, bpIabCats) => {
+	//loop through api results and assign to iabCategories
+	let bpIabCatIds = bpIabCats.map((cat) => cat.iabCategoryId)
+	for (const row of iabCats) {
+		if (bpIabCatIds.includes(Number(row.id))) {
+			row.actionId = getActionId(bpIabCats, Number(row.id))
+		}
+		if (row.children) {
+			for (const child of row.children) {
+				if (bpIabCatIds.includes(Number(child.id))) {
+					child.actionId = getActionId(bpIabCats, Number(child.id))
+				}
+				if (child.children) {
+					for (const gChild of child.children) {
+						if (bpIabCatIds.includes(Number(gChild.id))) {
+							gChild.actionId = getActionId(bpIabCats, Number(gChild.id))
+						}
+						if (gChild.children) {
+							for (const ggChild of gChild.children) {
+								if (bpIabCatIds.includes(Number(ggChild.id))) {
+									ggChild.actionId = getActionId(bpIabCats, Number(ggChild.id))
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return iabCats
+}
+
+const getActionId = (bpIabCats, id) => {
+	let bpCat = bpIabCats.filter((cat) => cat.iabCategoryId === id)
+	return bpCat[0].iabCategoryResponseId
 }
 
 export function fetchBrandProfileTopics(brandProfileId) {
@@ -266,6 +376,8 @@ export const createBrandProfile = () => {
 					dispatch(addBrandProfile(copy))
 					dispatch(setBrandProfileCreating(false))
 					dispatch(setBrandProfileCreated(true))
+					console.log('create  brand profile')
+					console.log(response.data)
 					dispatch(setBrandProfileUnderEdit(response.data))
 				}
 			})
@@ -293,6 +405,13 @@ export function setBrandProfileCategories(categories) {
 	return {
 		type: SET_BRAND_PROFILE_CATEGORIES,
 		categories
+	}
+}
+
+export function setBrandProfileIabCategories(iabCategories) {
+	return {
+		type: SET_BRAND_PROFILE_IAB_CATEGORIES,
+		iabCategories
 	}
 }
 
@@ -401,6 +520,21 @@ export const patchBrandProfileCategories = (data) => {
 			dispatch(setBrandProfileSaved(true))
 		}
 	})
+}
+
+export const patchBrandProfileIabCategories = (data) => {
+	let brandProfileId = data.brandProfileId
+	let iabCategories = data.iabCategories
+
+	let url = apiBase + `/brand-profile/${brandProfileId}/iab-categories`
+	return async (dispatch) => {
+		dispatch(setBrandProfileSaving(true))
+		const result = await axios.patch(url, iabCategories)
+		if (result.status === 201 || result.status === 200) {
+			dispatch(setBrandProfileSaving(false))
+			dispatch(setBrandProfileSaved(true))
+		}
+	}
 }
 
 export const patchBrandProfileTopics = (data) => {

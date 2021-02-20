@@ -13,7 +13,6 @@ import InputGroup from 'rsuite/lib/InputGroup'
 import InputNumber from 'rsuite/lib/InputNumber'
 import DateRangePicker from 'rsuite/lib/DateRangePicker'
 import FiltersLabel from './FiltersLabel'
-import Panel from 'rsuite/lib/Panel'
 import CheckTreePicker from 'rsuite/lib/CheckTreePicker'
 import { iabCategoriesFilter } from '../../../../../staticData/iabCategories'
 import TagPicker from 'rsuite/lib/TagPicker'
@@ -29,30 +28,39 @@ const filterSpacing = 1
 
 const actionIdOptions = [
 	{
-		label: 'View Targeted Items',
+		label: 'View All',
+		actionIds: null,
+		id: 6
+	},
+	{
+		label: 'No Action',
+		actionIds: [],
+		id: 5
+	},
+	{
+		label: 'Target',
 		actionIds: [listActions.target.actionId],
 		id: listActions.target.actionId
 	},
 	{
-		label: 'View Blocked Items',
+		label: 'Block',
 		actionIds: [listActions.block.actionId],
 		id: listActions.block.actionId
 	},
 	{
-		label: 'View Watched Items',
+		label: 'Watch',
 		actionIds: [listActions.watch.actionId],
 		id: listActions.watch.actionId
 	},
 	{
-		label: 'View Targeted, Watched, and Blocked Items',
+		label: 'All Actions',
 		actionIds: [
 			listActions.target.actionId,
 			listActions.block.actionId,
 			listActions.watch.actionId
 		],
 		id: 4
-	},
-	{ label: 'View All Items', actionIds: [], id: 5 }
+	}
 ]
 
 export const FiltersSideBar = ({
@@ -158,7 +166,7 @@ export const FiltersSideBar = ({
 											data={countriesOptions}
 											labelKey={'countryName'}
 											valueKey={'countryCode'}
-											defaultValue={['US']}
+											//defaultValue={['US']}
 											placeholder='Countries'
 											onChange={(val) => {
 												handleFilterChange(filters.countries, val)
@@ -174,7 +182,7 @@ export const FiltersSideBar = ({
 											data={languagesOptions}
 											labelKey={'languageName'}
 											valueKey={'languageCode'}
-											defaultValue={['en']}
+											//defaultValue={['en']}
 											virtualized={true}
 											placeholder='Languages'
 											onChange={(val) => {

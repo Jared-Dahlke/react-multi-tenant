@@ -14,6 +14,7 @@ import {
 	SCENARIOS_IS_LOADING,
 	SET_BRAND_PROFILE_UNDER_EDIT,
 	SET_BRAND_PROFILE_CATEGORIES,
+	SET_BRAND_PROFILE_IAB_CATEGORIES,
 	SET_BRAND_PROFILE_COMPETITORS,
 	SET_BRAND_PROFILE_TOPICS,
 	SET_BRAND_PROFILE_SCENARIOS,
@@ -91,6 +92,11 @@ export function brandProfileUnderEdit(
 			return {
 				...state,
 				categories: action.categories
+			}
+		case SET_BRAND_PROFILE_IAB_CATEGORIES:
+			return {
+				...state,
+				iabCategories: action.iabCategories
 			}
 		case SET_BRAND_PROFILE_TOPICS:
 			return {
