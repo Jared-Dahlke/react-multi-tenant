@@ -66,7 +66,9 @@ export function fetchBrandProfileBasic(brandProfileId) {
 					)
 				})
 
-				let brandProfile = getState().brandProfileUnderEdit
+				let brandProfile = JSON.parse(
+					JSON.stringify(getState().brandProfileUnderEdit)
+				)
 				brandProfile.brandProfileId = result.data.brandProfileId
 				brandProfile.brandName = result.data.brandName
 				brandProfile.websiteUrl = result.data.websiteUrl

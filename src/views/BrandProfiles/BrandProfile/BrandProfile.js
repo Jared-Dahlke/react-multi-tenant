@@ -19,6 +19,7 @@ import Steps from 'rsuite/lib/Steps'
 import useOnScreen from './useOnScreen'
 import Loader from 'rsuite/lib/Loader'
 import { perms, userCan, UserCan } from '../../../Can'
+import useDeepCompareEffect from 'use-deep-compare-effect'
 
 const mapStateToProps = (state) => {
 	return {
@@ -131,15 +132,6 @@ function BrandProfile(props) {
 		config: { duration: 100 },
 		opacity: props.brandProfile.brandName.length > 0 ? 1 : 0
 	})
-
-	let bp = JSON.stringify(props.brandProfile)
-	const [loaded, setLoaded] = React.useState(false)
-	React.useEffect(() => {
-		let bpParsed = JSON.parse(bp)
-		if (bpParsed.brandName.length > 0) {
-			setLoaded(true)
-		}
-	}, [bp])
 
 	return (
 		<div>
@@ -273,7 +265,7 @@ function BrandProfile(props) {
 						ref={containerRef}
 					>
 						<GridItem xs={12} sm={12} md={10}>
-							{!loaded && (
+							{props.brandProfile.brandName.length < 1 && (
 								<div
 									style={{
 										textAlign: 'center',
