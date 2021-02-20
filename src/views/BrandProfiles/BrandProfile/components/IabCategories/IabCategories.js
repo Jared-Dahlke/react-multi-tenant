@@ -24,7 +24,7 @@ function IabCategories(props) {
 		if (!fetched) {
 			let params = {
 				brandProfileId: props.brandProfileId,
-				iabCategories: iabCategoriesFilter
+				iabCategories: JSON.parse(JSON.stringify(iabCategoriesFilter))
 			}
 			props.fetchBrandProfileIabCategories(params)
 			setFetched(true)

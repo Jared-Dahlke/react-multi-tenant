@@ -33,7 +33,16 @@ const mapDispatchToProps = (dispatch) => {
 
 function IabCategoriesTree(props) {
 	const [search, setSearch] = React.useState('')
-	const [iabTaxonomy, setIabTaxonomy] = React.useState(iabCategoriesFilter)
+
+	const [iabTaxonomy, setIabTaxonomy] = React.useState([])
+
+	let iabCats = props.brandProfile.iabCategories
+	React.useEffect(() => {
+		if (iabCats?.length > 0) {
+			setIabTaxonomy(iabCats)
+		}
+	}, [iabCats])
+
 	const filterTree = (filter, list) => {
 		if (search.length < 1) {
 			return iabTaxonomy
@@ -259,15 +268,20 @@ function IabCategoriesTree(props) {
 	}
 
 	let fin = React.useMemo(() => {
-		let iabTaxCopy = JSON.parse(JSON.stringify(iabTaxonomy))
-		if (search.length < 1) {
-			setExpandAll(false)
-			return iabTaxonomy
-		} else {
-			setExpandAll(true)
-			return filterTree(search, iabTaxCopy)
+		if (iabTaxonomy?.length > 0) {
+			let iabTaxCopy = JSON.parse(JSON.stringify(iabTaxonomy))
+			if (search.length < 1) {
+				setExpandAll(false)
+				return iabTaxonomy
+			} else {
+				setExpandAll(true)
+				return filterTree(search, iabTaxCopy)
+			}
 		}
 	}, [search, iabTaxonomy])
+
+	console.log('data going into tree:')
+	console.log(fin)
 
 	return (
 		<Grid container spacing={filterSpacing}>

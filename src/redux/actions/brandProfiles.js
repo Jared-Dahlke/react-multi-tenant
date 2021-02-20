@@ -136,33 +136,81 @@ export function fetchBrandProfileCategories(brandProfileId) {
 export function fetchBrandProfileIabCategories(args) {
 	let brandProfileId = args.brandProfileId
 	let iabCategories = args.iabCategories
-	let url = apiBase + `/brand-profile/${brandProfileId}/iabCategories`
+	let url = apiBase + `/brand-profile/${brandProfileId}/iab-categories`
 	return async (dispatch, getState) => {
-		/*try {
-			const result = await axios.get(url)
+		const result = await axios.get(url)
 
-			if (result.status === 200) {
-				categoriesObjValidation.validate(result.data).catch(function(err) {
-					console.log(err.name, err.errors)
-					alert(
-						' we received different data from the api than expected while fetching brand profile categories, see console log for more details'
-					)
-				})
-				dispatch(setBrandProfileCategories(result.data))
+		if (result.status === 200) {
+			// categoriesObjValidation.validate(result.data).catch(function(err) {
+			// 	console.log(err.name, err.errors)
+			// 	alert(
+			// 		' we received different data from the api than expected while fetching brand profile categories, see console log for more details'
+			// 	)
+			// })
+			console.log('result.data.')
+			console.log(result.data)
+			if (result.data.length > 0) {
+				let processedIabCategories = processIabCategories(
+					iabCategories,
+					result.data
+				)
+				console.log('setting:')
+				console.log(processedIabCategories)
+				dispatch(setBrandProfileIabCategories(processedIabCategories))
+			} else {
+				dispatch(setBrandProfileIabCategories(iabCategories))
 			}
-		} catch (error) {
-			alert(error)
-		}*/
-		const result = []
-
-		let processedIabCategories = processIabCategories(iabCategories, result)
-		dispatch(setBrandProfileIabCategories(processedIabCategories))
+		}
 	}
 }
 
 const processIabCategories = (iabCats, bpIabCats) => {
 	//loop through api results and assign to iabCategories
+	console.log('process iab cats')
+	console.log(iabCats)
+	console.log(bpIabCats)
+	let bpIabCatIds = bpIabCats.map((cat) => cat.iabCategoryId)
+	console.log('bpIabCatIds')
+	console.log(bpIabCatIds)
+	for (const row of iabCats) {
+		if (bpIabCatIds.includes(Number(row.id))) {
+			console.log('bpIabCatIds includes id')
+			row.actionId = getActionId(bpIabCats, Number(row.id))
+		}
+		if (row.children) {
+			for (const child of row.children) {
+				if (bpIabCatIds.includes(Number(child.id))) {
+					child.actionId = getActionId(bpIabCats, Number(child.id))
+				}
+				if (child.children) {
+					for (const gChild of child.children) {
+						if (bpIabCatIds.includes(Number(gChild.id))) {
+							gChild.actionId = getActionId(bpIabCats, Number(gChild.id))
+						}
+						if (gChild.children) {
+							for (const ggChild of gChild.children) {
+								if (bpIabCatIds.includes(Number(ggChild.id))) {
+									ggChild.actionId = getActionId(bpIabCats, Number(ggChild.id))
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	return iabCats
+}
+
+const getActionId = (bpIabCats, id) => {
+	console.log('get action Id')
+	console.log(bpIabCats)
+	console.log(id)
+	//	console.log()
+	let bpCat = bpIabCats.filter((cat) => cat.iabCategoryId === id)
+	console.log('returning: ')
+	console.log(bpCat[0].iabCategoryResponseId)
+	return bpCat[0].iabCategoryResponseId
 }
 
 export function fetchBrandProfileTopics(brandProfileId) {
@@ -447,7 +495,7 @@ export const patchBrandProfileIabCategories = (data) => {
 	let brandProfileId = data.brandProfileId
 	let iabCategories = data.iabCategories
 
-	let url = apiBase + `/brand-profile/${brandProfileId}/iabCategories`
+	let url = apiBase + `/brand-profile/${brandProfileId}/iab-categories`
 	return async (dispatch) => {
 		dispatch(setBrandProfileSaving(true))
 		const result = await axios.patch(url, iabCategories)
