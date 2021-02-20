@@ -280,9 +280,6 @@ function IabCategoriesTree(props) {
 		}
 	}, [search, iabTaxonomy])
 
-	console.log('data going into tree:')
-	console.log(fin)
-
 	return (
 		<Grid container spacing={filterSpacing}>
 			<Grid item xs={12}>

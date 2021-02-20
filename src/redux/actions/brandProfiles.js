@@ -81,6 +81,7 @@ export function fetchBrandProfileBasic(brandProfileId) {
 				brandProfile.tertiaryKPI = result.data.tertiaryKPI
 					? result.data.tertiaryKPI
 					: ''
+
 				dispatch(setBrandProfileUnderEdit(brandProfile))
 			}
 		} catch (error) {
@@ -147,15 +148,12 @@ export function fetchBrandProfileIabCategories(args) {
 			// 		' we received different data from the api than expected while fetching brand profile categories, see console log for more details'
 			// 	)
 			// })
-			console.log('result.data.')
-			console.log(result.data)
+
 			if (result.data.length > 0) {
 				let processedIabCategories = processIabCategories(
 					iabCategories,
 					result.data
 				)
-				console.log('setting:')
-				console.log(processedIabCategories)
 				dispatch(setBrandProfileIabCategories(processedIabCategories))
 			} else {
 				dispatch(setBrandProfileIabCategories(iabCategories))
@@ -166,15 +164,9 @@ export function fetchBrandProfileIabCategories(args) {
 
 const processIabCategories = (iabCats, bpIabCats) => {
 	//loop through api results and assign to iabCategories
-	console.log('process iab cats')
-	console.log(iabCats)
-	console.log(bpIabCats)
 	let bpIabCatIds = bpIabCats.map((cat) => cat.iabCategoryId)
-	console.log('bpIabCatIds')
-	console.log(bpIabCatIds)
 	for (const row of iabCats) {
 		if (bpIabCatIds.includes(Number(row.id))) {
-			console.log('bpIabCatIds includes id')
 			row.actionId = getActionId(bpIabCats, Number(row.id))
 		}
 		if (row.children) {
@@ -203,13 +195,7 @@ const processIabCategories = (iabCats, bpIabCats) => {
 }
 
 const getActionId = (bpIabCats, id) => {
-	console.log('get action Id')
-	console.log(bpIabCats)
-	console.log(id)
-	//	console.log()
 	let bpCat = bpIabCats.filter((cat) => cat.iabCategoryId === id)
-	console.log('returning: ')
-	console.log(bpCat[0].iabCategoryResponseId)
 	return bpCat[0].iabCategoryResponseId
 }
 
@@ -347,6 +333,8 @@ export const createBrandProfile = () => {
 					dispatch(addBrandProfile(copy))
 					dispatch(setBrandProfileCreating(false))
 					dispatch(setBrandProfileCreated(true))
+					console.log('create  brand profile')
+					console.log(response.data)
 					dispatch(setBrandProfileUnderEdit(response.data))
 				}
 			})

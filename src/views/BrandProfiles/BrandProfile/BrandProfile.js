@@ -112,7 +112,7 @@ function BrandProfile(props) {
 		scenariosVisible
 	])
 
-	const scrollSpeed = 95
+	const scrollSpeed = 100
 	const { scrollToElement } = useScroll({
 		scrollSpeed,
 		containerRef,
@@ -128,174 +128,140 @@ function BrandProfile(props) {
 	}
 
 	const brandInfoProps = useSpring({
+		config: { duration: 100 },
 		opacity: props.brandProfile.brandName.length > 0 ? 1 : 0
 	})
 
-	const outcomesProps = useSpring({
-		opacity: props.brandProfile.brandName.length > 0 ? 1 : 0
-	})
-
-	const competitorsProps = useSpring({
-		opacity: props.brandProfile.competitors ? 1 : 0
-	})
-
-	const categoriesProps = useSpring({
-		opacity: props.brandProfile.categories ? 1 : 0
-	})
-
-	const iabCategoriesProps = useSpring({
-		opacity: props.brandProfile.iabCategories ? 1 : 0
-	})
-
-	const topicsProps = useSpring({
-		opacity: props.brandProfile.topics ? 1 : 0
-	})
-
-	const opinionsProps = useSpring({
-		opacity: props.brandProfile.opinions ? 1 : 0
-	})
-
-	const scenariosProps = useSpring({
-		opacity: props.brandProfile.scenarios ? 1 : 0
-	})
-
-	const questionsProps = useSpring({
-		opacity: props.brandProfile.questions ? 1 : 0
-	})
+	let bp = JSON.stringify(props.brandProfile)
+	const [loaded, setLoaded] = React.useState(false)
+	React.useEffect(() => {
+		let bpParsed = JSON.parse(bp)
+		if (bpParsed.brandName.length > 0) {
+			setLoaded(true)
+		}
+	}, [bp])
 
 	return (
 		<div>
 			<GridContainer justify='center' style={{ paddingTop: 20 }}>
 				<Grid item xs={2}>
-					<animated.div style={brandInfoProps}>
-						<Steps vertical>
+					<Steps vertical>
+						<Steps.Item
+							title='Brand Information'
+							onClick={() =>
+								handleStepsClick(
+									brandProfileSteps.brandInformation,
+									brandInformationRef
+								)
+							}
+							style={{ cursor: 'pointer' }}
+							status={
+								activeStep === brandProfileSteps.brandInformation
+									? 'process'
+									: 'wait'
+							}
+						/>
+
+						<Steps.Item
+							title='Outcomes'
+							onClick={() =>
+								handleStepsClick(brandProfileSteps.outcomes, outcomesRef)
+							}
+							style={{ cursor: 'pointer' }}
+							status={
+								activeStep === brandProfileSteps.outcomes ? 'process' : 'wait'
+							}
+						/>
+
+						<Steps.Item
+							title='Competitors'
+							onClick={() =>
+								handleStepsClick(brandProfileSteps.competitors, competitorsRef)
+							}
+							style={{ cursor: 'pointer' }}
+							status={
+								activeStep === brandProfileSteps.competitors
+									? 'process'
+									: 'wait'
+							}
+						/>
+
+						{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
 							<Steps.Item
-								title='Brand Information'
+								title='Categories'
 								onClick={() =>
-									handleStepsClick(
-										brandProfileSteps.brandInformation,
-										brandInformationRef
-									)
+									handleStepsClick(brandProfileSteps.categories, categoriesRef)
 								}
 								style={{ cursor: 'pointer' }}
 								status={
-									activeStep === brandProfileSteps.brandInformation
+									activeStep === brandProfileSteps.categories
 										? 'process'
 										: 'wait'
 								}
 							/>
+						)}
 
+						<Steps.Item
+							title='IAB Categories'
+							onClick={() =>
+								handleStepsClick(
+									brandProfileSteps.iabCategories,
+									iabCategoriesRef
+								)
+							}
+							style={{ cursor: 'pointer' }}
+							status={
+								activeStep === brandProfileSteps.iabCategories
+									? 'process'
+									: 'wait'
+							}
+						/>
+
+						{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
 							<Steps.Item
-								title='Outcomes'
+								title='Topics'
 								onClick={() =>
-									handleStepsClick(brandProfileSteps.outcomes, outcomesRef)
+									handleStepsClick(brandProfileSteps.topics, topicsRef)
 								}
 								style={{ cursor: 'pointer' }}
 								status={
-									activeStep === brandProfileSteps.outcomes ? 'process' : 'wait'
+									activeStep === brandProfileSteps.topics ? 'process' : 'wait'
 								}
 							/>
+						)}
+						<Steps.Item
+							title='Questions'
+							onClick={() =>
+								handleStepsClick(brandProfileSteps.questions, questionsRef)
+							}
+							style={{ cursor: 'pointer' }}
+							status={
+								activeStep === brandProfileSteps.questions ? 'process' : 'wait'
+							}
+						/>
 
-							<Steps.Item
-								title='Competitors'
-								onClick={() =>
-									handleStepsClick(
-										brandProfileSteps.competitors,
-										competitorsRef
-									)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.competitors
-										? 'process'
-										: 'wait'
-								}
-							/>
+						<Steps.Item
+							title='Opinions'
+							onClick={() =>
+								handleStepsClick(brandProfileSteps.opinions, opinionsRef)
+							}
+							style={{ cursor: 'pointer' }}
+							status={
+								activeStep === brandProfileSteps.opinions ? 'process' : 'wait'
+							}
+						/>
 
-							{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
-								<Steps.Item
-									title='Categories'
-									onClick={() =>
-										handleStepsClick(
-											brandProfileSteps.categories,
-											categoriesRef
-										)
-									}
-									style={{ cursor: 'pointer' }}
-									status={
-										activeStep === brandProfileSteps.categories
-											? 'process'
-											: 'wait'
-									}
-								/>
-							)}
-
-							<Steps.Item
-								title='IAB Categories'
-								onClick={() =>
-									handleStepsClick(
-										brandProfileSteps.iabCategories,
-										iabCategoriesRef
-									)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.iabCategories
-										? 'process'
-										: 'wait'
-								}
-							/>
-
-							{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
-								<Steps.Item
-									title='Topics'
-									onClick={() =>
-										handleStepsClick(brandProfileSteps.topics, topicsRef)
-									}
-									style={{ cursor: 'pointer' }}
-									status={
-										activeStep === brandProfileSteps.topics ? 'process' : 'wait'
-									}
-								/>
-							)}
-							<Steps.Item
-								title='Questions'
-								onClick={() =>
-									handleStepsClick(brandProfileSteps.questions, questionsRef)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.questions
-										? 'process'
-										: 'wait'
-								}
-							/>
-
-							<Steps.Item
-								title='Opinions'
-								onClick={() =>
-									handleStepsClick(brandProfileSteps.opinions, opinionsRef)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.opinions ? 'process' : 'wait'
-								}
-							/>
-
-							<Steps.Item
-								title='Scenarios'
-								onClick={() =>
-									handleStepsClick(brandProfileSteps.scenarios, scenariosRef)
-								}
-								style={{ cursor: 'pointer' }}
-								status={
-									activeStep === brandProfileSteps.scenarios
-										? 'process'
-										: 'wait'
-								}
-							/>
-						</Steps>
-					</animated.div>
+						<Steps.Item
+							title='Scenarios'
+							onClick={() =>
+								handleStepsClick(brandProfileSteps.scenarios, scenariosRef)
+							}
+							style={{ cursor: 'pointer' }}
+							status={
+								activeStep === brandProfileSteps.scenarios ? 'process' : 'wait'
+							}
+						/>
+					</Steps>
 				</Grid>
 
 				<Grid item xs={12} sm={10} md={10}>
@@ -307,7 +273,7 @@ function BrandProfile(props) {
 						ref={containerRef}
 					>
 						<GridItem xs={12} sm={12} md={10}>
-							{props.brandProfile.brandName.length === 0 && (
+							{!loaded && (
 								<div
 									style={{
 										textAlign: 'center',
@@ -315,84 +281,75 @@ function BrandProfile(props) {
 										marginTop: 100
 									}}
 								>
-									<Loader speed='slow' size='lg' />
+									<Loader
+										speed='fast'
+										size='lg'
+										content={'Loading...'}
+										vertical
+									/>
 								</div>
 							)}
 
-							<div style={{ padding: 10 }}>
-								<div ref={brandInformationRef} />
-								<animated.div style={brandInfoProps}>
+							<animated.div style={brandInfoProps}>
+								<div style={{ padding: 10 }}>
+									<div ref={brandInformationRef} />
+
 									<BasicInfo
 										brandProfileId={props.match.params.brandProfileId}
 									/>
-								</animated.div>
-								<div ref={outcomesRef} style={{ marginTop: 60 }}>
-									<animated.div style={outcomesProps}>
+
+									<div ref={outcomesRef} style={{ marginTop: 60 }}>
 										<Outcomes
 											brandProfileId={props.match.params.brandProfileId}
 										/>
-									</animated.div>
-								</div>
-								<div ref={competitorsRef} style={{ marginTop: 60 }}>
-									<animated.div style={competitorsProps}>
+									</div>
+									<div ref={competitorsRef} style={{ marginTop: 60 }}>
 										<TopCompetitors
 											brandProfileId={props.match.params.brandProfileId}
 										/>
-									</animated.div>
-								</div>
+									</div>
 
-								{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
-									<div ref={categoriesRef} style={{ marginTop: 60 }}>
-										<animated.div style={categoriesProps}>
+									{userCan(perms.BRAND_PROFILE_CATEGORIES_READ) && (
+										<div ref={categoriesRef} style={{ marginTop: 60 }}>
 											<Categories
 												brandProfileId={props.match.params.brandProfileId}
 											/>
-										</animated.div>
-									</div>
-								)}
+										</div>
+									)}
 
-								<div ref={iabCategoriesRef} style={{ marginTop: 60 }}>
-									<animated.div style={iabCategoriesProps}>
+									<div ref={iabCategoriesRef} style={{ marginTop: 60 }}>
 										<IabCategories
 											brandProfileId={props.match.params.brandProfileId}
 										/>
-									</animated.div>
-								</div>
+									</div>
 
-								{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
-									<div ref={topicsRef} style={{ marginTop: 60 }}>
-										<animated.div style={topicsProps}>
+									{userCan(perms.BRAND_PROFILE_TOPICS_READ) && (
+										<div ref={topicsRef} style={{ marginTop: 60 }}>
 											<Topics
 												brandProfileId={props.match.params.brandProfileId}
 											/>
-										</animated.div>
-									</div>
-								)}
+										</div>
+									)}
 
-								<div ref={questionsRef} style={{ marginTop: 60 }}>
-									<animated.div style={questionsProps}>
+									<div ref={questionsRef} style={{ marginTop: 60 }}>
 										<Questions
 											brandProfileId={props.match.params.brandProfileId}
 										/>
-									</animated.div>
-								</div>
+									</div>
 
-								<div ref={opinionsRef} style={{ marginTop: 60 }}>
-									<animated.div style={opinionsProps}>
+									<div ref={opinionsRef} style={{ marginTop: 60 }}>
 										<Opinions
 											brandProfileId={props.match.params.brandProfileId}
 										/>
-									</animated.div>
-								</div>
+									</div>
 
-								<div ref={scenariosRef} style={{ marginTop: 60 }}>
-									<animated.div style={scenariosProps}>
+									<div ref={scenariosRef} style={{ marginTop: 60 }}>
 										<Scenarios
 											brandProfileId={props.match.params.brandProfileId}
 										/>
-									</animated.div>
+									</div>
 								</div>
-							</div>
+							</animated.div>
 						</GridItem>
 					</GridList>
 				</Grid>
