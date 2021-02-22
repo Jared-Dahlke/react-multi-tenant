@@ -14,12 +14,6 @@ export const listsObjValidation = Yup.array()
 			channelCount: Yup.number().required(),
 			videoCount: Yup.number().required(),
 			versionId: Yup.number().required(),
-			createdBy: Yup.object().shape({
-				email: Yup.string().required(),
-				firstName: Yup.string().required(),
-				lastName: Yup.string().required(),
-				userId: Yup.number().required()
-			}),
 			archived: Yup.bool().required(),
 			active: Yup.bool().required()
 		})

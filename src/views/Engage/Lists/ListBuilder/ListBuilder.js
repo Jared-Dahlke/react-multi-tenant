@@ -179,7 +179,10 @@ function ListBuilder(props) {
 		1
 	)
 
+	const [clickCalled, setClickCalled] = React.useState(false)
+
 	React.useEffect(() => {
+		//	if (clickCalled) {
 		let params = {
 			versionId: parsedVersionId,
 			pageNumber: currentPage,
@@ -187,6 +190,7 @@ function ListBuilder(props) {
 			sort: currentChannelsSort
 		}
 		props.fetchChannels(params)
+		//	}
 	}, [currentPage, channelsFetchTrigger])
 
 	const [mounted, setMounted] = React.useState(false)
@@ -325,23 +329,17 @@ function ListBuilder(props) {
 	const [initialCalled, setInitialCalled] = React.useState(false)
 	React.useEffect(() => {
 		if (!initialCalled) {
-			console.log('inside initial called')
-			console.log(props.smartListStats)
 			let hasIds =
 				(stats.channelCount && stats.channelCount > 0) ||
 				(stats.videoCount && stats.videoCount > 0)
 			if (hasIds) {
-				console.log('handlefilter change')
 				handleFilterChange(filters.actionIds, [1, 2, 3])
 				setInitialCalled(true)
 			}
 		}
 	}, [stats])
 
-	const [clickCalled, setClickCalled] = React.useState(false)
 	React.useEffect(() => {
-		console.log('filterState use effect')
-		console.log(initialCalled)
 		if (!clickCalled && initialCalled) {
 			handleApplyFiltersButtonClick()
 			setClickCalled(true)
@@ -349,8 +347,6 @@ function ListBuilder(props) {
 	}, [filterState, initialCalled])
 
 	const handleFilterChange = (filter, value) => {
-		console.log(filter)
-		console.log(value)
 		switch (filter) {
 			case filters.kids:
 				setFilterState((prevState) => {

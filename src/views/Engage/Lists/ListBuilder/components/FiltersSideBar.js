@@ -124,7 +124,8 @@ export const FiltersSideBar = ({
 									valueKey={'actionIds'}
 									placeholder={'Select'}
 									data={actionIdOptions}
-									defaultValue={filterState.actionIds}
+									value={filterState.actionIds}
+									//	defaultValue={filterState.actionIds}
 									onChange={(val) => {
 										handleFilterChange(filters.actionIds, val)
 									}}
