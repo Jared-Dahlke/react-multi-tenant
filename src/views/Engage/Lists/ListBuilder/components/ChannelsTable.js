@@ -103,6 +103,7 @@ export default function ChannelsTable({
 				>
 					Visible Columns
 				</Button>
+
 				<Table
 					style={{ flex: 1 }}
 					rowClassName={'lbtable'}

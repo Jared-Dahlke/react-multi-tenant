@@ -18,8 +18,7 @@ import { useScroll } from 'react-scroll-hooks'
 import Steps from 'rsuite/lib/Steps'
 import useOnScreen from './useOnScreen'
 import Loader from 'rsuite/lib/Loader'
-import { perms, userCan, UserCan } from '../../../Can'
-import useDeepCompareEffect from 'use-deep-compare-effect'
+import { perms, userCan } from '../../../Can'
 
 const mapStateToProps = (state) => {
 	return {
