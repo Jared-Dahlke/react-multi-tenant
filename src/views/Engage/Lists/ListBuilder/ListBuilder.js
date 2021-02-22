@@ -307,7 +307,7 @@ function ListBuilder(props) {
 		kids: false,
 		iabCategories: [],
 		countries: [],
-		actionIds: [],
+		actionIds: null,
 		uploadDate: null,
 		categories: [],
 		languages: [],
@@ -321,7 +321,36 @@ function ListBuilder(props) {
 		}
 	})
 
+	let stats = props.smartListStats
+	const [initialCalled, setInitialCalled] = React.useState(false)
+	React.useEffect(() => {
+		if (!initialCalled) {
+			console.log('inside initial called')
+			console.log(props.smartListStats)
+			let hasIds =
+				(stats.channelCount && stats.channelCount > 0) ||
+				(stats.videoCount && stats.videoCount > 0)
+			if (hasIds) {
+				console.log('handlefilter change')
+				handleFilterChange(filters.actionIds, [1, 2, 3])
+				setInitialCalled(true)
+			}
+		}
+	}, [stats])
+
+	const [clickCalled, setClickCalled] = React.useState(false)
+	React.useEffect(() => {
+		console.log('filterState use effect')
+		console.log(initialCalled)
+		if (!clickCalled && initialCalled) {
+			handleApplyFiltersButtonClick()
+			setClickCalled(true)
+		}
+	}, [filterState, initialCalled])
+
 	const handleFilterChange = (filter, value) => {
+		console.log(filter)
+		console.log(value)
 		switch (filter) {
 			case filters.kids:
 				setFilterState((prevState) => {
@@ -396,11 +425,13 @@ function ListBuilder(props) {
 			case filters.actionIds:
 				let actionIds = []
 				if (!value) {
-					value = []
+					actionIds = null
+				} else {
+					for (const actionId of value) {
+						actionIds.push(actionId)
+					}
 				}
-				for (const actionId of value) {
-					actionIds.push(actionId)
-				}
+
 				setFilterState((prevState) => {
 					return {
 						...prevState,
@@ -548,7 +579,6 @@ function ListBuilder(props) {
 					setBulk={setBulk}
 					parsedVersionId={parsedVersionId}
 				/>
-
 				<div style={{ display: 'flex' }}>
 					<Panel
 						style={{
@@ -591,6 +621,7 @@ function ListBuilder(props) {
 											size='xs'
 											checkedChildren='Videos'
 											unCheckedChildren='Channels'
+											style={{ backgroundColor: accentColor }}
 										/>
 
 										<Button
@@ -656,6 +687,7 @@ function ListBuilder(props) {
 						</div>
 					</Panel>
 				</div>
+
 				<div style={{ display: 'flex' }}>
 					<FiltersSideBar
 						filters={filters}
@@ -702,7 +734,6 @@ function ListBuilder(props) {
 							}}
 						/>
 					)}
-
 					<VideoModal
 						tableHeight={tableHeight - 400}
 						visibleVideoColumns={props.visibleVideoColumns}

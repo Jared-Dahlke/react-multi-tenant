@@ -216,6 +216,7 @@ export function fetchChannels(args) {
 			}
 			let formattedChannels = formatChannels(result.data)
 			dispatch(setChannels(formattedChannels))
+
 			dispatch(setChannelsIsLoading(false))
 		}
 	}

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { fetchVersionStats } from '../../../../../redux/actions/engage/lists'
 import '../components/listbuilder.css'
 import numeral from 'numeral'
-import Panel from 'rsuite/lib/Panel'
 import CustomPie from './CustomPie'
 
 const mapStateToProps = (state) => {
