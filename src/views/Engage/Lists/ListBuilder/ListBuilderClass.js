@@ -159,9 +159,7 @@ class ListBuilder extends React.Component {
 
 	componentDidMount() {
 		let versionId = this.props.match.params.versionId
-		this.setState({ parsedVersionId: versionId }, () => {
-			//this.fetchChannelsFunction()
-		})
+		this.setState({ parsedVersionId: versionId })
 	}
 
 	componentWillUnmount() {
@@ -171,7 +169,7 @@ class ListBuilder extends React.Component {
 		this.props.setChannelsHasNextPage(true)
 		this.props.setVideosHasNextPage(true)
 		this.props.setChannelVideosHasNextPage(true)
-
+		this.props.setSmartListStats({})
 		this.setState({
 			currentPage: 1,
 			currentVideosPage: 1,
@@ -188,7 +186,7 @@ class ListBuilder extends React.Component {
 
 		let stats = this.props.smartListStats
 
-		if (stats.channelCount && !this.state.didInitialFetch) {
+		if (stats.channelCount != null && !this.state.didInitialFetch) {
 			let hasIds =
 				(stats.channelCount && stats.channelCount > 0) ||
 				(stats.videoCount && stats.videoCount > 0)
@@ -208,11 +206,23 @@ class ListBuilder extends React.Component {
 						this.fetchChannelsFunction()
 					}
 				)
+			} else {
+				this.setState(
+					(prevState) => {
+						let newState = {
+							...prevState.filterState,
+							actionIds: null
+						}
+						return {
+							filterState: newState,
+							didInitialFetch: true
+						}
+					},
+					() => {
+						this.fetchChannelsFunction()
+					}
+				)
 			}
-		} else if (!this.state.didInitialFetch) {
-			this.setState({ didInitialFetch: true }, () => {
-				this.fetchChannelsFunction()
-			})
 		}
 	}
 
