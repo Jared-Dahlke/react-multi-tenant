@@ -10,8 +10,8 @@ import {
 	SET_ADD_SCENARIO,
 	SET_ADMIN_LABELS,
 	SET_LABELS_IS_LOADING,
-	SET_LABEL_DELETING,
-	SET_LABEL_TO_DELETE,
+	SET_LABEL_ARCHIVING,
+	SET_LABEL_TO_ARCHIVE,
 	SET_LABEL_SAVING,
 	SET_ADD_LABEL,
 	SET_LABEL_TO_CREATE,
@@ -191,16 +191,16 @@ export function setAdminLabels(labels) {
 	}
 }
 
-export function setLabelDeleting(labelId) {
+export function setLabelArchiving(labelId) {
 	return {
-		type: SET_LABEL_DELETING,
-		labelDeleting: labelId
+		type: SET_LABEL_ARCHIVING,
+		labelArchiving: labelId
 	}
 }
 
-export function setLabelToDeleted(labelId) {
+export function setLabelToArchived(labelId) {
 	return {
-		type: SET_LABEL_TO_DELETE,
+		type: SET_LABEL_TO_ARCHIVE,
 		labelId
 	}
 }
@@ -331,16 +331,16 @@ export const createLabel = (label) => {
 	}
 }
 
-export const deleteLabel = (labelId) => {
+export const archiveLabel = (labelId) => {
 	let url = apiBase + `/scenarios/labels/${labelId}`
 	return (dispatch) => {
-		dispatch(setLabelDeleting(labelId))
+		dispatch(setLabelArchiving(labelId))
 		axios
 			.delete(url)
 			.then((response) => {
-				dispatch(setLabelToDeleted(labelId))
-				dispatch(setLabelDeleting(''))
-				toast.success('Label Deleted')
+				dispatch(setLabelToArchived(labelId))
+				dispatch(setLabelArchiving(''))
+				toast.success('Label Archived')
 			})
 			.catch((error) => {
 				toast.error(error.response.data.message)

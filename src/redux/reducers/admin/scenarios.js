@@ -10,8 +10,8 @@ import {
 	SET_SCENARIO_ARCHIVING,
 	SET_ADMIN_LABELS,
 	SET_LABELS_IS_LOADING,
-	SET_LABEL_DELETING,
-	SET_LABEL_TO_DELETE,
+	SET_LABEL_ARCHIVING,
+	SET_LABEL_TO_ARCHIVE,
 	SET_ADD_LABEL,
 	SET_LABEL_SAVING,
 	SET_LABEL_TO_CREATE,
@@ -108,9 +108,13 @@ export function labels(state = [], action) {
 	switch (action.type) {
 		case SET_ADMIN_LABELS:
 			return action.labels
-		case SET_LABEL_TO_DELETE:
+		case SET_LABEL_TO_ARCHIVE:
 			let newState = [
-				...state.filter(({ labelId }) => labelId !== action.labelId)
+				...state.map((label) =>
+					label.labelId === action.labelId
+						? { ...label, archived: true }
+						: label
+				)
 			]
 			return newState
 		case SET_ADD_LABEL:
@@ -126,10 +130,10 @@ export function labels(state = [], action) {
 	}
 }
 
-export function labelDeleting(state = '', action) {
+export function labelArchiving(state = '', action) {
 	switch (action.type) {
-		case SET_LABEL_DELETING:
-			return action.labelDeleting
+		case SET_LABEL_ARCHIVING:
+			return action.labelArchiving
 		default:
 			return state
 	}
