@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
 import Button from 'rsuite/lib/Button'
-import VideoModal from './components/VideoModal'
+import ChannelVideosModal from './components/ChannelVideosModal'
+import { withRouter } from 'react-router-dom'
 import VideosTable from './components/VideosTable'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
@@ -102,6 +103,8 @@ class ListBuilder extends React.Component {
 		super(props)
 		this.state = {
 			date: new Date(),
+			showChannelVideosModal: false,
+			viewingVideosForChannel: null,
 			bulk: false,
 			isEditingName: false,
 			smartListName: '',
@@ -112,12 +115,16 @@ class ListBuilder extends React.Component {
 			lists: [],
 			currentPage: 1,
 			currentVideosPage: 1,
-			currentChannelVideoPage: 1,
+			currentChannelVideosPage: 1,
 			currentChannelsSort: {
 				sortColumn: 'views',
 				sortType: 'desc'
 			},
 			currentVideosSort: {
+				sortColumn: 'views',
+				sortType: 'desc'
+			},
+			currentChannelVideosSort: {
 				sortColumn: 'views',
 				sortType: 'desc'
 			},
@@ -163,10 +170,7 @@ class ListBuilder extends React.Component {
 	componentWillUnmount() {}
 
 	UNSAFE_componentWillReceiveProps(prevProps) {
-		console.log('component will rec props')
-		console.log(prevProps)
 		if (prevProps.lists.length > 0 && this.state.smartListName.length < 1) {
-			console.log('seting smartlistunderedit')
 			this.setState({ lists: prevProps.lists }, () => {
 				this.setSmartListUnderEdit()
 			})
@@ -179,9 +183,6 @@ class ListBuilder extends React.Component {
 				version.versionId == this.props.match.params.versionId ||
 				version.versionId === this.props.match.params.versionId
 			) {
-				console.log('setting current version')
-				console.log(version)
-
 				this.setState({
 					version: version,
 					smartListName: version.smartListName,
@@ -211,6 +212,20 @@ class ListBuilder extends React.Component {
 		this.props.fetchVideos(params)
 	}
 
+	fetchChannelVideosFunction = () => {
+		let params = {
+			versionId: this.state.parsedVersionId,
+			pageNumber: this.state.currentChannelVideosPage,
+			filters: {
+				...this.state.filterState,
+				channelId: this.state.viewingVideosForChannel.id
+			},
+			sort: this.state.currentChannelVideosSort
+		}
+
+		this.props.fetchChannelVideos(params)
+	}
+
 	handleChannelsToggle = (viewingVideos) => {
 		if (this.props.videos.length < 1 && viewingVideos) {
 			this.setState({ currentVideosPage: 1, videosHasNextPage: true }, () => {
@@ -221,7 +236,7 @@ class ListBuilder extends React.Component {
 	}
 
 	goToListsPage = () => {
-		//	history.push(routes.app.engage.lists.lists.path)
+		this.props.history.push(routes.app.engage.lists.lists.path)
 	}
 
 	handleNameChange = (e) => {
@@ -239,6 +254,14 @@ class ListBuilder extends React.Component {
 		})
 	}
 
+	handleDownloadClick = (versionId, smartListName) => {
+		let payload = {
+			versionId,
+			smartListName
+		}
+		this.props.downloadExcelList(payload)
+	}
+
 	handleApplyFiltersButtonClick = () => {
 		this.props.removeAllChannels()
 		this.props.removeAllVideos()
@@ -250,7 +273,7 @@ class ListBuilder extends React.Component {
 			{
 				currentPage: 1,
 				currentVideosPage: 1,
-				currentChannelVideoPage: 1
+				currentChannelVideosPage: 1
 			},
 			() => {
 				this.fetchChannelsFunction()
@@ -277,10 +300,41 @@ class ListBuilder extends React.Component {
 		})
 	}
 
+	setCurrentChannelVideosSort = (val) => {
+		this.props.removeAllChannelVideos()
+		this.props.setChannelVideosHasNextPage(true)
+
+		this.setState(
+			{ currentChannelVideosSort: val, currentChannelVideosPage: 1 },
+			() => {
+				this.fetchChannelVideosFunction()
+			}
+		)
+	}
+
+	handleVideosClick = (channel) => {
+		this.props.removeAllChannelVideos()
+		this.setState({ viewingVideosForChannel: channel }, () => {
+			this.fetchChannelVideosFunction()
+		})
+		this.setState({ showChannelVideosModal: true })
+	}
+
+	handleChannelVideosModalClose = () => {
+		this.setState(
+			{ showChannelVideosModal: false, currentChannelVideosPage: 1 },
+			() => {
+				this.setState({ viewingVideosForChannel: null })
+				this.props.setChannelVideosHasNextPage(true)
+				this.props.removeAllChannelVideos()
+			}
+		)
+	}
+
 	handleActionButtonClick = (actionId, item) => {
 		this.props.setSmartListStatsLoading(true)
 		let unSelecting = item.actionId === actionId
-		let versionId = parsedVersionId
+		let versionId = this.state.parsedVersionId
 
 		if (unSelecting) {
 			delete item.actionId
@@ -480,6 +534,15 @@ class ListBuilder extends React.Component {
 	render() {
 		return (
 			<>
+				<BulkOperationsModal
+					bulk={this.state.bulk}
+					setBulk={(val) =>
+						this.setState((prevState) => {
+							return { bulk: val }
+						})
+					}
+					parsedVersionId={this.state.parsedVersionId}
+				/>
 				<div style={{ display: 'flex' }}>
 					<Panel
 						style={{
@@ -536,11 +599,11 @@ class ListBuilder extends React.Component {
 											loading={
 												this.props.isDownloadingExcel &&
 												this.props.isDownloadingExcelVersionId ===
-													parsedVersionId
+													this.state.parsedVersionId
 											}
 											onClick={() =>
-												handleDownloadClick(
-													parsedVersionId,
+												this.handleDownloadClick(
+													this.state.parsedVersionId,
 													this.state.smartListName
 												)
 											}
@@ -551,7 +614,7 @@ class ListBuilder extends React.Component {
 										<Button
 											size='xs'
 											onClick={() => {
-												setBulk(true)
+												this.setState({ bulk: true })
 											}}
 										>
 											Bulk Operations
@@ -570,12 +633,28 @@ class ListBuilder extends React.Component {
 									display: 'flex',
 									minWidth: 430
 								}}
-							></div>
+							>
+								<div style={{ flex: 1 }}>
+									<p>Brand Profile:</p>
+									<p style={{ color: 'grey' }}>
+										{this.state.version?.brandProfileName}
+									</p>
+									<p>Objective:</p>
+									<p style={{ color: 'grey' }}>
+										{this.state.version?.objectiveName}
+									</p>
+								</div>
+							</div>
 							<div
 								style={{
 									width: '100%'
 								}}
-							></div>
+							>
+								<Stats
+									parsedVersionId={this.props.match.params.versionId}
+									smartListStats={this.props.smartListStats}
+								/>
+							</div>
 						</div>
 					</Panel>
 				</div>
@@ -585,7 +664,13 @@ class ListBuilder extends React.Component {
 						filters={this.filters}
 						handleFilterChange={this.handleFilterChange}
 						expand={this.state.filtersExpanded}
-						handleToggle={() => setFiltersExpanded((prevState) => !prevState)}
+						handleToggle={() =>
+							this.setState((prevState) => {
+								return {
+									filtersExpanded: !prevState.filtersExpanded
+								}
+							})
+						}
 						filterState={this.state.filterState}
 						handleApplyFiltersButtonClick={this.handleApplyFiltersButtonClick}
 					/>
@@ -613,7 +698,7 @@ class ListBuilder extends React.Component {
 								}
 							}}
 							handleActionButtonClick={this.handleActionButtonClick}
-							//	handleVideosClick={handleVideosClick}
+							handleVideosClick={this.handleVideosClick}
 							visibleChannelColumns={this.props.visibleChannelColumns}
 							setVisibleChannelColumns={this.props.setVisibleChannelColumns}
 						/>
@@ -645,6 +730,35 @@ class ListBuilder extends React.Component {
 							}}
 						/>
 					)}
+
+					<ChannelVideosModal
+						tableHeight={this.tableHeight - 400}
+						visibleVideoColumns={this.props.visibleVideoColumns}
+						setVisibleVideoColumns={this.props.setVisibleVideoColumns}
+						currentVideosSort={this.state.currentChannelVideosSort}
+						setCurrentVideosSort={this.setCurrentChannelVideosSort}
+						show={this.state.showChannelVideosModal}
+						close={this.handleChannelVideosModalClose}
+						videos={this.props.channelVideos}
+						incrementPage={() => {
+							if (!this.props.videosIsLoading) {
+								this.setState(
+									(prevState) => {
+										return {
+											currentChannelVideosPage:
+												prevState.currentChannelVideosPage + 1
+										}
+									},
+									() => {
+										this.fetchChannelVideosFunction()
+									}
+								)
+							}
+						}}
+						handleActionButtonClick={this.handleActionButtonClick}
+						channel={this.state.viewingVideosForChannel}
+						videosIsLoading={this.props.videosIsLoading}
+					/>
 				</div>
 			</>
 		)
