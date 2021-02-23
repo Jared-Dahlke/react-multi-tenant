@@ -99,6 +99,7 @@ class ListBuilder extends React.Component {
 		super(props)
 		this.state = {
 			date: new Date(),
+			didInitialFetch: false,
 			showChannelVideosModal: false,
 			viewingVideosForChannel: null,
 			bulk: false,
@@ -159,31 +160,58 @@ class ListBuilder extends React.Component {
 	componentDidMount() {
 		let versionId = this.props.match.params.versionId
 		this.setState({ parsedVersionId: versionId }, () => {
-			this.fetchChannelsFunction()
+			//this.fetchChannelsFunction()
 		})
 	}
 
 	componentWillUnmount() {}
 
 	UNSAFE_componentWillReceiveProps(prevProps) {
-		console.log('comp will rec props')
 		if (prevProps.lists.length > 0 && this.state.smartListName.length < 1) {
-			console.log('about to set state')
 			this.setState({ lists: prevProps.lists }, () => {
 				this.setSmartListUnderEdit()
 			})
 		}
+
+		let stats = this.props.smartListStats
+
+		if (stats.channelCount && !this.state.didInitialFetch) {
+			console.log('has channelcount prop')
+			let hasIds =
+				(stats.channelCount && stats.channelCount > 0) ||
+				(stats.videoCount && stats.videoCount > 0)
+			if (hasIds) {
+				// this.handleFilterChange(filters.actionIds, [1, 2, 3])
+				console.log('hasIds')
+				this.setState(
+					(prevState) => {
+						let newState = {
+							...prevState.filterState,
+							actionIds: [1, 2, 3]
+						}
+						return {
+							filterState: newState,
+							didInitialFetch: true
+						}
+					},
+					() => {
+						this.fetchChannelsFunction()
+					}
+				)
+			} else {
+				this.setState({ didInitialFetch: true }, () => {
+					this.fetchChannelsFunction()
+				})
+			}
+		}
 	}
 
 	setSmartListUnderEdit = () => {
-		console.log('setSmartListUnderEdit')
-		console.log(this.state.lists)
 		for (const version of this.state.lists) {
 			if (
 				version.versionId == this.props.match.params.versionId ||
 				version.versionId === this.props.match.params.versionId
 			) {
-				console.log('about to set name')
 				this.setState({
 					version: version,
 					smartListName: version.smartListName,
