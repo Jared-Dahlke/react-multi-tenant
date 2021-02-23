@@ -187,7 +187,7 @@ export const cloneListVersion = (args) => {
 	let versionId = args.versionId
 	let smartListName = args.smartListName
 	let url = apiBase + `/smart-list/version/${versionId}/clone`
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		dispatch(setIsPostingList(true))
 		dispatch(setIsPostingListVersionId(versionId))
 		axios
@@ -202,7 +202,13 @@ export const cloneListVersion = (args) => {
 					})
 
 					response.data.smartListName = smartListName
+					response.data.brandProfileName = args.brandProfileName
 					dispatch(setSmartListVersionUnderEdit(response.data))
+
+					let listsCopy = JSON.parse(JSON.stringify(getState().engage.lists))
+					listsCopy.push(response.data)
+					dispatch(setLists(listsCopy))
+
 					dispatch(setIsPostingList(false))
 					dispatch(setPostListSuccess(true))
 				}

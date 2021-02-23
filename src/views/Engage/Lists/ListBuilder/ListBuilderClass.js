@@ -32,7 +32,6 @@ import {
 	postVersionBulkAction,
 	deleteVersionDataItem,
 	downloadExcelList,
-	setSmartListVersionUnderEdit,
 	fetchLists,
 	patchListName,
 	setSmartListStats,
@@ -53,7 +52,6 @@ const mapStateToProps = (state) => {
 		visibleVideoColumns: state.engage.visibleVideoColumns,
 		visibleChannelColumns: state.engage.visibleChannelColumns,
 		smartListStats: state.engage.smartListStats,
-		smartListVersionUnderEdit: state.engage.smartListVersionUnderEdit,
 		lists: state.engage.lists,
 		videos: state.engage.videos,
 		channelVideos: state.engage.channelVideos,
@@ -79,8 +77,6 @@ const mapDispatchToProps = (dispatch) => {
 		setSmartListStats: (params) => dispatch(setSmartListStats(params)),
 		fetchLists: (accountId) => dispatch(fetchLists(accountId)),
 		patchListName: (payload) => dispatch(patchListName(payload)),
-		setSmartListVersionUnderEdit: (version) =>
-			dispatch(setSmartListVersionUnderEdit(version)),
 		fetchVideos: (params) => dispatch(fetchVideos(params)),
 		fetchChannelVideos: (params) => dispatch(fetchChannelVideos(params)),
 		fetchChannels: (params) => dispatch(fetchChannels(params)),
@@ -170,7 +166,9 @@ class ListBuilder extends React.Component {
 	componentWillUnmount() {}
 
 	UNSAFE_componentWillReceiveProps(prevProps) {
+		console.log('comp will rec props')
 		if (prevProps.lists.length > 0 && this.state.smartListName.length < 1) {
+			console.log('about to set state')
 			this.setState({ lists: prevProps.lists }, () => {
 				this.setSmartListUnderEdit()
 			})
@@ -178,11 +176,14 @@ class ListBuilder extends React.Component {
 	}
 
 	setSmartListUnderEdit = () => {
+		console.log('setSmartListUnderEdit')
+		console.log(this.state.lists)
 		for (const version of this.state.lists) {
 			if (
 				version.versionId == this.props.match.params.versionId ||
 				version.versionId === this.props.match.params.versionId
 			) {
+				console.log('about to set name')
 				this.setState({
 					version: version,
 					smartListName: version.smartListName,
@@ -242,6 +243,7 @@ class ListBuilder extends React.Component {
 	handleNameChange = (e) => {
 		e.preventDefault()
 		this.setState({ isEditingName: false })
+
 		let payload = {
 			smartListName: e.target.value,
 			smartListId: this.state.version.smartListId
@@ -350,7 +352,6 @@ class ListBuilder extends React.Component {
 			})
 		} else {
 			item.actionId = actionId
-			//updateStats(actionId, true, item, oldItem.actionId)
 			let args = {
 				versionId: versionId,
 				data: [{ actionId: actionId, id: item.id }]
