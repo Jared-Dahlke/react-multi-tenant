@@ -383,6 +383,9 @@ const MyEnhancedForm = withFormik({
 			smartListId: '',
 			uploadedList: [],
 			smartLists: props.lists,
+			brandProfileName: props.brandProfiles[0]
+				? props.brandProfiles[0].brandName
+				: '',
 			brandProfileId: props.brandProfiles[0]
 				? props.brandProfiles[0].brandProfileId
 				: ''
@@ -429,6 +432,7 @@ const MyEnhancedForm = withFormik({
 		let data = {
 			list,
 			brandProfileId: values.brandProfileId,
+			brandProfileName: values.brandProfileName,
 			accountId: currentAccount.accountId
 		}
 		props.postList(data)

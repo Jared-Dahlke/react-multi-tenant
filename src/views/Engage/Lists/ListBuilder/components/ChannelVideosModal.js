@@ -2,7 +2,7 @@ import React from 'react'
 import Modal from 'rsuite/lib/Modal'
 import Button from 'rsuite/lib/Button'
 import VideosTable from './VideosTable'
-const VideoModal = (props) => {
+const ChannelVideosModal = (props) => {
 	return (
 		<Modal full show={props.show} onHide={props.close}>
 			<Modal.Header>
@@ -30,4 +30,4 @@ const VideoModal = (props) => {
 	)
 }
 
-export default VideoModal
+export default ChannelVideosModal
