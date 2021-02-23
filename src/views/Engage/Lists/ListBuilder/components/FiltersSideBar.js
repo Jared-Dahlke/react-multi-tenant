@@ -147,6 +147,8 @@ export const FiltersSideBar = ({
 											labelKey={'name'}
 											valueKey={'id'}
 											onChange={(val) => {
+												console.log('on change')
+												console.log(filters)
 												handleFilterChange(filters.iabCategories, val)
 											}}
 											cascade={true}
