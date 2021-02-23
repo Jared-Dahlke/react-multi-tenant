@@ -13,7 +13,7 @@ import Table from 'rsuite/lib/Table'
 import {
 	fetchAdminLabels,
 	createLabel,
-	deleteLabel,
+	archiveLabel,
 	setInitLabelAdd
 } from '../../../redux/actions/admin/scenarios'
 import { connect } from 'react-redux'
@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
 		labelsIsLoading: state.admin.labelsIsLoading,
 		initLabelAdd: state.admin.initLabelAdd,
 		labelSaving: state.admin.labelSaving,
-		labelDeleting: state.admin.labelDeleting,
+		labelArchiving: state.admin.labelArchiving,
 		adminLabels: state.admin.labels
 	}
 }
@@ -33,7 +33,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchAdminLabels: () => dispatch(fetchAdminLabels()),
 		createLabel: (label) => dispatch(createLabel(label)),
-		deleteLabel: (labelId) => dispatch(deleteLabel(labelId)),
+		archiveLabel: (labelId) => dispatch(archiveLabel(labelId)),
 		setInitLabelAdd: (bool) => dispatch(setInitLabelAdd(bool))
 	}
 }
@@ -51,15 +51,17 @@ function Labels(props) {
 	const ActionCell = ({ rowData, dataKey, ...props }) => {
 		return (
 			<Table.Cell {...props} style={{ padding: 1 }}>
-				<Button
-					appearance='link'
-					loading={props.labelDeleting === rowData.labelId}
-					onClick={() => {
-						handleDeleteLabelClick(rowData.labelId)
-					}}
-				>
-					Delete
-				</Button>
+				{!rowData.archived && (
+					<Button
+						appearance='link'
+						loading={props.labelArchiving === rowData.labelId}
+						onClick={() => {
+							handleArchiveLabelClick(rowData.labelId)
+						}}
+					>
+						Archive
+					</Button>
+				)}
 			</Table.Cell>
 		)
 	}
@@ -80,8 +82,8 @@ function Labels(props) {
 		}
 	})
 
-	const handleDeleteLabelClick = (labelId) => {
-		props.deleteLabel(labelId)
+	const handleArchiveLabelClick = (labelId) => {
+		props.archiveLabel(labelId)
 	}
 
 	return (
@@ -147,6 +149,14 @@ function Labels(props) {
 								<Table.HeaderCell>Label Name</Table.HeaderCell>
 								<Table.Cell dataKey='labelName' style={{ color: 'grey' }} />
 							</Table.Column>
+							<Table.Column verticalAlign={'middle'} width={100}>
+								<Table.HeaderCell>Archived</Table.HeaderCell>
+								<Table.Cell style={{ color: 'grey' }}>
+									{(rowData) => {
+										return rowData.archived ? 'True' : 'False'
+									}}
+								</Table.Cell>
+							</Table.Column>
 							<Table.Column verticalAlign={'middle'} width={60}>
 								<Table.HeaderCell>Actions</Table.HeaderCell>
 								<ActionCell />
@@ -156,24 +166,24 @@ function Labels(props) {
 				) : props.labelsIsLoading ? (
 					<Loader center size='lg' content='Loading...' vertical />
 				) : (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
 
-							height: 'calc(100vh - 200px)',
-							color: 'white'
-						}}
-					>
-						<Button
-							appearance='primary'
-							onClick={() => props.setInitLabelAdd(true)}
-						>
-							Create Label
+									height: 'calc(100vh - 200px)',
+									color: 'white'
+								}}
+							>
+								<Button
+									appearance='primary'
+									onClick={() => props.setInitLabelAdd(true)}
+								>
+									Create Label
 						</Button>
-					</div>
-				)}
+							</div>
+						)}
 			</GridItem>
 		</Grid>
 	)
