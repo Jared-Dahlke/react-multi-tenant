@@ -383,9 +383,6 @@ const MyEnhancedForm = withFormik({
 			smartListId: '',
 			uploadedList: [],
 			smartLists: props.lists,
-			brandProfileName: props.brandProfiles[0]
-				? props.brandProfiles[0].brandName
-				: '',
 			brandProfileId: props.brandProfiles[0]
 				? props.brandProfiles[0].brandProfileId
 				: ''
@@ -411,6 +408,12 @@ const MyEnhancedForm = withFormik({
 				}
 			}
 		}
+
+		const getBrandProfileBySmartListId = (smartListId) => {
+			let list = props.lists.filter((list) => list.smartListId === smartListId)
+			return list[0].brandProfileId
+		}
+
 		let currentAccount = getCurrentAccount(props.accounts.data)
 		let list = {}
 		if (values.uploadType === 'new') {
@@ -429,10 +432,20 @@ const MyEnhancedForm = withFormik({
 				smartListData: values.uploadedList
 			}
 		}
+
+		let brandProfileId =
+			values.uploadType === 'existing'
+				? getBrandProfileBySmartListId(values.smartListId)
+				: values.brandProfileId
+
+		let brandProfile = props.brandProfiles.filter(
+			(bp) => bp.brandProfileId === brandProfileId
+		)
+
 		let data = {
 			list,
 			brandProfileId: values.brandProfileId,
-			brandProfileName: values.brandProfileName,
+			brandProfileName: brandProfile[0].brandName,
 			accountId: currentAccount.accountId
 		}
 		props.postList(data)

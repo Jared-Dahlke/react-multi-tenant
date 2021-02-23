@@ -75,10 +75,14 @@ function CreateNewListModal(props) {
 			targetTypeId: values.targetTypeId
 		}
 
+		let brandProfile = props.brandProfiles.filter(
+			(bp) => bp.brandProfileId === values.brandProfileId
+		)
+
 		let data = {
 			list,
 			brandProfileId: values.brandProfileId,
-			brandProfileName: values.brandProfileName,
+			brandProfileName: brandProfile[0].brandName,
 			accountId: currentAccount.accountId
 		}
 
@@ -191,14 +195,11 @@ function CreateNewListModal(props) {
 
 const MyEnhancedForm = withFormik({
 	mapPropsToValues: (props) => {
-		console.log('my enhance form')
-		console.log(props?.brandProfiles[0]?.brandName)
 		return {
 			smartLists: props.lists,
 			smartListName: '',
 			targetTypeId: 1,
 			objectiveId: 1,
-			brandProfileName: props?.brandProfiles[0]?.brandName,
 			brandProfileId: props.brandProfiles[0]
 				? props.brandProfiles[0].brandProfileId
 				: ''

@@ -164,7 +164,20 @@ class ListBuilder extends React.Component {
 		})
 	}
 
-	componentWillUnmount() {}
+	componentWillUnmount() {
+		this.props.removeAllChannels()
+		this.props.removeAllVideos()
+		this.props.removeAllChannelVideos()
+		this.props.setChannelsHasNextPage(true)
+		this.props.setVideosHasNextPage(true)
+		this.props.setChannelVideosHasNextPage(true)
+
+		this.setState({
+			currentPage: 1,
+			currentVideosPage: 1,
+			currentChannelVideosPage: 1
+		})
+	}
 
 	UNSAFE_componentWillReceiveProps(prevProps) {
 		if (prevProps.lists.length > 0 && this.state.smartListName.length < 1) {
@@ -176,13 +189,10 @@ class ListBuilder extends React.Component {
 		let stats = this.props.smartListStats
 
 		if (stats.channelCount && !this.state.didInitialFetch) {
-			console.log('has channelcount prop')
 			let hasIds =
 				(stats.channelCount && stats.channelCount > 0) ||
 				(stats.videoCount && stats.videoCount > 0)
 			if (hasIds) {
-				// this.handleFilterChange(filters.actionIds, [1, 2, 3])
-				console.log('hasIds')
 				this.setState(
 					(prevState) => {
 						let newState = {
@@ -198,11 +208,11 @@ class ListBuilder extends React.Component {
 						this.fetchChannelsFunction()
 					}
 				)
-			} else {
-				this.setState({ didInitialFetch: true }, () => {
-					this.fetchChannelsFunction()
-				})
 			}
+		} else if (!this.state.didInitialFetch) {
+			this.setState({ didInitialFetch: true }, () => {
+				this.fetchChannelsFunction()
+			})
 		}
 	}
 
