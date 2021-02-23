@@ -15,7 +15,8 @@ export const listsObjValidation = Yup.array()
 			videoCount: Yup.number().required(),
 			versionId: Yup.number().required(),
 			archived: Yup.bool().required(),
-			active: Yup.bool().required()
+			active: Yup.bool().required(),
+			latestVideoUploadDate: Yup.date().nullable()
 		})
 	)
 	.test(

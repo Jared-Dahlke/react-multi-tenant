@@ -78,6 +78,8 @@ export default function ChannelsTable({
 		{ label: 'Name', id: 'name' },
 		{ label: 'Create Date', id: 'createDate' },
 		{ label: 'YT Category', id: 'ytCategory' },
+		{ label: 'Latest Upload Date', id: 'latestVideoUploadDate' },
+
 		{ label: 'IAB Category', id: 'iabCategory' },
 		{ label: 'Videos', id: 'videos' },
 		{ label: 'Views', id: 'views' },
@@ -164,6 +166,17 @@ export default function ChannelsTable({
 							<TooltipCell
 								displayProp='createDateDisplay'
 								tooltipProp='createDateTooltip'
+								dataKey='created'
+							/>
+						</Table.Column>
+					)}
+
+					{visibleChannelColumns.includes('latestVideoUploadDate') && (
+						<Table.Column verticalAlign={'middle'} align='center' sortable>
+							<Table.HeaderCell>Latest Upload</Table.HeaderCell>
+							<TooltipCell
+								displayProp='latestVideoUploadDate'
+								tooltipProp='latestVideoUploadDate'
 								dataKey='created'
 							/>
 						</Table.Column>

@@ -265,6 +265,9 @@ const formatChannels = (channels) => {
 	for (const item of channels) {
 		item.createDateDisplay = dayjs(item.created).format('MM/DD/YYYY')
 		item.createDateTooltip = dayjs(item.created).format('MM/DD/YYYY')
+		item.latestVideoUploadDate = dayjs(item.latestVideoUploadDate).format(
+			'MM/DD/YYYY'
+		)
 
 		item.countryDisplay = countryCodeToFlagEmoji(item.countryCode)
 		item.countryTooltip = item.countryName

@@ -39,8 +39,9 @@ export const listActions = {
 export const channelColumns = [
 	'image',
 	'name',
-	'createDate',
+	//	'createDate', //not shown by default
 	'ytCategory',
+	'latestVideoUploadDate',
 	'iabCategory',
 	'videos',
 	'views',
