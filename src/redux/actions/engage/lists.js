@@ -309,12 +309,27 @@ export const postVersionBulkAction = (args) => {
 	}
 }
 
+let fetchStatsRequest = null
+
 export const fetchVersionStats = (versionId) => {
+	if (fetchStatsRequest) {
+		fetchStatsRequest.cancel()
+	}
+	fetchStatsRequest = axios.CancelToken.source()
 	let url = `${apiBase}/smart-list/version/${versionId}/stats`
 	return async (dispatch) => {
 		dispatch(setSmartListStatsLoading(true))
-		const result = await axios.get(url)
-		dispatch(setSmartListStats(result.data))
+
+		const result = await defaultAxios({
+			method: 'GET',
+			url: url,
+			cancelToken: fetchStatsRequest.token
+		})
+
+		if (result.status === 200) {
+			dispatch(setSmartListStats(result.data))
+		}
+
 		dispatch(setSmartListStatsLoading(false))
 	}
 }
