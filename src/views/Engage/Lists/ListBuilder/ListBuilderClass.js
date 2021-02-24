@@ -177,7 +177,7 @@ class ListBuilder extends React.Component {
 		})
 	}
 
-	UNSAFE_componentWillReceiveProps(prevProps) {
+	componentDidUpdate(prevProps) {
 		if (prevProps.lists.length > 0 && this.state.smartListName.length < 1) {
 			this.setState({ lists: prevProps.lists }, () => {
 				this.setSmartListUnderEdit()
@@ -185,7 +185,6 @@ class ListBuilder extends React.Component {
 		}
 
 		let stats = this.props.smartListStats
-
 		if (stats.channelCount != null && !this.state.didInitialFetch) {
 			let hasIds =
 				(stats.channelCount && stats.channelCount > 0) ||
