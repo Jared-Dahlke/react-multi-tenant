@@ -739,6 +739,7 @@ class ListBuilder extends React.Component {
 
 						{this.state.viewingChannels && (
 							<ChannelsTable
+								loading={this.props.channelsIsLoading}
 								tableHeight={this.tableHeight}
 								setCurrentChannelsSort={this.setCurrentChannelsSort}
 								currentChannelsSort={this.state.currentChannelsSort}

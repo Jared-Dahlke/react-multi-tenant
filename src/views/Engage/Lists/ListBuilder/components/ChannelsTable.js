@@ -26,7 +26,8 @@ export default function ChannelsTable({
 	setCurrentChannelsSort,
 	visibleChannelColumns,
 	setVisibleChannelColumns,
-	tableHeight
+	tableHeight,
+	loading
 }) {
 	const hasMountedRef = React.useRef(false)
 
@@ -97,7 +98,7 @@ export default function ChannelsTable({
 				setVisibleColumns={setVisibleChannelColumns}
 			/>
 
-			<Grid item xs={12} style={{ marginLeft: 15 }}>
+			<Grid item xs={12} style={{ marginLeft: 15, position: 'relative' }}>
 				<Button
 					size='xs'
 					onClick={() => setColumnPickerShowing(true)}
@@ -105,6 +106,18 @@ export default function ChannelsTable({
 				>
 					Visible Columns
 				</Button>
+				{loading && (
+					<div
+						style={{
+							position: 'absolute',
+							bottom: 35,
+							width: 300,
+							zIndex: 999999
+						}}
+					>
+						<Tooltip visible>Loading more...</Tooltip>
+					</div>
+				)}
 
 				<Table
 					style={{ flex: 1 }}
