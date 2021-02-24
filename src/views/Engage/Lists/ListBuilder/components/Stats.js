@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
 const Stats = (props) => {
 	let fetchVersionStats = props.fetchVersionStats
 	React.useEffect(() => {
-		fetchVersionStats(props.parsedVersionId)
+		//fetchVersionStats(props.parsedVersionId)
 	}, [])
 
 	let stats = props.smartListStats

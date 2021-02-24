@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import { routes } from '../../../../routes'
 import ChannelsTable from './components/ChannelsTable'
 import Button from 'rsuite/lib/Button'
 import ChannelVideosModal from './components/ChannelVideosModal'
-import { withRouter } from 'react-router-dom'
+import { fetchVersionStats } from '../../../../redux/actions/engage/lists'
 import VideosTable from './components/VideosTable'
 import Grid from '@material-ui/core/Grid'
 import Icon from 'rsuite/lib/Icon'
@@ -69,6 +68,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		fetchVersionStats: (versionId) => dispatch(fetchVersionStats(versionId)),
 		setVisibleChannelColumns: (arr) => dispatch(setVisibleChannelColumns(arr)),
 		setVisibleVideoColumns: (arr) => dispatch(setVisibleVideoColumns(arr)),
 		setSmartListStatsLoading: (bool) =>
@@ -100,6 +100,7 @@ class ListBuilder extends React.Component {
 		this.state = {
 			date: new Date(),
 			didInitialFetch: false,
+			loading: true,
 			showChannelVideosModal: false,
 			viewingVideosForChannel: null,
 			bulk: false,
@@ -158,6 +159,7 @@ class ListBuilder extends React.Component {
 	}
 
 	componentDidMount() {
+		this.props.fetchVersionStats(this.props.match.params.versionId)
 		let versionId = this.props.match.params.versionId
 		this.setState({ parsedVersionId: versionId })
 	}
@@ -170,10 +172,12 @@ class ListBuilder extends React.Component {
 		this.props.setVideosHasNextPage(true)
 		this.props.setChannelVideosHasNextPage(true)
 		this.props.setSmartListStats({})
+
 		this.setState({
 			currentPage: 1,
 			currentVideosPage: 1,
-			currentChannelVideosPage: 1
+			currentChannelVideosPage: 1,
+			loading: true
 		})
 	}
 
@@ -181,10 +185,12 @@ class ListBuilder extends React.Component {
 		if (prevProps.lists.length > 0 && this.state.smartListName.length < 1) {
 			this.setState({ lists: prevProps.lists }, () => {
 				this.setSmartListUnderEdit()
+				this.setState({ loading: false })
 			})
 		}
 
 		let stats = this.props.smartListStats
+
 		if (stats.channelCount != null && !this.state.didInitialFetch) {
 			let hasIds =
 				(stats.channelCount && stats.channelCount > 0) ||
@@ -580,236 +586,245 @@ class ListBuilder extends React.Component {
 	tableHeight = 890
 
 	render() {
-		return (
-			<>
-				<BulkOperationsModal
-					bulk={this.state.bulk}
-					setBulk={(val) =>
-						this.setState((prevState) => {
-							return { bulk: val }
-						})
-					}
-					parsedVersionId={this.state.parsedVersionId}
-				/>
-				<div style={{ display: 'flex' }}>
-					<Panel
-						style={{
-							flex: 1,
-							marginBottom: 15,
-							backgroundColor: '#F7F7FA'
-						}}
-						header={
-							<Grid container>
-								<Grid item xs={6}>
-									<ControlLabel>SmartList Name</ControlLabel>
-									<InputGroup
-										style={{
-											borderColor: this.state.isEditingName
-												? accentColor
-												: '#F7F7FA'
-										}}
-									>
-										<InputGroup.Button
-											onClick={() => {
-												this.setState({ isEditingName: true })
-											}}
-											style={{ backgroundColor: 'transparent' }}
-										>
-											<Icon style={{ color: '#0092d1' }} icon='pencil' />
-										</InputGroup.Button>
-										<Input
-											style={{ backgroundColor: 'transparent', color: 'grey' }}
-											onPressEnter={(e) => this.handleNameChange(e)}
-											onBlur={(e) => {
-												this.handleNameChange(e)
-											}}
-											onChange={(val) => {
-												//	e.preventDefault()
-												this.setState({ smartListName: val })
-											}}
-											disabled={!this.state.isEditingName}
-											value={this.state.smartListName}
-										/>
-									</InputGroup>
-								</Grid>
-								<Grid item xs={6} align='right'>
-									<ButtonToolbar>
-										<Toggle
-											onChange={this.handleChannelsToggle}
-											size='xs'
-											checkedChildren='Videos'
-											unCheckedChildren='Channels'
-											style={{ backgroundColor: accentColor }}
-										/>
-
-										<Button
-											size='xs'
-											loading={
-												this.props.isDownloadingExcel &&
-												this.props.isDownloadingExcelVersionId ===
-													this.state.parsedVersionId
-											}
-											onClick={() =>
-												this.handleDownloadClick(
-													this.state.parsedVersionId,
-													this.state.smartListName
-												)
-											}
-										>
-											Download
-										</Button>
-
-										<Button
-											size='xs'
-											onClick={() => {
-												this.setState({ bulk: true })
-											}}
-										>
-											Bulk Operations
-										</Button>
-										<Button size='xs' onClick={this.goToListsPage}>
-											Done
-										</Button>
-									</ButtonToolbar>
-								</Grid>
-							</Grid>
-						}
-					>
-						<div style={{ display: 'flex' }}>
-							<div
-								style={{
-									display: 'flex',
-									minWidth: 430
-								}}
-							>
-								<div style={{ flex: 1 }}>
-									<p>Brand Profile:</p>
-									<p style={{ color: 'grey' }}>
-										{this.state.version?.brandProfileName}
-									</p>
-									<p>Objective:</p>
-									<p style={{ color: 'grey' }}>
-										{this.state.version?.objectiveName}
-									</p>
-								</div>
-							</div>
-							<div
-								style={{
-									width: '100%'
-								}}
-							>
-								<Stats
-									parsedVersionId={this.props.match.params.versionId}
-									smartListStats={this.props.smartListStats}
-								/>
-							</div>
-						</div>
-					</Panel>
-				</div>
-
-				<div style={{ display: 'flex' }}>
-					<FiltersSideBar
-						filters={this.filters}
-						handleFilterChange={this.handleFilterChange}
-						expand={this.state.filtersExpanded}
-						handleToggle={() =>
+		if (this.state.loading) {
+			return (
+				<Loader speed='fast' size='lg' content={'Loading...'} vertical center />
+			)
+		} else {
+			return (
+				<>
+					<BulkOperationsModal
+						bulk={this.state.bulk}
+						setBulk={(val) =>
 							this.setState((prevState) => {
-								return {
-									filtersExpanded: !prevState.filtersExpanded
-								}
+								return { bulk: val }
 							})
 						}
-						filterState={this.state.filterState}
-						handleApplyFiltersButtonClick={this.handleApplyFiltersButtonClick}
+						parsedVersionId={this.state.parsedVersionId}
 					/>
-
-					{this.state.viewingChannels && (
-						<ChannelsTable
-							tableHeight={this.tableHeight}
-							setCurrentChannelsSort={this.setCurrentChannelsSort}
-							currentChannelsSort={this.state.currentChannelsSort}
-							channelsHasNextPage={this.props.channelsHasNextPage}
-							channelsIsLoading={this.props.channelsIsLoading}
-							items={this.props.channels}
-							incrementPage={() => {
-								if (!this.props.channelsIsLoading) {
-									this.setState(
-										(prevState) => {
-											return {
-												currentPage: prevState.currentPage + 1
-											}
-										},
-										() => {
-											this.fetchChannelsFunction()
-										}
-									)
-								}
+					<div style={{ display: 'flex' }}>
+						<Panel
+							style={{
+								flex: 1,
+								marginBottom: 15,
+								backgroundColor: '#F7F7FA'
 							}}
-							handleActionButtonClick={this.handleActionButtonClick}
-							handleVideosClick={this.handleVideosClick}
-							visibleChannelColumns={this.props.visibleChannelColumns}
-							setVisibleChannelColumns={this.props.setVisibleChannelColumns}
-						/>
-					)}
+							header={
+								<Grid container>
+									<Grid item xs={6}>
+										<ControlLabel>SmartList Name</ControlLabel>
+										<InputGroup
+											style={{
+												borderColor: this.state.isEditingName
+													? accentColor
+													: '#F7F7FA'
+											}}
+										>
+											<InputGroup.Button
+												onClick={() => {
+													this.setState({ isEditingName: true })
+												}}
+												style={{ backgroundColor: 'transparent' }}
+											>
+												<Icon style={{ color: '#0092d1' }} icon='pencil' />
+											</InputGroup.Button>
+											<Input
+												style={{
+													backgroundColor: 'transparent',
+													color: 'grey'
+												}}
+												onPressEnter={(e) => this.handleNameChange(e)}
+												onBlur={(e) => {
+													this.handleNameChange(e)
+												}}
+												onChange={(val) => {
+													//	e.preventDefault()
+													this.setState({ smartListName: val })
+												}}
+												disabled={!this.state.isEditingName}
+												value={this.state.smartListName}
+											/>
+										</InputGroup>
+									</Grid>
+									<Grid item xs={6} align='right'>
+										<ButtonToolbar>
+											<Toggle
+												onChange={this.handleChannelsToggle}
+												size='xs'
+												checkedChildren='Videos'
+												unCheckedChildren='Channels'
+												style={{ backgroundColor: accentColor }}
+											/>
 
-					{!this.state.viewingChannels && (
-						<VideosTable
-							tableHeight={this.tableHeight}
-							setVisibleVideoColumns={this.props.setVisibleVideoColumns}
-							currentVideosSort={this.state.currentVideosSort}
-							setCurrentVideosSort={this.setCurrentVideosSort}
-							videos={this.props.videos}
-							videosIsLoading={this.props.videosIsLoading}
+											<Button
+												size='xs'
+												loading={
+													this.props.isDownloadingExcel &&
+													this.props.isDownloadingExcelVersionId ===
+														this.state.parsedVersionId
+												}
+												onClick={() =>
+													this.handleDownloadClick(
+														this.state.parsedVersionId,
+														this.state.smartListName
+													)
+												}
+											>
+												Download
+											</Button>
+
+											<Button
+												size='xs'
+												onClick={() => {
+													this.setState({ bulk: true })
+												}}
+											>
+												Bulk Operations
+											</Button>
+											<Button size='xs' onClick={this.goToListsPage}>
+												Done
+											</Button>
+										</ButtonToolbar>
+									</Grid>
+								</Grid>
+							}
+						>
+							<div style={{ display: 'flex' }}>
+								<div
+									style={{
+										display: 'flex',
+										minWidth: 430
+									}}
+								>
+									<div style={{ flex: 1 }}>
+										<p>Brand Profile:</p>
+										<p style={{ color: 'grey' }}>
+											{this.state.version?.brandProfileName}
+										</p>
+										<p>Objective:</p>
+										<p style={{ color: 'grey' }}>
+											{this.state.version?.objectiveName}
+										</p>
+									</div>
+								</div>
+								<div
+									style={{
+										width: '100%'
+									}}
+								>
+									<Stats
+										parsedVersionId={this.props.match.params.versionId}
+										smartListStats={this.props.smartListStats}
+									/>
+								</div>
+							</div>
+						</Panel>
+					</div>
+
+					<div style={{ display: 'flex' }}>
+						<FiltersSideBar
+							filters={this.filters}
+							handleFilterChange={this.handleFilterChange}
+							expand={this.state.filtersExpanded}
+							handleToggle={() =>
+								this.setState((prevState) => {
+									return {
+										filtersExpanded: !prevState.filtersExpanded
+									}
+								})
+							}
+							filterState={this.state.filterState}
+							handleApplyFiltersButtonClick={this.handleApplyFiltersButtonClick}
+						/>
+
+						{this.state.viewingChannels && (
+							<ChannelsTable
+								tableHeight={this.tableHeight}
+								setCurrentChannelsSort={this.setCurrentChannelsSort}
+								currentChannelsSort={this.state.currentChannelsSort}
+								channelsHasNextPage={this.props.channelsHasNextPage}
+								channelsIsLoading={this.props.channelsIsLoading}
+								items={this.props.channels}
+								incrementPage={() => {
+									if (!this.props.channelsIsLoading) {
+										this.setState(
+											(prevState) => {
+												return {
+													currentPage: prevState.currentPage + 1
+												}
+											},
+											() => {
+												this.fetchChannelsFunction()
+											}
+										)
+									}
+								}}
+								handleActionButtonClick={this.handleActionButtonClick}
+								handleVideosClick={this.handleVideosClick}
+								visibleChannelColumns={this.props.visibleChannelColumns}
+								setVisibleChannelColumns={this.props.setVisibleChannelColumns}
+							/>
+						)}
+
+						{!this.state.viewingChannels && (
+							<VideosTable
+								tableHeight={this.tableHeight}
+								setVisibleVideoColumns={this.props.setVisibleVideoColumns}
+								currentVideosSort={this.state.currentVideosSort}
+								setCurrentVideosSort={this.setCurrentVideosSort}
+								videos={this.props.videos}
+								videosIsLoading={this.props.videosIsLoading}
+								visibleVideoColumns={this.props.visibleVideoColumns}
+								handleActionButtonClick={this.handleActionButtonClick}
+								incrementPage={() => {
+									if (!this.props.videosIsLoading) {
+										this.setState(
+											(prevState) => {
+												return {
+													currentVideosPage: prevState.currentVideosPage + 1
+												}
+											},
+											() => {
+												this.fetchVideosFunction()
+											}
+										)
+									}
+								}}
+							/>
+						)}
+
+						<ChannelVideosModal
+							tableHeight={this.tableHeight - 400}
 							visibleVideoColumns={this.props.visibleVideoColumns}
-							handleActionButtonClick={this.handleActionButtonClick}
+							setVisibleVideoColumns={this.props.setVisibleVideoColumns}
+							currentVideosSort={this.state.currentChannelVideosSort}
+							setCurrentVideosSort={this.setCurrentChannelVideosSort}
+							show={this.state.showChannelVideosModal}
+							close={this.handleChannelVideosModalClose}
+							videos={this.props.channelVideos}
 							incrementPage={() => {
 								if (!this.props.videosIsLoading) {
 									this.setState(
 										(prevState) => {
 											return {
-												currentVideosPage: prevState.currentVideosPage + 1
+												currentChannelVideosPage:
+													prevState.currentChannelVideosPage + 1
 											}
 										},
 										() => {
-											this.fetchVideosFunction()
+											this.fetchChannelVideosFunction()
 										}
 									)
 								}
 							}}
+							handleActionButtonClick={this.handleActionButtonClick}
+							channel={this.state.viewingVideosForChannel}
+							videosIsLoading={this.props.videosIsLoading}
 						/>
-					)}
-
-					<ChannelVideosModal
-						tableHeight={this.tableHeight - 400}
-						visibleVideoColumns={this.props.visibleVideoColumns}
-						setVisibleVideoColumns={this.props.setVisibleVideoColumns}
-						currentVideosSort={this.state.currentChannelVideosSort}
-						setCurrentVideosSort={this.setCurrentChannelVideosSort}
-						show={this.state.showChannelVideosModal}
-						close={this.handleChannelVideosModalClose}
-						videos={this.props.channelVideos}
-						incrementPage={() => {
-							if (!this.props.videosIsLoading) {
-								this.setState(
-									(prevState) => {
-										return {
-											currentChannelVideosPage:
-												prevState.currentChannelVideosPage + 1
-										}
-									},
-									() => {
-										this.fetchChannelVideosFunction()
-									}
-								)
-							}
-						}}
-						handleActionButtonClick={this.handleActionButtonClick}
-						channel={this.state.viewingVideosForChannel}
-						videosIsLoading={this.props.videosIsLoading}
-					/>
-				</div>
-			</>
-		)
+					</div>
+				</>
+			)
+		}
 	}
 }
 
